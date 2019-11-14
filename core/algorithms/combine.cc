@@ -20,6 +20,7 @@ Algorithm::result_t combine::apply(iterator& it)
 	{
 	sibling_iterator sib=tr.begin(it);
 	index_map_t ind_free, ind_dummy;
+	std::vector<Ex::iterator> dummies;
 	while(sib!=tr.end(it)) {  // iterate over all factors in the product
 		sibling_iterator ch=tr.begin(sib);
 		while(ch!=tr.end(sib)) { // iterate over all indices of this factor
@@ -33,50 +34,113 @@ Algorithm::result_t combine::apply(iterator& it)
 		}
 	if(ind_dummy.size()==0) return result_t::l_no_action;
 
-	index_map_t::iterator dums1=ind_dummy.begin(), dums2;
-	while(dums1!=ind_dummy.end()) {
+	while(ind_dummy.begin()!=ind_dummy.end()) {
+		bool found=false;
+		index_map_t::iterator start=ind_dummy.begin();
+		while(!found && start!=ind_dummy.end()) {
+			iterator parent=tr.parent(start->second);
+			sibling_iterator ch=tr.begin(parent), last_part;
+			while(ch!=tr.end(parent)) {
+				auto fnd=ind_dummy.find((Ex::iterator)ch);
+				if(fnd!=ind_dummy.end()) last_part=ch;
+				++ch;
+				}
+			if(last_part==start->second) {
+				// We are on a rightmost contracted index
+				found=true;
+				}
+			else ++start;
+			}
+		bool paired=true;
+		while(paired && start!=ind_dummy.end()) {
+			iterator parent=tr.parent(start->second);
+			sibling_iterator ch=tr.begin(parent), last_part;
+			while(ch!=tr.end(parent) && ind_dummy.size()>0) {
+				auto fnd2=ind_dummy.equal_range((Ex::iterator)ch);
+				auto fnd1=fnd2.first;
+				if(fnd1->second!=ch) ++fnd1;
+				if(fnd1->second==ch) {
+					dummies.insert(dummies.end(), ch);
+					ind_dummy.erase(fnd1);
+					last_part=ch;
+					}
+				++ch;
+				}
+			auto fnd=ind_dummy.find((Ex::iterator)last_part);
+			if(fnd==ind_dummy.end()) {
+				last_part->flip_parent_rel();
+				fnd=ind_dummy.find((Ex::iterator)last_part);
+				last_part->flip_parent_rel();
+				}
+			if(fnd==ind_dummy.end()) {
+				// Contraction ends because we are on a vector
+				// It could also be a trace if we removed the paired index more than one iteration ago
+				paired=false;
+				}
+			else {
+				start=fnd;
+				index_map_t::iterator check=ind_dummy.end();
+				iterator parent=tr.parent(start->second);
+				sibling_iterator ch=tr.begin(parent), first_part;
+				while(check==ind_dummy.end()) {
+					first_part=ch;
+					check=ind_dummy.find((Ex::iterator)ch);
+					++ch;
+					}
+				if(first_part!=start->second) {
+					throw NotYetImplemented("Evaluation requires transposing a matrix.");
+					return result_t::l_no_action;
+					}
+				}
+			}
+		}
+
+	std::vector<Ex::iterator>::iterator dums1=dummies.begin(), dums2;
+	dums2=dums1;
+	++dums2;
+	while(dums1!=dummies.end() && dums2!=dummies.end()) {
 		//		txtout << "analysing " << std::endl;
 		//		txtout << *(dums1->second->name) << std::endl;
-		dums2=dums1;
-		++dums2;
 
 		bool isbrack1=false, isbrack2=false;
 		bool ismatorvec1=false, ismatorvec2=false;
-		bool diffparents=tr.parent(dums1->second)!=tr.parent(dums2->second);
-		const Matrix *mat1=kernel.properties.get<Matrix>(tr.parent(dums1->second));
+		// These are both to recognize traces
+		bool diffparents=tr.parent(*dums1)!=tr.parent(*dums2);
+		bool consecutive=*(*dums1)->name==*(*dums2)->name;
+		const Matrix *mat1=kernel.properties.get<Matrix>(tr.parent(*dums1));
 		if(mat1)
 			ismatorvec1=true;
-		else if(*(tr.parent(dums1->second)->name)=="\\indexbracket") {
+		else if(*(tr.parent(*dums1)->name)=="\\indexbracket") {
 			ismatorvec1=true;
 			isbrack1=true;
 			}
-		else if(tr.number_of_children(tr.parent(dums1->second))==1)
+		else if(tr.number_of_children(tr.parent(*dums1))==1)
 			ismatorvec1=true;
-		const Matrix *mat2=kernel.properties.get<Matrix>(tr.parent(dums2->second));
+		const Matrix *mat2=kernel.properties.get<Matrix>(tr.parent(*dums2));
 		if(mat2)
 			ismatorvec2=true;
-		else if(*(tr.parent(dums2->second)->name)=="\\indexbracket") {
+		else if(*(tr.parent(*dums2)->name)=="\\indexbracket") {
 			ismatorvec2=true;
 			isbrack2=true;
 			}
-		else if(tr.number_of_children(tr.parent(dums2->second))==1)
+		else if(tr.number_of_children(tr.parent(*dums2))==1)
 			ismatorvec2=true;
 
-		if(ismatorvec1 && ismatorvec2 && diffparents) {
+		if(ismatorvec1 && ismatorvec2 && diffparents && consecutive) {
 			//			txtout << "gluing " << *(dums2->second->name) << std::endl;
 			// create new indexbracket with product node
-			iterator outerbrack=tr.insert(tr.parent(dums1->second), str_node("\\indexbracket"));
+			iterator outerbrack=tr.insert(tr.parent(*dums1), str_node("\\indexbracket"));
 			iterator brackprod=tr.append_child(outerbrack, str_node("\\prod"));
-			iterator parn1=tr.parent(dums1->second);
-			iterator parn2=tr.parent(dums2->second);
+			iterator parn1=tr.parent(*dums1);
+			iterator parn2=tr.parent(*dums2);
 			// remove the dummy index from these two objects, and move
 			// other (dummy or not) indices to the outer indexbracket.
-			sibling_iterator ind1=tr.begin(tr.parent(dums1->second));
-			sibling_iterator stop1=tr.end(tr.parent(dums1->second));
+			sibling_iterator ind1=tr.begin(tr.parent(*dums1));
+			sibling_iterator stop1=tr.end(tr.parent(*dums1));
 			if(isbrack1)
 				++ind1;
 			while(ind1!=stop1) {
-				if(ind1!=dums1->second) {
+				if(ind1!=*dums1) {
 					sibling_iterator nxt=ind1;
 					++nxt;
 					tr.reparent(outerbrack, ind1, nxt);
@@ -84,13 +148,13 @@ Algorithm::result_t combine::apply(iterator& it)
 				++ind1;
 				//				ind1=tr.erase(ind1);
 				}
-			tr.erase(dums1->second);
-			sibling_iterator ind2=tr.begin(tr.parent(dums2->second));
-			sibling_iterator stop2=tr.end(tr.parent(dums2->second));
+			tr.erase(*dums1);
+			sibling_iterator ind2=tr.begin(tr.parent(*dums2));
+			sibling_iterator stop2=tr.end(tr.parent(*dums2));
 			if(isbrack2)
 				++ind2;
 			while(ind2!=stop2) {
-				if(ind2!=dums2->second) {
+				if(ind2!=*dums2) {
 					sibling_iterator nxt=ind2;
 					++nxt;
 					tr.reparent(outerbrack, ind2, nxt);
@@ -98,7 +162,7 @@ Algorithm::result_t combine::apply(iterator& it)
 				++ind2;
 				//				ind2=tr.erase(ind2);
 				}
-			tr.erase(dums2->second);
+			tr.erase(*dums2);
 
 			// put both objects inside the indexbracket.
 			if(isbrack1) {
@@ -130,8 +194,12 @@ Algorithm::result_t combine::apply(iterator& it)
 				tr.reparent(brackprod,parn2,nxt);
 				}
 			}
+		if(consecutive) {
+			++dums1;
+			++dums2;
+			}
 		++dums1;
-		++dums1;
+		++dums2;
 		}
 
 	//std::cerr << it << std::endl;

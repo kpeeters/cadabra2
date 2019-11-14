@@ -21,7 +21,7 @@ def test02():
     A::ImplicitIndex(A_{a b});
     B::ImplicitIndex(B_{a b});    
     ex:= Tr( A B A C B ) - Tr( C );
-    untrace(_);
+    untrace(_)
     tst:= C Tr( A B A B ) - C Tr(1) - @(ex);
     assert(tst==0)
     print("Test 02 passed")
@@ -34,7 +34,7 @@ def test03():
     \sigma^{\mu}::ImplicitIndex(\sigma^{\mu a}_{b});    
     Tr{#}::Trace(indices=spinor);
     ex:= Tr( \sigma^{\mu} q \sigma^{\nu} );
-    untrace(_);
+    untrace(_)
     tst:= q Tr( \sigma^{\mu} \sigma^{\nu} ) - @(ex);
     assert(tst==0)
     print("Test 03 passed")
@@ -54,7 +54,7 @@ def test05():
     __cdbkernel__=create_scope()
     {a,b,c,d}::Indices(vector);
     ex:=(A)_{a b} (B)_{b c} (C)_{c d};
-    combine(_);
+    combine(_)
     tst:= (A B C)_{a d} - @(ex);
     assert(tst==0)
     print("Test 05 passed")
@@ -65,8 +65,8 @@ def test06():
     __cdbkernel__=create_scope()
     {a,b}::Indices(vector);
     ex:=(A)_{a b} (B)_{b a};
-    combine(_);
-    tst:= (A B)_{b b} - @(ex);
+    combine(_)
+    tst:= (B A)_{b b} - @(ex);
     assert(tst==0)
     print("Test 06 passed")
 
@@ -79,10 +79,21 @@ def test07():
     \Gamma^{m}::ImplicitIndex(\Gamma^{m a}_{b});
     \Gamma^{m}::Matrix;
     ex:=(\Gamma^{m} \Gamma^{n})^{a}_{c};
-    expand(_);
+    expand(_)
     tst:= (\Gamma^{m})^{a}_{b} (\Gamma^{n})^{b}_{c} - @(ex);
     assert(tst==0)
     print("Test 07 passed")
 
 test07()
+
+def test08():
+    __cdbkernel__=create_scope()
+    {a,b}::Indices(vector);
+    ex:=(u)_{a} (M)^{a b} (v)_{b};
+    combine(_)
+    tst:= \indexbracket(u M v) - @(ex);
+    assert(tst==0)
+    print("Test 08 passed")
+
+test08()
 
