@@ -129,3 +129,10 @@ def test12():
    
 test12()
 
+def test13():
+   R_{a b c d}::RiemannTensor.
+   A^{a b c}::AntiSymmetric.
+   ex:= R_{a b c d} A^{a b c};
+   young_reduce(ex, $R_{a b c d} A^{a b c}$);
+   assert ex==0
+   print("Test 13 passed")
