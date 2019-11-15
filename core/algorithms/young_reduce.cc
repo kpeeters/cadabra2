@@ -26,7 +26,7 @@ std::string ex_to_string(cadabra::Ex::iterator it, const cadabra::Kernel& kernel
 	return ex_to_string(cadabra::Ex(it), kernel);
 }
 
-#define DEBUG_OUTPUT 1
+#define DEBUG_OUTPUT 0
 #define cdebug if (!DEBUG_OUTPUT) {} else std::cerr
 
 
@@ -271,8 +271,11 @@ young_reduce::result_t young_reduce::apply(iterator& it)
 		res = apply_known(it);
 	}
 
-	if (res != result_t::l_no_action)
+	if (res != result_t::l_no_action) {
+		cdebug << "Action taken; cleaning...";
 		cleanup_dispatch(kernel, tr, it);
+		cdebug << "done!\n";
+	}
 	return res;
 }
 
@@ -298,11 +301,11 @@ young_reduce::result_t young_reduce::apply_known(iterator& it)
 	auto factor = it_sym.compare(pat_sym);
 	if (factor != 0) {
 		cdebug << "Projection was a multiple of pat; reducing...\n";
-		auto newit = tr.replace(nodes.back(), pat);
+		it = tr.replace(nodes.back(), pat);
 		nodes.pop_back();
 		for (auto node : nodes)
 			node_zero(node);
-		multiply(newit->multiplier, factor);
+		multiply(it->multiplier, factor);
 		cdebug << "Produced " << ex_to_string(it, kernel) << '\n';
 		return result_t::l_applied;
 	}
