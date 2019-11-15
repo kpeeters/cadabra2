@@ -147,3 +147,16 @@ Build the Cadabra Jupyter kernel with::
 The 'new' button in the Jupyterhub file browser should now offer you
 the option of creating a new Cadabra notebook.
 
+
+Creating a Conda package of the Cadabra Jupyter kernel
+------------------------------------------------------
+
+To build a Conda package of the Cadabra Jupyter kernel from scratch,
+first install miniconda as above, and activate::
+
+    source ~/miniconda3/bin/activate
+
+Install the prerequisites for building conda packages::
+
+    conda install conda-build
+
