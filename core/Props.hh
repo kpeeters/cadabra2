@@ -503,7 +503,7 @@ namespace cadabra {
 				if(ret1) { // property of the right type found for object 1
 					property_map_t::const_iterator walk2=pit2.first;
 					while(walk2!=pit2.second) {
-						if((*walk2).second.first->match(*this, it2, ignore_parent_rel)) { // match for object 1 found
+						if((*walk2).second.first->match(*this, it2, ignore_parent_rel)) { // match for object 2 found
 							ret2=dynamic_cast<const T *>((*walk2).second.second);
 							if(ret2) { // property of the right type found for object 2
 								if(ret1==ret2 && walk1!=walk2) { // accept if properties are the same and patterns are not
