@@ -74,6 +74,18 @@ test06()
 
 def test07():
     __cdbkernel__=create_scope()
+    {a,b}::Indices(vector);
+    {A,B}::AntiCommuting;
+    ex:=(A)_{a b} (B)_{b a};
+    combine(_)
+    tst:= (-B A)_{b b} - @(ex);
+    assert(tst==0)
+    print("Test 07 passed")
+
+test07()
+
+def test08():
+    __cdbkernel__=create_scope()
     {m,n}::Indices(vector);
     {a,b,c}::Indices(spinor, position=fixed);
     \Gamma^{m}::ImplicitIndex(\Gamma^{m a}_{b});
@@ -82,29 +94,29 @@ def test07():
     expand(_)
     tst:= (\Gamma^{m})^{a}_{b} (\Gamma^{n})^{b}_{c} - @(ex);
     assert(tst==0)
-    print("Test 07 passed")
-
-test07()
-
-def test08():
-    __cdbkernel__=create_scope()
-    {a,b}::Indices(vector);
-    ex:=(u)_{a} (M)^{a b} (v)_{b};
-    combine(_)
-    tst:= \indexbracket(u M v) - @(ex);
-    assert(tst==0)
     print("Test 08 passed")
 
 test08()
 
 def test09():
     __cdbkernel__=create_scope()
+    {a,b}::Indices(vector);
+    ex:=(u)_{a} (M)^{a b} (v)_{b};
+    combine(_)
+    tst:= \indexbracket(u M v) - @(ex);
+    assert(tst==0)
+    print("Test 09 passed")
+
+test09()
+
+def test10():
+    __cdbkernel__=create_scope()
     {a,b,c}::Indices(vector);
     ex:=(B)_{b c} (A)_{a b};
     combine(_);
     tst:= (A B)_{a c} - @(ex);
     assert(tst==0)
-    print("Test 09 passed")
+    print("Test 10 passed")
 
-test09()
+test10()
 
