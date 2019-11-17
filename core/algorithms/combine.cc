@@ -36,7 +36,7 @@ Algorithm::result_t combine::apply(iterator& it)
 
 	while(ind_dummy.begin()!=ind_dummy.end()) {
 		bool found=false;
-		index_map_t::iterator start=ind_dummy.begin();
+		index_map_t::iterator start=ind_dummy.begin(), backup;
 		while(!found && start!=ind_dummy.end()) {
 			iterator parent=tr.parent(start->second);
 			sibling_iterator ch=tr.begin(parent), last_part;
@@ -46,11 +46,17 @@ Algorithm::result_t combine::apply(iterator& it)
 				++ch;
 				}
 			if(last_part==start->second) {
-				// We are on a rightmost contracted index
-				found=true;
+				++last_part;
+				if(last_part==tr.end(parent)) {
+					// Dummy index with nothing to the right is preferred
+					found=true;
+					}
+				else backup=start;
 				}
-			else ++start;
+			if(!found) ++start;
 			}
+		// As a backup, we use a dummy index with only non-dummies to the right
+		if(!found) start=backup;
 		bool paired=true;
 		while(paired && start!=ind_dummy.end()) {
 			iterator parent=tr.parent(start->second);

@@ -97,3 +97,14 @@ def test08():
 
 test08()
 
+def test09():
+    __cdbkernel__=create_scope()
+    {a,b,c}::Indices(vector);
+    ex:=(B)_{b c} (A)_{a b};
+    combine(_);
+    tst:= (A B)_{a c} - @(ex);
+    assert(tst==0)
+    print("Test 09 passed")
+
+test09()
+
