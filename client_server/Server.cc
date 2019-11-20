@@ -231,7 +231,9 @@ void Server::on_close(websocketpp::connection_hdl hdl)
 	//	auto it = connections.find(hdl);
 	// snoop::log(snoop::info) << "Connection " << it->second.uuid << " close." << snoop::flush;
 	connections.erase(hdl);
-	exit(-1);
+
+	if(exit_on_disconnect)
+		exit(-1);
 	}
 
 int quit(void *)
@@ -506,8 +508,9 @@ void Server::on_kernel_fault(Block blk)
 	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
 	}
 
-void Server::run(int port)
+void Server::run(int port, bool eod)
 	{
+	exit_on_disconnect=eod;
 	try {
 		wserver.clear_access_channels(websocketpp::log::alevel::all);
 		wserver.clear_error_channels(websocketpp::log::elevel::all);

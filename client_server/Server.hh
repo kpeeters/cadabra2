@@ -38,8 +38,12 @@ class Server {
 
 		/// The only user-visible part: just instantiate a server object and
 		/// start it with run(). This will not return until the server has
-		/// been shut down. Picks a random port when port==0.
-		void run(int port=0);
+		/// been shut down. Picks a random port when port==0. If
+		/// `exit_on_disconnect==false`, keep the server alive on the
+		/// same porta and with the same authentication token when
+		/// the connection drops (so you can reconnect).
+		
+		void run(int port=0, bool exit_on_disconnect=true);
 
 
 		/// Python output catching. We implement this in a C++ class
@@ -136,6 +140,7 @@ class Server {
 		std::thread             runner;
 		std::mutex              block_available_mutex;
 		std::condition_variable block_available;
+		bool                    exit_on_disconnect;
 
 		// Data and connection info for a single block of code.
 		class Block {

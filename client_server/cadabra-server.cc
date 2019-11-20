@@ -64,11 +64,14 @@ int main(int argc, char **argv)
 #endif
 
 	int port=0;
+	bool eod=true;
 	if(argc>1)
 		port=atoi(argv[1]);
+	if(argc>2)
+		eod=(atoi(argv[2])==1);
 
 	Server server;
-	server.run(port);
+	server.run(port, eod);
 
 //	snoop::log(snoop::info) << "Terminating" << snoop::flush;
 #ifndef ENABLE_JUPYTER
