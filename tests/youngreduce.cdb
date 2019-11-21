@@ -81,10 +81,13 @@ def test09():
    __cdbkernel__ = create_scope()
    R_{a b c d}::RiemannTensor.
    ex := R_{a b c d} + R_{a d b c};
-   # This one still segfaults:
-   # young_reduce(ex);
+   
+   young_reduce(ex)
+   assert ex == $R_{a b c d} + R_{a d b c}$
+
    young_reduce(ex, $R_{a c d b}$)
    assert ex == $-R_{a c d b}$
+
    print("Test 09 passed")
    
 test09()
@@ -130,9 +133,33 @@ def test12():
 test12()
 
 def test13():
+   __cdbkernel__ = create_scope()
    R_{a b c d}::RiemannTensor.
    A^{a b c}::AntiSymmetric.
-   ex:= R_{a b c d} A^{a b c};
-   young_reduce(ex, $R_{a b c d} A^{a b c}$);
+   ex:= R_{a b c d} A^{a b c}:
+   young_reduce(ex, $R_{a b c d} A^{a b c}$)
    assert ex==0
    print("Test 13 passed")
+
+test13()
+
+def test14():
+	__cdbkernel__ = create_scope()
+	A_{a b c d e}::AntiSymmetric.
+	ex = young_reduce($9A_{b a c e d} - 3A_{e d c b a}$, $A_{b a c e d}$)
+	display(ex)
+	assert ex == $6A_{b a c e d}$
+	print("Test 14 passed")
+
+test14()
+
+def test15():
+	__cdbkernel__ = create_scope()
+	R_{a b c d}::RiemannTensor.
+	A_{a b c d}::AntiSymmetric.
+	ex := R_{b a c d}:
+	young_reduce(ex, $A_{b a c d})
+	assert ex == $R_{b a c d}
+	print("Test 15 passed")
+
+test15()
