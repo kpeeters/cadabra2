@@ -303,9 +303,9 @@ add_library(cadabra2++_static  STATIC $<TARGET_OBJECTS:cadabra2++objects>)
 target_link_libraries(cadabra2++_static ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB})
 
 # Sample executable
-add_executable("${TESTNAME}" "tests/${TESTNAME}.cc")
-target_include_directories("${TESTNAME}" PUBLIC "${CMAKE_BINARY_DIR}/include" "${CMAKE_BINARY_DIR}/include/cadabra2++")
-target_link_libraries("${TESTNAME}" cadabra2++)
+add_executable(simple simple.cc)
+target_include_directories(simple PUBLIC "${CMAKE_BINARY_DIR}/include" "${CMAKE_BINARY_DIR}/include/cadabra2++")
+target_link_libraries(simple cadabra2++)
  
 
 #---------------------------------------------------------------------------
