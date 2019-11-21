@@ -10,6 +10,14 @@ project(Cadabra)
 # Preamble
 #---------------------------------------------------------------------------
 
+# Aliases for directories
+set(CADABRA_ROOT_DIR ${CMAKE_SOURCE_DIR})
+set(CADABRA_CLIENT_SERVER_DIR ${CADABRA_ROOT_DIR}/client_server)
+set(CADABRA_CORE_DIR ${CADABRA_ROOT_DIR}/core)
+set(CADABRA_FRONTEND_DIR ${CADABRA_ROOT_DIR}/frontend)
+set(CADABRA_IMAGES_DIR ${CADABRA_ROOT_DIR}/images)
+set(CADABRA_LIBS_DIR ${CADABRA_ROOT_DIR}/libs)
+
 include(cmake/functions.cmake)
 
 # Include Visual Studio specific build commands
@@ -59,18 +67,18 @@ install(
   endif()
   "
   )
+
+  # Are we trying to build cadabra as a c++ library?
+  option(BUILD_AS_CPP_LIBRARY "Build cadabra as a C++ library" OFF)
+  if (BUILD_AS_CPP_LIBRARY)
+	enable_testing()
+	add_subdirectory(c++lib)
+	return()
+  endif()
  
 
 # Include packaging logic.
 include(cmake/packaging.cmake)
-
-# Aliases for directories
-set(CADABRA_ROOT_DIR ${CMAKE_SOURCE_DIR})
-set(CADABRA_CLIENT_SERVER_DIR ${CADABRA_ROOT_DIR}/client_server)
-set(CADABRA_CORE_DIR ${CADABRA_ROOT_DIR}/core)
-set(CADABRA_FRONTEND_DIR ${CADABRA_ROOT_DIR}/frontend)
-set(CADABRA_IMAGES_DIR ${CADABRA_ROOT_DIR}/images)
-set(CADABRA_LIBS_DIR ${CADABRA_ROOT_DIR}/libs)
 
 
 #---------------------------------------------------------------------------
