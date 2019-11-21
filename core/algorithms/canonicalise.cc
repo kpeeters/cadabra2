@@ -4,6 +4,7 @@
 #include "Functional.hh"
 #include "algorithms/canonicalise.hh"
 #include "modules/xperm_new.h"
+#include "properties/Trace.hh"
 #include "properties/Traceless.hh"
 #include "properties/Diagonal.hh"
 #include "properties/Derivative.hh"
@@ -50,17 +51,46 @@ bool canonicalise::remove_traceless_traces(iterator& it)
 	while(facit!=tr.end(it)) {
 		const Traceless *trl=kernel.properties.get_composite<Traceless>(facit);
 		if(trl) {
+			unsigned int ihits=0;
 			tree_exact_less_mod_prel_obj comp(&kernel.properties);
 			std::set<Ex, tree_exact_less_mod_prel_obj> countmap(comp);
 			index_iterator indit=begin_index(facit);
 			while(indit!=end_index(facit)) {
+				bool incremented_now=false;
+				auto ind=kernel.properties.get<Indices>(indit, true);
+				if(ind->set_name==trl->index_set_name) {
+					incremented_now=true;
+					++ihits;
+					}
 				if(countmap.find(Ex(indit))==countmap.end()) {
 					countmap.insert(Ex(indit));
-					++indit;
 					}
-				else {
+				else if(incremented_now) {
 					zero(it->multiplier);
 					return true;
+					}
+				++indit;
+				}
+			iterator parent=it;
+			if (tr.number_of_children(parent)==1) parent=tr.parent(it);
+			const Trace *trace=kernel.properties.get<Trace>(parent);
+			if(trace) {
+				int tmp;
+				auto impi=kernel.properties.get_with_pattern<ImplicitIndex>(facit, tmp);
+				if(impi.first->explicit_form.size()>0) {
+					// Does the explicit form have two more indices of the right type?
+					Ex::iterator eform=impi.first->explicit_form.begin();
+					unsigned int ehits=0;
+					indit=begin_index(eform);
+					while(indit!=end_index(eform)) {
+						auto ind=kernel.properties.get<Indices>(indit, true);
+						if(ind->set_name==trl->index_set_name && ind->set_name==trace->index_set_name) ++ehits;
+						if(ehits - ihits > 1) {
+							zero(parent->multiplier);
+							return true;
+							}
+						++indit;
+						}
 					}
 				}
 			}

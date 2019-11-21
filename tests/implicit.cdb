@@ -27,7 +27,7 @@ def test02():
     print("Test 02 passed")
 
 test02()
-        
+
 def test03():
     __cdbkernel__=create_scope()
     {a,b,c,d}::Indices(spinor);
@@ -43,13 +43,21 @@ test03()
         
 def test04():
     __cdbkernel__=create_scope()
-    {a,b,c,d}::Indices(spinor);
+    {a,b}::Indices(spinor);
+    {m,n}::Indices(vector);
     Tr{#}::Trace(indices=spinor);
-    ex:=Tr( V^{m} ) + W^{m};
+    A::ImplicitIndex(A_{a b});
+    B::ImplicitIndex(B_{m n});
+    A::Traceless(indices=spinor);
+    B::Traceless(indices=vector);
+    ex:=Tr( A ) + Tr( B );
+    canonicalise(_);
+    tst:= Tr( B ) - @(ex);
+    assert(tst==0)
     print("Test 04 passed")
 
 test04()
-        
+
 def test05():
     __cdbkernel__=create_scope()
     {a,b,c,d}::Indices(vector);
