@@ -16,15 +16,24 @@ class CadabraProxy(tornado.websocket.WebSocketHandler):
         res = self.start_cadabra_server()
         print(res)
         self.cdb_data=res
-        self.write_message(res["token"])
+        msg={"header": {"msg_type": "hello", "token": res["token"]}}
+        self.write_message(json.dumps(msg))
         url = "ws://localhost:"+str(res["port"])
         print(url)
-        conn = tornado.websocket.websocket_connect(url, on_message_callback=self.on_cdb_message)
-        conn.add_done_callback(self.on_cdb_connected)
+        self.cdb_data["conn_fut"] = tornado.websocket.websocket_connect(url, on_message_callback=self.on_cdb_message)
+        self.cdb_data["conn_fut"].add_done_callback(self.on_cdb_connected)
 
+    # Handler for messages which come in from the browser app and need to be
+    # forwarded to the kernel.
+    
     def on_message(self, message):
         print("message from "+str(self.cdb_data))
-        self.write_message(u"You said: " + message)
+        print(message)
+#        self.write_message(u"You said: " + message)
+        if "conn" in self.cdb_data:
+            self.cdb_data["conn"].write_message(message)
+        else:
+            print("Received before kernel connected")
 
     def on_close(self):
         print("WebSocket for "+str(self.cdb_data)+" closed")
@@ -34,22 +43,29 @@ class CadabraProxy(tornado.websocket.WebSocketHandler):
         print("Websocket to kernel connected")
         conn = fut.result()
         self.cdb_data["conn"]=conn
-        req = {}
-        header = {}
-        content = {}
-        header["uuid"]="none"
-        header["cell_id"]=1
-        header["cell_origin"]="client"
-        header["msg_type"]="execute_request"
-        content["code"]="ex:= A_{m n};"
-        req["auth_token"]=self.cdb_data["token"]
-        req["header"]=header
-        req["content"]=content
-        conn.write_message(json.dumps(req))
+#         req = {}
+#         header = {}
+#         content = {}
+#         header["uuid"]="none"
+#         header["cell_id"]=1
+#         header["cell_origin"]="client"
+#         header["msg_type"]="execute_request"
+#         content["code"]="ex:= A_{m n};"
+#         req["auth_token"]=self.cdb_data["token"]
+#         req["header"]=header
+#         req["content"]=content
+#         conn.write_message(json.dumps(req))
         
     def on_cdb_message(self, msg):
         print("Received message from cdb kernel")
         print(str(msg))
+        if msg!=None:
+            # Forward to the browser.
+            # First change any header/cell_id to a string to prevent
+            # Javascript from rounding it...
+            jmsg=json.loads(msg)
+            jmsg["header"]["cell_id"]=str(jmsg["header"]["cell_id"])
+            self.write_message(json.dumps(jmsg))
         
     def start_cadabra_server(self):
         """ Start a Cadabra server in a docker container.
@@ -90,7 +106,10 @@ if __name__ == "__main__":
         (r"/ws", CadabraProxy),
         (r"/js/(.*)",
          tornado.web.StaticFileHandler,
-         {'path': '../js/'})
+         {'path': '../js/'}),
+        (r"/css/(.*)",
+         tornado.web.StaticFileHandler,
+         {'path': '../css/'})
     ])
     app.settings["template_path"]="../html"
     app.listen(8888)
