@@ -1,9 +1,8 @@
 import docker
-
 import tornado.websocket
 import tornado.ioloop
 import tornado.web
-
+import json
 
 
 class CadabraHub(tornado.web.RequestHandler):
@@ -18,9 +17,10 @@ class CadabraProxy(tornado.websocket.WebSocketHandler):
         print(res)
         self.cdb_data=res
         self.write_message(res["token"])
-        conn = tornado.websocket.websocket_connect("http://localhost:"+str(res["port"]),
-                                 on_message_callback=self.on_cdb_message)
-        self.cdb_data["conn"]=conn
+        url = "ws://localhost:"+str(res["port"])
+        print(url)
+        conn = tornado.websocket.websocket_connect(url, on_message_callback=self.on_cdb_message)
+        conn.add_done_callback(self.on_cdb_connected)
 
     def on_message(self, message):
         print("message from "+str(self.cdb_data))
@@ -30,6 +30,23 @@ class CadabraProxy(tornado.websocket.WebSocketHandler):
         print("WebSocket for "+str(self.cdb_data)+" closed")
         self.cdb_data["container"].stop()
 
+    def on_cdb_connected(self, fut):
+        print("Websocket to kernel connected")
+        conn = fut.result()
+        self.cdb_data["conn"]=conn
+        req = {}
+        header = {}
+        content = {}
+        header["uuid"]="none"
+        header["cell_id"]=1
+        header["cell_origin"]="client"
+        header["msg_type"]="execute_request"
+        content["code"]="ex:= A_{m n};"
+        req["auth_token"]=self.cdb_data["token"]
+        req["header"]=header
+        req["content"]=content
+        conn.write_message(json.dumps(req))
+        
     def on_cdb_message(self, msg):
         print("Received message from cdb kernel")
         print(str(msg))
