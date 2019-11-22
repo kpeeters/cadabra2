@@ -2,7 +2,7 @@
 var ws=null;
 
 $(document).ready( function() {
-    ws = new WebSocket("ws://localhost:35831");
+    ws = new WebSocket("ws://localhost:8888/ws");
     ws.onopen = function() {
         console.log("Connection to Cadabra server open.");
     };

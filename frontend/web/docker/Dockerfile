@@ -4,7 +4,7 @@ FROM library/debian
 LABEL maintainer="info@cadabra.science"
 
 ADD master.tar.gz /tmp
-RUN apt update && apt install -y cmake g++ pkg-config \
+RUN adduser --disabled-password cadabra && apt update && apt install -y cmake g++ pkg-config \
                       python3-dev python3-sympy \
                       libpcre3 libpcre3-dev libgmp3-dev \
                       libglibmm-2.4-dev \
@@ -25,7 +25,9 @@ RUN apt update && apt install -y cmake g++ pkg-config \
 #                       libgmp-dev libsqlite3-dev uuid-dev 
 
 #COPY cadabra-server /usr/bin/cadabra-server
- 
-#CMD ["/usr/local/bin/cadabra-server", "-D", "FOREGROUND"]
-#EXPOSE 80
+
+# Start the Cadabra server on port 32768, do not exit process
+CMD ["su", "-", "cadabra", "-c", "/usr/local/bin/cadabra-server 32768 0"]
+
+EXPOSE 32768
  
