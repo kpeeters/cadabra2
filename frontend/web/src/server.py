@@ -4,19 +4,6 @@ import tornado.websocket
 import tornado.ioloop
 import tornado.web
 
-class CadabraHub(tornado.web.RequestHandler):
-    def get(self):
-        self.render("index.html", title="Cadabra2")
-
-class CadabraProxy(tornado.websocket.WebSocketHandler):
-    def open(self):
-        print("WebSocket opened")
-
-    def on_message(self, message):
-        self.write_message(u"You said: " + message)
-
-    def on_close(self):
-        print("WebSocket closed")
 
 
 def start_cadabra_server():
@@ -44,10 +31,29 @@ def start_cadabra_server():
     tok=tok.decode("utf-8") 
     tok=tok.rstrip("\n")
     print("Authentication token", tok)
-    return { "port": port, "token": tok };
-#    print(container.exec_run("cadabra-server 32768 0"))
-#    container.stop(timeout=0)
+    return { "port": port, "token": tok, "container": container };
     
+
+class CadabraHub(tornado.web.RequestHandler):
+    def get(self):
+        self.render("index.html", title="Cadabra2")
+
+class CadabraProxy(tornado.websocket.WebSocketHandler):
+    def open(self, *args, **kwargs):
+        print("WebSocket opened")
+        res = start_cadabra_server()
+        print(res)
+        self.cdb_data=res
+        self.write_message(res["token"])
+
+    def on_message(self, message):
+        print("message from "+str(self.cdb_data))
+        self.write_message(u"You said: " + message)
+
+    def on_close(self):
+        print("WebSocket for "+str(self.cdb_data)+" closed")
+        self.cdb_data["container"].stop()
+
 
 #print(client.containers.list())    
 #print(client.images.list())
