@@ -36,7 +36,7 @@ Algorithm::result_t combine::apply(iterator& it)
 
 	while(ind_dummy.begin()!=ind_dummy.end()) {
 		bool found=false;
-		index_map_t::iterator start=ind_dummy.begin();
+		index_map_t::iterator start=ind_dummy.begin(), backup;
 		while(!found && start!=ind_dummy.end()) {
 			iterator parent=tr.parent(start->second);
 			sibling_iterator ch=tr.begin(parent), last_part;
@@ -46,11 +46,17 @@ Algorithm::result_t combine::apply(iterator& it)
 				++ch;
 				}
 			if(last_part==start->second) {
-				// We are on a rightmost contracted index
-				found=true;
+				++last_part;
+				if(last_part==tr.end(parent)) {
+					// Dummy index with nothing to the right is preferred
+					found=true;
+					}
+				else backup=start;
 				}
-			else ++start;
+			if(!found) ++start;
 			}
+		// As a backup, we use a dummy index with only non-dummies to the right
+		if(!found) start=backup;
 		bool paired=true;
 		while(paired && start!=ind_dummy.end()) {
 			iterator parent=tr.parent(start->second);
@@ -133,6 +139,38 @@ Algorithm::result_t combine::apply(iterator& it)
 			iterator brackprod=tr.append_child(outerbrack, str_node("\\prod"));
 			iterator parn1=tr.parent(*dums1);
 			iterator parn2=tr.parent(*dums2);
+
+			// count how many sign changes stand between the two objects
+			int sign=1;
+			unsigned int hits=0;
+			Ex_comparator compare(kernel.properties);
+			sib=tr.begin(it);
+			while(hits<2) {
+				if(hits==1 && sib!=parn2) {
+					// pass arguments manually as can_swap() does not check them
+					bool isbrack=*(sib->name)=="\\indexbracket";
+					if(isbrack && isbrack2) {
+						auto es=compare.equal_subtree(tr.begin(parn2), tr.begin(sib));
+						sign*=compare.can_swap(tr.begin(parn2), tr.begin(sib), es, true);
+						}
+					else if(isbrack && !isbrack2) {
+						auto es=compare.equal_subtree(parn2, tr.begin(sib));
+						sign*=compare.can_swap(parn2, tr.begin(sib), es, true);
+						}
+					else if(!isbrack && isbrack2) {
+						auto es=compare.equal_subtree(tr.begin(parn2), sib);
+						sign*=compare.can_swap(tr.begin(parn2), sib, es, true);
+						}
+					else {
+						auto es=compare.equal_subtree(parn2, sib);
+						sign*=compare.can_swap(parn2, sib, es, true);
+						}
+					}
+				if(sib==parn1 || sib==parn2) ++hits;
+				++sib;
+				}
+			if(sign==-1) flip_sign(brackprod->multiplier);
+
 			// remove the dummy index from these two objects, and move
 			// other (dummy or not) indices to the outer indexbracket.
 			sibling_iterator ind1=tr.begin(tr.parent(*dums1));
