@@ -1,6 +1,7 @@
 
 #include "Cleanup.hh"
 #include "algorithms/sort_product.hh"
+#include "properties/Trace.hh"
 
 using namespace cadabra;
 
@@ -85,6 +86,61 @@ Algorithm::result_t sort_product::apply(iterator& st)
 				}
 			++one;
 			++two;
+			}
+		}
+
+	if(ret==result_t::l_no_action) {
+		bool found=false;
+		bool ascend=true;
+		iterator parn=st;
+		// It is fine to cycle when we have a sum of a sum inside a trace
+		while(ascend && !tr.is_head(parn)) {
+			parn=tr.parent(parn);
+			const Trace *trace=kernel.properties.get<Trace>(parn);
+			if(trace) {
+				ascend=false;
+				found=true;
+				}
+			else if(*parn->name=="\\indexbracket") {
+				ascend=false;
+				if(number_of_indices(parn)==2) {
+					index_iterator first=begin_index(parn);
+					index_iterator last=first;
+					++last;
+					if(*first->name==*last->name) found=true;
+					}
+				}
+			else if(*parn->name!="\\sum") {
+				ascend=false;
+				}
+			}
+		if(found) {
+			one=tr.begin(st);
+			two=one;
+			++two;
+			while(two!=tr.end(st)) {
+				compare.clear();
+				auto es=compare.equal_subtree(one, two);
+				if(compare.should_swap(one, es)) one=two;
+				++two;
+				}
+			// We have found the element that should go at the front of the trace
+			Ex::sibling_iterator front=one;
+			while(tr.begin(st)!=front) {
+				one=tr.begin(st);
+				two=one;
+				++two;
+				while(two!=tr.end(st)) {
+					compare.clear();
+					auto es=compare.equal_subtree(one, two);
+					int sign=compare.can_swap_components(one, two, es);
+					if(sign==-1) flip_sign(st->multiplier);
+					tr.swap(one);
+					++two;
+					++two;
+					}
+				}
+			ret=result_t::l_applied;
 			}
 		}
 

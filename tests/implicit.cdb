@@ -144,3 +144,29 @@ def test11():
 
 test11()
 
+def test12():
+    __cdbkernel__=create_scope()
+    {a,b}::Indices(vector);
+    Tr{#}::Trace(indices=vector);
+    A::ImplicitIndex(A_{a b});
+    B::ImplicitIndex(B_{a b});
+    {A_{a b}, B_{a b}}::AntiCommuting;
+    ex:=Tr( B A );
+    sort_product(_);
+    tst:= Tr( -A B ) - @(ex);
+    assert(tst==0)
+    print("Test 12 passed")
+
+test12()
+
+def test13():
+    __cdbkernel__=create_scope()
+    {A,B,C}::ImplicitIndex;
+    ex:=(B A C)_{a a};
+    sort_product(_);
+    tst:= (A C B)_{a a} - @(ex);
+    assert(tst==0)
+    print("Test 13 passed")
+
+test13()
+
