@@ -81,7 +81,6 @@ namespace cadabra {
 		def_algo<collect_components>(m, "collect_components", true, false, 0);
 		def_algo<collect_factors>(m, "collect_factors", true, false, 0);
 		def_algo<collect_terms>(m, "collect_terms", true, false, 0);
-		def_algo<combine>(m, "combine", true, false, 0);
 		def_algo<decompose_product>(m, "decompose_product", true, false, 0);
 		def_algo<distribute>(m, "distribute", true, false, 0);
 		def_algo<eliminate_kronecker>(m, "eliminate_kronecker", true, false, 0);
@@ -100,9 +99,10 @@ namespace cadabra {
 		def_algo<sort_sum>(m, "sort_sum", true, false, 0);
 		def_algo<tabdimension>(m, "tab_dimension", true, false, 0);
 		def_algo<young_project_product>(m, "young_project_product", true, false, 0);
-		def_algo<drop_weight, Ex>(m, "drop_weight", false, false, 0, py::arg("condition") = Ex{});
+		def_algo<combine, Ex>(m, "combine", true, false, 0, py::arg("trace_op") = Ex{});
 		def_algo<complete, Ex>(m, "complete", false, false, 0, py::arg("add"));
 		def_algo<decompose, Ex>(m, "decompose", false, false, 0, py::arg("basis"));
+		def_algo<drop_weight, Ex>(m, "drop_weight", false, false, 0, py::arg("condition") = Ex{});
 		def_algo<eliminate_metric, Ex>(m, "eliminate_metric", true, false, 0, py::arg("preferred") = Ex{});
 		def_algo<eliminate_vielbein, Ex>(m, "eliminate_vielbein", true, false, 0, py::arg("preferred") = Ex{});		
 		def_algo<keep_weight, Ex>(m, "keep_weight", false, false, 0, py::arg("condition"));
