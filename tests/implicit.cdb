@@ -128,3 +128,19 @@ def test10():
 
 test10()
 
+def test11():
+    __cdbkernel__=create_scope()
+    {a,b}::Indices(vector);
+    Tr{#}::Trace(indices=vector);
+    A::ImplicitIndex(A_{a b});
+    B::ImplicitIndex(B_{a b});
+    {A_{a b}, B_{a b}, C, D}::AntiCommuting;
+    ex:=Tr( A C B D );
+    untrace(_);
+    sort_product(_);
+    tst:= -C D Tr( A B ) - @(ex);
+    assert(tst==0)
+    print("Test 11 passed")
+
+test11()
+
