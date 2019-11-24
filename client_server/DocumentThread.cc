@@ -9,13 +9,15 @@
 #include <string>
 #include <fstream>
 
-#include <boost/config.hpp>
+//#include <boost/config.hpp>
 
 #include <internal/unistd.h>
 #include <sys/types.h>
-#include <glibmm/miscutils.h>
+//#include <glibmm/miscutils.h>
 #include <json/json.h>
+#ifndef EMSCRIPTEN
 #include "Snoop.hh"
+#endif
 #include "Config.hh"
 
 using namespace cadabra;
@@ -25,8 +27,10 @@ DocumentThread::DocumentThread(GUIBase* g)
 	{
 	// Setup logging.
 	std::string version=std::string(CADABRA_VERSION_MAJOR)+"."+CADABRA_VERSION_MINOR+"."+CADABRA_VERSION_PATCH;
+#ifndef EMSCRIPTEN
 	snoop::log.init("Cadabra", version, "log.cadabra.science");
 	snoop::log.set_sync_immediately(true);
+#endif
 	//	snoop::log(snoop::warn) << "Starting" << snoop::flush;
 
 	}
@@ -222,9 +226,11 @@ void DocumentThread::Prefs::save()
 
 void DocumentThread::set_user_details(const std::string& name, const std::string& email, const std::string& affiliation)
 	{
+#ifndef EMSCRIPTEN
 	snoop::log("name") << name << snoop::flush;
 	snoop::log("email") << email << snoop::flush;
 	snoop::log("affiliation") << affiliation << snoop::flush;
+#endif
 	}
 
 bool DocumentThread::help_type_and_topic(const std::string& before, const std::string& after,

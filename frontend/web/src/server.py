@@ -57,8 +57,8 @@ class CadabraProxy(tornado.websocket.WebSocketHandler):
 #         conn.write_message(json.dumps(req))
         
     def on_cdb_message(self, msg):
-        print("Received message from cdb kernel")
-        print(str(msg))
+        #print("Received message from cdb kernel")
+        #print(str(msg))
         if msg!=None:
             # Forward to the browser.
             # First change any header/cell_id to a string to prevent

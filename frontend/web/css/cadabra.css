@@ -8,4 +8,10 @@ textarea {
     font-family: monospace;
     color: blue;
     font-size: 14px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+.MathJax { 
+    text-align: left !important;
+    margin-left: 15px !important;
 }

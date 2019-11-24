@@ -5,10 +5,12 @@
 #include <sstream>
 #include <fstream>
 #include <regex>
-#include <boost/filesystem.hpp>
-#include <boost/algorithm/string.hpp>
+//#include <boost/filesystem.hpp>
+//#include <boost/algorithm/string.hpp>
 #include <iostream>
+#ifdef WEB_INCOMPLETE
 #include <glibmm/base64.h>
+#endif
 #include <internal/uuid.h>
 
 using namespace cadabra;
@@ -538,7 +540,9 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		// Images have to be saved to disk as separate files as
 		// LaTeX has no concept of images embedded in the .tex file.
 		std::ofstream out(image_file_base+std::to_string(image_num)+".png");
+		#ifdef WEB_INCOMPLETE
 		out << Glib::Base64::decode(it->textbuf);
+		#endif
 		++image_num;
 		}
 	else {
