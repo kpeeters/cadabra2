@@ -58,10 +58,14 @@ bool canonicalise::remove_traceless_traces(iterator& it)
 			while(indit!=end_index(facit)) {
 				bool incremented_now=false;
 				auto ind=kernel.properties.get<Indices>(indit, true);
-				if(ind->set_name==trl->index_set_name) {
-					incremented_now=true;
-					++ihits;
+				if(ind) {
+					if(ind->set_name==trl->index_set_name) {
+						incremented_now=true;
+						++ihits;
+						}
 					}
+				else incremented_now=true;
+				// Having no name is treated as having the right name
 				if(countmap.find(Ex(indit))==countmap.end()) {
 					countmap.insert(Ex(indit));
 					}
@@ -72,7 +76,7 @@ bool canonicalise::remove_traceless_traces(iterator& it)
 				++indit;
 				}
 			iterator parent=it;
-			if (tr.number_of_children(parent)==1) parent=tr.parent(it);
+			if (tr.number_of_children(it)==1 && !tr.is_head(it)) parent=tr.parent(it);
 			const Trace *trace=kernel.properties.get<Trace>(parent);
 			if(trace) {
 				int tmp;
@@ -86,7 +90,7 @@ bool canonicalise::remove_traceless_traces(iterator& it)
 						auto ind=kernel.properties.get<Indices>(indit, true);
 						if(ind->set_name==trl->index_set_name && ind->set_name==trace->index_set_name) ++ehits;
 						if(ehits - ihits > 1) {
-							zero(parent->multiplier);
+							zero(it->multiplier);
 							return true;
 							}
 						++indit;

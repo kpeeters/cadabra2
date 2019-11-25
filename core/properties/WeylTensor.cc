@@ -35,8 +35,10 @@ void WeylTensor::validate(const Kernel& kernel, const Ex& pat) const
 	index_iterator indit=index_iterator::begin(kernel.properties, pat.begin());
 	auto ind=kernel.properties.get<Indices>(indit, true);
 	// We cannot access the right things from parse()
-	WeylTensor *ptr = const_cast<WeylTensor*>(this);
-	ptr->index_set_name=ind->set_name;
+	if(ind) {
+		WeylTensor *ptr = const_cast<WeylTensor*>(this);
+		ptr->index_set_name=ind->set_name;
+		}
 	}
 
 void WeylTensor::latex(std::ostream& str) const
