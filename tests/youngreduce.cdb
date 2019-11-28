@@ -6,6 +6,7 @@ def test01():
    S_{a b c}::Symmetric;
    ex:= S_{a b c}S_{b a c} + S_{b a c}S_{c a b}:
    young_reduce(ex, $S_{a b c}S_{a b c}$)
+   display(ex)
    assert(ex == $2S_{a b c}S_{a b c}$)
    print("Test 01 passed")
 
@@ -158,8 +159,8 @@ def test15():
 	R_{a b c d}::RiemannTensor.
 	A_{a b c d}::AntiSymmetric.
 	ex := R_{b a c d}:
-	young_reduce(ex, $A_{b a c d})
-	assert ex == $R_{b a c d}
+	young_reduce(ex, $A_{b a c d}$)
+	assert ex == $R_{b a c d}$
 	print("Test 15 passed")
 
 test15()

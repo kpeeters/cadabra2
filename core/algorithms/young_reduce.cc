@@ -26,35 +26,39 @@ std::string ex_to_string(cadabra::Ex::iterator it, const cadabra::Kernel& kernel
 	return ex_to_string(cadabra::Ex(it), kernel);
 }
 
-std::string adjform_to_string(const cadabra::yr::adjform_t& adjform, const std::vector<cadabra::nset_t::iterator>& index_map)
+std::string adjform_to_string(const cadabra::yr::adjform_t& adjform, const std::vector<cadabra::nset_t::iterator>* index_map = nullptr)
 {
 	std::map<cadabra::yr::index_t, int> dummy_map;
 	int dummy_counter = 0;
 	std::string res;
 	for (const auto& elem : adjform) {
-		if (elem < 0) {
-			res += *index_map[-(elem + 1)];
-		}
-		else if (dummy_map.find(elem) != dummy_map.end()) {
-			res += "d_" + std::to_string(dummy_map[elem]);
+		if (index_map) {
+			if (elem < 0) {
+				res += *(*index_map)[-(elem + 1)];
+			}
+			else if (dummy_map.find(elem) != dummy_map.end()) {
+				res += "d_" + std::to_string(dummy_map[elem]);
+			}
+			else {
+				dummy_map[adjform[adjform[elem]]] = dummy_counter++;
+				res += "d_" + std::to_string(dummy_map[adjform[adjform[elem]]]);
+			}
 		}
 		else {
-			dummy_map[adjform[adjform[elem]]] = dummy_counter++;
-			res += "d_" + std::to_string(dummy_map[adjform[adjform[elem]]]);
+			res += std::to_string(elem);
 		}
 	}
 	return res;
 }
 
-std::string pf_to_string (const cadabra::yr::ProjectedForm& projform, const std::vector<cadabra::nset_t::iterator>& index_map)
+std::string pf_to_string (const cadabra::yr::ProjectedForm& projform, const std::vector<cadabra::nset_t::iterator>* index_map = nullptr)
 {
 	std::stringstream os;
 	int i = 0;
-	int max = 20;
+	int max = std::min(std::size_t(200), projform.data.size());
 	auto it = projform.data.begin();
-	while (i < max && i < projform.data.size()) {
-		for (const auto& elem : it->first)
-			os << elem << ' ';
+	while (i < max) {
+		os << adjform_to_string(it->first/*, index_map*/);
 		os << '\t' << it->second << '\n';
 		++i;
 		++it;
@@ -65,11 +69,53 @@ std::string pf_to_string (const cadabra::yr::ProjectedForm& projform, const std:
 	return os.str();
 }
 
-#define DEBUG_OUTPUT 1
+#define DEBUG_OUTPUT 0
 #define cdebug if (!DEBUG_OUTPUT) {} else std::cerr
 
 
 ////////////////////////////////////////////////////////////////////
+
+// Get the next permutation of adjform and return the number of swaps
+// required for the transformation
+int next_perm(cadabra::yr::adjform_t& adjform)
+{
+	int n = adjform.size();
+
+	// Find longest non-increasing suffix to get pivot
+	int pivot = n - 2;
+	while (pivot > -1) {
+		if (adjform[pivot + 1] > adjform[pivot])
+			break;
+		--pivot;
+	}
+
+	// Entire sequence is already sorted, return
+	if (pivot == -1)
+		return 0;
+
+	// Find rightmost element greater than pivot
+	int idx = n - 1;
+	while (idx > pivot) {
+		if (adjform[idx] > adjform[pivot])
+			break;
+		--idx;
+	}
+
+	// Swap with pivot
+	std::swap(adjform[pivot], adjform[idx]);
+
+	// Reverse the suffix
+	int swaps = 1;
+	int maxswaps = (n - pivot - 1) / 2;
+	for (int i = 0; i < maxswaps; ++i) {
+		if (adjform[pivot + i + 1] != adjform[n - i - 1]) {
+			std::swap(adjform[pivot + i + 1], adjform[n - i - 1]);
+			++swaps;
+		}
+	}
+
+	return swaps;
+}
 
 // Returns the position of 'val' between 'begin' and 'end', starting
 // the search at 'offset'
@@ -147,19 +193,23 @@ namespace cadabra {
 			data[adjform] = value;
 		}
 
-		void ProjectedForm::apply_young_symmetry(const std::vector<index_t>& indices, bool antisymmetric)
+		void ProjectedForm::apply_young_symmetry(const adjform_t& indices, bool antisymmetric)
 		{
-			map_t old_data = data;
+			map_t old_data;
+			std::swap(old_data, data);
 
 			// Loop over all entries, for each one looping over all permutations
 			// of the indices to be symmetrized and creating a new term for that
 			// permutation; then add the new term to the list of entries
 			for (const auto& kv : old_data) {
+
+				cdebug << "Applying young_symmetry " << (antisymmetric ? -kv.second : kv.second) << " * " << adjform_to_string(indices) << " to term " << adjform_to_string(kv.first) << '\n';
+
 				auto perm = indices;
-				bool flip = false;
 				int parity = 1;
-				while (std::next_permutation(perm.begin(), perm.end())) {
-					if (antisymmetric && (flip = !flip))
+				int swaps = 2;
+				do {
+					if (antisymmetric && swaps % 2 != 0)
 						parity *= -1;
 					auto ret = kv.first;
 					for (size_t i = 0; i < indices.size(); ++i) {
@@ -169,8 +219,9 @@ namespace cadabra {
 						if (ret[index] >= 0)
 							ret[ret[index]] = index;
 					}
+					cdebug << "\tMade term " << adjform_to_string(ret) << " * " << (parity * kv.second) << '\n';
 					data[ret] += parity * kv.second;
-				}
+				} while (swaps = next_perm(perm));
 			}
 		}
 
@@ -539,7 +590,7 @@ ProjectedForm young_reduce::symmetrize(Ex::iterator it)
 
 	sym.multiply(*it->multiplier);
 
-	cdebug << sym << '\n';
+	cdebug << pf_to_string(sym, &index_map) << '\n';
 
 	return sym;
 }
