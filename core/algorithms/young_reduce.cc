@@ -26,11 +26,96 @@ std::string ex_to_string(cadabra::Ex::iterator it, const cadabra::Kernel& kernel
 	return ex_to_string(cadabra::Ex(it), kernel);
 }
 
-#define DEBUG_OUTPUT 1
+std::string adjform_to_string(const cadabra::yr::adjform_t& adjform, const std::vector<cadabra::nset_t::iterator>* index_map = nullptr)
+{
+	std::map<cadabra::yr::index_t, int> dummy_map;
+	int dummy_counter = 0;
+	std::string res;
+	for (const auto& elem : adjform) {
+		if (index_map) {
+			if (elem < 0) {
+				res += *(*index_map)[-(elem + 1)];
+			}
+			else if (dummy_map.find(elem) != dummy_map.end()) {
+				res += "d_" + std::to_string(dummy_map[elem]);
+			}
+			else {
+				dummy_map[adjform[adjform[elem]]] = dummy_counter++;
+				res += "d_" + std::to_string(dummy_map[adjform[adjform[elem]]]);
+			}
+		}
+		else {
+			res += std::to_string(elem);
+		}
+	}
+	return res;
+}
+
+std::string pf_to_string (const cadabra::yr::ProjectedForm& projform, const std::vector<cadabra::nset_t::iterator>* index_map = nullptr)
+{
+	std::stringstream os;
+	int i = 0;
+	int max = std::min(std::size_t(200), projform.data.size());
+	auto it = projform.data.begin();
+	while (i < max) {
+		os << adjform_to_string(it->first/*, index_map*/);
+		os << '\t' << it->second << '\n';
+		++i;
+		++it;
+	}
+	if (i == max) {
+		os << "(skipped " << (projform.data.size() - max) << " terms)\n";
+	}
+	return os.str();
+}
+
+#define DEBUG_OUTPUT 0
 #define cdebug if (!DEBUG_OUTPUT) {} else std::cerr
 
 
 ////////////////////////////////////////////////////////////////////
+
+// Get the next permutation of adjform and return the number of swaps
+// required for the transformation
+int next_perm(cadabra::yr::adjform_t& adjform)
+{
+	int n = adjform.size();
+
+	// Find longest non-increasing suffix to get pivot
+	int pivot = n - 2;
+	while (pivot > -1) {
+		if (adjform[pivot + 1] > adjform[pivot])
+			break;
+		--pivot;
+	}
+
+	// Entire sequence is already sorted, return
+	if (pivot == -1)
+		return 0;
+
+	// Find rightmost element greater than pivot
+	int idx = n - 1;
+	while (idx > pivot) {
+		if (adjform[idx] > adjform[pivot])
+			break;
+		--idx;
+	}
+
+	// Swap with pivot
+	std::swap(adjform[pivot], adjform[idx]);
+
+	// Reverse the suffix
+	int swaps = 1;
+	int maxswaps = (n - pivot - 1) / 2;
+	for (int i = 0; i < maxswaps; ++i) {
+		if (adjform[pivot + i + 1] != adjform[n - i - 1]) {
+			std::swap(adjform[pivot + i + 1], adjform[n - i - 1]);
+			++swaps;
+		}
+	}
+
+	return swaps;
+}
 
 // Returns the position of 'val' between 'begin' and 'end', starting
 // the search at 'offset'
@@ -46,6 +131,7 @@ namespace cadabra {
 	{
 		mpq_class ProjectedForm::compare(const ProjectedForm& other) const
 		{
+			cdebug << "entered compare\n";
 			// Early failure checks
 			if (data.empty() || data.size() != other.data.size())
 				return 0;
@@ -54,20 +140,40 @@ namespace cadabra {
 			// other terms checking that the factor is the same. If not, return 0
 			auto a_it = data.begin(), b_it = other.data.begin(), a_end = data.end();
 			mpq_class factor = a_it->second / b_it->second;
+			cdebug << "factor is " << factor << '\n';
 			while (a_it != a_end) {
-				if (a_it->second / b_it->second != factor)
+				cdebug << "comparing " << a_it->second << " * ";
+				for (const auto& elem : a_it->first)
+					cdebug << elem << ' ';
+				cdebug << " to " << b_it->second << " * ";
+				for (const auto& elem : b_it->first)
+					cdebug << elem << ' ';
+				cdebug << '\n';
+				if (a_it->second / b_it->second != factor) {
+					cdebug << "factor was " << (a_it->second / b_it->second) << "!\n";
 					return 0;
+				}
 				++a_it, ++b_it;
 			}
+			cdebug << "matched all terms!\n";
 			return factor;
 		}
 
-		void ProjectedForm::combine(const ProjectedForm& other)
+		void ProjectedForm::combine(const ProjectedForm& other, mpq_class factor)
 		{
-			for (const auto& kv : other.data) {
-				data[kv.first] += kv.second;
-				if (data[kv.first] == 0)
-					data.erase(kv.first);
+			if (factor == 1) {
+				for (const auto& kv : other.data) {
+					data[kv.first] += kv.second;
+					if (data[kv.first] == 0)
+						data.erase(kv.first);
+				}
+			}
+			else {
+				for (const auto& kv : other.data) {
+					data[kv.first] += kv.second * factor;
+					if (data[kv.first] == 0)
+						data.erase(kv.first);
+				}
 			}
 		}
 
@@ -87,19 +193,23 @@ namespace cadabra {
 			data[adjform] = value;
 		}
 
-		void ProjectedForm::apply_young_symmetry(const std::vector<index_t>& indices, bool antisymmetric)
+		void ProjectedForm::apply_young_symmetry(const adjform_t& indices, bool antisymmetric)
 		{
-			map_t old_data = data;
+			map_t old_data;
+			std::swap(old_data, data);
 
 			// Loop over all entries, for each one looping over all permutations
 			// of the indices to be symmetrized and creating a new term for that
 			// permutation; then add the new term to the list of entries
 			for (const auto& kv : old_data) {
+
+				cdebug << "Applying young_symmetry " << (antisymmetric ? -kv.second : kv.second) << " * " << adjform_to_string(indices) << " to term " << adjform_to_string(kv.first) << '\n';
+
 				auto perm = indices;
-				bool flip = false;
 				int parity = 1;
-				while (std::next_permutation(perm.begin(), perm.end())) {
-					if (antisymmetric && (flip = !flip))
+				int swaps = 2;
+				do {
+					if (antisymmetric && swaps % 2 != 0)
 						parity *= -1;
 					auto ret = kv.first;
 					for (size_t i = 0; i < indices.size(); ++i) {
@@ -109,8 +219,9 @@ namespace cadabra {
 						if (ret[index] >= 0)
 							ret[ret[index]] = index;
 					}
+					cdebug << "\tMade term " << adjform_to_string(ret) << " * " << (parity * kv.second) << '\n';
 					data[ret] += parity * kv.second;
-				}
+				} while (swaps = next_perm(perm));
 			}
 		}
 
@@ -147,14 +258,20 @@ namespace cadabra {
 			Ex::iterator l1 = lhs.begin(), l2 = lhs.end();
 			Ex::iterator r1 = rhs.begin(), r2 = rhs.end();
 
+			std::vector<Ex::iterator> l_indices, r_indices;
+
 			// Loop over all tree nodes using a depth first iterator. If the
 			// entry is an index ensure that it has the same parent_rel, if it
 			// is any other type of node check that the names match.
 			while (l1 != l2 && r1 != r2) {
 				if (l1->is_index()) {
+					l1.skip_children();
+					r1.skip_children();
 					if (l1->fl.parent_rel != r1->fl.parent_rel) {
 						return false;
 					}
+					l_indices.push_back(l1);
+					r_indices.push_back(r1);
 				}
 				else {
 					if (l1->name != r1->name || l1->multiplier != r1->multiplier) {
@@ -185,20 +302,20 @@ namespace cadabra {
 			}
 		}
 
-		std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim, Ex pat)
+		std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim, Ex::iterator pat)
 		{
 			if (*it->name == delim) {
 				std::vector<Ex::iterator> res;
 				Ex::sibling_iterator beg = it.begin(), end = it.end();
 				while (beg != end) {
-					if (check_structure(beg, pat.begin()))
+					if (check_structure(beg, pat))
 						res.push_back(beg);
 					++beg;
 				}
 				return res;
 			}
 			else {
-				if (check_structure(it, pat.begin()))
+				if (check_structure(it, pat))
 					return std::vector<Ex::iterator>(1, it);
 				else
 					return std::vector<Ex::iterator>();
@@ -251,13 +368,7 @@ young_reduce::~young_reduce()
 
 bool young_reduce::can_apply(iterator it)
 {
-	if (pat == Ex::iterator()) {
-		// No pattern set, can only apply to a sum node
-		return *it->name == "\\sum";
-	}
-	else {
-		return true;
-	}
+	return true;
 }
 
 young_reduce::result_t young_reduce::apply(iterator& it)
@@ -271,8 +382,11 @@ young_reduce::result_t young_reduce::apply(iterator& it)
 		res = apply_known(it);
 	}
 
-	if (res != result_t::l_no_action)
+	if (res != result_t::l_no_action) {
+		cdebug << "Action taken; cleaning...";
 		cleanup_dispatch(kernel, tr, it);
+		cdebug << "done!\n";
+	}
 	return res;
 }
 
@@ -282,9 +396,18 @@ young_reduce::result_t young_reduce::apply_known(iterator& it)
 	ProjectedForm it_sym;
 	auto nodes = split_ex(it, "\\sum", pat);
 	cdebug << "Found " << nodes.size() << " terms which match pat:\n";
+	if (nodes.size() == 0)
+		return result_t::l_no_action;
+
 	for (auto& node : nodes) {
 		cdebug << "\t" << ex_to_string(node, kernel) << "\n";
-		it_sym.combine(symmetrize(node));
+		if (subtree_equal(&kernel.properties, pat, node, -2, true, -1)) {
+			cdebug << "Matched pat; combining\n";
+			it_sym.combine(pat_sym, *node->multiplier / *pat->multiplier);
+		}
+		else {
+			it_sym.combine(symmetrize(node));
+		}
 	}
 
 	// Check if projection yielded zero
@@ -297,12 +420,12 @@ young_reduce::result_t young_reduce::apply_known(iterator& it)
 	// Check if projection is a multiple of 'pat'
 	auto factor = it_sym.compare(pat_sym);
 	if (factor != 0) {
-		cdebug << "Projection was a multiple of pat; reducing...\n";
-		auto newit = tr.replace(nodes.back(), pat);
+		cdebug << "Projection was a multiple (" << factor << ") of pat; reducing...\n";
+		it = tr.replace(nodes.back(), pat);
 		nodes.pop_back();
 		for (auto node : nodes)
 			node_zero(node);
-		multiply(newit->multiplier, factor);
+		multiply(it->multiplier, factor);
 		cdebug << "Produced " << ex_to_string(it, kernel) << '\n';
 		return result_t::l_applied;
 	}
@@ -325,6 +448,12 @@ young_reduce::result_t young_reduce::apply_unknown(iterator& it)
 	while (!terms.empty()) {
 		cdebug << "Examining " << ex_to_string(terms.back(), kernel) << "...";
 		bool can_reduce = set_pattern(terms.back());
+		if (can_reduce && pat_sym.data.empty()) {
+			cdebug << "pat_sym is zero; zeroing node\n";
+			node_zero(pat);
+			res = result_t::l_applied;
+			continue;
+		}
 		std::vector<Ex::iterator> cur_terms;
 		for (index_t i = terms.size() - 2; i != -1; --i) {
 			if (check_structure(terms.back(), terms[i])) {
@@ -368,6 +497,8 @@ young_reduce::result_t young_reduce::apply_unknown(iterator& it)
 		}
 	}
 
+	pat = Ex::iterator();
+	pat_sym.clear();
 	return res;
 }
 
@@ -402,6 +533,7 @@ bool young_reduce::set_pattern(Ex::iterator new_pat)
 
 ProjectedForm young_reduce::symmetrize(Ex::iterator it)
 {
+	cdebug << "symmetrizing " << ex_to_string(it, kernel) << "produces:\n";
 	ProjectedForm sym;
 	sym.insert(to_adjform(it), 1);
 
@@ -457,6 +589,8 @@ ProjectedForm young_reduce::symmetrize(Ex::iterator it)
 	}
 
 	sym.multiply(*it->multiplier);
+
+	cdebug << pf_to_string(sym, &index_map) << '\n';
 
 	return sym;
 }

@@ -4,8 +4,9 @@
 def test01():
    __cdbkernel__ = create_scope()
    S_{a b c}::Symmetric;
-   ex:= S_{a b c}S_{b a c} + S_{b a c}S_{c a b};
-   young_reduce(ex, $S_{a b c}S_{a b c}$);
+   ex:= S_{a b c}S_{b a c} + S_{b a c}S_{c a b}:
+   young_reduce(ex, $S_{a b c}S_{a b c}$)
+   display(ex)
    assert(ex == $2S_{a b c}S_{a b c}$)
    print("Test 01 passed")
 
@@ -32,8 +33,8 @@ test03()
 def test04():
    __cdbkernel__ = create_scope()
    A_{a b c}::AntiSymmetric.
-   ex = young_reduce($A_{c a b}A_{b a c} + A_{b c a}A_{c b a}$, $2A_{a b c}A_{a b c}$)
-   assert ex == $-2A_{a b c}A_{a b c}$
+   ex = young_reduce($A_{c a b}A_{b a c} + A_{b c a}A_{c b a} + 2A_{a b c}A_{a b c}$)
+   assert ex == 0
    print("Test 04 passed")
 
 test04()
@@ -50,8 +51,9 @@ test05()
 def test06():
    __cdbkernel__ = create_scope()
    R_{a b c d}::RiemannTensor.
-   ex = young_reduce($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d}$, $R_{a b c d}R_{a b c d}$)
-   assert ex == $3/2 R_{a b c d}R_{a b c d}$
+   #ex = young_reduce($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d}$, $R_{a b c d}R_{a b c d}$)
+   ex = young_reduce($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d} - 3/2 R_{a b c d} R_{a b c d}$)
+   assert ex == 0
    print("Test 06 passed")
    
 test06()
@@ -59,7 +61,8 @@ test06()
 def test07():
    __cdbkernel__ = create_scope()
    R_{a b c d}::RiemannTensor.
-   ex = young_reduce($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d}$, $R_{a b c d}R_{a c b d}$)
+   #ex = young_reduce($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d}$, $R_{a b c d}R_{a c b d}$)
+   ex = young_reduce($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d}$)
    assert ex == $3 R_{a b c d}R_{a c b d}$
    print("Test 07 passed")
    
@@ -68,7 +71,8 @@ test07()
 def test08():
    __cdbkernel__ = create_scope()
    R_{a b c d}::RiemannTensor.
-   ex = young_reduce($R_{a b c d} + R_{a c d b} + R_{a d b c}$, $R_{a b c d}$)
+   #ex = young_reduce($R_{a b c d} + R_{a c d b} + R_{a d b c}$, $R_{a b c d}$)
+   ex = young_reduce($R_{a b c d} + R_{a c d b} + R_{a d b c}$)
    assert ex == $0$
    print("Test 08 passed")
 
@@ -77,8 +81,14 @@ test08()
 def test09():
    __cdbkernel__ = create_scope()
    R_{a b c d}::RiemannTensor.
-   ex = young_reduce($R_{a b c d} + R_{a d b c}$, $R_{a c d b}$)
+   ex := R_{a b c d} + R_{a d b c};
+   
+   young_reduce(ex)
+   assert ex == $R_{a b c d} + R_{a d b c}$
+
+   young_reduce(ex, $R_{a c d b}$)
    assert ex == $-R_{a c d b}$
+
    print("Test 09 passed")
    
 test09()
@@ -89,7 +99,8 @@ def test10():
    A_{a b}::AntiSymmetric.
    S_{a b}::Symmetric.
    ex = $A_{a b}S_{c d}A_{e f}S_{g h} + A_{b a}S_{c d}A_{e f}S_{h g}$
-   young_reduce(ex, $A_{a b}S_{c d}A_{e f}S_{g h}$)
+   #young_reduce(ex, $A_{a b}S_{c d}A_{e f}S_{g h}$)
+   young_reduce(ex)
    assert ex == $0$
    print("Test 10 passed")
    
@@ -110,13 +121,46 @@ def test12():
    {m,n,p,q,r,s,t,u,v,w,a,b,c,d,e,f}::Indices(vector).
    W_{m n p q}::WeylTensor.
    ex:= W_{p q r s} W_{p t r u} W_{t v q w} W_{u v s w} 
-     - W_{p q r s} W_{p q t u} W_{r v t w} W_{s v u w}
-     - W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a}
-     + (1/4) W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c};
+  - W_{p q r s} W_{p q t u} W_{r v t w} W_{s v u w}
+  - W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a}
+  + (1/4) W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c}:
   
-   rename_dummies(ex);
-   young_reduce(ex, $W_{m n p q} W_{m r p s} W_{r t n u} W_{s t q u}$);
+   young_reduce(ex)
+   #young_reduce(ex, $W_{m n p q} W_{m r p s} W_{r t n u} W_{s t q u}$);
    #young_reduce(ex, $W_{p q r s} W_{p t r u} W_{t v q w} W_{u v s w}$);
    assert(ex==0)
    print("Test 12 passed")
    
+test12()
+
+def test13():
+   __cdbkernel__ = create_scope()
+   R_{a b c d}::RiemannTensor.
+   A^{a b c}::AntiSymmetric.
+   ex:= R_{a b c d} A^{a b c}:
+   young_reduce(ex, $R_{a b c d} A^{a b c}$)
+   assert ex==0
+   print("Test 13 passed")
+
+test13()
+
+def test14():
+	__cdbkernel__ = create_scope()
+	A_{a b c d e}::AntiSymmetric.
+	ex = young_reduce($9A_{b a c e d} - 3A_{e d c b a}$, $A_{b a c e d}$)
+	display(ex)
+	assert ex == $6A_{b a c e d}$
+	print("Test 14 passed")
+
+test14()
+
+def test15():
+	__cdbkernel__ = create_scope()
+	R_{a b c d}::RiemannTensor.
+	A_{a b c d}::AntiSymmetric.
+	ex := R_{b a c d}:
+	young_reduce(ex, $A_{b a c d}$)
+	assert ex == $R_{b a c d}$
+	print("Test 15 passed")
+
+test15()
