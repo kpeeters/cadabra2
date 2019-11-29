@@ -148,7 +148,6 @@ def test14():
 	__cdbkernel__ = create_scope()
 	A_{a b c d e}::AntiSymmetric.
 	ex = young_reduce($9A_{b a c e d} - 3A_{e d c b a}$, $A_{b a c e d}$)
-	display(ex)
 	assert ex == $6A_{b a c e d}$
 	print("Test 14 passed")
 
