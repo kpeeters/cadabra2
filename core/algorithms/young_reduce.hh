@@ -22,7 +22,8 @@ namespace cadabra {
 			mpq_class compare(const ProjectedForm& other) const;
 
 			// Add all contributions from 'other' into 'this'
-			void combine(const ProjectedForm& other, mpq_class factor = 1);
+			void combine(const ProjectedForm& other);
+			void combine(const ProjectedForm& other, mpq_class factor);
 
 			// Multiply all terms by a constant factor
 			void multiply(mpq_class k);
@@ -47,6 +48,9 @@ namespace cadabra {
 		// Checks if 'lhs' and 'rhs' are identical up to index names
 		bool check_structure(Ex::iterator lhs, Ex::iterator rhs);
 
+		// Check for a TableauBase property (potentially deep)
+		bool has_TableauBase(Ex::iterator it, const Kernel& kernel);
+
 		// Returns a list of iterators of the children of 'it' if it->name
 		// is delim, otherwise returns a list containing 'it' as its only
 		// entry. If 'pat' is specified, any terms not matching 'pat' are
@@ -54,10 +58,7 @@ namespace cadabra {
 		std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim);
 		std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim, Ex::iterator pat);
 
-		// Rewrite adjform type indices as dummy indices
 		adjform_t collapse_dummy_indices(adjform_t adjform);
-
-		// Rewrite dummy indices as adjform type indices
 		adjform_t expand_dummy_indices(adjform_t adjform);
 	}
 

@@ -159,21 +159,21 @@ namespace cadabra {
 			return factor;
 		}
 
+		void ProjectedForm::combine(const ProjectedForm& other)
+		{
+			for (const auto& kv : other.data) {
+				data[kv.first] += kv.second;
+				if (data[kv.first] == 0)
+					data.erase(kv.first);
+			}
+		}
+
 		void ProjectedForm::combine(const ProjectedForm& other, mpq_class factor)
 		{
-			if (factor == 1) {
-				for (const auto& kv : other.data) {
-					data[kv.first] += kv.second;
-					if (data[kv.first] == 0)
-						data.erase(kv.first);
-				}
-			}
-			else {
-				for (const auto& kv : other.data) {
-					data[kv.first] += kv.second * factor;
-					if (data[kv.first] == 0)
-						data.erase(kv.first);
-				}
+			for (const auto& kv : other.data) {
+				data[kv.first] += kv.second * factor;
+				if (data[kv.first] == 0)
+					data.erase(kv.first);
 			}
 		}
 
@@ -190,7 +190,8 @@ namespace cadabra {
 
 		void ProjectedForm::insert(adjform_t adjform, mpq_class value)
 		{
-			data[adjform] = value;
+			if (value != 0)
+				data[adjform] = value;
 		}
 
 		void ProjectedForm::apply_young_symmetry(const adjform_t& indices, bool antisymmetric)
@@ -221,6 +222,8 @@ namespace cadabra {
 					}
 					cdebug << "\tMade term " << adjform_to_string(ret) << " * " << (parity * kv.second) << '\n';
 					data[ret] += parity * kv.second;
+					if (data[ret] == 0)
+						data.erase(ret);
 				} while (swaps = next_perm(perm));
 			}
 		}
@@ -258,8 +261,6 @@ namespace cadabra {
 			Ex::iterator l1 = lhs.begin(), l2 = lhs.end();
 			Ex::iterator r1 = rhs.begin(), r2 = rhs.end();
 
-			std::vector<Ex::iterator> l_indices, r_indices;
-
 			// Loop over all tree nodes using a depth first iterator. If the
 			// entry is an index ensure that it has the same parent_rel, if it
 			// is any other type of node check that the names match.
@@ -270,8 +271,6 @@ namespace cadabra {
 					if (l1->fl.parent_rel != r1->fl.parent_rel) {
 						return false;
 					}
-					l_indices.push_back(l1);
-					r_indices.push_back(r1);
 				}
 				else {
 					if (l1->name != r1->name || l1->multiplier != r1->multiplier) {
@@ -282,6 +281,18 @@ namespace cadabra {
 			}
 
 			return l1 == l2 && r1 == r2;
+		}
+
+		bool has_TableauBase(Ex::iterator it, const cadabra::Kernel& kernel)
+		{
+			if (*it->name == "\\prod" || *it->name == "\\sum") {
+				for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg)
+					if (has_TableauBase(beg, kernel))
+						return true;
+			}
+			else {
+				return (kernel.properties.get_composite<cadabra::TableauBase>(it) != nullptr);
+			}
 		}
 
 		std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim)
@@ -368,7 +379,12 @@ young_reduce::~young_reduce()
 
 bool young_reduce::can_apply(iterator it)
 {
-	return true;
+	if (pat == Ex::iterator()) {
+		// check for TableauBase
+		return has_TableauBase(it, kernel);
+	}
+	else
+		return true;
 }
 
 young_reduce::result_t young_reduce::apply(iterator& it)
@@ -513,17 +529,13 @@ bool young_reduce::set_pattern(Ex::iterator new_pat)
 		throw std::runtime_error("pat is empty");
 
 	cdebug << "Checking for TableauBase property...";
-	bool has_tableau_symmetry = false;
-	for (const auto& term: collect) {
-		if (kernel.properties.get_composite<TableauBase>(term) != nullptr) {
-			has_tableau_symmetry = true;
-			break;
-		}
-	}
-	cdebug << (has_tableau_symmetry ? "true!" : "false - exiting...") << '\n';
-
-	if (!has_tableau_symmetry) 
+	if (!has_TableauBase(new_pat, kernel)) {
+		cdebug << "false, returning...\n";
 		return false;
+	}
+	else {
+		cdebug << "true!\n";
+	}
 
 	pat = new_pat;
 	pat_sym = symmetrize(new_pat);	
