@@ -59,7 +59,9 @@ bool canonicalise::remove_traceless_traces(iterator& it)
 				bool incremented_now=false;
 				auto ind=kernel.properties.get<Indices>(indit, true);
 				if(ind) {
-					if(ind->set_name==trl->index_set_name) {
+					// The indexs need to be in the set for which the object is
+					// traceless (if specified, otherwise accept all).
+					if(ind->set_name==trl->index_set_name || trl->index_set_name=="") {
 						incremented_now=true;
 						++ihits;
 						}

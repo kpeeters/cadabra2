@@ -23,7 +23,7 @@ std::string WeylTensor::name() const
 	}
 
 // Traceless and TableauSymetry args are overwritten elsewhere
-bool WeylTensor::parse(Kernel&, keyval_t& keyvals)
+bool WeylTensor::parse(Kernel&, keyval_t& )
 	{
 	return true;
 	}

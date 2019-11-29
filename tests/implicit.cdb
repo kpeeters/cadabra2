@@ -51,7 +51,7 @@ def test04():
     A::Traceless(indices=spinor);
     B::Traceless(indices=vector);
     ex:=Tr( A ) + Tr( B );
-    canonicalise(_);
+    canonicalise(_)
     tst:= Tr( B ) - @(ex);
     assert(tst==0)
     print("Test 04 passed")
@@ -98,7 +98,7 @@ def test08():
     {A,B}::AntiCommuting;
     ex:=(A)_{a b} (B)_{b a};
     combine(_)
-    tst:= (-B A)_{b b} - @(ex);
+    tst:= \indexbracket{-B A}_{b b} - @(ex);
     assert(tst==0)
     print("Test 08 passed")
 
@@ -133,7 +133,7 @@ def test11():
     __cdbkernel__=create_scope()
     {a,b,c}::Indices(vector);
     ex:=(B)_{b c} (A)_{a b};
-    combine(_);
+    combine(_)
     tst:= (A B)_{a c} - @(ex);
     assert(tst==0)
     print("Test 11 passed")
@@ -148,8 +148,8 @@ def test12():
     B::ImplicitIndex(B_{a b});
     {A_{a b}, B_{a b}, C, D}::AntiCommuting;
     ex:=Tr( A C B D );
-    untrace(_);
-    sort_product(_);
+    untrace(_)
+    sort_product(_)
     tst:= -C D Tr( A B ) - @(ex);
     assert(tst==0)
     print("Test 12 passed")
@@ -164,7 +164,7 @@ def test13():
     B::ImplicitIndex(B_{a b});
     {A_{a b}, B_{a b}}::AntiCommuting;
     ex:=Tr( B A );
-    sort_product(_);
+    sort_product(_)
     tst:= Tr( -A B ) - @(ex);
     assert(tst==0)
     print("Test 13 passed")
@@ -175,7 +175,7 @@ def test14():
     __cdbkernel__=create_scope()
     {A,B,C}::ImplicitIndex;
     ex:=(B A C)_{a a};
-    sort_product(_);
+    sort_product(_)
     tst:= (A C B)_{a a} - @(ex);
     assert(tst==0)
     print("Test 14 passed")
