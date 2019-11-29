@@ -6,7 +6,6 @@ def test01():
    S_{a b c}::Symmetric;
    ex:= S_{a b c}S_{b a c} + S_{b a c}S_{c a b}:
    young_reduce(ex, $S_{a b c}S_{a b c}$)
-   display(ex)
    assert(ex == $2S_{a b c}S_{a b c}$)
    print("Test 01 passed")
 
@@ -138,7 +137,8 @@ def test13():
    R_{a b c d}::RiemannTensor.
    A^{a b c}::AntiSymmetric.
    ex:= R_{a b c d} A^{a b c}:
-   young_reduce(ex, $R_{a b c d} A^{a b c}$)
+   young_reduce(ex)
+   #young_reduce(ex, $R_{a b c d} A^{a b c}$)
    assert ex==0
    print("Test 13 passed")
 
@@ -147,8 +147,7 @@ test13()
 def test14():
 	__cdbkernel__ = create_scope()
 	A_{a b c d e}::AntiSymmetric.
-	ex = young_reduce($9A_{b a c e d} - 3A_{e d c b a}$, $A_{b a c e d}$)
-	display(ex)
+	ex = young_reduce($9A_{b a c e d} - 3A_{e d c b a}$, $7A_{b a c e d}$)
 	assert ex == $6A_{b a c e d}$
 	print("Test 14 passed")
 
@@ -164,3 +163,12 @@ def test15():
 	print("Test 15 passed")
 
 test15()
+
+def test16():
+	__cdbkernel__ = create_scope()
+	S_{a b c}::Symmetric.
+	assert young_reduce($a + b + c$) == $a + b + c$
+	assert young_reduce($0$) == $0$
+	print("Test 16 passed")
+
+test16()
