@@ -51,7 +51,7 @@ std::string adjform_to_string(const cadabra::yr::adjform_t& adjform, const std::
 	return res;
 }
 
-std::string pf_to_string (const cadabra::yr::ProjectedForm& projform, const std::vector<cadabra::nset_t::iterator>* index_map = nullptr)
+std::string pf_to_string (const cadabra::yr::ProjectedForm& projform, const std::vector<cadabra::nset_t::iterator>*)
 {
 	std::stringstream os;
 	int i = 0;
@@ -224,7 +224,7 @@ namespace cadabra {
 					data[ret] += parity * kv.second;
 					if (data[ret] == 0)
 						data.erase(ret);
-				} while (swaps = next_perm(perm));
+					} while( (swaps = next_perm(perm)) );
 			}
 		}
 
@@ -289,6 +289,7 @@ namespace cadabra {
 				for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg)
 					if (has_TableauBase(beg, kernel))
 						return true;
+				return false;
 			}
 			else {
 				return (kernel.properties.get_composite<cadabra::TableauBase>(it) != nullptr);
