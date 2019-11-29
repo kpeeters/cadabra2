@@ -313,6 +313,14 @@ namespace cadabra {
 			int  can_swap(Ex::iterator one, Ex::iterator two, match_t subtree_comparison,
 			              bool ignore_implicit_indices=false);
 
+			/// Wrapper for can_swap which is meant for objects that have implicit
+			/// indices. This checks whether a single component of A commutes or
+			/// anticommutes with a single component of B, saying nothing about
+			/// whether A and B commute under matrix multiplication.
+
+			int  can_swap_components(Ex::iterator one, Ex::iterator two,
+						 match_t subtree_comparison);
+
 			/// Determine whether object 'one' and 'two' can be moved next
 			/// to each other by moving either one or the other: if fix_one==true
 			/// the first node is kept fixed, otherwise the second node is kept fixed.

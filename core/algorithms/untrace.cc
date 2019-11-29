@@ -75,8 +75,16 @@ Algorithm::result_t untrace::apply(iterator& trloc)
 			}
 
 		if(move_out) {
+			int sign=1;
+			sibling_iterator st2=tr.begin(prodloc);
+			Ex_comparator compare(kernel.properties);
+			while(st2!=st) {
+				auto es=compare.equal_subtree(st, st2);
+				sign*=compare.can_swap_components(st, st2, es);
+				++st2;
+				}
 			tr.move_before(trloc, st);
-			//multiply(it->multiplier, sign);
+			multiply(trloc->multiplier, sign);
 			}
 
 		st=nxt;

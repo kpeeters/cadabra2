@@ -27,7 +27,7 @@ def test02():
     print("Test 02 passed")
 
 test02()
-        
+
 def test03():
     __cdbkernel__=create_scope()
     {a,b,c,d}::Indices(spinor);
@@ -43,13 +43,21 @@ test03()
         
 def test04():
     __cdbkernel__=create_scope()
-    {a,b,c,d}::Indices(spinor);
+    {a,b}::Indices(spinor);
+    {m,n}::Indices(vector);
     Tr{#}::Trace(indices=spinor);
-    ex:=Tr( V^{m} ) + W^{m};
+    A::ImplicitIndex(A_{a b});
+    B::ImplicitIndex(B_{m n});
+    A::Traceless(indices=spinor);
+    B::Traceless(indices=vector);
+    ex:=Tr( A ) + Tr( B );
+    canonicalise(_)
+    tst:= Tr( B ) - @(ex);
+    assert(tst==0)
     print("Test 04 passed")
 
 test04()
-        
+
 def test05():
     __cdbkernel__=create_scope()
     {a,b,c,d}::Indices(vector);
@@ -74,13 +82,11 @@ test06()
 
 def test07():
     __cdbkernel__=create_scope()
-    {m,n}::Indices(vector);
-    {a,b,c}::Indices(spinor, position=fixed);
-    \Gamma^{m}::ImplicitIndex(\Gamma^{m a}_{b});
-    \Gamma^{m}::Matrix;
-    ex:=(\Gamma^{m} \Gamma^{n})^{a}_{c};
-    expand(_)
-    tst:= (\Gamma^{m})^{a}_{b} (\Gamma^{n})^{b}_{c} - @(ex);
+    {a,b}::Indices(vector);
+    Tr{#}::Trace(indices=vector);
+    ex:=(A)_{a b} (B)_{b a};
+    combine(_, trace_op=$Tr$)
+    tst:= Tr( B A ) - @(ex);
     assert(tst==0)
     print("Test 07 passed")
 
@@ -89,11 +95,90 @@ test07()
 def test08():
     __cdbkernel__=create_scope()
     {a,b}::Indices(vector);
-    ex:=(u)_{a} (M)^{a b} (v)_{b};
+    {A,B}::AntiCommuting;
+    ex:=(A)_{a b} (B)_{b a};
     combine(_)
-    tst:= \indexbracket(u M v) - @(ex);
+    tst:= \indexbracket{-B A}_{b b} - @(ex);
     assert(tst==0)
     print("Test 08 passed")
 
 test08()
+
+def test09():
+    __cdbkernel__=create_scope()
+    {m,n}::Indices(vector);
+    {a,b,c}::Indices(spinor, position=fixed);
+    \Gamma^{m}::ImplicitIndex(\Gamma^{m a}_{b});
+    \Gamma^{m}::Matrix;
+    ex:=(\Gamma^{m} \Gamma^{n})^{a}_{c};
+    expand(_)
+    tst:= (\Gamma^{m})^{a}_{b} (\Gamma^{n})^{b}_{c} - @(ex);
+    assert(tst==0)
+    print("Test 09 passed")
+
+test09()
+
+def test10():
+    __cdbkernel__=create_scope()
+    {a,b}::Indices(vector);
+    ex:=(u)_{a} (M)^{a b} (v)_{b};
+    combine(_)
+    tst:= \indexbracket(u M v) - @(ex);
+    assert(tst==0)
+    print("Test 10 passed")
+
+test10()
+
+def test11():
+    __cdbkernel__=create_scope()
+    {a,b,c}::Indices(vector);
+    ex:=(B)_{b c} (A)_{a b};
+    combine(_)
+    tst:= (A B)_{a c} - @(ex);
+    assert(tst==0)
+    print("Test 11 passed")
+
+test11()
+
+def test12():
+    __cdbkernel__=create_scope()
+    {a,b}::Indices(vector);
+    Tr{#}::Trace(indices=vector);
+    A::ImplicitIndex(A_{a b});
+    B::ImplicitIndex(B_{a b});
+    {A_{a b}, B_{a b}, C, D}::AntiCommuting;
+    ex:=Tr( A C B D );
+    untrace(_)
+    sort_product(_)
+    tst:= -C D Tr( A B ) - @(ex);
+    assert(tst==0)
+    print("Test 12 passed")
+
+test12()
+
+def test13():
+    __cdbkernel__=create_scope()
+    {a,b}::Indices(vector);
+    Tr{#}::Trace(indices=vector);
+    A::ImplicitIndex(A_{a b});
+    B::ImplicitIndex(B_{a b});
+    {A_{a b}, B_{a b}}::AntiCommuting;
+    ex:=Tr( B A );
+    sort_product(_)
+    tst:= Tr( -A B ) - @(ex);
+    assert(tst==0)
+    print("Test 13 passed")
+
+test13()
+
+def test14():
+    __cdbkernel__=create_scope()
+    {A,B,C}::ImplicitIndex;
+    ex:=(B A C)_{a a};
+    sort_product(_)
+    tst:= (A C B)_{a a} - @(ex);
+    assert(tst==0)
+    print("Test 14 passed")
+
+test14()
 

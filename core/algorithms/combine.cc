@@ -5,8 +5,8 @@
 
 using namespace cadabra;
 
-combine::combine(const Kernel& k, Ex& e)
-	: Algorithm(k, e)
+combine::combine(const Kernel& k, Ex& e, Ex& t)
+	: Algorithm(k, e), trace_op(t)
 	{
 	}
 
@@ -36,7 +36,7 @@ Algorithm::result_t combine::apply(iterator& it)
 
 	while(ind_dummy.begin()!=ind_dummy.end()) {
 		bool found=false;
-		index_map_t::iterator start=ind_dummy.begin();
+		index_map_t::iterator start=ind_dummy.begin(), backup;
 		while(!found && start!=ind_dummy.end()) {
 			iterator parent=tr.parent(start->second);
 			sibling_iterator ch=tr.begin(parent), last_part;
@@ -46,11 +46,17 @@ Algorithm::result_t combine::apply(iterator& it)
 				++ch;
 				}
 			if(last_part==start->second) {
-				// We are on a rightmost contracted index
-				found=true;
+				++last_part;
+				if(last_part==tr.end(parent)) {
+					// Dummy index with nothing to the right is preferred
+					found=true;
+					}
+				else backup=start;
 				}
-			else ++start;
+			if(!found) ++start;
 			}
+		// As a backup, we use a dummy index with only non-dummies to the right
+		if(!found) start=backup;
 		bool paired=true;
 		while(paired && start!=ind_dummy.end()) {
 			iterator parent=tr.parent(start->second);
@@ -95,6 +101,7 @@ Algorithm::result_t combine::apply(iterator& it)
 			}
 		}
 
+	std::string trace_start="";
 	std::vector<Ex::iterator>::iterator dums1=dummies.begin(), dums2;
 	dums2=dums1;
 	++dums2;
@@ -133,6 +140,38 @@ Algorithm::result_t combine::apply(iterator& it)
 			iterator brackprod=tr.append_child(outerbrack, str_node("\\prod"));
 			iterator parn1=tr.parent(*dums1);
 			iterator parn2=tr.parent(*dums2);
+
+			// count how many sign changes stand between the two objects
+			int sign=1;
+			unsigned int hits=0;
+			Ex_comparator compare(kernel.properties);
+			sib=tr.begin(it);
+			while(hits<2) {
+				if(hits==1 && sib!=parn2) {
+					// pass arguments manually as can_swap() does not check them
+					bool isbrack=*(sib->name)=="\\indexbracket";
+					if(isbrack && isbrack2) {
+						auto es=compare.equal_subtree(tr.begin(parn2), tr.begin(sib));
+						sign*=compare.can_swap_components(tr.begin(parn2), tr.begin(sib), es);
+						}
+					else if(isbrack && !isbrack2) {
+						auto es=compare.equal_subtree(parn2, tr.begin(sib));
+						sign*=compare.can_swap_components(parn2, tr.begin(sib), es);
+						}
+					else if(!isbrack && isbrack2) {
+						auto es=compare.equal_subtree(tr.begin(parn2), sib);
+						sign*=compare.can_swap_components(tr.begin(parn2), sib, es);
+						}
+					else {
+						auto es=compare.equal_subtree(parn2, sib);
+						sign*=compare.can_swap_components(parn2, sib, es);
+						}
+					}
+				if(sib==parn1 || sib==parn2) ++hits;
+				++sib;
+				}
+			if(sign==-1) flip_sign(brackprod->multiplier);
+
 			// remove the dummy index from these two objects, and move
 			// other (dummy or not) indices to the outer indexbracket.
 			sibling_iterator ind1=tr.begin(tr.parent(*dums1));
@@ -197,7 +236,22 @@ Algorithm::result_t combine::apply(iterator& it)
 		if(consecutive) {
 			++dums1;
 			++dums2;
+			if(dums2!=dummies.end() && trace_op.size()>0) {
+				if(*(*dums2)->name==trace_start) {
+					iterator parn=tr.parent(*dums2);
+					iterator trace=tr.insert(parn, str_node(trace_op.begin()->name));
+					sibling_iterator nxt=tr.begin(parn);
+					++nxt;
+					++dums1;
+					++dums2;
+					tr.reparent(trace, tr.begin(parn), nxt);
+					multiply(trace->multiplier, *parn->multiplier);
+					tr.erase(parn);
+					trace_start="";
+					}
+				}
 			}
+		else trace_start=*(*dums1)->name;
 		++dums1;
 		++dums2;
 		}
