@@ -22,10 +22,23 @@ std::string WeylTensor::name() const
 	return "WeylTensor";
 	}
 
+// Traceless and TableauSymetry args are overwritten elsewhere
+bool WeylTensor::parse(Kernel&, keyval_t& keyvals)
+	{
+	return true;
+	}
+
 void WeylTensor::validate(const Kernel& kernel, const Ex& pat) const
 	{
 	if(Algorithm::number_of_indices(kernel.properties, pat.begin())!=4)
 		throw ConsistencyException("WeylTensor: need exactly 4 indices.");
+	index_iterator indit=index_iterator::begin(kernel.properties, pat.begin());
+	auto ind=kernel.properties.get<Indices>(indit, true);
+	// We cannot access the right things from parse()
+	if(ind) {
+		WeylTensor *ptr = const_cast<WeylTensor*>(this);
+		ptr->index_set_name=ind->set_name;
+		}
 	}
 
 void WeylTensor::latex(std::ostream& str) const

@@ -34,6 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "properties/Indices.hh"
 #include "properties/Coordinate.hh"
 #include "properties/Symbol.hh"
+#include "properties/Trace.hh"
 #include "properties/DependsBase.hh"
 
 #include <sstream>
@@ -319,7 +320,8 @@ void Algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnod
 		return;
 
 	const Derivative *der=kernel.properties.get<Derivative>(walk);
-	if(*walk->name=="\\prod" || der) {
+	const Trace *trace=kernel.properties.get<Trace>(walk);
+	if(*walk->name=="\\prod" || der || trace) {
 		if(der && it->is_index()) return;
 		walk->multiplier=rat_set.insert(0).first;
 		it=walk;
