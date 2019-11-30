@@ -182,3 +182,17 @@ def test14():
 
 test14()
 
+def test15():
+    __cdbkernel__=create_scope()
+    {\mu,\nu,\rho}::Indices(vector).
+    {a^{\mu},b^{\mu},c^{\mu}}::NonCommuting.
+    tr{#}::Trace.
+    ex:=tr(a^{\mu} b^{\nu} c^{\rho}  a^{\mu} b^{\rho} c^{\nu}+b^{\mu} c^{\nu} a^{\rho} b^{\nu} c^{\mu} a^{\rho}+c^{\mu} a^{\nu} b^{\mu} c^{\rho} a^{\nu} b^{\rho});
+    sort_product(_)
+    rename_dummies(_)
+    tst:= 3 tr( a^{\mu} b^{\nu} c^{\rho}  a^{\mu} b^{\rho} c^{\nu} ) - @(ex);
+    assert(tst==0)
+    print("Test 15 passed")
+    
+test15()
+        
