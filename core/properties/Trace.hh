@@ -5,10 +5,11 @@
 #include "properties/Symmetric.hh"
 #include "properties/Distributable.hh"
 #include "properties/IndexInherit.hh"
+#include "properties/NumericalFlat.hh"
 
 namespace cadabra {
 
-	class Trace : public Distributable, public IndexInherit, virtual public property {
+	class Trace : public Distributable, public IndexInherit, public NumericalFlat, virtual public property {
 		public:
 			Trace();
 			virtual std::string name() const override;
