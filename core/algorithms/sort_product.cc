@@ -126,21 +126,23 @@ Algorithm::result_t sort_product::apply(iterator& st)
 				}
 			// We have found the element that should go at the front of the trace
 			Ex::sibling_iterator front=one;
-			while(tr.begin(st)!=front) {
-				one=tr.begin(st);
-				two=one;
-				++two;
-				while(two!=tr.end(st)) {
-					compare.clear();
-					auto es=compare.equal_subtree(one, two);
-					int sign=compare.can_swap_components(one, two, es);
-					if(sign==-1) flip_sign(st->multiplier);
-					tr.swap(one);
+			if(front!=tr.begin(st)) {
+				while(tr.begin(st)!=front) {
+					one=tr.begin(st);
+					two=one;
 					++two;
-					++two;
+					while(two!=tr.end(st)) {
+						compare.clear();
+						auto es=compare.equal_subtree(one, two);
+						int sign=compare.can_swap_components(one, two, es);
+						if(sign==-1) flip_sign(st->multiplier);
+						tr.swap(one);
+						++two;
+						++two;
+						}
 					}
+				ret=result_t::l_applied;
 				}
-			ret=result_t::l_applied;
 			}
 		}
 

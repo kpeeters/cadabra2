@@ -196,3 +196,17 @@ def test15():
     
 test15()
         
+def test16():
+    __cdbkernel__=create_scope()
+    {\mu,\nu,\rho}::Indices(vector).
+    {a^{\mu},b^{\mu},c^{\mu}}::NonCommuting.
+    tr{#}::Trace.
+    ex:=tr( b^{\mu} c^{\nu} a^{\rho} b^{\nu} c^{\mu} a^{\rho} );
+    sort_product(_)
+    rename_dummies(_)
+    tst:= tr( a^{\mu} b^{\nu} c^{\rho}  a^{\mu} b^{\rho} c^{\nu} ) - @(ex);
+    assert(tst==0)
+    print("Test 16 passed")
+    
+test16()
+        
