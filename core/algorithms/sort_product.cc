@@ -115,17 +115,47 @@ Algorithm::result_t sort_product::apply(iterator& st)
 				}
 			}
 		if(found) {
+			// Construct all cyclic orderings
+			std::vector<std::vector<Ex::sibling_iterator>> candidates;
 			one=tr.begin(st);
-			two=one;
-			++two;
-			while(two!=tr.end(st)) {
-				compare.clear();
-				auto es=compare.equal_subtree(one, two);
-				if(compare.should_swap(one, es)) one=two;
+			while(one!=tr.end(st)) {
+				two=one;
 				++two;
+				if(two==tr.end(st)) two=tr.begin(st);
+				std::vector<Ex::sibling_iterator> candidate(1, one);
+				while(two!=one) {
+					candidate.push_back(two);
+					++two;
+					if(two==tr.end(st)) two=tr.begin(st);
+					}
+				candidates.push_back(candidate);
+				++one;
 				}
-			// We have found the element that should go at the front of the trace
-			Ex::sibling_iterator front=one;
+			// Narrow them down by comparing first digit, then second digit, ...
+			unsigned int digit=1;
+			while(candidates.size()>1 && digit<=num) {
+				std::vector<std::vector<Ex::sibling_iterator>>::iterator candidate=candidates.begin();
+				one=candidate->at(digit-1);
+				++candidate;
+				while(candidate!=candidates.end()) {
+					two=candidate->at(digit-1);
+					compare.clear();
+					auto es=compare.equal_subtree(one, two);
+					if(es==Ex_comparator::match_t::no_match_greater || es==Ex_comparator::match_t::match_index_greater) {
+						--candidate;
+						candidate=candidates.erase(candidate);
+						one=candidate->at(digit-1);
+						++candidate;
+						}
+					else if(es==Ex_comparator::match_t::no_match_less || es==Ex_comparator::match_t::match_index_less) {
+						candidate=candidates.erase(candidate);
+						}
+					else ++candidate;
+					}
+				++digit;
+				}
+			// Use the first ordering but keep track of signs this time
+			Ex::sibling_iterator front=candidates.at(0).at(0);
 			if(front!=tr.begin(st)) {
 				while(tr.begin(st)!=front) {
 					one=tr.begin(st);
