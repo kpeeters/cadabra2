@@ -209,4 +209,16 @@ def test16():
     print("Test 16 passed")
     
 test16()
-        
+
+def test17():
+    __cdbkernel__=create_scope()
+    {A,B}::ImplicitIndex.
+    tr{#}::Trace.
+    ex:=tr( A B B A );
+    sort_product(_)
+    tst:= tr( A A B B ) - @(ex);
+    assert(tst==0)
+    print("Test 17 passed")
+
+test17()
+	
