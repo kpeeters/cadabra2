@@ -1158,6 +1158,23 @@ namespace cadabra {
 		return sign;
 		}
 
+	int Ex_comparator::can_swap_components(Ex::iterator one, Ex::iterator two, match_t subtree_comparison)
+		{
+		int tmp;
+		auto impi=properties.get_with_pattern<ImplicitIndex>(one, tmp);
+		if(impi.first) {
+			if(impi.first->explicit_form.size()>0) {
+				one=impi.first->explicit_form.begin();
+				}
+			}
+		impi=properties.get_with_pattern<ImplicitIndex>(two, tmp);
+		if(impi.first) {
+			if(impi.first->explicit_form.size()>0) {
+				two=impi.first->explicit_form.begin();
+				}
+			}
+		return can_swap(one, two, subtree_comparison, true);
+		}
 
 	// Determine the sign required to move the last factor in 'factors' to
 	// the right of the first.  If moving left, do not count signs from

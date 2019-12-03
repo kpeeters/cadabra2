@@ -5,8 +5,8 @@
 
 using namespace cadabra;
 
-combine::combine(const Kernel& k, Ex& e)
-	: Algorithm(k, e)
+combine::combine(const Kernel& k, Ex& e, Ex& t)
+	: Algorithm(k, e), trace_op(t)
 	{
 	}
 
@@ -101,6 +101,7 @@ Algorithm::result_t combine::apply(iterator& it)
 			}
 		}
 
+	std::string trace_start="";
 	std::vector<Ex::iterator>::iterator dums1=dummies.begin(), dums2;
 	dums2=dums1;
 	++dums2;
@@ -151,19 +152,19 @@ Algorithm::result_t combine::apply(iterator& it)
 					bool isbrack=*(sib->name)=="\\indexbracket";
 					if(isbrack && isbrack2) {
 						auto es=compare.equal_subtree(tr.begin(parn2), tr.begin(sib));
-						sign*=compare.can_swap(tr.begin(parn2), tr.begin(sib), es, true);
+						sign*=compare.can_swap_components(tr.begin(parn2), tr.begin(sib), es);
 						}
 					else if(isbrack && !isbrack2) {
 						auto es=compare.equal_subtree(parn2, tr.begin(sib));
-						sign*=compare.can_swap(parn2, tr.begin(sib), es, true);
+						sign*=compare.can_swap_components(parn2, tr.begin(sib), es);
 						}
 					else if(!isbrack && isbrack2) {
 						auto es=compare.equal_subtree(tr.begin(parn2), sib);
-						sign*=compare.can_swap(tr.begin(parn2), sib, es, true);
+						sign*=compare.can_swap_components(tr.begin(parn2), sib, es);
 						}
 					else {
 						auto es=compare.equal_subtree(parn2, sib);
-						sign*=compare.can_swap(parn2, sib, es, true);
+						sign*=compare.can_swap_components(parn2, sib, es);
 						}
 					}
 				if(sib==parn1 || sib==parn2) ++hits;
@@ -235,7 +236,22 @@ Algorithm::result_t combine::apply(iterator& it)
 		if(consecutive) {
 			++dums1;
 			++dums2;
+			if(dums2!=dummies.end() && trace_op.size()>0) {
+				if(*(*dums2)->name==trace_start) {
+					iterator parn=tr.parent(*dums2);
+					iterator trace=tr.insert(parn, str_node(trace_op.begin()->name));
+					sibling_iterator nxt=tr.begin(parn);
+					++nxt;
+					++dums1;
+					++dums2;
+					tr.reparent(trace, tr.begin(parn), nxt);
+					multiply(trace->multiplier, *parn->multiplier);
+					tr.erase(parn);
+					trace_start="";
+					}
+				}
 			}
+		else trace_start=*(*dums1)->name;
 		++dums1;
 		++dums2;
 		}

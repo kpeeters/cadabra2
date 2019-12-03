@@ -1,0 +1,33 @@
+package:
+  name: "cadabra2-jupyter-kernel"
+  version: "2.2.7"
+
+source:
+  path: ../  
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - cmake
+    - pkg-config
+    - glibmm
+    - zeromq
+    - cppzmq
+    - xtl
+    - cryptopp
+    - sqlite
+    - util-linux
+    - xeus
+    - nlohmann_json
+    - sympy
+    - jupyter
+
+  run:
+    - python
+
+about:
+  home: https://cadabra.science
+  license: GPL
+  license_family: GPL
+  summary: Jupyter kernel for the Cadabra2 computer algebra system.
