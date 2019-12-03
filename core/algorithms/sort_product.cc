@@ -142,8 +142,7 @@ Algorithm::result_t sort_product::apply(iterator& st)
 					compare.clear();
 					auto es=compare.equal_subtree(one, two);
 					if(es==Ex_comparator::match_t::no_match_greater || es==Ex_comparator::match_t::match_index_greater) {
-						--candidate;
-						candidate=candidates.erase(candidate);
+						candidate=candidates.erase(candidates.begin(), candidate);
 						one=candidate->at(digit-1);
 						++candidate;
 						}
