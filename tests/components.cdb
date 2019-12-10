@@ -800,7 +800,12 @@ def test37():
 # ex:=g_{\mu\nu};
 # evaluate(ex, dec);
 #     
-    
+
+# {i,j}::Indices(values={1,2,3});
+# ex:=v_i v_i;
+# evaluate(ex, $v_1=-1.12, v_2=1.6, v_3=4.48$);
+# tst:=23.88 - @(ex);
+        
 print(list(map(lambda x: str(x), server.totals())))
 
 
