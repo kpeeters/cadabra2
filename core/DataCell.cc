@@ -2,7 +2,6 @@
 #include "InstallPrefix.hh"
 #include "Config.hh"
 #include "DataCell.hh"
-#include "Jupyter.hh"
 #include <sstream>
 #include <fstream>
 #include <regex>
