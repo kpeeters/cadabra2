@@ -34,6 +34,7 @@ set(CADABRA_SERVER_SRC
 	cadabra-server.cc
 	Server.cc 
 	${CADABRA_CORE_DIR}/InstallPrefix.cc
+	${CADABRA_CORE_DIR}/DataCell.cc
 	${CADABRA_CORE_DIR}/CdbPython.cc 
 	${CADABRA_CORE_DIR}/Stopwatch.cc 
 	${CADABRA_LIBS_DIR}/whereami/whereami.c

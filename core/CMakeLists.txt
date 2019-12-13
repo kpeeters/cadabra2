@@ -216,6 +216,8 @@ set(LOCAL_SRC_FILES
 	SympyCdb.cc
 	YoungTab.cc
 	modules/xperm_new.cc
+   InstallPrefix.cc
+   DataCell.cc
 	${ALGORITHM_SRC_FILES}
 	${PROPERTY_SRC_FILES}
 	)
@@ -297,9 +299,13 @@ if(ENABLE_SYSTEM_JSONCPP)
   add_executable(cadabra2python 
 	 cadabra2python.cc 
 	 CdbPython.cc
+    InstallPrefix.cc    
+    DataCell.cc
+    ${CADABRA_LIBS_DIR}/whereami/whereami.c
 	 )
   target_link_libraries(cadabra2python 
-	 ${Boost_LIBRARIES} 
+	 ${Boost_LIBRARIES}
+    ${GLIBMM3_LIBRARIES}     
 	 ${PYTHON_LIBRARIES}
 	 ${JSONCPP_LIBRARIES}
 	 )
@@ -307,11 +313,15 @@ else()
   add_executable(cadabra2python 
 	 cadabra2python.cc 
 	 CdbPython.cc
+    InstallPrefix.cc
+    DataCell.cc
 	 ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
+    ${CADABRA_LIBS_DIR}/whereami/whereami.c
 	 )
   target_link_libraries(cadabra2python 
 	 ${Boost_LIBRARIES} 
 	 ${PYTHON_LIBRARIES}
+    ${GLIBMM3_LIBRARIES}     
 	 )
 endif()
 

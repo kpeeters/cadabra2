@@ -386,6 +386,8 @@ void cadabra::JSON_deserialise(const std::string& cj, DTree& doc)
 	const Json::Value desc = root["description"];
 	if(!desc) 
 		root = cadabra::ipynb2cnb(root);
+
+	// std::cerr << root << std::endl;
 	
 	// Scan through json file.
 	const Json::Value cells = root["cells"];
