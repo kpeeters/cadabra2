@@ -1,5 +1,5 @@
 {
-	"cell_id" : 10246630462622169684,
+	"cell_id" : 16600244550298176585,
 	"cells" : 
 	[
 		{
@@ -127,6 +127,7 @@
 					"source" : "\\begin{dmath*}{}R^{a}\\,_{b c a}-R^{a}\\,_{b a c}\\end{dmath*}"
 				}
 			],
+			"ignore_on_import" : true,
 			"source" : "ex:= R^{a}_{b c a} - R^{a}_{b a c};"
 		},
 		{
@@ -151,6 +152,7 @@
 					"source" : "\\begin{dmath*}{}-2R_{b c}\\end{dmath*}"
 				}
 			],
+			"ignore_on_import" : true,
 			"source" : "riemann_to_ricci(ex);"
 		},
 		{

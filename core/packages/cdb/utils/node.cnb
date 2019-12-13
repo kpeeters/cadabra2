@@ -1,55 +1,67 @@
 {
+	"cell_id" : 1674164035215342669,
 	"cells" : 
 	[
 		{
+			"cell_id" : 4541113739588128532,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : "def n_args(ex_node):\n\t\"\"\"Returns the number of first-level arguments a node has\"\"\"\n\tif type(ex_node) is Ex:\n\t\tex_node = ex_node.top()\n\treturn sum(1 for i in ex_node.args())"
 		},
 		{
+			"cell_id" : 12002362360129662198,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : "def nth_arg(ex_node, n):\n\t\"\"\"Gets the nth first-level argument of an ExNode object\"\"\"\n\tif type(ex_node) is Ex:\n\t\tex_node = ex_node.top()\n\n\tfor i, arg in enumerate(ex_node.args()):\n\t\tif i == n:\n\t\t\treturn arg\n\traise IndexError"
 		},
 		{
+			"cell_id" : 3905388232732922485,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : "def arg_tuple(ex_node, n):\n\t\"\"\"Returns a tuple containing the first n arguments of an ExNode object\"\"\"\n\tif type(ex_node) is Ex:\n\t\tex_node = ex_node.top()\n\n\treturn (nth_arg(ex_node, i)._latex_() for i in range(n))"
 		},
 		{
+			"cell_id" : 6625943265031471290,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : "def n_children(ex_node):\n\t\"\"\"Returns the number of first-level children a node has\"\"\"\n\tif type(ex_node) is Ex:\n\t\tex_node = ex_node.top()\n\n\treturn sum(1 for i in ex_node.children())"
 		},
 		{
+			"cell_id" : 13783965533728989485,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : "def nth_child(ex_node, n):\n\t\"\"\"Gets the nth first-level child of an ExNode object\"\"\"\n\tif type(ex_node) is Ex:\n\t\tex_node = ex_node.top()\n\n\tfor i, arg in enumerate(ex_node.args()):\n\t\tif i == n:\n\t\t\treturn arg\n\traise IndexError"
 		},
 		{
+			"cell_id" : 6084336848221340877,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : "def child_tuple(ex_node, n):\n\t\"\"\"Returns a tuple containing the first n children of an ExNode object\"\"\"\n\tif type(ex_node) is Ex:\n\t\tex_node = ex_node.top()\n\n\treturn (nth_child(ex_node, i)._latex_() for i in range(n))"
 		},
 		{
+			"cell_id" : 6834160618828137935,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 10463424941420234170,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}a, b, c, d, e, f, g\\end{verbatim}"
 				},
 				{
+					"cell_id" : 4355001156256662151,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}(a, b, c, d)\\end{verbatim}"
 				}
 			],
-			"source" : "if __name__ == \"__main__\":\n\tex1 = $a, b, c, d, e, f, g$\n\tdisplay(\", \".join(nth_arg(ex1, i)._latex_() for i in range(n_args(ex1))))\n\tdisplay('(' + \", \".join(arg_tuple(ex1, 4)) + ')')"
+			"ignore_on_import" : true,
+			"source" : "ex1 = $a, b, c, d, e, f, g$\ndisplay(\", \".join(nth_arg(ex1, i)._latex_() for i in range(n_args(ex1))))\ndisplay('(' + \", \".join(arg_tuple(ex1, 4)) + ')')"
 		},
 		{
+			"cell_id" : 13524964813951039698,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
