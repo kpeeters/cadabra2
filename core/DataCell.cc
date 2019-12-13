@@ -2,6 +2,7 @@
 #include "InstallPrefix.hh"
 #include "Config.hh"
 #include "DataCell.hh"
+#include "Jupyter.hh"
 #include <sstream>
 #include <fstream>
 #include <regex>
@@ -12,6 +13,18 @@
 #include <internal/uuid.h>
 
 using namespace cadabra;
+
+// General tool to strip spaces from both ends
+static std::string trim(const std::string& s)
+	{
+	if(s.length() == 0)
+		return s;
+	int b = s.find_first_not_of(" \t\n");
+	int e = s.find_last_not_of(" \t\n");
+	if(b == -1) // No non-spaces
+		return "";
+	return std::string(s, b, e - b + 1);
+	}
 
 bool DataCell::id_t::operator<(const DataCell::id_t& other) const
 	{
@@ -368,6 +381,12 @@ void cadabra::JSON_deserialise(const std::string& cj, DTree& doc)
 	DataCell top(DataCell::CellType::document);
 	DTree::iterator doc_it = doc.set_head(top);
 
+	// Determine whether this is a Jupyter notebook or a Cadabra
+	// notebook.
+	const Json::Value desc = root["description"];
+	if(!desc) 
+		root = cadabra::ipynb2cnb(root);
+	
 	// Scan through json file.
 	const Json::Value cells = root["cells"];
 	JSON_in_recurse(doc, doc_it, cells);
@@ -655,3 +674,51 @@ void cadabra::python_recurse(const DTree& doc, DTree::iterator it, std::ostrings
 // 	   }
 //    return str;
 //    }
+
+Json::Value cadabra::ipynb2cnb(const Json::Value& root)
+	{
+	auto nbf = root["nbformat"];
+	Json::Value json;
+
+	if(!nbf)
+		return json;
+
+	json["description"]="Cadabra JSON notebook format";
+	json["version"]=1.0;
+
+	Json::Value cells;
+	const Json::Value& jucells=root["cells"];
+	
+	// Jupyter notebooks just have a single array of cells; walk
+	// through and add to our "cells" array.
+
+	for(unsigned int c=0; c<jucells.size(); ++c) {
+		Json::Value cell;
+		if(jucells[c]["cell_type"].asString()=="markdown")
+			cell["cell_type"]="latex";
+		else
+			cell["cell_type"]="input";
+		cell["hidden"]=false;
+		const Json::Value& source=jucells[c]["source"];
+		// Jupyter stores the source line-by-line in an array 'source'.
+		std::string block;
+		for(unsigned int l=0; l<source.size(); ++l) {
+			std::string line=source[l].asString();
+			if(line.size()>0) {
+				if(line[0]=='#') {
+					if(line[line.size()-1]=='\n')
+						line=line.substr(0,line.size()-1);
+					block+="\\section*{"+trim(line.substr(1))+"}\n";
+					}
+				else
+					block+=line;
+				}
+			}
+		cell["source"]=block;
+		cells.append(cell);
+		}
+
+	json["cells"] = cells;
+	
+	return json;
+	}

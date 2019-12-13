@@ -147,4 +147,9 @@ namespace cadabra {
 
 	/// Replace all occurrences of a substring in the original string.
 	// std::string replace_all(std::string, const std::string& old, const std::string& nw);
-	}
+
+	/// Convert the JSON of a Jupyter notebook (with Cadabra contents)
+	/// to the JSON of a Cadabra notebook.
+	
+	Json::Value ipynb2cnb(const Json::Value&);
+}
