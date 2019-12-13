@@ -2,6 +2,7 @@
 #pragma once
 
 #include "Props.hh"
+#include "Config.hh"
 
 /// \ingroup core
 ///
@@ -28,6 +29,9 @@ namespace cadabra {
 
 			/// Settings.
 			enum class scalar_backend_t { sympy, mathematica } scalar_backend;
+
+			const static std::string version;
+			const static std::string build  ;
 
 		};
 

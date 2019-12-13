@@ -6,6 +6,9 @@
 
 using namespace cadabra;
 
+const std::string Kernel::version = CADABRA_VERSION_FULL;
+const std::string Kernel::build   = CADABRA_VERSION_BUILD;
+
 Kernel::Kernel()
 	: scalar_backend(scalar_backend_t::sympy)
 	{

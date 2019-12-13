@@ -140,7 +140,9 @@ namespace cadabra {
 
 		pybind11::class_<Kernel>(m, "Kernel", pybind11::dynamic_attr())
 		.def(pybind11::init<>())
-		.def_readonly("scalar_backend", &Kernel::scalar_backend);
+			.def_readonly_static("version",        &Kernel::version)
+			.def_readonly_static("build",          &Kernel::build)			
+			.def_readonly("scalar_backend", &Kernel::scalar_backend);
 
 		Kernel* kernel = create_scope();
 		m.attr("__cdbkernel__") = pybind11::cast(kernel);
