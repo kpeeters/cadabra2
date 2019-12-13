@@ -88,6 +88,11 @@ namespace cadabra {
 			bool                          hidden;
 			bool                          sensitive;
 
+			/// Flag indicating whether this cell should be ignored in case the 
+			/// notebook is imported. Essentially the equivalent of `if __name__=="__main__"`.
+
+			bool                          ignore_on_import;
+
 			/// Indicator whether this cell is currently being evaluated by the server.
 			/// Currently only has a meaning for cells of type 'python'.
 			/// This flag is set/reset using the ActionSetRunStatus action.

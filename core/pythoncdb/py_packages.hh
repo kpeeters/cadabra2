@@ -5,7 +5,8 @@ namespace cadabra {
 	/// \ingroup files
 	///
 	/// Convert a Cadabra notebook file to a python package which can be imported
-	/// using standard 'import' notation.
+	/// using standard 'import' notation. Doing this will ignore all cells
+	/// which are labelled `ignore_on_import`.
 
 	void compile_package(const std::string& in_name, const std::string& out_name);
 

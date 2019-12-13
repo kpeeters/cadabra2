@@ -127,6 +127,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
 	actiongroup->add( Gtk::Action::create("EditMakeCellPython", "Cell is Cadabra/Python"), Gtk::AccelKey("<control><shift>P"),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_python) );
+	actiongroup->add( Gtk::Action::create("EditIgnoreCellOnImport", "Ignore cell on import"), Gtk::AccelKey("<control><shift>I"),
+	                  sigc::mem_fun(*this, &NotebookWindow::on_ignore_cell_on_import) );
 
 	actiongroup->add( Gtk::Action::create("MenuView", "_View") );
 	actiongroup->add( Gtk::Action::create("ViewSplit", "Split view"),
@@ -267,6 +269,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		   "      <separator/>"
 		   "      <menuitem action='EditMakeCellTeX' />"
 		   "      <menuitem action='EditMakeCellPython' />"
+		   "      <menuitem action='EditIgnoreCellOnImport' />"			
 		   "    </menu>"
 		   "    <menu action='MenuView'>"
 		   "      <menuitem action='ViewSplit' />"
@@ -1520,6 +1523,14 @@ void NotebookWindow::on_edit_cell_is_python()
 		update_cell(doc, current_cell);
 		}
 	refresh_highlighting();
+	}
+
+void NotebookWindow::on_ignore_cell_on_import()
+	{
+	if(current_cell==doc.end()) return;
+
+	current_cell->ignore_on_import=~current_cell->ignore_on_import;
+	update_cell(doc, current_cell);
 	}
 
 void NotebookWindow::on_edit_cell_is_latex()

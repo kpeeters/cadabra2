@@ -32,6 +32,7 @@ DataCell::DataCell(CellType t, const std::string& str, bool cell_hidden)
 	textbuf = str;
 	hidden = cell_hidden;
 	running=false;
+	ignore_on_import=false;
 	}
 
 DataCell::DataCell(id_t id_, CellType t, const std::string& str, bool cell_hidden)
@@ -41,6 +42,7 @@ DataCell::DataCell(id_t id_, CellType t, const std::string& str, bool cell_hidde
 	hidden = cell_hidden;
 	running=false;
 	serial_number=id_;
+	ignore_on_import=false;	
 	}
 
 DataCell::DataCell(const DataCell& other)
@@ -51,6 +53,7 @@ DataCell::DataCell(const DataCell& other)
 	hidden = other.hidden;
 	sensitive = other.sensitive;
 	serial_number = other.serial_number;
+	ignore_on_import = other.ignore_on_import;
 	}
 
 std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding, bool strip_code, std::string title)
@@ -323,6 +326,8 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 		}
 	if(it->hidden)
 		json["hidden"]=true;
+	if(it->ignore_on_import)
+		json["ignore_on_import"]=true;
 
 	json["cell_id"] = it->id().id;
 
@@ -372,11 +377,12 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 	{
 	try {
 		for(unsigned int c=0; c<cells.size(); ++c) {
-			const Json::Value celltype    = cells[c]["cell_type"];
-			const Json::Value cell_id     = cells[c].get("cell_id", generate_uuid<Json::UInt64>()).asUInt64();
-			const Json::Value cell_origin = cells[c]["cell_origin"];
-			const Json::Value textbuf     = cells[c]["source"];
-			const Json::Value hidden      = cells[c]["hidden"];
+			const Json::Value celltype         = cells[c]["cell_type"];
+			const Json::Value cell_id          = cells[c].get("cell_id", generate_uuid<Json::UInt64>()).asUInt64();
+			const Json::Value cell_origin      = cells[c]["cell_origin"];
+			const Json::Value textbuf          = cells[c]["source"];
+			const Json::Value hidden           = cells[c]["hidden"];
+			const Json::Value ignored          = cells[c]["ignore_on_import"];
 
 			DTree::iterator last=doc.end();
 			DataCell::id_t id;
@@ -462,6 +468,8 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 				}
 
 			if(last!=doc.end()) {
+				if(ignored.asBool())
+					last->ignore_on_import=true;
 				if(cells[c].isMember("cells")) {
 					const Json::Value subcells = cells[c]["cells"];
 					JSON_in_recurse(doc, last, subcells);

@@ -6,6 +6,7 @@
 #include <fstream>
 #include "json/json.h"
 #include <iomanip>
+//#include <iostream>
 
 std::string cadabra::escape_quotes(const std::string& line)
 	{
@@ -199,7 +200,7 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 	return ret+end_of_line;
 	}
 
-std::string cadabra::cnb2python(const std::string& in_name, bool display)
+std::string cadabra::cnb2python(const std::string& in_name, bool for_standalone)
 	{
 	// Read the file into a Json object and get the cells
 	std::ifstream ifs(in_name);
@@ -229,14 +230,17 @@ std::string cadabra::cnb2python(const std::string& in_name, bool display)
 	//	    << "   exec(code)\n\n";
 
 	for (auto cell : cells) {
-		if (cell["cell_type"] == "input") {
-			std::stringstream s, temp;
-			s << cell["source"].asString();
-			std::string line, lhs, rhs, op, indent;
-			while (std::getline(s, line)) {
-				auto res = convert_line(line, lhs, rhs, op, indent, display);
-				if(res!="::empty")
-					ofs << res << '\n';
+		bool ioi = cell["ignore_on_import"].asBool();
+		if(for_standalone || !ioi) {
+			if (cell["cell_type"] == "input") {
+				std::stringstream s, temp;
+				s << cell["source"].asString();
+				std::string line, lhs, rhs, op, indent;
+				while (std::getline(s, line)) {
+					auto res = convert_line(line, lhs, rhs, op, indent, for_standalone);
+					if(res!="::empty")
+						ofs << res << '\n';
+					}
 				}
 			}
 		}
