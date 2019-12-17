@@ -707,9 +707,21 @@ Json::Value cadabra::ipynb2cnb(const Json::Value& root)
 			std::string line=source[l].asString();
 			if(line.size()>0) {
 				if(line[0]=='#') {
+					std::string sub="";
+					line=line.substr(1);
+					int inc=0;
+					while(line.size()>0 && line[0]=='#') {
+						if(inc<2) {
+							sub+="sub";
+							inc+=1;
+							}
+						line=line.substr(1);
+						}
+					if(line.size()==0)
+						continue;
 					if(line[line.size()-1]=='\n')
 						line=line.substr(0,line.size()-1);
-					block+="\\section*{"+trim(line.substr(1))+"}\n";
+					block+="\\"+sub+"section*{"+trim(line)+"}\n";
 					}
 				else
 					block+=line;

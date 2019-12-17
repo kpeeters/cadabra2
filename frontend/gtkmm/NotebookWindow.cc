@@ -1529,8 +1529,9 @@ void NotebookWindow::on_ignore_cell_on_import()
 	{
 	if(current_cell==doc.end()) return;
 
-	current_cell->ignore_on_import=~current_cell->ignore_on_import;
+	current_cell->ignore_on_import= !(current_cell->ignore_on_import);
 	update_cell(doc, current_cell);
+	refresh_highlighting();
 	}
 
 void NotebookWindow::on_edit_cell_is_latex()

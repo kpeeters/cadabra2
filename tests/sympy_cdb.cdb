@@ -47,3 +47,12 @@ def test03():
 test03()
 
 
+def test04():
+   __cdbkernel__=create_scope() 
+   ex:= 1 - (-1)**2;
+   simplify(_)
+   assert(ex==0)
+   print("Test 04 passed")
+
+test04()
+      
