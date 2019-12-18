@@ -155,7 +155,7 @@ Algorithm::result_t sort_product::apply(iterator& st)
 						while(ch!=end_index(one)) {
 							auto fnd=ind_free.find((Ex::iterator)ch);
 							if(fnd!=ind_free.end()) {
-								free1_names+="";
+								free1_names+=*ch->name;
 								++free1;
 								}
 							++ch;
@@ -164,7 +164,7 @@ Algorithm::result_t sort_product::apply(iterator& st)
 						while(ch!=end_index(two)) {
 							auto fnd=ind_free.find((Ex::iterator)ch);
 							if(fnd!=ind_free.end()) {
-								free2_names+="";
+								free2_names+=*ch->name;
 								++free2;
 								}
 							++ch;
