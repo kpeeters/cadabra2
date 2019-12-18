@@ -221,4 +221,17 @@ def test17():
     print("Test 17 passed")
 
 test17()
-	
+
+def test18():
+    __cdbkernel__=create_scope()
+    {\mu,\nu}::Indices(vector).
+    tr{#}::Trace.
+    {a^{\mu},b^{\mu}}::NonCommuting.
+    {a^{\mu},b^{\mu}}::SelfNonCommuting.
+    ex:=tr{a^{\mu} b^{\mu} b^{\nu} a^{\nu}} - tr{a^{\mu} a^{\nu} b^{\nu} b^{\mu} };
+    sort_product(_)
+    rename_dummies(_)        
+    assert(ex==0)
+    print("Test 18 passed")
+
+test18()

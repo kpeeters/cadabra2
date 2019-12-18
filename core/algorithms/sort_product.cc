@@ -160,7 +160,7 @@ Algorithm::result_t sort_product::apply(iterator& st)
 								}
 							++ch;
 							}
-						index_iterator ch=begin_index(two);
+						ch=begin_index(two);
 						while(ch!=end_index(two)) {
 							auto fnd=ind_free.find((Ex::iterator)ch);
 							if(fnd!=ind_free.end()) {
