@@ -133,6 +133,7 @@ Algorithm::result_t sort_product::apply(iterator& st)
 				}
 			// Narrow them down by comparing first digit, then second digit, ...
 			unsigned int digit=1;
+			index_map_t ind_free, ind_dummy;
 			while(candidates.size()>1 && digit<=num) {
 				std::vector<std::vector<Ex::sibling_iterator>>::iterator candidate=candidates.begin();
 				one=candidate->at(digit-1);
@@ -140,13 +141,45 @@ Algorithm::result_t sort_product::apply(iterator& st)
 				while(candidate!=candidates.end()) {
 					two=candidate->at(digit-1);
 					compare.clear();
+					int dir=0;
 					auto es=compare.equal_subtree(one, two);
-					if(es==Ex_comparator::match_t::no_match_greater || es==Ex_comparator::match_t::match_index_greater) {
+					if(es==Ex_comparator::match_t::no_match_greater) dir=1;
+					else if(es==Ex_comparator::match_t::no_match_less) dir=-1;
+					else {
+						unsigned int free1=0;
+						unsigned int free2=0;
+						std::string free1_names="";
+						std::string free2_names="";
+						if(ind_free.size()==0 && ind_dummy.size()==0) classify_indices(st, ind_free, ind_dummy);
+						index_iterator ch=begin_index(one);
+						while(ch!=end_index(one)) {
+							auto fnd=ind_free.find((Ex::iterator)ch);
+							if(fnd!=ind_free.end()) {
+								free1_names+="";
+								++free1;
+								}
+							++ch;
+							}
+						index_iterator ch=begin_index(two);
+						while(ch!=end_index(two)) {
+							auto fnd=ind_free.find((Ex::iterator)ch);
+							if(fnd!=ind_free.end()) {
+								free2_names+="";
+								++free2;
+								}
+							++ch;
+							}
+						if(free1>free2) dir=1;
+						else if(free1<free2) dir=-1;
+						else if(free1_names>free2_names) dir=1;
+						else if(free1_names<free2_names) dir=-1;
+						}
+					if(dir==1) {
 						candidate=candidates.erase(candidates.begin(), candidate);
 						one=candidate->at(digit-1);
 						++candidate;
 						}
-					else if(es==Ex_comparator::match_t::no_match_less || es==Ex_comparator::match_t::match_index_less) {
+					else if(dir==-1) {
 						candidate=candidates.erase(candidate);
 						}
 					else ++candidate;
