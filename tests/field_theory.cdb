@@ -148,4 +148,18 @@ def test09():
 
 test09()
 
+def test10():
+    __cdbkernel__=create_scope()
+    {i,j,k,l}::Indices(vector);
+    {i,j,k,l}::Integer(1..3);
+    \delta{#}::KroneckerDelta;
+    \epsilon_{i j k}::EpsilonTensor(delta=\delta);
+    ex:= \epsilon_{i j j} \epsilon_{i k l} + \epsilon_{i j k} \epsilon_{i j l};
+    epsilon_to_delta(_)
+    expand_delta(_)
+    tst:= 2 \delta_{k l} - @(ex);
+    assert(tst==0)
+    print("Test 10 passed")
+
+test10()
         
