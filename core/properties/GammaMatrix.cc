@@ -23,6 +23,7 @@ bool GammaMatrix::parse(Kernel& kernel, keyval_t& keyvals)
 		}
 
 	ImplicitIndex::parse(kernel, keyvals);
+	AntiSymmetric::parse(kernel, keyvals);
 
 	//	kv=keyvals.find("delta");
 	//	if(kv!=keyvals.end()) delta=Ex(kv->second);
