@@ -52,7 +52,8 @@ class PackageCompiler(MetaPathFinder):
                 for entry in path:
                    have_cnb = os.path.isfile(os.path.join(entry, name + ".cnb"))
                    have_cdb = os.path.isfile(os.path.join(entry, name + ".cdb"))
-                   if have_cnb or have_cdb:
+                   have_ipynb = os.path.isfile(os.path.join(entry, name + ".ipynb"))
+                   if have_cnb or have_cdb or have_ipynb:
                        # Notebook was found. Create a version of it in the temporary directory, then
                        # return a ModuleSpec object to allow Python to load that file
                        pkg_path = os.path.join(user_config_dir(), "cadabra_packages", *parents)
@@ -61,8 +62,10 @@ class PackageCompiler(MetaPathFinder):
                                os.makedirs(pkg_path)
                        if have_cnb:                                             
                           compile_package__(os.path.join(entry, name + ".cnb"), os.path.join(pkg_path, name + ".py"))
-                       else:                                             
+                       elif have_cdb:                                             
                           compile_package__(os.path.join(entry, name + ".cdb"), os.path.join(pkg_path, name + ".py"))
+                       else:                                             
+                          compile_package__(os.path.join(entry, name + ".ipynb"), os.path.join(pkg_path, name + ".py"))
                        return ModuleSpec(
                                         fullname, 
                                         SourceFileLoader(fullname, os.path.join(pkg_path, name + ".py")), 

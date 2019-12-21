@@ -107,6 +107,7 @@ bool DisplaySympy::needs_brackets(Ex::iterator it)
 	std::string child =*it->name;
 
 	if(parent=="\\prod" || parent=="\\frac" || parent=="\\pow") {
+		if(parent=="\\pow" && *it->multiplier<0) return true;
 		if(child=="\\sum") return true;
 		if(parent=="\\pow" && ( (tree.index(it)==0 && !it->is_integer()) || child=="\\sum" || child=="\\prod" || child=="\\pow")  ) return true;
 		}

@@ -1,11 +1,13 @@
 
 #include "CdbPython.hh"
+#include "DataCell.hh"
 #include <regex>
 #include <sstream>
 #include <sys/stat.h>
 #include <fstream>
 #include "json/json.h"
 #include <iomanip>
+#include <iostream>
 
 std::string cadabra::escape_quotes(const std::string& line)
 	{
@@ -199,13 +201,17 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 	return ret+end_of_line;
 	}
 
-std::string cadabra::cnb2python(const std::string& in_name, bool display)
+std::string cadabra::cnb2python(const std::string& in_name, bool for_standalone)
 	{
-	// Read the file into a Json object and get the cells
+	// Read the file into a Json object and get the cells. We go through
+	// a proper notebook read because that way we can benefit from automatic
+	// Jupyter -> Cadabra conversion.
 	std::ifstream ifs(in_name);
-	Json::Value nb;
-	ifs >> nb;
-	Json::Value& cells = nb["cells"];
+	std::string content, line;
+	while(std::getline(ifs, line))
+		content+=line;
+	cadabra::DTree doc;
+	cadabra::JSON_deserialise(content, doc);
 
 	std::time_t t = std::time(nullptr);
 	std::tm tm = *std::localtime(&t);
@@ -228,17 +234,24 @@ std::string cadabra::cnb2python(const std::string& in_name, bool display)
 	//	    << "   code = compile(f.read(), 'cadabra2_defaults.py', 'exec')\n"
 	//	    << "   exec(code)\n\n";
 
-	for (auto cell : cells) {
-		if (cell["cell_type"] == "input") {
-			std::stringstream s, temp;
-			s << cell["source"].asString();
-			std::string line, lhs, rhs, op, indent;
-			while (std::getline(s, line)) {
-				auto res = convert_line(line, lhs, rhs, op, indent, display);
-				if(res!="::empty")
-					ofs << res << '\n';
+	// FIXME: this only does a single layer of cells below the top-level
+	// 'document' cell; need recursing, in principle.
+	auto docit=doc.begin();
+	for(auto cell=doc.begin(docit); cell!=doc.end(docit); ++cell) {
+		bool ioi = cell->ignore_on_import;
+		if(for_standalone || !ioi) {
+			if(cell->cell_type==cadabra::DataCell::CellType::python) {
+				std::stringstream s, temp;
+				s << cell->textbuf; // cell["source"].asString();
+				std::string line, lhs, rhs, op, indent;
+				while (std::getline(s, line)) {
+					auto res = convert_line(line, lhs, rhs, op, indent, for_standalone);
+					if(res!="::empty")
+						ofs << res << '\n';
+					}
 				}
 			}
+		cell.skip_children();
 		}
 	// Ensure only symbols defined in this file get exported
 	ofs << '\n'

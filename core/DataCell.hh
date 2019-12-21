@@ -88,6 +88,11 @@ namespace cadabra {
 			bool                          hidden;
 			bool                          sensitive;
 
+			/// Flag indicating whether this cell should be ignored in case the 
+			/// notebook is imported. Essentially the equivalent of `if __name__=="__main__"`.
+
+			bool                          ignore_on_import;
+
 			/// Indicator whether this cell is currently being evaluated by the server.
 			/// Currently only has a meaning for cells of type 'python'.
 			/// This flag is set/reset using the ActionSetRunStatus action.
@@ -108,7 +113,7 @@ namespace cadabra {
 	std::string JSON_serialise(const DTree&);
 	void        JSON_recurse(const DTree&, DTree::iterator, Json::Value&);
 
-	/// Load a document from .cj format, i.e. the inverse of the above.
+	/// Load a document from .cnb format, i.e. the inverse of the above.
 
 	void        JSON_deserialise(const std::string&, DTree&);
 	void        JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value& cells);
@@ -142,4 +147,9 @@ namespace cadabra {
 
 	/// Replace all occurrences of a substring in the original string.
 	// std::string replace_all(std::string, const std::string& old, const std::string& nw);
-	}
+
+	/// Convert the JSON of a Jupyter notebook (with Cadabra contents)
+	/// to the JSON of a Cadabra notebook.
+	
+	Json::Value ipynb2cnb(const Json::Value&);
+}

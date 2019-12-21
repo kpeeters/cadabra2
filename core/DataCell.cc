@@ -13,6 +13,18 @@
 
 using namespace cadabra;
 
+// General tool to strip spaces from both ends
+static std::string trim(const std::string& s)
+	{
+	if(s.length() == 0)
+		return s;
+	int b = s.find_first_not_of(" \t\n");
+	int e = s.find_last_not_of(" \t\n");
+	if(b == -1) // No non-spaces
+		return "";
+	return std::string(s, b, e - b + 1);
+	}
+
 bool DataCell::id_t::operator<(const DataCell::id_t& other) const
 	{
 	if(created_by_client != other.created_by_client) return created_by_client;
@@ -32,6 +44,7 @@ DataCell::DataCell(CellType t, const std::string& str, bool cell_hidden)
 	textbuf = str;
 	hidden = cell_hidden;
 	running=false;
+	ignore_on_import=false;
 	}
 
 DataCell::DataCell(id_t id_, CellType t, const std::string& str, bool cell_hidden)
@@ -41,6 +54,7 @@ DataCell::DataCell(id_t id_, CellType t, const std::string& str, bool cell_hidde
 	hidden = cell_hidden;
 	running=false;
 	serial_number=id_;
+	ignore_on_import=false;	
 	}
 
 DataCell::DataCell(const DataCell& other)
@@ -51,6 +65,7 @@ DataCell::DataCell(const DataCell& other)
 	hidden = other.hidden;
 	sensitive = other.sensitive;
 	serial_number = other.serial_number;
+	ignore_on_import = other.ignore_on_import;
 	}
 
 std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding, bool strip_code, std::string title)
@@ -323,6 +338,8 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 		}
 	if(it->hidden)
 		json["hidden"]=true;
+	if(it->ignore_on_import)
+		json["ignore_on_import"]=true;
 
 	json["cell_id"] = it->id().id;
 
@@ -363,6 +380,14 @@ void cadabra::JSON_deserialise(const std::string& cj, DTree& doc)
 	DataCell top(DataCell::CellType::document);
 	DTree::iterator doc_it = doc.set_head(top);
 
+	// Determine whether this is a Jupyter notebook or a Cadabra
+	// notebook.
+	const Json::Value desc = root["description"];
+	if(!desc) 
+		root = cadabra::ipynb2cnb(root);
+
+	// std::cerr << root << std::endl;
+	
 	// Scan through json file.
 	const Json::Value cells = root["cells"];
 	JSON_in_recurse(doc, doc_it, cells);
@@ -372,11 +397,12 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 	{
 	try {
 		for(unsigned int c=0; c<cells.size(); ++c) {
-			const Json::Value celltype    = cells[c]["cell_type"];
-			const Json::Value cell_id     = cells[c].get("cell_id", generate_uuid<Json::UInt64>()).asUInt64();
-			const Json::Value cell_origin = cells[c]["cell_origin"];
-			const Json::Value textbuf     = cells[c]["source"];
-			const Json::Value hidden      = cells[c]["hidden"];
+			const Json::Value celltype         = cells[c]["cell_type"];
+			const Json::Value cell_id          = cells[c].get("cell_id", generate_uuid<Json::UInt64>()).asUInt64();
+			const Json::Value cell_origin      = cells[c]["cell_origin"];
+			const Json::Value textbuf          = cells[c]["source"];
+			const Json::Value hidden           = cells[c]["hidden"];
+			const Json::Value ignored          = cells[c]["ignore_on_import"];
 
 			DTree::iterator last=doc.end();
 			DataCell::id_t id;
@@ -462,6 +488,8 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 				}
 
 			if(last!=doc.end()) {
+				if(ignored.asBool())
+					last->ignore_on_import=true;
 				if(cells[c].isMember("cells")) {
 					const Json::Value subcells = cells[c]["cells"];
 					JSON_in_recurse(doc, last, subcells);
@@ -647,3 +675,63 @@ void cadabra::python_recurse(const DTree& doc, DTree::iterator it, std::ostrings
 // 	   }
 //    return str;
 //    }
+
+Json::Value cadabra::ipynb2cnb(const Json::Value& root)
+	{
+	auto nbf = root["nbformat"];
+	Json::Value json;
+
+	if(!nbf)
+		return json;
+
+	json["description"]="Cadabra JSON notebook format";
+	json["version"]=1.0;
+
+	Json::Value cells;
+	const Json::Value& jucells=root["cells"];
+	
+	// Jupyter notebooks just have a single array of cells; walk
+	// through and add to our "cells" array.
+
+	for(unsigned int c=0; c<jucells.size(); ++c) {
+		Json::Value cell;
+		if(jucells[c]["cell_type"].asString()=="markdown")
+			cell["cell_type"]="latex";
+		else
+			cell["cell_type"]="input";
+		cell["hidden"]=false;
+		const Json::Value& source=jucells[c]["source"];
+		// Jupyter stores the source line-by-line in an array 'source'.
+		std::string block;
+		for(unsigned int l=0; l<source.size(); ++l) {
+			std::string line=source[l].asString();
+			if(line.size()>0) {
+				if(line[0]=='#') {
+					std::string sub="";
+					line=line.substr(1);
+					int inc=0;
+					while(line.size()>0 && line[0]=='#') {
+						if(inc<2) {
+							sub+="sub";
+							inc+=1;
+							}
+						line=line.substr(1);
+						}
+					if(line.size()==0)
+						continue;
+					if(line[line.size()-1]=='\n')
+						line=line.substr(0,line.size()-1);
+					block+="\\"+sub+"section*{"+trim(line)+"}\n";
+					}
+				else
+					block+=line;
+				}
+			}
+		cell["source"]=block;
+		cells.append(cell);
+		}
+
+	json["cells"] = cells;
+	
+	return json;
+	}

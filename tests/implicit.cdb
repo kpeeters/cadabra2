@@ -209,4 +209,29 @@ def test16():
     print("Test 16 passed")
     
 test16()
-        
+
+def test17():
+    __cdbkernel__=create_scope()
+    {A,B}::ImplicitIndex.
+    tr{#}::Trace.
+    ex:=tr( A B B A );
+    sort_product(_)
+    tst:= tr( A A B B ) - @(ex);
+    assert(tst==0)
+    print("Test 17 passed")
+
+test17()
+
+def test18():
+    __cdbkernel__=create_scope()
+    {\mu,\nu}::Indices(vector).
+    tr{#}::Trace.
+    {a^{\mu},b^{\mu}}::NonCommuting.
+    {a^{\mu},b^{\mu}}::SelfNonCommuting.
+    ex:=tr{a^{\mu} b^{\mu} b^{\nu} a^{\nu}} - tr{a^{\mu} a^{\nu} b^{\nu} b^{\mu} };
+    sort_product(_)
+    rename_dummies(_)        
+    assert(ex==0)
+    print("Test 18 passed")
+
+test18()

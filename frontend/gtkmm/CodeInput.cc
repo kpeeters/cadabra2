@@ -613,8 +613,12 @@ bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 
 	if(datacell->cell_type==DataCell::CellType::latex)
 		cr->set_source_rgba(.2, .7, .2, 1.0);
-	else
-		cr->set_source_rgba(.2, .2, .7, 1.0);
+	else {
+		if(datacell->ignore_on_import)
+			cr->set_source_rgba(.4, .4, .7, 0.5);
+		else
+			cr->set_source_rgba(.2, .2, .7, 1.0);
+		}
 	double line_width=2.0/1.6*scale_;
 	cr->set_line_width(line_width);
 	cr->set_antialias(Cairo::ANTIALIAS_NONE);

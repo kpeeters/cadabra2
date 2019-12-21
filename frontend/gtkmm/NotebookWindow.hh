@@ -191,6 +191,7 @@ namespace cadabra {
 			void on_edit_split();
 			void on_edit_cell_is_latex();
 			void on_edit_cell_is_python();
+			void on_ignore_cell_on_import();			
 
 			void on_view_split();
 			void on_view_close();

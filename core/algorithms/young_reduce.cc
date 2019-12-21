@@ -570,16 +570,18 @@ ProjectedForm young_reduce::symmetrize(Ex::iterator it)
 	pos = 0;
 	for (auto& it : terms) {
 		auto tb = kernel.properties.get_composite<TableauBase>(it);
-		auto tab = tb->get_tab(kernel.properties, tr, it, 0);
-		for (size_t col = 0; col < tab.row_size(0); ++col) {
-			if (tab.column_size(col) > 1) {
-				std::vector<index_t> indices;
-				for (auto beg = tab.begin_column(col), end = tab.end_column(col); beg != end; ++beg)
-					indices.push_back(*beg + pos);
-				std::sort(indices.begin(), indices.end());
-				sym.apply_young_symmetry(indices, true);
+		if(tb) {
+			auto tab = tb->get_tab(kernel.properties, tr, it, 0);
+			for (size_t col = 0; col < tab.row_size(0); ++col) {
+				if (tab.column_size(col) > 1) {
+					std::vector<index_t> indices;
+					for (auto beg = tab.begin_column(col), end = tab.end_column(col); beg != end; ++beg)
+						indices.push_back(*beg + pos);
+					std::sort(indices.begin(), indices.end());
+					sym.apply_young_symmetry(indices, true);
+					}
+				}
 			}
-		}
 		pos += it.number_of_children();
 	}
 
@@ -588,19 +590,21 @@ ProjectedForm young_reduce::symmetrize(Ex::iterator it)
 	for (auto& it : terms) {
 		// Apply the symmetries
 		auto tb = kernel.properties.get_composite<TableauBase>(it);
-		auto tab = tb->get_tab(kernel.properties, tr, it, 0);
-		for (size_t row = 0; row < tab.number_of_rows(); ++row) {
-			if (tab.row_size(row) > 1) {
-				std::vector<index_t> indices;
-				for (auto beg = tab.begin_row(row), end = tab.end_row(row); beg != end; ++beg)
-					indices.push_back(*beg + pos);
-				std::sort(indices.begin(), indices.end());
-				sym.apply_young_symmetry(indices, false);
+		if(tb) {
+			auto tab = tb->get_tab(kernel.properties, tr, it, 0);
+			for (size_t row = 0; row < tab.number_of_rows(); ++row) {
+				if (tab.row_size(row) > 1) {
+					std::vector<index_t> indices;
+					for (auto beg = tab.begin_row(row), end = tab.end_row(row); beg != end; ++beg)
+						indices.push_back(*beg + pos);
+					std::sort(indices.begin(), indices.end());
+					sym.apply_young_symmetry(indices, false);
+					}
+				}
 			}
-		}
 		pos += it.number_of_children();
-	}
-
+		}
+	
 	sym.multiply(*it->multiplier);
 
 	cdebug << pf_to_string(sym, &index_map) << '\n';

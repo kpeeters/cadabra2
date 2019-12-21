@@ -125,9 +125,9 @@ namespace cadabra {
 			}
 
 		// Turn \pow{mA A}{B} with mA the multiplier for A into mA^B \pow{A}{B}
-		if(exp->is_integer() && *arg->multiplier!=1) {
+		if(exp->is_integer() && *arg->multiplier!=1 && *arg->name!="1") {
 			mpz_class nw_n, nw_d;
-			// std::cerr << "also doing " << *arg->multiplier << "**" << *exp->multiplier << std::endl;
+//			std::cerr << "also doing " << arg << ", " << *arg->multiplier << "**" << *exp->multiplier << std::endl;
 			long Cexp=to_long(*exp->multiplier);
 			mpz_pow_ui(nw_n.get_mpz_t(), arg->multiplier->get_num().get_mpz_t(), std::abs(Cexp));
 			mpz_pow_ui(nw_d.get_mpz_t(), arg->multiplier->get_den().get_mpz_t(), std::abs(Cexp));

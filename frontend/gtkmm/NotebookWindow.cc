@@ -127,6 +127,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
 	actiongroup->add( Gtk::Action::create("EditMakeCellPython", "Cell is Cadabra/Python"), Gtk::AccelKey("<control><shift>P"),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_python) );
+	actiongroup->add( Gtk::Action::create("EditIgnoreCellOnImport", "Ignore cell on import"), Gtk::AccelKey("<control><shift>I"),
+	                  sigc::mem_fun(*this, &NotebookWindow::on_ignore_cell_on_import) );
 
 	actiongroup->add( Gtk::Action::create("MenuView", "_View") );
 	actiongroup->add( Gtk::Action::create("ViewSplit", "Split view"),
@@ -267,6 +269,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		   "      <separator/>"
 		   "      <menuitem action='EditMakeCellTeX' />"
 		   "      <menuitem action='EditMakeCellPython' />"
+		   "      <menuitem action='EditIgnoreCellOnImport' />"			
 		   "    </menu>"
 		   "    <menu action='MenuView'>"
 		   "      <menuitem action='ViewSplit' />"
@@ -1522,6 +1525,15 @@ void NotebookWindow::on_edit_cell_is_python()
 	refresh_highlighting();
 	}
 
+void NotebookWindow::on_ignore_cell_on_import()
+	{
+	if(current_cell==doc.end()) return;
+
+	current_cell->ignore_on_import= !(current_cell->ignore_on_import);
+	update_cell(doc, current_cell);
+	refresh_highlighting();
+	}
+
 void NotebookWindow::on_edit_cell_is_latex()
 	{
 	if(current_cell==doc.end()) return;
@@ -1663,6 +1675,7 @@ void NotebookWindow::on_help_about()
 	std::vector<Glib::ustring> special;
 	special.push_back("José M. Martín-García (for the xPerm canonicalisation code)");
 	special.push_back("Dominic Price (for the conversion to pybind and most of the Windows port)");
+	special.push_back("Connor Behan (for various improvements related to index-free algorithms)");	
 	special.push_back("James Allen (for writing much of the factoring code)");
 	special.push_back("Software Sustainability Institute");
 	special.push_back("Institute of Advanced Study (for a Christopherson/Knott fellowship)");

@@ -140,7 +140,12 @@ def test13():
    young_reduce(ex)
    #young_reduce(ex, $R_{a b c d} A^{a b c}$)
    assert ex==0
-   print("Test 13 passed")
+   print("Test 13a passed")
+   ex:=R_{a b c d} A_{a b c};
+   young_reduce(ex)
+   tst:= R_{a b c d} A_{a b c} - @(ex);
+   assert(tst==0)
+   print("Test 13b passed")
 
 test13()
 
