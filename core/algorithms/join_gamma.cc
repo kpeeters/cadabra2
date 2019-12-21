@@ -117,11 +117,14 @@ bool join_gamma::can_apply(iterator st)
 				if(fc!=tr.end(st)) {
 					gm2=kernel.properties.get<GammaMatrix>(fc);
 					if(gm2) {
-						only_expand.clear();
-						// FIXME: handle only expansion into single term
-						//							else if(it->is_rational()) {
-						//								only_expand.push_back(to_long(*it->multiplier));
-						return true;
+						if(gm1->index_set_name==gm2->index_set_name) {
+							only_expand.clear();
+							// FIXME: handle only expansion into single term
+							//							else if(it->is_rational()) {
+							//								only_expand.push_back(to_long(*it->multiplier));
+							return true;
+							}
+						else --fc;
 						}
 					}
 				}

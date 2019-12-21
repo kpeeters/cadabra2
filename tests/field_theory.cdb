@@ -162,4 +162,20 @@ def test10():
     print("Test 10 passed")
 
 test10()
-        
+
+def test11():
+    __cdbkernel__=create_scope()
+    {a,b,c,d,e}::Indices(vector1);
+    {a,b,c,d,e}::Integer(1..3);
+    {p,q,r,s,t}::Indices(vector2);
+    {p,q,r,s,t}::Integer(1..3);
+    \delta{#}::KroneckerDelta;
+    \epsilon_{a b c}::EpsilonTensor(delta=\delta);
+    E_{p q r}::EpsilonTensor(delta=\delta);
+    ex:= \epsilon_{a b c} E_{p q r} \epsilon_{a d e};
+    epsilon_to_delta(_)
+    tst:= 2 E_{p q r} \delta_{b d c e} - @(ex);
+    assert(tst==0)
+    print("Test 11 passed")
+
+test11()
