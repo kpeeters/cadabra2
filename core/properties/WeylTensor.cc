@@ -37,7 +37,7 @@ void WeylTensor::validate(const Kernel& kernel, const Ex& pat) const
 	// We cannot access the right things from parse()
 	if(ind) {
 		WeylTensor *ptr = const_cast<WeylTensor*>(this);
-		ptr->index_set_name=ind->set_name;
+		ptr->index_set_names.insert(ind->set_name);
 		}
 	}
 
