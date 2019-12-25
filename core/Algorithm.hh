@@ -128,6 +128,9 @@ namespace cadabra {
 			// inherited from child nodes).
 			static unsigned int number_of_direct_indices(iterator it);
 
+			// The set to which the first index belongs, defaulting to the empty string.
+			std::string set_name_of_indices(iterator it);
+
 			bool     rename_replacement_dummies(iterator, bool still_inside_algo=false);
 
 

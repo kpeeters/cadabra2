@@ -479,6 +479,16 @@ unsigned int Algorithm::number_of_indices(iterator it)
 	return res;
 	}
 
+std::string Algorithm::set_name_of_indices(iterator it)
+	{
+	std::string res="";
+	index_iterator indit=begin_index(it);
+	if(indit!=end_index(it)) {
+		const Indices *ind=kernel.properties.get<Indices>(indit, true);
+		if(ind) res=ind->set_name;
+		}
+	return res;
+	}
 
 index_iterator Algorithm::begin_index(iterator it) const
 	{
