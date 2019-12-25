@@ -184,6 +184,11 @@ if(NOT ENABLE_JUPYTER)
 	 ${GLIBMM3_LIBRARIES}
 	 Threads::Threads
 	 )
+  if(ENABLE_SYSTEM_JSONCPP)
+    target_link_libraries(cadabra_client
+      ${JSONCPP_LIBRARIES}
+      )
+  endif()
   if(WIN32)
     target_link_libraries(cadabra_client ws2_32 bcrypt)
   endif()

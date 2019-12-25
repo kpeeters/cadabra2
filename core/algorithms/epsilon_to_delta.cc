@@ -18,13 +18,21 @@ bool epsilon_to_delta::can_apply(iterator st)
 
 	epsilons.clear();
 	// Find the two epsilon tensors in the product.
+	std::multimap<std::string,Ex::iterator> emap;
 	sibling_iterator it=tr.begin(st);
-	signature=1;
 	while(it!=tr.end(st)) {
 		const EpsilonTensor *eps=kernel.properties.get<EpsilonTensor>(it);
-		if(eps) {
-			epsilons.push_back(it);
-			// FIXME: what if the epsilons are not all the same type?
+		if(eps) emap.insert(std::pair<std::string,Ex::iterator>(eps->index_set_name,it));
+		++it;
+		}
+	signature=1;
+	std::multimap<std::string,Ex::iterator>::iterator eit=emap.begin();
+	while(epsilons.size()<2 && eit!=emap.end()) {
+		if(emap.count(eit->first)>1) {
+			epsilons.push_back(eit->second);
+			++eit;
+			epsilons.push_back(eit->second);
+			const EpsilonTensor *eps=kernel.properties.get<EpsilonTensor>(eit->second);
 			if(eps->metric.begin()!=eps->metric.end()) {
 				const Metric *met=kernel.properties.get<Metric>(eps->metric.begin());
 				if(met)
@@ -33,7 +41,7 @@ bool epsilon_to_delta::can_apply(iterator st)
 			if(eps->krdelta.begin()!=eps->krdelta.end())
 				repdelta=eps->krdelta;
 			}
-		++it;
+		++eit;
 		}
 	if(epsilons.size()<2)
 		return false;
