@@ -113,12 +113,12 @@ bool join_gamma::can_apply(iterator st)
 		while(fc!=tr.end(st)) {
 			gm1=kernel.properties.get<GammaMatrix>(fc);
 			if(gm1) {
-				std::string target=set_name_of_indices(fc);
+				std::string target=get_index_set_name(begin_index(fc));
 				++fc;
 				if(fc!=tr.end(st)) {
 					gm2=kernel.properties.get<GammaMatrix>(fc);
 					if(gm2) {
-						if(target==set_name_of_indices(fc)) {
+						if(target==get_index_set_name(begin_index(fc))) {
 							only_expand.clear();
 							// FIXME: handle only expansion into single term
 							//							else if(it->is_rational()) {

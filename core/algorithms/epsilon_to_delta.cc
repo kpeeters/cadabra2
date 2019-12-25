@@ -22,7 +22,7 @@ bool epsilon_to_delta::can_apply(iterator st)
 	sibling_iterator it=tr.begin(st);
 	while(it!=tr.end(st)) {
 		const EpsilonTensor *eps=kernel.properties.get<EpsilonTensor>(it);
-		if(eps) emap.insert(std::pair<std::string,Ex::iterator>(set_name_of_indices(it),it));
+		if(eps) emap.insert(std::pair<std::string,Ex::iterator>(get_index_set_name(begin_index(it)),it));
 		++it;
 		}
 	signature=1;
