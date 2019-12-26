@@ -479,6 +479,18 @@ unsigned int Algorithm::number_of_indices(iterator it)
 	return res;
 	}
 
+std::string Algorithm::get_index_set_name(iterator it) const
+	{
+	const Indices *ind=kernel.properties.get<Indices>(it, true);
+	if(ind) {
+		return ind->set_name;
+		// TODO: The logic was once as below, but it is no longer clear to
+		// me why that would ever make sense.
+		//		if(ind->parent_name!="") return ind->parent_name;
+		//		else                     return ind->set_name;
+		}
+	else return " undeclared";
+	}
 
 index_iterator Algorithm::begin_index(iterator it) const
 	{

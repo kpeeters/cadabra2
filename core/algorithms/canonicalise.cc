@@ -61,7 +61,7 @@ bool canonicalise::remove_traceless_traces(iterator& it)
 				if(ind) {
 					// The indexs need to be in the set for which the object is
 					// traceless (if specified, otherwise accept all).
-					if(ind->set_name==trl->index_set_name || trl->index_set_name=="") {
+					if(trl->index_set_names.find(ind->set_name)!=trl->index_set_names.end() || trl->index_set_names.size()==0) {
 						incremented_now=true;
 						++ihits;
 						}
@@ -90,7 +90,7 @@ bool canonicalise::remove_traceless_traces(iterator& it)
 					indit=begin_index(eform);
 					while(indit!=end_index(eform)) {
 						auto ind=kernel.properties.get<Indices>(indit, true);
-						if(ind->set_name==trl->index_set_name && ind->set_name==trace->index_set_name) ++ehits;
+						if(trl->index_set_names.find(ind->set_name)!=trl->index_set_names.end() && ind->set_name==trace->index_set_name) ++ehits;
 						if(ehits - ihits > 1) {
 							zero(it->multiplier);
 							return true;
@@ -138,19 +138,6 @@ Indices::position_t canonicalise::position_type(iterator it) const
 	if(ind)
 		return ind->position_type;
 	return Indices::free;
-	}
-
-std::string canonicalise::get_index_set_name(iterator it) const
-	{
-	const Indices *ind=kernel.properties.get<Indices>(it, true);
-	if(ind) {
-		return ind->set_name;
-		// TODO: The logic was once as below, but it is no longer clear to
-		// me why that would ever make sense.
-		//		if(ind->parent_name!="") return ind->parent_name;
-		//		else                     return ind->set_name;
-		}
-	else return " undeclared";
 	}
 
 bool canonicalise::only_one_on_derivative(iterator i1, iterator i2) const

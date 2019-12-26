@@ -12,7 +12,6 @@ namespace cadabra {
 			virtual ~EpsilonTensor() {};
 			virtual std::string name() const override;
 			virtual bool parse(Kernel&, keyval_t&) override;
-			virtual void validate(const Kernel&, const Ex&) const override;
 
 			Ex metric, krdelta;
 		};
