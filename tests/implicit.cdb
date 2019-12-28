@@ -241,7 +241,7 @@ def test19():
     A::ImplicitIndex.
     tr{#}::Trace.
     ex:= i tr(i A);
-    untrace(_);
+    untrace(_, repeat=True)
     tst:= -tr(A) - @(ex);
     assert("Test 19 passed")
 
