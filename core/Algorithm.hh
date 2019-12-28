@@ -192,7 +192,8 @@ namespace cadabra {
 			/// Wrap a term in a product or sum in a node with indicated
 			/// name, irrespective of its parent (it usually makes more
 			/// sense to call the safer prod_wrap_single_term or
-			/// sum_wrap_single_term above).
+			/// sum_wrap_single_term above). Sets the iterator to the
+			/// new node.
 			void     force_node_wrap(iterator&, std::string);
 
 			/// Figure out whether two objects (commonly indices) are separated by a derivative

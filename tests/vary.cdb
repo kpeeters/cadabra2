@@ -162,3 +162,17 @@ test12()
 # \delta{#}::Accent;    
 # ex:=  \int{ -1/2 g^{\mu\nu}\partial_{\mu}{\phi} \partial_{\nu}{\phi} + V(\phi) }{x};
 # vary(ex, $\phi-> \delta{\phi}$);
+
+def test14():
+    __cdbkernel__=create_scope()
+    {\mu,\nu}::Indices(vector).
+    \delta{#}::Accent.
+    \Vt{#}::LaTeXForm("{\tilde{V}}").
+    ex:=\int{\Vt_{\mu}\Vt^{\mu}}{x};
+    vary(_,$\Vt_{\mu}->\delta{\Vt_{\mu}}$);
+    tst:= \int{\delta{\Vt_{\mu}} \Vt^{\mu} + \Vt_{\mu} \delta{\Vt^{\mu}}}{x} - @(ex);
+    display(tst)
+    assert(tst==0)
+    print("Test 14 passed")
+
+test14()

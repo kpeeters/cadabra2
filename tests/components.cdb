@@ -806,7 +806,6 @@ def test37():
 # evaluate(ex, $v_1=-1.12, v_2=1.6, v_3=4.48$);
 # tst:=23.88 - @(ex);
         
-print(list(map(lambda x: str(x), server.totals())))
 
 
 # {i,j}::Indices(name=space, position=free);
@@ -816,3 +815,20 @@ print(list(map(lambda x: str(x), server.totals())))
 # rl:= A_{t} = 3, A_{i} = B_{i};
 # evaluate(ex, rl, simplify=True)
 #     tst:= \components_{m}( \comma{ \comma{t} = 3  } ) - @(ex);
+
+def test36():
+    __cdbkernel__=create_scope()
+    {\mu,\nu}::Indices(values={1,2,3,4}, position=fixed);
+    \partial{#}::PartialDerivative;
+    {A^{1},A^{2},A^{3},A^{4}}::Depends(\partial{#});
+    ex:=\partial_{\mu}{A^{\mu}};
+    evaluate(ex)
+    tst:= \partial_{1}{A^{1}} + \partial_{2}{A^{2}} + \partial_{3}{A^{3}} + \partial_{4}{A^{4}} - @(ex);
+    assert(tst==0)
+    print("Test 36 passed")
+
+test36()
+
+
+print(list(map(lambda x: str(x), server.totals())))
+        

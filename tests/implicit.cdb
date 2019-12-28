@@ -235,3 +235,16 @@ def test18():
     print("Test 18 passed")
 
 test18()
+
+def test19():
+    i::ImaginaryI;
+    A::ImplicitIndex.
+    tr{#}::Trace.
+    ex:= i tr(i A);
+    untrace(_);
+    tst:= -tr(A) - @(ex);
+    assert("Test 19 passed")
+
+test19()
+
+

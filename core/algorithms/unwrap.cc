@@ -328,8 +328,8 @@ Algorithm::result_t unwrap::apply(iterator& it)
 			}
 		}
 	cleanup_dispatch(kernel, tr, it);
-
-	// std::cerr << "unwrap done " << Ex(it) << std::endl;
+	
+//	std::cerr << "unwrap done " << it << std::endl;
 
 	return res;
 	}

@@ -119,11 +119,15 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 	result_t ret=result_t::l_no_action;
 
 	Ex::fixed_depth_iterator start=tr.begin_fixed(it, depth, false);
-	// std::cerr << "apply_generic at " << it.node << " " << *it->name << " " << *start->name << std::endl;
+#ifdef DEBUG
+	std::cerr << "apply_generic at " << it.node << " " << *it->name << " " << *start->name << std::endl;
+#endif
 
 	while(tr.is_valid(start)) {
 		//		std::cerr << "evaluate main loop at " << *start->name << std::endl;
-		//		std::cerr << "main loop for " << typeid(*this).name() << ":\n" << Ex(start) << std::endl;
+#ifdef DEBUG
+		std::cerr << "main loop for " << typeid(*this).name() << ":\n" << Ex(start) << std::endl;
+#endif
 
 		result_t thisret=result_t::l_no_action;
 		Ex::iterator enter(start);

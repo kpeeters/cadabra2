@@ -26,15 +26,15 @@ bool untrace::can_apply(iterator st)
 
 Algorithm::result_t untrace::apply(iterator& trloc)
 	{
+	auto res=result_t::l_no_action;
 	const Trace *trace = kernel.properties.get<Trace>(trloc);
 
-	// ensure we sit in a product
-	auto par=tr.parent(trloc);
-	iterator moveprod=par;
-	if(tr.is_head(trloc) || *par->name!="\\prod") {
-		moveprod=trloc;
-		prod_wrap_single_term(moveprod);
-		}
+	// We cannot touch any nodes above `trloc`, so
+	// we will wrap the trace node in a product and
+	// then let cleanup take care of unwrapping
+	// that product.
+	iterator moveprod=trloc;
+	force_node_wrap(moveprod, "\\prod");
 
 	// ensure the argument is a product
 	iterator prodloc=tr.begin(trloc);
@@ -75,6 +75,7 @@ Algorithm::result_t untrace::apply(iterator& trloc)
 			}
 
 		if(move_out) {
+			res=result_t::l_applied;
 			int sign=1;
 			sibling_iterator st2=tr.begin(prodloc);
 			Ex_comparator compare(kernel.properties);
@@ -95,6 +96,9 @@ Algorithm::result_t untrace::apply(iterator& trloc)
 		node_one(prodloc);
 
 	trloc = moveprod;
-	// std::cerr << trloc << std::endl;
-	return result_t::l_no_action;
+
+//	std::cerr << trloc << std::endl;
+	cleanup_dispatch(kernel, tr, trloc);
+	
+	return res;
 	}
