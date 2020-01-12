@@ -41,6 +41,14 @@ std::string cadabra::cdb2python(const std::string& in_name, bool display)
 	    << "   pass\n\n";
 
 	ofs << cdb2python_string(buffer.str(), display);
+
+	ofs << '\n'
+	    << "del locals()['display']\n\n"
+	    << "try:\n"
+	    << "    __all__\n"
+	    << "except NameError:\n"
+	    << "    __all__  = list(set(dir()) - set(temp__all__))\n";
+
 	return ofs.str();
 	}
 

@@ -731,3 +731,18 @@ test41()
 # 
 # ex:= \partial{\psi_{\nu}} \partial{\psi_{\mu}} + \psi_{\nu} \psi_{\mu};
 # sort_product(_);
+
+def test42():
+    __cdbkernel__=create_scope()        
+    \nabla{#}::Derivative;
+    A::ImplicitIndex;
+    tr{#}::Trace;
+    \nabla{#}::ImplicitIndex;
+    ex:=tr{\nabla{A B}};
+    product_rule(ex);
+    tst:= tr{\nabla{A} B + A \nabla{B}} - @(ex);
+    assert(tst==0)
+    print("Test 42 passed")
+
+test42()
+

@@ -7,6 +7,8 @@
 
 using namespace cadabra;
 
+// #define DEBUG 1
+
 product_rule::product_rule(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr), number_of_indices(0)
 	{
@@ -42,6 +44,9 @@ bool product_rule::can_apply(iterator it)
 
 Algorithm::result_t product_rule::apply(iterator& it)
 	{
+#ifdef DEBUG
+	std::cerr << "product_rule::apply: at " << it << std::endl;
+#endif
 	Ex rep; // the subtree storing the result
 	iterator sm; // the sum node inside 'rep'
 
@@ -211,8 +216,13 @@ Algorithm::result_t product_rule::apply(iterator& it)
 			//						<< " " << stc << std::endl;
 			int ret=comp.can_swap(emptyD.begin(), repch, stc);
 			//			  txtout << ret << std::endl;
-			if(ret==0)
-				return result_t::l_no_action;
+			if(ret==0) {
+				// This happens when a derivative acts on a product of ImplicitIndices
+				// objects. That's not going to be an anti-commuting derivative, so set
+				// the sign to 1.
+				ret=1;
+				// return result_t::l_no_action;
+				}
 			sign*=ret;
 
 			// Because 'd' already reports itself to have differential form degree one,
@@ -234,6 +244,11 @@ Algorithm::result_t product_rule::apply(iterator& it)
 		}
 	//	it=tr.replace(it,rep.begin());
 	it=tr.move_ontop(it, rep.begin());
+
+#ifdef DEBUG
+	std::cerr << "product_rule: " << it << std::endl;
+#endif
+	
 	if(rename_dummies_at!=tr.end()) {
 		//		std::cerr << "...\n";
 		//		std::cerr << Ex(rename_dummies_at) << std::endl;
