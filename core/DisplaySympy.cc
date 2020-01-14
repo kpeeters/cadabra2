@@ -473,9 +473,10 @@ void DisplaySympy::print_intlike(std::ostream& str, Ex::iterator it)
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
 	++sib;
-	if(tree.is_valid(sib)) {
+	while(tree.is_valid(sib)) {
 		str << ", ";
 		dispatch(str, sib);
+		++sib;
 		}
 	str << ")";
 	}
