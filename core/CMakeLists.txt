@@ -189,6 +189,7 @@ set(LOCAL_SRC_FILES
 	ExNode.cc
 	ProgressMonitor.cc
 	Bridge.cc
+	Adjform.cc
 	Algorithm.cc
 	Cleanup.cc
 	Combinatorics.cc
