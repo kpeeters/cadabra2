@@ -28,4 +28,19 @@ namespace cadabra {
 		IndexMap index_map;
 	};
 
+	class young_reduce_trace : public Algorithm
+	{
+	public:
+		young_reduce_trace(const Kernel& kernel, Ex& ex);
+		~young_reduce_trace();
+
+		virtual bool can_apply(iterator it) override;
+		virtual result_t apply(iterator& it) override;
+
+	private:
+		result_t apply_sum(iterator& it);
+		result_t apply_trace(iterator& it);
+
+		IndexMap index_map;
+	};
 }

@@ -300,7 +300,9 @@ namespace cadabra {
 					if (idx == n_indices)
 						idx = 0;
 				}
+				std::cerr << "Before rotation: " << perm << '\n';
 				std::rotate(perm.begin(), perm.begin() + 1, perm.end());
+				std::cerr << "After rotation: " << perm << '\n';
 				add(perm, kv.second);
 			}
 		}

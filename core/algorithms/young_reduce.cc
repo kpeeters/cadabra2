@@ -362,3 +362,75 @@ AdjformEx young_reduce::symmetrize(Ex::iterator it)
 	return sym;
 }
 
+#include "properties/Trace.hh"
+
+bool has_Trace(const Kernel& kernel, Ex::iterator it)
+{
+	auto p = kernel.properties.get_composite<cadabra::Trace>(it);
+	if (p)
+		return true;
+	else
+		return false;
+}
+
+
+young_reduce_trace::young_reduce_trace(const Kernel& kernel, Ex& ex)
+	: Algorithm(kernel, ex)
+{
+
+}
+
+young_reduce_trace::~young_reduce_trace()
+{
+
+}
+
+bool young_reduce_trace::can_apply(iterator it)
+{
+	// Accept sum nodes and trace nodes
+	return has_Trace(kernel, it) || *it->name == "\\sum";
+}
+
+young_reduce_trace::result_t young_reduce_trace::apply(iterator& it)
+{
+	if (has_Trace(kernel, it)) {
+		return apply_trace(it);
+	}
+	else {
+		return apply_sum(it);
+	}
+}
+
+young_reduce_trace::result_t young_reduce_trace::apply_sum(iterator& it)
+{
+	assert(*it->name == "\\sum");
+	return result_t::l_no_action;
+}
+
+young_reduce_trace::result_t young_reduce_trace::apply_trace(iterator& it)
+{
+	assert(has_Trace(kernel, it));
+
+	// Can only apply if the child node is a sum node
+	if (it.number_of_children() == 0 || *it.begin()->name != "\\sum")
+		return result_t::l_no_action;
+
+	sibling_iterator beg = it.begin().begin(), end = it.begin().end();
+
+	AdjformEx a1, a2;
+	a1.add(index_map.to_adjform(beg));
+	a1.apply_cyclic_symmetry();
+	std::cerr << a1 << '\n';
+	++beg;
+	while (beg != end) {
+		a2.add(index_map.to_adjform(beg));
+		++beg;
+	}
+
+	a2.apply_cyclic_symmetry();
+	std::cerr << a2 << '\n';
+
+	auto factor = a1.compare(a2);
+	std::cerr << "factor was " << factor << "\n";
+	return result_t::l_no_action;
+}

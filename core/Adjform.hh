@@ -10,15 +10,18 @@ namespace cadabra {
 	using AdjformIdx = short;
 	using Adjform = std::vector<AdjformIdx>;
 
+	// To ensure consistency when creating adjforms out of two
+	// different Ex objects an IndexMap object is required which
+	// keeps track of which numeric index represents which index
+	// name 
 	class IndexMap
 	{
 	public:
+		// Create an Adjform object out of an expression
 		Adjform to_adjform(Ex::iterator it);
 
 	private:
-		// Return a unique negative index for each name
 		AdjformIdx get_free_index(nset_t::iterator name);
-
 		std::vector<nset_t::iterator> data;
 	};
 	
