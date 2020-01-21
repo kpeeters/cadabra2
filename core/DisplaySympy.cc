@@ -27,6 +27,7 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 			{"\\equals", "Eq" },
 
 			{"\\infty", "sympy.oo"},
+			{"\\hbar",   "hbar"},
 
 			{"\\alpha",   "alpha" },
 			{"\\beta",    "bbeta" },  // beta seems to be reserved
