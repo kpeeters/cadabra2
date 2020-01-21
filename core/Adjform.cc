@@ -293,16 +293,14 @@ namespace cadabra {
 
 		for (const auto& kv : old_data) {
 			auto perm = kv.first;
-			for (int step = 1; step < n_steps; ++step) {
+			for (int step = 0; step < n_steps; ++step) {
 				for (auto& idx : perm) {
 					if (idx >= 0)
 						++idx;
 					if (idx == n_indices)
 						idx = 0;
 				}
-				std::cerr << "Before rotation: " << perm << '\n';
-				std::rotate(perm.begin(), perm.begin() + 1, perm.end());
-				std::cerr << "After rotation: " << perm << '\n';
+				std::rotate(perm.begin(), perm.begin() + perm.size() - 1, perm.end());
 				add(perm, kv.second);
 			}
 		}
@@ -327,7 +325,7 @@ std::ostream& operator << (std::ostream& os, const cadabra::AdjformEx& adjex)
 		++i;
 		++it;
 	}
-	if (i == max) {
+	if (max < adjex.size()) {
 		os << "(skipped " << (adjex.size() - max) << " terms)\n";
 	}
 	return os;

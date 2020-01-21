@@ -417,20 +417,25 @@ young_reduce_trace::result_t young_reduce_trace::apply_trace(iterator& it)
 
 	sibling_iterator beg = it.begin().begin(), end = it.begin().end();
 
-	AdjformEx a1, a2;
-	a1.add(index_map.to_adjform(beg));
-	a1.apply_cyclic_symmetry();
-	std::cerr << a1 << '\n';
-	++beg;
-	while (beg != end) {
-		a2.add(index_map.to_adjform(beg));
-		++beg;
+	AdjformEx ref;
+	ref.add(index_map.to_adjform(beg), *beg->multiplier);
+	ref.apply_cyclic_symmetry();
+
+	result_t res = result_t::l_no_action;
+
+	auto cur = beg;
+	while (++cur != end) {
+		AdjformEx tst;
+		tst.add(index_map.to_adjform(cur), *cur->multiplier);
+		tst.apply_cyclic_symmetry();
+
+		auto factor = ref.compare(tst);
+		if (factor != 0) {
+			cur = tr.replace(cur, beg);
+			multiply(cur->multiplier, factor);
+			res = result_t::l_applied;
+		}
 	}
 
-	a2.apply_cyclic_symmetry();
-	std::cerr << a2 << '\n';
-
-	auto factor = a1.compare(a2);
-	std::cerr << "factor was " << factor << "\n";
-	return result_t::l_no_action;
+	return res;
 }
