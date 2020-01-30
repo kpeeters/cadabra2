@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Storage.hh"
 
 namespace cadabra

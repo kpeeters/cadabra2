@@ -3,6 +3,7 @@
 #include "PreClean.hh"
 #include "Cleanup.hh"
 #include "Parser.hh"
+#include "Config.hh"
 
 using namespace cadabra;
 
