@@ -87,7 +87,6 @@ namespace cadabra {
 		for (Ex::iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
 			if (!beg->is_index())
 				continue;
-
 			// Only fill in if it hasn't been yet
 			if (adjform.size() <= pos || adjform[pos] < 0) {
 				// Attempt to find a matching dummy index
@@ -117,7 +116,6 @@ namespace cadabra {
 			}
 			++pos;
 		}
-
 		return adjform;
 	}
 
@@ -133,6 +131,20 @@ namespace cadabra {
 		}
 	}
 
+	AdjformEx::AdjformEx()
+	{
+
+	}
+
+	AdjformEx::AdjformEx(const Adjform& adjform, mpq_class value)
+	{
+		set(adjform, value);
+	}
+
+	AdjformEx::AdjformEx(Ex::iterator it, IndexMap& index_map)
+	{
+		set(index_map.to_adjform(it), *it->multiplier);
+	}
 
 	mpq_class AdjformEx::compare(const AdjformEx& other) const
 	{
@@ -209,7 +221,13 @@ namespace cadabra {
 		return data.empty();
 	}
 
-	void AdjformEx::set(term_t term, mpq_class value)
+	void AdjformEx::set(Adjform term, mpq_class value)
+	{
+		if (!term.empty())
+			set_(term, value);
+	}
+
+	void AdjformEx::set_(Adjform term, mpq_class value)
 	{
 		if (value != 0)
 			data[term] = value;
@@ -217,7 +235,13 @@ namespace cadabra {
 			data.erase(term);
 	}
 
-	void AdjformEx::add(term_t term, mpq_class value)
+	void AdjformEx::add_(Adjform term, mpq_class value)
+	{
+		if (!term.empty()) 
+			add_(term, value);
+	}
+
+	void AdjformEx::add(Adjform term, mpq_class value)
 	{
 		auto elem = data.find(term);
 
@@ -254,7 +278,7 @@ namespace cadabra {
 					if (ret[index] >= 0)
 						ret[ret[index]] = index;
 				}
-				add(ret, parity * kv.second);
+				add_(ret, parity * kv.second);
 			} while ((swaps = next_perm(perm)));
 		}
 	}
@@ -271,13 +295,13 @@ namespace cadabra {
 		for (const auto& kv : old_data) {
 			while (std::next_permutation(perm.begin(), perm.end())) {
 				auto term = collapse_dummy_indices(kv.first);
-				term_t out = term;
+				Adjform out = term;
 				for (size_t i = 0; i < perm.size(); ++i) {
-					for (index_t k = 0; k < n_indices; ++k) {
+					for (size_t k = 0; k < n_indices; ++k) {
 						out[perm[i] + k] = term[positions[i] + k];
 					}
 				}
-				add(expand_dummy_indices(out), kv.second);
+				add_(expand_dummy_indices(out), kv.second);
 			}
 		}
 	}
@@ -293,15 +317,15 @@ namespace cadabra {
 
 		for (const auto& kv : old_data) {
 			auto perm = kv.first;
-			for (int step = 0; step < n_steps; ++step) {
+			for (size_t step = 0; step < n_steps; ++step) {
 				for (auto& idx : perm) {
 					if (idx >= 0)
 						++idx;
-					if (idx == n_indices)
+					if (idx == (AdjformIdx)n_indices)
 						idx = 0;
 				}
 				std::rotate(perm.begin(), perm.begin() + perm.size() - 1, perm.end());
-				add(perm, kv.second);
+				add_(perm, kv.second);
 			}
 		}
 	}
@@ -317,8 +341,8 @@ std::ostream& operator << (std::ostream& os, const cadabra::Adjform& adjform)
 
 std::ostream& operator << (std::ostream& os, const cadabra::AdjformEx& adjex)
 {
-	int i = 0;
-	int max = std::min(std::size_t(200), adjex.size());
+	size_t i = 0;
+	size_t max = std::min(std::size_t(200), adjex.size());
 	auto it = adjex.begin();
 	while (i < max) {
 		os << it->first << '\t' << it->second << '\n';

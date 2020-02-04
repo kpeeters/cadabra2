@@ -21,20 +21,21 @@ namespace cadabra {
 	public:
 		// Create an Adjform object out of an expression
 		Adjform to_adjform(Ex::iterator it);
-
-	private:
 		AdjformIdx get_free_index(nset_t::iterator name);
+	private:
 		std::vector<nset_t::iterator> data;
 	};
 	
 	class AdjformEx
 	{
 	public:
-		using index_t = short;
-		using term_t = std::vector<index_t>;
-		using map_t = std::map<term_t, mpq_class>;
+		using map_t = std::map<Adjform, mpq_class>;
 		using iterator = map_t::iterator;
 		using const_iterator = map_t::const_iterator;
+
+		AdjformEx();
+		AdjformEx(const Adjform& adjform, mpq_class value);
+		AdjformEx(Ex::iterator it, IndexMap& index_map);
 
 		// Check if 'other' is a linear multiple of 'this' and return
 		// the numeric factor if so, otherwise returns 0
@@ -65,10 +66,10 @@ namespace cadabra {
 		bool empty() const;
 
 		// Sets the given term to value, creating/removing the term if required
-		void set(term_t adjform, mpq_class value = 1);
+		void set(Adjform adjform, mpq_class value = 1);
 
 		// Adds value to the given term, creating/removing the term if required
-		void add(term_t adjform, mpq_class value = 1);
+		void add(Adjform adjform, mpq_class value = 1);
 
 		// Symmetrize in the given indices
 		// e.g. if the only term is abcd then
@@ -86,6 +87,9 @@ namespace cadabra {
 		void apply_cyclic_symmetry();
 
 	private:
+		// Unsafe (but faster) versions of the public functions
+		void set_(Adjform adjform, mpq_class value = 1);
+		void add_(Adjform adjform, mpq_class value = 1);
 		map_t data;
 	};
 }

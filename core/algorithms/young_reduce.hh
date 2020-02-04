@@ -41,6 +41,17 @@ namespace cadabra {
 		result_t apply_sum(iterator& it);
 		result_t apply_trace(iterator& it);
 
+		struct CollectedTerm 
+		{ 
+			Ex::iterator it;
+			Adjform names, indices; 
+			mpq_class parent_multiplier;
+			std::vector<size_t> pushes;
+		};
+
+		CollectedTerm collect_term(iterator it, mpq_class parent_multiplier);
+		std::vector<CollectedTerm> collect_terms(iterator it);
+
 		IndexMap index_map;
 	};
 }

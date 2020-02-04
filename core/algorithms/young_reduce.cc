@@ -373,6 +373,17 @@ bool has_Trace(const Kernel& kernel, Ex::iterator it)
 		return false;
 }
 
+template <typename Vec>
+void cycle(Vec& adjform, size_t n)
+{
+	for (auto& idx : adjform) {
+		if (idx >= 0)
+			++idx;
+		if (idx == (AdjformIdx)adjform.size())
+			idx = 0;
+	}
+	std::rotate(adjform.begin(), adjform.end() - 1, adjform.end());
+}
 
 young_reduce_trace::young_reduce_trace(const Kernel& kernel, Ex& ex)
 	: Algorithm(kernel, ex)
@@ -388,54 +399,138 @@ young_reduce_trace::~young_reduce_trace()
 bool young_reduce_trace::can_apply(iterator it)
 {
 	// Accept sum nodes and trace nodes
+	std::cerr << "checking if can apply to node " << ex_to_string(it, kernel) << '\n';
 	return has_Trace(kernel, it) || *it->name == "\\sum";
 }
 
-young_reduce_trace::result_t young_reduce_trace::apply(iterator& it)
+young_reduce_trace::result_t young_reduce_trace::apply(iterator& it) 
 {
-	if (has_Trace(kernel, it)) {
-		return apply_trace(it);
-	}
-	else {
-		return apply_sum(it);
-	}
-}
+	auto terms = collect_terms(it);
+	auto res = result_t::l_no_action;
 
-young_reduce_trace::result_t young_reduce_trace::apply_sum(iterator& it)
-{
-	assert(*it->name == "\\sum");
-	return result_t::l_no_action;
-}
+	for (size_t i = 0; i < terms.size() - 1; ++i) {
+		for (size_t j = i + 1; j < terms.size(); ++j) {
+			auto perm = terms[j];
+			do {
+				if (terms[i].names == perm.names && terms[i].indices == perm.indices) {
+					multiply(terms[i].it->multiplier, terms[j].parent_multiplier / (terms[j].parent_multiplier * *terms[j].it->multiplier));
+					std::cerr << "multiplied\n";
+					tr.erase(terms[j].it);
+					std::cerr << "erased\n";
+					terms.erase(terms.begin() + j);
+					std::cerr << "deleted from vector\n";
+					--j;
+					res= result_t::l_applied;
+					break;
+				}
 
-young_reduce_trace::result_t young_reduce_trace::apply_trace(iterator& it)
-{
-	assert(has_Trace(kernel, it));
-
-	// Can only apply if the child node is a sum node
-	if (it.number_of_children() == 0 || *it.begin()->name != "\\sum")
-		return result_t::l_no_action;
-
-	sibling_iterator beg = it.begin().begin(), end = it.begin().end();
-
-	AdjformEx ref;
-	ref.add(index_map.to_adjform(beg), *beg->multiplier);
-	ref.apply_cyclic_symmetry();
-
-	result_t res = result_t::l_no_action;
-
-	auto cur = beg;
-	while (++cur != end) {
-		AdjformEx tst;
-		tst.add(index_map.to_adjform(cur), *cur->multiplier);
-		tst.apply_cyclic_symmetry();
-
-		auto factor = ref.compare(tst);
-		if (factor != 0) {
-			cur = tr.replace(cur, beg);
-			multiply(cur->multiplier, factor);
-			res = result_t::l_applied;
+				cycle(perm.names, 1);
+				cycle(perm.indices, perm.pushes.back());
+				cycle(perm.pushes, 1);
+			} while (perm.names != terms[j].names || perm.indices != terms[j].indices);
 		}
 	}
-
 	return res;
+}
+
+// young_reduce_trace::result_t young_reduce_trace::apply(iterator& it)
+// {
+// 	std::cerr << "Applying to " << ex_to_string(it, kernel) << '\n';
+// 	auto terms = collect_terms(it);
+// 	std::cerr << "collected terms:\n";
+// 	for (auto term : terms) {
+// 		std::cerr << "\t" << ex_to_string(term.first, kernel) << '\n';
+// 	}
+// 	auto res = result_t::l_no_action;
+// 	for (size_t i = 0; i < terms.size(); ++i) {
+// 		AdjformEx lhs;
+// 		lhs.set(index_map.to_adjform(terms[i].first));
+// 		std::cerr << terms[i].first << '\n';
+// 		std::cerr << "made adjform:\n" << lhs << "\n";
+
+// 		lhs.apply_cyclic_symmetry();
+// 		std::cerr << "applied cyclic symmetry\n";
+// 		for (size_t j = 1; j < terms.size(); ++j) {
+// 			AdjformEx rhs;
+// 			rhs.set(index_map.to_adjform(terms[j].first));
+// 			rhs.apply_cyclic_symmetry();
+// 			auto factor = lhs.compare(rhs);
+// 			std::cerr << "Comparing " << ex_to_string(terms[i].first, kernel) << " to " << ex_to_string(terms[j].first, kernel) << '\n';
+// 			if (factor != 0) {
+// 				std::cerr << "Similar ( factor is " << factor << "), collapsing...\n";
+// 				multiply(terms[i].first->multiplier, terms[i].second / (terms[j].second * factor));
+// 				std::cerr << "multiplied\n";
+// 				tr.erase(terms[j].first);
+// 				std::cerr << "erased\n";
+// 				terms.erase(terms.begin() + j);
+// 				std::cerr << "deleted from vector\n";
+// 				--j;
+// 				res= result_t::l_applied;
+// 			}
+// 			else {
+// 				std::cerr << "no action applied\n";
+// 			}
+// 		}
+// 	}
+// 	return res;
+// }
+
+young_reduce_trace::CollectedTerm young_reduce_trace::collect_term(iterator it, mpq_class parent_multiplier)
+{
+	CollectedTerm ct;
+	ct.it = it;
+	
+	if (*it->name == "\\prod") {
+		for (sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
+			ct.names.push_back(index_map.get_free_index(beg->name));
+			ct.pushes.push_back(0);
+			for (sibling_iterator cbeg = beg.begin(), cend = beg.end(); cbeg != cend; ++cbeg) {
+				if (cbeg->is_index())
+					ct.pushes.back()++;
+			}
+		}
+	}
+	else {
+		ct.names.push_back(index_map.get_free_index(it->name));
+		ct.pushes.push_back(0);
+			for (sibling_iterator cbeg = it.begin(), cend = it.end(); cbeg != cend; ++cbeg) {
+				if (cbeg->is_index())
+					ct.pushes.back()++;
+			}
+	}
+
+	ct.indices = index_map.to_adjform(it);
+	ct.parent_multiplier = parent_multiplier;
+	return ct;
+}
+
+std::vector<young_reduce_trace::CollectedTerm> young_reduce_trace::collect_terms(iterator it)
+{
+	// If a trace node just return all the children
+	if (has_Trace(kernel, it)) {
+		sibling_iterator beg = it.begin(), end = it.end();
+		if (beg == end)
+			return {};
+		if (*beg->name != "\\sum")
+			return { collect_term(beg, *it->multiplier) };
+		std::vector<CollectedTerm> ret;
+		for (sibling_iterator a = beg.begin(), b = beg.end(); a != b; ++a)
+			ret.push_back(collect_term(a, *it->multiplier));
+		return ret;
+	}
+	
+	// If a sum node, collect all trace nodes
+	if (*it->name == "\\sum") {
+		std::vector<CollectedTerm> ret;
+		for (sibling_iterator a = it.begin(), b = it.end(); a != b; ++a) {
+			if (has_Trace(kernel, a)) {
+				auto nodes = collect_terms(a);
+				ret.insert(ret.end(), nodes.begin(), nodes.end());
+			}
+		}
+		return ret;
+	}
+
+	// Else return nothing
+	return {};
 }
