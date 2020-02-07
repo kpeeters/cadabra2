@@ -41,6 +41,8 @@ namespace cadabra {
 		result_t apply_sum(iterator& it);
 		result_t apply_trace(iterator& it);
 
+		void cleanup_empty_traces(iterator it);
+
 		struct CollectedTerm 
 		{ 
 			Ex::iterator it;

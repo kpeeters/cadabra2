@@ -1,0 +1,34 @@
+#!/usr/local/bin/cadabra2
+
+from cdb.utils.develop import test_algo
+
+
+@test_algo($2 * Tr{A B C D}$)
+def test01():
+	Tr{#}::Trace.
+	{A, B, C, D}::NonCommuting.
+	ex := Tr{A B C D + C D A B + B C D A} - Tr{D A B C}.
+	return young_reduce_trace(ex)
+test01()
+
+@test_algo($3 * tr(a^{\mu} b^{\nu} c^{\rho} a^{\mu} b^{\rho} c^{\nu}$)
+def test02():
+	{\mu,\nu,\rho}::Indices(vector).
+	{a^{\mu},b^{\mu},c^{\mu}}::NonCommuting.
+	tr{#}::Trace.
+	ex := tr(a^{\mu} b^{\nu} c^{\rho} a^{\mu} b^{\rho} c^{\nu} + 
+              b^{\mu} c^{\nu} a^{\rho} b^{\nu} c^{\mu} a^{\rho} + 
+              c^{\mu} a^{\nu} b^{\mu} c^{\rho} a^{\nu} b^{\rho}).
+	return young_reduce_trace(ex)
+test02()
+
+@test_algo($0$, True)
+def test03():
+	{\mu,\nu}::Indices(vector).
+	u^{\mu}::ImplicitIndex.
+	u^{\mu}::SelfNonCommuting.
+	tr{#}::Trace.
+	ex := tr{u^{\mu} u^{\mu} u^{\nu} u^{\nu}} - 
+	      tr{u^{\mu} u^{\nu} u^{\nu} u^{\mu}}.
+	return young_reduce_trace(ex)
+test03()

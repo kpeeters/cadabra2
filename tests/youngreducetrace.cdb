@@ -1,8 +1,0 @@
-#!/usr/bin/env cadabra2
-
-def test01():
-	Tr{#}::Trace.
-	{A, B, C, D}::NonCommuting.
-	ex := Tr{A B C D + C D A B};
-	#young_reduce_trace(ex);
-test01()

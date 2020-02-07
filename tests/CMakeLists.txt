@@ -91,6 +91,7 @@ set(RTESTS
   vary
   young
   youngreduce
+  yrtrace
   )
 if(MATHEMATICA_FOUND)
   set(RTESTS ${RTESTS} mma)
