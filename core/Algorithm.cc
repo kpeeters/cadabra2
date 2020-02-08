@@ -607,20 +607,20 @@ bool Algorithm::check_consistency(iterator it) const
 
 void Algorithm::report_progress(const std::string&, int, int, int count)
 	{
-	bool display=false;
-	if(count==2) display=true;
-	else {
-		if(report_progress_stopwatch.stopped()) {
-			display=true;
-			report_progress_stopwatch.start();
-			}
-		else {
-			if(report_progress_stopwatch.seconds()>0 || report_progress_stopwatch.useconds()>300000L) {
-				display=true;
-				report_progress_stopwatch.reset();
-				}
-			}
-		}
+//	bool display=false;
+//	if(count==2) display=true;
+//	else {
+//		if(report_progress_stopwatch.stopped()) {
+//			display=true;
+//			report_progress_stopwatch.start();
+//			}
+//		else {
+//			if(report_progress_stopwatch.seconds()>0 || report_progress_stopwatch.useconds()>300000L) {
+//				display=true;
+//				report_progress_stopwatch.reset();
+//				}
+//			}
+//		}
 
 	//	if(display) { // prevents updates at a rate of more than one per second
 	//		if(eo->output_format==Ex_output::out_xcadabra) {

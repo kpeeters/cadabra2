@@ -394,14 +394,14 @@ void DisplaySympy::print_productlike(std::ostream& str, Ex::iterator it, const s
 	// then print brackets.
 
 	str_node::bracket_t previous_bracket_=str_node::b_invalid;
-	bool beginning_of_group=true;
+//	bool beginning_of_group=true;
 	Ex::sibling_iterator ch=tree.begin(it);
 	while(ch!=tree.end(it)) {
 		str_node::bracket_t current_bracket_=(*ch).fl.bracket;
 		if(previous_bracket_!=current_bracket_) {
 			if(current_bracket_!=str_node::b_none) {
 				print_opening_bracket(str, current_bracket_);
-				beginning_of_group=true;
+//				beginning_of_group=true;
 				}
 			}
 		dispatch(str, ch);

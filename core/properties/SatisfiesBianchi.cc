@@ -12,9 +12,9 @@ std::string SatisfiesBianchi::name() const
 unsigned int SatisfiesBianchi::size(const Properties& properties, Ex& tr, Ex::iterator it) const
 	{
 	Ex::sibling_iterator chld=tr.begin(it);
-	bool indexfirst=false;
+//	bool indexfirst=false;
 	if(chld->fl.parent_rel!=str_node::p_none) {
-		indexfirst=true;
+//		indexfirst=true;
 		++chld;
 		}
 	assert(chld->fl.parent_rel==str_node::p_none);

@@ -64,7 +64,7 @@ namespace cadabra {
 		}
 
 	Ex::Ex(const Ex& other)
-		: tree<str_node>(other), state_(result_t::l_no_action)
+		: std::enable_shared_from_this<Ex>(other), tree<str_node>(other), state_(result_t::l_no_action)
 		{
 		//	std::cout << "Ex copy constructor" << std::endl;
 		}

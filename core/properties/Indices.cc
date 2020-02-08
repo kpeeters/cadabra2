@@ -68,10 +68,10 @@ bool Indices::parse(Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals)
 
 			// If all values are indices, add an `Integer' property for the object,
 			// listing these integers.
-			bool is_number=true;
+//			bool is_number=true;
 			for(auto& val: values)
 				if(!val.begin()->is_integer()) {
-					is_number=false;
+//					is_number=false;
 					break;
 					}
 			// FIXME: inject other property.

@@ -29,9 +29,9 @@ TableauBase::tab_t KroneckerDelta::get_tab(const Properties& properties, Ex& tr,
 	if(tr.number_of_children(it)%2!=0)
 		throw ConsistencyException("Encountered a KroneckerDelta object with an odd number of indices.");
 
-	bool onlytwo=false;
-	if(tr.number_of_children(it)==2)
-		onlytwo=true;
+//	bool onlytwo=false;
+//	if(tr.number_of_children(it)==2)
+//		onlytwo=true;
 
 	tab_t tab;
 	for(unsigned int i=0; i<tr.number_of_children(it); i+=2) {

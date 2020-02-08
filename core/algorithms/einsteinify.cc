@@ -67,6 +67,6 @@ Algorithm::result_t einsteinify::apply(iterator& it)
 		prev=dit;
 		++dit;
 		}
-	return result_t::l_applied;
+	return res;
 	}
 
