@@ -2,6 +2,7 @@
 #include "Props.hh"
 #include "Compare.hh"
 #include "Cleanup.hh"
+#include "IndexIterator.hh"
 #include "algorithms/collect_factors.hh"
 #include "algorithms/collect_terms.hh"
 #include "properties/Symbol.hh"
@@ -27,9 +28,10 @@ void collect_factors::fill_hash_map(iterator it)
 	sibling_iterator sib=tr.begin(it);
 	unsigned int factors=0;
 	while(sib!=tr.end(it)) { // iterate over all factors in the product
-		sibling_iterator chsib=tr.begin(sib);
+		auto chsib=index_iterator::begin(kernel.properties, sib);
+		auto chend=index_iterator::end(kernel.properties, sib);
 		bool dontcollect=false;
-		while(chsib!=tr.end(sib)) { // iterate over all child nodes of a factor
+		while(chsib!=chend) { // iterate over all child nodes of a factor
 			const Symbol     *smb=kernel.properties.get<Symbol>(chsib, true);
 			// std::cerr << chsib << ": " << smb << std::endl;
 			if((chsib->fl.parent_rel==str_node::p_sub || chsib->fl.parent_rel==str_node::p_super) &&

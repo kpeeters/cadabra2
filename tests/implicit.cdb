@@ -237,6 +237,7 @@ def test18():
 test18()
 
 def test19():
+    __cdbkernel__=create_scope()
     i::ImaginaryI;
     A::ImplicitIndex.
     tr{#}::Trace.
@@ -247,4 +248,14 @@ def test19():
 
 test19()
 
+def test20():
+    __cdbkernel__=create_scope()
+    {\mu,\nu}::Indices(vector).
+    tr{#}::Trace.
+    ex:=A A tr{u^{\mu} u^{\nu}} tr{u^{\nu} u^{\mu}}- B B tr{u^{\mu} u^{\nu}} tr{u^{\mu} u^{\nu}};
+    collect_factors(_);
+    tst:= A**2 tr{u^{\mu} u^{\nu}} tr{u^{\nu} u^{\mu}}- B**2 tr{u^{\mu} u^{\nu}} tr{u^{\mu} u^{\nu}} - @(ex);
+    assert(tst==0)
+    print("Test 20 passed")
 
+test20()
