@@ -235,13 +235,13 @@ namespace cadabra {
 			data.erase(term);
 	}
 
-	void AdjformEx::add_(Adjform term, mpq_class value)
+	void AdjformEx::add(Adjform term, mpq_class value)
 	{
 		if (!term.empty()) 
 			add_(term, value);
 	}
 
-	void AdjformEx::add(Adjform term, mpq_class value)
+	void AdjformEx::add_(Adjform term, mpq_class value)
 	{
 		auto elem = data.find(term);
 
