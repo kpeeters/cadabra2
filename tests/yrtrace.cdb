@@ -22,7 +22,7 @@ def test02():
 	return young_reduce_trace(ex)
 test02()
 
-@test_algo($0$, True)
+@test_algo($0$)
 def test03():
 	{\mu,\nu}::Indices(vector).
 	u^{\mu}::ImplicitIndex.
