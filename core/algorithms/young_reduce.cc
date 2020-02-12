@@ -26,343 +26,96 @@ std::string ex_to_string(cadabra::Ex::iterator it, const cadabra::Kernel& kernel
 	return ex_to_string(cadabra::Ex(it), kernel);
 }
 
-std::string adjform_to_string(const cadabra::yr::adjform_t& adjform, const std::vector<cadabra::nset_t::iterator>* index_map = nullptr)
-{
-	std::map<cadabra::yr::index_t, int> dummy_map;
-	int dummy_counter = 0;
-	std::string res;
-	for (const auto& elem : adjform) {
-		if (index_map) {
-			if (elem < 0) {
-				res += *(*index_map)[-(elem + 1)];
-			}
-			else if (dummy_map.find(elem) != dummy_map.end()) {
-				res += "d_" + std::to_string(dummy_map[elem]);
-			}
-			else {
-				dummy_map[adjform[adjform[elem]]] = dummy_counter++;
-				res += "d_" + std::to_string(dummy_map[adjform[adjform[elem]]]);
-			}
-		}
-		else {
-			res += std::to_string(elem);
-		}
-	}
-	return res;
-}
-
-std::string pf_to_string (const cadabra::yr::ProjectedForm& projform, const std::vector<cadabra::nset_t::iterator>*)
-{
-	std::stringstream os;
-	int i = 0;
-	int max = std::min(std::size_t(200), projform.data.size());
-	auto it = projform.data.begin();
-	while (i < max) {
-		os << adjform_to_string(it->first/*, index_map*/);
-		os << '\t' << it->second << '\n';
-		++i;
-		++it;
-	}
-	if (i == max) {
-		os << "(skipped " << (projform.data.size() - max) << " terms)\n";
-	}
-	return os.str();
-}
-
 #define DEBUG_OUTPUT 0
 #define cdebug if (!DEBUG_OUTPUT) {} else std::cerr
 
 
 ////////////////////////////////////////////////////////////////////
 
-// Get the next permutation of adjform and return the number of swaps
-// required for the transformation
-int next_perm(cadabra::yr::adjform_t& adjform)
-{
-	int n = adjform.size();
-
-	// Find longest non-increasing suffix to get pivot
-	int pivot = n - 2;
-	while (pivot > -1) {
-		if (adjform[pivot + 1] > adjform[pivot])
-			break;
-		--pivot;
-	}
-
-	// Entire sequence is already sorted, return
-	if (pivot == -1)
-		return 0;
-
-	// Find rightmost element greater than pivot
-	int idx = n - 1;
-	while (idx > pivot) {
-		if (adjform[idx] > adjform[pivot])
-			break;
-		--idx;
-	}
-
-	// Swap with pivot
-	std::swap(adjform[pivot], adjform[idx]);
-
-	// Reverse the suffix
-	int swaps = 1;
-	int maxswaps = (n - pivot - 1) / 2;
-	for (int i = 0; i < maxswaps; ++i) {
-		if (adjform[pivot + i + 1] != adjform[n - i - 1]) {
-			std::swap(adjform[pivot + i + 1], adjform[n - i - 1]);
-			++swaps;
-		}
-	}
-
-	return swaps;
-}
-
-// Returns the position of 'val' between 'begin' and 'end', starting
-// the search at 'offset'
-template <typename It, typename T>
-size_t index_of(It begin, It end, const T& val, size_t offset = 0)
-{
-	auto pos = std::find(begin + offset, end, val);
-	return std::distance(begin, pos);
-}
-
-namespace cadabra {
-	namespace yr
-	{
-		mpq_class ProjectedForm::compare(const ProjectedForm& other) const
-		{
-			cdebug << "entered compare\n";
-			// Early failure checks
-			if (data.empty() || data.size() != other.data.size())
-				return 0;
-
-			// Find the numeric factor between the first two terms, then loop over all
-			// other terms checking that the factor is the same. If not, return 0
-			auto a_it = data.begin(), b_it = other.data.begin(), a_end = data.end();
-			mpq_class factor = a_it->second / b_it->second;
-			cdebug << "factor is " << factor << '\n';
-			while (a_it != a_end) {
-				cdebug << "comparing " << a_it->second << " * ";
-				for (const auto& elem : a_it->first)
-					cdebug << elem << ' ';
-				cdebug << " to " << b_it->second << " * ";
-				for (const auto& elem : b_it->first)
-					cdebug << elem << ' ';
-				cdebug << '\n';
-				if (a_it->second / b_it->second != factor) {
-					cdebug << "factor was " << (a_it->second / b_it->second) << "!\n";
-					return 0;
-				}
-				++a_it, ++b_it;
-			}
-			cdebug << "matched all terms!\n";
-			return factor;
-		}
-
-		void ProjectedForm::combine(const ProjectedForm& other)
-		{
-			for (const auto& kv : other.data) {
-				data[kv.first] += kv.second;
-				if (data[kv.first] == 0)
-					data.erase(kv.first);
-			}
-		}
-
-		void ProjectedForm::combine(const ProjectedForm& other, mpq_class factor)
-		{
-			for (const auto& kv : other.data) {
-				data[kv.first] += kv.second * factor;
-				if (data[kv.first] == 0)
-					data.erase(kv.first);
-			}
-		}
-
-		void ProjectedForm::multiply(mpq_class k)
-		{
-			for (auto& kv : data)
-				kv.second *= k;
-		}
-
-		void ProjectedForm::clear()
-		{
-			data.clear();
-		}
-
-		void ProjectedForm::insert(adjform_t adjform, mpq_class value)
-		{
-			if (value != 0)
-				data[adjform] = value;
-		}
-
-		void ProjectedForm::apply_young_symmetry(const adjform_t& indices, bool antisymmetric)
-		{
-			map_t old_data;
-			std::swap(old_data, data);
-
-			// Loop over all entries, for each one looping over all permutations
-			// of the indices to be symmetrized and creating a new term for that
-			// permutation; then add the new term to the list of entries
-			for (const auto& kv : old_data) {
-
-				cdebug << "Applying young_symmetry " << (antisymmetric ? -kv.second : kv.second) << " * " << adjform_to_string(indices) << " to term " << adjform_to_string(kv.first) << '\n';
-
-				auto perm = indices;
-				int parity = 1;
-				int swaps = 2;
-				do {
-					if (antisymmetric && swaps % 2 != 0)
-						parity *= -1;
-					auto ret = kv.first;
-					for (size_t i = 0; i < indices.size(); ++i) {
-						ret[indices[i]] = kv.first[perm[i]];
-					}
-					for (auto index : indices) {
-						if (ret[index] >= 0)
-							ret[ret[index]] = index;
-					}
-					cdebug << "\tMade term " << adjform_to_string(ret) << " * " << (parity * kv.second) << '\n';
-					data[ret] += parity * kv.second;
-					if (data[ret] == 0)
-						data.erase(ret);
-					} while( (swaps = next_perm(perm)) );
-			}
-		}
-
-		void ProjectedForm::apply_ident_symmetry(std::vector<index_t> positions, index_t n_indices)
-		{
-			map_t old_data = data;
-			std::sort(positions.begin(), positions.end());
-			auto perm = positions;
-
-			// Loop over all entries, for each loop over all permutations
-			// of identical symbol and create a new term for that permutation;
-			// then add the new term to the list of entries
-			for (const auto& kv : old_data) {
-				while (std::next_permutation(perm.begin(), perm.end())) {
-					auto term = collapse_dummy_indices(kv.first);
-					adjform_t out = term;
-					for (size_t i = 0; i < perm.size(); ++i) {
-						for (index_t k = 0; k < n_indices; ++k) {
-							out[perm[i] + k] = term[positions[i] + k];
-						}
-					}
-					data[expand_dummy_indices(out)] += kv.second;
-				}
-			}
-		}
-
-		bool check_structure(Ex::iterator lhs, Ex::iterator rhs)
-		{
-			// Early failure checks
-			if (lhs->name != rhs->name) {
-				return false;
-			}
-
-			Ex::iterator l1 = lhs.begin(), l2 = lhs.end();
-			Ex::iterator r1 = rhs.begin(), r2 = rhs.end();
-
-			// Loop over all tree nodes using a depth first iterator. If the
-			// entry is an index ensure that it has the same parent_rel, if it
-			// is any other type of node check that the names match.
-			while (l1 != l2 && r1 != r2) {
-				if (l1->is_index()) {
-					l1.skip_children();
-					r1.skip_children();
-					if (l1->fl.parent_rel != r1->fl.parent_rel) {
-						return false;
-					}
-				}
-				else {
-					if (l1->name != r1->name || l1->multiplier != r1->multiplier) {
-						return false;
-					}
-				}
-				++l1, ++r1;
-			}
-
-			return l1 == l2 && r1 == r2;
-		}
-
-		bool has_TableauBase(Ex::iterator it, const cadabra::Kernel& kernel)
-		{
-			if (*it->name == "\\prod" || *it->name == "\\sum") {
-				for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg)
-					if (has_TableauBase(beg, kernel))
-						return true;
-				return false;
-			}
-			else {
-				return (kernel.properties.get_composite<cadabra::TableauBase>(it) != nullptr);
-			}
-		}
-
-		std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim)
-		{
-			if (*it->name == delim) {
-				// Loop over children creating a list
-				std::vector<Ex::iterator> res;
-				Ex::sibling_iterator beg = it.begin(), end = it.end();
-				while (beg != end) {
-					res.push_back(beg);
-					++beg;
-				}
-				return res;
-			}
-			else {
-				// Return a list containing only 'it'
-				return std::vector<Ex::iterator>(1, it);
-			}
-		}
-
-		std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim, Ex::iterator pat)
-		{
-			if (*it->name == delim) {
-				std::vector<Ex::iterator> res;
-				Ex::sibling_iterator beg = it.begin(), end = it.end();
-				while (beg != end) {
-					if (check_structure(beg, pat))
-						res.push_back(beg);
-					++beg;
-				}
-				return res;
-			}
-			else {
-				if (check_structure(it, pat))
-					return std::vector<Ex::iterator>(1, it);
-				else
-					return std::vector<Ex::iterator>();
-			}
-		}
-
-		adjform_t collapse_dummy_indices(adjform_t adjform)
-		{
-			index_t next_free_index = adjform.size();
-			for (size_t i = 0; i < adjform.size(); ++i) {
-				if (adjform[i] >= 0 && adjform[i] < (index_t)adjform.size()) {
-					adjform[adjform[i]] = next_free_index;
-					adjform[i] = next_free_index;
-					++next_free_index;
-				}
-			}
-			return adjform;
-		}
-
-		adjform_t expand_dummy_indices(adjform_t adjform)
-		{
-			for (size_t idx = 0; idx < adjform.size(); ++idx) {
-				if (adjform[idx] >= (index_t)adjform.size()) {
-					auto pos = index_of(adjform.begin(), adjform.end(), adjform[idx], idx + 1);
-					adjform[idx] = pos;
-					adjform[pos] = idx;
-				}
-			}
-			return adjform;
-		}
-	}
-}
-
 using namespace cadabra;
-using namespace yr;
+
+bool check_structure(Ex::iterator lhs, Ex::iterator rhs)
+{
+	// Early failure checks
+	if (lhs->name != rhs->name) {
+		return false;
+	}
+
+	Ex::iterator l1 = lhs.begin(), l2 = lhs.end();
+	Ex::iterator r1 = rhs.begin(), r2 = rhs.end();
+
+	// Loop over all tree nodes using a depth first iterator. If the
+	// entry is an index ensure that it has the same parent_rel, if it
+	// is any other type of node check that the names match.
+	while (l1 != l2 && r1 != r2) {
+		if (l1->is_index()) {
+			l1.skip_children();
+			r1.skip_children();
+			if (l1->fl.parent_rel != r1->fl.parent_rel) {
+				return false;
+			}
+		}
+		else {
+			if (l1->name != r1->name || l1->multiplier != r1->multiplier) {
+				return false;
+			}
+		}
+		++l1, ++r1;
+	}
+
+	return l1 == l2 && r1 == r2;
+}
+
+bool has_TableauBase(Ex::iterator it, const cadabra::Kernel& kernel)
+{
+	if (*it->name == "\\prod" || *it->name == "\\sum") {
+		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg)
+			if (has_TableauBase(beg, kernel))
+				return true;
+		return false;
+	}
+	else {
+		return (kernel.properties.get_composite<cadabra::TableauBase>(it) != nullptr);
+	}
+}
+
+std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim)
+{
+	if (*it->name == delim) {
+		// Loop over children creating a list
+		std::vector<Ex::iterator> res;
+		Ex::sibling_iterator beg = it.begin(), end = it.end();
+		while (beg != end) {
+			res.push_back(beg);
+			++beg;
+		}
+		return res;
+	}
+	else {
+		// Return a list containing only 'it'
+		return std::vector<Ex::iterator>(1, it);
+	}
+}
+
+std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim, Ex::iterator pat)
+{
+	if (*it->name == delim) {
+		std::vector<Ex::iterator> res;
+		Ex::sibling_iterator beg = it.begin(), end = it.end();
+		while (beg != end) {
+			if (check_structure(beg, pat))
+				res.push_back(beg);
+			++beg;
+		}
+		return res;
+	}
+	else {
+		if (check_structure(it, pat))
+			return std::vector<Ex::iterator>(1, it);
+		else
+			return std::vector<Ex::iterator>();
+	}
+}
 
 young_reduce::young_reduce(const Kernel& kernel, Ex& ex, const Ex* pattern)
 	: Algorithm(kernel, ex)
@@ -410,7 +163,7 @@ young_reduce::result_t young_reduce::apply(iterator& it)
 young_reduce::result_t young_reduce::apply_known(iterator& it)
 {
 	cdebug << "Apply known:\n\tpat = " << ex_to_string(pat, kernel) << "\n\t it = " << ex_to_string(it, kernel) << '\n';
-	ProjectedForm it_sym;
+	AdjformEx it_sym;
 	auto nodes = split_ex(it, "\\sum", pat);
 	cdebug << "Found " << nodes.size() << " terms which match pat:\n";
 	if (nodes.size() == 0)
@@ -428,7 +181,7 @@ young_reduce::result_t young_reduce::apply_known(iterator& it)
 	}
 
 	// Check if projection yielded zero
-	if (it_sym.data.empty()) {
+	if (it_sym.empty()) {
 		cdebug << "Projection yielded 0; zeroing node\n";
 		node_zero(it);
 		return result_t::l_applied;
@@ -465,14 +218,14 @@ young_reduce::result_t young_reduce::apply_unknown(iterator& it)
 	while (!terms.empty()) {
 		cdebug << "Examining " << ex_to_string(terms.back(), kernel) << "...";
 		bool can_reduce = set_pattern(terms.back());
-		if (can_reduce && pat_sym.data.empty()) {
+		if (can_reduce && pat_sym.empty()) {
 			cdebug << "pat_sym is zero; zeroing node\n";
 			node_zero(pat);
 			res = result_t::l_applied;
 			continue;
 		}
 		std::vector<Ex::iterator> cur_terms;
-		for (index_t i = terms.size() - 2; i != -1; --i) {
+		for (AdjformIdx i = terms.size() - 2; i != -1; --i) {
 			if (check_structure(terms.back(), terms[i])) {
 				cur_terms.push_back(terms[i]);
 				terms.erase(terms.begin() + i);
@@ -484,11 +237,11 @@ young_reduce::result_t young_reduce::apply_unknown(iterator& it)
 			cdebug << "\t" << ex_to_string(term, kernel) << '\n';
 		if (can_reduce && !cur_terms.empty()) {
 			cdebug << "Pat is (potentially) reduceable...\n";
-			ProjectedForm it_sym;
+			AdjformEx it_sym;
 			for (auto& node : cur_terms)
 				it_sym.combine(symmetrize(node));
 
-			if (it_sym.data.empty()) {
+			if (it_sym.empty()) {
 				cdebug << "Projection yielded 0; zeroing nodes\n";
 				for (auto node : cur_terms)
 					node_zero(node);
@@ -544,15 +297,15 @@ bool young_reduce::set_pattern(Ex::iterator new_pat)
 	return true;	
 }
 
-ProjectedForm young_reduce::symmetrize(Ex::iterator it)
+AdjformEx young_reduce::symmetrize(Ex::iterator it)
 {
 	cdebug << "symmetrizing " << ex_to_string(it, kernel) << "produces:\n";
-	ProjectedForm sym;
-	sym.insert(to_adjform(it), 1);
+	AdjformEx sym;
+	sym.set(index_map.to_adjform(it), 1);
 
 	// Symmetrize in identical tensors
-	std::map<std::string, std::pair<index_t, std::vector<index_t>>> idents;
-	index_t pos = 0;
+	std::map<std::string, std::pair<size_t, std::vector<size_t>>> idents;
+	size_t pos = 0;
 	auto terms = split_ex(it, "\\prod");
 	for (auto& term : terms) {
 		idents[*term->name].first = term.number_of_children();
@@ -574,7 +327,7 @@ ProjectedForm young_reduce::symmetrize(Ex::iterator it)
 			auto tab = tb->get_tab(kernel.properties, tr, it, 0);
 			for (size_t col = 0; col < tab.row_size(0); ++col) {
 				if (tab.column_size(col) > 1) {
-					std::vector<index_t> indices;
+					std::vector<size_t> indices;
 					for (auto beg = tab.begin_column(col), end = tab.end_column(col); beg != end; ++beg)
 						indices.push_back(*beg + pos);
 					std::sort(indices.begin(), indices.end());
@@ -594,7 +347,7 @@ ProjectedForm young_reduce::symmetrize(Ex::iterator it)
 			auto tab = tb->get_tab(kernel.properties, tr, it, 0);
 			for (size_t row = 0; row < tab.number_of_rows(); ++row) {
 				if (tab.row_size(row) > 1) {
-					std::vector<index_t> indices;
+					std::vector<size_t> indices;
 					for (auto beg = tab.begin_row(row), end = tab.end_row(row); beg != end; ++beg)
 						indices.push_back(*beg + pos);
 					std::sort(indices.begin(), indices.end());
@@ -606,61 +359,151 @@ ProjectedForm young_reduce::symmetrize(Ex::iterator it)
 		}
 	
 	sym.multiply(*it->multiplier);
-
-	cdebug << pf_to_string(sym, &index_map) << '\n';
-
 	return sym;
 }
 
-adjform_t young_reduce::to_adjform(Ex::iterator it)
+#include "properties/Trace.hh"
+
+bool has_Trace(const Kernel& kernel, Ex::iterator it)
 {
-	adjform_t adjform;
-	size_t pos = 0;
-	for (Ex::iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
-		if (!beg->is_index())
-			continue;
-
-		// Only fill in if it hasn't been yet
-		if (adjform.size() <= pos || adjform[pos] < 0) {
-			// Attempt to find a matching dummy index
-			bool found = false;
-			size_t searchpos = pos + 1;
-			for (Ex::iterator cur = std::next(beg); cur != end; ++cur) {
-				if (!cur->is_index())
-					continue;
-				if (beg->name == cur->name) {
-					// Make sure vector is big enough
-					if (adjform.size() <= searchpos)
-						adjform.resize(searchpos + 1, -1);
-					adjform[pos] = searchpos;
-					adjform[searchpos] = pos;
-					found = true;
-					break;
-				}
-				++searchpos;
-			}
-
-			// No matching dummy index found, add as a free index
-			if (!found) {
-				if (adjform.size() <= pos)
-					adjform.resize(pos + 1, -1);
-				adjform[pos] = get_free_index(beg->name);
-			}
-		}
-		++pos;
-	}
-
-	return adjform;
+	auto p = kernel.properties.get_composite<cadabra::Trace>(it);
+	if (p)
+		return true;
+	else
+		return false;
 }
 
-index_t young_reduce::get_free_index (nset_t::iterator name)
+template <typename Vec>
+void cycle(Vec& adjform, size_t n)
 {
-	auto pos = index_of(index_map.begin(), index_map.end(), name);
-	if (pos == index_map.size()) {
-		index_map.push_back(name);
-		return -(index_t)index_map.size();
+	if (adjform.size() < 2)
+		return;
+	n %= adjform.size();
+
+	for (auto& idx : adjform) {
+		if (idx >= 0)
+			++idx;
+		if (idx == (typename Vec::value_type)adjform.size())
+			idx = 0;
+	}
+	std::rotate(adjform.begin(), adjform.end() - 1, adjform.end());
+}
+
+young_reduce_trace::young_reduce_trace(const Kernel& kernel, Ex& ex)
+	: Algorithm(kernel, ex)
+{
+
+}
+
+young_reduce_trace::~young_reduce_trace()
+{
+
+}
+
+bool young_reduce_trace::can_apply(iterator it)
+{
+	// Accept sum nodes and trace nodes
+	bool res = has_Trace(kernel, it) || *it->name == "\\sum";
+	return res;
+}
+
+young_reduce_trace::result_t young_reduce_trace::apply(iterator& it) 
+{
+	auto terms = collect_terms(it);
+	auto res = result_t::l_no_action;
+
+	for (size_t i = 0; i < terms.size() - 1; ++i) {
+		for (size_t j = i + 1; j < terms.size(); ++j) {
+			auto perm = terms[j];
+			do {
+				if (terms[i].names == perm.names && terms[i].indices == perm.indices) {
+					multiply(terms[i].it->multiplier, 1 + ((terms[j].parent_multiplier * *terms[j].it->multiplier) / (terms[i].parent_multiplier * *terms[i].it->multiplier)));
+					tr.erase(terms[j].it);
+					terms.erase(terms.begin() + j);
+					--j;
+					res= result_t::l_applied;
+					break;
+				}
+
+				cycle(perm.names, 1);
+				cycle(perm.indices, perm.pushes.back());
+				cycle(perm.pushes, 1);
+			} while (perm.names != terms[j].names || perm.indices != terms[j].indices);
+		}
+	}
+	cleanup_empty_traces(it);
+	cleanup_dispatch(kernel, tr, it);
+	return res;
+}
+
+void young_reduce_trace::cleanup_empty_traces(Ex::iterator it)
+{
+	if (has_Trace(kernel, it) && it.number_of_children() == 0) {
+		node_zero(it);
+	}
+	else if (*it->name == "\\sum" || *it->name == "\\prod") {
+		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
+			cleanup_empty_traces(beg);
+		}
+	}
+}
+
+young_reduce_trace::CollectedTerm young_reduce_trace::collect_term(iterator it, mpq_class parent_multiplier)
+{
+	CollectedTerm ct;
+	ct.it = it;
+	
+	if (*it->name == "\\prod") {
+		for (sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
+			ct.names.push_back(index_map.get_free_index(beg->name));
+			ct.pushes.push_back(0);
+			for (sibling_iterator cbeg = beg.begin(), cend = beg.end(); cbeg != cend; ++cbeg) {
+				if (cbeg->is_index())
+					ct.pushes.back()++;
+			}
+		}
 	}
 	else {
-		return -(index_t)pos - 1;
+		ct.names.push_back(index_map.get_free_index(it->name));
+		ct.pushes.push_back(0);
+			for (sibling_iterator cbeg = it.begin(), cend = it.end(); cbeg != cend; ++cbeg) {
+				if (cbeg->is_index())
+					ct.pushes.back()++;
+			}
 	}
+
+	ct.indices = index_map.to_adjform(it);
+	ct.parent_multiplier = parent_multiplier;
+	return ct;
+}
+
+std::vector<young_reduce_trace::CollectedTerm> young_reduce_trace::collect_terms(iterator it)
+{
+	// If a trace node just return all the children
+	if (has_Trace(kernel, it)) {
+		sibling_iterator beg = it.begin(), end = it.end();
+		if (beg == end)
+			return {};
+		if (*beg->name != "\\sum")
+			return { collect_term(beg, *it->multiplier) };
+		std::vector<CollectedTerm> ret;
+		for (sibling_iterator a = beg.begin(), b = beg.end(); a != b; ++a)
+			ret.push_back(collect_term(a, *it->multiplier));
+		return ret;
+	}
+	
+	// If a sum node, collect all trace nodes
+	if (*it->name == "\\sum") {
+		std::vector<CollectedTerm> ret;
+		for (sibling_iterator a = it.begin(), b = it.end(); a != b; ++a) {
+			if (has_Trace(kernel, a)) {
+				auto nodes = collect_terms(a);
+				ret.insert(ret.end(), nodes.begin(), nodes.end());
+			}
+		}
+		return ret;
+	}
+
+	// Else return nothing
+	return {};
 }
