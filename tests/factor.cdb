@@ -202,6 +202,17 @@ def test17():
 
 test17()
     
+def test18():
+    __cdbkernel__=create_scope()
+    {a,b,c,d,e}::Indices;
+    D{#}::Derivative;
+    ex:= D_{a}{D_{b}{F}} - D_{b}{D_{a}{F}} - S A_{a b};
+    factor_in(ex, $ S $)
+    tst:= D_{a}{D_{b}{F}} - D_{b}{D_{a}{F}} - S A_{a b} - @(ex);
+    assert(tst==0)
+    print("Test 18 passed")
+
+test18()
 
 
 # @reset.

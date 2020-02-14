@@ -1,6 +1,7 @@
 
 #include "Functional.hh"
 #include "algorithms/factor_in.hh"
+#include <boost/functional/hash.hpp>
 
 #define DBG_MACRO_NO_WARNING 
 #define DBG_MACRO_DISABLE 
@@ -31,19 +32,21 @@ hashval_t factor_in::calc_restricted_hash(iterator it) const
 	{
 	if(*it->name!="\\prod") return tr.calc_hash(it);
 
-	sibling_iterator sib=tr.begin(it);
-	hashval_t ret=1;
+	hashval_t ret=0;
+//	boost::hash_combine(ret, *it->name);
+
+	auto sib=tr.begin(it);
 	bool first=true;
 	while(sib!=tr.end(it)) { // see storage.cc for the original calc_hash
 		if(factnodes.count(Ex(sib))==0) {
 			if(first) {
+				// ensure that if there is only one factor, the hash equals tr.calc_hash
+				// on that single factor.
 				first=false;
 				ret=tr.calc_hash(sib);
 				}
-			else {
-				ret*=17;
-				ret+=tr.calc_hash(sib);
-				}
+			else 
+				boost::hash_combine(ret, tr.calc_hash(sib));
 			}
 		++sib;
 		}
@@ -56,6 +59,8 @@ void factor_in::fill_hash_map(iterator it)
 	sibling_iterator sib=tr.begin(it);
 	unsigned int terms=0;
 	while(sib!=tr.end(it)) {
+		dbg( sib );
+		dbg( calc_restricted_hash(sib) );
 		term_hash.insert(std::pair<hashval_t, sibling_iterator>(calc_restricted_hash(sib), sib));
 		++terms;
 		++sib;
@@ -224,10 +229,10 @@ Algorithm::result_t factor_in::apply(iterator& it)
 	// Remove all terms which have zero multiplier.
 	// Remove all terms which are empty `\prod` nodes.
 	// Distribute sum multipliers over terms.
-	dbg( it );
+//	dbg( it );
 	sibling_iterator one=tr.begin(it);
 	while(one!=tr.end(it)) {
-		dbg( one );
+//		dbg( one );
 		if(*one->multiplier==0)
 			one=tr.erase(one);
 		else if(*one->name=="\\prod" && tr.number_of_children(one)==0) {

@@ -27,6 +27,8 @@ You should have received a copy of the GNU General Public License
 #include <codecvt>
 #include <pcrecpp.h>
 
+#include <boost/functional/hash.hpp>
+
 //#define DEBUG 1
 
 namespace cadabra {
@@ -385,18 +387,20 @@ namespace cadabra {
 		// the correct thing to do?)
 		//
 		// If this algorithm is changed, factorise::calc_restricted_hash in
-		// modules/algebra.cc should also be modified!
+		// core/algorithms/factor_in.cc should also be modified!
 
-		hashval_t ret=(hashval_t)(&(*it->name));
+		iterator end=it;
+		end.skip_children();
+		++end;
+		it.skip_children(false);
 
-		sibling_iterator sub=begin(it);
-		while(sub!=end(it)) {
-			ret*=17;
-			ret+=calc_hash(sub);
-			++sub;
+		hashval_t seed = 0;
+		while(it!=end) {
+			boost::hash_combine(seed, *it->name);
+			++it;
 			}
-
-		return ret;
+		
+		return seed;
 		}
 
 	Ex::sibling_iterator Ex::arg(iterator it, unsigned int num)
