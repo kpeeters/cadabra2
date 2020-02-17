@@ -292,6 +292,16 @@ if(MATHEMATICA_FOUND)
 	target_link_libraries(cadabra2 PRIVATE ${Mathematica_WSTP_LIBRARIES})
 endif()
 
+# cadabra2 CLI
+add_executable(cadabra2-cli
+	cadabra2-cli.cc
+	CdbPython.cc
+	InstallPrefix.cc
+	${CADABRA_LIBS_DIR}/whereami/whereami.c
+)
+target_link_libraries(cadabra2-cli PRIVATE pybind11::embed)
+target_compile_definitions(cadabra2-cli PRIVATE CDBPYTHON_NO_NOTEBOOK)
+
 # Test preprocessor executable
 add_executable(test_preprocessor 
 	test_preprocessor.cc 
@@ -395,6 +405,8 @@ else()
 	 )
 endif()
 
+install(TARGETS cadabra2-cli DESTINATION bin)
+
 install(
 	FILES 
 		"${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" 
@@ -403,13 +415,6 @@ install(
 		"${PYTHON_SITE_PATH}"
 )
 
-# CLI
-install(
-  PROGRAMS 
-    "${PROJECT_SOURCE_DIR}/cadabra2" 
-  DESTINATION 
-    bin
-)
 install_directory_permissions("bin")
 
 # cadabra2python

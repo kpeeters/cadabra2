@@ -35,5 +35,9 @@ namespace cadabra {
 	/// notebooks to python packages), and it will not convert
 	/// any cells which have their `ignore_on_import` flag set.
 
+	#ifndef CDBPYTHON_NO_NOTEBOOK
+
 	std::string cnb2python(const std::string&, bool for_standalone);
+
+	#endif
 	}
