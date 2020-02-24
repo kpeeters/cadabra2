@@ -3,12 +3,14 @@
 
 #include "Algorithm.hh"
 
-/// \ingroup algorithms
-///
-/// Split an expression into terms or factors.
+namespace cadabra {
+
+	/// \ingroup algorithms
+	///
+	/// Split an expression into terms or factors.
 
 
-class split : public Algorithm {
+	class split : public Algorithm {
 	public:
 		split(const Kernel&, Ex&);
 
@@ -16,3 +18,4 @@ class split : public Algorithm {
 		virtual result_t apply(iterator&);
 	};
 
+}

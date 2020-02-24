@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 
 // Returns the group name belongs to, or nullptr if not found
