@@ -1,13 +1,16 @@
 
-#include "CdbPython.hh"
-#include "DataCell.hh"
 #include <regex>
 #include <sstream>
 #include <sys/stat.h>
 #include <fstream>
-#include "json/json.h"
 #include <iomanip>
 #include <iostream>
+#include "CdbPython.hh"
+
+#ifndef CDBPYTHON_NO_NOTEBOOK
+#include "DataCell.hh"
+#include "json/json.h"
+#endif
 
 std::string cadabra::escape_quotes(const std::string& line)
 	{
@@ -209,6 +212,8 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 	return ret+end_of_line;
 	}
 
+#ifndef CDBPYTHON_NO_NOTEBOOK
+
 std::string cadabra::cnb2python(const std::string& in_name, bool for_standalone)
 	{
 	// Read the file into a Json object and get the cells. We go through
@@ -326,3 +331,5 @@ std::string cadabra::cnb2python(const std::string& in_name, bool for_standalone)
 // 	return ofs.str();
 // 	}
 //
+
+#endif
