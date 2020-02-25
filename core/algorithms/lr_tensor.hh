@@ -1,3 +1,4 @@
+#pragma once
 
 #include "Algorithm.hh"
 #include "algorithms/tab_basics.hh"
