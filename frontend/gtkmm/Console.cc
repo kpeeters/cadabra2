@@ -130,7 +130,6 @@ Console::Console(sigc::slot<void> run_slot)
 
 	tv.set_wrap_mode(Gtk::WRAP_WORD_CHAR);
 	tv.set_hexpand(true);
-	tv.set_monospace(true);
 
 	tv.signal_key_press_event().connect(
 	   sigc::mem_fun(&input, &TextViewProxy::on_key_press_event),

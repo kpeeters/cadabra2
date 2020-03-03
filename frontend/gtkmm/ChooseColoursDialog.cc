@@ -73,17 +73,13 @@ namespace cadabra {
 		}
 
 	void ChooseColoursDialog::on_color_set()
-		{
+	{
 		for (auto& language : colour_buttons) {
 			for (auto& kw : language.second) {
 				prefs.colours[language.first][kw.first] = kw.second->get_rgba().to_string();
-				}
 			}
-		parent.refresh_highlighting();
-		/*prefs.colours[cur_lang][cur_kw_type] = std::string(colour.to_string());
-		dynamic_cast<Gtk::Label*>(label_widgets[cur_lang + cur_kw_type].get())->set_markup(
-			std::string("<span foreground=\"") + colour.to_string() + "\">" + capitalize_first(cur_kw_type) + "</span>"
-		);
-		label_widgets[cur_lang + cur_kw_type]->show();*/
 		}
+
+		parent.refresh_all_cells();
+	}
 	}
