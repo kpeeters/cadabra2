@@ -161,8 +161,8 @@ void CodeInput::highlight_python()
 				wordtype = 0;
 				}
 			}
-		else if (wordtype == 2) {   // End on linebreak
-			if (cur == '\n') {
+		else if (wordtype == 2) {   // End on linebreak or end of document
+			if (cur == '\n' || cur == '\0') {
 				buf->apply_tag_by_name("comment", start, it);
 				wordtype = 0;
 				}
@@ -369,7 +369,7 @@ void CodeInput::highlight_latex()
 		auto cur = deref(it, 0);
 
 		if (wordtype == 1) {
-			if (cur == '\n') {
+			if (cur == '\n' || cur == '\0') {
 				buf->apply_tag_by_name("comment", start, it);
 				start = it;
 				wordtype = 0;
