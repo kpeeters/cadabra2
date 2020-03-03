@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
 	# Generate header file
 	sys.stdout = open(os.path.join(outdir, 'Keywords.hh'), 'w+')
-	print("#include <string>\n")
+	print("#pragma once\n\n#include <string>\n")
 	print("// Returns the group name belongs to, or nullptr if not found")
 	print("const char* get_keyword_group(const std::string& name);")
 
