@@ -79,6 +79,7 @@ set(RTESTS
   paper
   programming
   basic
+  meld
   numerical
   output
   substitute
@@ -90,8 +91,8 @@ set(RTESTS
   symmetry
   vary
   young
-  youngreduce
-  yrtrace
+#  youngreduce
+#  yrtrace
   )
 if(MATHEMATICA_FOUND)
   set(RTESTS ${RTESTS} mma)
