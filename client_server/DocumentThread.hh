@@ -92,7 +92,7 @@ namespace cadabra {
 			friend ActionEraseText;
 
 			class Prefs {
-			public:
+				public:
 					using ColorMap = std::map<std::string, std::string>;
 					Prefs(bool use_defaults = false);
 					void save();
@@ -100,9 +100,6 @@ namespace cadabra {
 					bool highlight;
 					bool is_registered;
 					bool is_anonymous;
-					std::string text_colour;
-					std::string selection_colour;
-					std::string font;
 					std::map<std::string, ColorMap> colours;
 					std::string git_path;
 				private:

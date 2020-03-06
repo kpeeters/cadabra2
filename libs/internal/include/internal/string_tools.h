@@ -3,7 +3,6 @@
 #include <locale>
 #include <string>
 #include <vector>
-#include <sstream>
 
 inline std::string ltrim(std::string s)
 {
@@ -37,17 +36,4 @@ inline std::vector<std::string> string_to_vec(const std::string& s)
 		pos = it;
 	}
 	return v;
-}
-
-template <typename T>
-void replace_all(std::string& str, const std::string& from, const T& to) {
-	std::ostringstream oss;
-	oss << to;
-	auto to_str = oss.str();
-
-    size_t start_pos = 0;
-    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
-        str.replace(start_pos, from.length(), to_str);
-        start_pos += to_str.length(); // Handles case where 'to' is a substring of 'from'
-    }
 }
