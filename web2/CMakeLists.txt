@@ -83,6 +83,7 @@ set(ALGOS
   lower_free_indices
   lr_tensor
   map_sympy
+  meld
   product_rule
   raise_free_indices
   reduce_delta
