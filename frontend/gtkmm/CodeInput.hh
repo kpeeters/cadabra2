@@ -58,9 +58,6 @@ namespace cadabra {
 					DTree::iterator datacell;
 				};
 
-			/// Set the font size, 0 being default, negative smaller, positive larger.
-
-			void set_font_size(int num);
 			void enable_highlighting(DataCell::CellType cell_type, const Prefs& prefs);
 			void disable_highlighting();
 

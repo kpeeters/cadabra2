@@ -74,6 +74,7 @@ SET(ALGORITHM_SRC_FILES
 	algorithms/lower_free_indices.cc
 	algorithms/lr_tensor.cc
 	algorithms/map_sympy.cc
+	algorithms/meld.cc
 	algorithms/order.cc
 	algorithms/product_rule.cc
 	algorithms/reduce_delta.cc
@@ -98,7 +99,6 @@ SET(ALGORITHM_SRC_FILES
 	algorithms/young_project.cc
 	algorithms/young_project_product.cc
 	algorithms/young_project_tensor.cc
-	algorithms/young_reduce.cc
 	algorithms/zoom.cc  
 )
 
@@ -183,8 +183,8 @@ set(MODULE_SRC_FILES
 )
 
 set(LOCAL_SRC_FILES
-   InstallPrefix.cc
-   DataCell.cc
+    InstallPrefix.cc
+    DataCell.cc
 	CdbPython.cc
 	ExNode.cc
 	ProgressMonitor.cc

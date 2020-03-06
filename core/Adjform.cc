@@ -354,3 +354,4 @@ std::ostream& operator << (std::ostream& os, const cadabra::AdjformEx& adjex)
 	}
 	return os;
 }
+

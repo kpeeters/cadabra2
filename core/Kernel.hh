@@ -2,7 +2,6 @@
 #pragma once
 
 #include "Props.hh"
-#include "Config.hh"
 
 /// \ingroup core
 ///

@@ -96,3 +96,4 @@ namespace cadabra {
 
 std::ostream& operator << (std::ostream& os, const cadabra::Adjform& adjform);
 std::ostream& operator << (std::ostream& os, const cadabra::AdjformEx& adjex);
+

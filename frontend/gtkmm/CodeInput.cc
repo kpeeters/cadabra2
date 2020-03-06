@@ -9,18 +9,6 @@
 
 using namespace cadabra;
 
-// General tool to strip spaces from both ends
-std::string trim(const std::string& s)
-	{
-	if(s.length() == 0)
-		return s;
-	int b = s.find_first_not_of(" \t\n");
-	int e = s.find_last_not_of(" \t\n");
-	if(b == -1) // No non-spaces
-		return "";
-	return std::string(s, b, e - b + 1);
-	}
-
 CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double scale)
 	: Gtk::TextView(tb), scale_(scale), datacell(it)
 	{
@@ -55,7 +43,6 @@ void CodeInput::init(const Prefs& prefs)
 	//	scroll_.set_size_request(-1,200);
 	//	scroll_.set_border_width(1);
 	//	scroll_.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
-	set_font_size(prefs.font_step);
 	edit.set_wrap_mode(Gtk::WRAP_NONE);
 
 	//	edit.override_background_color(Gdk::RGBA("white"), Gtk::STATE_FLAG_ACTIVE);
@@ -161,8 +148,8 @@ void CodeInput::highlight_python()
 				wordtype = 0;
 				}
 			}
-		else if (wordtype == 2) {   // End on linebreak
-			if (cur == '\n') {
+		else if (wordtype == 2) {   // End on linebreak or end of document
+			if (cur == '\n' || cur == '\0') {
 				buf->apply_tag_by_name("comment", start, it);
 				wordtype = 0;
 				}
@@ -369,7 +356,7 @@ void CodeInput::highlight_latex()
 		auto cur = deref(it, 0);
 
 		if (wordtype == 1) {
-			if (cur == '\n') {
+			if (cur == '\n' || cur == '\0') {
 				buf->apply_tag_by_name("comment", start, it);
 				start = it;
 				wordtype = 0;
@@ -698,16 +685,4 @@ void CodeInput::slice_cell(std::string& before, std::string& after)
 	Gtk::TextBuffer::iterator it=textbuf->get_iter_at_mark(textbuf->get_insert());
 	before=textbuf->get_slice(textbuf->begin(), it);
 	after =textbuf->get_slice(it, textbuf->end());
-	}
-
-void CodeInput::set_font_size(int num)
-	{
-	std::ostringstream fstr;
-	float size=9+(num*2);
-#ifdef __APPLE__
-	size*=1.5;
-#endif
-	fstr << "monospace " << size;
-	edit.override_font(Pango::FontDescription(fstr.str()));
-	edit.queue_resize();
 	}

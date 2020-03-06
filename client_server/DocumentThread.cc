@@ -177,6 +177,9 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	highlight = data.get("highlight", false).asBool();
 	is_registered = data.get("is_registered", false).asBool();
 	is_anonymous = data.get("is_anonymous", false).asBool();
+	text_colour = data.get("text_colour", "blue").asString();
+	selection_colour = data.get("selection_colour", "#ccc").asString();
+	font = data.get("font", "monospace 9").asString();
 	git_path = data.get("git_path", "").asString();
 	if(git_path=="")
 		git_path="/usr/bin/git";
@@ -209,6 +212,9 @@ void DocumentThread::Prefs::save()
 		data["highlight"] = highlight;
 		data["is_registered"] = is_registered;
 		data["is_anonymous"] = is_anonymous;
+		data["selection_colour"] = selection_colour;
+		data["text_colour"] = text_colour;
+		data["font"] = font;
 		for (const auto& lang : colours) {
 			for (const auto& kw : lang.second)
 				data["colours"][lang.first][kw.first] = kw.second;

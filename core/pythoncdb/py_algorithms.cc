@@ -39,6 +39,7 @@
 #include "../algorithms/map_mma.hh"
 #endif
 #include "../algorithms/map_sympy.hh"
+#include "../algorithms/meld.hh"
 #include "../algorithms/order.hh"
 #include "../algorithms/product_rule.hh"
 #include "../algorithms/reduce_delta.hh"
@@ -62,7 +63,6 @@
 #include "../algorithms/young_project.hh"
 #include "../algorithms/young_project_product.hh"
 #include "../algorithms/young_project_tensor.hh"
-#include "../algorithms/young_reduce.hh"
 #include "../algorithms/zoom.hh"
 
 namespace cadabra {
@@ -135,7 +135,8 @@ namespace cadabra {
 		def_algo<split_gamma, bool>(m, "split_gamma", true, false, 0, py::arg("on_back"));
 		def_algo<split_index, Ex>(m, "split_index", true, false, 0, py::arg("rules"));
 		def_algo<unwrap, Ex>(m, "unwrap", true, false, 0, py::arg("wrapper") = Ex{});
-		def_algo_preorder<young_reduce, const Ex*>(m, "young_reduce", true, false, 0, py::arg("pattern") = nullptr);
-		def_algo_preorder<young_reduce_trace>(m, "young_reduce_trace", true, false, 0);
+//		def_algo_preorder<young_reduce, const Ex*>(m, "young_reduce", true, false, 0, py::arg("pattern") = nullptr);
+//		def_algo_preorder<young_reduce_trace>(m, "young_reduce_trace", true, false, 0);
+		def_algo_preorder<meld>(m, "meld", true, false, 0);
 		}
 	}
