@@ -1,0 +1,209 @@
+# Testing that some expressions are canonicalised
+# properly using the meld algorithm
+
+def test01():
+    __cdbkernel__ = create_scope()
+    S_{a b c}::Symmetric;
+    ex:= S_{a b c}S_{b a c} + S_{b a c}S_{c a b}:
+    meld(ex)
+    assert(ex == $2S_{b a c}S_{c a b}$)
+    print("Test 01 passed")
+
+test01()
+
+def test02():
+    __cdbkernel__ = create_scope()
+    A_{a b c}::AntiSymmetric.
+    ex = meld($A_{a b c} - A_{b a c}$)
+    assert ex == $2A_{b a c}$
+    print("Test 02 passed")
+   
+#test02()
+
+def test03():
+    __cdbkernel__ = create_scope()
+    A_{a b c}::AntiSymmetric.
+    ex = meld($A_{a b c} + A_{a c b}$)
+    assert ex == $0$
+    print("Test 03 passed")
+
+test03()
+
+def test04():
+    __cdbkernel__ = create_scope()
+    A_{a b c}::AntiSymmetric.
+    ex = meld($A_{c a b}A_{b a c} + A_{b c a}A_{c b a} + 2A_{a b c}A_{a b c}$)
+    assert ex == 0
+    print("Test 04 passed")
+
+test04()
+
+def test05():
+    __cdbkernel__ = create_scope()
+    A_{a b}::AntiSymmetric;
+    ex = meld($A_{b a}$)
+    assert(ex == $-A_{a b}$)
+    print("Test 05 passed")
+   
+#test05()
+
+def test06():
+    __cdbkernel__ = create_scope()
+    R_{a b c d}::RiemannTensor.
+    #ex = meld($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d}$)
+    ex = meld($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d} - 3/2 R_{a b c d} R_{a b c d}$)
+    assert ex == 0
+    print("Test 06 passed")
+   
+test06()
+
+def test07():
+    __cdbkernel__ = create_scope()
+    R_{a b c d}::RiemannTensor.
+    #ex = meld($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d}$)
+    ex = meld($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d}$)
+    assert ex == $3 R_{a b c d}R_{a c b d}$
+    print("Test 07 passed")
+   
+test07()
+
+def test08():
+    __cdbkernel__ = create_scope()
+    R_{a b c d}::RiemannTensor.
+    #ex = meld($R_{a b c d} + R_{a c d b} + R_{a d b c}$)
+    ex = meld($R_{a b c d} + R_{a c d b} + R_{a d b c}$)
+    assert ex == $0$
+    print("Test 08 passed")
+
+test08()
+
+def test09():
+    __cdbkernel__ = create_scope()
+    R_{a b c d}::RiemannTensor.
+    ex := R_{a b c d} + R_{a d b c};
+    meld(ex)
+    assert ex == $R_{a b c d} + R_{a d b c}$
+    print("Test 09 passed")
+   
+test09()
+
+def test10():
+    __cdbkernel__ = create_scope()
+    {a, b, c, d, e, f, g, h}::Indices.
+    A_{a b}::AntiSymmetric.
+    S_{a b}::Symmetric.
+    ex = $A_{a b}S_{c d}A_{e f}S_{g h} + A_{b a}S_{c d}A_{e f}S_{h g}$
+    #meld(ex, $A_{a b}S_{c d}A_{e f}S_{g h}$)
+    meld(ex)
+    assert ex == $0$
+    print("Test 10 passed")
+   
+test10()
+
+def test11():
+    __cdbkernel__ = create_scope()
+    {a, b, c, d, e, f, g, h}::Indices.
+    T_{a b c d e f g h}::Symmetric.
+    ex = meld($T_{b a d c f e h g}$)
+    assert ex == $T_{a b c d e f g h}$
+    print("Test 11 passed")
+   
+#test11()
+
+def test12():
+    __cdbkernel__ = create_scope()
+    {m,n,p,q,r,s,t,u,v,w,a,b,c,d,e,f}::Indices(vector).
+    W_{m n p q}::WeylTensor.
+    ex:= W_{p q r s} W_{p t r u} W_{t v q w} W_{u v s w} 
+        - W_{p q r s} W_{p q t u} W_{r v t w} W_{s v u w}
+        - W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a}
+        + (1/4) W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c}:
+    meld(ex)
+    assert(ex==0)
+    print("Test 12 passed")
+   
+test12()
+
+def test13():
+    __cdbkernel__ = create_scope()
+    R_{a b c d}::RiemannTensor.
+    A^{a b c}::AntiSymmetric.
+    ex:= R_{a b c d} A^{a b c}:
+    meld(ex)
+    #meld(ex, $R_{a b c d} A^{a b c}$)
+    assert ex==0
+    print("Test 13a passed")
+    ex:=R_{a b c d} A_{a b c};
+    meld(ex)
+    tst:= R_{a b c d} A_{a b c} - @(ex);
+    assert(tst==0)
+    print("Test 13b passed")
+
+test13()
+
+def test14():
+    __cdbkernel__ = create_scope()
+    A_{a b c d e}::AntiSymmetric.
+    ex = meld($9A_{b a c e d} - 3A_{e d c b a}$)
+    assert ex == $6A_{e d c b a}$
+    print("Test 14 passed")
+
+test14()
+
+def test15():
+	__cdbkernel__ = create_scope()
+	R_{a b c d}::RiemannTensor.
+	A_{a b c d}::AntiSymmetric.
+	ex := R_{b a c d}:
+	meld(ex, $A_{b a c d}$)
+	assert ex == $R_{b a c d}$
+	print("Test 15 passed")
+
+#test15()
+
+def test16():
+	__cdbkernel__ = create_scope()
+	S_{a b c}::Symmetric.
+	assert meld($a + b + c$) == $a + b + c$
+	assert meld($0$) == $0$
+	print("Test 16 passed")
+
+test16()
+
+def test17():
+    __cdbkernel__ = create_scope()
+    Tr{#}::Trace.
+    {A, B, C, D}::NonCommuting.
+    ex := Tr{A B C D + C D A B + B C D A} - Tr{D A B C}.
+    meld(ex)
+    assert ex == $2 * Tr{A B C D}$
+    print("Test 17 passed")
+
+test17()
+
+def test18():
+    __cdbkernel__ = create_scope()
+    {\mu,\nu,\rho}::Indices(vector).
+    {a^{\mu},b^{\mu},c^{\mu}}::NonCommuting.
+    tr{#}::Trace.
+    ex := tr(a^{\mu} b^{\nu} c^{\rho} a^{\mu} b^{\rho} c^{\nu} + 
+              b^{\mu} c^{\nu} a^{\rho} b^{\nu} c^{\mu} a^{\rho} + 
+              c^{\mu} a^{\nu} b^{\mu} c^{\rho} a^{\nu} b^{\rho}).
+    meld(ex)
+    assert ex == $3 * tr(a^{\mu} b^{\nu} c^{\rho} a^{\mu} b^{\rho} c^{\nu}$
+    print("Test 18 passed")
+
+test18()
+
+def test19():
+    {\mu,\nu}::Indices(vector).
+    u^{\mu}::ImplicitIndex.
+    u^{\mu}::SelfNonCommuting.
+    tr{#}::Trace.
+    ex := tr{u^{\mu} u^{\mu} u^{\nu} u^{\nu}} - 
+        tr{u^{\mu} u^{\nu} u^{\nu} u^{\mu}}.
+    meld(ex)
+    assert ex == $0$
+    print("Test 19 passed")
+
+test19()
