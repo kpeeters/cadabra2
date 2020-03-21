@@ -79,16 +79,21 @@ std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim, Ex
 	}
 }
 
-bool has_TableauBase(const cadabra::Kernel& kernel, Ex::iterator it)
+bool meld::has_TableauBase(Ex::iterator it)
 {
 	if (*it->name == "\\prod" || *it->name == "\\sum") {
 		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg)
-			if (has_TableauBase(kernel, beg))
+			if (has_TableauBase(beg))
 				return true;
 		return false;
 	}
 	else {
-		return (kernel.properties.get_composite<cadabra::TableauBase>(it) != nullptr);
+		auto tb = kernel.properties.get_composite<cadabra::TableauBase>(it);
+		if(tb != nullptr) {
+			if(tb->size(kernel.properties, tr, it)>0)
+				return true;
+			}
+		return false;
 	}
 }
 
@@ -120,7 +125,7 @@ bool meld::can_apply(iterator it)
     return
         *it->name == "\\sum" ||
         has_Trace(kernel, it) ||
-        has_TableauBase(kernel, it);
+        has_TableauBase(it);
 
 }
 
@@ -191,14 +196,18 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 	for (auto& it : terms) {
 		auto tb = kernel.properties.get_composite<TableauBase>(it);
 		if(tb) {
-			auto tab = tb->get_tab(kernel.properties, tr, it, 0);
-			for (size_t col = 0; col < tab.row_size(0); ++col) {
-				if (tab.column_size(col) > 1) {
-					std::vector<size_t> indices;
-					for (auto beg = tab.begin_column(col), end = tab.end_column(col); beg != end; ++beg)
-						indices.push_back(*beg + pos);
-					std::sort(indices.begin(), indices.end());
-					sym.apply_young_symmetry(indices, true);
+			int siz = tb->size(kernel.properties, tr, it);
+			if(siz>0) {
+				// FIXME: need to handle all tableaux, not just '0'.
+				auto tab = tb->get_tab(kernel.properties, tr, it, 0);
+				for (size_t col = 0; col < tab.row_size(0); ++col) {
+					if (tab.column_size(col) > 1) {
+						std::vector<size_t> indices;
+						for (auto beg = tab.begin_column(col), end = tab.end_column(col); beg != end; ++beg)
+							indices.push_back(*beg + pos);
+						std::sort(indices.begin(), indices.end());
+						sym.apply_young_symmetry(indices, true);
+						}
 					}
 				}
 			}
@@ -211,14 +220,18 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 		// Apply the symmetries
 		auto tb = kernel.properties.get_composite<TableauBase>(it);
 		if(tb) {
-			auto tab = tb->get_tab(kernel.properties, tr, it, 0);
-			for (size_t row = 0; row < tab.number_of_rows(); ++row) {
-				if (tab.row_size(row) > 1) {
-					std::vector<size_t> indices;
-					for (auto beg = tab.begin_row(row), end = tab.end_row(row); beg != end; ++beg)
-						indices.push_back(*beg + pos);
-					std::sort(indices.begin(), indices.end());
-					sym.apply_young_symmetry(indices, false);
+			int siz = tb->size(kernel.properties, tr, it);
+			if(siz>0) {
+				// FIXME: need to handle all tableaux, not just '0'.
+				auto tab = tb->get_tab(kernel.properties, tr, it, 0);
+				for (size_t row = 0; row < tab.number_of_rows(); ++row) {
+					if (tab.row_size(row) > 1) {
+						std::vector<size_t> indices;
+						for (auto beg = tab.begin_row(row), end = tab.end_row(row); beg != end; ++beg)
+							indices.push_back(*beg + pos);
+						std::sort(indices.begin(), indices.end());
+						sym.apply_young_symmetry(indices, false);
+						}
 					}
 				}
 			}
@@ -236,7 +249,7 @@ meld::result_t meld::do_tableaux(iterator it)
 	auto terms = split_ex(it, "\\sum");
 	while (!terms.empty()) {
         auto pat = terms.back();
-        bool can_reduce = has_TableauBase(kernel, pat);
+        bool can_reduce = has_TableauBase(pat);
         auto collect = split_ex(pat, "\\prod");
 		auto pat_sym = symmetrize(pat);
 
