@@ -148,6 +148,7 @@ set(PROPERTY_SRC_FILES
 	properties/Symmetric.cc
 	properties/Tableau.cc
 	properties/TableauBase.cc
+	properties/TableauInherit.cc   
 	properties/TableauSymmetry.cc
 	properties/Trace.cc	
 	properties/Traceless.cc

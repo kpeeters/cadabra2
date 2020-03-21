@@ -18,10 +18,11 @@ young_project_tensor::young_project_tensor(const Kernel& k, Ex& tr, bool modmono
 bool young_project_tensor::can_apply(iterator it)
 	{
 	tb=kernel.properties.get_composite<TableauBase>(it);
-	if(tb)
-		return true;
-	else
-		return false;
+	if(tb) {
+		if(tb->size(kernel.properties, tr, it)>0)
+			return true;
+		}
+	return false;
 	}
 
 Algorithm::result_t young_project_tensor::apply(iterator& it)
@@ -29,6 +30,7 @@ Algorithm::result_t young_project_tensor::apply(iterator& it)
 	//	std::cout << "at " << *it->name << std::endl;
 	assert(tb);
 	//	txtout << typeid(*tb).name() << std::endl;
+	// FIXME: handle cases with multiple tabs.
 	TableauBase::tab_t tab=tb->get_tab(kernel.properties, tr, it, 0);
 	if(tab.number_of_rows()==0)
 		return result_t::l_no_action;

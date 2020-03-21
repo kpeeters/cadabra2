@@ -739,7 +739,7 @@ def test42():
     tr{#}::Trace;
     \nabla{#}::ImplicitIndex;
     ex:=tr{\nabla{A B}};
-    product_rule(ex);
+    product_rule(ex)
     tst:= tr{\nabla{A} B + A \nabla{B}} - @(ex);
     assert(tst==0)
     print("Test 42 passed")

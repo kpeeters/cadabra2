@@ -4,7 +4,7 @@
 #include "properties/CommutingAsProduct.hh"
 #include "properties/NumericalFlat.hh"
 #include "properties/WeightBase.hh"
-#include "properties/TableauBase.hh"
+#include "properties/TableauInherit.hh"
 #include "properties/Distributable.hh"
 #include "properties/DependsInherit.hh"
 #include "properties/IndexInherit.hh"
@@ -12,14 +12,16 @@
 
 namespace cadabra {
 
-	class Derivative : public IndexInherit,
+	class Derivative :
+		public IndexInherit,
+		public TableauInherit,
 		public DependsInherit,
 	//                   public Inherit<Spinor>,
 		public Inherit<SortOrder>,
 		public CommutingAsProduct,
 		public NumericalFlat,
 		public WeightBase,
-		public TableauBase,
+//		virtual public TableauBase,
 		public Distributable, virtual public property {
 		public :
 			virtual ~Derivative() {};

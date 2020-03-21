@@ -2,6 +2,7 @@
 #pragma once
 
 #include "Props.hh"
+#include "properties/TableauBase.hh"
 
 namespace cadabra {
 
@@ -11,6 +12,7 @@ namespace cadabra {
 				{
 				return std::string("IndexInherit");
 				};
+
 		};
 
 	}

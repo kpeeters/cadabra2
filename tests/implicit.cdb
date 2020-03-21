@@ -253,9 +253,23 @@ def test20():
     {\mu,\nu}::Indices(vector).
     tr{#}::Trace.
     ex:=A A tr{u^{\mu} u^{\nu}} tr{u^{\nu} u^{\mu}}- B B tr{u^{\mu} u^{\nu}} tr{u^{\mu} u^{\nu}};
-    collect_factors(_);
+    collect_factors(_)
     tst:= A**2 tr{u^{\mu} u^{\nu}} tr{u^{\nu} u^{\mu}}- B**2 tr{u^{\mu} u^{\nu}} tr{u^{\mu} u^{\nu}} - @(ex);
     assert(tst==0)
     print("Test 20 passed")
 
 test20()
+
+def test21():
+    __cdbkernel__=create_scope()
+    {\mu,\nu}::Indices(vector).
+    A^{\mu\nu}::Symmetric.
+    B^{\mu\nu}::AntiSymmetric.
+    tr{#}::Trace.
+    B^{\mu\nu}::ImplicitIndex.
+    ex:=A^{\mu\nu} tr{B^{\mu\nu}};
+    canonicalise(_)
+    assert ex==0
+    print("Test 21 passed")
+
+test21()
