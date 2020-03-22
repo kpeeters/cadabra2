@@ -66,6 +66,7 @@ namespace cadabra {
 
 		k->inject_property(new Distributable(), Ex_from_string("\\prod{#}", false, k), 0);
 		k->inject_property(new IndexInherit(), Ex_from_string("\\prod{#}", false, k), 0);
+		k->inject_property(new TableauInherit(), Ex_from_string("\\prod{#}", false, k), 0);		
 		k->inject_property(new CommutingAsProduct(), Ex_from_string("\\prod{#}", false, k), 0);
 		k->inject_property(new DependsInherit(), Ex_from_string("\\prod{#}", false, k), 0);
 		k->inject_property(new NumericalFlat(), Ex_from_string("\\prod{#}", false, k), 0);

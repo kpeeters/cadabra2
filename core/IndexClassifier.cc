@@ -355,6 +355,7 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 			}
 		}
 	else if(inh) {
+		// std::cerr << "classify inherit at " << it << std::endl;		
 		index_map_t free_so_far;
 		Ex::sibling_iterator sit=it.begin();
 		while(sit!=it.end()) {
@@ -381,33 +382,14 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 
 				ind_dummy.insert(factor_dummy.begin(), factor_dummy.end());
 				index_map_t new_dummy;
-				//				for(auto& ii: factor_free)
-				//					std::cerr << "factor_free " << Ex(ii.second) << std::endl;
-				//				for(auto& ii: free_so_far)
-				//					std::cerr << "free_so_far " << Ex(ii.second) << std::endl;
 				determine_intersection(factor_free, free_so_far, new_dummy, true);
-				//				for(auto& ii: new_dummy)
-				//					std::cerr << "new dummy " << Ex(ii.second) << std::endl;
 				free_so_far.insert(factor_free.begin(), factor_free.end());
 				ind_dummy.insert(new_dummy.begin(), new_dummy.end());
 				}
 			else {
-				//				ind_free.insert(free_so_far.begin(), free_so_far.end());
-				//				free_so_far.clear();
-				//std::cerr << "adding index " << Ex(sit) << std::endl;
 				classify_add_index(sit, free_so_far, ind_dummy);
 				}
 			++sit;
-			//			const Derivative *der=kernel.properties.get<Derivative>(it);
-			//			if(*it->name=="\\indexbracket" || der) { // the other children are indices themselves
-			//				ind_free.insert(free_so_far.begin(), free_so_far.end());
-			//				free_so_far.clear();
-			//				while(sit!=it.end()) {
-			//					classify_add_index(sit, ind_free, ind_dummy);
-			//					++sit;
-			//					}
-			//				break;
-			//				}
 			}
 		ind_free.insert(free_so_far.begin(), free_so_far.end());
 		}
@@ -454,11 +436,11 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 		// node gets replaced).
 		}
 	else {
+		// std::cerr << "classify ordinary at " << it << std::endl;
 		Ex::sibling_iterator sit=it.begin();
 		index_map_t item_free;
 		index_map_t item_dummy;
 		while(sit!=it.end()) {
-			//			std::cout << *sit->name << std::endl;
 			if((sit->fl.parent_rel==str_node::p_sub || sit->fl.parent_rel==str_node::p_super) && sit->fl.bracket==str_node::b_none) {
 				if(*sit->name!="??") {
 					const Coordinate *cdn=kernel.properties.get<Coordinate>(sit, true);
@@ -471,19 +453,14 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 						}
 					else {
 						index_map_t::iterator fnd=find_modulo_parent_rel(sit, item_free);
-						//						index_map_t::iterator fnd=item_free.find(Ex(sit));
 						if(fnd!=item_free.end()) {
-							//							std::cerr << *sit->name << " already in free set" << std::endl;
-							//							if(item_dummy.find(Ex(sit))!=item_dummy.end())
 							if(find_modulo_parent_rel(sit, item_dummy)!=item_dummy.end())
 								throw ConsistencyException("Triple index " + *sit->name + " inside a single factor found.");
 							item_dummy.insert(*fnd);
 							item_free.erase(fnd);
 							item_dummy.insert(index_map_t::value_type(Ex(sit), Ex::iterator(sit)));
-							//							std::cout << item_dummy.size() << " " << item_free.size() << std::endl;
 							}
 						else {
-							//							std::cerr << *sit->name << " is new" << std::endl;
 							item_free.insert(index_map_t::value_type(Ex(sit), Ex::iterator(sit)));
 							}
 						}
@@ -497,9 +474,9 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 		ind_free.insert(item_free.begin(), item_free.end());
 		ind_dummy.insert(item_dummy.begin(), item_dummy.end());
 		}
-	//	std::cout << "ind_free: " << ind_free.size() << std::endl;
-	//	std::cout << "ind_dummy: " << ind_dummy.size() << std::endl;
 
+	// std::cerr << "ind_free: "  << ind_free.size() << std::endl;
+	// std::cerr << "ind_dummy: " << ind_dummy.size() << std::endl;
 	}
 
 Ex IndexClassifier::get_dummy(const list_property *dums,

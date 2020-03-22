@@ -45,6 +45,7 @@
 #include "properties/Symbol.hh"
 #include "properties/Symmetric.hh"
 #include "properties/Tableau.hh"
+#include "properties/TableauInherit.hh"
 #include "properties/TableauSymmetry.hh"
 #include "properties/Trace.hh"
 #include "properties/Traceless.hh"
@@ -343,6 +344,7 @@ namespace cadabra {
 		using Py_SortOrder = BoundProperty<SortOrder, Py_list_property>;
 		using Py_Symbol = BoundProperty<Symbol, BoundPropertyBase>;
 		using Py_Tableau = BoundProperty<Tableau, BoundPropertyBase>;
+		using Py_TableauInherit = BoundProperty<TableauInherit, BoundPropertyBase>;
 		using Py_Vielbein = BoundProperty<Vielbein, BoundPropertyBase>;
 		using Py_InverseVielbein = BoundProperty<InverseVielbein, BoundPropertyBase>;
 
@@ -374,6 +376,7 @@ namespace cadabra {
 		def_prop<Py_Symbol>(m);
 		def_prop<Py_Tableau>(m)
 			.def_property_readonly("dimension", [](const Py_Tableau & p) { return p.get_prop()->dimension; });
+		def_prop<Py_TableauInherit>(m);
 		def_prop<Py_Vielbein>(m);
 		def_prop<Py_InverseVielbein>(m);
 

@@ -267,9 +267,28 @@ def test21():
     B^{\mu\nu}::AntiSymmetric.
     tr{#}::Trace.
     B^{\mu\nu}::ImplicitIndex.
+    \epsilon^{\mu\nu\rho\sigma}::EpsilonTensor.
     ex:=A^{\mu\nu} tr{B^{\mu\nu}};
     canonicalise(_)
     assert ex==0
-    print("Test 21 passed")
-
+    print("Test 21a passed")
+    ex:=\epsilon^{\mu\nu\rho\sigma} tr{A^{\mu\nu} B^{\rho\sigma}};
+    canonicalise(_)
+    assert ex==0
+    print("Test 21b passed")    
+    ex:=\epsilon^{\mu\nu\rho\sigma} A^{\nu\mu} B^{\rho\sigma};
+    canonicalise(_)
+    assert ex==0
+    print("Test 21c passed")    
+    ex:=\epsilon^{\mu\nu\rho\sigma} tr{ A^{\nu\mu} B^{\rho\sigma} };
+    canonicalise(_)    
+    assert ex==0
+    print("Test 21d passed")    
+    ex:=\epsilon^{\mu\nu\rho\sigma} tr{ A^{\nu\mu} B^{\rho\sigma} + A^{\mu\nu} B^{\rho\sigma} };
+    # FIXME: this does not work with repeat=True?
+    canonicalise(_)
+    canonicalise(_)
+    assert ex==0
+    print("Test 21e passed")
+    
 test21()

@@ -17,6 +17,8 @@ young_project_tensor::young_project_tensor(const Kernel& k, Ex& tr, bool modmono
 
 bool young_project_tensor::can_apply(iterator it)
 	{
+	if(*it->name=="\\prod") return false;
+	
 	tb=kernel.properties.get_composite<TableauBase>(it);
 	if(tb) {
 		if(tb->size(kernel.properties, tr, it)>0)
