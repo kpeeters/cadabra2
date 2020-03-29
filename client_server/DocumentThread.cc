@@ -134,7 +134,7 @@ void DocumentThread::process_action_queue()
 		// Unlock the action queue while we are processing this particular action,
 		// so that other actions can be added which we run.
 		stack_mutex.unlock();
-		//std::cerr << "Executing action " << typeid(*ab).name() << std::endl;
+		// std::cerr << "Executing action " << typeid(*ab).name() << " for " << ab->ref_id.id << std::endl;
 		// Execute the action; this will run synchronously, so after
 		// this returns the doc and visual representation have both been
 		// updated.

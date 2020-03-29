@@ -14,6 +14,8 @@
 #include <boost/algorithm/string/replace.hpp>
 #include <json/json.h>
 
+#include <internal/uuid.h>
+
 #include "Config.hh"
 #ifndef ENABLE_JUPYTER
 #include "Snoop.hh"
@@ -29,7 +31,7 @@ using websocketpp::lib::placeholders::_2;
 using websocketpp::lib::bind;
 
 Server::Server()
-	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)
+//	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)
 	{
 	boost::uuids::uuid authentication_uuid = boost::uuids::random_generator()();
 	authentication_token = boost::uuids::to_string( authentication_uuid );
@@ -39,7 +41,7 @@ Server::Server()
 	}
 
 Server::Server(const std::string& socket)
-	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)
+//	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)
 	{
 	socket_name=socket;
 	init();
@@ -421,7 +423,7 @@ uint64_t Server::send(const std::string& output, const std::string& msg_type, ui
 	// Make a JSON message.
 	Json::Value json, content, header;
 
-	++return_cell_id;
+	auto return_cell_id=cadabra::generate_uuid<Json::UInt64>();
 	if(parent_id==0)
 		header["parent_id"]=(Json::Value::UInt64)current_id;
 	else
@@ -461,7 +463,7 @@ void Server::on_block_error(Block blk)
 	// Make a JSON message.
 	Json::Value json, content, header;
 
-	++return_cell_id;
+	auto return_cell_id=cadabra::generate_uuid<Json::UInt64>();
 	header["parent_id"]=(Json::Value::UInt64)blk.cell_id;
 	header["parent_origin"]="client";
 	header["cell_id"]=(Json::Value::UInt64)return_cell_id;
@@ -487,7 +489,7 @@ void Server::on_kernel_fault(Block blk)
 	// Make a JSON message.
 	Json::Value json, content, header;
 
-	++return_cell_id;
+	auto return_cell_id=cadabra::generate_uuid<Json::UInt64>();
 	header["parent_id"]=(Json::Value::UInt64)blk.cell_id;
 	header["parent_origin"]="client";
 	header["cell_id"]=(Json::Value::UInt64)return_cell_id;

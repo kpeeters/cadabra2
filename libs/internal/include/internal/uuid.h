@@ -18,14 +18,9 @@ namespace cadabra
 	template <typename IntegerT>
 	IntegerT generate_uuid()
 	{
-		static bool seeded = false;
-		static std::mt19937 rng;
+		static std::random_device rd;
+		static std::mt19937 rng(rd());
 		static std::uniform_int_distribution<IntegerT> uni(1);
-
-		if (!seeded) {
-			rng.seed(detail::get_seed());
-			seeded = true;
-		}
 
 		return uni(rng);
 	}

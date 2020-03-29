@@ -21,6 +21,7 @@ configure_file(
 #---------------------------------------------------------------------------
 # Locate libraries.
 #---------------------------------------------------------------------------
+#SET(CMAKE_FIND_LIBRARY_SUFFIXES .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
 
 # Boost.regex, Boost.system
 find_package(Boost 1.53 COMPONENTS system)

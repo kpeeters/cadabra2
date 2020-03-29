@@ -1,0 +1,134 @@
+{
+	"cell_id" : 12286062114484406453,
+	"cells" : 
+	[
+		{
+			"cell_id" : 14628779505962182789,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def post_process(ex):\n    meld(ex)\n    collect_terms(ex)"
+		},
+		{
+			"cell_id" : 17732859429837154320,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9223372036854775810,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetry to~}R_{a b c d}.\\end{dmath*}"
+				}
+			],
+			"source" : "R_{a b c d}::RiemannTensor;"
+		},
+		{
+			"cell_id" : 8054626802115821673,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9223372036854775812,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775813,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0"
+						}
+					],
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=R_{a b c d} + R_{a c d b} + R_{a d b c};"
+		},
+		{
+			"cell_id" : 8540820496130751966,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "W_{m n p q}::WeylTensor."
+		},
+		{
+			"cell_id" : 8245654388093335992,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9223372036854775816,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775817,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0"
+						}
+					],
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= W_{p q r s} W_{p t r u} W_{t v q w} W_{u v s w} \n  - W_{p q r s} W_{p q t u} W_{r v t w} W_{s v u w}\n  - W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a}\n  + (1/4) W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c};"
+		},
+		{
+			"cell_id" : 14294698861693786241,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9223372036854775819,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Symmetric to~}S_{m n p}.\\end{dmath*}"
+				},
+				{
+					"cell_id" : 9223372036854775820,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property AntiSymmetric to~}A^{m n p}.\\end{dmath*}"
+				}
+			],
+			"source" : "S_{m n p}::Symmetric;\nA^{m n p}::AntiSymmetric;"
+		},
+		{
+			"cell_id" : 17887186645587646211,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9223372036854775822,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775823,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0"
+						}
+					],
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=R_{a b c d} A^{b c d};"
+		},
+		{
+			"cell_id" : 8808759323842202056,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

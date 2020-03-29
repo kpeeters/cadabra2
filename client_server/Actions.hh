@@ -47,8 +47,8 @@ namespace cadabra {
 			/// Can this action be undone?
 			virtual bool undoable() const;
 
-		protected:
 			DataCell::id_t  ref_id;
+		protected:
 			DTree::iterator ref;
 		};
 

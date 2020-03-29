@@ -50,6 +50,7 @@ void ActionAddCell::execute(DocumentThread& cl, GUIBase& gb)
 			newref = cl.doc.insert_after(ref, newcell);
 			break;
 		case Position::child:
+			// std::cerr << "Append child to " << ref->id().id << std::endl;
 			newref = cl.doc.append_child(ref, newcell);
 			break;
 		}

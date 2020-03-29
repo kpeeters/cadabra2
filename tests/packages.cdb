@@ -15,3 +15,18 @@ def test01():
     print("Test 01b passed")
 
 test01()
+
+def test02():
+    __cdbkernel__=create_scope()
+    import cdb.core.manip as manip
+    {I,J}::Indices(position=fixed);
+    \delta{#}::Derivative;
+    ex:= A = B C;
+    lhs= manip.get_lhs(ex)
+    rhs= manip.get_rhs(ex)        
+    ex2:= \delta_{I}{ @(lhs) } = \delta_{I}{ @(rhs) };
+    tst:= (\delta_{I}{A} = \delta_{I}{B C}) - @(ex2);
+    assert tst == $0=0$
+    print("Test 02 passed")
+
+test02()

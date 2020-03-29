@@ -272,7 +272,7 @@ void ComputeThread::cell_finished_running(DataCell::id_t id)
 void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	{
 	client::connection_ptr con = wsclient.get_con_from_hdl(hdl);
-	//	std::cerr << msg->get_payload() << std::endl;
+	//std::cerr << msg->get_payload() << std::endl;
 
 	// Parse the JSON message.
 	Json::Value  root;

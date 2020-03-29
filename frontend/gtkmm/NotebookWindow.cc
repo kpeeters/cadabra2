@@ -638,6 +638,7 @@ bool NotebookWindow::on_key_press_event(GdkEventKey* event)
 
 void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 	{
+	// std::cerr << "Add cell for " << it->id().id << std::endl;
 	// Add a visual cell corresponding to this document cell in
 	// every canvas.
 
@@ -680,6 +681,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				// FIXME: would be good to share the input and output of TeXView too.
 				// Right now nothing is shared...
 				newcell.outbox = manage( new TeXView(engine, it) );
+				// std::cerr << "Add widget " << newcell.outbox << " for cell " << it->id().id << std::endl;
 				newcell.outbox->tex_error.connect(
 				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_tex_error), it ) );
 
@@ -838,15 +840,19 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 		// DTree cell (happens for instance when deleting a cell, undoing,
 		// then re-evaluating: the DTree still has the output cells, while
 		// they have gone from the visual tree).
-		if(fnd==canvasses[i]->visualcells.end())
+		if(fnd==canvasses[i]->visualcells.end()) {
+			std::cerr << "No visual cell for " << it->id().id << std::endl;
 			continue;
+			}
 
 		VisualCell& actual = fnd->second;//canvasses[i]->visualcells[&(*it)];
 
 		// The pointers are all in a union, and Gtkmm does not care
 		// about the precise type, so we just remove imagebox, knowing
 		// that it may actually be an inbox or outbox.
+		// std::cerr << "Removing " << actual.imagebox << std::endl;
 		parentbox->remove(*actual.imagebox);
+		
 		// The above does not delete the Gtk widget, despite having been
 		// wrapped in manage at construction. So we have to delete it
 		// ourselves. Fortunately the container does not try to delete
@@ -1131,7 +1137,7 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number,
 	DTree::sibling_iterator sib=doc.begin(it);
 	dim_output_cells(it);
 	while(sib!=doc.end(it)) {
-		// std::cout << "cadabra-client: scheduling output cell for removal" << std::endl;
+		// std::cout << "cadabra-client: scheduling output cell for removal: " << sib->id().id << std::endl;
 		std::shared_ptr<ActionBase> action = std::make_shared<ActionRemoveCell>(sib->id());
 		queue_action(action);
 		++sib;
@@ -1140,6 +1146,7 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number,
 	// Execute the cell.
 	set_stop_sensitive(true);
 	follow_cell=it;
+	// std::cerr << "Executing cell " << it->id().id << std::endl;
 	compute->execute_cell(it);
 
 	return true;
