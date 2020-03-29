@@ -48,8 +48,8 @@ bool sort_sum::should_swap(iterator obj, int subtree_comparison) const
 
 	// Find a SortOrder property which contains both one and two.
 	int num1, num2;
-	const SortOrder *so1=kernel.properties.get_composite<SortOrder>(one,num1);
-	const SortOrder *so2=kernel.properties.get_composite<SortOrder>(two,num2);
+	const SortOrder *so1=kernel.properties.get<SortOrder>(one,num1);
+	const SortOrder *so2=kernel.properties.get<SortOrder>(two,num2);
 
 	if(so1==0 || so2==0) { // No sort order known
 		if(subtree_comparison<0) return true;

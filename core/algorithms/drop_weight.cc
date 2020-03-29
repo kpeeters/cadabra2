@@ -39,11 +39,11 @@ bool drop_keep_weight::can_apply(iterator st)
 	const WeightInherit *gmnpar=0;
 	const Weight        *wghpar=0;
 
-	gmn=kernel.properties.get_composite<WeightInherit>(st, label);
-	wgh=kernel.properties.get_composite<Weight>(st, label);
+	gmn=kernel.properties.get<WeightInherit>(st, label);
+	wgh=kernel.properties.get<Weight>(st, label);
 	if(tr.is_head(st)==false) {
-		gmnpar=kernel.properties.get_composite<WeightInherit>(tr.parent(st), label);
-		wghpar=kernel.properties.get_composite<Weight>(tr.parent(st), label);
+		gmnpar=kernel.properties.get<WeightInherit>(tr.parent(st), label);
+		wghpar=kernel.properties.get<Weight>(tr.parent(st), label);
 		}
 
 	// std::cerr << *st->name << ": " << gmn << ", " << wgh << ", " << gmnpar << " " << std::endl;
@@ -76,7 +76,7 @@ Algorithm::result_t drop_keep_weight::do_apply(iterator& it, bool keepthem)
 					continue;
 					}
 
-				const WeightBase *gnb=kernel.properties.get_composite<WeightBase>(sib, label);
+				const WeightBase *gnb=kernel.properties.get<WeightBase>(sib, label);
 				if(gnb) {
 					// std::cerr << "WeightBase for child " << Ex(sib) << std::endl;
 					multiplier_t val;

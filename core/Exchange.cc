@@ -42,7 +42,7 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 			++sib;
 			continue;
 			}
-		if(properties.get_composite<GammaMatrix>(sib)) {
+		if(properties.get<GammaMatrix>(sib)) {
 			total_number_of_indices+=Algorithm::number_of_indices(properties, sib);
 			++sib;
 			continue;
@@ -50,7 +50,7 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 
 		// In case of spinors, the name may be hidden inside a Dirac bar.
 		Ex::sibling_iterator truetensor=sib;
-		const DiracBar *db=properties.get_composite<DiracBar>(truetensor);
+		const DiracBar *db=properties.get<DiracBar>(truetensor);
 		if(db)
 			truetensor=tr.begin(truetensor);
 
@@ -59,7 +59,7 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 		// Compare the current tensor with all other tensors encountered so far.
 		for(; i<idts.size(); ++i) {
 			Ex::sibling_iterator truetensor2=idts[i].tensors[0];
-			const DiracBar *db2=properties.get_composite<DiracBar>(truetensor2);
+			const DiracBar *db2=properties.get<DiracBar>(truetensor2);
 			if(db2)
 				truetensor2=tr.begin(truetensor2);
 
@@ -77,8 +77,8 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 					// skip objects without spinor line
 					do {
 						++tmpit;
-						gmnxt=properties.get_composite<GammaMatrix>(tmpit);
-						spnxt=properties.get_composite<Spinor>(tmpit);
+						gmnxt=properties.get<GammaMatrix>(tmpit);
+						spnxt=properties.get<Spinor>(tmpit);
 						}
 					while(gmnxt==0 && spnxt==0);
 					if(tmpit==sib) {
@@ -92,8 +92,8 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 						// skip objects without spinor line
 						do {
 							++tmpit;
-							gmnxt=properties.get_composite<GammaMatrix>(tmpit);
-							spnxt=properties.get_composite<Spinor>(tmpit);
+							gmnxt=properties.get<GammaMatrix>(tmpit);
+							spnxt=properties.get<Spinor>(tmpit);
 							}
 						while(gmnxt==0 && spnxt==0);
 						if(tmpit==sib) { // yes, it's a proper Majorana spinor pair.
@@ -109,13 +109,13 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 			}
 		if(i==idts.size()) {
 			identical_tensors_t ngr;
-			ngr.comm=properties.get_composite<SelfCommutingBehaviour>(sib, true);
+			ngr.comm=properties.get<SelfCommutingBehaviour>(sib, true);
 			//			if(ngr.comm)
 			//				std::cerr << "selfcomm " << ngr.comm->sign() << " for " << sib << std::endl;
-			ngr.spino=properties.get_composite<Spinor>(sib);
-			ngr.tab=properties.get_composite<TableauBase>(sib);
-			ngr.traceless=properties.get_composite<Traceless>(sib);
-			ngr.gammatraceless=properties.get_composite<GammaTraceless>(sib);
+			ngr.spino=properties.get<Spinor>(sib);
+			ngr.tab=properties.get<TableauBase>(sib);
+			ngr.traceless=properties.get<Traceless>(sib);
+			ngr.gammatraceless=properties.get<GammaTraceless>(sib);
 			ngr.extra_sign=0;
 			ngr.number_of_indices=Algorithm::number_of_indices(properties, truetensor);
 			ngr.tensors.push_back(sib);

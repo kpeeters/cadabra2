@@ -19,7 +19,7 @@ bool young_project_tensor::can_apply(iterator it)
 	{
 	if(*it->name=="\\prod") return false;
 	
-	tb=kernel.properties.get_composite<TableauBase>(it);
+	tb=kernel.properties.get<TableauBase>(it);
 	if(tb) {
 		if(tb->size(kernel.properties, tr, it)>0)
 			return true;

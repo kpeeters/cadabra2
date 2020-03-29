@@ -46,8 +46,8 @@ bool simplify::can_apply(iterator st)
 
 	// Determine if any of the free indices are harmless (Coordinates or Symbols).
 	for(auto& ind: ind_free) {
-		const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(ind.second, true);
-		const Symbol     *smb=kernel.properties.get_composite<Symbol>(ind.second, true);
+		const Coordinate *cdn=kernel.properties.get<Coordinate>(ind.second, true);
+		const Symbol     *smb=kernel.properties.get<Symbol>(ind.second, true);
 		if(cdn==0 && smb==0) {
 			still_ok=false;
 			break;
@@ -63,8 +63,8 @@ bool simplify::can_apply(iterator st)
 		// starting at the index, and if it is not coordinate or symbol, then go up until we
 		// reach the first child level of the product.
 		for(auto& ind: ind_free) {
-			const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(ind.second, true);
-			const Symbol     *smb=kernel.properties.get_composite<Symbol>(ind.second, true);
+			const Coordinate *cdn=kernel.properties.get<Coordinate>(ind.second, true);
+			const Symbol     *smb=kernel.properties.get<Symbol>(ind.second, true);
 			if(cdn==0 && smb==0) {
 				auto fac=tr.parent(ind.second);
 				while(tr.parent(fac)!=iterator(st))
@@ -73,8 +73,8 @@ bool simplify::can_apply(iterator st)
 				}
 			}
 		for(auto& ind: ind_dummy) {
-			const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(ind.second, true);
-			const Symbol     *smb=kernel.properties.get_composite<Symbol>(ind.second, true);
+			const Coordinate *cdn=kernel.properties.get<Coordinate>(ind.second, true);
+			const Symbol     *smb=kernel.properties.get<Symbol>(ind.second, true);
 			if(cdn==0 && smb==0) {
 				auto fac=tr.parent(ind.second);
 				while(tr.parent(fac)!=iterator(st))

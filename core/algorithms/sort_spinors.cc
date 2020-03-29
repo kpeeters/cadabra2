@@ -14,7 +14,7 @@ sort_spinors::sort_spinors(const Kernel& k, Ex& e)
 
 bool sort_spinors::can_apply(iterator it)
 	{
-	const Spinor   *sp1=kernel.properties.get_composite<Spinor>(it);
+	const Spinor   *sp1=kernel.properties.get<Spinor>(it);
 	const DiracBar *db1=kernel.properties.get<DiracBar>(it);
 
 	// Only act if the node is a Dira conjugate Majorana spinor.
@@ -32,8 +32,8 @@ bool sort_spinors::can_apply(iterator it)
 	sibling_iterator sib=it;
 	++sib;
 	while(sib!=tr.end(par)) {
-		const Spinor      *spinor=kernel.properties.get_composite<Spinor>(sib);
-		const GammaMatrix *gamma =kernel.properties.get_composite<GammaMatrix>(sib);
+		const Spinor      *spinor=kernel.properties.get<Spinor>(sib);
+		const GammaMatrix *gamma =kernel.properties.get<GammaMatrix>(sib);
 
 		if(spinor) {
 			if(!spinor->majorana)
@@ -54,8 +54,8 @@ bool sort_spinors::can_apply(iterator it)
 Algorithm::result_t sort_spinors::apply(iterator& )
 	{
 	int num1, num2;
-	const SortOrder     *so1=kernel.properties.get_composite<SortOrder>(one,num1);
-	const SortOrder     *so2=kernel.properties.get_composite<SortOrder>(two,num2);
+	const SortOrder     *so1=kernel.properties.get<SortOrder>(one,num1);
+	const SortOrder     *so2=kernel.properties.get<SortOrder>(two,num2);
 
 	if(so1!=0 && so1==so2) {
 		if(num1>num2) {

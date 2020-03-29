@@ -48,7 +48,7 @@ multiplier_t WeightInherit::value(const Kernel& kernel, Ex::iterator it, const s
 		if(!sib->is_index()) {
 			switch(combination_type) {
 				case multiplicative: {
-					const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
+					const WeightBase *gnb=properties.get<WeightBase>(sib, forcedlabel);
 					// std::cerr << "finding weight for " << Ex(sib) << std::endl;
 					if(gnb) {
 						multiplier_t tmp=gnb->value(kernel, sib, forcedlabel);
@@ -58,7 +58,7 @@ multiplier_t WeightInherit::value(const Kernel& kernel, Ex::iterator it, const s
 				break;
 				case additive: {
 					multiplier_t thisone=0;
-					const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
+					const WeightBase *gnb=properties.get<WeightBase>(sib, forcedlabel);
 					if(gnb) thisone=gnb->value(kernel, sib, forcedlabel);
 					else    thisone=0;
 					if(first_term) {
@@ -71,7 +71,7 @@ multiplier_t WeightInherit::value(const Kernel& kernel, Ex::iterator it, const s
 					}
 				break;
 				case power: {
-					const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
+					const WeightBase *gnb=properties.get<WeightBase>(sib, forcedlabel);
 					if(gnb) {
 						multiplier_t tmp=gnb->value(kernel, sib, forcedlabel);
 						++sib;

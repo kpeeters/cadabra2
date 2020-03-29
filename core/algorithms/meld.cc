@@ -88,7 +88,7 @@ bool meld::has_TableauBase(Ex::iterator it)
 		return false;
 	}
 	else {
-		auto tb = kernel.properties.get_composite<cadabra::TableauBase>(it);
+		auto tb = kernel.properties.get<cadabra::TableauBase>(it);
 		if(tb != nullptr) {
 			if(tb->size(kernel.properties, tr, it)>0)
 				return true;
@@ -99,7 +99,7 @@ bool meld::has_TableauBase(Ex::iterator it)
 
 bool has_Trace(const Kernel& kernel, Ex::iterator it)
 {
-	auto p = kernel.properties.get_composite<cadabra::Trace>(it);
+	auto p = kernel.properties.get<cadabra::Trace>(it);
 	if (p)
 		return true;
 	else
@@ -194,7 +194,7 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 	// Young project antisymmetric components
 	pos = 0;
 	for (auto& it : terms) {
-		auto tb = kernel.properties.get_composite<TableauBase>(it);
+		auto tb = kernel.properties.get<TableauBase>(it);
 		if(tb) {
 			int siz = tb->size(kernel.properties, tr, it);
 			if(siz>0) {
@@ -218,7 +218,7 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 	pos = 0;
 	for (auto& it : terms) {
 		// Apply the symmetries
-		auto tb = kernel.properties.get_composite<TableauBase>(it);
+		auto tb = kernel.properties.get<TableauBase>(it);
 		if(tb) {
 			int siz = tb->size(kernel.properties, tr, it);
 			if(siz>0) {

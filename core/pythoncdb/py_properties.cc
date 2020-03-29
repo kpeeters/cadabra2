@@ -166,7 +166,7 @@ namespace cadabra {
 	{
 		int tmp;
 		auto res = get_kernel_from_scope()->properties.get_with_pattern<PropT>(
-			it, tmp, false, ignore_parent_rel);
+			it, tmp, "", false, ignore_parent_rel);
 
 		if (res.first) {
 			return std::make_shared<BoundProperty<PropT, ParentTs...>>(

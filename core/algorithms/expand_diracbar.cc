@@ -21,7 +21,7 @@ bool expand_diracbar::can_apply(iterator it)
 			const GammaMatrix *gam=kernel.properties.get<GammaMatrix>(ch);
 			if(gam) {
 				++ch;
-				const Spinor *sp=kernel.properties.get_composite<Spinor>(ch);
+				const Spinor *sp=kernel.properties.get<Spinor>(ch);
 				if(sp && ++ch==tr.end(tr.begin(it))) return true;
 				}
 			}

@@ -33,7 +33,8 @@ namespace cadabra {
 	class Properties;
 	class Kernel;
 	class Accent;
-
+	class Ex_comparator;
+	
 	class pattern {
 		public:
 			pattern();
@@ -48,10 +49,15 @@ namespace cadabra {
 			/// example). The latter feature is mostly used to do pattern
 			/// matching when the property for which we need it cannot
 			/// rely on such child node properties, e.g. Accent; see the
-			/// specialisation in get_composite below.
+			/// specialisation in get below.
 			
 			bool match(const Properties&, const Ex::iterator&, bool ignore_parent_rel=false, bool ignore_properties=false) const;
 			bool children_wildcard() const;
+
+			/// As `match`, but using a comparator object which is
+			/// externally provided, so that the caller can use
+			/// the found pattern map.
+			bool match_ext(const Properties&, const Ex::iterator&, Ex_comparator& comp, bool ignore_parent_rel=false, bool ignore_properties=false) const;
 
 			Ex obj;
 		};
@@ -269,29 +275,27 @@ namespace cadabra {
 			property_map_t  props;  // pattern -> property
 			pattern_map_t   pats;   // property -> pattern; for list properties, patterns are stored here in order
 
-			// Normal search: given a pattern, get its property if any.
-			template<class T> const T*  get(Ex::iterator, bool ignore_parent_rel=false) const; // Shorthand for get_composite
-			template<class T> const T*  get() const;
-			template<class T> const T*  get_composite(Ex::iterator, bool ignore_parent_rel=false) const;
-			template<class T> const T*  get_composite(Ex::iterator, int& serialnum, bool doserial=true, bool ignore_parent_rel=false) const;
-			// Ditto for labelled properties
-			template<class T> const T*  get_composite(Ex::iterator, const std::string& label) const;
-			template<class T> const T*  get_composite(Ex::iterator, int& serialnum, const std::string& label, bool doserial=true) const;
-			// For list properties: given two patterns, get a common property.
-			template<class T> const T*  get_composite(Ex::iterator, Ex::iterator, bool ignore_parent_rel=false) const;
-			template<class T> const T*  get_composite(Ex::iterator, Ex::iterator, int&, int&, bool ignore_parent_rel=false) const;
+			/// Normal search: given a pattern, get its property if any.
+			template<class T> const T*  get(Ex::iterator, bool ignore_parent_rel=false) const;
+			template<class T> const T*  get(Ex::iterator, int& serialnum, bool doserial=true, bool ignore_parent_rel=false) const;
+			/// Ditto for labelled properties
+			template<class T> const T*  get(Ex::iterator, const std::string& label) const;
+			template<class T> const T*  get(Ex::iterator, int& serialnum, const std::string& label, bool doserial=true) const;
+			/// For list properties: given two patterns, get a common property.
+			template<class T> const T*  get(Ex::iterator, Ex::iterator, bool ignore_parent_rel=false) const;
+			template<class T> const T*  get(Ex::iterator, Ex::iterator, int&, int&, bool ignore_parent_rel=false) const;
 
+			/// General property finder, which will return not only the property but also
+			/// the pattern which matched the given node. All 'get' functions above call
+			/// this function; all functionality is contained in here.
 			template<class T>
-			std::pair<const T*, const pattern *> get_with_pattern(Ex::iterator, int& serialnum, bool doserial=true, bool ignore_parent_rel=false) const;
+			std::pair<const T*, const pattern *> get_with_pattern(Ex::iterator, int& serialnum,
+																					const std::string& label,
+																					bool doserial=true, bool ignore_parent_rel=false) const;
 
 			// Get the outermost node which has the given property attached, i.e. go down through
 			// all (if any) nodes which have just inherited the property.
 			template<class T> Ex::iterator head(Ex::iterator, bool ignore_parent_rel=false) const;
-
-			// Search through pointers
-			bool has(const property *, Ex::iterator);
-			// Find serial number of a pattern in a given list property
-			int  serial_number(const property *, const pattern *) const;
 
 			// Inverse search: given a property type, get a pattern which has this property.
 			// When given an iterator, it starts to search in the property
@@ -306,30 +310,32 @@ namespace cadabra {
 		private:
 			void insert_prop(const Ex&, const property *);
 			void insert_list_prop(const std::vector<Ex>&, const list_property *);
+			bool check_label(const property *, const std::string&) const;
+			bool check_label(const labelled_property *, const std::string&) const;			
+			// Search through pointers
+			bool has(const property *, Ex::iterator);
+			// Find serial number of a pattern in a given list property
+			int  serial_number(const property *, const pattern *) const;
+
 		};
 
 	template<class T>
 	const T* Properties::get(Ex::iterator it, bool ignore_parent_rel) const
 		{
-		return get_composite<T>(it, ignore_parent_rel);
-		}
-
-	template<class T>
-	const T* Properties::get_composite(Ex::iterator it, bool ignore_parent_rel) const
-		{
 		int tmp;
-		return get_composite<T>(it, tmp, false, ignore_parent_rel);
+		return get<T>(it, tmp, false, ignore_parent_rel);
 		}
 
 	template<class T>
-	const T* Properties::get_composite(Ex::iterator it, int& serialnum, bool doserial, bool ignore_parent_rel) const
+	const T* Properties::get(Ex::iterator it, int& serialnum, bool doserial, bool ignore_parent_rel) const
 		{
-		auto ret = get_with_pattern<T>(it, serialnum, doserial, ignore_parent_rel);
+		auto ret = get_with_pattern<T>(it, serialnum, "", doserial, ignore_parent_rel);
 		return ret.first;
 		}
 
 	template<class T>
-	std::pair<const T*, const pattern *> Properties::get_with_pattern(Ex::iterator it, int& serialnum, bool doserial, bool ignore_parent_rel) const
+	std::pair<const T*, const pattern *> Properties::get_with_pattern(Ex::iterator it, int& serialnum, const std::string& label,
+																							bool doserial, bool ignore_parent_rel) const
 		{
 		std::pair<const T*, const pattern *> ret;
 		ret.first=0;
@@ -360,18 +366,24 @@ namespace cadabra {
 					if(ret.first) {
 						if((*walk).second.first->match(*this, it, ignore_parent_rel, ignore_properties)) {
 							ret.second=(*walk).second.first;
-							if(doserial) {
-								std::pair<pattern_map_t::const_iterator, pattern_map_t::const_iterator>
-								pm=pats.equal_range((*walk).second.second);
-								serialnum=0;
-								while(pm.first!=pm.second) {
-									if((*pm.first).second==(*walk).second.first)
-										break;
-									++serialnum;
-									++pm.first;
+							if(!check_label(ret.first, label)) 
+								ret.first=0;
+							else {
+								if(doserial) {
+									serialnum=serial_number( (*walk).second.second, (*walk).second.first );
+//									serialnum = serial_number(pats, (*walk).second.second);
+//									std::pair<pattern_map_t::const_iterator, pattern_map_t::const_iterator>
+//										pm=pats.equal_range((*walk).second.second);
+//									serialnum=0;
+//									while(pm.first!=pm.second) {
+//										if((*pm.first).second==(*walk).second.first)
+//											break;
+//										++serialnum;
+//										++pm.first;
+//										}
 									}
+								break;
 								}
-							break;
 							}
 						}
 					ret.first=0;
@@ -397,7 +409,7 @@ namespace cadabra {
 			//		std::cout << "no match but perhaps inheritance?" << std::endl;
 			Ex::sibling_iterator sib=it.begin();
 			while(sib!=it.end()) {
-				std::pair<const T*, const pattern *> tmp=get_with_pattern<T>((Ex::iterator)(sib), serialnum, doserial);
+				std::pair<const T*, const pattern *> tmp=get_with_pattern<T>((Ex::iterator)(sib), serialnum, label, doserial);
 				if(tmp.first) {
 					ret=tmp;
 					break;
@@ -411,82 +423,28 @@ namespace cadabra {
 		}
 
 	template<class T>
-	const T* Properties::get_composite(Ex::iterator it, const std::string& label) const
+	const T* Properties::get(Ex::iterator it, const std::string& label) const
 		{
 		int tmp;
-		return get_composite<T>(it, tmp, label, false);
+		return get<T>(it, tmp, label, false);
 		}
 
 	template<class T>
-	const T* Properties::get_composite(Ex::iterator it, int& serialnum, const std::string& label, bool doserial) const
+	const T* Properties::get(Ex::iterator it, int& serialnum, const std::string& label, bool doserial) const
 		{
-		const T* ret=0;
-		bool inherits=false;
-		std::pair<property_map_t::const_iterator, property_map_t::const_iterator> pit=props.equal_range(it->name_only());
-
-		// First look for properties of the node itself. Go through the loop twice:
-		// once looking for patterns which do not have wildcards, and then looking
-		// for wildcard patterns.
-		bool wildcards=false;
-
-		// For some properties, we cannot lookup properties lower down the
-		// tree, because it would lead to an endless recursion (and it would
-		// not make sense anyway). At the moment, this is only for Accent.
-		bool ignore_properties=false;
-		if(std::is_same<T, Accent>::value) ignore_properties=true;
-		
-		for(;;) {
-			property_map_t::const_iterator walk=pit.first;
-			while(walk!=pit.second) {
-				if(wildcards==(*walk).second.first->children_wildcard()) {
-					if((*walk).second.first->match(*this, it, false, ignore_properties)) { // match found
-						ret=dynamic_cast<const T *>((*walk).second.second);
-						if(ret) { // found! determine serial number
-							// std::cerr << "found weight for " << ret->label << " vs " << label << std::endl;
-							if(ret->label!=label && ret->label!="all")
-								ret=0;
-							else {
-								if(doserial)
-									serialnum=serial_number( (*walk).second.second, (*walk).second.first );
-								break;
-								}
-							}
-						if(dynamic_cast<const PropertyInherit *>((*walk).second.second))
-							inherits=true;
-						else if(dynamic_cast<const Inherit<T> *>((*walk).second.second))
-							inherits=true;
-						}
-					}
-				++walk;
-				}
-			if(!wildcards && !ret) wildcards=true;
-			else break;
-			}
-
-		// If no property was found, figure out whether a property is inherited from a child node.
-		if(!ret && inherits) {
-			Ex::sibling_iterator sib=it.begin();
-			while(sib!=it.end()) {
-				const T* tmp=get_composite<T>((Ex::iterator)(sib), serialnum, label, doserial);
-				if(tmp) {
-					ret=tmp;
-					break;
-					}
-				++sib;
-				}
-			}
-		return ret;
+		auto ret=get_with_pattern<T>(it, serialnum, label, doserial, false);
+		return ret.first;
 		}
 
 	template<class T>
-	const T* Properties::get_composite(Ex::iterator it1, Ex::iterator it2, bool ignore_parent_rel) const
+	const T* Properties::get(Ex::iterator it1, Ex::iterator it2, bool ignore_parent_rel) const
 		{
 		int tmp1, tmp2;
-		return get_composite<T>(it1,it2,tmp1,tmp2, ignore_parent_rel);
+		return get<T>(it1,it2,tmp1,tmp2, ignore_parent_rel);
 		}
 
 	template<class T>
-	const T* Properties::get_composite(Ex::iterator it1, Ex::iterator it2, int& serialnum1, int& serialnum2, bool ignore_parent_rel) const
+	const T* Properties::get(Ex::iterator it1, Ex::iterator it2, int& serialnum1, int& serialnum2, bool ignore_parent_rel) const
 		{
 		const T* ret1=0;
 		const T* ret2=0;
@@ -536,7 +494,7 @@ namespace cadabra {
 				if(inherits2) sib2=it2.begin();
 				else          sib2=it2;
 				do { // 2
-					const T* tmp=get_composite<T>((Ex::iterator)(sib1), (Ex::iterator)(sib2), serialnum1, serialnum2, ignore_parent_rel);
+					const T* tmp=get<T>((Ex::iterator)(sib1), (Ex::iterator)(sib2), serialnum1, serialnum2, ignore_parent_rel);
 					if(tmp) {
 						ret1=tmp;
 						found=true;
@@ -555,22 +513,6 @@ namespace cadabra {
 done:
 		if(!found) ret1=0;
 		return ret1;
-		}
-
-	template<class T>
-	const T* Properties::get() const
-		{
-		const T* ret=0;
-		// FIXME: hack
-		nset_t::iterator nit=name_set.insert(std::string("")).first;
-		std::pair<property_map_t::const_iterator, property_map_t::const_iterator> pit=
-		   props.equal_range(nit);
-		while(pit.first!=pit.second) {
-			ret=dynamic_cast<const T *>((*pit.first).second.second);
-			if(ret) break;
-			++pit.first;
-			}
-		return ret;
 		}
 
 	template<class T>

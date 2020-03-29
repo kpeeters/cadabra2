@@ -42,6 +42,12 @@ pattern::pattern(const Ex& o)
 
 bool pattern::match(const Properties& properties, const Ex::iterator& it, bool ignore_parent_rel, bool ignore_properties) const
 	{
+	Ex_comparator comp(properties);
+	return match_ext(properties, it, comp, ignore_parent_rel, ignore_properties);
+	}
+
+bool pattern::match_ext(const Properties& properties, const Ex::iterator& it, Ex_comparator& comp, bool ignore_parent_rel, bool ignore_properties) const
+	{
 	// Special case for range wildcards.
 	// FIXME: move this to Compare.cc (see the FIXME there)
 
@@ -101,7 +107,6 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 #ifdef DEBUG
 	std::cerr << "vvvvvvv " << ignore_properties << std::endl;
 #endif
-	Ex_comparator comp(properties);
 	Ex_comparator::match_t res=
 		comp.equal_subtree(obj.begin(), it,
 								 ignore_properties?Ex_comparator::useprops_t::never:Ex_comparator::useprops_t::not_at_top,
@@ -633,3 +638,14 @@ std::string Properties::master_insert(Ex proptree, property *thepropbase)
 		}
 	return str.str();
 	}
+
+bool Properties::check_label(const property* p, const std::string& label) const
+	{
+	return true;
+	}
+
+bool Properties::check_label(const labelled_property* p, const std::string& label) const
+	{
+	return (p->label==label || p->label=="all");
+	}
+	

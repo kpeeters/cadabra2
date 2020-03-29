@@ -282,8 +282,8 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 		auto free_index_set_contains = [&](const index_map_t& one, const index_map_t& two) {
 			index_map_t::const_iterator i1=one.begin();
 			while(i1!=one.end()) {
-				const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(i1->second, true);
-				const Symbol     *smb=kernel.properties.get_composite<Symbol>(i1->second, true);
+				const Coordinate *cdn=kernel.properties.get<Coordinate>(i1->second, true);
+				const Symbol     *smb=kernel.properties.get<Symbol>(i1->second, true);
 				// Integer, coordinate or symbol indices, or pattern objects, or '\sum' nodes, are always ok.
 				if(i1->second->is_integer()==false && !cdn && !smb && !i1->second->is_name_wildcard() && !i1->second->is_object_wildcard()
 				      && !(*i1->second->name=="\\sum")) {

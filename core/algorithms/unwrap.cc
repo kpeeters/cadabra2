@@ -194,7 +194,7 @@ Algorithm::result_t unwrap::apply(iterator& it)
 				// Then figure out whether there is implicit dependence on the operator.
 				// or on the coordinate.
 				if(move_out) {
-					const DependsBase *dep=kernel.properties.get_composite<DependsBase>(factor);
+					const DependsBase *dep=kernel.properties.get<DependsBase>(factor);
 					if(dep!=0) {
 #ifdef DEBUG
 						std::cerr << *factor->name << " acted on by " << *old_it->name << "; depends" << std::endl;

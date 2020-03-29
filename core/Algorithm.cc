@@ -939,7 +939,7 @@ bool Algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 				const Derivative *der=pr.get<Derivative>(walk);
 				if(der) {
 					if(tr.is_valid(check_dependence) ) {
-						const DependsBase *dep = pr.get_composite<DependsBase>(check_dependence);
+						const DependsBase *dep = pr.get<DependsBase>(check_dependence);
 						if(dep) {
 							Ex deps=dep->dependencies(kernel, check_dependence);
 							sibling_iterator depobjs=deps.begin(deps.begin());

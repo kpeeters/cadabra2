@@ -49,7 +49,7 @@ bool canonicalise::remove_traceless_traces(iterator& it)
 	// Remove any traces of traceless tensors (this is best done early).
 	sibling_iterator facit=tr.begin(it);
 	while(facit!=tr.end(it)) {
-		const Traceless *trl=kernel.properties.get_composite<Traceless>(facit);
+		const Traceless *trl=kernel.properties.get<Traceless>(facit);
 		if(trl) {
 			unsigned int ihits=0;
 			tree_exact_less_mod_prel_obj comp(&kernel.properties);
@@ -82,7 +82,7 @@ bool canonicalise::remove_traceless_traces(iterator& it)
 			const Trace *trace=kernel.properties.get<Trace>(parent);
 			if(trace) {
 				int tmp;
-				auto impi=kernel.properties.get_with_pattern<ImplicitIndex>(facit, tmp);
+				auto impi=kernel.properties.get_with_pattern<ImplicitIndex>(facit, tmp, "");
 				if(impi.first->explicit_form.size()>0) {
 					// Does the explicit form have two more indices of the right type?
 					Ex::iterator eform=impi.first->explicit_form.begin();
@@ -110,7 +110,7 @@ bool canonicalise::remove_vanishing_numericals(iterator& it)
 	// Remove Diagonal objects with numerical indices which are not all the same.
 	sibling_iterator facit=tr.begin(it);
 	while(facit!=tr.end(it)) {
-		const Diagonal *dgl=kernel.properties.get_composite<Diagonal>(facit);
+		const Diagonal *dgl=kernel.properties.get<Diagonal>(facit);
 		if(dgl) {
 			index_iterator indit=begin_index(facit);
 			if(indit->is_rational()) {
@@ -386,7 +386,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		sibling_iterator facit=tr.begin(it);
 		int curr_pos=0;
 		while(facit!=tr.end(it)) {
-			const TableauBase *tba=kernel.properties.get_composite<TableauBase>(facit);
+			const TableauBase *tba=kernel.properties.get<TableauBase>(facit);
 			// std::cerr << Ex(facit) << " has tableaubase " << tba << std::endl;
 			if(tba) {
 				unsigned int num_ind=number_of_indices(facit);

@@ -60,9 +60,9 @@ bool expand::can_apply(iterator it)
 
 			while(sib!=tr.end(prod)) {
 				int tmp;
-				auto impi=kernel.properties.get_with_pattern<ImplicitIndex>(sib, tmp);
+				auto impi=kernel.properties.get_with_pattern<ImplicitIndex>(sib, tmp, "");
 				if(impi.first) {
-					const Matrix *mat=kernel.properties.get_composite<Matrix>(sib);
+					const Matrix *mat=kernel.properties.get<Matrix>(sib);
 					if(mat) {
 						if(index_open==0) {
 							mx_first=sib;
@@ -110,7 +110,7 @@ bool expand::can_apply(iterator it)
 
 			if(check_pos && mx_first!=tr.end()) {
 				int tmp;
-				auto impi=kernel.properties.get_with_pattern<ImplicitIndex>(mx_first, tmp);
+				auto impi=kernel.properties.get_with_pattern<ImplicitIndex>(mx_first, tmp, "");
 				Ex::iterator eform=impi.first->explicit_form.begin();
 				Ex::iterator iform=impi.second->obj.begin();
 				index_iterator ch1=nth_implicit_index(eform, iform, 1);
@@ -121,7 +121,7 @@ bool expand::can_apply(iterator it)
 				}
 			if(check_pos && mx_last!=tr.end()) {
 				int tmp;
-				auto impi=kernel.properties.get_with_pattern<ImplicitIndex>(mx_last, tmp);
+				auto impi=kernel.properties.get_with_pattern<ImplicitIndex>(mx_last, tmp, "");
 				Ex::iterator eform=impi.first->explicit_form.begin();
 				Ex::iterator iform=impi.second->obj.begin();
 				index_iterator ch1=nth_implicit_index(eform, iform, 2);
@@ -154,10 +154,10 @@ Algorithm::result_t expand::apply(iterator& it)
 	Ex dum;
 	while(sib!=tr.end(prod)) {
 		int tmp;
-		auto impi=kernel.properties.get_with_pattern<ImplicitIndex>(sib, tmp);
+		auto impi=kernel.properties.get_with_pattern<ImplicitIndex>(sib, tmp, "");
 		sib->fl.bracket=str_node::b_none;
 		if(impi.first) {
-			const Matrix *mat=kernel.properties.get_composite<Matrix>(sib);
+			const Matrix *mat=kernel.properties.get<Matrix>(sib);
 			sibling_iterator origobj=sib;
 
 			if(tr.number_of_children(sib)>0)

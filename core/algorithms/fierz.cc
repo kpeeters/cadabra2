@@ -33,11 +33,11 @@ bool fierz::can_apply(iterator it)
 	sibling_iterator sib=tr.begin(it);
 	const Integer *indit=0;
 	while(sib!=tr.end(it)) {
-		const DiracBar *db=kernel.properties.get_composite<DiracBar>(sib);
+		const DiracBar *db=kernel.properties.get<DiracBar>(sib);
 		if(db) {
 			DEBUG( std::cerr << "found db" << sib << std::endl; );
 			spin1=sib;
-			prop1=kernel.properties.get_composite<Spinor>(spin1);
+			prop1=kernel.properties.get<Spinor>(spin1);
 			sibling_iterator ch=sib;
 			const GammaMatrix *gmnxt=0;
 			const Spinor      *spnxt=0;
@@ -45,15 +45,15 @@ bool fierz::can_apply(iterator it)
 			do {
 				++ch;
 				if(ch==tr.end(it)) break;
-				gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
-				spnxt=kernel.properties.get_composite<Spinor>(ch);
+				gmnxt=kernel.properties.get<GammaMatrix>(ch);
+				spnxt=kernel.properties.get<Spinor>(ch);
 				}
 			while(gmnxt==0 && spnxt==0);
 			if(gmnxt) {
 				DEBUG( std::cerr << "found gamma " << ch << std::endl; );
 				// FIXME: should also work when there is a unit matrix in between.
-				indit=kernel.properties.get_composite<Integer>(ch.begin(), true);
-				indprop=kernel.properties.get_composite<Indices>(ch.begin(), true);
+				indit=kernel.properties.get<Integer>(ch.begin(), true);
+				indprop=kernel.properties.get<Indices>(ch.begin(), true);
 				if(!indit || !indprop) return false;
 				dim=to_long(*indit->difference.begin()->multiplier);
 				if(dim==1)
@@ -64,8 +64,8 @@ bool fierz::can_apply(iterator it)
 				do {
 					++ch;
 					if(ch==tr.end(it)) break;
-					spnxt=kernel.properties.get_composite<Spinor>(ch);
-					gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
+					spnxt=kernel.properties.get<Spinor>(ch);
+					gmnxt=kernel.properties.get<GammaMatrix>(ch);
 					}
 				while(gmnxt==0 && spnxt==0);
 				prop2=spnxt;
@@ -76,11 +76,11 @@ bool fierz::can_apply(iterator it)
 					do {
 						++ch;
 						if(ch==tr.end(it)) break;
-						spnxt=kernel.properties.get_composite<Spinor>(ch);
-						gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
+						spnxt=kernel.properties.get<Spinor>(ch);
+						gmnxt=kernel.properties.get<GammaMatrix>(ch);
 						}
 					while(gmnxt==0 && spnxt==0);
-					db=kernel.properties.get_composite<DiracBar>(ch);
+					db=kernel.properties.get<DiracBar>(ch);
 					if(db) {
 						DEBUG( std::cerr << "found db2" << std::endl; );
 						spin3=ch;
@@ -89,8 +89,8 @@ bool fierz::can_apply(iterator it)
 						do {
 							++ch;
 							if(ch==tr.end(it)) break;
-							spnxt=kernel.properties.get_composite<Spinor>(ch);
-							gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
+							spnxt=kernel.properties.get<Spinor>(ch);
+							gmnxt=kernel.properties.get<GammaMatrix>(ch);
 							}
 						while(gmnxt==0 && spnxt==0);
 						if(gmnxt) {
@@ -100,8 +100,8 @@ bool fierz::can_apply(iterator it)
 							do {
 								++ch;
 								if(ch==tr.end(it)) break;
-								spnxt=kernel.properties.get_composite<Spinor>(ch);
-								gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
+								spnxt=kernel.properties.get<Spinor>(ch);
+								gmnxt=kernel.properties.get<GammaMatrix>(ch);
 								}
 							while(gmnxt==0 && spnxt==0);
 							prop4=spnxt;

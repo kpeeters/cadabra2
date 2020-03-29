@@ -25,7 +25,7 @@ multiplier_t Derivative::value(const Kernel& kernel, Ex::iterator it, const std:
 
 	Ex::sibling_iterator sib=it.begin();
 	while(sib!=it.end()) {
-		const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
+		const WeightBase *gnb=properties.get<WeightBase>(sib, forcedlabel);
 		if(gnb) {
 			multiplier_t tmp=gnb->value(kernel, sib, forcedlabel);
 			if(sib->is_index()) ret-=tmp;

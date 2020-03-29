@@ -155,7 +155,7 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 void explicit_indices::handle_factor(sibling_iterator& factor, bool )
 	{
 	int tmp;
-	auto ii = kernel.properties.get_with_pattern<ImplicitIndex>(factor, tmp);
+	auto ii = kernel.properties.get_with_pattern<ImplicitIndex>(factor, tmp, "");
 	if(ii.first) {
 		// Determine indices on this factor. Use a copy because we
 		// need this object later.

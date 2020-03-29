@@ -1161,13 +1161,13 @@ namespace cadabra {
 	int Ex_comparator::can_swap_components(Ex::iterator one, Ex::iterator two, match_t subtree_comparison)
 		{
 		int tmp;
-		auto impi=properties.get_with_pattern<ImplicitIndex>(one, tmp);
+		auto impi=properties.get_with_pattern<ImplicitIndex>(one, tmp, "");
 		if(impi.first) {
 			if(impi.first->explicit_form.size()>0) {
 				one=impi.first->explicit_form.begin();
 				}
 			}
-		impi=properties.get_with_pattern<ImplicitIndex>(two, tmp);
+		impi=properties.get_with_pattern<ImplicitIndex>(two, tmp, "");
 		if(impi.first) {
 			if(impi.first->explicit_form.size()>0) {
 				two=impi.first->explicit_form.begin();
@@ -1247,8 +1247,8 @@ namespace cadabra {
 
 		// Find a SortOrder property which contains both one and two.
 		int num1, num2;
-		const SortOrder *so1=properties.get_composite<SortOrder>(one,num1);
-		const SortOrder *so2=properties.get_composite<SortOrder>(two,num2);
+		const SortOrder *so1=properties.get<SortOrder>(one,num1);
+		const SortOrder *so2=properties.get<SortOrder>(two,num2);
 
 		if(so1==0 || so2==0 || so1!=so2) {
 			// std::cerr << "No sort order between " << Ex(one) << " and " << Ex(two);
@@ -1275,8 +1275,8 @@ namespace cadabra {
 		int sign=1;
 		Ex::sibling_iterator sib=prod.begin();
 		while(sib!=prod.end()) {
-			const Indices *ind1=properties.get_composite<Indices>(sib, true);
-			const Indices *ind2=properties.get_composite<Indices>(obj, true);
+			const Indices *ind1=properties.get<Indices>(sib, true);
+			const Indices *ind2=properties.get<Indices>(obj, true);
 			if(! (ind1!=0 && ind2!=0) ) { // If both objects are actually real indices,
 				// then we do not include their commutativity property
 				// in the sign. This is because the routines that use
@@ -1334,7 +1334,7 @@ namespace cadabra {
 		int sign=1;
 		Ex::sibling_iterator sib=prod.begin();
 		while(sib!=prod.end()) {
-			//		const Indices *ind=kernel.properties->get_composite<Indices>(sib);
+			//		const Indices *ind=kernel.properties->get<Indices>(sib);
 			//		if(ind==0) {
 			sign*=can_swap_sum_obj(sum, sib, ignore_implicit_indices);
 			if(sign==0) break;
@@ -1370,11 +1370,11 @@ namespace cadabra {
 			index_iterator it2=index_iterator::begin(properties, obj2);
 			while(it2!=index_iterator::end(properties, obj2)) {
 				// Only deal with real indices here, i.e. those carrying an Indices property.
-				const Indices *ind1=properties.get_composite<Indices>(it1, true);
-				const Indices *ind2=properties.get_composite<Indices>(it2, true);
+				const Indices *ind1=properties.get<Indices>(it1, true);
+				const Indices *ind2=properties.get<Indices>(it2, true);
 				if(ind1!=0 && ind2!=0) {
-					const CommutingBehaviour *com1 =properties.get_composite<CommutingBehaviour>(it1, true);
-					const CommutingBehaviour *com2 =properties.get_composite<CommutingBehaviour>(it2, true);
+					const CommutingBehaviour *com1 =properties.get<CommutingBehaviour>(it1, true);
+					const CommutingBehaviour *com2 =properties.get<CommutingBehaviour>(it2, true);
 
 					if(com1!=0  &&  com1 == com2)
 						sign *= com1->sign();
@@ -1422,7 +1422,7 @@ namespace cadabra {
 		// std::cerr << "can_swap " << *one->name << " " << *two->name << " " << ignore_implicit_indices << std::endl;
 
 		// Explicitly declared commutation behaviour goes first.
-		const CommutingBehaviour *com = properties.get_composite<CommutingBehaviour>(one, two, true);
+		const CommutingBehaviour *com = properties.get<CommutingBehaviour>(one, two, true);
 		if(com)
 			return com->sign();
 
@@ -1432,8 +1432,8 @@ namespace cadabra {
 		// exception is when these indices are explicitly stated to be in
 		// different sets.
 
-		const ImplicitIndex *ii1 = properties.get_composite<ImplicitIndex>(one);
-		const ImplicitIndex *ii2 = properties.get_composite<ImplicitIndex>(two);
+		const ImplicitIndex *ii1 = properties.get<ImplicitIndex>(one);
+		const ImplicitIndex *ii2 = properties.get<ImplicitIndex>(two);
 		if(!ignore_implicit_indices) {
 			if(ii1) {
 				if(ii1->explicit_form.size()==0) {
@@ -1477,8 +1477,8 @@ namespace cadabra {
 			}
 
 		// Do we need to use Self* properties?
-		const SelfCommutingBehaviour *sc1 =properties.get_composite<SelfCommutingBehaviour>(one, true);
-		const SelfCommutingBehaviour *sc2 =properties.get_composite<SelfCommutingBehaviour>(two, true);
+		const SelfCommutingBehaviour *sc1 =properties.get<SelfCommutingBehaviour>(one, true);
+		const SelfCommutingBehaviour *sc2 =properties.get<SelfCommutingBehaviour>(two, true);
 		if( (sc1!=0 && sc1==sc2) )
 			return sc1->sign();
 
@@ -1494,10 +1494,10 @@ namespace cadabra {
 		// take into account all commutativity properties of explict with implicit indices,
 		// as well as hard-specified commutativity of factors.
 
-		const CommutingAsProduct *comap1 = properties.get_composite<CommutingAsProduct>(one);
-		const CommutingAsProduct *comap2 = properties.get_composite<CommutingAsProduct>(two);
-		const CommutingAsSum     *comas1 = properties.get_composite<CommutingAsSum>(one);
-		const CommutingAsSum     *comas2 = properties.get_composite<CommutingAsSum>(two);
+		const CommutingAsProduct *comap1 = properties.get<CommutingAsProduct>(one);
+		const CommutingAsProduct *comap2 = properties.get<CommutingAsProduct>(two);
+		const CommutingAsSum     *comas1 = properties.get<CommutingAsSum>(one);
+		const CommutingAsSum     *comas2 = properties.get<CommutingAsSum>(two);
 
 		if(comap1 && comap2) return tmpsign*can_swap_prod_prod(one,two,ignore_implicit_indices);
 		if(comap1 && comas2) return tmpsign*can_swap_prod_sum(one,two,ignore_implicit_indices);
