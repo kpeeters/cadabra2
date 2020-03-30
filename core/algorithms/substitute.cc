@@ -6,7 +6,7 @@
 #include "properties/Indices.hh"
 
 #define DBG_MACRO_NO_WARNING 
-#define DBG_MACRO_DISABLE 
+#define DBG_MACRO_DISABLE
 #include "dbg.h"
 
 // #define DEBUG 1
@@ -144,7 +144,9 @@ bool substitute::can_apply(iterator st)
 
 Algorithm::result_t substitute::apply(iterator& st)
 	{
-	// std::cerr << "substitute::apply at " << Ex(st) << std::endl;
+#ifdef DEBUG
+	std::cerr << "substitute::apply at " << Ex(st) << std::endl;
+#endif
 
 //	dbg(comparator.replacement_map);
 //	for(auto& rule: comparator.replacement_map)
@@ -196,7 +198,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 		//std::cerr << "consider element of repl " << Ex(it) << std::endl;
 
 		if(loc!=comparator.replacement_map.end()) { // name wildcards
-			//std::cerr << "rule: " << Ex(loc->first) << " -> " << Ex(loc->second) << std::endl;
+#ifdef DEBUG
+			std::cerr << "wildcard replaced: " << loc->first << " -> " << loc->second << std::endl;
+#endif
 
 			// When a replacement is made here, and the index is actually
 			// a dummy in the replacement, we screw up the ind_dummy
@@ -236,10 +240,16 @@ Algorithm::result_t substitute::apply(iterator& st)
 			//std::cerr << "srule : " << Ex(it) << std::endl;
 			multiplier_t tmpmult=*it->multiplier; // remember target multiplier
 			iterator tmp= tr.insert_subtree(it, (*sloc).second);
+#ifdef DEBUG
+			std::cerr << "subtree replaced: " << repl << std::endl;
+#endif
 			tmp->fl.bracket=it->fl.bracket;
 			tmp->fl.parent_rel=it->fl.parent_rel; // ok?
 			it=tr.erase(it);
 			multiply(tmp->multiplier, tmpmult);
+#ifdef DEBUG
+			std::cerr << "subtree replaced 2: " << repl << std::endl;
+#endif
 			subtree_insertion_points.push_back(tmp);
 			index_map_t ind_subtree_free, ind_subtree_dummy;
 			// FIXME: as in the name wildcard case above, we only need these
@@ -259,6 +269,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// not replaced here, but rather in the next step.
 	// std::cerr << ind_dummy.size() << std::endl;
 	if(ind_dummy.size()>0) {
+#ifdef DEBUG
+		std::cerr << "avoid dummy clashes" << std::endl;
+#endif
 		index_map_t must_be_empty;
 		determine_intersection(ind_forced, ind_dummy, must_be_empty);
 		index_map_t::iterator indit=must_be_empty.begin();
@@ -287,14 +300,15 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// After all replacements have been done, we need to cleanup the
 	// replacement tree.
 
-	dbg(repl);
-
+#ifdef DEBUG
+	std::cerr << repl << std::endl;
+#endif
+	
 	cleanup_dispatch_deep(kernel, repl);
-	// std::cerr << "repl after: \n" << repl << std::endl;
 
-	// Remove the wrapping "\expression" node, not needed anymore.
-	//	repl.flatten(repl.begin());
-	//	repl.erase(repl.begin());
+#ifdef DEBUG
+	std::cerr << "after cleanup:\n" << repl << std::endl;
+#endif
 
 	repl.begin()->fl.bracket=st->fl.bracket;
 	bool rename_replacement_dummies_called=false;
@@ -315,7 +329,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 			rename_replacement_dummies(newtr); // do NOW, otherwise the replacement cannot be isolated anymore
 			rename_replacement_dummies_called=true;
 			}
-		if(*rhs->name=="\\prod") {
+		if(*rhs->name=="\\prod" && *newtr->name=="\\prod") {
 			tr.flatten(newtr);
 			tr.erase(newtr);
 			}
@@ -342,6 +356,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 
 		}
 	else {
+#ifdef DEBUG
+		std::cerr << "move " << repl << " on top of " << st << std::endl;
+#endif
 		multiply(repl.begin()->multiplier, *st->multiplier);
 		auto keep_parent_rel=st->fl.parent_rel;
 		st=tr.move_ontop(st, repl.begin()); // no need to keep the original repl tree
@@ -367,6 +384,10 @@ Algorithm::result_t substitute::apply(iterator& st)
 	//	// things are taken care of by the algorithm class itself).
 	//	// FIXME: still needed?
 	//	cleanup_dispatch(kernel, tr, st);
+
+#ifdef DEBUG
+	std::cerr << tr << std::endl;
+#endif
 
 	dbg(tr.begin());
 	dbg(subtree_insertion_points.size());

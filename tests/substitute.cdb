@@ -497,7 +497,26 @@ def test124():
     print("Test 124 passed")
 
 test124()
-    
+
+
+ex:=T_{A};
+substitute(ex, $T{A?} = Q$);
+try:
+    tst:= T_{A} - @(ex);
+    assert(tst==0)
+    print("Test 125a passed")
+except:
+    assert(False)
+
+ex:=T{A};
+substitute(ex, $T_{A?} = Q$);
+try:
+    tst:= T{A} - @(ex);
+    assert(tst==0)
+    print("Test 125b passed")
+except:
+    assert(False)
+
     
 # \hat{R}_{a b c d}
 # R(x,y)

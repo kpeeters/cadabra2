@@ -110,6 +110,10 @@ namespace cadabra {
 		if(exp==tr.end(it)) return false;
 
 		if(*arg->name=="1") {
+			if(*arg->multiplier==0) { // 0**anything = 0
+				zero(it->multiplier);
+				return true;
+				}
 			if(*arg->multiplier==1) { // 1**anything = 1
 				one(it->multiplier);
 				tr.erase_children(it);

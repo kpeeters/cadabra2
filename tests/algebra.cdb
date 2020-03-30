@@ -579,9 +579,20 @@ test27()
 
 def test28():
     ex:=k^{a}n_{c a}+2**{1/2} k_{c} 2**{1/2};
-    collect_factors(_);
+    collect_factors(_)
     tst:=k^{a}n_{c a}+2**{1/2} k_{c} 2**{1/2} - @(ex);
     assert(tst==0)
     print("Test 28 passed")
 
 test28()
+
+def test29():
+    __cdbkernel__=create_scope()
+    {a,ad, ket{#}}::NonCommuting;
+    ex:= ad ad ad ket(0);
+    substitute(ex, $ad ket(n??) = \sqrt{n?? +1} ket(n??+1) $)
+    tst:= ad ad ket(1) - @(ex);
+    assert(tst==0)
+    print("Test 29 passed")
+
+test29()

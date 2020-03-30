@@ -293,6 +293,11 @@ namespace cadabra {
 																					const std::string& label,
 																					bool doserial=true, bool ignore_parent_rel=false) const;
 
+			template<class T>
+			std::pair<const T*, const pattern *> get_with_pattern_ext(Ex::iterator, Ex_comparator&, int& serialnum,
+																					const std::string& label,
+																					bool doserial=true, bool ignore_parent_rel=false) const;
+
 			// Get the outermost node which has the given property attached, i.e. go down through
 			// all (if any) nodes which have just inherited the property.
 			template<class T> Ex::iterator head(Ex::iterator, bool ignore_parent_rel=false) const;
@@ -316,7 +321,8 @@ namespace cadabra {
 			bool has(const property *, Ex::iterator);
 			// Find serial number of a pattern in a given list property
 			int  serial_number(const property *, const pattern *) const;
-
+			Ex_comparator *create_comparator() const;
+			void           destroy_comparator(Ex_comparator *) const;			
 		};
 
 	template<class T>
@@ -336,6 +342,18 @@ namespace cadabra {
 	template<class T>
 	std::pair<const T*, const pattern *> Properties::get_with_pattern(Ex::iterator it, int& serialnum, const std::string& label,
 																							bool doserial, bool ignore_parent_rel) const
+		{
+		Ex_comparator *compptr = create_comparator();
+		// FIXME: catch and rethrow all exceptions so we do not leak memory
+		auto ret = get_with_pattern_ext<T>(it, *compptr, serialnum, label, doserial, ignore_parent_rel);
+		destroy_comparator(compptr);
+		return ret;
+		}
+
+	template<class T>
+	std::pair<const T*, const pattern *> Properties::get_with_pattern_ext(Ex::iterator it, Ex_comparator& comp,
+																								 int& serialnum, const std::string& label,
+																								 bool doserial, bool ignore_parent_rel) const
 		{
 		std::pair<const T*, const pattern *> ret;
 		ret.first=0;
@@ -364,24 +382,13 @@ namespace cadabra {
 					// First check property type; a dynamic cast is much faster than a pattern match.
 					ret.first=dynamic_cast<const T *>((*walk).second.second);
 					if(ret.first) {
-						if((*walk).second.first->match(*this, it, ignore_parent_rel, ignore_properties)) {
+						if((*walk).second.first->match_ext(*this, it, comp, ignore_parent_rel, ignore_properties)) {
 							ret.second=(*walk).second.first;
 							if(!check_label(ret.first, label)) 
 								ret.first=0;
 							else {
-								if(doserial) {
+								if(doserial) 
 									serialnum=serial_number( (*walk).second.second, (*walk).second.first );
-//									serialnum = serial_number(pats, (*walk).second.second);
-//									std::pair<pattern_map_t::const_iterator, pattern_map_t::const_iterator>
-//										pm=pats.equal_range((*walk).second.second);
-//									serialnum=0;
-//									while(pm.first!=pm.second) {
-//										if((*pm.first).second==(*walk).second.first)
-//											break;
-//										++serialnum;
-//										++pm.first;
-//										}
-									}
 								break;
 								}
 							}
@@ -398,10 +405,7 @@ namespace cadabra {
 				//			std::cerr << "not yet found, switching to wildcards" << std::endl;
 				wildcards=true;
 				}
-			else {
-				//			std::cout << "all searches done" << std::endl;
-				break;
-				}
+			else break;
 			}
 
 		// If no property was found, figure out whether a property is inherited from a child node.

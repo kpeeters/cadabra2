@@ -107,6 +107,7 @@ bool pattern::match_ext(const Properties& properties, const Ex::iterator& it, Ex
 #ifdef DEBUG
 	std::cerr << "vvvvvvv " << ignore_properties << std::endl;
 #endif
+	comp.clear();
 	Ex_comparator::match_t res=
 		comp.equal_subtree(obj.begin(), it,
 								 ignore_properties?Ex_comparator::useprops_t::never:Ex_comparator::useprops_t::not_at_top,
@@ -649,3 +650,12 @@ bool Properties::check_label(const labelled_property* p, const std::string& labe
 	return (p->label==label || p->label=="all");
 	}
 	
+Ex_comparator *Properties::create_comparator() const
+	{
+	return new Ex_comparator(*this);
+	}
+
+void Properties::destroy_comparator(Ex_comparator *c) const
+	{
+	delete c;
+	}

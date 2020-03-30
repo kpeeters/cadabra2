@@ -17,8 +17,7 @@ namespace cadabra {
 			/// (as e.g. in `a{b??}::LaTeXForm("| b?? \rangle")`).
 			std::string latex_form() const;
 			
-		private:
-			std::string latex_;
+			std::vector<Ex> latex;
 		};
 
 	}

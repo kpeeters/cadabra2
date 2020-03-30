@@ -3,6 +3,7 @@
 #include "Symbols.hh"
 #include "DisplayTeX.hh"
 #include "Algorithm.hh"
+#include "algorithms/substitute.hh"
 #include "properties/LaTeXForm.hh"
 #include "properties/Derivative.hh"
 #include "properties/Accent.hh"
@@ -127,7 +128,10 @@ void DisplayTeX::print_other(std::ostream& str, Ex::iterator it)
 		return;
 		}
 
-	const LaTeXForm *lf=kernel.properties.get<LaTeXForm>(it, true);  // get property, ignore parent rel!
+	Ex_comparator comp(kernel.properties);
+	int num;
+	auto prop=kernel.properties.get_with_pattern_ext<LaTeXForm>(it, comp, num, "", false, true);  // get property, ignore parent rel!
+	const LaTeXForm *lf=prop.first;
 	bool needs_extra_brackets=false;
 	const Accent *ac=kernel.properties.get<Accent>(it);
 	if(!ac && extra_brackets_for_symbols) { // accents should never get additional curly brackets, {\bar}{g} does not print.
@@ -140,13 +144,45 @@ void DisplayTeX::print_other(std::ostream& str, Ex::iterator it)
 		}
 
 	if(needs_extra_brackets) str << "{"; // to prevent double sup/sub script errors
-	if(lf) str << lf->latex_form();
-	else   str << texify(*it->name);
-	if(needs_extra_brackets) str << "}";
-	//	else str << *it->name;
+	if(lf) {
+		std::cerr << "pattern is " << prop.second->obj << std::endl;
 
-	print_children(str, it);
+		// FIXME: can be done much simpler. Use the pattern as the lhs, and
+		// one-by-one the elements in latex as the rhs. So
+		//     ket(A??) -> "|"
+		//     ket(A??) -> A??
+		//     ...
+		// Then apply this to the original expression to be printed, e.g. ket(1).
 
+		for(auto lt: lf->latex) {
+			auto s = *(lt.begin()->name);
+			if(s[0]=='\"') {
+				s=s.substr(1,s.size()-2);
+				str << s;
+				if(lf->latex.size()==1)
+					print_children(str, it);
+				}
+			else {
+				Ex replacement("\\arrow");
+				replacement.append_child(replacement.begin(), prop.second->obj.begin());
+				replacement.append_child(replacement.begin(), lt.begin());
+				Ex tmp(it);
+				substitute subs(kernel, tmp, replacement);
+				auto lti=tmp.begin();
+				if(subs.can_apply(lti))
+					subs.apply(lti);
+				std::cerr << tmp << std::endl;
+				dispatch(str, tmp.begin());
+				}
+			}
+		}
+	else {
+		str << texify(*it->name);
+		print_children(str, it);
+		}
+
+	if(needs_extra_brackets)
+		str << "}";
 
 	if(needs_brackets(it))
 		str << "\\right)";

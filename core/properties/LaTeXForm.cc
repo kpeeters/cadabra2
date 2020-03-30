@@ -16,16 +16,16 @@ std::string LaTeXForm::unnamed_argument() const
 bool LaTeXForm::parse(Kernel&, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator kv=keyvals.find("latex");
-	if(kv!=keyvals.end()) {
-		latex_=*(kv->second->name);
-		}
+	for(const auto& kv: keyvals)
+		latex.push_back(kv.second);
+
 	// Strip quotes. FIXME: handle errors.
-	latex_=latex_.substr(1,latex_.size()-2);
+//	latex_=latex_.substr(1,latex_.size()-2);
 	return true;
 	}
 
 std::string LaTeXForm::latex_form() const
 	{
-	return latex_;
+	return *(latex.begin()->begin()->name); // FIXME: deprecated
 	}
 

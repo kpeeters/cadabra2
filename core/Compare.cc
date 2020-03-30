@@ -321,11 +321,13 @@ namespace cadabra {
 
 		while(i1!=i1end && i2!=i2end) {
 			useprops_t up = use_props;
+			auto dist = Ex::distance(rememberi1, i1, depth_predicate);
 			if(use_props==useprops_t::not_at_top) {
-				if(Ex::distance(rememberi1, i1, depth_predicate)!=0) up=useprops_t::always;
-				else                                                 up=useprops_t::never;
+				if(dist!=0) up=useprops_t::always;
+				else        up=useprops_t::never;
 				}
-			match_t mm=compare(i1, i2, first_call, up, ignore_parent_rel);
+			bool    ip = ignore_parent_rel && (dist==0);
+			match_t mm=compare(i1, i2, first_call, up, ip);
 			//		DEBUG( std::cerr << "COMPARE " << *i1->name << ", " << *i2->name << " = " << static_cast<int>(mm) << std::endl; )
 			first_call=false;
 			switch(mm) {
