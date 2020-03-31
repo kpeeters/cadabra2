@@ -1,6 +1,6 @@
 package:
   name: "cadabra2-jupyter-kernel"
-  version: "2.2.7"
+  version: "2.2.9"
 
 source:
   path: ../  
@@ -9,6 +9,8 @@ requirements:
   build:
     - python
     - setuptools
+    - boost 1.67.*	 
+    - libboost 1.67.*
     - cmake
     - pkg-config
     - glibmm
@@ -25,6 +27,20 @@ requirements:
 
   run:
     - python
+    - jupyter
+    - libstdcxx-ng
+    - libgcc-ng
+    - gmp    
+    - glibmm
+    - xeus
+    - libboost 1.67.*
+
+# outputs:
+#   - name: "cadabra2-jupyter-kernel"
+#     files:
+#       - bin/cadabra-jupyter-kernel
+#       - share/jupyter/kernels/
+#       - share/cadabra2/
 
 about:
   home: https://cadabra.science
