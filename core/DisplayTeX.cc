@@ -145,10 +145,9 @@ void DisplayTeX::print_other(std::ostream& str, Ex::iterator it)
 
 	if(needs_extra_brackets) str << "{"; // to prevent double sup/sub script errors
 	if(lf) {
-		std::cerr << "pattern is " << prop.second->obj << std::endl;
-
-		// FIXME: can be done much simpler. Use the pattern as the lhs, and
-		// one-by-one the elements in latex as the rhs. So
+		// Use the pattern as the lhs, and one-by-one the elements in
+		// latex as the rhs. So
+		//
 		//     ket(A??) -> "|"
 		//     ket(A??) -> A??
 		//     ...
@@ -171,7 +170,7 @@ void DisplayTeX::print_other(std::ostream& str, Ex::iterator it)
 				auto lti=tmp.begin();
 				if(subs.can_apply(lti))
 					subs.apply(lti);
-				std::cerr << tmp << std::endl;
+				// std::cerr << tmp << std::endl;
 				dispatch(str, tmp.begin());
 				}
 			}

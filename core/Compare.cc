@@ -310,7 +310,6 @@ namespace cadabra {
 		// Accent. We use a predicate function to take care of this.
 		auto depth_predicate = [this,use_props](const Ex::iterator& i) {
 			if(use_props!=useprops_t::not_at_top) return true;
-			DEBUG( std::cerr << "***** NOT SUPPOSED TO HAPPEN" << std::endl; );
 			const Accent *accent = properties.get<Accent>(i);
 			return (accent==0);
 		};
@@ -612,6 +611,9 @@ namespace cadabra {
 				// otherwise assume they match).
 				// If two is a rational, we have already checked that one can take this value.
 
+				if(two->is_index() && !one->is_index() && !one->is_range_wildcard())
+					return report(match_t::no_match_indexpos_greater);
+				
 				if(one->is_index()) {
 					DEBUG( std::cerr << tab() << "object one is index" << std::endl; );
 
@@ -753,6 +755,12 @@ namespace cadabra {
 			else return report(match_t::node_match);
 			}
 		else if(objectpattern) {
+			// Even for object patterns, if we do not ignore the parent rel, we need to test them.
+			if(!ignore_parent_rel)
+				if( one->fl.parent_rel != two->fl.parent_rel )
+					return report( (one->fl.parent_rel < two->fl.parent_rel)
+										?match_t::no_match_indexpos_less:match_t::no_match_indexpos_greater );
+			
 			subtree_replacement_map_t::iterator loc=subtree_replacement_map.find(one->name);
 			if(loc!=subtree_replacement_map.end()) {
 				return report(equal_subtree((*loc).second,two,use_props));

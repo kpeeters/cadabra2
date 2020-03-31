@@ -45,17 +45,20 @@ def test04():
 test04()
 
 def test05():
-ket{A??}::LaTeXForm("|", A??, "\rangle");
-ex:= a ket{n};
-res=ex._latex_();
-assert(res==r"a |n\rangle")
-print("Test 05a passed")
-Q{A??}::LaTeXForm("R");
-ex:= b Q{n};
-res=ex._latex_();
-assert(res==r"b R\left(n\right)")
-T{A??}::LaTeXForm(T_{A??});
-ex:= b T{n_{1}};
-res=ex._latex_();
-print("Test 05b passed")
+    __cdbkernel__=create_scope()
+    ket{A??}::LaTeXForm("|", A??, "\rangle");
+    ex:= a ket{n};
+    res=ex._latex_();
+    assert(res==r"a |n\rangle")
+    print("Test 05a passed")
+    Q{A??}::LaTeXForm("R");
+    ex:= b Q{n};
+    res=ex._latex_();
+    assert(res==r"b R\left(n\right)")
+    T{A??}::LaTeXForm(T_{A??});
+    ex:= b T{n_{1}};
+    res=ex._latex_();
+    assert(res==r"b T_{n_{1}}")
+    print("Test 05b passed")
     
+test05()

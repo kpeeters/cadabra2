@@ -498,25 +498,34 @@ def test124():
 
 test124()
 
-
-ex:=T_{A};
-substitute(ex, $T{A?} = Q$);
-try:
-    tst:= T_{A} - @(ex);
-    assert(tst==0)
-    print("Test 125a passed")
-except:
-    assert(False)
-
-ex:=T{A};
-substitute(ex, $T_{A?} = Q$);
-try:
-    tst:= T{A} - @(ex);
-    assert(tst==0)
-    print("Test 125b passed")
-except:
-    assert(False)
-
+def test125():
+    __cdbkernel__=create_scope()
+    ex:=T_{A};
+    substitute(ex, $T{A?} = Q$);
+    try:
+        tst:= T_{A} - @(ex);
+        assert(tst==0)
+        print("Test 125a passed")
+    except:
+        assert(False)
     
+    ex:=T{A};
+    substitute(ex, $T_{A?} = Q$);
+    try:
+        tst:= T{A} - @(ex);
+        assert(tst==0)
+        print("Test 125b passed")
+    except:
+        assert(False)
+
+test125()
+
+\del{#}::LaTeXForm("\partial").
+ex:=\del_{m}{A};
+res=ex._latex_()
+    
+ex:=A_{m}(x);
+substitute(ex, $A{#}->Q$);
+        
 # \hat{R}_{a b c d}
 # R(x,y)
