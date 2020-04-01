@@ -294,7 +294,7 @@ target_link_libraries(cadabra2 PRIVATE
 	${GMP_LIBRARIES}   
 	${Boost_LIBRARIES}
 	${PYTHON_LIBRARIES}
-	${GLIBMM3_LIBRARIES}    
+#	${GLIBMM3_LIBRARIES}    
 	)
 if(ENABLE_SYSTEM_JSONCPP)
   target_link_libraries(cadabra2 PRIVATE
@@ -334,7 +334,7 @@ if(ENABLE_SYSTEM_JSONCPP)
 	 )
   target_link_libraries(cadabra2python 
 	 ${Boost_LIBRARIES}
-    ${GLIBMM3_LIBRARIES}     
+#    ${GLIBMM3_LIBRARIES}     
 	 ${PYTHON_LIBRARIES}
 	 ${JSONCPP_LIBRARIES}
 	 )
@@ -351,7 +351,7 @@ else()
   target_link_libraries(cadabra2python 
 	 ${Boost_LIBRARIES} 
 	 ${PYTHON_LIBRARIES}
-    ${GLIBMM3_LIBRARIES}     
+#    ${GLIBMM3_LIBRARIES}     
 	 )
 endif()
 
@@ -365,7 +365,11 @@ if(NOT ENABLE_JUPYTER)
    	 ${CADABRA_LIBS_DIR}/whereami/whereami.c
        ${CADABRA_LIBS_DIR}/base64/base64.cc
    	 )
-     target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES}	${GLIBMM3_LIBRARIES} ${JSONCPP_LIBRARIES})
+     target_link_libraries(cadabra2cadabra
+       ${Boost_LIBRARIES}
+#       ${GLIBMM3_LIBRARIES}
+       ${JSONCPP_LIBRARIES}
+       )
    else()
      add_executable(cadabra2cadabra 
    	 cadabra2cadabra.cc 
@@ -375,7 +379,10 @@ if(NOT ENABLE_JUPYTER)
    	 ${CADABRA_LIBS_DIR}/whereami/whereami.c
        ${CADABRA_LIBS_DIR}/base64/base64.cc
    	 )
-     target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES}	${GLIBMM3_LIBRARIES})
+     target_link_libraries(cadabra2cadabra
+       ${Boost_LIBRARIES}
+#	    ${GLIBMM3_LIBRARIES}
+       )
    endif()
 endif()
 
