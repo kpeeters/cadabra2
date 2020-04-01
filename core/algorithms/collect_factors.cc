@@ -6,6 +6,9 @@
 #include "algorithms/collect_factors.hh"
 #include "algorithms/collect_terms.hh"
 #include "properties/Symbol.hh"
+#include "properties/Coordinate.hh"
+
+//#define DEBUG
 
 using namespace cadabra;
 
@@ -33,9 +36,10 @@ void collect_factors::fill_hash_map(iterator it)
 		bool dontcollect=false;
 		while(chsib!=chend) { // iterate over all child nodes of a factor
 			const Symbol     *smb=kernel.properties.get<Symbol>(chsib, true);
+			const Coordinate *coo=kernel.properties.get<Coordinate>(chsib, true);			
 			// std::cerr << chsib << ": " << smb << std::endl;
 			if((chsib->fl.parent_rel==str_node::p_sub || chsib->fl.parent_rel==str_node::p_super) &&
-			      chsib->is_rational()==false && smb==0) {
+			      chsib->is_rational()==false && smb==0 && coo==0) {
 				dontcollect=true;
 				break;
 				}

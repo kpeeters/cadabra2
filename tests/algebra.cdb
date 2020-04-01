@@ -596,3 +596,12 @@ def test29():
     print("Test 29 passed")
 
 test29()
+
+def test30():
+    __cdbkernel__=create_scope()
+t::Coordinate;
+a::Depends(t);
+\partial{#}::PartialDerivative;
+ex:= (\partial_{t}{a})**(-1)  (\partial_{t}{a})**3;
+collect_factors(ex);
+    

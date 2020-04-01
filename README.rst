@@ -6,7 +6,10 @@ Cadabra
 
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.2500762.svg
    :target: https://doi.org/10.5281/zenodo.2500762
-				
+
+.. image:: https://anaconda.org/kpeeters/cadabra2-jupyter-kernel/badges/installer/conda.svg
+   :target: jupyter.html
+
 *A field-theory motivated approach to computer algebra.*
 
 Kasper Peeters <info@cadabra.science>
