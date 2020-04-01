@@ -1,17 +1,32 @@
 {% extends "layout.html" %}
 
-{% block title %}Cadabra: Jupyter/IPython compatibility{% endblock %}
+{% block title %}Cadabra: use with Jupyter{% endblock %}
 
 {% block head %}{%- endblock %}
 
 {% block main %}
-<h1>Jupyter/IPython compatibility</h1>
+<h1>Cadabra in Jupyter</h1>
+<h2>General</h2>
 <p>
-  The design goal for Cadabra version 2 is to make the notebook
-  interface read and display Jupyter/IPython compliant notebooks. The
-  kernel will also be able to execute them if they contain only cells
-  with Python code.  For the time being only a (very) limited subset
-  of notebooks actually work, but the architecture is there.
+  By virtue of the Cadabra kernel for Jupyter, it is possible to use
+  Cadabra from a Jupyter notebook.
+</p>
+
+<h2>Installation</h2>
+<p>
+  To obtain the Cadabra kernel for Jupyter, you need to either install
+  it from Anaconda, or build it yourself. To install, make sure your
+  conda installation is up-to-date with:
+  <div class="output">
+    conda update -n base -c defaults conda
+  </div>
+  Then add the required channels and update/install:
+  <div class="output">
+    conda config --add channels kpeeters
+    conda config --add channels conda-forge
+    conda update --all
+    conda install cadabra2-jupyter-kernel
+  </div>
 </p>
 <br/>
 {%- endblock %}

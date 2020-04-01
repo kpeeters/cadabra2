@@ -9,11 +9,11 @@ requirements:
   build:
     - python
     - setuptools
-    - boost 1.67.*	 
-    - libboost 1.67.*
+    - boost
+    - libboost
     - cmake
-    - pkg-config
-    - glibmm
+#    - pkg-config
+#    - glibmm
     - zeromq
     - cppzmq
     - xtl
@@ -28,12 +28,12 @@ requirements:
   run:
     - python
     - jupyter
-    - libstdcxx-ng
-    - libgcc-ng
+#    - libstdcxx-ng
+#    - libgcc-ng
     - gmp    
     - glibmm
     - xeus
-    - libboost 1.67.*
+    - libboost
 
 # outputs:
 #   - name: "cadabra2-jupyter-kernel"

@@ -24,6 +24,14 @@ configure_file(
 #SET(CMAKE_FIND_LIBRARY_SUFFIXES .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
 
 # Boost.regex, Boost.system
+# if(ENABLE_JUPYTER)
+#   # To avoid issues building the Jupyter kernel on Conda, link boost
+#   # statically, to avoid version mismatch. Unfortunately, this cannot work,
+#   # as you cannot link a static library into a shared one. But fortunately,
+#   # for the Jupyter kernel, cadabra2.so only uses header-only Boost stuff,
+#   # so no linking takes place
+#   set(Boost_USE_STATIC_LIBS   ON)
+# endif()
 find_package(Boost 1.53 COMPONENTS system)
 
 # Find glibmm (for base64)

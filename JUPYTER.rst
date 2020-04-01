@@ -35,11 +35,7 @@ and if you don't think this is a problem, see e.g.
 
   https://unix.stackexchange.com/questions/414904/anaconda-qt-vs-system-qt
 
-Anyway, on to building. First ensure you have your build tools::
-
-    sudo apt install g++ make libboost-all-dev
-  
-Then activate your miniconda distribution::
+After installation, first activate your miniconda distribution::
 
     source ~/miniconda3/bin/activate
 
@@ -156,7 +152,47 @@ first install miniconda as above, and activate::
 
     source ~/miniconda3/bin/activate
 
-Install the prerequisites for building conda packages::
+Now the fun starts. Conda is an absolutely horrendous packaging
+system, which absolutely does *not* get dependencies right, but we
+will have to live with it. First, update the base conda distribution::
 
-    conda install conda-build
+    conda update -n base -c defaults conda     
+    conda update --all
 
+Then activate the `conda-forge` channel, and update to the latest of
+everything::
+
+    conda config --add channels conda-forge
+    conda update --all
+
+Do *not* use `conda config --set channel_priority strict` as that
+*will* break the build with an endless list of package conflicts.
+There are other ways to add the conda-forge channel, all subtly
+different; avoid adding `-c conda-forge` as that is just broken beyond
+belief too. Now install the prerequisites for building conda
+packages::
+
+    conda install conda-build anaconda-client \
+         xeus pkg-config glibmm
+
+That last line should not have been necessary, as build requirements
+in `meta.yaml` should have taken care of it, but alas, it does not
+work that way. It spits out various messages about packages being
+*downgraded*; don't ask, I told you the system was broken.
+
+Now change to the `conda` directory and build the package::
+
+    cd cadabra2/conda
+    export PKG_CONFIG_PATH=${HOME}/miniconda3/lib/pkgconfig
+    conda build .
+
+Again, that path setting should have been handled automatically...
+To upload::
+
+    anaconda login
+    anaconda upload /path/to/conda-package.tar.bz2
+
+
+set(Boost_USE_STATIC_LIBS   ON)
+
+https://cmake.org/cmake/help/v3.6/module/FindBoost.html
