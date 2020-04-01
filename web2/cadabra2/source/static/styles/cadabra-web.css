@@ -272,6 +272,7 @@ div.image_png {
 div.output { 
 	 padding-left: 40px;
 	 font-family: monospace;
+    white-space: pre;
 	 color: black;
 }
 code {

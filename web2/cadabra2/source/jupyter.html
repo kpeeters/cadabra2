@@ -10,40 +10,58 @@
 <h2>General</h2>
 <p>
   By virtue of the Cadabra kernel for Jupyter, it is possible to use
-  Cadabra from a Jupyter notebook.
+  Cadabra from a Jupyter notebook. This allows you to use Cadabra
+  notation in a familiar environment, and make use of
+  e.g.&nbsp;Jupyter widgets for visualisation, or other things which
+  are currently not possible in the Cadabra notebook interface.
+</p>
+<p>
+  The Cadabra Cloud service makes use of Jupyter to provide you with
+  an on-line service to run Cadabra; send an email
+  to <a href="mailto:cloud@cadabra.science?Subject=Cadabra%20Cloud%20access&Body=I%20would%20like%20to%20register%20for%20beta%20access%20to%20Cadabra%20Cloud.">cloud@cadabra.science</a>
+  if you want to get access.
 </p>
 
 <h2>Installation</h2>
 <p>
   To obtain the Cadabra kernel for Jupyter, you need to either install
-  it from Anaconda, or build it yourself. To install, make sure your
-  conda installation is up-to-date with:
-  <div class="output">
-    conda update -n base -c defaults conda
-  </div>
-  Then add the required channels and update/install:
-  <div class="output">
-    conda config --add channels kpeeters
-    conda config --add channels conda-forge
-    conda update --all
-    conda install cadabra2-jupyter-kernel
-  </div>
+  it from Anaconda,
+  or <a href="https://github.com/kpeeters/cadabra2/JUPYTER.rst">build
+  it yourself</a>. To install, make sure your conda installation is
+  up-to-date with:
 </p>
+<div class="output">  conda update -n base -c defaults conda</div>
+<p>
+  Then add the required channels and update/install:
+</p>
+<div class="output">  conda config --add channels kpeeters
+  conda config --add channels conda-forge
+  conda update --all
+  conda install cadabra2-jupyter-kernel</div>
 <p>
   If the above went well, you should now be able to start the Jupyter
   notebook as usual with
-  <div class="output">
-    jupyter notebook
-  </div>
+</p>
+<div class="output">  jupyter notebook</div>
+<p>
   The 'New' button in the top-right of the screen should then give you
   the option of creating a new notebook with a Cadabra kernel.
 </p>
-<br/>
 
 <h2>Differences with Cadabra's own notebook</h2>
 <p>
   When you use Cadabra within Jupyter, most things will work as in
-  Cadabra's own notebook interface. 
+  Cadabra's own notebook interface. The main thing to keep in mind is
+  that Jupyter notebooks (with extension <tt>.ipynb</tt>) and Cadabra
+  notebooks (with extension <tt>.cnb</tt>) are not the same file
+  format. You can read notebooks created in Jupyter into the Cadabra
+  <tt>cadabra2-gtk</tt> client, but you cannot read Cadabra notebooks
+  into Jupyter (at least not until a converter is written).
+</p>
+<p>
+  You <em>can</em>, however, make use of Cadabra packages inside the
+  Jupyter notebook, so you can still do <tt>import something</tt>
+  where <tt>something.cnb</tt> is a Cadabra notebook.
 </p>
 
 {%- endblock %}
