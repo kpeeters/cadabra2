@@ -43,6 +43,7 @@ set(CADABRA_SERVER_SRC
 	${CADABRA_CORE_DIR}/CdbPython.cc 
 	${CADABRA_CORE_DIR}/Stopwatch.cc 
 	${CADABRA_LIBS_DIR}/whereami/whereami.c
+	${CADABRA_LIBS_DIR}/base64/base64.cc
 	)
 if(NOT CONDA_FOUND)
   set(CADABRA_SERVER_SRC
@@ -82,6 +83,7 @@ set(JUPYTER_KERNEL_SRC
 	 ${CADABRA_CORE_DIR}/Stopwatch.cc 
 	 ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
 	 ${CADABRA_LIBS_DIR}/whereami/whereami.c
+	 ${CADABRA_LIBS_DIR}/base64/base64.cc
 	 )
   
 
@@ -106,6 +108,7 @@ include_directories(
 	"${CADABRA_LIBS_DIR}/websocketpp" 
 	"${CADABRA_LIBS_DIR}/internal/include"
 	"${CADABRA_LIBS_DIR}/whereami"
+	"${CADABRA_LIBS_DIR}/base64"   
 	${Boost_INCLUDE_DIRS}
 	${PYTHON_INCLUDE_DIRS}
 	${SQLITE3_INCLUDE_DIR}
@@ -167,6 +170,7 @@ if(WIN32)
 if(NOT ENABLE_JUPYTER)
   add_executable(cadabra2html 
 	 cadabra2html.cc 
+    ${CADABRA_LIBS_DIR}/base64/base64.cc
 	 )
   target_link_libraries(cadabra2html cadabra_client)
 endif()
@@ -175,6 +179,7 @@ endif()
 if(NOT ENABLE_JUPYTER)
   add_executable(cadabra2latex 
 	 cadabra2latex.cc 
+    ${CADABRA_LIBS_DIR}/base64/base64.cc
 	 )
   target_link_libraries(cadabra2latex cadabra_client)
 endif()

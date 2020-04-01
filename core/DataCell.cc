@@ -8,7 +8,8 @@
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 #include <iostream>
-#include <glibmm/base64.h>
+//#include <glibmm/base64.h>
+#include "base64.hh"
 #include <internal/uuid.h>
 
 using namespace cadabra;
@@ -566,7 +567,8 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		// Images have to be saved to disk as separate files as
 		// LaTeX has no concept of images embedded in the .tex file.
 		std::ofstream out(image_file_base+std::to_string(image_num)+".png");
-		out << Glib::Base64::decode(it->textbuf);
+//		out << Glib::Base64::decode(it->textbuf);
+		out << base64_decode(it->textbuf);
 		++image_num;
 		}
 	else {

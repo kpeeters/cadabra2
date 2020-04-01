@@ -49,6 +49,7 @@ set(cadabra_gtk_src
 	../common/lodepng.cc
 	# ../common/exec-stream.cc
 	${CADABRA_LIBS_DIR}/tiny-process-library/process.cpp
+	${CADABRA_LIBS_DIR}/base64/base64.cc
 )
 if (MSVC)
 	list(APPEND cadabra_gtk_src ${CADABRA_LIBS_DIR}/tiny-process-library/process_win.cpp)

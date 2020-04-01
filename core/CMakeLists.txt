@@ -35,7 +35,8 @@ configure_file(
 find_package(Boost 1.53 COMPONENTS system)
 
 # Find glibmm (for base64)
-find_package(GLIBMM  REQUIRED)
+# This is now disabled because we had issues on Conda, where glibmm in some
+# find_package(GLIBMM  REQUIRED)
 
 # GMPXX
 find_package(GMPXX REQUIRED)
@@ -230,6 +231,7 @@ set(LOCAL_SRC_FILES
 	YoungTab.cc
 	modules/xperm_new.cc
    ${CADABRA_LIBS_DIR}/whereami/whereami.c
+   ${CADABRA_LIBS_DIR}/base64/base64.cc  
 	${ALGORITHM_SRC_FILES}
 	${PROPERTY_SRC_FILES}
 	)
@@ -260,6 +262,7 @@ include_directories(
 	"."
 	"${CADABRA_LIBS_DIR}/internal/include"
 	"${CADABRA_LIBS_DIR}/whereami"
+	"${CADABRA_LIBS_DIR}/base64"   
 	"${CADABRA_LIBS_DIR}/dbg"   
 	${Boost_INCLUDE_DIRS}
 	)
@@ -316,6 +319,7 @@ target_compile_definitions(cadabra2-cli PRIVATE CDBPYTHON_NO_NOTEBOOK)
 add_executable(test_preprocessor 
 	test_preprocessor.cc 
 	PreProcessor.cc
+   ${CADABRA_LIBS_DIR}/base64/base64.cc  
 )
 
 # cadabra2python executable
@@ -326,6 +330,7 @@ if(ENABLE_SYSTEM_JSONCPP)
     InstallPrefix.cc    
     DataCell.cc
     ${CADABRA_LIBS_DIR}/whereami/whereami.c
+    ${CADABRA_LIBS_DIR}/base64/base64.cc
 	 )
   target_link_libraries(cadabra2python 
 	 ${Boost_LIBRARIES}
@@ -341,6 +346,7 @@ else()
     DataCell.cc
 	 ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
     ${CADABRA_LIBS_DIR}/whereami/whereami.c
+    ${CADABRA_LIBS_DIR}/base64/base64.cc
 	 )
   target_link_libraries(cadabra2python 
 	 ${Boost_LIBRARIES} 
@@ -357,6 +363,7 @@ if(NOT ENABLE_JUPYTER)
    	 DataCell.cc 
    	 InstallPrefix.cc
    	 ${CADABRA_LIBS_DIR}/whereami/whereami.c
+       ${CADABRA_LIBS_DIR}/base64/base64.cc
    	 )
      target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES}	${GLIBMM3_LIBRARIES} ${JSONCPP_LIBRARIES})
    else()
@@ -366,6 +373,7 @@ if(NOT ENABLE_JUPYTER)
    	 InstallPrefix.cc
    	 ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
    	 ${CADABRA_LIBS_DIR}/whereami/whereami.c
+       ${CADABRA_LIBS_DIR}/base64/base64.cc
    	 )
      target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES}	${GLIBMM3_LIBRARIES})
    endif()
