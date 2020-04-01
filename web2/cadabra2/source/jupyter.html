@@ -6,6 +6,7 @@
 
 {% block main %}
 <h1>Cadabra in Jupyter</h1>
+
 <h2>General</h2>
 <p>
   By virtue of the Cadabra kernel for Jupyter, it is possible to use
@@ -28,6 +29,22 @@
     conda install cadabra2-jupyter-kernel
   </div>
 </p>
+<p>
+  If the above went well, you should now be able to start the Jupyter
+  notebook as usual with
+  <div class="output">
+    jupyter notebook
+  </div>
+  The 'New' button in the top-right of the screen should then give you
+  the option of creating a new notebook with a Cadabra kernel.
+</p>
 <br/>
+
+<h2>Differences with Cadabra's own notebook</h2>
+<p>
+  When you use Cadabra within Jupyter, most things will work as in
+  Cadabra's own notebook interface. 
+</p>
+
 {%- endblock %}
 

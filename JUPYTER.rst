@@ -116,6 +116,9 @@ First install TLJH as per the instructions at::
 installer will ask for the password but you won't see that prompt,
 making it look like the installation process hangs).
 
+*New*: it should now also be possible to simply install the conda
+package for the Jupyter kernel. *New*
+
 Become root (you cannot write into `/opt/tljh` otherwise) and set the
 conda path using::
 
@@ -193,6 +196,3 @@ To upload::
     anaconda upload /path/to/conda-package.tar.bz2
 
 
-set(Boost_USE_STATIC_LIBS   ON)
-
-https://cmake.org/cmake/help/v3.6/module/FindBoost.html
