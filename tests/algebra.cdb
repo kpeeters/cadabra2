@@ -603,10 +603,29 @@ def test30():
     a::Depends(t);
     \partial{#}::PartialDerivative;
     ex:= (\partial_{t}{a})**(-1)  (\partial_{t}{a})**3;
-    collect_factors(ex);
+    collect_factors(ex)
     tst:= (\partial_{t}{a})**2 - @(ex);
     assert(tst==0)
     print("Test 30 passed")
 
 test30()
-    
+
+def test31():
+    __cdbkernel__=create_scope()
+    {A,B,C}::AntiCommuting.
+    \partial{#}::Derivative.
+    {F,G,H}::Depends(\partial{#}).
+    ex := \partial{(A F + G) C};
+    unwrap(ex)
+    tst:= \partial{(A F + G) C} - @(ex);
+    assert(tst==0)
+    print("Test 31a passed")
+    ex := \partial{(A F + B G) C};
+    unwrap(ex)
+    tst:= -C \partial{A F + B G} - @(ex);
+    assert(tst==0)
+    print("Test 31b passed")
+
+test31()
+
+

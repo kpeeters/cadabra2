@@ -272,10 +272,14 @@ Algorithm::result_t unwrap::apply(iterator& it)
 						Ex_comparator compare(kernel.properties);
 						sign=compare.can_swap(tr.begin(derarg),factor,Ex_comparator::match_t::no_match_less);
 						}
-
-					res=result_t::l_applied;
-					tr.move_before(old_it, factor);
-					multiply(it->multiplier, sign);
+					if(sign!=0) {
+						// If the sign *is* zero, it means that we are trying to move a factor
+						// through another one, but do not know how to do that. In that case,
+						// you cannot move the factor out.
+						res=result_t::l_applied;
+						tr.move_before(old_it, factor);
+						multiply(it->multiplier, sign);
+						}
 					}
 
 				factor=nxt;
