@@ -436,6 +436,13 @@ install(
 		"${PYTHON_SITE_PATH}"
 )
 
+# CLI
+install(
+  PROGRAMS 
+    "${PROJECT_SOURCE_DIR}/cadabra2" 
+  DESTINATION 
+    bin
+)
 install_directory_permissions("bin")
 
 # cadabra2python
