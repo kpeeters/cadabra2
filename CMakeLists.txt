@@ -110,15 +110,11 @@ else()
   message(STATUS "Not building the Jupyter kernel")
 endif()
 
-if(NOT ENABLE_JUPYTER)
-  option(BUILD_TESTS "Build tests" ON)
-  if (BUILD_TESTS)
-  	message(STATUS "Building tests")
-  	# Allows tests to be built in all subdirectories.
-  	enable_testing()
- endif()
-else()
-  set(BUILD_TESTS OFF)
+option(BUILD_TESTS "Build tests" ON)
+if (BUILD_TESTS)
+  message(STATUS "Building tests")
+  # Allows tests to be built in all subdirectories.
+  enable_testing()
 endif()
 
 option(ENABLE_MATHEMATICA "Enable Mathematica support" ON)

@@ -63,6 +63,9 @@ set(CADABRA_CLIENT_SRC
 	)
 
 if(ENABLE_SYSTEM_JSONCPP)
+  target_link_libraries(cadabra_client
+    ${JSONCPP_LIBRARIES}
+    )   
 else()
   list(APPEND CADABRA_SERVER_SRC
 	 ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp
@@ -167,41 +170,35 @@ if(WIN32)
  endif()
 
 # cadabra2html
-if(NOT ENABLE_JUPYTER)
-  add_executable(cadabra2html 
-	 cadabra2html.cc 
-    ${CADABRA_LIBS_DIR}/base64/base64.cc
-	 )
-  target_link_libraries(cadabra2html cadabra_client)
-endif()
+add_executable(cadabra2html 
+  cadabra2html.cc 
+  ${CADABRA_LIBS_DIR}/base64/base64.cc
+  )
+target_link_libraries(cadabra2html cadabra_client)
 
 # cadabra2latex
-if(NOT ENABLE_JUPYTER)
-  add_executable(cadabra2latex 
-	 cadabra2latex.cc 
-    ${CADABRA_LIBS_DIR}/base64/base64.cc
-	 )
-  target_link_libraries(cadabra2latex cadabra_client)
-endif()
+add_executable(cadabra2latex 
+  cadabra2latex.cc 
+  ${CADABRA_LIBS_DIR}/base64/base64.cc
+  )
+target_link_libraries(cadabra2latex cadabra_client)
 
 # Client library
-if(NOT ENABLE_JUPYTER)
-  add_library(cadabra_client STATIC ${CADABRA_CLIENT_SRC})
+add_library(cadabra_client STATIC ${CADABRA_CLIENT_SRC})
+target_link_libraries(cadabra_client
+  ${Boost_LIBRARIES}
+  ${SQLITE3_LIBRARIES}
+  ${PYTHON_LIBRARIES}
+  ${GLIBMM3_LIBRARIES}
+  Threads::Threads
+  )
+if(ENABLE_SYSTEM_JSONCPP)
   target_link_libraries(cadabra_client
-	 ${Boost_LIBRARIES}
-	 ${SQLITE3_LIBRARIES}
-	 ${PYTHON_LIBRARIES}
-	 ${GLIBMM3_LIBRARIES}
-	 Threads::Threads
-	 )
-  if(ENABLE_SYSTEM_JSONCPP)
-    target_link_libraries(cadabra_client
-      ${JSONCPP_LIBRARIES}
-      )
-  endif()
-  if(WIN32)
-    target_link_libraries(cadabra_client ws2_32 bcrypt)
-  endif()
+    ${JSONCPP_LIBRARIES}
+    )
+endif()
+if(WIN32)
+  target_link_libraries(cadabra_client ws2_32 bcrypt)
 endif()
 
 # Jupyter kernel
@@ -244,9 +241,8 @@ endif()
 #set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for libraries")
 
 install(TARGETS cadabra-server DESTINATION bin)
-if(NOT ENABLE_JUPYTER)
-  install(TARGETS cadabra2html cadabra2latex DESTINATION bin)
-endif()
+install(TARGETS cadabra2html cadabra2latex DESTINATION bin)
+
 # We don't need to install the libcadabra_client library as it is statically
 # linked with our binaries anyway.
 # install(
