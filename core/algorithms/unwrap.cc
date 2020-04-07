@@ -270,7 +270,7 @@ Algorithm::result_t unwrap::apply(iterator& it)
 					int sign=1;
 					if(factor!=tr.begin(derarg)) {
 						Ex_comparator compare(kernel.properties);
-						sign=compare.can_swap(tr.begin(derarg),factor,Ex_comparator::match_t::no_match_less);
+						sign=compare.can_move_to_front(tr, derarg, factor); //, Ex_comparator::match_t::no_match_less);
 						}
 					if(sign!=0) {
 						// If the sign *is* zero, it means that we are trying to move a factor

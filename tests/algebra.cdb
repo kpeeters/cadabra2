@@ -628,4 +628,22 @@ def test31():
 
 test31()
 
+def test32():
+    # issues/106
+    __cdbkernel__=create_scope()  
+    {A, B, C}::AntiCommuting.
+    d{#}::Derivative.
+    A::Depends(d{#}).
+    B::Depends(d{#}).
+    ex:= d{A B C};
+    unwrap(ex);
+    tst:= C d{A B} - @(ex);
+    assert(tst==0)
+    print("Test 32a passed")
+    ex:= d{A B A C};
+    unwrap(ex);
+    tst:= - C d{A B A} - @(ex);
+    assert(tst==0)
+    print("Test 32b passed")
 
+test32()
