@@ -69,7 +69,7 @@ size_t ifactorial(size_t n, size_t den = 1)
 {
 	if (n < 2)
 		return 1;
-	
+
 	size_t res = 1;
 	for (size_t k = den + 1; k <= n; ++k)
 		res *= k;
@@ -351,8 +351,10 @@ namespace cadabra {
 				prefactor.append_child(prefactor.begin(), (Ex::iterator)it);
 		}
 
-		cleanup_dispatch(kernel, prefactor, prefactor.begin());
-		cleanup_dispatch(kernel, tensor, tensor.begin());
+		Ex::iterator prefactor_begin = prefactor.begin();
+		cleanup_dispatch(kernel, prefactor, prefactor_begin);
+		Ex::iterator tensor_begin = tensor.begin();
+		cleanup_dispatch(kernel, tensor, tensor_begin);
 	}
 
 	AdjformEx::rational_type AdjformEx::compare(const AdjformEx& other) const
