@@ -96,6 +96,7 @@ find_package(PCRE REQUIRED)
 #---------------------------------------------------------------------------
 
 set(LOCAL_SRC_FILES
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Adjform.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Algorithm.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Cleanup.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Combinatorics.cc
@@ -110,6 +111,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Functional.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexIterator.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexClassifier.cc  
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Hash.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Kernel.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Parser.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/PreClean.cc
@@ -220,9 +222,11 @@ set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/young_project.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/young_project_product.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/young_project_tensor.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/meld.cc
   SympyDummy.cc
 )
 set(MAIN_HEADERS
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Adjform.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Algorithm.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Combinatorics.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Compare.hh
@@ -232,6 +236,7 @@ set(MAIN_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexClassifier.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexIterator.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Kernel.hh
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Hash.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Parser.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/ProgressMonitor.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Props.hh
@@ -265,6 +270,8 @@ foreach(HEADER ${ALGO_HEADERS})
 	get_filename_component(FILENAME "${HEADER}" NAME)
 	file(APPEND "${CMAKE_BINARY_DIR}/include/cadabra2++.hh" "#include \"cadabra2++/algorithms/${FILENAME}\"\n")
 endforeach()
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/cpplib.hh.in CPPLIB_HH_IN)
+file(APPEND "${CMAKE_BINARY_DIR}/include/cadabra2++.hh" "\n//Helper functions\n${CPPLIB_HH_IN}")
 
 set(LIB_INCLUDE_DIRS
 	"." 

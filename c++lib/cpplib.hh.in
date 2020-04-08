@@ -1,0 +1,94 @@
+namespace cadabra {
+	namespace cpplib {
+
+		using ExPtr = std::shared_ptr<Ex>;
+
+		namespace detail {
+			struct ExConstructorProxy
+			{
+				ExConstructorProxy(const char* data) : data(data) {}
+				ExPtr operator () (Kernel& kernel)
+				{
+					return kernel.ex_from_string(data);
+				}
+				std::string data;
+			};
+
+			struct ExPrettyPrinter
+			{
+				ExPrettyPrinter(const Kernel& kernel, Ex::iterator it, bool use_unicode = true) 
+					: kernel(kernel)
+					, ex(it)
+					, use_unicode(use_unicode) {}
+				const Kernel& kernel;
+				Ex ex;
+				bool use_unicode;
+			};
+		}
+		
+		template <typename Prop>
+		void inject_property(Kernel& kernel, const ExPtr& pattern, const ExPtr& args = nullptr)
+		{
+			kernel.inject_property(new Prop(), pattern, args);
+		}
+
+		template <typename Prop>
+		void inject_property(Kernel& kernel, const char* pattern, const ExPtr& args = nullptr)
+		{
+			inject_property<Prop>(kernel, kernel.ex_from_string(pattern), args);
+		}
+
+		template <typename Prop>
+		void inject_property(Kernel& kernel, const ExPtr& pattern, const char* args)
+		{
+			inject_property<Prop>(kernel, pattern, kernel.ex_from_string(args));
+		}
+
+		template <typename Prop>
+		void inject_property(Kernel& kernel, const char* pattern, const char* args)
+		{
+			inject_property<Prop>(kernel, kernel.ex_from_string(pattern), kernel.ex_from_string(args));
+		}
+
+		template <typename Algo>
+		Algorithm::result_t apply_algo(const Kernel& kernel, const ExPtr& ex, bool deep = true, bool repeat = false, unsigned int depth = 0)
+		{
+			Algo algo(kernel, *ex);
+			return algo.apply_generic(deep, repeat, depth);
+		}
+
+		template <typename Algo>
+		Algorithm::result_t apply_algo(const Kernel& kernel, const ExPtr& ex, Ex::iterator it, bool deep = true, bool repeat = false, unsigned int depth = 0)
+		{
+			Algo algo(kernel, *ex);
+			return algo.apply_generic(it, deep, repeat, depth);
+		}
+
+		inline detail::ExConstructorProxy operator "" _ex(const char* ex, std::size_t n)
+		{
+			return detail::ExConstructorProxy(ex);
+		}
+
+		inline detail::ExPrettyPrinter pprint(const Kernel& kernel, const ExPtr& ex, bool use_unicode = true)
+		{
+			return detail::ExPrettyPrinter(kernel, ex->begin(), use_unicode);
+		}
+
+		inline detail::ExPrettyPrinter pprint(const Kernel& kernel, const Ex& ex, bool use_unicode = true)
+		{
+			return detail::ExPrettyPrinter(kernel, ex.begin(), use_unicode);
+		}
+		
+		inline detail::ExPrettyPrinter pprint(const Kernel& kernel, Ex::iterator it, bool use_unicode = true)
+		{
+			return detail::ExPrettyPrinter(kernel, it, use_unicode);
+		}
+
+		inline std::ostream& operator << (std::ostream& stream, const detail::ExPrettyPrinter& pretty_printer)
+		{
+			DisplayTerminal dt(pretty_printer.kernel, pretty_printer.ex, pretty_printer.use_unicode);
+			dt.output(stream);
+			return stream;
+		}
+	}
+}
