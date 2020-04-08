@@ -17,7 +17,9 @@ namespace cadabra {
             virtual result_t apply(iterator& it) override;
 
         private:
-            void cleanup(iterator it);
+            void cleanup_traces(iterator it);
+				void cleanup_like_terms(iterator it);
+
             AdjformEx symmetrize(Ex::iterator it);
             
             result_t do_traces(iterator it);

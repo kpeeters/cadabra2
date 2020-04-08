@@ -1,45 +1,30 @@
 #include <vector>
+#include <Eigen/Dense>
 #include "properties/Trace.hh"
 #include "properties/TableauBase.hh"
 #include "Cleanup.hh"
+#include "Hash.hh"
 #include "meld.hh"
+#include "collect_terms.hh"
+#include "DisplayTerminal.hh"
 
 using namespace cadabra;
 
+std::string ex_to_string(const Kernel& kernel, const Ex& ex)
+{
+	std::ostringstream ss;
+	DisplayTerminal dt(kernel, ex, true);
+	dt.output(ss);
+	return "$" + ss.str() + "$";
+}
+
+std::string ex_to_string(const Kernel& kernel, Ex::iterator it)
+{
+	return ex_to_string(kernel, Ex(it));
+}
+
 //-------------------------------------------------
 // generic useful routines
-
-bool check_structure(Ex::iterator lhs, Ex::iterator rhs)
-{
-	// Early failure checks
-	if (lhs->name != rhs->name) {
-		return false;
-	}
-
-	Ex::iterator l1 = lhs.begin(), l2 = lhs.end();
-	Ex::iterator r1 = rhs.begin(), r2 = rhs.end();
-
-	// Loop over all tree nodes using a depth first iterator. If the
-	// entry is an index ensure that it has the same parent_rel, if it
-	// is any other type of node check that the names match.
-	while (l1 != l2 && r1 != r2) {
-		if (l1->is_index()) {
-			l1.skip_children();
-			r1.skip_children();
-			if (l1->fl.parent_rel != r1->fl.parent_rel) {
-				return false;
-			}
-		}
-		else {
-			if (l1->name != r1->name || l1->multiplier != r1->multiplier) {
-				return false;
-			}
-		}
-		++l1, ++r1;
-	}
-
-	return l1 == l2 && r1 == r2;
-}
 
 std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim)
 {
@@ -59,27 +44,7 @@ std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim)
 	}
 }
 
-std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim, Ex::iterator pat)
-{
-	if (*it->name == delim) {
-		std::vector<Ex::iterator> res;
-		Ex::sibling_iterator beg = it.begin(), end = it.end();
-		while (beg != end) {
-			if (check_structure(beg, pat))
-				res.push_back(beg);
-			++beg;
-		}
-		return res;
-	}
-	else {
-		if (check_structure(it, pat))
-			return std::vector<Ex::iterator>(1, it);
-		else
-			return std::vector<Ex::iterator>();
-	}
-}
-
-bool meld::has_TableauBase(Ex::iterator it)
+bool has_TableauBase(const Kernel& kernel, Ex::iterator it)
 {
 	if (*it->name == "\\prod" || *it->name == "\\sum") {
 		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg)
@@ -88,18 +53,13 @@ bool meld::has_TableauBase(Ex::iterator it)
 		return false;
 	}
 	else {
-		auto tb = kernel.properties.get<cadabra::TableauBase>(it);
-		if(tb != nullptr) {
-			if(tb->size(kernel.properties, tr, it)>0)
-				return true;
-			}
-		return false;
+		return (kernel.properties.get_composite<TableauBase>(it) != nullptr);
 	}
 }
 
 bool has_Trace(const Kernel& kernel, Ex::iterator it)
 {
-	auto p = kernel.properties.get<cadabra::Trace>(it);
+	auto p = kernel.properties.get_composite<Trace>(it);
 	if (p)
 		return true;
 	else
@@ -110,7 +70,7 @@ bool has_Trace(const Kernel& kernel, Ex::iterator it)
 // meld stuff
 
 meld::meld(const Kernel& kernel, Ex& ex)
-    : Algorithm(kernel, ex)
+	 : Algorithm(kernel, ex)
 {
 
 }
@@ -122,49 +82,57 @@ meld::~meld()
 
 bool meld::can_apply(iterator it)
 {
-    return
-        *it->name == "\\sum" ||
-        has_Trace(kernel, it) ||
-        has_TableauBase(it);
+	 return
+		  *it->name == "\\sum" ||
+		  has_Trace(kernel, it) ||
+		  has_TableauBase(kernel, it);
 
 }
 
 #define APPLY_ROUTINE(name)             \
-    switch (name (it)) {                \
-        case  result_t::l_applied:      \
-            res = result_t::l_applied;  \
-            break;                      \
-        case result_t::l_error:         \
-            return result_t::l_applied; \
-        default:                        \
-            break;                      \
-    }                                   //end
+	 switch (name (it)) {                \
+		  case  result_t::l_applied:      \
+				res = result_t::l_applied;  \
+				break;                      \
+		  case result_t::l_error:         \
+				return result_t::l_error;   \
+				break;                      \
+		  default:                        \
+				break;                      \
+	 }                                   //end of macro
 
 meld::result_t meld::apply(iterator& it) 
 {
-    result_t res = result_t::l_no_action;
+	 result_t res = result_t::l_no_action;
 
-	APPLY_ROUTINE(do_traces);
-    APPLY_ROUTINE(do_tableaux);
-    
-	cleanup(it);
-    cleanup_dispatch(kernel, tr, it);
+	 APPLY_ROUTINE(do_traces);
+	 APPLY_ROUTINE(do_tableaux);
 
-    return res;
+	 cleanup_dispatch(kernel, tr, it);
+	 cleanup_traces(it);
+	 cleanup_like_terms(it);
+
+	 return res;
 }
 
-void meld::cleanup(iterator it)
+void meld::cleanup_traces(iterator it)
 {
-    // Remove empty traces    
-    if (has_Trace(kernel, it) && it.number_of_children() == 0) {
+	 // Remove empty traces    
+	 if (has_Trace(kernel, it) && it.number_of_children() == 0) {
 		node_zero(it);
-	}
-	else if (*it->name == "\\sum" || *it->name == "\\prod") {
+	 }
+	 else if (*it->name == "\\sum" || *it->name == "\\prod") {
 		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
-            Ex::iterator newit = beg;
-			cleanup(newit);
+				Ex::iterator newit = beg;
+			cleanup_traces(newit);
 		}
 	}
+}
+
+void meld::cleanup_like_terms(iterator it)
+{
+	collect_terms ct(kernel, tr);
+	ct.apply_generic(it, true, false, 0);
 }
 
 //-------------------------------------------------
@@ -172,8 +140,7 @@ void meld::cleanup(iterator it)
 
 AdjformEx meld::symmetrize(Ex::iterator it)
 {
-	AdjformEx sym;
-	sym.set(index_map.to_adjform(it), 1);
+	AdjformEx sym(it, index_map, kernel);
 
 	// Symmetrize in identical tensors
 	std::map<std::string, std::pair<size_t, std::vector<size_t>>> idents;
@@ -237,110 +204,198 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 			}
 		pos += it.number_of_children();
 		}
-	
-	sym.multiply(*it->multiplier);
 	return sym;
 }
 
 meld::result_t meld::do_tableaux(iterator it)
 {
+	using namespace Eigen;
+	using matrix_type = Matrix<AdjformEx::rational_type, Dynamic, Dynamic>;
+	using vector_type = Matrix<AdjformEx::rational_type, Dynamic, 1>;
+	
 	result_t res = result_t::l_no_action;
 
+	// 'coeffs' is a square matrix which enough terms of the young projection to
+	// ensure that when solving for linear dependence there are as many
+	// unknowns as equations
+	matrix_type coeffs;
+
+	// The adjform in position 'i' of 'mapping' represents the term corresponding
+	// to the 'i'th row of 'coeffs'
+	std::vector<Adjform> mapping;
+
+	// A list of all the adjforms encountered so far
+	std::vector<AdjformEx> adjforms;
+
 	auto terms = split_ex(it, "\\sum");
-	while (!terms.empty()) {
-        auto pat = terms.back();
-        bool can_reduce = has_TableauBase(pat);
-        auto collect = split_ex(pat, "\\prod");
-		auto pat_sym = symmetrize(pat);
-
-		if (can_reduce && pat_sym.empty()) {
-			node_zero(pat);
+	std::remove_if(terms.begin(), terms.end(), [this](Ex::iterator it) { return has_Indices(kernel, it); });
+	for (size_t term_idx = 0; term_idx < terms.size(); ++term_idx) {
+		auto cur_adjform = symmetrize(terms[term_idx]);
+		if (cur_adjform.empty()) {
+			// Empty adjform means that the term is identically
+			// equal to 0
+			node_zero(terms[term_idx]);
+			terms.erase(terms.begin() + term_idx);
+			--term_idx;
 			res = result_t::l_applied;
-			continue;
 		}
-		std::vector<Ex::iterator> cur_terms;
-		for (AdjformIdx i = terms.size() - 2; i != -1; --i) {
-			if (check_structure(pat, terms[i])) {
-				cur_terms.push_back(terms[i]);
-				terms.erase(terms.begin() + i);
-			}
-		}
-		terms.pop_back();
-		if (can_reduce && !cur_terms.empty()) {
-			AdjformEx it_sym;
-			for (auto& node : cur_terms)
-				it_sym.combine(symmetrize(node));
+		else {
+			// See if the current term is a linear combination of
+			// terms previously encountered
+			bool has_solution = true;
 
-			if (it_sym.empty()) {
-				for (auto node : cur_terms)
-					node_zero(node);
-				res = result_t::l_applied;
+			// Initialize 'y' which contains the coefficients in the
+			// young projection
+			vector_type x, y;
+			y.resize(coeffs.cols());
+			for (size_t i = 0; i < mapping.size(); ++i)
+				y.coeffRef(i) = cur_adjform.get(mapping[i]);
+
+			if (coeffs.size() == 0) {
+				has_solution = false;
 			}
 			else {
-				auto factor = it_sym.compare(pat_sym);
-				if (factor != 0) {
-					multiply(pat->multiplier, factor + 1);
-					for (auto& node : cur_terms)
-						node_zero(node);
-					res = result_t::l_applied;
+				// x is guaranteed to be a solution as the 'coeffs' matrix
+				// is square. To check whether it is actually a solution, go
+				// back over all the adjforms and ensure that the equation
+				// holds for each term
+				x = coeffs.fullPivLu().solve(y);
+
+				std::vector<AdjformEx::const_iterator> lhs_its;
+				AdjformEx::const_iterator rhs_it = cur_adjform.begin();
+				Adjform cur_term = rhs_it->first;
+
+				// Populate the lhs_its vector and find the smallest term
+				for (const auto& adjform : adjforms) {
+					auto it = adjform.begin();
+					if (it->first < cur_term)
+						cur_term = it->first;
+					lhs_its .push_back(it);
 				}
+				
+				size_t n_finished = 0;
+				while (n_finished < lhs_its.size()) {
+					// Ensure that the next term is bigger than any other term to begin with
+					Adjform next_term;
+					next_term.push_back(std::numeric_limits<Adjform::value_type>::max());
+					AdjformEx::rational_type sum = 0;
+					for (int i = 0; i < adjforms.size(); ++i) {
+						if (lhs_its[i] != adjforms[i].end() && lhs_its[i]->first == cur_term) {
+							sum += x.coeff(i) * lhs_its[i]->second;
+							++lhs_its[i];
+							if (lhs_its[i] == adjforms[i].end())
+								++n_finished;
+						}
+						if (lhs_its[i] != adjforms[i].end() && lhs_its[i]->first < next_term)
+							next_term = lhs_its[i]->first;
+					}
+
+					AdjformEx::rational_type rhs_sum;
+					if (rhs_it == cur_adjform.end() || rhs_it->first != cur_term) {
+						rhs_sum = 0;
+					}
+					else {
+						rhs_sum = rhs_it->second;
+						++rhs_it;
+					}
+
+					if (sum != rhs_sum) {
+						has_solution = false;
+						break;
+					}
+					if (rhs_it != cur_adjform.end() && rhs_it->first < next_term)
+						next_term = rhs_it->first;
+					cur_term = next_term;
+				}
+				if (rhs_it != cur_adjform.end())
+					has_solution = false;
+			}
+
+			if (has_solution) {
+				node_zero(terms[term_idx]);
+				terms.erase(terms.begin() + term_idx);
+				--term_idx;
+				for (size_t i = 0; i < adjforms.size(); ++i) {
+					if (x.coeff(i) != 0) {
+						tr.erase(terms[i]);
+						terms[i] = tr.append_child(it, str_node("\\prod"));
+						auto prefactor = tr.append_child(terms[i], str_node("\\sum"));
+						tr.append_child(prefactor, adjforms[i].get_prefactor_ex().begin());
+						auto new_term = tr.append_child(prefactor, cur_adjform.get_prefactor_ex().begin());
+						multiply(new_term->multiplier, x.coeff(i));
+						adjforms[i].get_prefactor_ex() = prefactor;
+						tr.append_child(terms[i], adjforms[i].get_tensor_ex().begin());
+					}
+				}
+			}
+			else {
+				// add to adjform
+				bool found = false;
+				for (const auto& kv : cur_adjform) {
+					auto pos = std::find(mapping.begin(), mapping.end(), kv.first);
+					if (pos == mapping.end()) {
+						mapping.push_back(kv.first);
+						found = true;
+						break;
+					}
+				}
+				if (!found)
+					throw std::runtime_error("Could not find a suitable element to add to the matrix");
+
+				coeffs.conservativeResize(coeffs.rows() + 1, coeffs.cols() + 1);
+				// Fill in bottom row
+				for (size_t i = 0; i < adjforms.size(); ++i)
+					coeffs.coeffRef(coeffs.rows() - 1, i) = adjforms[i].get(mapping.back());
+				// Fill in the righthand column
+				for (size_t i = 0; i < mapping.size(); ++i)
+					coeffs.coeffRef(i, coeffs.cols() - 1) = cur_adjform.get(mapping[i]);
+				adjforms.push_back(cur_adjform);
 			}
 		}
 	}
+
 	return res;
 }
 
 //-------------------------------------------------
 // do_trace stuff
 
-void cycle_adjform(Adjform& adjform, size_t n)
-{
-	if (adjform.size() < 2)
-		return;
-	n %= adjform.size();
-
-	std::rotate(adjform.begin(), adjform.end() - n, adjform.end());
-	for (auto& idx : adjform) {
-		if (idx >= 0)
-			idx = (idx + n) % adjform.size();
-	}
-}
-
 void cycle_vec(std::vector<size_t>& vec, size_t n)
 {
 	n %= vec.size();
-	std::rotate(vec.begin(), vec.end() - n, vec.end());
+	
 }
 
 struct TraceTerm
 { 
-    TraceTerm(Ex::iterator it, mpq_class parent_multiplier, IndexMap& index_map);
-    Ex::iterator it;
-    Adjform names, indices; 
-    mpq_class parent_multiplier;
-    std::vector<size_t> pushes;
+	 TraceTerm(Ex::iterator it, mpq_class parent_multiplier, IndexMap& index_map);
+	 Ex::iterator it;
+	 Adjform names, indices; 
+	 mpq_class parent_multiplier;
+	 std::vector<size_t> pushes;
 };
 
 TraceTerm::TraceTerm(Ex::iterator it, mpq_class parent_multiplier, IndexMap& index_map)
 	: it(it)
 	, parent_multiplier(parent_multiplier)
 {
-    auto terms = split_ex(it, "\\prod");
-    for (const auto& term : terms) {
-        names.push_back(index_map.get_free_index(term->name));
-        pushes.push_back(0);
-        for (Ex::sibling_iterator beg = term.begin(), end = term.end(); beg != end; ++beg) {
-            if (beg->is_index()) {
-				indices.push_back(index_map.get_free_index(term->name));
-                ++pushes.back();
-			}
-        }
-    }
+	Ex_hasher hasher(HashFlags::HASH_IGNORE_TOP_MULTIPLIER | HashFlags::HASH_IGNORE_INDEX_ORDER);
+	 auto terms = split_ex(it, "\\prod");
+	 for (const auto& term : terms) {
+		  names.push_back(index_map.get_free_index(hasher(term)));
+		  pushes.push_back(0);
+		  for (Ex::sibling_iterator beg = term.begin(), end = term.end(); beg != end; ++beg) {
+				if (beg->is_index()) {
+					indices.push_back(index_map.get_free_index(hasher(term)));
+					++pushes.back();
+				}
+		  }
+	 }
 }
 
 std::vector<TraceTerm> collect_trace_terms(Ex::iterator it, const Kernel& kernel, IndexMap& index_map)
 {
-    // If a trace node just return all the children
+	 // If a trace node just return all the children
 	if (has_Trace(kernel, it)) {
 		Ex::sibling_iterator beg = it.begin(), end = it.end();
 		if (beg == end)
@@ -371,7 +426,7 @@ std::vector<TraceTerm> collect_trace_terms(Ex::iterator it, const Kernel& kernel
 
 meld::result_t meld::do_traces(iterator it)
 {
-    auto terms = collect_trace_terms(it, kernel, index_map);
+	 auto terms = collect_trace_terms(it, kernel, index_map);
 	if (terms.empty())
 		return result_t::l_no_action;
 
@@ -389,9 +444,9 @@ meld::result_t meld::do_traces(iterator it)
 					break;
 				}
 
-				cycle_adjform(perm.names, 1);
-				cycle_adjform(perm.indices, perm.pushes.back());
-				cycle_vec(perm.pushes, 1);
+				perm.names.rotate(1);
+				perm.indices.rotate(perm.pushes.back());
+				std::rotate(perm.pushes.begin(), perm.pushes.end() - 1, perm.pushes.end());
 			} while (perm.names != terms[j].names || perm.indices != terms[j].indices);
 		}
 	}
