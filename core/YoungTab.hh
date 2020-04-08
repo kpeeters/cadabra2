@@ -157,6 +157,7 @@ namespace yngtab {
 					in_column_iterator  operator-(unsigned int);
 					in_column_iterator& operator+=(unsigned int);
 					in_column_iterator& operator-=(unsigned int);
+					T&                  operator[](difference_type n) const;
 					bool                operator<(const in_column_iterator& other) const;
 					bool                operator>(const in_column_iterator& other) const;
 					bool                operator<=(const in_column_iterator& other) const;
@@ -550,6 +551,12 @@ namespace yngtab {
 	ptrdiff_t filled_tableau<T>::in_column_iterator::operator-(const in_column_iterator& other) const
 		{
 		return row_number-other.row_number;
+		}
+
+	template<class T>
+	T& filled_tableau<T>::in_column_iterator::operator[](difference_type n) const
+		{
+		return (*tab)(row_number + n, column_number);
 		}
 
 	template<class T>
