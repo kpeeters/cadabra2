@@ -647,3 +647,12 @@ def test32():
     print("Test 32b passed")
 
 test32()
+
+    
+# {A, B, C}::AntiCommuting.
+# d{#}::Derivative.
+# A::Depends(d{#}).
+# B::Depends(d{#}).
+# ex:= d_{B}{A B C};
+# unwrap(ex)
+

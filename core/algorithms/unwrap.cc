@@ -265,8 +265,9 @@ Algorithm::result_t unwrap::apply(iterator& it)
 
 				// If no dependence found, move this child out of the derivative.
 				if(move_out) {
-					// FIXME: Does not handle subtree-compare properly, and does not look at the
-					// commutativity property of the index wrt. the derivative is taken.
+					// FIXME: Does does not look at the commutativity
+					// property of the index/indices wrt. which the
+					// derivative is taken.
 					int sign=1;
 					if(factor!=tr.begin(derarg)) {
 						Ex_comparator compare(kernel.properties);
