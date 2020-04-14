@@ -12,6 +12,11 @@
 
 namespace cadabra {
 
+	// Return true if 'it' has children which are indices and not
+	// registered as Symbol or Coordinate.
+	bool has_indices(const Kernel& kernel, Ex::iterator it);
+	bool is_index(const Kernel& kernel, Ex::iterator it);
+
 	class IndexMap;
 
 	class Adjform
@@ -70,9 +75,6 @@ namespace cadabra {
 		std::vector<Ex_hasher::result_t> data;
 	};
 
-	// Checks if a node has children which are associated with the Indices proeprty
-	bool has_Indices(const Kernel& kernel, Ex::iterator it);
-	
 	class AdjformEx
 	{
 	public:

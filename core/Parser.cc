@@ -31,7 +31,7 @@ You should have received a copy of the GNU General Public License
 std::istream& operator>>(std::istream& str, cadabra::Parser& pa)
 	{
 	std::string inp;
-	while(std::getline(str, inp)) {
+	while(std::getline(str >> std::ws, inp)) {
 		// FIXME: This should all have been done in the manipulator, but when we
 		// read the default settings from a string the input here is more than
 		// just one line.

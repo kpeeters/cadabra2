@@ -40,7 +40,6 @@ find_package(Boost 1.53 COMPONENTS system)
 
 # GMPXX
 find_package(GMPXX REQUIRED)
-find_package(Eigen3 CONFIG REQUIRED)
 
 # JSONCPP (if using the system-provided one)
 if(ENABLE_SYSTEM_JSONCPP)
@@ -296,7 +295,6 @@ target_link_libraries(cadabra2 PRIVATE
 	${Boost_LIBRARIES}
 #	${PYTHON_LIBRARIES}
 #	${GLIBMM3_LIBRARIES}    
-	Eigen3::Eigen
 	)
 
 # On Unix, don't link the extension module to libpython*.so

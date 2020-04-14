@@ -6,16 +6,16 @@ def test01():
     S_{a b c}::Symmetric;
     ex:= S_{a b c}S_{b a c} + S_{b a c}S_{c a b}:
     meld(ex)
-    assert(ex == $2S_{b a c}S_{c a b}$)
+    assert(ex == $2S_{a b c}S_{b a c}$)
     print("Test 01 passed")
 
-test01()
+#test01()
 
 def test02():
     __cdbkernel__ = create_scope()
     A_{a b c}::AntiSymmetric.
     ex = meld($A_{a b c} - A_{b a c}$)
-    assert ex == $2A_{b a c}$
+    assert ex == $2A_{a b c}$
     print("Test 02 passed")
    
 #test02()
@@ -27,7 +27,7 @@ def test03():
     assert ex == $0$
     print("Test 03 passed")
 
-test03()
+#test03()
 
 def test04():
     __cdbkernel__ = create_scope()
@@ -36,13 +36,13 @@ def test04():
     assert ex == 0
     print("Test 04 passed")
 
-test04()
+#test04()
 
 def test05():
     __cdbkernel__ = create_scope()
     A_{a b}::AntiSymmetric;
-    ex = meld($A_{b a}$)
-    assert(ex == $-A_{a b}$)
+    ex = meld($k * A_{a b} + l * A_{b a}$)
+    assert(ex == $(k - l) A_{a b}$)
     print("Test 05 passed")
    
 #test05()
@@ -50,22 +50,21 @@ def test05():
 def test06():
     __cdbkernel__ = create_scope()
     R_{a b c d}::RiemannTensor.
-    #ex = meld($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d}$)
-    ex = meld($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d} - 3/2 R_{a b c d} R_{a b c d}$)
-    assert ex == 0
+    ex = meld($k * R_{a b c d}R_{a b c d} + l * R_{a b c d}R_{a c b d}$)
+    assert ex == $(k + 1/2 l) R_{a b c d} R_{a b c d}$
     print("Test 06 passed")
    
-test06()
+#test06()
 
 def test07():
     __cdbkernel__ = create_scope()
     R_{a b c d}::RiemannTensor.
     #ex = meld($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d}$)
     ex = meld($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d}$)
-    assert ex == $3 R_{a b c d}R_{a c b d}$
+    assert ex == $3/2 R_{a b c d}R_{a b c d}$
     print("Test 07 passed")
    
-test07()
+#test07()
 
 def test08():
     __cdbkernel__ = create_scope()
@@ -75,7 +74,7 @@ def test08():
     assert ex == $0$
     print("Test 08 passed")
 
-test08()
+#test08()
 
 def test09():
     __cdbkernel__ = create_scope()
@@ -85,7 +84,7 @@ def test09():
     assert ex == $R_{a b c d} + R_{a d b c}$
     print("Test 09 passed")
    
-test09()
+#test09()
 
 def test10():
     __cdbkernel__ = create_scope()
@@ -98,14 +97,15 @@ def test10():
     assert ex == $0$
     print("Test 10 passed")
    
-test10()
+#test10()
 
 def test11():
     __cdbkernel__ = create_scope()
     {a, b, c, d, e, f, g, h}::Indices.
-    T_{a b c d e f g h}::Symmetric.
-    ex = meld($T_{b a d c f e h g}$)
-    assert ex == $T_{a b c d e f g h}$
+    T_{a b c}::Symmetric.
+    ex = meld($T_0 + m_1 * T_{a b c}T^{b a c} + m_2 * T_{b c a}T^{c b a}$)
+    print(ex)
+    assert ex == $T_0 + (m_1 + m_2) T_{a b c}T^{b a c}$
     print("Test 11 passed")
    
 #test11()
@@ -122,7 +122,7 @@ def test12():
     assert(ex==0)
     print("Test 12 passed")
    
-test12()
+#test12()
 
 def test13():
     __cdbkernel__ = create_scope()
@@ -145,18 +145,18 @@ def test14():
     __cdbkernel__ = create_scope()
     A_{a b c d e}::AntiSymmetric.
     ex = meld($9A_{b a c e d} - 3A_{e d c b a}$)
-    assert ex == $6A_{e d c b a}$
+    print(ex)
+    assert ex == $6A_{b a c e d}$
     print("Test 14 passed")
 
-test14()
+#test14()
 
 def test15():
 	__cdbkernel__ = create_scope()
 	R_{a b c d}::RiemannTensor.
-	A_{a b c d}::AntiSymmetric.
-	ex := R_{b a c d}:
-	meld(ex, $A_{b a c d}$)
-	assert ex == $R_{b a c d}$
+	ex := k * R_{a b c d} + l * R_{a c d b} + m * R_{a d b c}:
+	meld(ex)
+	assert ex == $(k - m) R_{a b c d} + (k - l) R_{a c d b}$
 	print("Test 15 passed")
 
 #test15()
@@ -190,6 +190,7 @@ def test18():
               b^{\mu} c^{\nu} a^{\rho} b^{\nu} c^{\mu} a^{\rho} + 
               c^{\mu} a^{\nu} b^{\mu} c^{\rho} a^{\nu} b^{\rho}).
     meld(ex)
+    print(ex)
     assert ex == $3 * tr(a^{\mu} b^{\nu} c^{\rho} a^{\mu} b^{\rho} c^{\nu}$
     print("Test 18 passed")
 

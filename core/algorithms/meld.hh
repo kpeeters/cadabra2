@@ -21,9 +21,12 @@ namespace cadabra {
 				void cleanup_like_terms(iterator it);
 
             AdjformEx symmetrize(Ex::iterator it);
-            
-            result_t do_traces(iterator it);
-            result_t do_tableaux(iterator it);
+
+				bool can_apply_traces(iterator it);
+				bool can_apply_tableaux(iterator it);
+
+            result_t apply_traces(iterator it);
+            result_t apply_tableaux(iterator it);
 
 			 bool has_TableauBase(Ex::iterator it);
 

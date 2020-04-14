@@ -4,7 +4,8 @@
 #include <numeric>
 #include "Adjform.hh"
 #include "Cleanup.hh"
-#include "properties/Indices.hh"
+#include "properties/Symbol.hh"
+#include "properties/Coordinate.hh"
 
 // Get the next permutation of term and return the number of swaps
 // required for the transformation
@@ -77,12 +78,21 @@ size_t ifactorial(size_t n, size_t den = 1)
 }
 
 namespace cadabra {
+	bool is_index(const Kernel& kernel, Ex::iterator it)
+	{
+		if (it->is_index()) {
+			auto s = kernel.properties.get<Symbol>(it);
+			auto c = kernel.properties.get<Coordinate>(it);
+			return !it->is_integer() && !s && !c;
+		}
+		return false;
+	}
 
-	bool has_Indices(const cadabra::Kernel& kernel, cadabra::Ex::iterator it)
+	bool has_indices(const cadabra::Kernel& kernel, cadabra::Ex::iterator it)
 	{
 		using namespace cadabra;
 		for (Ex::iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
-			if (kernel.properties.get_composite<Indices>(beg))
+			if (is_index(kernel, beg))
 				return true;
 		}
 		return false;
@@ -97,7 +107,7 @@ namespace cadabra {
 	{
 		Ex_hasher hasher(HashFlags::HASH_IGNORE_PARENT_REL);
 		for (Ex::iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
-			if (kernel.properties.get_composite<Indices>(beg)) {
+			if (is_index(kernel, beg)) {
 				beg.skip_children();
 				push_back(index_map.get_free_index(hasher(beg)));
 			}
@@ -337,7 +347,7 @@ namespace cadabra {
 
 		if (*it->name == "\\prod") {
 			for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
-				if (has_Indices(kernel, beg))
+				if (has_indices(kernel, beg))
 					tensor.append_child(tensor.begin(), (Ex::iterator)beg);
 				else
 					prefactor.append_child(prefactor.begin(), (Ex::iterator)beg);
@@ -345,16 +355,20 @@ namespace cadabra {
 			cadabra::multiply(prefactor.begin()->multiplier, *it->multiplier);
 		}
 		else {
-			if (has_Indices(kernel, it))
+			if (has_indices(kernel, it)) {
 				tensor.append_child(tensor.begin(), (Ex::iterator)it);
-			else
+				cadabra::multiply(prefactor.begin()->multiplier, *it->multiplier);
+			}
+			else {
 				prefactor.append_child(prefactor.begin(), (Ex::iterator)it);
+			}
 		}
 
 		Ex::iterator prefactor_begin = prefactor.begin();
 		cleanup_dispatch(kernel, prefactor, prefactor_begin);
 		Ex::iterator tensor_begin = tensor.begin();
 		cleanup_dispatch(kernel, tensor, tensor_begin);
+		one(tensor_begin->multiplier);
 	}
 
 	AdjformEx::rational_type AdjformEx::compare(const AdjformEx& other) const
