@@ -68,9 +68,10 @@ public:
 				swap(row(A, i), row(A, imax)); //pivoting rows of A
 			}
 
+			if (A(i, i) == 0)
+				return false;
+
 			for (size_t j = i + 1; j < N; ++j) {
-				if (A(i, i) == 0) 
-					return false;
 				A(j, i) /= A(i, i);
 				for (size_t k = i + 1; k < N; ++k)
 					A(j, k) -= A(j, i) * A(i, k);
@@ -82,6 +83,7 @@ public:
 
 	vector_type solve(const vector_type& y)
 	{
+		x.resize(y.size());
 		for (size_t i = 0; i < N; ++i) {
 			x(i) = y(P(i));
 			for (int k = 0; k < i; ++k)
@@ -219,17 +221,21 @@ void meld::cleanup_like_terms(iterator it)
 AdjformEx meld::symmetrize(Ex::iterator it)
 {
 	AdjformEx sym(it, index_map, kernel);
-	Ex_hasher hasher(HashFlags::HASH_IGNORE_INDEX_ORDER);
 	auto terms = split_ex(sym.get_tensor_ex().begin(), "\\prod");
 
 	// Symmetrize in identical tensors
 	// Map holding hash of tensor -> { number of indices, {pos1, pos2, ...} }
-	std::map<Ex_hasher::result_t, std::pair<size_t, std::vector<size_t>>> idents;
+	std::map<nset_t::iterator, std::pair<size_t, std::vector<size_t>>, nset_it_less> idents;
 	size_t pos = 0;
 	for (const auto& term : split_ex(sym.get_tensor_ex().begin(), "\\prod")) {
-		idents[hasher(term)].second.push_back(pos);
-		for (Ex::iterator beg = term.begin(), end = term.end(); beg != end; ++beg) 
-			idents[hasher(term)].first += is_index(kernel, beg);			
+		auto elem = idents.insert({ term->name, {0, {}} });
+		if (elem.second) {
+			// Insertion took place, count indices
+			for (Ex::iterator beg = term.begin(), end = term.end(); beg != end; ++beg)
+				elem.first->second.first += is_index(kernel, beg);
+		}
+		elem.first->second.second.push_back(pos);
+		pos += elem.first->second.first;
 	}
 	for (const auto& ident : idents) {
 		if (ident.second.second.size() != 1)
@@ -402,7 +408,7 @@ meld::result_t meld::apply_tableaux(iterator it)
 					}
 
 					if (sum != rhs_sum) {
-						//std::cerr << "solution failed for " << cur_term << '\n';
+						std::cerr << "solution failed for " << cur_term << '\n';
 						has_solution = false;
 						break;
 					}
@@ -434,7 +440,6 @@ meld::result_t meld::apply_tableaux(iterator it)
 			else {
 				// Add a row to the adjform
 				coeffs.resize(coeffs.size1() + 1, coeffs.size2() + 1);
-				adjforms.push_back(cur_adjform);
 				bool found = false;
 
 				for (const auto& kv : cur_adjform) {
@@ -446,8 +451,10 @@ meld::result_t meld::apply_tableaux(iterator it)
 						// Fill in the righthand column
 						for (size_t i = 0; i < mapping.size(); ++i)
 							coeffs(i, coeffs.size2() - 1) = cur_adjform.get(mapping[i]);
-
+						// Fill in the bottom right element
+						coeffs(coeffs.size1() - 1, coeffs.size2() - 1) = cur_adjform.get(kv.first);
 						if (solver.factorize(coeffs)) {
+							adjforms.push_back(std::move(cur_adjform));
 							mapping.push_back(kv.first);
 							found = true;
 							break;
