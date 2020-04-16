@@ -293,9 +293,16 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 
 bool meld::can_apply_tableaux(iterator it)
 {
-	return
-		*it->name == "\\sum" &&
-		has_TableauBase(kernel, it); 
+	if (has_TableauBase(kernel, it))
+		return true;
+
+	if (*it->name == "\\sum") {
+		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg)
+			if (has_TableauBase(kernel, beg))
+				return true;
+	}
+
+	return false;
 }
 
 bool meld::can_apply_traces(iterator it)
@@ -408,7 +415,7 @@ meld::result_t meld::apply_tableaux(iterator it)
 					}
 
 					if (sum != rhs_sum) {
-						std::cerr << "solution failed for " << cur_term << '\n';
+						//std::cerr << "solution failed for " << cur_term << '\n';
 						has_solution = false;
 						break;
 					}
