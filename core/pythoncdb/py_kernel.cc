@@ -46,8 +46,8 @@ namespace cadabra {
 			}
 
 		// No kernel in local scope, find one in global scope.
-		pybind11::dict globals = get_globals();
-		if (scope_has(globals, "__cdbkernel__")) {
+		auto globals = get_globals();
+		if (globals && scope_has(globals, "__cdbkernel__")) {
 			kernel = globals["__cdbkernel__"].cast<Kernel*>();
 			return kernel;
 			}

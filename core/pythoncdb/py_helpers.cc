@@ -14,8 +14,7 @@ namespace cadabra {
 
 	py::object get_globals()
 		{
-
-		return py::reinterpret_borrow<py::object>(PyEval_GetGlobals());
+		return py::globals();
 		}
 
 	bool scope_has(const py::dict& dict, const std::string& obj)
