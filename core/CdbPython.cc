@@ -35,7 +35,6 @@ std::string cadabra::cdb2python(const std::string& in_name, bool display)
 	    << "# Do not modify - changing the timestamp of this file may cause import errors\n"
 	    << "# Original file location: " << in_name << '\n'
 	    << "import cadabra2\n"
-	    << "import imp\n"
 	    << "from cadabra2 import *\n"
 		 << "from cadabra2_defaults import *\n"
 	    << "__cdbkernel__ = cadabra2.__cdbkernel__\n"
