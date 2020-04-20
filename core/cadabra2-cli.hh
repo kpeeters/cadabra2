@@ -1,35 +1,90 @@
-#include <pybind11/embed.h>
 #include <string>
 #include <memory>
+
+// Work around MSVC linking problem
+#ifdef _DEBUG
+#define CADABRA_CLI_DEBUG_MARKER
+#undef _DEBUG
+#endif
+#include <Python.h>
+#ifdef CADABRA_CLI_DEBUG_MARKER
+#define _DEBUG
+#undef CADABRA_CLI_DEBUG_MARKER
+#endif
+
 
 class Shell
 {
 public:
-    Shell(unsigned int flags = 0);
+	enum class Flags : unsigned int
+	{
+		None             = 0x00,
+		NoBanner         = 0x01,
+		IgnoreSemicolons = 0x02,
+		NoColour         = 0x04,
+		NoReadline       = 0x08
+	};
 
-    void restart();
-    int interact();
-    int run_script(const std::string& filename);
+	Shell(Flags flags);
+	~Shell();
+
+	void restart();
+	void interact();
+	void execute_file(const std::string& filename, bool preprocess = true);
+	void execute(const std::string& code);
+	PyObject* evaluate(const std::string& code);
+
+	void write_stdout(const std::string& str, const char* end = "\n");
+	void write_stdout(PyObject* obj, const char* end = "\n");
+	void write_stderr(const std::string& str, const char* end = "\n");
+	void write_stderr(PyObject* obj, const char* end = "\n");
 
 private:
-    void execute(const std::string& code);
-    bool try_evaluate(const std::string& code);
+	void set_histfile();
+	std::string histfile;
 
-    void process_ps1(const std::string& line);
-    void process_ps2(const std::string& line);
+	std::string to_string(PyObject* obj);
+	std::string sanitize(std::string s);
 
-    void process_error(const std::string& msg);
-    void process_syntax_error(const std::string& msg);
-    void process_system_exit(const std::string& msg);
+	bool get_input(const std::string& prompt, std::string& line);
+	void process_ps1(const std::string& line);
+	void process_ps2(const std::string& line);
+	void set_completion_callback(const char* buffer, std::vector<std::string>& completions);
 
-	pybind11::dict locals;
-    std::unique_ptr<pybind11::scoped_interpreter> guard;
+	bool is_syntax_error();
+	bool is_eof_error();
+	void handle_error();
+	void clear_error();
 
-    bool is_running;
-	int return_code;
-
-	std::string ps1, ps2;
+	PyObject* globals;
 	std::string collect;
 
-    unsigned int flags;
+	const char* colour_error;
+	const char* colour_warning;
+	const char* colour_info;
+	const char* colour_success;
+	const char* colour_reset;
+	Flags flags;
+	};
+
+class PyExceptionBase : public std::exception {};
+class PyException : public PyExceptionBase {};
+class PySyntaxError : public PyExceptionBase {};
+
+class ExitRequest : public std::exception
+{
+public:
+	ExitRequest();
+	ExitRequest(int code);
+	ExitRequest(const std::string& message);
+
+	virtual const char* what() const noexcept override;
+
+	int code;
+	std::string message;
 };
+
+
+Shell::Flags& operator |= (Shell::Flags& lhs, Shell::Flags rhs);
+Shell::Flags operator | (Shell::Flags lhs, Shell::Flags rhs);
+bool operator & (Shell::Flags lhs, Shell::Flags rhs);

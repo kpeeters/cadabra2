@@ -264,6 +264,7 @@ include_directories(
 	"${CADABRA_LIBS_DIR}/whereami"
 	"${CADABRA_LIBS_DIR}/base64"   
 	"${CADABRA_LIBS_DIR}/dbg"   
+	"${CADABRA_LIBS_DIR}/linenoise"  
 	${Boost_INCLUDE_DIRS}
 	)
 if(ENABLE_SYSTEM_JSONCPP)
@@ -322,8 +323,9 @@ add_executable(cadabra2-cli
 	InstallPrefix.cc
 	${CADABRA_LIBS_DIR}/whereami/whereami.c
 )
-target_link_libraries(cadabra2-cli PRIVATE pybind11::embed)
 target_compile_definitions(cadabra2-cli PRIVATE CDBPYTHON_NO_NOTEBOOK)
+target_include_directories(cadabra2-cli PRIVATE ${PYTHON_INCLUDE_DIRS})
+target_link_libraries(cadabra2-cli PRIVATE ${PYTHON_LIBRARIES})
 
 # Test preprocessor executable
 add_executable(test_preprocessor 
