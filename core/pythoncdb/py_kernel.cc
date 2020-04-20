@@ -40,7 +40,7 @@ namespace cadabra {
 
 		// Try and find the kernel in the local scope
 		auto locals = get_locals();
-		if (scope_has(locals, "__cdbkernel__")) {
+		if (locals && scope_has(locals, "__cdbkernel__")) {
 			kernel = locals["__cdbkernel__"].cast<Kernel*>();
 			return kernel;
 			}
