@@ -92,43 +92,36 @@ void Shell::restart()
 		globals = PyModule_GetDict(main);
 		if (!globals)
 			throw std::runtime_error("Could not fetch globals");
+		Py_DECREF(main);
 	}
+
+	PyObject* sys = PyImport_ImportModule("sys");
+	py_stdout = PyObject_GetAttrString(sys, "stdout");
+	py_stderr = PyObject_GetAttrString(sys, "stderr");
+	Py_DECREF(sys);
 }
 
 void Shell::interact()
 {
 	// Run cadabra2_defaults.py
 	std::string module_path = cadabra::install_prefix() + "/share/cadabra2/python";
-	try {
-		execute("import sys; sys.path.append('" + sanitize(module_path) + "')");
-		execute("sys.ps1 = '> '; sys.ps2 = '. '");
+	bool ok =
+		execute("import sys") &&
+		execute("sys.path.append('" + sanitize(module_path) + "')") &&
+		execute("sys.ps1 = '> '") &&
+		execute("sys.ps2 = '. '") &&
 		execute_file(module_path + "/cadabra2_defaults.py", false);
-	}
-	catch (const PyExceptionBase& err) {
+	if (!ok) {
 		handle_error();
-		throw ExitRequest("Error encountered whilst initializing the interpreter");
+		throw ExitRequest("Error encountered while initializing the interpreter");
 	}
-	catch (const std::runtime_error& err) {
-		write_stdout(err.what());
-		throw ExitRequest("Error encountered whilst initializing the interpreter");
-	}
-
+	
 	// Print startup info banner
 	if (!(flags & Flags::NoBanner)) {
 		write_stdout("Cadabra " CADABRA_VERSION_FULL " (build " CADABRA_VERSION_BUILD 
 		          " dated " CADABRA_VERSION_DATE ")"); 
-		write_stdout("Copyright (C) " COPYRIGHT_YEARS "  Kasper Peeters <kasper.peeters@phi-sci.com>"); 
-		write_stdout("Using SymPy version ", "");
-		PyObject* sympy_version;
-		try {
-			sympy_version = evaluate("sympy.__version__");
-		}
-		catch (const PyExceptionBase& err) {
-			sympy_version = Py_None;
-		}
-		write_stdout(to_string(sympy_version));
-		if (sympy_version != Py_None)
-			Py_XDECREF(sympy_version);
+		write_stdout("Copyright (C) " COPYRIGHT_YEARS "  Kasper Peeters <kasper.peeters@phi-sci.com>");
+		write_stdout("Using SymPy version " + evaluate_to_string("sympy.__version__"));
 	}
 
 	// Input-output loop
@@ -167,24 +160,36 @@ bool Shell::get_input(const std::string& prompt, std::string& line)
 	}
 }
 
-void Shell::write_stdout(const std::string& str, const char* end)
+void Shell::write_stdout(const std::string& str, const char* end, bool flush)
 {
-	PySys_FormatStdout("%s%s", str.c_str(), end);
+	PyObject_CallMethod(py_stdout, "write", "s", str.c_str());
+	PyObject_CallMethod(py_stdout, "write", "s", end);
+	if (flush)
+		PyObject_CallMethod(py_stdout, "flush", NULL);
 }
 
-void Shell::write_stdout(PyObject* obj, const char* end)
+void Shell::write_stdout(PyObject* obj, const char* end, bool flush)
 {
-	write_stdout(to_string(obj), end);
+	PyObject_CallMethod(py_stdout, "write", "O", obj);
+	PyObject_CallMethod(py_stdout, "write", "s", end);
+	if (flush)
+		PyObject_CallMethod(py_stdout, "flush", NULL);
 }
 
-void Shell::write_stderr(const std::string& str, const char* end)
+void Shell::write_stderr(const std::string& str, const char* end, bool flush)
 {
-	PySys_FormatStderr("%s%s", str.c_str(), end);
+	PyObject_CallMethod(py_stderr, "write", "s", str.c_str());
+	PyObject_CallMethod(py_stderr, "write", "s", end);
+	if (flush)
+		PyObject_CallMethod(py_stderr, "flush", NULL);
 }
 
-void Shell::write_stderr(PyObject* obj, const char* end)
+void Shell::write_stderr(PyObject* obj, const char* end, bool flush)
 {
-	write_stderr(to_string(obj), end);
+	PyObject_CallMethod(py_stderr, "write", "O", obj);
+	PyObject_CallMethod(py_stderr, "write", "s", end);
+	if (flush)
+		PyObject_CallMethod(py_stderr, "flush", NULL);
 }
 
 std::string Shell::to_string(PyObject* obj)
@@ -208,31 +213,41 @@ PyObject* Shell::evaluate(const std::string& code)
 {
 	PyObject* co = Py_CompileString(code.c_str(), "<stdin>", Py_eval_input);
 	if (!co)
-		throw PySyntaxError{};
+		return NULL;
 
 	PyObject* res = PyEval_EvalCode(co, globals, globals);
 	Py_DECREF(co);
-
-	if (!res)
-		throw PyException{};
 
 	return res;
 }
 
-void Shell::execute(const std::string& code)
+std::string Shell::evaluate_to_string(const std::string& code, const std::string& error_val)
+{
+	PyObject* res = evaluate(code);
+	if (res) {
+		std::string s = to_string(res);
+		Py_DECREF(res);
+		return s;
+	}
+	else {
+		clear_error();
+		return error_val;
+	}
+}
+
+bool Shell::execute(const std::string& code)
 {
 	PyObject* co = Py_CompileString(code.c_str(), "<stdin>", Py_file_input);
 	if (!co)
-		throw PySyntaxError{};
+		return false;
 
 	PyObject* res = PyEval_EvalCode(co, globals, globals);
 	Py_DECREF(co);
 
-	if (!res)
-		throw PyException{};
+	return res;
 }
 
-void Shell::execute_file(const std::string& filename, bool preprocess)
+bool Shell::execute_file(const std::string& filename, bool preprocess)
 {
 	bool display = !(flags & Flags::IgnoreSemicolons);
 	std::string code;
@@ -240,8 +255,11 @@ void Shell::execute_file(const std::string& filename, bool preprocess)
 		code = cadabra::cdb2python(filename, display);
 	else {
 		std::ifstream ifs(filename);
-		if (!ifs.is_open())
-			throw std::runtime_error("Could not open file " + filename);
+		if (!ifs.is_open()) {
+			std::string message = "Could not open file " + filename;
+			PyErr_SetString(PyExc_FileNotFoundError, message.c_str());
+			return false;
+		}
 		std::stringstream buffer;
 		buffer << ifs.rdbuf();
 		code = buffer.str();
@@ -249,13 +267,12 @@ void Shell::execute_file(const std::string& filename, bool preprocess)
 
 	PyObject* co = Py_CompileString(code.c_str(), filename.c_str(), Py_file_input);
 	if (!co)
-		throw PySyntaxError{};
+		return false;
 
 	PyObject* res = PyEval_EvalCode(co, globals, globals);
 	Py_DECREF(co);
 
-	if (!res)
-		throw PyException{};
+	return res;
 }
 
 void Shell::process_ps1(const std::string& line)
@@ -270,33 +287,27 @@ void Shell::process_ps1(const std::string& line)
 		return;
 	}
 
-	try {
-		PyObject* res = evaluate(output);
+	PyObject* res = evaluate(output);
+	if (res) {
 		if (res != Py_None) {
 			write_stdout(to_string(res));
 			PyDict_SetItemString(globals, "_", res);
 			Py_DECREF(res);
 		}
 	}
-	catch (const PySyntaxError& err) {
+	else if (is_syntax_error()) {
 		clear_error();
-		try {
-			execute(output);
-		}
-		catch (const PySyntaxError& err) {
+		if (!execute(output)) {
 			if (is_eof_error()) {
-				clear_error();
 				collect += line + "\n";
+				clear_error();
 			}
 			else {
 				handle_error();
 			}
 		}
-		catch (const PyException& err) {
-			handle_error();
-		}
 	}
-	catch (const PyException& err) {
+	else {
 		handle_error();
 	}
 }
@@ -311,10 +322,7 @@ void Shell::process_ps2(const std::string& line)
 	bool display = !(flags & Flags::IgnoreSemicolons);
 	std::string code = cadabra::cdb2python_string(collect, display);
 
-	try {
-		execute(code);
-	}
-	catch (const PyExceptionBase& err) {
+	if (!execute(code)) {
 		handle_error();
 	}
 
@@ -392,10 +400,9 @@ void Shell::handle_error()
 				throw ExitRequest{ to_string(value) };
 		}
 		else {
-			write_stderr(colour_error, "");
+			PySys_WriteStderr(colour_error);
 			PyErr_Print();
-			write_stderr(colour_reset, "");
-			fprintf(stderr, colour_reset);
+			write_stderr(colour_reset, "", true);
 		}
 	}
 	PyErr_Clear();

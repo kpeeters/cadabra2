@@ -30,14 +30,15 @@ public:
 
 	void restart();
 	void interact();
-	void execute_file(const std::string& filename, bool preprocess = true);
-	void execute(const std::string& code);
+	bool execute_file(const std::string& filename, bool preprocess = true);
+	bool execute(const std::string& code);
 	PyObject* evaluate(const std::string& code);
+	std::string evaluate_to_string(const std::string& code, const std::string& err_val = "<error>");
 
-	void write_stdout(const std::string& str, const char* end = "\n");
-	void write_stdout(PyObject* obj, const char* end = "\n");
-	void write_stderr(const std::string& str, const char* end = "\n");
-	void write_stderr(PyObject* obj, const char* end = "\n");
+	void write_stdout(const std::string& str, const char* end = "\n", bool flush = false);
+	void write_stdout(PyObject* obj, const char* end = "\n", bool flush = false);
+	void write_stderr(const std::string& str, const char* end = "\n", bool flush = false);
+	void write_stderr(PyObject* obj, const char* end = "\n", bool flush = false);
 
 private:
 	void set_histfile();
@@ -56,6 +57,8 @@ private:
 	void handle_error();
 	void clear_error();
 
+	PyObject* py_stdout;
+	PyObject* py_stderr;
 	PyObject* globals;
 	std::string collect;
 
@@ -66,10 +69,6 @@ private:
 	const char* colour_reset;
 	Flags flags;
 	};
-
-class PyExceptionBase : public std::exception {};
-class PyException : public PyExceptionBase {};
-class PySyntaxError : public PyExceptionBase {};
 
 class ExitRequest : public std::exception
 {
