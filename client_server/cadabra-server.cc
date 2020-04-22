@@ -1,6 +1,6 @@
 
 #include "Config.hh"
-#include "Snoop.hh"
+// #include "Snoop.hh"
 #include "Server.hh"
 #include <glibmm/miscutils.h>
 
@@ -58,10 +58,10 @@ int main(int argc, char **argv)
 //				 << " and PYTHONHOME = " << Glib::getenv("PYTHONHOME") << "." << std::endl;
 #endif
 	
-#ifndef ENABLE_JUPYTER
-	snoop::log.init("CadabraServer", CADABRA_VERSION_FULL, "log.cadabra.science");
-	snoop::log.set_sync_immediately(true);
-#endif
+// #ifndef ENABLE_JUPYTER
+// 	snoop::log.init("CadabraServer", CADABRA_VERSION_FULL, "log.cadabra.science");
+// 	snoop::log.set_sync_immediately(true);
+// #endif
 
 	int port=0;
 	bool eod=true;
@@ -74,9 +74,9 @@ int main(int argc, char **argv)
 	server.run(port, eod);
 
 //	snoop::log(snoop::info) << "Terminating" << snoop::flush;
-#ifndef ENABLE_JUPYTER
-	snoop::log.sync_with_server();
-#endif
+// #ifndef ENABLE_JUPYTER
+// 	snoop::log.sync_with_server();
+// #endif
 	}
 
 

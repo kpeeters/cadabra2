@@ -40,12 +40,12 @@ set(CADABRA_SERVER_SRC
 	${CADABRA_LIBS_DIR}/whereami/whereami.c
 	${CADABRA_LIBS_DIR}/base64/base64.cc
 	)
-if(NOT CONDA_FOUND)
-  set(CADABRA_SERVER_SRC
-	 ${CADABRA_SERVER_SRC}
-	 Snoop.cc
-	 )
-endif()
+# if(NOT CONDA_FOUND)
+#   set(CADABRA_SERVER_SRC
+# 	 ${CADABRA_SERVER_SRC}
+# 	 Snoop.cc
+# 	 )
+# endif()
 
 set(CADABRA_CLIENT_SRC
 	ComputeThread.cc 
@@ -143,7 +143,7 @@ endif()
 target_link_libraries(cadabra-server
 	pybind11::embed
 	${Boost_LIBRARIES}
-	${SQLITE3_LIBRARIES}
+#	${SQLITE3_LIBRARIES}
 	${PYTHON_LIBRARIES}
 	${GLIBMM3_LIBRARIES} 
 	Threads::Threads
