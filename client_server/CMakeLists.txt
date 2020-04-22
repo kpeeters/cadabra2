@@ -62,11 +62,7 @@ set(CADABRA_CLIENT_SRC
 	${CADABRA_LIBS_DIR}/whereami/whereami.c
 	)
 
-if(ENABLE_SYSTEM_JSONCPP)
-  target_link_libraries(cadabra_client
-    ${JSONCPP_LIBRARIES}
-    )   
-else()
+if(NOT ENABLE_SYSTEM_JSONCPP)
   list(APPEND CADABRA_SERVER_SRC
 	 ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp
 	 )
@@ -169,20 +165,6 @@ if(WIN32)
    target_link_libraries(cadabra-server dl util)
  endif()
 
-# cadabra2html
-add_executable(cadabra2html 
-  cadabra2html.cc 
-  ${CADABRA_LIBS_DIR}/base64/base64.cc
-  )
-target_link_libraries(cadabra2html cadabra_client)
-
-# cadabra2latex
-add_executable(cadabra2latex 
-  cadabra2latex.cc 
-  ${CADABRA_LIBS_DIR}/base64/base64.cc
-  )
-target_link_libraries(cadabra2latex cadabra_client)
-
 # Client library
 add_library(cadabra_client STATIC ${CADABRA_CLIENT_SRC})
 target_link_libraries(cadabra_client
@@ -200,6 +182,20 @@ endif()
 if(WIN32)
   target_link_libraries(cadabra_client ws2_32 bcrypt)
 endif()
+
+# cadabra2html
+add_executable(cadabra2html 
+  cadabra2html.cc 
+  ${CADABRA_LIBS_DIR}/base64/base64.cc
+  )
+target_link_libraries(cadabra2html cadabra_client)
+
+# cadabra2latex
+add_executable(cadabra2latex 
+  cadabra2latex.cc 
+  ${CADABRA_LIBS_DIR}/base64/base64.cc
+  )
+target_link_libraries(cadabra2latex cadabra_client)
 
 # Jupyter kernel
 if(ENABLE_JUPYTER)
