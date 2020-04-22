@@ -18,11 +18,6 @@ set(INSTALL_LATEX_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2")
 find_package(GLIBMM  REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(Threads REQUIRED)
-if(ENABLE_JUPYTER)
-  # To avoid issues building the Jupyter kernel on Conda, link boost
-  # statically, to avoid version mismatch.
-  set(Boost_USE_STATIC_LIBS   ON)
-endif()
 find_package(Boost 1.53.0 COMPONENTS system program_options date_time filesystem REQUIRED)
 if(ENABLE_SYSTEM_JSONCPP)
   message("-- Linking against system-provided jsoncpp")
@@ -62,11 +57,7 @@ set(CADABRA_CLIENT_SRC
 	${CADABRA_LIBS_DIR}/whereami/whereami.c
 	)
 
-if(ENABLE_SYSTEM_JSONCPP)
-  target_link_libraries(cadabra_client
-    ${JSONCPP_LIBRARIES}
-    )   
-else()
+if(NOT ENABLE_SYSTEM_JSONCPP)
   list(APPEND CADABRA_SERVER_SRC
 	 ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp
 	 )
@@ -169,20 +160,6 @@ if(WIN32)
    target_link_libraries(cadabra-server dl util)
  endif()
 
-# cadabra2html
-add_executable(cadabra2html 
-  cadabra2html.cc 
-  ${CADABRA_LIBS_DIR}/base64/base64.cc
-  )
-target_link_libraries(cadabra2html cadabra_client)
-
-# cadabra2latex
-add_executable(cadabra2latex 
-  cadabra2latex.cc 
-  ${CADABRA_LIBS_DIR}/base64/base64.cc
-  )
-target_link_libraries(cadabra2latex cadabra_client)
-
 # Client library
 add_library(cadabra_client STATIC ${CADABRA_CLIENT_SRC})
 target_link_libraries(cadabra_client
@@ -201,6 +178,20 @@ if(WIN32)
   target_link_libraries(cadabra_client ws2_32 bcrypt)
 endif()
 
+# cadabra2html
+add_executable(cadabra2html 
+  cadabra2html.cc 
+  ${CADABRA_LIBS_DIR}/base64/base64.cc
+  )
+target_link_libraries(cadabra2html cadabra_client)
+
+# cadabra2latex
+add_executable(cadabra2latex 
+  cadabra2latex.cc 
+  ${CADABRA_LIBS_DIR}/base64/base64.cc
+  )
+target_link_libraries(cadabra2latex cadabra_client)
+
 # Jupyter kernel
 if(ENABLE_JUPYTER)
   print_header("Configuring Jupyter kernel build")
@@ -212,6 +203,9 @@ if(ENABLE_JUPYTER)
   add_executable(cadabra-jupyter-kernel ${JUPYTER_KERNEL_SRC})
   message("-- UUID library at ${UUID_LIBRARIES}")
   target_link_libraries(cadabra-jupyter-kernel xeus Threads::Threads uuid ${Boost_LIBRARIES} ${GLIBMM3_LIBRARIES} ${PYTHON_LIBRARIES})
+  if(ENABLE_SYSTEM_JSONCPP)
+    target_link_libraries(cadabra-jupyter-kernel ${JSONCPP_LIBRARIES}) 
+  endif()
 else()
   print_header("Not building Jupyter kernel")
 endif()
