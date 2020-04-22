@@ -18,11 +18,6 @@ set(INSTALL_LATEX_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2")
 find_package(GLIBMM  REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(Threads REQUIRED)
-if(ENABLE_JUPYTER)
-  # To avoid issues building the Jupyter kernel on Conda, link boost
-  # statically, to avoid version mismatch.
-  set(Boost_USE_STATIC_LIBS   ON)
-endif()
 find_package(Boost 1.53.0 COMPONENTS system program_options date_time filesystem REQUIRED)
 if(ENABLE_SYSTEM_JSONCPP)
   message("-- Linking against system-provided jsoncpp")
