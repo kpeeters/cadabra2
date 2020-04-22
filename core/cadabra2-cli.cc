@@ -38,7 +38,7 @@ Shell::Shell(Flags flags)
 
 Shell::~Shell()
 {
-	if (!(flags & Flags::NoReadline)) 
+	if (!(flags & Flags::NoReadline))
 		SaveHistory(histfile.c_str());
 }
 
@@ -87,7 +87,7 @@ void Shell::restart()
 	globals = PyEval_GetGlobals();
 	if (!globals) {
 		PyObject* main = PyImport_ImportModule("__main__");
-		if (!main) 
+		if (!main)
 			throw std::runtime_error("Could not access __main__ frame");
 		globals = PyModule_GetDict(main);
 		if (!globals)
@@ -95,52 +95,68 @@ void Shell::restart()
 		Py_DECREF(main);
 	}
 
-	PyObject* sys = PyImport_ImportModule("sys");
-	py_stdout = PyObject_GetAttrString(sys, "stdout");
-	py_stderr = PyObject_GetAttrString(sys, "stderr");
-	Py_DECREF(sys);
+	sys = PyImport_ImportModule("sys");
+	std::string module_path = cadabra::install_prefix() + "/share/cadabra2/python";
+	PyObject* module_path_str = PyUnicode_FromString(module_path.c_str());
+	PyList_Append(PyObject_GetAttrString(sys, "path"), module_path_str);
+	Py_XDECREF(module_path_str);
 }
 
 void Shell::interact()
 {
 	// Run cadabra2_defaults.py
-	std::string module_path = cadabra::install_prefix() + "/share/cadabra2/python";
-	bool ok =
-		execute("import sys") &&
-		execute("sys.path.append('" + sanitize(module_path) + "')") &&
-		execute("sys.ps1 = '> '") &&
-		execute("sys.ps2 = '. '") &&
-		execute_file(module_path + "/cadabra2_defaults.py", false);
-	if (!ok) {
+	if (!execute_file(cadabra::install_prefix() + "/share/cadabra2/python/cadabra2_defaults.py", false)) {
 		handle_error();
 		throw ExitRequest("Error encountered while initializing the interpreter");
 	}
-	
+
 	// Print startup info banner
 	if (!(flags & Flags::NoBanner)) {
-		write_stdout("Cadabra " CADABRA_VERSION_FULL " (build " CADABRA_VERSION_BUILD 
-		          " dated " CADABRA_VERSION_DATE ")"); 
-		write_stdout("Copyright (C) " COPYRIGHT_YEARS "  Kasper Peeters <kasper.peeters@phi-sci.com>");
-		write_stdout("Using SymPy version " + evaluate_to_string("sympy.__version__"));
+		write("Cadabra " CADABRA_VERSION_FULL " (build " CADABRA_VERSION_BUILD
+		          " dated " CADABRA_VERSION_DATE ")");
+		write("Copyright (C) " COPYRIGHT_YEARS "  Kasper Peeters <kasper.peeters@phi-sci.com>");
+		write("Using SymPy version " + evaluate_to_string("sympy.__version__"));
 	}
 
 	// Input-output loop
+	bool(*get_input)(const std::string&, std::string&);
+	if (flags & Flags::NoReadline)
+		get_input = [] (const std::string& prompt, std::string& line) {
+			std::cout << prompt;
+			std::getline(std::cin, line);
+			if (std::cin.eof()) {
+				std::cin.clear();
+				return true;
+			}
+			else {
+				return false;
+			}
+		};
+	else
+		get_input = [] (const std::string& prompt, std::string& line) {
+			return Readline(prompt.c_str(), line);
+		};
+
 	std::string curline;
 	while (true) {
 		using namespace std::placeholders;
-		if (!(flags & Flags::NoReadline)) 
+		if (!(flags & Flags::NoReadline))
 			SetCompletionCallback(std::bind(&Shell::set_completion_callback, this, _1, _2));
 		if (collect.empty()) {
-			auto cursor = to_string(PySys_GetObject("ps1"));
-			if (!get_input(cursor, curline))
-				break;
-			process_ps1(curline);
+			if (get_input(get_ps1(), curline)) {
+				PyErr_SetNone(PyExc_KeyboardInterrupt);
+				handle_error();
+			}
+			if (!process_ps1(curline))
+				handle_error();
 		}
 		else {
-			auto cursor = to_string(PySys_GetObject("ps2"));
-			if (!get_input(cursor, curline))
-				break;
-			process_ps2(curline);
+			if (get_input(get_ps2(), curline)) {
+				PyErr_SetNone(PyExc_KeyboardInterrupt);
+				handle_error();
+			}
+			if (!process_ps2(curline))
+				handle_error();
 		}
 
 		if (!(flags & Flags::NoReadline))
@@ -148,48 +164,67 @@ void Shell::interact()
 	}
 }
 
-bool Shell::get_input(const std::string& prompt, std::string& line)
+void Shell::interact_file(const std::string& filename, bool preprocess)
 {
-	if (!(flags & Flags::NoReadline)) {
-		return !Readline(prompt.c_str(), line);
+	std::ifstream ifs(filename);
+	if (!ifs.is_open())
+		throw ExitRequest("Could not open file " + filename);
+
+	if (!execute("import cadabra2; from cadabra2 import *; from cadabra2_defaults import *; __cdbkernel__ = cadabra2.__cdbkernel__")) {
+		handle_error();
+		throw ExitRequest("Error occurred during script initialization");
 	}
-	else {
-		std::cout << prompt;
-		std::getline(std::cin, line);
-		return true;
+
+	std::string curline;
+	while (std::getline(ifs, curline)) {
+		if (!collect.empty() && curline.find_first_not_of(" \t") == 0) {
+			if (!process_ps2("")) {
+				handle_error();
+				throw ExitRequest("Script ended execution due to an uncaught exception");
+			}
+		}
+		if (collect.empty()) {
+			write(get_ps1() + curline);
+			if (!process_ps1(curline)) {
+				handle_error();
+				throw ExitRequest("Script ended execution due to an uncaught exception");
+			}
+		}
+		else {
+			write(get_ps2() + curline);
+			if (!process_ps2(curline)) {
+				handle_error();
+				throw ExitRequest("Script ended execution due to an uncaught exception");
+			}
+		}
+	}
+
+	if (!collect.empty()) {
+		if (!process_ps2("")) {
+			handle_error();
+			throw ExitRequest("Script ended execution due to an uncaught exception");
+		}
 	}
 }
 
-void Shell::write_stdout(const std::string& str, const char* end, bool flush)
+void Shell::write(const std::string& text, const char* end, const char* stream, bool flush)
 {
-	PyObject_CallMethod(py_stdout, "write", "s", str.c_str());
-	PyObject_CallMethod(py_stdout, "write", "s", end);
+	PyObject* pystream = PyObject_GetAttrString(sys, stream);
+	PyObject_CallMethod(pystream, "write", "s", text.c_str());
+	PyObject_CallMethod(pystream, "write", "s", end);
 	if (flush)
-		PyObject_CallMethod(py_stdout, "flush", NULL);
+		PyObject_CallMethod(pystream, "flush", NULL);
+	Py_XDECREF(pystream);
 }
 
-void Shell::write_stdout(PyObject* obj, const char* end, bool flush)
+void Shell::write(PyObject* obj, const char* end, const char* stream, bool flush)
 {
-	PyObject_CallMethod(py_stdout, "write", "O", obj);
-	PyObject_CallMethod(py_stdout, "write", "s", end);
+	PyObject* pystream = PyObject_GetAttrString(sys, stream);
+	PyObject_CallMethod(pystream, "write", "O", obj);
+	PyObject_CallMethod(pystream, "write", "s", end);
 	if (flush)
-		PyObject_CallMethod(py_stdout, "flush", NULL);
-}
-
-void Shell::write_stderr(const std::string& str, const char* end, bool flush)
-{
-	PyObject_CallMethod(py_stderr, "write", "s", str.c_str());
-	PyObject_CallMethod(py_stderr, "write", "s", end);
-	if (flush)
-		PyObject_CallMethod(py_stderr, "flush", NULL);
-}
-
-void Shell::write_stderr(PyObject* obj, const char* end, bool flush)
-{
-	PyObject_CallMethod(py_stderr, "write", "O", obj);
-	PyObject_CallMethod(py_stderr, "write", "s", end);
-	if (flush)
-		PyObject_CallMethod(py_stderr, "flush", NULL);
+		PyObject_CallMethod(pystream, "flush", NULL);
+	Py_XDECREF(pystream);
 }
 
 std::string Shell::to_string(PyObject* obj)
@@ -209,9 +244,9 @@ std::string Shell::sanitize(std::string s)
 }
 
 
-PyObject* Shell::evaluate(const std::string& code)
+PyObject* Shell::evaluate(const std::string& code, const std::string& filename)
 {
-	PyObject* co = Py_CompileString(code.c_str(), "<stdin>", Py_eval_input);
+	PyObject* co = Py_CompileString(code.c_str(), filename.c_str(), Py_eval_input);
 	if (!co)
 		return NULL;
 
@@ -235,9 +270,9 @@ std::string Shell::evaluate_to_string(const std::string& code, const std::string
 	}
 }
 
-bool Shell::execute(const std::string& code)
+bool Shell::execute(const std::string& code, const std::string& filename)
 {
-	PyObject* co = Py_CompileString(code.c_str(), "<stdin>", Py_file_input);
+	PyObject* co = Py_CompileString(code.c_str(), filename.c_str(), Py_file_input);
 	if (!co)
 		return false;
 
@@ -275,7 +310,7 @@ bool Shell::execute_file(const std::string& filename, bool preprocess)
 	return res;
 }
 
-void Shell::process_ps1(const std::string& line)
+bool Shell::process_ps1(const std::string& line)
 {
 	// Convert cadabra to python
 	bool display = !(flags & Flags::IgnoreSemicolons);
@@ -284,49 +319,69 @@ void Shell::process_ps1(const std::string& line)
 	if (output == "::empty") {
 		// Cadabra continuation line, add to collect
 		collect += line + "\n";
-		return;
+		return true;
 	}
 
 	PyObject* res = evaluate(output);
 	if (res) {
 		if (res != Py_None) {
-			write_stdout(to_string(res));
+			write(res);
 			PyDict_SetItemString(globals, "_", res);
 			Py_DECREF(res);
 		}
+		return true;
 	}
 	else if (is_syntax_error()) {
 		clear_error();
-		if (!execute(output)) {
-			if (is_eof_error()) {
-				collect += line + "\n";
-				clear_error();
-			}
-			else {
-				handle_error();
-			}
+		if (execute(output)) {
+			return true;
+		}
+		else if (is_eof_error()) {
+			collect += line + "\n";
+			clear_error();
+			return true;
 		}
 	}
-	else {
-		handle_error();
-	}
+	return false;
 }
 
-void Shell::process_ps2(const std::string& line)
+bool Shell::process_ps2(const std::string& line)
 {
 	if (!line.empty()) {
 		collect += line + "\n";
-		return;
+		return true;
 	}
 
 	bool display = !(flags & Flags::IgnoreSemicolons);
 	std::string code = cadabra::cdb2python_string(collect, display);
 
-	if (!execute(code)) {
-		handle_error();
-	}
-
+	auto res = execute(code);
 	collect.clear();
+	return res;
+}
+
+std::string Shell::get_ps1()
+{
+	PyObject* ps1 = PyObject_GetAttrString(sys, "ps1");
+	if (!ps1) {
+		ps1 = PyUnicode_FromString("> ");
+		PyObject_SetAttrString(sys, "ps1", ps1);
+	}
+	auto res = to_string(ps1);
+	Py_XDECREF(ps1);
+	return res;
+}
+
+std::string Shell::get_ps2()
+{
+	PyObject* ps2 = PyObject_GetAttrString(sys, "ps2");
+	if (!ps2) {
+		ps2 = PyUnicode_FromString(". ");
+		PyObject_SetAttrString(sys, "ps2", ps2);
+	}
+	auto res = to_string(ps2);
+	Py_XDECREF(ps2);
+	return res;
 }
 
 void Shell::set_completion_callback(const char* buffer, std::vector<std::string>& completions)
@@ -340,7 +395,7 @@ void Shell::set_completion_callback(const char* buffer, std::vector<std::string>
 			break;
 		--pos;
 	}
-	
+
 	std::string partial(buffer + pos, len - pos);
 	PyObject* keys = PyDict_Keys(globals);
 	for (int i = 0; i < PyList_Size(keys); ++i) {
@@ -402,7 +457,7 @@ void Shell::handle_error()
 		else {
 			PySys_WriteStderr(colour_error);
 			PyErr_Print();
-			write_stderr(colour_reset, "", true);
+			write(colour_reset, "", "stderr", true);
 		}
 	}
 	PyErr_Clear();
@@ -456,6 +511,8 @@ void help()
 		"  -i      --interactive         Force interactive mode even if scripts are\n"
 		"                                provided (will be started in the same Python\n"
 		"                                context as the last script)\n"
+		"  -l      --linebyline          Run scripts as though the input to an\n"
+		"                                interactive session\n"
 		"  -f      --fatal               When a SystemExit exception is raised, do not\n"
 		"                                continue to execute any more scripts\n"
 		"  -q      --quiet               Do not display startup banner\n"
@@ -465,7 +522,6 @@ void help()
 		"  -c      --chain               Share the same Python context between\n"
 		"                                scripts and interactive mode\n"
 		"  -r      --noreadline          Do not use readline libraries for input\n"
-		"          --noreadline\n"
 		"  -w      --nocolor             Do not colourize output\n"
 		"          --nocolour\n"
 		"  -v      --verbose             Print extra debugging information";
@@ -500,6 +556,7 @@ int main(int argc, char* argv[])
 
 	Shell::Flags flags = Shell::Flags::None;
 	bool force_interactive = false;
+	bool line_by_line = false;
 	bool fatal = false;
 	bool chain_scripts = false;
 	bool verbose = false;
@@ -507,6 +564,9 @@ int main(int argc, char* argv[])
 	for (const auto& opt : opts) {
 		if (opt == "i" || opt == "interactive") {
 			force_interactive = true;
+		}
+		else if (opt == "l" || opt == "linebyline") {
+			line_by_line = true;
 		}
 		else if (opt == "f" || opt == "fatal") {
 			fatal = true;
@@ -540,21 +600,27 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	if (!scripts.empty())
+		flags |= Shell::Flags::NoBanner;
+
 	Shell shell(flags);
 
 	for (const auto& script : scripts) {
-		if (!chain_scripts)	
+		if (!chain_scripts)
 			shell.restart();
 		try {
-			shell.execute_file(script);
+			if (line_by_line)
+				shell.interact_file(script, true);
+			else
+				shell.execute_file(script, true);
 		}
 		catch (const ExitRequest& err) {
 			if (err.code != 0) {
 				if (!err.message.empty())
-					shell.write_stderr(err.message);
+					shell.write(err.message, "\n", "stderr", true);
 			}
 			if (verbose)
-				shell.write_stderr("Script exited with code " + std::to_string(err.code));
+				shell.write("Script exited with code " + std::to_string(err.code), "\n", "stderr", true);
 			if (fatal)
 				return err.code;
 		}
@@ -566,10 +632,10 @@ int main(int argc, char* argv[])
 		catch (const ExitRequest& err) {
 			if (err.code != 0) {
 				if (!err.message.empty())
-					shell.write_stderr(err.message);
+					shell.write(err.message, "\n", "stderr", true);
 			}
 			if (verbose)
-				shell.write_stderr("Exited with code " + std::to_string(err.code));
+				shell.write("Exited with code " + std::to_string(err.code), "\n", "stderr", true);
 			return err.code;
 		}
 	}

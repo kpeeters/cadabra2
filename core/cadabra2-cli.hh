@@ -22,7 +22,7 @@ public:
 		NoBanner         = 0x01,
 		IgnoreSemicolons = 0x02,
 		NoColour         = 0x04,
-		NoReadline       = 0x08
+		NoReadline       = 0x08,
 	};
 
 	Shell(Flags flags);
@@ -30,15 +30,14 @@ public:
 
 	void restart();
 	void interact();
+	void interact_file(const std::string& filename, bool preprocess = true);
 	bool execute_file(const std::string& filename, bool preprocess = true);
-	bool execute(const std::string& code);
-	PyObject* evaluate(const std::string& code);
+	bool execute(const std::string& code, const std::string& filename = "<stdin>");
+	PyObject* evaluate(const std::string& code, const std::string& filename = "<stdin>");
 	std::string evaluate_to_string(const std::string& code, const std::string& err_val = "<error>");
 
-	void write_stdout(const std::string& str, const char* end = "\n", bool flush = false);
-	void write_stdout(PyObject* obj, const char* end = "\n", bool flush = false);
-	void write_stderr(const std::string& str, const char* end = "\n", bool flush = false);
-	void write_stderr(PyObject* obj, const char* end = "\n", bool flush = false);
+	void write(const std::string& text, const char* end = "\n", const char* stream = "stdout", bool flush = false);
+	void write(PyObject* obj, const char* end = "\n", const char* stream = "stdout", bool flush = false);
 
 private:
 	void set_histfile();
@@ -47,19 +46,20 @@ private:
 	std::string to_string(PyObject* obj);
 	std::string sanitize(std::string s);
 
-	bool get_input(const std::string& prompt, std::string& line);
-	void process_ps1(const std::string& line);
-	void process_ps2(const std::string& line);
+	bool process_ps1(const std::string& line);
+	bool process_ps2(const std::string& line);
 	void set_completion_callback(const char* buffer, std::vector<std::string>& completions);
+
+	std::string get_ps1();
+	std::string get_ps2();
 
 	bool is_syntax_error();
 	bool is_eof_error();
 	void handle_error();
 	void clear_error();
 
-	PyObject* py_stdout;
-	PyObject* py_stderr;
 	PyObject* globals;
+	PyObject* sys;
 	std::string collect;
 
 	const char* colour_error;
