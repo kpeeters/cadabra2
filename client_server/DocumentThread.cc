@@ -9,13 +9,15 @@
 #include <string>
 #include <fstream>
 
-#include <boost/config.hpp>
+//#include <boost/config.hpp>
 
 #include <internal/unistd.h>
 #include <sys/types.h>
-#include <glibmm/miscutils.h>
 #include <json/json.h>
+#ifndef EMSCRIPTEN
+#include <glibmm/miscutils.h>
 #include "Snoop.hh"
+#endif
 #include "Config.hh"
 
 using namespace cadabra;
@@ -25,8 +27,10 @@ DocumentThread::DocumentThread(GUIBase* g)
 	{
 	// Setup logging.
 	std::string version=std::string(CADABRA_VERSION_MAJOR)+"."+CADABRA_VERSION_MINOR+"."+CADABRA_VERSION_PATCH;
+#ifndef EMSCRIPTEN
 	snoop::log.init("Cadabra", version, "log.cadabra.science");
 	snoop::log.set_sync_immediately(true);
+#endif
 	//	snoop::log(snoop::warn) << "Starting" << snoop::flush;
 
 	}
@@ -151,8 +155,9 @@ void DocumentThread::process_action_queue()
 
 
 DocumentThread::Prefs::Prefs(bool use_defaults)
-	: config_path(std::string(Glib::get_user_config_dir()) + "/cadabra2.conf")
 	{
+#ifndef EMSCRIPTEN
+	config_path=std::string(Glib::get_user_config_dir()) + "/cadabra2.conf";
 	if (!use_defaults) {
 		std::ifstream f(config_path);
 		if (f)
@@ -199,6 +204,7 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	colours["latex"]["parameter"] = (latex_colours.get("brace", "rgb(245,121,0)").asString());
 	colours["latex"]["comment"] = (latex_colours.get("comment", "Silver").asString());
 	colours["latex"]["maths"] = (latex_colours.get("maths", "Sienna").asString());
+#endif
 	}
 
 void DocumentThread::Prefs::save()
@@ -222,9 +228,11 @@ void DocumentThread::Prefs::save()
 
 void DocumentThread::set_user_details(const std::string& name, const std::string& email, const std::string& affiliation)
 	{
+#ifndef EMSCRIPTEN
 	snoop::log("name") << name << snoop::flush;
 	snoop::log("email") << email << snoop::flush;
 	snoop::log("affiliation") << affiliation << snoop::flush;
+#endif
 	}
 
 bool DocumentThread::help_type_and_topic(const std::string& before, const std::string& after,

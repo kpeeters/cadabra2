@@ -37,7 +37,7 @@ std::string getRegKey(const std::string& location, const std::string& name, bool
 
 // Run a simple Cadabra server on a local port.
 
-int main()
+int main(int argc, char **argv)
 	{
 #ifdef _WIN32
 	// The Anaconda people _really_ do not understand packaging...
@@ -63,8 +63,15 @@ int main()
 	snoop::log.set_sync_immediately(true);
 #endif
 
+	int port=0;
+	bool eod=true;
+	if(argc>1)
+		port=atoi(argv[1]);
+	if(argc>2)
+		eod=(atoi(argv[2])==1);
+
 	Server server;
-	server.run();
+	server.run(port, eod);
 
 //	snoop::log(snoop::info) << "Terminating" << snoop::flush;
 #ifndef ENABLE_JUPYTER

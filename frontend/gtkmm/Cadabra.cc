@@ -53,6 +53,11 @@ Cadabra::Cadabra(int argc, char **argv)
 	                      's',
 	                      "Connect to running server on given port.",
 	                      "number");
+	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_FILENAME,
+	                      "token",
+	                      't',
+	                      "Use the given authentication token to connect to the server.",
+	                      "string");
 	}
 
 template <typename T_ArgType>
@@ -88,13 +93,15 @@ int Cadabra::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& opti
 		return -1;
 
 	get_arg_value(options, "server-port", server_port);
-	//	std::cerr << server_port << std::endl;
+	if(get_arg_value(options, "token",       server_token)==false)
+		std::cerr << "no token" << std::endl;
+	std::cerr << server_port << ", " << server_token << std::endl;
 	return -1;
 	}
 
 void Cadabra::on_activate()
 	{
-	compute = new cadabra::ComputeThread(server_port);
+	compute = new cadabra::ComputeThread(server_port, server_token);
 	compute_thread = new std::thread(&cadabra::ComputeThread::run, compute);
 
 	auto nw = new cadabra::NotebookWindow(this);
