@@ -293,9 +293,19 @@ target_link_libraries(cadabra2 PRIVATE
 	${GMPXX_LIBRARIES}
 	${GMP_LIBRARIES}   
 	${Boost_LIBRARIES}
-	${PYTHON_LIBRARIES}
+#	${PYTHON_LIBRARIES}
 #	${GLIBMM3_LIBRARIES}    
 	)
+
+# On Unix, don't link the extension module to libpython*.so
+# because some python executables are link to python static library for performance
+# and if an extension is linked to python shared library, symbol clashes occur.
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  set_target_properties(cadabra2 PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+  target_link_libraries(cadabra2 PRIVATE ${PYTHON_LIBRARIES})
+endif()
+
 if(ENABLE_SYSTEM_JSONCPP)
   target_link_libraries(cadabra2 PRIVATE
 	 ${JSONCPP_LIBRARIES}
