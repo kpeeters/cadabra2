@@ -150,7 +150,7 @@ bool has_Trace(const Kernel& kernel, Ex::iterator it)
 // meld stuff
 
 meld::meld(const Kernel& kernel, Ex& ex)
-	 : Algorithm(kernel, ex)
+	: Algorithm(kernel, ex)
 {
 
 }
@@ -181,38 +181,16 @@ bool meld::can_apply(iterator it)
 		}													\
 	}														//end of macro
 
-meld::result_t meld::apply(iterator& it) 
+meld::result_t meld::apply(iterator& it)
 {
-	 result_t res = result_t::l_no_action;
+	result_t res = result_t::l_no_action;
 
-	 APPLY_ROUTINE(traces);
-	 APPLY_ROUTINE(tableaux);
+	APPLY_ROUTINE(traces);
+	APPLY_ROUTINE(tableaux);
 
-	 cleanup_dispatch(kernel, tr, it);
-	 cleanup_traces(it);
-	 cleanup_like_terms(it);
+	cleanup_dispatch(kernel, tr, it);
 
-	 return res;
-}
-
-void meld::cleanup_traces(iterator it)
-{
-	 // Remove empty traces    
-	 if (has_Trace(kernel, it) && it.number_of_children() == 0) {
-		node_zero(it);
-	 }
-	 else if (*it->name == "\\sum" || *it->name == "\\prod") {
-		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
-				Ex::iterator newit = beg;
-			cleanup_traces(newit);
-		}
-	}
-}
-
-void meld::cleanup_like_terms(iterator it)
-{
-	collect_terms ct(kernel, tr);
-	ct.apply_generic(it, true, false, 0);
+	return res;
 }
 
 //-------------------------------------------------
@@ -245,23 +223,19 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 	// Young project antisymmetric components
 	pos = 0;
 	for (auto& it : terms) {
-		auto tb = kernel.properties.get<TableauBase>(it);
-		if(tb) {
-			int siz = tb->size(kernel.properties, tr, it);
-			if(siz>0) {
-				// FIXME: need to handle all tableaux, not just '0'.
-				auto tab = tb->get_tab(kernel.properties, tr, it, 0);
-				for (size_t col = 0; col < tab.row_size(0); ++col) {
-					if (tab.column_size(col) > 1) {
-						std::vector<size_t> indices;
-						for (auto beg = tab.begin_column(col), end = tab.end_column(col); beg != end; ++beg)
-							indices.push_back(*beg + pos);
-						std::sort(indices.begin(), indices.end());
-						sym.apply_young_symmetry(indices, true);
-						}
-					}
+		auto tb = kernel.properties.get_composite<TableauBase>(it);
+		if (tb) {
+			auto tab = tb->get_tab(kernel.properties, tr, it, 0);
+			for (size_t col = 0; col < tab.row_size(0); ++col) {
+				if (tab.column_size(col) > 1) {
+					std::vector<size_t> indices;
+					for (auto beg = tab.begin_column(col), end = tab.end_column(col); beg != end; ++beg)
+						indices.push_back(*beg + pos);
+					std::sort(indices.begin(), indices.end());
+					sym.apply_young_symmetry(indices, true);
 				}
 			}
+		}
 		pos += it.number_of_children();
 	}
 
@@ -269,25 +243,21 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 	pos = 0;
 	for (auto& it : terms) {
 		// Apply the symmetries
-		auto tb = kernel.properties.get<TableauBase>(it);
-		if(tb) {
-			int siz = tb->size(kernel.properties, tr, it);
-			if(siz>0) {
-				// FIXME: need to handle all tableaux, not just '0'.
-				auto tab = tb->get_tab(kernel.properties, tr, it, 0);
-				for (size_t row = 0; row < tab.number_of_rows(); ++row) {
-					if (tab.row_size(row) > 1) {
-						std::vector<size_t> indices;
-						for (auto beg = tab.begin_row(row), end = tab.end_row(row); beg != end; ++beg)
-							indices.push_back(*beg + pos);
-						std::sort(indices.begin(), indices.end());
-						sym.apply_young_symmetry(indices, false);
-						}
-					}
+		auto tb = kernel.properties.get_composite<TableauBase>(it);
+		if (tb) {
+			auto tab = tb->get_tab(kernel.properties, tr, it, 0);
+			for (size_t row = 0; row < tab.number_of_rows(); ++row) {
+				if (tab.row_size(row) > 1) {
+					std::vector<size_t> indices;
+					for (auto beg = tab.begin_row(row), end = tab.end_row(row); beg != end; ++beg)
+						indices.push_back(*beg + pos);
+					std::sort(indices.begin(), indices.end());
+					sym.apply_young_symmetry(indices, false);
 				}
 			}
-		pos += it.number_of_children();
 		}
+		pos += it.number_of_children();
+	}
 	return sym;
 }
 
@@ -324,7 +294,7 @@ meld::result_t meld::apply_tableaux(iterator it)
 	using namespace boost::numeric::ublas;
 	using matrix_type = matrix<AdjformEx::rational_type>;
 	using vector_type = vector<AdjformEx::rational_type>;
-	
+
 	result_t res = result_t::l_no_action;
 
 	// 'coeffs' is a square matrix which enough terms of the young projection to
@@ -387,7 +357,7 @@ meld::result_t meld::apply_tableaux(iterator it)
 						cur_term = it->first;
 					lhs_its.push_back(it);
 				}
-				
+
 				size_t n_finished = 0;
 				while (n_finished < lhs_its.size()) {
 					// Ensure that the next term is bigger than any other term to begin with
@@ -483,51 +453,52 @@ meld::result_t meld::apply_tableaux(iterator it)
 void cycle_vec(std::vector<size_t>& vec, size_t n)
 {
 	n %= vec.size();
-	
+
 }
 
 struct TraceTerm
-{ 
-	 TraceTerm(Ex::iterator it, mpq_class parent_multiplier, IndexMap& index_map);
-	 Ex::iterator it;
-	 Adjform names, indices; 
-	 mpq_class parent_multiplier;
-	 std::vector<size_t> pushes;
+{
+	TraceTerm(Ex::iterator it, mpq_class parent_multiplier, const Kernel& kernel, IndexMap& index_map);
+	Ex::iterator it;
+	Adjform names, indices;
+	mpq_class parent_multiplier;
+	std::vector<size_t> pushes;
 };
 
-TraceTerm::TraceTerm(Ex::iterator it, mpq_class parent_multiplier, IndexMap& index_map)
+TraceTerm::TraceTerm(Ex::iterator it, mpq_class parent_multiplier, const Kernel& kernel, IndexMap& index_map)
 	: it(it)
 	, parent_multiplier(parent_multiplier)
 {
-	Ex_hasher hasher(HashFlags::HASH_IGNORE_TOP_MULTIPLIER | HashFlags::HASH_IGNORE_INDEX_ORDER);
-	 auto terms = split_ex(it, "\\prod");
-	 for (const auto& term : terms) {
-		  names.push_back(index_map.get_free_index(hasher(term)));
-		  pushes.push_back(0);
-		  for (Ex::sibling_iterator beg = term.begin(), end = term.end(); beg != end; ++beg) {
-				if (beg->is_index()) {
-					indices.push_back(index_map.get_free_index(hasher(term)));
-					++pushes.back();
-				}
-		  }
-	 }
+	Ex_hasher hasher(HashFlags::HASH_IGNORE_TOP_MULTIPLIER | HashFlags::HASH_IGNORE_INDICES);
+	auto terms = split_ex(it, "\\prod");
+	for (const auto& term : terms) {
+		names.push_back(index_map.get_free_index(hasher(term)));
+		pushes.push_back(0);
+		for (Ex::sibling_iterator beg = term.begin(), end = term.end(); beg != end; ++beg) {
+			if (is_index(kernel, beg)) {
+				beg.skip_children();
+				indices.push_back(index_map.get_free_index(hasher(term)));
+				++pushes.back();
+			}
+		}
+	}
 }
 
 std::vector<TraceTerm> collect_trace_terms(Ex::iterator it, const Kernel& kernel, IndexMap& index_map)
 {
-	 // If a trace node just return all the children
+	// If a trace node just return all the children
 	if (has_Trace(kernel, it)) {
 		Ex::sibling_iterator beg = it.begin(), end = it.end();
 		if (beg == end)
 			return {};
 		if (*beg->name != "\\sum")
-			return { TraceTerm(beg, *it->multiplier, index_map) };
+			return { TraceTerm(beg, *it->multiplier, kernel, index_map) };
 		std::vector<TraceTerm> ret;
 		for (Ex::sibling_iterator a = beg.begin(), b = beg.end(); a != b; ++a)
-			ret.emplace_back(a, *it->multiplier, index_map);
+			ret.emplace_back(a, *it->multiplier, kernel, index_map);
 		return ret;
 	}
-	
+
 	// If a sum node, collect all trace nodes
 	if (*it->name == "\\sum") {
 		std::vector<TraceTerm> ret;
@@ -560,7 +531,14 @@ meld::result_t meld::apply_traces(iterator it)
 					tr.erase(terms[j].it);
 					terms.erase(terms.begin() + j);
 					--j;
-					res= result_t::l_applied;
+					if (*terms[i].it->multiplier == 0) {
+						// Modify the loop
+						if (j != terms.size() - 1) {
+							++i;
+							j = i;
+						}
+					}
+					res = result_t::l_applied;
 					break;
 				}
 
@@ -570,5 +548,31 @@ meld::result_t meld::apply_traces(iterator it)
 			} while (perm.names != terms[j].names || perm.indices != terms[j].indices);
 		}
 	}
+
+	// Clean up empty traces
+	auto is_empty_trace = [this](iterator tst) {
+		if (!has_Trace(kernel, tst))
+			return false;
+		if (tst.number_of_children() == 0)
+			return true;
+		if (*tst.begin()->name == "\\sum" && tst.begin().number_of_children() == 0)
+			return true;
+		return false;
+	};
+
+	if (*it->name == "\\sum") {
+		Ex::sibling_iterator beg = it.begin(), end = it.end();
+		while (beg != end) {
+			if (is_empty_trace(beg))
+				beg = tr.erase(beg);
+			else
+				++beg;
+		}
+	}
+	else {
+		if (is_empty_trace(it))
+			it = tr.erase(it);
+	}
+
 	return res;
 }
