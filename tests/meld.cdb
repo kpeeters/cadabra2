@@ -187,7 +187,6 @@ def test18():
               b^{\mu} c^{\nu} a^{\rho} b^{\nu} c^{\mu} a^{\rho} + 
               c^{\mu} a^{\nu} b^{\mu} c^{\rho} a^{\nu} b^{\rho}).
     meld(ex)
-    print(ex)
     assert ex == $3 * tr(a^{\mu} b^{\nu} c^{\rho} a^{\mu} b^{\rho} c^{\nu}$
     print("Test 18 passed")
 
