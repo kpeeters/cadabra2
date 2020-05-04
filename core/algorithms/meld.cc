@@ -133,13 +133,13 @@ bool has_TableauBase(const Kernel& kernel, Ex::iterator it)
 		return false;
 	}
 	else {
-		return (kernel.properties.get_composite<TableauBase>(it) != nullptr);
+		return (kernel.properties.get<TableauBase>(it) != nullptr);
 	}
 }
 
 bool has_Trace(const Kernel& kernel, Ex::iterator it)
 {
-	auto p = kernel.properties.get_composite<Trace>(it);
+	auto p = kernel.properties.get<Trace>(it);
 	if (p)
 		return true;
 	else
@@ -223,7 +223,7 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 	// Young project antisymmetric components
 	pos = 0;
 	for (auto& it : terms) {
-		auto tb = kernel.properties.get_composite<TableauBase>(it);
+		auto tb = kernel.properties.get<TableauBase>(it);
 		if (tb) {
 			auto tab = tb->get_tab(kernel.properties, tr, it, 0);
 			for (size_t col = 0; col < tab.row_size(0); ++col) {
@@ -243,7 +243,7 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 	pos = 0;
 	for (auto& it : terms) {
 		// Apply the symmetries
-		auto tb = kernel.properties.get_composite<TableauBase>(it);
+		auto tb = kernel.properties.get<TableauBase>(it);
 		if (tb) {
 			auto tab = tb->get_tab(kernel.properties, tr, it, 0);
 			for (size_t row = 0; row < tab.number_of_rows(); ++row) {
