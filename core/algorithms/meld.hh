@@ -25,9 +25,7 @@ namespace cadabra {
             result_t apply_traces(iterator it);
             result_t apply_tableaux(iterator it);
 
-			 bool has_TableauBase(Ex::iterator it);
-
-				 IndexMap index_map;
+            IndexMap index_map;
     };
 
 }

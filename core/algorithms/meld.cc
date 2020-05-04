@@ -128,7 +128,7 @@ bool has_TableauBase(const Kernel& kernel, Ex::iterator it)
 {
 	if (*it->name == "\\prod" || *it->name == "\\sum") {
 		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg)
-			if (has_TableauBase(beg))
+			if (has_TableauBase(kernel, beg))
 				return true;
 		return false;
 	}
