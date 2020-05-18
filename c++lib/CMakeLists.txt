@@ -167,6 +167,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/properties/Symmetric.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/properties/Tableau.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/properties/TableauBase.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/properties/TableauInherit.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/properties/TableauSymmetry.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/properties/Trace.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/properties/Traceless.cc
