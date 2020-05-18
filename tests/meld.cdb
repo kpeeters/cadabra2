@@ -204,3 +204,9 @@ def test19():
     print("Test 19 passed")
 
 test19()
+
+def test20():
+    ex := A_{m n} B_{m n} - A_{p q} B_{p q}.
+    meld(ex)
+    assert ex == $0$
+    print("Test 20 passed")
