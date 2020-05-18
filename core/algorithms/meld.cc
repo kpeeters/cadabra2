@@ -269,12 +269,12 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 
 bool meld::can_apply_tableaux(iterator it)
 {
-	if (has_TableauBase(kernel, it))
+	if (has_indices(kernel, it))
 		return true;
 
 	if (*it->name == "\\sum") {
 		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg)
-			if (has_TableauBase(kernel, beg))
+			if (has_indices(kernel, beg))
 				return true;
 	}
 
