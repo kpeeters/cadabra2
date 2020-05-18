@@ -121,7 +121,7 @@ def test12():
     assert(ex==0)
     print("Test 12 passed")
    
-#test12()
+test12()
 
 def test13():
     __cdbkernel__ = create_scope()

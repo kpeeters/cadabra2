@@ -560,8 +560,8 @@ namespace cadabra {
 	void AdjformEx::apply_ident_symmetry(std::vector<size_t> positions, size_t n_indices)
 	{
 		for (size_t i = 0; i < positions.size() - 1; ++i) {
+			auto old_data = data;
 			for (size_t j = i + 1; j < positions.size(); ++j) {
-				auto old_data = data;
 				for (const auto& kv : old_data) {
 					auto term = kv.first;
 					for (size_t k = 0; k < n_indices; ++k) 
