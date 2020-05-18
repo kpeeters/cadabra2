@@ -77,12 +77,14 @@ int main(int argc, char **argv)
 // #ifndef ENABLE_JUPYTER
 // 	snoop::log.sync_with_server();
 // #endif
+
+	return 0;
 	}
 
 
 #if defined(_WIN32) && defined(NDEBUG)
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 	{
-	main();
+	return main(__argc, __argv);
 	}
 #endif
