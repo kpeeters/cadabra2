@@ -98,6 +98,7 @@ set(ALGOS
   split_index
   substitute
   take_match
+  untrace
   unwrap
   vary
   young_project_product
