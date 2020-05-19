@@ -93,8 +93,8 @@
 #endif
 
 #define PYBIND11_VERSION_MAJOR 2
-#define PYBIND11_VERSION_MINOR 3
-#define PYBIND11_VERSION_PATCH dev0
+#define PYBIND11_VERSION_MINOR 5
+#define PYBIND11_VERSION_PATCH 0
 
 /// Include Python header, disable linking to pythonX_d.lib on Windows in debug mode
 #if defined(_MSC_VER)
@@ -103,7 +103,7 @@
 #  endif
 #  pragma warning(push)
 #  pragma warning(disable: 4510 4610 4512 4005)
-#  if defined(_DEBUG)
+#  if defined(_DEBUG) && !defined(Py_DEBUG)
 #    define PYBIND11_DEBUG_MARKER
 #    undef _DEBUG
 #  endif
@@ -113,10 +113,9 @@
 #include <frameobject.h>
 #include <pythread.h>
 
-#if defined(_WIN32) && (defined(min) || defined(max))
-#  error Macro clash with min and max -- define NOMINMAX when compiling your program on Windows
-#endif
-
+/* Python #defines overrides on all sorts of core functions, which
+   tends to weak havok in C++ codebases that expect these to work
+   like regular functions (potentially with several overloads) */
 #if defined(isalnum)
 #  undef isalnum
 #  undef isalpha
@@ -125,6 +124,10 @@
 #  undef isupper
 #  undef tolower
 #  undef toupper
+#endif
+
+#if defined(copysign)
+#  undef copysign
 #endif
 
 #if defined(_MSC_VER)
@@ -168,7 +171,9 @@
 #define PYBIND11_STR_TYPE ::pybind11::str
 #define PYBIND11_BOOL_ATTR "__bool__"
 #define PYBIND11_NB_BOOL(ptr) ((ptr)->nb_bool)
+// Providing a separate declaration to make Clang's -Wmissing-prototypes happy
 #define PYBIND11_PLUGIN_IMPL(name) \
+    extern "C" PYBIND11_EXPORT PyObject *PyInit_##name();   \
     extern "C" PYBIND11_EXPORT PyObject *PyInit_##name()
 
 #else
@@ -192,8 +197,10 @@
 #define PYBIND11_STR_TYPE ::pybind11::bytes
 #define PYBIND11_BOOL_ATTR "__nonzero__"
 #define PYBIND11_NB_BOOL(ptr) ((ptr)->nb_nonzero)
+// Providing a separate PyInit decl to make Clang's -Wmissing-prototypes happy
 #define PYBIND11_PLUGIN_IMPL(name) \
     static PyObject *pybind11_init_wrapper();               \
+    extern "C" PYBIND11_EXPORT void init##name();           \
     extern "C" PYBIND11_EXPORT void init##name() {          \
         (void)pybind11_init_wrapper();                      \
     }                                                       \
@@ -211,6 +218,8 @@ extern "C" {
 #define PYBIND11_STRINGIFY(x) #x
 #define PYBIND11_TOSTRING(x) PYBIND11_STRINGIFY(x)
 #define PYBIND11_CONCAT(first, second) first##second
+#define PYBIND11_ENSURE_INTERNALS_READY \
+    pybind11::detail::get_internals();
 
 #define PYBIND11_CHECK_PYTHON_VERSION \
     {                                                                          \
@@ -257,6 +266,7 @@ extern "C" {
     static PyObject *pybind11_init();                                          \
     PYBIND11_PLUGIN_IMPL(name) {                                               \
         PYBIND11_CHECK_PYTHON_VERSION                                          \
+        PYBIND11_ENSURE_INTERNALS_READY                                        \
         try {                                                                  \
             return pybind11_init();                                            \
         } PYBIND11_CATCH_INIT_EXCEPTIONS                                       \
@@ -284,6 +294,7 @@ extern "C" {
     static void PYBIND11_CONCAT(pybind11_init_, name)(pybind11::module &);     \
     PYBIND11_PLUGIN_IMPL(name) {                                               \
         PYBIND11_CHECK_PYTHON_VERSION                                          \
+        PYBIND11_ENSURE_INTERNALS_READY                                        \
         auto m = pybind11::module(PYBIND11_TOSTRING(name));                    \
         try {                                                                  \
             PYBIND11_CONCAT(pybind11_init_, name)(m);                          \
@@ -673,6 +684,8 @@ PYBIND11_RUNTIME_EXCEPTION(index_error, PyExc_IndexError)
 PYBIND11_RUNTIME_EXCEPTION(key_error, PyExc_KeyError)
 PYBIND11_RUNTIME_EXCEPTION(value_error, PyExc_ValueError)
 PYBIND11_RUNTIME_EXCEPTION(type_error, PyExc_TypeError)
+PYBIND11_RUNTIME_EXCEPTION(buffer_error, PyExc_BufferError)
+PYBIND11_RUNTIME_EXCEPTION(import_error, PyExc_ImportError)
 PYBIND11_RUNTIME_EXCEPTION(cast_error, PyExc_RuntimeError) /// Thrown when pybind11::cast or handle::call fail due to a type casting error
 PYBIND11_RUNTIME_EXCEPTION(reference_cast_error, PyExc_RuntimeError) /// Used internally
 
@@ -719,10 +732,6 @@ struct error_scope {
 /// Dummy destructor wrapper that can be used to expose classes with a private destructor
 struct nodelete { template <typename T> void operator()(T*) { } };
 
-// overload_cast requires variable templates: C++14
-#if defined(PYBIND11_CPP14)
-#define PYBIND11_OVERLOAD_CAST 1
-
 NAMESPACE_BEGIN(detail)
 template <typename... Args>
 struct overload_cast_impl {
@@ -742,19 +751,23 @@ struct overload_cast_impl {
 };
 NAMESPACE_END(detail)
 
+// overload_cast requires variable templates: C++14
+#if defined(PYBIND11_CPP14)
+#define PYBIND11_OVERLOAD_CAST 1
 /// Syntax sugar for resolving overloaded function pointers:
 ///  - regular: static_cast<Return (Class::*)(Arg0, Arg1, Arg2)>(&Class::func)
 ///  - sweet:   overload_cast<Arg0, Arg1, Arg2>(&Class::func)
 template <typename... Args>
 static constexpr detail::overload_cast_impl<Args...> overload_cast = {};
 // MSVC 2015 only accepts this particular initialization syntax for this variable template.
+#endif
 
 /// Const member function selector for overload_cast
 ///  - regular: static_cast<Return (Class::*)(Arg) const>(&Class::func)
 ///  - sweet:   overload_cast<Arg>(&Class::func, const_)
 static constexpr auto const_ = std::true_type{};
 
-#else // no overload_cast: providing something that static_assert-fails:
+#if !defined(PYBIND11_CPP14) // no overload_cast: providing something that static_assert-fails:
 template <typename... Args> struct overload_cast {
     static_assert(detail::deferred_t<std::false_type, Args...>::value,
                   "pybind11::overload_cast<...> requires compiling in C++14 mode");
