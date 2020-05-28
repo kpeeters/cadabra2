@@ -280,6 +280,7 @@ set(LIB_INCLUDE_DIRS
 	"${CADABRA_LIBS_DIR}/internal/include"
 	"${CADABRA_LIBS_DIR}/dbg"
 )
+message("${LIB_INCLUDE_DIRS}")
 
 if(USE_TREETRACKER)
   add_definitions(-DUSE_TREETRACKER)
@@ -314,6 +315,11 @@ target_link_libraries(cadabra2++_static ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB
 add_executable(simple simple.cc)
 target_include_directories(simple PUBLIC "${CMAKE_BINARY_DIR}/include" "${CMAKE_BINARY_DIR}/include/cadabra2++")
 target_link_libraries(simple cadabra2++)
+ 
+# Test for adjform
+add_executable(adjform adjform.cc)
+target_include_directories(adjform PUBLIC "${CMAKE_BINARY_DIR}/include" "${CMAKE_BINARY_DIR}/include/cadabra2++")
+target_link_libraries(adjform cadabra2++)
  
 
 #---------------------------------------------------------------------------

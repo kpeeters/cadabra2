@@ -68,14 +68,22 @@ install(
   "
   )
 
-  # Are we trying to build cadabra as a c++ library?
-  option(BUILD_AS_CPP_LIBRARY "Build cadabra as a C++ library" OFF)
-  if (BUILD_AS_CPP_LIBRARY)
-	enable_testing()
-	add_subdirectory(c++lib)
-	return()
-  endif()
- 
+# Turn Mathematica support on/off.
+option(ENABLE_MATHEMATICA "Enable Mathematica support" ON)
+
+# Are we trying to build cadabra as a c++ library?
+option(BUILD_AS_CPP_LIBRARY "Build cadabra as a C++ library" OFF)
+if (BUILD_AS_CPP_LIBRARY)
+  enable_testing()
+  add_subdirectory(c++lib)
+  configure_file(
+	 "${PROJECT_SOURCE_DIR}/core/Config.hh.in" 
+	 "${PROJECT_SOURCE_DIR}/core/Config.hh"
+    )
+  # Bail out early.
+  return()
+endif()
+
 
 # Include packaging logic.
 include(cmake/packaging.cmake)
@@ -116,8 +124,6 @@ if (BUILD_TESTS)
   # Allows tests to be built in all subdirectories.
   enable_testing()
 endif()
-
-option(ENABLE_MATHEMATICA "Enable Mathematica support" ON)
 
 option(ENABLE_FRONTEND    "Enable the UI frontend" ON)
 
@@ -215,7 +221,7 @@ endif()
 
 if(ENABLE_MATHEMATICA)
 	print_header("Configuring Mathematica")
-	find_package(Mathematica COMPONENTS WSTP)
+	find_package(Mathematica COMPONENTS WSTP REQUIRED)
 endif()
 
 

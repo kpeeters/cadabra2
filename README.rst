@@ -523,13 +523,11 @@ For any questions, please contact info@cadabra.science .
 Building Cadabra as C++ library
 -------------------------------
 
-EXPERIMENTAL: If you want to use the functionality of Cadabra inside
-your own C++ programs, you can build Cadabra as a shared library. To
-do this::
+If you want to use the functionality of Cadabra inside your own C++
+programs, you can build Cadabra as a shared library. To do this::
 
-    cd c++lib
     mkdir build
-    cmake ..
+    cmake -DBUILD_AS_CPP_LIBRARY=ON ..
     make
     sudo make install
 
