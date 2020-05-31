@@ -9,9 +9,17 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
+    - name: get dependencies
+      run:  sudo apt get install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev \
+          libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev  \
+          texlive texlive-latex-extra dvipng \
+          python3-matplotlib python3-mpmath python3-sympy python3-gmpy2
     - name: configure
-      run: ./configure
+      working-directory: /home/runner/work/cadabra2/build
+      run: cmake ..
     - name: make
+      working-directory: /home/runner/work/cadabra2/build
       run: make
     - name: make test
+      working-directory: /home/runner/work/cadabra2/build
       run: make test
