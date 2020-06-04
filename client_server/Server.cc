@@ -256,9 +256,10 @@ void Server::wait_for_job()
 	std::cerr << "Server::wait_for__job: start" << std::endl;
 #endif
 
-#ifndef ENABLE_JUPYTER
+#ifndef CDB_DONT_ACQUIRE_GIL
 	// FIXME: why do we need this for the normal Cadabra server, but does
-	// it hang in the Jupyter server?
+	// it hang in the Jupyter server? If you drop this from the normal
+	// server, it will crash soon below.
 	pybind11::gil_scoped_acquire acquire;
 #endif
 

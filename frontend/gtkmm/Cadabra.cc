@@ -93,9 +93,8 @@ int Cadabra::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& opti
 		return -1;
 
 	get_arg_value(options, "server-port", server_port);
-	if(get_arg_value(options, "token",       server_token)==false)
-		std::cerr << "no token" << std::endl;
-	std::cerr << server_port << ", " << server_token << std::endl;
+	get_arg_value(options, "token",       server_token);
+//	std::cerr << server_port << ", " << server_token << std::endl;
 	return -1;
 	}
 

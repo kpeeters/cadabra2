@@ -1,50 +1,92 @@
+{% set name = "cadabra2" %}
+{% set version = "2.2.9" %}
+
 package:
-  name: "cadabra2-jupyter-kernel"
-  version: "2.2.9"
+  name: {{ name|lower }}
+  version: {{ version }}
 
 source:
-  path: ../  
+  path: ../
+#   url: https://github.com/kpeeters/cadabra2/archive/{{ version }}.tar.gz
+#   sha256: 72786423b2ff847e8e0035326a8f1b2cdcf76a68c77f95588276bbccfaa74d7e
+#   patches:
+#     - cdd2fb45dc3e280d6f3834b54d9f7d612b604155.patch
+
+build:
+  number: 0
+  skip: True  # [win]
 
 requirements:
   build:
+    - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - python
-    - setuptools
-    - boost
-    - libboost
     - cmake
-#    - pkg-config
-#    - glibmm
+    - make
+    - pkg-config
+    - {{ cdt('libice-devel') }}  # [linux]
+    - {{ cdt('libsm-devel') }}  # [linux]
+    - {{ cdt('libx11-devel') }}  # [linux]
+    - {{ cdt('libxcomposite-devel') }}  # [linux]
+    - {{ cdt('libxcursor-devel') }}  # [linux]
+    - {{ cdt('libxdamage-devel') }}  # [linux]
+    - {{ cdt('libxext-devel') }}  # [linux]
+    - {{ cdt('libxi-devel') }}  # [linux]
+    - {{ cdt('libxinerama-devel') }}  # [linux]
+    - {{ cdt('libxfixes-devel') }}  # [linux]
+    - {{ cdt('libxrandr-devel') }}  # [linux]
+    - {{ cdt('libxrender-devel') }}  # [linux]
+    - {{ cdt('libxtst-devel') }}  # [linux]
+    - {{ cdt('mesa-libEGL-devel') }}  # [linux]
+    - {{ cdt('mesa-libGL-devel') }}  # [linux]
+    - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
+
+  host:
+    - python
+    - gmp
+    - boost-cpp
+    - libuuid
+    - sqlite
+    - pcre
+    - gtkmm-3.0
+    - glibmm
+    - cairomm-1.0
+    - glib
+    - sigcpp-2.0
+    - pangomm-1.4
+    - cairo
+    - atkmm-1.6
+    - nlohmann_json
+    - xtl
+    - jsoncpp
+    - xeus
     - zeromq
     - cppzmq
-    - xtl
-    - cryptopp
-    - sqlite
-    - util-linux
-    - xeus
-    - nlohmann_json
+    - gtkmm
+    - pybind11
+    # Needed for ctest
     - sympy
-    - jupyter
-
   run:
+    - boost-cpp
     - python
-    - jupyter
-#    - libstdcxx-ng
-#    - libgcc-ng
-    - gmp    
-    - glibmm
-    - xeus
-    - libboost
+    - sympy
+    - matplotlib-base
+    # Remove these when they get run_exports
+    - {{ pin_compatible("cairo") }}
+    - {{ pin_compatible("glibmm") }}
+    - {{ pin_compatible("glib") }}
 
-# outputs:
-#   - name: "cadabra2-jupyter-kernel"
-#     files:
-#       - bin/cadabra-jupyter-kernel
-#       - share/jupyter/kernels/
-#       - share/cadabra2/
+test:
+  imports:
+    - cadabra2
 
 about:
-  home: https://cadabra.science
-  license: GPL
+  home: https://github.com/kpeeters/cadabra2
+  license: GPL-3.0-only
   license_family: GPL
-  summary: Jupyter kernel for the Cadabra2 computer algebra system.
+  license_file: LICENSE
+  summary: 'a field-theory motivated approach to computer algebra'
+
+extra:
+  recipe-maintainers:
+    - isuruf
+    - kpeeters

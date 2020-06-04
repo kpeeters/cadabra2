@@ -8,9 +8,33 @@ Python interface). At the moment this is only supported by compiling
 against a Conda python, simply because that enables us to build on the
 'xeus' library more easily.
 
+Building a Conda package
+------------------------
 
-Building using Conda
---------------------
+After installation, first activate your miniconda distribution::
+
+    source ~/miniconda3/bin/activate
+
+All dependencies to build a Conda package of Cadabra can then be
+installed from Conda directly, with::
+
+    conda install conda-build
+
+Then build with::
+
+    cd conda
+    conda-build .
+    
+To install::
+
+    conda install --use-local cadabra2
+
+
+
+    
+
+Building using Conda (old)
+--------------------------
 
 The following instructions have been tested on a clean Ubuntu 18.04
 installation.
