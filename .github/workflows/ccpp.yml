@@ -12,9 +12,9 @@ jobs:
     - name: setup python
       uses: actions/setup-python@v2
       with:
-          python-version: 3.6
+          python-version: 3.7
     - name: get dependencies
-      run:  sudo apt-get install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev texlive-base python3-mpmath && python -m pip install sympy
+      run:  sudo apt-get install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev texlive-base python3-mpmath && python3 --version && which python3 && python3 -m pip install sympy
     - name: configure
       run:  mkdir build && cd build && cmake -DENABLE_MATHEMATICA=OFF ..
     - name: make
