@@ -10,10 +10,10 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: get dependencies
-      run:  sudo apt-get install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev texlive-base python3-mpmath python3-sympy python3-gmpy2 
+      run:  sudo apt-get install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev texlive-base python3-mpmath python3-sympy python3-gmpy2 && python3 -c "import sympy; print(sympy.__version__)" 
     - name: configure
       run:  mkdir build && cd build && cmake -DENABLE_MATHEMATICA=OFF ..
     - name: make
       run:  cd build && make
     - name: make test
-      run:  sudo apt-get install python3-sympy python3-gmpy2 && cd build && make test ARGS="-V"
+      run:  cd build && make test ARGS="-V"
