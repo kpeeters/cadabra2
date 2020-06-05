@@ -6,7 +6,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    python-version: 3.6
     
     steps:
     - uses: actions/checkout@v1
