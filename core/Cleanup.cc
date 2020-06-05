@@ -38,6 +38,8 @@ namespace cadabra {
 				// once we hit zero, there is nothing to simplify anymore
 				break;
 				}
+			if(*it->name=="\\frac")                          res = cleanup_fraclike(kernel, tr, it);
+			changed = changed || res;
 			if(*it->name=="\\pow")                           res = cleanup_powlike(kernel, tr, it);
 			changed = changed || res;
 			if(*it->name=="\\prod" || *it->name=="\\wedge")  res = cleanup_productlike(kernel, tr, it);
@@ -100,6 +102,33 @@ namespace cadabra {
 		collect_terms ct(k, tr);
 		ct.check_index_consistency(it);
 		ct.check_degree_consistency(it); // FIXME: needs to be implemented in Algorithm.
+		}
+
+	bool cleanup_fraclike(const Kernel& k, Ex&tr, Ex::iterator& it)
+		{
+		auto arg=tr.begin(it);
+		if(*arg->name=="\\equals") {
+			// When dividing an equation by something else, divide both sides.
+
+			auto div=arg;
+			++div;
+
+			auto lhs=tr.begin(arg);
+			auto rhs=lhs;
+			rhs.skip_children();
+			++rhs;
+
+			auto lhsfrac=tr.wrap(lhs, str_node("\\frac"));
+			auto rhsfrac=tr.wrap(rhs, str_node("\\frac"));
+			tr.append_child(lhsfrac, div);
+			tr.append_child(rhsfrac, div);
+
+			it=tr.flatten_and_erase(it);
+			
+			return true;
+			}
+
+		return false;
 		}
 
 	bool cleanup_powlike(const Kernel& k, Ex&tr, Ex::iterator& it)
@@ -304,6 +333,53 @@ namespace cadabra {
 			}
 
 
+		// If any of the elements is an `\equals`, multiply the rest of the
+		// terms through on both sides. If there is more than one `\equals`, throw
+		// an error.
+
+		sib=tr.begin(it);
+		Ex::sibling_iterator equals_node=tr.end(it);
+		while(sib!=tr.end(it)) {
+			if(*sib->name=="\\equals") {
+				if(equals_node!=tr.end(it))
+					throw ConsistencyException("Encountered more than one equalities in a product; undefined.");
+				else
+					equals_node=sib;
+				}
+			++sib;
+			}
+		if(equals_node!=tr.end(it)) {
+			Ex::sibling_iterator lhs=tr.begin(equals_node);
+			Ex::sibling_iterator rhs=lhs;
+			++rhs;
+
+			auto lhsprod=tr.wrap(lhs, str_node("\\prod"));
+			auto rhsprod=tr.wrap(rhs, str_node("\\prod"));
+			sib=tr.begin(it);
+			bool left=true;
+			while(sib!=tr.end(it)) {
+				if(sib!=equals_node) {
+					if(left) {
+						tr.prepend_child(lhsprod, sib);
+						tr.prepend_child(rhsprod, sib);
+						}
+					else {
+						tr.append_child(lhsprod, sib);
+						tr.append_child(rhsprod, sib);
+						}
+					sib=tr.erase(sib);
+					}
+				else {
+					left=false;
+					++sib;
+					}
+				}
+			Ex::iterator tmp1(lhsprod), tmp2(rhsprod);
+			cleanup_dispatch(k, tr, tmp1);
+			cleanup_dispatch(k, tr, tmp2);
+			it=tr.flatten_and_erase(it);
+			ret=true;
+			}
 
 		return ret;
 		}

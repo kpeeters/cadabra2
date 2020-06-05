@@ -70,6 +70,7 @@ requirements:
     - python
     - sympy
     - matplotlib-base
+    - xeus
     # Remove these when they get run_exports
     - {{ pin_compatible("cairo") }}
     - {{ pin_compatible("glibmm") }}

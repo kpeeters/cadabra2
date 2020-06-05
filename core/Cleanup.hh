@@ -65,6 +65,7 @@ namespace cadabra {
 	/// allowed to modify anything except the node and nodes below (in
 	/// particular, they will leave sibling nodes untouched).
 
+	bool cleanup_fraclike(const Kernel& k, Ex&, Ex::iterator& it);
 	bool cleanup_powlike(const Kernel& k, Ex&, Ex::iterator& it);
 	bool cleanup_productlike(const Kernel& k, Ex&, Ex::iterator& it);
 	bool cleanup_sumlike(const Kernel& k, Ex&, Ex::iterator& it);

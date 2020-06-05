@@ -110,3 +110,25 @@ def test06():
 
 test06()
 
+def test07():
+    __cdbkernel__=create_scope()
+    ex:= p V = k T;
+    ex2:= @(ex)/V;
+    collect_factors(ex2)
+    tst:= (p = k T / V) - @(ex2);
+    assert(tst==$0=0$)
+    print("Test 07a passed")
+    
+    try:
+       ex1:= A = B;
+       ex2:= C = D;
+       ex3:= @(ex1) @(ex2);
+       assert(1==0)
+    except RuntimeError as e:
+        print("Test 07b passed")
+    
+    ex3:= Q @(ex) R;
+    assert( ex3 == $Q p V R = Q k T R$ )
+    print("Test 07c passed")
+
+test07()

@@ -472,7 +472,7 @@ void Shell::handle_error()
 				throw ExitRequest{ to_string(value) };
 		}
 		else {
-			PySys_WriteStderr(colour_error);
+			PySys_WriteStderr("%.1000s", colour_error);
 			PyErr_Print();
 			write(colour_reset, "", "stderr", true);
 		}

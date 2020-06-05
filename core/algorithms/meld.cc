@@ -86,7 +86,7 @@ public:
 		x.resize(y.size());
 		for (size_t i = 0; i < N; ++i) {
 			x(i) = y(P(i));
-			for (int k = 0; k < i; ++k)
+			for (size_t k = 0; k < i; ++k)
 				x(i) -= A(i, k) * x(k);
 		}
 
@@ -370,7 +370,7 @@ meld::result_t meld::apply_tableaux(iterator it)
 					Adjform next_term;
 					next_term.push_back(std::numeric_limits<Adjform::value_type>::max());
 					AdjformEx::rational_type sum = 0;
-					for (int i = 0; i < adjforms.size(); ++i) {
+					for (size_t i = 0; i < adjforms.size(); ++i) {
 						if (lhs_its[i] != adjforms[i].end() && lhs_its[i]->first == cur_term) {
 							sum += x(i) * lhs_its[i]->second;
 							++lhs_its[i];
