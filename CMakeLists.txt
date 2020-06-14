@@ -69,7 +69,7 @@ install(
   )
 
 # Turn Mathematica support on/off.
-option(ENABLE_MATHEMATICA "Enable Mathematica support" OFF)
+option(ENABLE_MATHEMATICA "Enable Mathematica support" ON)
 
 # Are we trying to build cadabra as a c++ library?
 option(BUILD_AS_CPP_LIBRARY "Build cadabra as a C++ library" OFF)

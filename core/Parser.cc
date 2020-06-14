@@ -187,6 +187,12 @@ bool Parser::string2tree(const std::string& inp)
 
 #ifdef DEBUG
 	std::cout << "converted to utf32" << std::endl;
+	for(int i=0; i<inp.size(); ++i)
+		std::cout << (int)inp[i] << " ";
+	std::cout << std::endl;
+	for(int i=0; i<str.size(); ++i)
+		std::cout << (int)str[i] << " ";
+	std::cout << std::endl;
 #endif
 
 	// Initialise the parser.
@@ -204,7 +210,9 @@ bool Parser::string2tree(const std::string& inp)
 			return false;
 			}
 		char32_t c=get_token(i);
-		// std::cerr << i << " " << (int)c << "\n" << std::endl;
+#ifdef DEBUG		
+		std::cerr << i << " " << (int)c << " mode " << static_cast<int>(current_mode.back()) << std::endl;
+#endif
 		switch(current_mode.back()) {
 			case m_skipwhite:
 				// std::cerr << "m_skipwhite" << " " << c << std::endl;

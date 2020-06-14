@@ -1,5 +1,6 @@
 # Testing that some expressions are canonicalised
 # properly using the meld algorithm
+import timeit
 
 def test01():
     __cdbkernel__ = create_scope()
@@ -193,6 +194,7 @@ def test18():
 test18()
 
 def test19():
+    __cdbkernel__ = create_scope()
     {\mu,\nu}::Indices(vector).
     u^{\mu}::ImplicitIndex.
     u^{\mu}::SelfNonCommuting.
@@ -206,7 +208,72 @@ def test19():
 test19()
 
 def test20():
+    __cdbkernel__ = create_scope()
     ex := A_{m n} B_{m n} - A_{p q} B_{p q}.
     meld(ex)
     assert ex == $0$
     print("Test 20 passed")
+
+def test21():
+    __cdbkernel__ = create_scope()
+    {a,b,c,d}::Indices(group);
+    {\mu,\nu,\rho,\sigma}::Indices(spacetime);
+    \epsilon^{\mu\nu\rho\sigma}::EpsilonTensor;
+    ex1:=F^{a b}_{\mu\sigma} A^{b c}_{\nu} A^{c a}_{\rho} \epsilon^{\mu\sigma\nu\rho}; 
+    ex2:=A^{a b}_{\mu} F^{b c}_{\nu\sigma} A^{c a}_{\rho} \epsilon^{\mu\nu\sigma\rho};
+    ex:=@(ex1)+@(ex2);
+    sort_product(_)
+    meld(_)
+    assert(ex==0)
+
+print(timeit.timeit(test21,number=1000))
+
+def test22():
+    __cdbkernel__ = create_scope()
+    {a,b,c,d}::Indices(group);
+    {\mu,\nu,\rho,\sigma}::Indices(spacetime);
+    \epsilon^{\mu\nu\rho\sigma}::EpsilonTensor;
+    ex1:=F^{a b}_{\mu\sigma} A^{b c}_{\nu} A^{c a}_{\rho} \epsilon^{\mu\sigma\nu\rho}; 
+    ex2:=A^{a b}_{\mu} F^{b c}_{\nu\sigma} A^{c a}_{\rho} \epsilon^{\mu\nu\sigma\rho};
+    ex:=@(ex1)+@(ex2);
+    sort_product(_)
+    canonicalise(_)
+    assert(ex==0)
+
+print(timeit.timeit(test22,number=1000))
+
+# import numpy as np
+# {n#}::Indices;
+# R_{n1 n2 n3 n4}::RiemannTensor;
+# str=""
+# for n in range(4):
+#    p = np.random.permutation(4*4)
+#    for tensor in range(4):
+#        str+="R_{"
+#        for index in range(4):
+#            str+=ilist[p[tensor*4+index]]+' '
+#        str+="} "
+#    if n<3:
+#       str+="+ "
+#         
+# ex=Ex(str)
+# meld(_);
+        
+
+def test23():
+    __cdbkernel__ = create_scope()
+    {\mu,\nu,\rho,\sigma}::Indices(spacetime);
+    \epsilon^{\mu\nu\rho\sigma}::EpsilonTensor;
+    {a,b,c,d}::Indices(group);
+    F_{\mu\sigma}::ImplicitIndex(F^{b c}_{\mu\sigma});
+    A_{\mu}::ImplicitIndex(A^{a b}_{\mu});
+    Tr{#}::Trace(indices=group);        
+    ex1:= a Tr( F_{\mu\sigma} A_{\nu} A_{\rho} ) \epsilon^{\mu\sigma\nu\rho};
+    ex2:= b Tr( A_{\mu} F_{\nu\sigma} A_{\rho} ) \epsilon^{\mu\nu\sigma\rho};
+    ex:= @(ex1) + @(ex2);    
+    explicit_indices(_);
+    sort_product(_);
+    meld(_);
+    
+test23()
+    

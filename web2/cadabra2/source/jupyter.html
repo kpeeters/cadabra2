@@ -27,15 +27,10 @@
   To obtain the Cadabra kernel for Jupyter, you need to either install
   it from Anaconda,
   or <a href="https://github.com/kpeeters/cadabra2/JUPYTER.rst">build
-  it yourself</a>. To install, make sure your conda installation is
-  up-to-date with:
+  it yourself</a>. To install, ensure that the required channel is
+  active, and update/install:
 </p>
-<div class="output">  conda update -n base -c defaults conda</div>
-<p>
-  Then add the required channels and update/install:
-</p>
-<div class="output">  conda config --add channels kpeeters
-  conda config --add channels conda-forge
+<div class="output">  conda config --add channels conda-forge
   conda update --all
   conda install cadabra2-jupyter-kernel</div>
 <p>

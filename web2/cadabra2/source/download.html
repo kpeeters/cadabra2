@@ -12,8 +12,7 @@
 <p>
   Packages for various Linux distributions and for Windows (beta!) are
   available for download here. Installation on macOS can be done
-  through HomeBrew; see below. All these packages get updated on a
-  semi-regular basis by yours truly; if you run into trouble, email me.
+  through HomeBrew or Conda; see below. 
 </p>
 <p>
   Note that if your distribution has a <code>cadabra</code> package, this
@@ -127,6 +126,27 @@
 		build instructions</a> for details.
 	 </div>
   </div>
+
+  <div class="distrotype">
+	 <img src="static/images/conda.png"/>
+	 <div class="distrotxt">
+      On Linux and macOS, you can install Cadabra, its native notebook
+      interface, and the Jupyter kernel via Conda or Anaconda, thanks
+      to the work of Isuru Fernando. Activate the <tt>conda-forge</tt>
+      channel if you have not done that already, with
+      <code>conda config --add channels conda-forge</code>
+      <code>conda config --set channel_priority strict</code>
+      and then install these packages by using one of the following
+      lines:
+      <code>conda install cadabra2</code>
+      <code>conda install cadabra2-gtk</code>
+      <code>conda install cadabra2-jupyter-kernel</code>
+      This is probably the simplest way to get the Cadabra Jupyter
+      kernel on your system, even if you are running one of the
+      distributions listed above.
+	 </div>
+  </div>
+
 </div>
 
 <p>

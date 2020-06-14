@@ -613,6 +613,7 @@ bool DisplayMMA::children_have_brackets(Ex::iterator ch) const
 std::string DisplayMMA::preparse_import(const std::string& in)
 	{
 	std::string ret = in;
+	ret = replace_all(ret, "\\\\", "\\");
 	for(auto& r: regex_map) {
 		ret = replace_all(ret, r.second, r.first);
 		}

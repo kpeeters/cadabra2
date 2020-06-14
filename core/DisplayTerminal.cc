@@ -12,6 +12,9 @@ DisplayTerminal::DisplayTerminal(const Kernel& k, const Ex& e, bool uuc)
 			{"\\cos", "cos"},
 			{"\\sin", "sin"},
 			{"\\tan", "tan"},
+			{"\\cosh", "cosh"},
+			{"\\sinh", "sinh"},
+			{"\\tanh", "tanh"},
 			{"\\int", "∫" },
 			{"\\sum", "∑" }
 		};
