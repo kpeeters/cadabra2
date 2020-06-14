@@ -57,4 +57,28 @@ def test04():
     print("Test 04 passed")
 
 test04()
-        
+
+def test05():
+    kernel(scalar_backend="mathematica")
+    {r,t}::Coordinate;
+    {a,b,c,d,e}::Indices(values={r,t});
+    \partial{#}::PartialDerivative;
+    f::Depends(r,t);
+    rl:= { g_{r r} = f r**2 };
+    ex:= \Gamma_{a b c} = \partial_{a}{ g_{b c} };
+    evaluate(ex, rl, rhsonly=True)
+    c1=ex[1][3][1][1]
+    tst:=@(c1) - r (r\partial_{r}{f} + 2 f);
+    distribute(tst)
+    assert(tst==0)
+    print("Test 05a passed")
+    c2=ex[1][3][0][1]
+    tst:=@(c2) - r**2 \partial_{t}{f};
+    distribute(tst)
+    assert(tst==0)
+    print("Test 05b passed")
+
+test05()
+    
+
+    

@@ -16,7 +16,7 @@ using namespace cadabra;
 WSLINK        MMA::lp = 0;
 WSEnvironment MMA::stdenv = 0;
 
-// #define DEBUG 1
+//#define DEBUG 1
 
 Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap,
                             std::vector<std::string> args, const std::string& method)
@@ -112,7 +112,15 @@ Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, cons
 
 	//parser.tree->print_recursive_treeform(std::cerr, parser.tree->begin());
 
+#ifdef DEBUG
+	std::cerr << "cleaned up: " << *parser.tree << std::endl;
+#endif
+	
 	ds.import(*parser.tree);
+
+#ifdef DEBUG
+	std::cerr << "imported: " << *parser.tree << std::endl;
+#endif
 
 	pre_clean_dispatch_deep(kernel, *parser.tree);
 	cleanup_dispatch_deep(kernel, *parser.tree);

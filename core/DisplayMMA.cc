@@ -639,16 +639,41 @@ void DisplayMMA::import(Ex& ex)
 			}
 
 		// Move child nodes of partial to the right place.
+		// We have to fix the notation for Derivative. A derivative
+		// of the type
+		//    \partial_{r t t}{f}
+		// gets produced as
+		//    Derivative[1][2][f][r][t]
+		// which at first instance reads
+		//    \partial{1}{2}{f}{r}{t}
+		// This is even true for simple 1st order derivatives.
+		// For 'm' arguments, we have '(m-1)/2' variables.
+		
 		if(*it->name=="\\partial")
 			{
-			std::cerr << "to convert: " << Ex(it) << std::endl;
+//			std::cerr << "to convert: " << Ex(it) << std::endl;
+			int n=ex.number_of_children(it);
+			if(n<3 || n%2!=1)
+				throw ConsistencyException("Returned unparseable derivative.");
+			
+			n=(n-1)/2;
+			std::vector<int> nums;
 			auto args = ex.begin(it);
+			for(int i=0; i<n; ++i) {
+				nums.push_back( to_long(*(args->multiplier)) );
+				args=ex.erase(args);
+				}
+
+			args=ex.begin(it);
 			++args;
+			int p=0;
 			while(args!=ex.end(it)) {
 				auto nxt=args;
 				++nxt;
-				ex.move_before(ex.begin(it), args)->fl.parent_rel=str_node::p_sub;
-				args=nxt;
+				for(int i=0; i<nums[p]; ++i)
+					ex.insert_subtree(ex.begin(it), args)->fl.parent_rel=str_node::p_sub;
+				args=ex.erase(args);
+				++p;
 				}
 			}
 
