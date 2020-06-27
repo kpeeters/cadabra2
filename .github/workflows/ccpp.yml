@@ -10,7 +10,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
     
-    steps:
+  steps:
     - uses: actions/checkout@v1
 
     - name: setup python
