@@ -156,7 +156,7 @@ namespace cadabra {
 			/// FIXME: the following should implement a stack of states,
 			/// so that it can be used with nested functions.
 
-			enum result_t { l_checkpointed, l_no_action, l_applied, l_error };
+			enum result_t { l_checkpointed, l_no_action, l_applied, l_applied_no_new_dummies, l_error };
 			result_t state() const;
 			void     update_state(result_t);
 			void     reset_state();

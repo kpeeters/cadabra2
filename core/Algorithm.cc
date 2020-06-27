@@ -78,13 +78,16 @@ Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
 	Ex::iterator start=tr.begin();
 	while(start!=tr.end()) {
 		if(traverse_ldots || !tr.is_hidden(start)) {
-			if(start->is_index()==false && apply_once(start)==result_t::l_applied) {
-				ret=result_t::l_applied;
-				// Need to cleanup on the entire tree above us.
-
-				if(!repeat) {
-					start.skip_children();
-					++start;
+			if(start->is_index()==false) {
+				auto aor=apply_once(start);
+				if(aor==result_t::l_applied || aor==result_t::l_applied_no_new_dummies) {
+					ret=result_t::l_applied;
+					// Need to cleanup on the entire tree above us.
+					
+					if(!repeat) {
+						start.skip_children();
+						++start;
+						}
 					}
 				}
 			else ++start;
@@ -147,10 +150,10 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 				it=enter;
 
 			// FIXME: handle l_error or remove
-			if(thisret==result_t::l_applied)
+			if(thisret==result_t::l_applied || thisret==result_t::l_applied_no_new_dummies)
 				ret=result_t::l_applied;
 			}
-		while(depth==0 && repeat && thisret==result_t::l_applied);
+		while(depth==0 && repeat && (thisret==result_t::l_applied || thisret==result_t::l_applied_no_new_dummies));
 
 		if(depth==0) {
 			// std::cerr << "break " << std::endl;
@@ -196,7 +199,7 @@ Algorithm::result_t Algorithm::apply_once(Ex::iterator& it)
 		if(can_apply(it)) {
 			result_t res=apply(it);
 			// std::cerr << "apply algorithm at " << *it->name << std::endl;
-			if(res==result_t::l_applied) {
+			if(res==result_t::l_applied || res==result_t::l_applied_no_new_dummies) {
 				cleanup_dispatch(kernel, tr, it);
 				return res;
 				}
@@ -265,9 +268,10 @@ Algorithm::result_t Algorithm::apply_deep(Ex::iterator& it)
 			++next;
 			bool work_is_topnode=(work==it);
 			result_t res = apply(work);
-			if(res==Algorithm::result_t::l_applied) {
+			if(res==Algorithm::result_t::l_applied || res==Algorithm::result_t::l_applied_no_new_dummies) {
 				some_changes_somewhere=result_t::l_applied;
-				rename_replacement_dummies(work, true);
+				if(res==Algorithm::result_t::l_applied)
+					rename_replacement_dummies(work, true);
 				deepest_action=tr.depth(work);
 				// If we got a zero at 'work', we need to propagate this up the tree and
 				// then restart our post-order traversal such that everything that has
