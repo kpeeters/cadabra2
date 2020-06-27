@@ -11,7 +11,7 @@ Cadabra
    :target: https://cadabra.science/jupyter.html
 
 .. image:: https://github.com/kpeeters/cadabra2/workflows/BuildTest/badge.svg
-
+   :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3ABuildTest
 
 *A field-theory motivated approach to computer algebra.*
 
