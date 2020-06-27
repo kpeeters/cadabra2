@@ -5,19 +5,32 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+  runs-on: ${{ matrix.os }}
+  strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     
     steps:
     - uses: actions/checkout@v1
+
     - name: setup python
       uses: actions/setup-python@v2
       with:
           python-version: 3.7
-    - name: get dependencies
+
+    - name: get dependencies (linux)
+      if: matrix.os == 'ubuntu-latest'
       run:  sudo apt-get install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev texlive-base libmpfr-dev libmpc-dev && python3 --version && which python3 && python3 -m pip install sympy gmpy2
+
+    - name: get dependencies (macos)
+      if: matrix.os == 'macos-latest'
+      run:  brew install cmake boost pcre gmp python3 pkgconfig gtkmm3 adwaita-icon-theme install sympy gmpy2
+
     - name: configure
       run:  mkdir build && cd build && cmake -DENABLE_MATHEMATICA=OFF ..
+      
     - name: make
       run:  cd build && make
+      
     - name: make test
       run:  cd build && make test ARGS="-V"
