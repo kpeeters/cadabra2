@@ -5,12 +5,12 @@ on: [push]
 jobs:
   build:
 
-  runs-on: ${{ matrix.os }}
-  strategy:
+    runs-on: ${{ matrix.os }}
+    strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
     
-  steps:
+    steps:
     - uses: actions/checkout@v1
 
     - name: setup python
