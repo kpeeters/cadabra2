@@ -1,0 +1,28 @@
+name: macOS
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: setup python
+      uses: actions/setup-python@v2
+      with:
+          python-version: 3.7
+
+    - name: get dependencies
+      run:  brew install cmake boost pcre gmp python3 pkgconfig gtkmm3 adwaita-icon-theme && python3 -m pip install sympy gmpy2
+
+    - name: configure
+      run:  mkdir build && cd build && cmake -DENABLE_MATHEMATICA=OFF ..
+      
+    - name: make
+      run:  cd build && make
+      
+    - name: make test
+      run:  cd build && make test ARGS="-V"
