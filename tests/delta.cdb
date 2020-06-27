@@ -29,8 +29,10 @@ ex:=\delta_{a1 m1 a2 m2 a3 m3 a4 m4 a5 m5 a6 m6} R_{a1 a2 m1 m2} R_{a3 a4 m3 m4}
 expand_delta(_);
 distribute(_);
 eliminate_kronecker(_);
-meld(_);
 substitute(_, $R_{m1 m2 m1 m2}=R, R_{m1 a1 m1 a2} = R_{a1 a2}, R_{a1 m1 m1 a2} = -R_{a1 a2}, R_{m1 a1 a2 m1} = -R_{a1 a2}, R_{a1 m1 a2 m1} = R_{a1 a2}$, repeat=True);
+sort_product(_)
+meld(_);
+print(len(ex))
 
 # Lovelock 4th order    
 {a#, m#}::Indices;

@@ -1,25 +1,28 @@
 Cadabra
 =======
 
-.. image:: http://joss.theoj.org/papers/10.21105/joss.01118/status.svg
+.. image:: https://joss.theoj.org/papers/10.21105/joss.01118/status.svg
    :target: https://doi.org/10.21105/joss.01118
 
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.2500762.svg
    :target: https://doi.org/10.5281/zenodo.2500762
 
-.. image:: https://anaconda.org/kpeeters/cadabra2-jupyter-kernel/badges/installer/conda.svg
+.. image:: https://anaconda.org/conda-forge/cadabra2-jupyter-kernel/badges/installer/conda.svg
    :target: https://cadabra.science/jupyter.html
+
+.. image:: https://github.com/kpeeters/cadabra2/workflows/BuildTest/badge.svg
+
 
 *A field-theory motivated approach to computer algebra.*
 
 Kasper Peeters <info@cadabra.science>
 
-- End-user documentation at http://cadabra.science/
-- Source code documentation at http://kpeeters.github.io/cadabra2
+- End-user documentation at https://cadabra.science/
+- Source code documentation at https://cadabra.science/doxygen/html
 
 This repository holds the 2.x series of the Cadabra computer algebra
 system. It supersedes the 1.x series, which can still be found at
-http://github.com/kpeeters/cadabra.
+https://github.com/kpeeters/cadabra.
 
 Cadabra was designed specifically for the solution of problems
 encountered in quantum and classical field theory. It has extensive
@@ -29,6 +32,7 @@ anti-commuting variables, Clifford algebras and Fierz transformations,
 implicit coordinate dependence, multiple index types and many
 more. The input format is a subset of TeX. Both a command-line and a
 graphical interface are available.
+
 
 Installation
 -------------
@@ -47,7 +51,7 @@ system from the list below for detailed instructions.
 - `Windows`_
 
 Binaries for these platforms may (or may not) be provided from the
-download page at http://cadabra.science/download.html, but they are
+download page at https://cadabra.science/download.html, but they are
 not always very up-to-date.
 
 See `Building Cadabra as C++ library`_ for instructions on how to
