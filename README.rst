@@ -306,7 +306,7 @@ macOS
 
 Cadabra builds with the standard Apple compiler, but in order to build
 on macOS you need a number of packages from Homebrew (see
-http://brew.sh). Quite a few Homebrew installations have broken
+https://brew.sh). Quite a few Homebrew installations have broken
 permissions; best to first do::
 
     sudo chown -R ${USER}:admin /usr/local/
@@ -322,7 +322,7 @@ If the lines above prompt you to install XCode, go ahead and let it do
 that.
 
 You also need a TeX installation such as MacTeX,
-http://tug.org/mactex/ .  *Any* TeX will do, as long as 'latex' and
+https://tug.org/mactex/ .  *Any* TeX will do, as long as 'latex' and
 'dvipng' are available. Make sure to *install TeX* before attempting
 to build Cadabra, otherwise the Cadabra style files will not be
 installed in the appropriate place. Make sure 'latex' works from the
@@ -364,7 +364,7 @@ link to Anaconda's Python, which has been built with Visual
 Studio. The recommended way to build Cadabra is thus to build against
 libraries which are all built using Visual Studio as well (if you are
 happy to not use Anaconda, you can also build with the excellent MSYS2
-system from http://www.msys2.org/; see below). It is practically
+system from https://www.msys2.org/; see below). It is practically
 impossible to build all dependencies yourself without going crazy, but
 fortunately that is not necessary because of the VCPKG library at
 https://github.com/Microsoft/vcpkg. This contains all dependencies
@@ -378,7 +378,7 @@ If you do not already have it, first install Visual Studio Community
 Edition from https://www.visualstudio.com/downloads/ and install
 Anaconda (a 64 bit version!) from https://www.anaconda.com/download/.
 You also need a TeX distribution, for instance MiKTeX from
-http://miktex.org and of course git from
+https://miktex.org and of course git from
 e.g. https://gitforwindows.org/. You need all four before you can
 start building Cadabra.
 
@@ -469,7 +469,7 @@ tried this for quite a while.**
 
 If you are happy with a Cadabra which cannot access an Anaconda Python
 distribution, it is possible to build using MSYS2. First, install
-MSYS2 from http://www.msys2.org. Once you have a working MSYS2
+MSYS2 from https://www.msys2.org. Once you have a working MSYS2
 shell, do the following to install various packages (all from an MSYS2
 shell!)::
 
@@ -517,8 +517,8 @@ notebook session. For full instructions, see
 Tutorials and other help
 ------------------------
 
-Please consult http://cadabra.science/ for tutorial-style notebooks
-and all other documentation, and http://cadabra.science/doxygen/html/
+Please consult https://cadabra.science/ for tutorial-style notebooks
+and all other documentation, and https://cadabra.science/doxygen/html/
 for doxygen documentation of the current master branch. The latter can
 also be generated locally; you will need (on Debian and derivatives)::
 
