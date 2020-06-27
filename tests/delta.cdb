@@ -21,6 +21,7 @@ eliminate_kronecker(_);
 meld(_);
 substitute(_, $R_{m n m n}=R, R_{m c p c} = R_{m p}, R_{c m c p} = R_{m p}$);
 
+# Lovelock 3rd order
 {a#, m#}::Indices;
 \delta{#}::KroneckerDelta;
 R_{m1 m2 m3 m4}::RiemannTensor;
@@ -31,6 +32,7 @@ eliminate_kronecker(_);
 meld(_);
 substitute(_, $R_{m1 m2 m1 m2}=R, R_{m1 a1 m1 a2} = R_{a1 a2}, R_{a1 m1 m1 a2} = -R_{a1 a2}, R_{m1 a1 a2 m1} = -R_{a1 a2}, R_{a1 m1 a2 m1} = R_{a1 a2}$, repeat=True);
 
+# Lovelock 4th order    
 {a#, m#}::Indices;
 \delta{#}::KroneckerDelta;
 R_{m1 m2 m3 m4}::RiemannTensor;
@@ -38,33 +40,35 @@ ex:=\delta_{a1 m1 a2 m2 a3 m3 a4 m4 a5 m5 a6 m6 a7 m7 a8 m8} R_{a1 a2 m1 m2} R_{
 expand_delta(_);
 distribute(_);
 eliminate_kronecker(_);
+print(len(ex))
 # 2520 terms
-print(len(ex))
-canonicalise(_);
-# 654 terms
-print(len(ex))
-rename_dummies(_);
-# 62 terms
-print(len(ex))
-meld(_);
-# 25 terms
-print(len(ex))  
 substitute(_, $R_{m1 m2 m1 m2}=R, R_{m1 a1 m1 a2} = R_{a1 a2}, R_{a1 m1 m1 a2} = -R_{a1 a2}, R_{m1 a1 a2 m1} = -R_{a1 a2}, R_{a1 m1 a2 m1} = R_{a1 a2}$, repeat=True);
+sort_product(_)
+print(len(ex))
+# 1489 terms
+canonicalise(_);
+rename_dummies(_);
+print(len(ex))
+# 25 terms
+meld(_);
+print(len(ex))  
+# 20 terms
 
+# Lovelock 5th order    
 {a#, m#}::Indices;
 \delta{#}::KroneckerDelta;
 R_{m1 m2 m3 m4}::RiemannTensor;
 ex:=\delta_{a1 m1 a2 m2 a3 m3 a4 m4 a5 m5 a6 m6 a7 m7 a8 m8 a9 m9 a10 m10} R_{a1 a2 m1 m2} R_{a3 a4 m3 m4} R_{a5 a6 m5 m6} R_{a7 a8 m7 m8} R_{a9 a10 m9 m10};
 expand_delta(_)
-distribute(_)
-eliminate_kronecker(_)
+distribute(_) # need l_applied_no_new_dummies; slow now
+eliminate_kronecker(_) # ditto; slow now
 # 113400 terms
 print(len(ex))
-canonicalise(_);
-#  terms
+canonicalise(_);  # takes a long time
+# 15814 terms
 print(len(ex))
 rename_dummies(_);
-#  terms
+# 452 terms
 print(len(ex))
 meld(_);
 #  terms

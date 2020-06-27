@@ -747,7 +747,7 @@ namespace cadabra {
 			// they matched because they are from the same set but do not have the same
 			// name, we still need to let the caller know about this.
 			if(is_index) {
-				int xc = subtree_compare(0, one, two, -2) ; //ignore_parent_rel?(-1):(-2));
+				int xc = subtree_compare(0, one, two, ignore_parent_rel?(-1):(-2));
 				if(xc==0) return report(match_t::subtree_match);
 				if(xc>0)  return report(match_t::match_index_less);
 				return report(match_t::match_index_greater);

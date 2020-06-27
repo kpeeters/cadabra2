@@ -192,7 +192,7 @@ Algorithm::result_t expand_delta::apply(iterator& st)
 	// After the return, we need to indicate that no new dummies were
 	// introduced, otherwise we go into rename_replacement_dummies,
 	// which can be extremely time-consuming.
-	std::cerr << "####### returning new value " << std::endl;
+//	std::cerr << "####### returning new value " << std::endl;
 	
 	return result_t::l_applied_no_new_dummies;
 	}

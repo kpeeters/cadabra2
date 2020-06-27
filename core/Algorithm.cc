@@ -89,6 +89,7 @@ Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
 						++start;
 						}
 					}
+				else ++start;
 				}
 			else ++start;
 			}
