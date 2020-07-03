@@ -196,6 +196,24 @@ meld::result_t meld::apply(iterator& it)
 //-------------------------------------------------
 // do_tableaux stuff
 
+struct Ident {
+	Ident() : n_indices(0) {}
+	size_t n_indices;
+	std::vector<Ex::iterator> its;
+	std::vector<size_t> positions;
+	std::vector<std::vector<int>> generate_commutation_matrix(const Kernel& kernel) const
+	{
+		Ex_comparator comp(kernel.properties);
+		std::vector<std::vector<int>> cm(its.size(), std::vector<int>(its.size()));
+		for (size_t i = 0; i < its.size(); ++i) {
+			for (size_t j = 0; j < its.size(); ++j) {
+				cm[i][j] = comp.can_swap(its[i], its[j], Ex_comparator::match_t::subtree_match);
+			}
+		}
+		return cm;
+	}
+};
+
 AdjformEx meld::symmetrize(Ex::iterator it)
 {
 	AdjformEx sym(it, index_map, kernel);
@@ -203,21 +221,27 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 
 	// Symmetrize in identical tensors
 	// Map holding hash of tensor -> { number of indices, {pos1, pos2, ...} }
-	std::map<nset_t::iterator, std::pair<size_t, std::vector<size_t>>, nset_it_less> idents;
+	std::map<nset_t::iterator, Ident, nset_it_less> idents;
 	size_t pos = 0;
 	for (const auto& term : split_ex(sym.get_tensor_ex().begin(), "\\prod")) {
-		auto elem = idents.insert({ term->name, {0, {}} });
+		auto elem = idents.insert({ term->name, {} });
+		auto& ident = elem.first->second;
 		if (elem.second) {
 			// Insertion took place, count indices
+			ident.n_indices = 0;
 			for (Ex::iterator beg = term.begin(), end = term.end(); beg != end; ++beg)
-				elem.first->second.first += is_index(kernel, beg);
+				ident.n_indices += is_index(kernel, beg);
 		}
-		elem.first->second.second.push_back(pos);
-		pos += elem.first->second.first;
+		ident.its.push_back(term);
+		ident.positions.push_back(pos);
+		pos += ident.n_indices;
 	}
 	for (const auto& ident : idents) {
-		if (ident.second.second.size() != 1)
-			sym.apply_ident_symmetry(ident.second.second, ident.second.first);
+		if (ident.second.positions.size() != 1) {
+			sym.apply_ident_symmetry(
+				ident.second.positions, ident.second.n_indices,
+				ident.second.generate_commutation_matrix(kernel));
+		}
 	}
 
 	// Young project antisymmetric components
@@ -226,7 +250,7 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 		auto tb = kernel.properties.get<TableauBase>(it);
 		if (tb) {
 			int siz = tb->size(kernel.properties, tr, it);
-			if(siz>0) {
+			if (siz > 0) {
 				auto tab = tb->get_tab(kernel.properties, tr, it, 0);
 				for (size_t col = 0; col < tab.row_size(0); ++col) {
 					if (tab.column_size(col) > 1) {
@@ -235,10 +259,10 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 							indices.push_back(*beg + pos);
 						std::sort(indices.begin(), indices.end());
 						sym.apply_young_symmetry(indices, true);
-						}
 					}
 				}
 			}
+		}
 		pos += it.number_of_children();
 	}
 
@@ -249,7 +273,7 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 		auto tb = kernel.properties.get<TableauBase>(it);
 		if (tb) {
 			int siz = tb->size(kernel.properties, tr, it);
-			if(siz>0) {
+			if (siz > 0) {
 				auto tab = tb->get_tab(kernel.properties, tr, it, 0);
 				for (size_t row = 0; row < tab.number_of_rows(); ++row) {
 					if (tab.row_size(row) > 1) {
@@ -258,10 +282,10 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 							indices.push_back(*beg + pos);
 						std::sort(indices.begin(), indices.end());
 						sym.apply_young_symmetry(indices, false);
-						}
 					}
 				}
 			}
+		}
 		pos += it.number_of_children();
 	}
 	return sym;
