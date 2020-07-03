@@ -28,7 +28,7 @@ namespace cadabra {
 		using array_type = std::vector<value_type>;
 		using const_reference = array_type::const_reference;
 		using const_iterator = array_type::const_iterator;
-		
+
 		Adjform();
 		Adjform(Ex::iterator it, IndexMap& index_map, const Kernel& kernel);
 
@@ -62,7 +62,7 @@ namespace cadabra {
 
 	bool is_free_index(Adjform::value_type idx);
 	bool is_dummy_index(Adjform::value_type idx);
-	
+
 	// To ensure consistency when creating adjforms out of two
 	// different Ex objects an IndexMap object is required which
 	// keeps track of which numeric index represents which index
@@ -91,7 +91,7 @@ namespace cadabra {
 		// Check if 'other' is a linear multiple of 'this' and return
 		// the numeric factor if so, otherwise returns 0
 		rational_type compare(const AdjformEx& other) const;
-		
+
 		void combine(const AdjformEx& other); // Add all contributions from 'other' into 'this'
 		void combine(const AdjformEx& other, rational_type factor);
 		void multiply(const rational_type& k); // Multiply all terms by a constant factor
@@ -126,10 +126,11 @@ namespace cadabra {
 		void apply_young_symmetry(const std::vector<size_t>& indices, bool antisymmetric);
 
 		// Symmetrize in indices starting at the indices in 'positions' with each group
-		// 'n_indices' long
+		// 'n_indices' long.
 		// e.g. if the only term is abcdefg then apply_ident_symmetry({0, 2, 4}, 2) ->
 		//      abcdefg + abefcdg + cdabefg + cdefabg + efabcdg + efcdabg
-		void apply_ident_symmetry(std::vector<size_t> positions, size_t n_indices);
+		void apply_ident_symmetry(const std::vector<size_t>& positions, size_t n_indices);
+		void apply_ident_symmetry(const std::vector<size_t>& positions, size_t n_indices, const std::vector<std::vector<int>>& commutation_matrix);
 
 		// Symmetrize cyclically so abc -> abc + bca + cab
 		void apply_cyclic_symmetry();

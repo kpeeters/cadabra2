@@ -399,7 +399,7 @@ namespace cadabra {
 
 	void AdjformEx::combine(const AdjformEx& other, AdjformEx::rational_type factor)
 	{
-		for (const auto& kv : other.data) 
+		for (const auto& kv : other.data)
 			add(kv.first, kv.second * factor);
 	}
 
@@ -500,7 +500,7 @@ namespace cadabra {
 
 	void AdjformEx::add(const Adjform& term, const AdjformEx::rational_type& value)
 	{
-		if (!term.empty()) 
+		if (!term.empty())
 			add_(term, value);
 	}
 
@@ -520,7 +520,7 @@ namespace cadabra {
 	void AdjformEx::apply_young_symmetry(const std::vector<size_t>& indices, bool antisymmetric)
 	{
 		map_t old_data = data;
-		
+
 		for (const auto& kv : old_data) {
 			std::vector<int> values(indices.size());
 			std::iota(values.begin(), values.end(), 1);
@@ -557,16 +557,24 @@ namespace cadabra {
 		}
 	}
 
-	void AdjformEx::apply_ident_symmetry(std::vector<size_t> positions, size_t n_indices)
+	void AdjformEx::apply_ident_symmetry(const std::vector<size_t>& positions, size_t n_indices)
+	{
+		apply_ident_symmetry(positions, n_indices, std::vector<std::vector<int>>(positions.size(), std::vector<int>(positions.size(), 1)));
+	}
+
+	void AdjformEx::apply_ident_symmetry(const std::vector<size_t>& positions, size_t n_indices, const std::vector<std::vector<int>>& commutation_matrix)
 	{
 		for (size_t i = 0; i < positions.size() - 1; ++i) {
 			auto old_data = data;
 			for (size_t j = i + 1; j < positions.size(); ++j) {
-				for (const auto& kv : old_data) {
-					auto term = kv.first;
-					for (size_t k = 0; k < n_indices; ++k) 
-						term.swap(positions[i] + k, positions[j] + k);
-					add_(term, kv.second);
+				int sign = commutation_matrix[i][j];
+				if (sign != 0) {
+					for (const auto& kv : old_data) {
+						auto term = kv.first;
+						for (size_t k = 0; k < n_indices; ++k)
+							term.swap(positions[i] + k, positions[j] + k);
+						add_(term, kv.second * sign);
+					}
 				}
 			}
 		}
