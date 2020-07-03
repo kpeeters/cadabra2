@@ -223,8 +223,12 @@ bool Parser::string2tree(const std::string& inp)
 				// std::cerr << "m_name" << " " << c << std::endl;
 				if(is_opening_bracket(c)!=str_node::b_no ||
 				      ( is_link(c)!=str_node::p_none && ( tmp.size()==0 ||
-				            !(tmp[0]=='@' || (tmp[0]=='\\' && tmp[1]=='@'))) )) {
-					// std::cerr << "appending " << tmp << " as child of " << *current_parent->name << std::endl;
+																		!((tmp.size()>3 && tmp[0]!='\\' && is_opening_bracket(get_token(i+1))==str_node::b_no) || tmp[0]=='@' || (tmp[0]=='\\' && tmp[1]=='@'))) )) {
+					// Note: the funky look-ahead above is to handle expressions of the form
+					// somethinglong_{m}, which should trigger a child node, and
+					// somethinglong_m, which should *not* (anything with more than 3 characters,
+					// not started with a '\', followed by an underscore, is assumed to be
+					// a python function.
 					current_parent=tree->append_child(current_parent,str_node(tmp,
 					                                  current_bracket.back(),
 					                                  current_parent_rel.back()));
@@ -289,8 +293,11 @@ bool Parser::string2tree(const std::string& inp)
 						current_parent_rel.push_back(pr);
 						if(pr==str_node::p_property)
 							current_mode.push_back(m_property);
-						else
+						else {
+							// A '^' or '_' immediately followed by text, without bracket.
+							// std::cerr << tmp[0] << std::endl;
 							current_mode.push_back(m_singlecharname);
+							}
 						}
 					break;
 					}
