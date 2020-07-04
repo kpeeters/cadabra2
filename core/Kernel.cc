@@ -11,7 +11,7 @@ const std::string Kernel::version = CADABRA_VERSION_FULL;
 const std::string Kernel::build   = CADABRA_VERSION_BUILD;
 
 Kernel::Kernel()
-	: scalar_backend(scalar_backend_t::sympy)
+	: scalar_backend(scalar_backend_t::sympy), call_embedded_python_functions(false)
 	{
 	//	std::cerr << "Kernel() " << this << std::endl;
 	}

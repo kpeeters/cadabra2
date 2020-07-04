@@ -478,6 +478,9 @@ namespace cadabra {
 		call_post_process(*kernel, ptr);
 		//	std::cerr << "cleaned up" << std::endl;
 
+		// Now run all embedded python functions.
+		run_python_functions(ptr, kernel);
+
 		return ptr;
 		}
 

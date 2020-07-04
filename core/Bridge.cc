@@ -1,9 +1,12 @@
 
 #include "pythoncdb/py_ex.hh"
+#include "pythoncdb/py_helpers.hh"
+#include "pythoncdb/py_globals.hh"
 #include "Bridge.hh"
 #include "algorithms/collect_terms.hh"
 
 using namespace cadabra;
+namespace py = pybind11;
 
 void pull_in(std::shared_ptr<Ex> ex, Kernel *kernel)
 	{
@@ -47,3 +50,67 @@ void pull_in(std::shared_ptr<Ex> ex, Kernel *kernel)
 	return;
 	}
 
+void run_python_functions(std::shared_ptr<Ex> ex, Kernel *kernel)
+	{
+	if(kernel->call_embedded_python_functions==false)
+		return;
+	
+	Ex::post_order_iterator it = ex->begin_post();
+	auto locals=get_locals();
+	while(it!=ex->end_post()) {
+		auto nxt=it;
+		++nxt;
+		// Only call functions if the cadabra symbols have one or
+		// more child nodes which all have bracket_t::b_none.
+		Ex::sibling_iterator sib=ex->begin(it);
+		if(sib==ex->end(it)) {
+			it=nxt;
+			continue;
+			}
+		
+		bool cancall=true;
+		while(sib!=ex->end(it)) {
+			if(sib->fl.parent_rel!=str_node::parent_rel_t::p_none) {
+				cancall=false;
+				break;
+				}
+			++sib;
+			}
+		if(!cancall) {
+			it=nxt;
+			continue;
+			}
+		
+		if(scope_has(locals, *it->name)) {
+			//std::cerr << "can run function " << *it->name << std::endl;
+			py::object fun=locals[(*it->name).c_str()];
+			Ex::sibling_iterator sib=ex->begin(it);
+			py::object res;
+			
+			if(sib!=ex->end(it)) {
+				Ex tmp1(sib);
+				++sib;
+				if(sib!=ex->end(it)) {
+					Ex tmp2(sib);
+					++sib;
+					if(sib!=ex->end(it)) {
+						Ex tmp3(sib);
+						res = fun(tmp1, tmp2, tmp3);
+						++sib;
+						if(sib!=ex->end(it)) {
+							throw RuntimeException("Cannot yet call inline functions with more than 3 arguments.");
+							}
+						}
+					else res = fun(tmp1, tmp2);
+					}
+				else res = fun(tmp1);
+				}
+			else res = fun();
+			
+			Ex repl = res.cast<Ex>();
+			Ex::iterator tmpit=it;
+			ex->move_ontop(tmpit, repl.begin());
+			}
+		it=nxt;
+		}
+	}

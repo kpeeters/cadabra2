@@ -152,11 +152,15 @@ namespace cadabra {
 			Kernel *k = get_kernel_from_scope();
 			for (auto& item : dict) {
 				std::string key = item.first.cast<std::string>();
-				std::string val = item.second.cast<std::string>();
 				if (key == "scalar_backend") {
+					std::string val = item.second.cast<std::string>();
 					if (val == "sympy")            k->scalar_backend = Kernel::scalar_backend_t::sympy;
 					else if (val == "mathematica") k->scalar_backend = Kernel::scalar_backend_t::mathematica;
 					else throw ArgumentException("scalar_backend must be 'sympy' or 'mathematica'.");
+					}
+				else if(key == "call_embedded_python_functions") {
+					bool val = item.second.cast<bool>();
+					k->call_embedded_python_functions=val;
 					}
 				else {
 					throw ArgumentException("unknown argument '" + key + "'.");
