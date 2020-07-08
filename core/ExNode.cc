@@ -1,6 +1,7 @@
 
 #include "ExNode.hh"
 #include "Cleanup.hh"
+#include "Exceptions.hh"
 #include "pythoncdb/py_kernel.hh"
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
@@ -11,7 +12,7 @@
 #include "DisplayTerminal.hh"
 #include <sstream>
 
-// #define DEBUG 1
+//#define DEBUG 1
 
 using namespace cadabra;
 
@@ -152,8 +153,8 @@ ExNode ExNode::indices()
 	{
 	ExNode ret(kernel, ex);
 	ret.topit=it;
-	ind_free.clear();
-	ind_dummy.clear();
+	ret.ind_free.clear();
+	ret.ind_dummy.clear();
 	ret.indices_only=true;
 	ret.use_index_iterator=true;
 	ret.update(true);
@@ -164,8 +165,8 @@ ExNode ExNode::free_indices()
 	{
 	ExNode ret(kernel, ex);
 	ret.topit=it;
-	ind_free.clear();
-	ind_dummy.clear();
+	ret.ind_free.clear();
+	ret.ind_dummy.clear();
 	classify_indices(it, ret.ind_free, ret.ind_dummy);
 	fill_index_position_map(it, ret.ind_dummy, ret.ind_pos_dummy);
 	ret.indices_only=true;
@@ -264,26 +265,37 @@ void ExNode::erase()
 
 std::string ExNode::get_name() const
 	{
+	if(!ex->is_valid(it))
+		throw ConsistencyException("Cannot print the value of an iterator before the first 'next'.");
 	return *it->name;
 	}
 
 void ExNode::set_name(std::string nm)
 	{
+	if(!ex->is_valid(it))
+		throw ConsistencyException("Cannot set the value of an iterator before the first 'next'.");
 	it->name = name_set.insert(nm).first;
 	}
 
 str_node::parent_rel_t ExNode::get_parent_rel() const
 	{
+	if(!ex->is_valid(it))
+		throw ConsistencyException("Cannot get the value of an iterator before the first 'next'.");
 	return it->fl.parent_rel;
 	}
 
 void ExNode::set_parent_rel(str_node::parent_rel_t pr)
 	{
+	if(!ex->is_valid(it))
+		throw ConsistencyException("Cannot set the value of an iterator before the first 'next'.");
 	it->fl.parent_rel=pr;
 	}
 
 pybind11::object ExNode::get_multiplier() const
 	{
+	if(!ex->is_valid(it))
+		throw ConsistencyException("Cannot get the multiplier of an iterator before the first 'next'.");
+
 	pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
 	auto m = *it->multiplier;
 	pybind11::object mult = mpq(m.get_num().get_si(), m.get_den().get_si());
@@ -296,6 +308,8 @@ void ExNode::set_multiplier(pybind11::object)
 	//	auto m = *it->multiplier;
 	//	pybind11::object mult = mpq(m.get_num().get_si(), m.get_den().get_si());
 	//	return mult;
+	if(!ex->is_valid(it))
+		throw ConsistencyException("Cannot set the multiplier of an iterator before the first 'next'.");
 	}
 
 
@@ -350,7 +364,11 @@ void ExNode::update(bool first)
 		// Test if this is a dummy index.
 		Ex::iterator tofind=indnxtit;
 		while(ind_pos_dummy.find(tofind)!=ind_pos_dummy.end()) {
+#ifdef DEBUG
+			std::cerr << "considered " << tofind << " but that's a dummy" << std::endl;
+#endif
 			++indnxtit;
+			tofind=indnxtit;
 			if(indnxtit==cadabra::index_iterator::end(get_kernel_from_scope()->properties, topit))
 				break;
 			}
@@ -401,6 +419,9 @@ ExNode& ExNode::next()
 
 std::string ExNode::__str__() const
 	{
+	if(!ex->is_valid(it))
+		throw ConsistencyException("Cannot print iterator before the first 'next'.");
+	
 	std::ostringstream str;
 	//
 	// //	if(state()==Algorithm::result_t::l_no_action)
@@ -415,6 +436,9 @@ std::string ExNode::__str__() const
 
 std::string ExNode::_latex_() const
 	{
+	if(!ex->is_valid(it))
+		throw ConsistencyException("Cannot print iterator LaTeX form before the first 'next'.");
+
 	std::ostringstream str;
 	DisplayTeX dt(*get_kernel_from_scope(), it);
 	dt.output(str, it);

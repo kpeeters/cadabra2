@@ -186,3 +186,24 @@ def test06():
     print("Test 06 passed")
 
 test06()
+
+def test07():
+    {a,b,c,d#,z}::Indices.
+    ex:= 1/2 D_{b} C^{a b c} A_{c};
+    fi=ex.top().free_indices()
+    assert(next(fi).name=='a')
+    print("Test 07a passed")
+    ex:= 1/2 C^{a b c} D_{b} A_{c};
+    fi=ex.top().free_indices()
+    assert(next(fi).name=='a')
+    print("Test 07b passed")
+    ex:= 1/2 D_{b} A_{c} C^{a b c};
+    fi=ex.top().free_indices()
+    assert(next(fi).name=='a')
+    print("Test 07c passed")
+
+test07()
+ 
+
+
+ 
