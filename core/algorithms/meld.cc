@@ -201,13 +201,15 @@ struct Ident {
 	size_t n_indices;
 	std::vector<Ex::iterator> its;
 	std::vector<size_t> positions;
-	std::vector<std::vector<int>> generate_commutation_matrix(const Kernel& kernel) const
+	std::vector<std::vector<int>> generate_commutation_matrix(const Kernel& kernel, Ex::iterator parent) const
 	{
 		Ex_comparator comp(kernel.properties);
 		std::vector<std::vector<int>> cm(its.size(), std::vector<int>(its.size()));
 		for (size_t i = 0; i < its.size(); ++i) {
 			for (size_t j = 0; j < its.size(); ++j) {
-				cm[i][j] = comp.can_swap(its[i], its[j], Ex_comparator::match_t::subtree_match);
+				if (i == j)
+					continue;
+				cm[i][j] = comp.can_move_adjacent(Ex::parent(its[i]), its[i], its[j]) * comp.can_swap(its[i], its[j], Ex_comparator::match_t::subtree_match);
 			}
 		}
 		return cm;
@@ -240,7 +242,7 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 		if (ident.second.positions.size() != 1) {
 			sym.apply_ident_symmetry(
 				ident.second.positions, ident.second.n_indices,
-				ident.second.generate_commutation_matrix(kernel));
+				ident.second.generate_commutation_matrix(kernel, it));
 		}
 	}
 
