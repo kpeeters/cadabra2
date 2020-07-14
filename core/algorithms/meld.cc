@@ -201,7 +201,7 @@ struct Ident {
 	size_t n_indices;
 	std::vector<Ex::iterator> its;
 	std::vector<size_t> positions;
-	std::vector<std::vector<int>> generate_commutation_matrix(const Kernel& kernel, Ex::iterator parent) const
+	std::vector<std::vector<int>> generate_commutation_matrix(const Kernel& kernel) const
 	{
 		Ex_comparator comp(kernel.properties);
 		std::vector<std::vector<int>> cm(its.size(), std::vector<int>(its.size()));
@@ -219,13 +219,14 @@ struct Ident {
 AdjformEx meld::symmetrize(Ex::iterator it)
 {
 	AdjformEx sym(it, index_map, kernel);
-	auto terms = split_ex(sym.get_tensor_ex().begin(), "\\prod");
+	auto prod = sym.get_tensor_ex().begin();
+	auto terms = split_ex(prod, "\\prod");
 
 	// Symmetrize in identical tensors
 	// Map holding hash of tensor -> { number of indices, {pos1, pos2, ...} }
 	std::map<nset_t::iterator, Ident, nset_it_less> idents;
 	size_t pos = 0;
-	for (const auto& term : split_ex(sym.get_tensor_ex().begin(), "\\prod")) {
+	for (const auto& term : split_ex(prod, "\\prod")) {
 		auto elem = idents.insert({ term->name, {} });
 		auto& ident = elem.first->second;
 		if (elem.second) {
@@ -242,7 +243,7 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 		if (ident.second.positions.size() != 1) {
 			sym.apply_ident_symmetry(
 				ident.second.positions, ident.second.n_indices,
-				ident.second.generate_commutation_matrix(kernel, it));
+				ident.second.generate_commutation_matrix(kernel));
 		}
 	}
 
