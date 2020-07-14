@@ -226,7 +226,7 @@ def test21():
     meld(_)
     assert(ex==0)
 
-print(timeit.timeit(test21,number=1000))
+print("Test 21 passed in", timeit.timeit(test21,number=1000))
 
 def test22():
     __cdbkernel__ = create_scope()
@@ -240,7 +240,7 @@ def test22():
     canonicalise(_)
     assert(ex==0)
 
-print(timeit.timeit(test22,number=1000))
+print("Test 22 passed in", timeit.timeit(test22,number=1000))
 
 # import numpy as np
 # {n#}::Indices;
@@ -275,5 +275,26 @@ def test23():
     sort_product(_);
     meld(_);
     
-test23()
+#test23()
     
+def test24():
+    __cdbkernel__ = create_scope()
+    {\mu, \nu, \rho}::Indices(vector)
+    A_{\mu, \nu}::AntiSymmetric.
+    {a^{\mu}, b^{\nu}}::NonCommuting.
+    ex := A_{\mu \nu} a^{\mu} b^{\rho} a^{\nu}:
+    meld(ex)
+    assert ex == $A_{\mu \nu} a^{\mu} b^{\rho} a^{\nu}$
+    print("Test 24 passed")
+
+test24()
+
+def test25():
+    __cdbkernel__ = create_scope()
+    T_{a b c}::SelfAntiCommuting.
+    ex := T_{a b c}T_{b a c} + T_{b a c}T_{a b c}:
+    meld(ex);
+    assert(ex == $0$)
+    print("Test 25 passed")
+
+test25()
