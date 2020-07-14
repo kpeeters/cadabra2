@@ -1,3 +1,8 @@
+#ifdef _MSC_VER
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#endif
+
 namespace cadabra {
 	namespace cpplib {
 
@@ -77,6 +82,14 @@ namespace cadabra {
 			Algo algo(kernel, *ex, std::forward<Args>(args)...);
 			algo.apply_pre_order();
 			return ex;
+		}
+
+		inline void pprint_enable_utf8()
+		{
+			// Set the codepage on windows to utf8
+#ifdef _MSC_VER
+			SetConsoleOutputCP(65001);
+#endif
 		}
 
 		inline detail::ExConstructorProxy operator "" _ex(const char* ex, std::size_t n)
