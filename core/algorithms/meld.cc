@@ -207,7 +207,9 @@ struct Ident {
 		std::vector<std::vector<int>> cm(its.size(), std::vector<int>(its.size()));
 		for (size_t i = 0; i < its.size(); ++i) {
 			for (size_t j = 0; j < its.size(); ++j) {
-				cm[i][j] = comp.can_swap(its[i], its[j], Ex_comparator::match_t::subtree_match);
+				if (i == j)
+					continue;
+				cm[i][j] = comp.can_move_adjacent(Ex::parent(its[i]), its[i], its[j]) * comp.can_swap(its[i], its[j], Ex_comparator::match_t::subtree_match);
 			}
 		}
 		return cm;
@@ -217,13 +219,14 @@ struct Ident {
 AdjformEx meld::symmetrize(Ex::iterator it)
 {
 	AdjformEx sym(it, index_map, kernel);
-	auto terms = split_ex(sym.get_tensor_ex().begin(), "\\prod");
+	auto prod = sym.get_tensor_ex().begin();
+	auto terms = split_ex(prod, "\\prod");
 
 	// Symmetrize in identical tensors
 	// Map holding hash of tensor -> { number of indices, {pos1, pos2, ...} }
 	std::map<nset_t::iterator, Ident, nset_it_less> idents;
 	size_t pos = 0;
-	for (const auto& term : split_ex(sym.get_tensor_ex().begin(), "\\prod")) {
+	for (const auto& term : split_ex(prod, "\\prod")) {
 		auto elem = idents.insert({ term->name, {} });
 		auto& ident = elem.first->second;
 		if (elem.second) {

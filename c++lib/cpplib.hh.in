@@ -1,3 +1,8 @@
+#ifdef _MSC_VER
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#endif
+
 namespace cadabra {
 	namespace cpplib {
 
@@ -16,7 +21,7 @@ namespace cadabra {
 
 			struct ExPrettyPrinter
 			{
-				ExPrettyPrinter(const Kernel& kernel, Ex::iterator it, bool use_unicode = true) 
+				ExPrettyPrinter(const Kernel& kernel, Ex::iterator it, bool use_unicode = true)
 					: kernel(kernel)
 					, ex(it)
 					, use_unicode(use_unicode) {}
@@ -25,7 +30,12 @@ namespace cadabra {
 				bool use_unicode;
 			};
 		}
-		
+
+		ExPtr copy(const ExPtr& ex)
+		{
+			return std::make_shared<Ex>(*ex);
+		}
+
 		template <typename Prop>
 		void inject_property(Kernel& kernel, const ExPtr& pattern, const ExPtr& args = nullptr)
 		{
@@ -50,18 +60,36 @@ namespace cadabra {
 			inject_property<Prop>(kernel, kernel.ex_from_string(pattern), kernel.ex_from_string(args));
 		}
 
-		template <typename Algo>
-		Algorithm::result_t apply_algo(const Kernel& kernel, const ExPtr& ex, bool deep = true, bool repeat = false, unsigned int depth = 0)
+		template <typename Algo, typename... Args>
+		ExPtr apply(const Kernel& kernel, const ExPtr& ex, Args&&... args,  bool deep = true, bool repeat = false, unsigned int depth = 0)
 		{
-			Algo algo(kernel, *ex);
-			return algo.apply_generic(deep, repeat, depth);
+			Algo algo(kernel, *ex, std::forward<Args>(args)...);
+			algo.apply_generic(deep, repeat, depth);
+			return ex;
 		}
 
-		template <typename Algo>
-		Algorithm::result_t apply_algo(const Kernel& kernel, const ExPtr& ex, Ex::iterator it, bool deep = true, bool repeat = false, unsigned int depth = 0)
+		template <typename Algo, typename... Args>
+		ExPtr apply(const Kernel& kernel, const ExPtr& ex, Ex::iterator it, Args&&... args, bool deep = true, bool repeat = false, unsigned int depth = 0)
 		{
-			Algo algo(kernel, *ex);
-			return algo.apply_generic(it, deep, repeat, depth);
+			Algo algo(kernel, *ex, std::forward<Args>(args)...);
+			algo.apply_generic(it, deep, repeat, depth);
+			return ex;
+		}
+
+		template <typename Algo, typename... Args>
+		ExPtr apply_preorder(const Kernel& kernel, const ExPtr& ex, Args&&... args)
+		{
+			Algo algo(kernel, *ex, std::forward<Args>(args)...);
+			algo.apply_pre_order();
+			return ex;
+		}
+
+		inline void pprint_enable_utf8()
+		{
+			// Set the codepage on windows to utf8
+#ifdef _MSC_VER
+			SetConsoleOutputCP(65001);
+#endif
 		}
 
 		inline detail::ExConstructorProxy operator "" _ex(const char* ex, std::size_t n)
@@ -78,7 +106,7 @@ namespace cadabra {
 		{
 			return detail::ExPrettyPrinter(kernel, ex.begin(), use_unicode);
 		}
-		
+
 		inline detail::ExPrettyPrinter pprint(const Kernel& kernel, Ex::iterator it, bool use_unicode = true)
 		{
 			return detail::ExPrettyPrinter(kernel, it, use_unicode);
