@@ -293,8 +293,21 @@ def test25():
     __cdbkernel__ = create_scope()
     T_{a b c}::SelfAntiCommuting.
     ex := T_{a b c}T_{b a c} + T_{b a c}T_{a b c}:
-    meld(ex);
+    meld(ex)
     assert(ex == $0$)
     print("Test 25 passed")
 
 test25()
+
+def test26():        
+    __cdbkernel__ = create_scope()
+    {m,n,p,q,r,s}::Indices;
+    A_{m n}::AntiSymmetric;
+    B_{m n}::Symmetric;
+    ex:= A_{m n} B_{n p} - A_{n m} B_{n p} + A_{m p} B_{q r} B_{q r} - A_{p m} B_{q s} B_{q s};
+    meld(ex, repeat=False)
+    assert(ex==$2A_{m n} B_{n p} + 2A_{m p} B_{q r} B_{q r}$)
+    print("Test 26 passed")
+
+test26()
+        
