@@ -231,6 +231,9 @@ endif()
 
 print_header("Configuring Python")
 
+# NEEDED TO USE CMAKE_INSTALL_FULL<dir>
+include(GNUInstallDirs)
+
 if(USE_PYTHON_3)
 	set(PYTHON_POSTFIX "3")
 	message(STATUS "Building for use with Python 3 (good!)")
@@ -243,9 +246,13 @@ add_subdirectory(libs/pybind11)
 
 message(STATUS "Found python ${PYTHON_LIBRARIES}")
 
-# We install the python module in our 'share' path, not in
-# the site-wide path as we used to. 
-set(PYTHON_SITE_PATH share/cadabra2/python)
+find_package (Python COMPONENTS Interpreter)
+
+set(PYTHON_SITE_PATH ${CMAKE_INSTALL_FULL_LIBDIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
+
+string(REGEX REPLACE "^${CMAKE_INSTALL_PREFIX}" "" PYTHON_SITE_PATH_REL ${PYTHON_SITE_PATH})
+set(PYTHON_SITE_PATH_REL ${PYTHON_SITE_PATH_REL})
+
 if(NOT WIN32)
   execute_process(
 	 COMMAND ${PYTHON_EXECUTABLE} -c "import site; print (site.getsitepackages()[0]);"
