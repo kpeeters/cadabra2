@@ -226,7 +226,7 @@ namespace cadabra {
 		using py_type = typename base_type::py_type;
 
 		return py_type(m, std::make_shared<cpp_type>()->name().c_str(), py::multiple_inheritance())
-			.def(py::init<Ex_ptr, Ex_ptr>(), py::arg("ex"), py::arg("param"))
+			.def(py::init<Ex_ptr, Ex_ptr>(), py::arg("ex"), py::arg("param")=Ex{})
 			.def_static("get", [](Ex_ptr ex, bool ipr) { return base_type::get_from_kernel(ex->begin(), ipr); }, py::arg("ex"), py::arg("ignore_parent_rel") = false)
 			.def_static("get", [](ExNode node, bool ipr) { return base_type::get_from_kernel(node.it, ipr); }, py::arg("exnode"), py::arg("ignore_parent_rel") = false)
 			.def("__str__", &BoundPropT::str_)
