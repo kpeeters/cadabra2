@@ -57,6 +57,7 @@ function runbuild {
 
 # Parameters: VM name, package type, local ssh port, folder name on web server.
 
+runbuild "Ubuntu_20.04"        ".deb" 7030 ubuntu2004
 runbuild "Ubuntu_18.04"        ".deb" 7017 ubuntu1804
 runbuild "Fedora_28"           ".rpm" 7020 fedora28
 runbuild "Fedora_29"           ".rpm" 7025 fedora29               
