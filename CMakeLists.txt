@@ -221,7 +221,7 @@ endif()
 
 if(ENABLE_MATHEMATICA)
 	print_header("Configuring Mathematica")
-	find_package(Mathematica COMPONENTS WSTP REQUIRED)
+	find_package(Mathematica COMPONENTS WSTP)
 endif()
 
 
