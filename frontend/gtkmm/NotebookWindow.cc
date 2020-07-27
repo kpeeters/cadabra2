@@ -536,6 +536,8 @@ void NotebookWindow::on_connect()
 	kernel_string = "connected";
 	dispatcher.emit();
 	console.initialize();
+	if (!name.empty())
+		console.send_input("sys.path.insert(0, r'" + name.substr(0, name.find_last_of("\\/")) + "')");
 	}
 
 void NotebookWindow::on_disconnect(const std::string& reason)
@@ -1278,7 +1280,8 @@ void NotebookWindow::on_file_save_as()
 	int result=dialog.run();
 
 	switch(result) {
-		case(Gtk::RESPONSE_OK): {
+	case(Gtk::RESPONSE_OK): {
+			std::string old_name = name;
 			name = dialog.get_filename();
 			std::string res=save(name);
 			if(res.size()>0) {
@@ -1291,6 +1294,7 @@ void NotebookWindow::on_file_save_as()
 			else {
 				modified=false;
 				update_title();
+				console.send_input("sys.path.remove(r'" + old_name.substr(0, old_name.find_last_of("\\/")) + "'); sys.path.insert(0, r'" + name.substr(0, name.find_last_of("\\/")) + "')");
 				}
 			break;
 			}
