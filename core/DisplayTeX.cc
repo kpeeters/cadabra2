@@ -258,11 +258,38 @@ std::string DisplayTeX::texify(std::string str) const
 	if(rn!=symmap.end())
 		str = rn->second;
 
+	// Convert symbols which need to be escaped for TeX.
 	std::string res;
 	for(unsigned int i=0; i<str.size(); ++i) {
 		if(str[i]=='#') res+="\\#";
 		else res+=str[i];
 		}
+
+	// Make symbols like "a13" print as "a_{13}" automatically.
+	if(res.size()>1) {
+		std::string nondigit;
+		std::string digit;
+		bool nd=true;
+		for(size_t i=0; i<str.size(); ++i) {
+			if(nd) {
+				if(isdigit(str[i])) {
+					nd=false;
+					digit+=str[i];
+					}
+				else nondigit+=str[i];
+				}
+			else {
+				if(isdigit(str[i])==false) {
+					digit="";
+					break; // nothing we can do here
+					}
+				else digit+=str[i];
+				}
+			}
+		if(digit.size()>0 && nondigit.size()>0)
+			res=nondigit+"_{"+digit+"}";
+		}
+	
 	return res;
 	}
 
