@@ -287,7 +287,7 @@ std::string DisplayTeX::texify(std::string str) const
 				}
 			}
 		if(digit.size()>0 && nondigit.size()>0)
-			res=nondigit+"_{"+digit+"}";
+			res="{"+nondigit+"_{"+digit+"}}";
 		}
 	
 	return res;
