@@ -305,6 +305,11 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   set_target_properties(cadabra2 PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   target_link_libraries(cadabra2 PRIVATE ${PYTHON_LIBRARIES})
+elseif(CMAKE_SHARED_LINKER_FLAGS MATCHES ".*-Wl,--no-undefined.*")
+  # Exception for systems that require no undefined symbols present
+  # in shared libraries (e.g. openSUSE).
+  message("-- Linking cadabra2.so to libpython.so because of default linker flags.")
+  target_link_libraries(cadabra2 PRIVATE ${PYTHON_LIBRARIES})
 endif()
 
 if(ENABLE_SYSTEM_JSONCPP)
