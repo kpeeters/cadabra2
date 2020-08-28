@@ -15,6 +15,7 @@ import site
 from code import InteractiveConsole
 import code
 import re
+import readline
 import rlcompleter
 import os
 
@@ -226,6 +227,8 @@ if __name__ == '__main__':
     sh = Shell()
     sys.ps1='> '
     sys.ps2='. '
+    readline.set_completer(rlcompleter.Completer(locals()).complete)
+    readline.parse_and_bind("tab: complete")
 
     if len(sys.argv)>1:
         if '-d' in sys.argv:
