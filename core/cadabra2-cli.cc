@@ -113,7 +113,7 @@ void Shell::restart()
 	}
 
 	sys = PyImport_ImportModule("sys");
-	std::string module_path = cadabra::install_prefix() + "/share/cadabra2/python";
+	std::string module_path = PYTHON_SITE_PATH;
 	PyObject* module_path_str = PyUnicode_FromString(module_path.c_str());
 	PyList_Append(PyObject_GetAttrString(sys, "path"), module_path_str);
 	Py_XDECREF(module_path_str);
@@ -122,7 +122,7 @@ void Shell::restart()
 void Shell::interact()
 {
 	// Run cadabra2_defaults.py
-	if (!execute_file(cadabra::install_prefix() + "/share/cadabra2/python/cadabra2_defaults.py", false)) {
+	if (!execute_file(std::string(PYTHON_SITE_PATH) + "/cadabra2_defaults.py", false)) {
 		handle_error();
 		throw ExitRequest("Error encountered while initializing the interpreter");
 	}

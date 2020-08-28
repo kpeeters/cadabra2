@@ -106,7 +106,7 @@ void Server::init()
 
 	// Make the C++ CatchOutput class visible on the Python side.
 
-	auto python_path = cadabra::install_prefix()+"/share/cadabra2/python";
+	auto python_path = std::string(PYTHON_SITE_PATH);
 
 	std::string stdOutErr =
 	   "import sys\n"
