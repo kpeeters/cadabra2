@@ -193,17 +193,19 @@ the 'Education' menu.
 Linux (openSUSE)
 ~~~~~~~~~~~~~~~~
 
-For openSUSE (tested on 'Leap 15.0', probably also fine with minor
+For openSUSE (tested on 'Leap 15.2', probably also fine with minor
 changes for 'Tumbleweed') you first need to install the dependencies
 with::
 
-    sudo zypper install git cmake python3-devel gcc-c++ \
+    sudo zypper install --no-recommends git cmake python3-devel gcc-c++ \
                   pcre-devel gmp-devel libuuid-devel sqlite-devel \
                   gtkmm3-devel  \
                   texlive python3-matplotlib \
                   python3-sympy \
-                  libboost_system1_69_0-devel libboost_filesystem1_69_0-devel \
-                  libboost_date_time1_69_0-devel libboost_program_options1_69_0-devel
+                  libboost_system1_71_0-devel libboost_filesystem1_71_0-devel \
+                  libboost_date_time1_71_0-devel libboost_program_options1_71_0-devel
+
+You can get away with less than the full texlive.
 
 This platform receives less testing so please get in touch if you run
 into any issues. You need to clone the cadabra2 git repository (if you

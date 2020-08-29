@@ -15,16 +15,10 @@
   through HomeBrew or Conda; see below. 
 </p>
 <p>
-  Note that if your distribution has a <code>cadabra</code> package, this
-  will contain a 1.x version, which is no longer being updated. The
-  packages available here will eventually make it into the
-  distributions as well, under the name <code>cadabra2</code>, but that
-  may take a while. You can install versions 1.x and 2.x in parallel,
-  they will not interfere with each other.
-</p>
-<p>
   Use at your own risk. Because of time constraints some of these
   packages receive almost no testing, so any feedback is welcome.
+  If you want to help getting these into official distribution
+  repositories, please let me know.
 </p>
 
 <div class="packages">
@@ -77,6 +71,7 @@
   <div class="distrotype">
 	 <img src="static/images/opensuse_logo.png"/>
 	 <div class="distronum"><a href="https://cadabra.science/packages/opensuse150/">openSUSE Leap 15.0</a></div>
+	 <div class="distronum"><a href="https://cadabra.science/packages/opensusetw/">openSUSE Tumbleweed</a></div>
   </div>
 
   <div class="distrotype">
@@ -97,7 +92,7 @@
 		After that, you can install Cadabra using
 		<code>brew tap kpeeters/repo</code>		
 		<code>brew install cadabra2</code>
-		<code>pip3 install sympy gmpy2</code>
+		<code>/usr/local/bin/python3 -m pip install sympy gmpy2</code>
 		Please not that this has not yet received a lot of testing; if
 		you encounter problems, please
 		email <a href="mailto:info@cadabra.science">info@cadabra.science</a>
