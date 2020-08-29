@@ -403,6 +403,21 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 		std::swap(block_queue, empty);
 
 		}
+	else if(msg_type=="complete") {
+		std::string str=root["string"].asString();
+		int alternative=root["alternative"].asInt();
+		std::string todo="print(__cdbkernel__.completer.complete(\""+str+"\", "+std::to_string(alternative)+"))";
+		// std::cerr << todo << std::endl;
+		std::string res=run_string(todo, true);
+		// FIXME: need a better way to get the result out of python, so we can spot None
+		// while keeping the possibility to complete 'No' -> 'None'.
+		if(res.size()>0 && res[res.size()-1]=='\n')
+			res=res.substr(0, res.size()-1);
+		if(res=="None")
+			res="";
+		//std::cerr << res << "|" << std::endl;
+		on_complete_finished(hdl, header.get("cell_id",0).asUInt64(), root["position"].asInt(), alternative, str, res);
+		}
 	else if(msg_type=="exit") {
 		exit(-1);
 		}
@@ -483,6 +498,29 @@ void Server::on_block_error(Block blk)
 	// std::cerr << "cadabra-server: sending error, " << str.str() << std::endl;
 
 	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
+	}
+
+void Server::on_complete_finished(websocketpp::connection_hdl hdl, uint64_t id, int pos, int alternative, std::string original, std::string completed)
+	{
+//	std::lock_guard<std::mutex> lock(ws_mutex); // Called from the receiving thread!
+
+	// Make a JSON message.
+	Json::Value json, content, header;
+
+	header["cell_id"]=(Json::Value::UInt64)id;
+	json["msg_type"]="completed";
+	content["original"]=original;
+	content["completed"]=completed;
+	content["position"]=pos;
+	content["alternative"]=alternative;
+	json["header"]=header;
+	json["content"]=content;
+
+	std::ostringstream str;
+	str << json << std::endl;
+	// std::cerr << "cadabra-server: sending completion, " << str.str() << std::endl;
+
+	wserver.send(hdl, str.str(), websocketpp::frame::opcode::text);
 	}
 
 void Server::on_kernel_fault(Block blk)

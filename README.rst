@@ -27,14 +27,15 @@ This repository holds the 2.x series of the Cadabra computer algebra
 system. It supersedes the 1.x series, which can still be found at
 https://github.com/kpeeters/cadabra.
 
-Cadabra was designed specifically for the solution of problems
-encountered in quantum and classical field theory. It has extensive
-functionality for tensor computer algebra, tensor polynomial
-simplification including multi-term symmetries, fermions and
-anti-commuting variables, Clifford algebras and Fierz transformations,
-implicit coordinate dependence, multiple index types and many
-more. The input format is a subset of TeX. Both a command-line and a
-graphical interface are available.
+Cadabra is a symbolic computer algebra system, designed specifically
+for the solution of problems encountered in quantum and classical
+field theory. It has extensive functionality for tensor computer
+algebra, tensor polynomial simplification including multi-term
+symmetries, fermions and anti-commuting variables, Clifford algebras
+and Fierz transformations, implicit coordinate dependence, multiple
+index types and many more. The input format is a subset of TeX. Both a
+command-line and a graphical interface are available, and there is a
+kernel for Jupyter.
 
 
 Installation
@@ -364,15 +365,11 @@ link to Anaconda's Python, which has been built with Visual
 Studio. The recommended way to build Cadabra is thus to build against
 libraries which are all built using Visual Studio as well (if you are
 happy to not use Anaconda, you can also build with the excellent MSYS2
-system from https://www.msys2.org/; see below). It is practically
-impossible to build all dependencies yourself without going crazy, but
-fortunately that is not necessary because of the VCPKG library at
+system from https://www.msys2.org/). It is practically impossible to
+build all dependencies yourself without going crazy, but fortunately
+that is not necessary because of the VCPKG library at
 https://github.com/Microsoft/vcpkg. This contains all dependencies
 (boost, gtkmm, sqlite and various others) in ready-to-use form.
-
-
-Building with vcpkg (recommended)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you do not already have it, first install Visual Studio Community
 Edition from https://www.visualstudio.com/downloads/ and install
@@ -396,19 +393,17 @@ Run the bootstrap script to set things up::
 Install all the dependencies with (this is a *very* slow process, be
 warned, it can easily take several hours, but at least it's automatic)::
   
-    vcpkg install mpir:x64-windows glibmm:x64-windows   (go have a coffee)
-    vcpkg install sqlite3:x64-windows boost:x64-windows (go for dinner)
-    vcpkg install gtkmm:x64-windows  (run overnight)
+    vcpkg install mpir:x64-windows glibmm:x64-windows sqlite3:x64-windows
+    vcpkg install boost-system:x64-windows \
+                  boost-asio:x64-windows
+                  boost-uuid:x64-windows
+                  boost-program-options:x64-windows
+                  boost-signals2:x64-windows
+                  boost-property-tree:x64-windows
+                  boost-date-time:x64-windows
+                  boost-filesystem:x64-windows
+    vcpkg install gtkmm:x64-windows
     vcpkg integrate install
-
-boost-system:x64-windows
-boost-asio:x64-windows
-boost-uuid:x64-windows
-boost-program-options:x64-windows
-boost-signals2:x64-windows
-boost-property-tree:x64-windows
-boost-date-time:x64-windows
-boost-filesystem:x64-windows
 
 The last line will spit out a CMAKE toolchain path; write it down, you need that shortly.
 Now clone the cadabra repository and configure as::
@@ -459,49 +454,6 @@ and you can start the notebook interface with::
 It should be possible to simply copy the C:\Cadabra folder to a
 different machine and run it there (that is essentially what the
 binary installer does).
-
-
-Building with MSYS2 (not recommended)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-**Warning: the instructions below are just for guidance, we have not
-tried this for quite a while.**
-
-If you are happy with a Cadabra which cannot access an Anaconda Python
-distribution, it is possible to build using MSYS2. First, install
-MSYS2 from https://www.msys2.org. Once you have a working MSYS2
-shell, do the following to install various packages (all from an MSYS2
-shell!)::
-
-    pacman -S mingw-w64-x86_64-gcc
-    pacman -S mingw-w64-x86_64-gtkmm3
-    pacman -S mingw-w64-x86_64-boost
-    pacman -S gmp gmp-devel pcre-devel
-    pacman -S mingw-w64-x86_64-cmake
-	 pacman -S mingw-w64-x86_64-sqlite3
-    pacman -S mingw-w64-x86_64-python3  
-    pacman -S mingw-w64-x86_64-adwaita-icon-theme
-
-Then close the MSYS2 shell and open the MINGW64 shell. Run::
-  
-    cd cadabra2/build
-    cmake -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=/home/[user] ..
-    mingw32-make
-
-Replace '[user]' with your user name.
-If the cmake fails with a complaint about 'sh.exe', just run it again.
-The above builds for python2, let me know if you know how to make it
-pick up python3 on Windows.
-
-This fails to install the shared libraries, but they do get
-built. Copy them all in ~/bin, and also copy a whole slew of other
-things into there. In addition you need::
-
-    cp /mingw64/bin/gspawn-win* ~/bin
-    export PYTHONPATH=/mingw64/lib/python2.7:/home/[user]/bin
-
-This fails to start the server with 'The application has requested the
-Runtime to terminate it in an unusual way'.
 
 
 Building a Jupyter kernel

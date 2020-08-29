@@ -18,6 +18,7 @@ namespace cadabra {
 	class ActionSetRunStatus;
 	class ActionSplitCell;
 	class ActionInsertText;
+	class ActionCompleteText;
 	class ActionEraseText;
 	class ComputeThread;
 	class GUIBase;
@@ -89,6 +90,7 @@ namespace cadabra {
 			friend ActionSplitCell;
 			friend ActionSetRunStatus;
 			friend ActionInsertText;
+			friend ActionCompleteText;			
 			friend ActionEraseText;
 
 			class Prefs {

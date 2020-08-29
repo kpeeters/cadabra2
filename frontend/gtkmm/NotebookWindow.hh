@@ -238,6 +238,7 @@ namespace cadabra {
 			bool cell_content_erase(int, int, DTree::iterator, int);
 			bool cell_content_execute(DTree::iterator, int, bool shift_enter_pressed);
 			bool cell_content_changed(DTree::iterator it, int i);
+			bool cell_complete_request(DTree::iterator it, int pos, int i);
 
 			void interactive_execute();
 

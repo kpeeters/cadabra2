@@ -3,6 +3,12 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+export CDB_TAG=$1
+if [ "${CDB_TAG}" = "" ]; then
+    echo "Please specify a version tag to build! Use 'HEAD' for latest master."
+    exit
+fi
+
 function runbuild {
 	 # Start the VM and wait for it to come up.
 	 echo "Starting build bot for $1, ssh port $3"
@@ -21,7 +27,7 @@ function runbuild {
 	 # on the local machine (as the build bot may not have an
 	 # up-to-date build script yet).
 
-	 ssh -tt -p $3 buildbot "bash -s" -- < ${DIR}/buildpkg.sh
+	 ssh -tt -p $3 buildbot CDB_TAG=${CDB_TAG} "bash -s" -- < ${DIR}/buildpkg.sh
 	 
 	 # Copy the generated package to the web server.
 
@@ -57,13 +63,13 @@ function runbuild {
 
 # Parameters: VM name, package type, local ssh port, folder name on web server.
 
-runbuild "Ubuntu_20.04"        ".deb" 7030 ubuntu2004
+#runbuild "Ubuntu_20.04"        ".deb" 7030 ubuntu2004
 #runbuild "Ubuntu_18.04"        ".deb" 7017 ubuntu1804
 #runbuild "Fedora_28"           ".rpm" 7020 fedora28
 #runbuild "Fedora_29"           ".rpm" 7025 fedora29               
 #runbuild "Mint_19"             ".deb" 7022 mint19
 # runbuild "OpenSUSE_15"         ".rpm" 7024 opensuse150  ssh error
-# runbuild "OpenSUSE_Tumbleweed" ".rpm" 7023 opensusetw   ssh error
+runbuild "OpenSUSE_Tumbleweed" ".rpm" 7023 opensusetw
 # runbuild "CentOS_7"            ".rpm" 7004 centos7      cmake/packaging clash
 # runbuild "Scientific_Linux_74" ".rpm" 7013 scientific7x
 #runbuild "Debian_921"          ".deb" 7014 debian9

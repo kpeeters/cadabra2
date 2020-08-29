@@ -5,6 +5,7 @@
 cd ${HOME}/cadabra2
 sudo ls 
 git pull origin
+git checkout ${CDB_TAG}
 sudo rm -Rf build/*
 mkdir build
 cd build

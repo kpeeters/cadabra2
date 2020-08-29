@@ -259,6 +259,7 @@ void ActionInsertText::execute(DocumentThread& cl, GUIBase& gb)
 	ActionBase::execute(cl, gb);
 
 	ref->textbuf.insert(insert_pos, text);
+	// std::cerr << "insert: textbuf now |" << ref->textbuf << "|" << std::endl;
 	}
 
 void ActionInsertText::revert(DocumentThread& cl, GUIBase& gb)
@@ -267,6 +268,36 @@ void ActionInsertText::revert(DocumentThread& cl, GUIBase& gb)
 	gb.update_cell(cl.doc, ref);
 	}
 
+
+ActionCompleteText::ActionCompleteText(DataCell::id_t ref_id, int pos, const std::string& content, int alt)
+	: ActionBase(ref_id), insert_pos(pos), text(content), alternative_(alt)
+	{
+	}
+
+void ActionCompleteText::execute(DocumentThread& cl, GUIBase& gb)
+	{
+	ActionBase::execute(cl, gb);
+
+	ref->textbuf.insert(insert_pos, text);
+	// std::cerr << "complete: textbuf now |" << ref->textbuf << "|" << std::endl;
+	gb.update_cell(cl.doc, ref);
+	}
+
+void ActionCompleteText::revert(DocumentThread& cl, GUIBase& gb)
+	{
+	ref->textbuf.erase(insert_pos, text.size());
+	gb.update_cell(cl.doc, ref);
+	}
+
+int ActionCompleteText::length() const
+	{
+	return text.size();
+	}
+
+int ActionCompleteText::alternative() const
+	{
+	return alternative_;
+	}
 
 ActionEraseText::ActionEraseText(DataCell::id_t ref_id, int start, int end)
 	: ActionBase(ref_id), from_pos(start), to_pos(end)

@@ -16,6 +16,7 @@ from importlib.abc import MetaPathFinder
 from cdb_appdirs import user_config_dir, user_data_dir
 import datetime
 import atexit
+import rlcompleter
 
 __cdbkernel__=cadabra2.__cdbkernel__
 import os

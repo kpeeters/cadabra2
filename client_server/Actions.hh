@@ -182,6 +182,32 @@ namespace cadabra {
 
 	/// \ingroup clientserver
 	///
+	/// Complete text at a point in a GUI cell with one or more
+	/// alternative.
+	/// In contrast to ActionInsertText, this one is triggered from
+	/// the server-side, so will update the GUI both for execute
+	/// and revert.
+
+	class ActionCompleteText : public ActionBase {
+		public:
+			ActionCompleteText(DataCell::id_t ref_id, int pos, const std::string&, int alternative);
+			virtual ~ActionCompleteText() {};
+
+			virtual void execute(DocumentThread&, GUIBase&) override;
+			virtual void revert(DocumentThread&,  GUIBase&) override;
+
+			int length() const;
+			int alternative() const;
+			
+		private:
+			DTree::iterator   this_cell;
+			int         insert_pos;
+			std::string text;
+			int         alternative_; // in case there is more than one completion alternative
+		};
+
+	/// \ingroup clientserver
+	///
 	/// Remove a text string starting at the indicated position, and
 	/// with the indicated length, from the indicated cell.
 	/// This action is assumed to be triggered from a user change to

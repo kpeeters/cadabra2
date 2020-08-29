@@ -50,6 +50,7 @@ namespace cadabra {
 					sigc::signal3<bool, std::string, int, DTree::iterator> content_insert;
 					sigc::signal3<bool, int, int, DTree::iterator>         content_erase;
 					sigc::signal1<bool, DTree::iterator>                   cell_got_focus;
+					sigc::signal2<bool, DTree::iterator, int>              complete_request;
 
 					friend CodeInput;
 

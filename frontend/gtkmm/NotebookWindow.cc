@@ -721,6 +721,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 
 				ci->edit.content_execute.connect(
 				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), i, true ) );
+				ci->edit.complete_request.connect(
+				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_complete_request), i ) );
 				ci->edit.cell_got_focus.connect(
 				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_got_focus), i ) );
 
@@ -895,7 +897,8 @@ void NotebookWindow::remove_all_cells()
 void NotebookWindow::update_cell(const DTree&, DTree::iterator it)
 	{
 	// We just do a redraw for now, but this may require more work later.
-
+	disable_stacks=true;
+	
 	for(unsigned int i=0; i<canvasses.size(); ++i) {
 		VisualCell& vc = canvasses[i]->visualcells[&(*it)];
 		if(it->cell_type==DataCell::CellType::python || it->cell_type==DataCell::CellType::latex) {
@@ -904,6 +907,7 @@ void NotebookWindow::update_cell(const DTree&, DTree::iterator it)
 			}
 		}
 
+	disable_stacks=false;
 	}
 
 void NotebookWindow::position_cursor(const DTree&, DTree::iterator it, int pos)
@@ -1049,6 +1053,8 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int )
 
 bool NotebookWindow::cell_content_changed(DTree::iterator, int /* i */)
 	{
+	if(disable_stacks) return false;
+
 	modified=true;
 	unselect_output_cell();
 	update_title();
@@ -1112,6 +1118,22 @@ bool NotebookWindow::cell_got_focus(DTree::iterator it, int canvas_number)
 void NotebookWindow::interactive_execute()
 	{
 	compute->execute_interactive(console.grab_input());
+	}
+
+bool NotebookWindow::cell_complete_request(DTree::iterator it, int pos, int canvas_number)
+	{
+	int cnum=0;
+	if(undo_stack.size()>0) {
+		auto cmp = std::dynamic_pointer_cast<ActionCompleteText>(undo_stack.top());
+		if(cmp) {
+			// std::cerr << "Undoing last completion" << std::endl;
+			cmp->revert(*this, *gui);
+			pos-=cmp->length();
+			cnum=cmp->alternative()+1;
+			undo_stack.pop();
+			}
+		}
+	return compute->complete(it, pos, cnum);
 	}
 
 bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number, bool )
@@ -1338,7 +1360,7 @@ void NotebookWindow::on_file_export_latex()
 			std::ofstream temp(name);
 			std::size_t dotpos = name.rfind('.');
 			std::string base = name.substr(0, dotpos);
-			std::cerr << base << std::endl;
+			// std::cerr << base << std::endl;
 			temp << export_as_LaTeX(doc, base);
 			}
 		}

@@ -78,6 +78,14 @@ namespace cadabra {
 
 			void restart_kernel();
 
+			/// Request completion of a string. Returns `false` if the current
+			/// cell cannot be completed, in which case the TAB which led to
+			/// the request should be interpreted literally and used for spacing.
+			/// The `alternative` argument is the serial number of the requested
+			/// completion, in case there is more than one possible completion.
+
+			bool complete(DTree::iterator, int pos, int alternative);
+
 			// Determine if there are still cells running on the server.
 			// FIXME: this does not guarantee thread-safety but at the moment
 			// is only used for updating status bars etc.

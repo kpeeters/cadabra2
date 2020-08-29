@@ -273,7 +273,7 @@ void ComputeThread::cell_finished_running(DataCell::id_t id)
 void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	{
 	client::connection_ptr con = wsclient.get_con_from_hdl(hdl);
-	//std::cerr << msg->get_payload() << std::endl;
+	// std::cerr << msg->get_payload() << std::endl;
 
 	// Parse the JSON message.
 	Json::Value  root;
@@ -309,6 +309,20 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	else if (msg_type.asString().find("csl_") == 0) {
 		root["header"]["from_server"] = true;
 		docthread->on_interactive_output(root);
+		}
+	else if(msg_type.asString()=="completed") {
+		// std::cerr << "received completion of " << content["original"] << " -> " << content["completed"] << std::endl;
+
+		// Finally, the action to add the output cell.
+		std::string toadd=content["completed"].asString();
+		if(toadd.size()>0) {
+			toadd=toadd.substr(content["original"].asString().size());
+			int pos=content["position"].asInt();
+			int alternative=content["alternative"].asInt();
+			std::shared_ptr<ActionBase> action =
+				std::make_shared<ActionCompleteText>(cell_id, pos, toadd, alternative);
+			docthread->queue_action(action);
+			}
 		}
 	else {
 		try {
@@ -569,4 +583,46 @@ void ComputeThread::restart_kernel()
 
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
 	docthread->on_interactive_output(req);
+	}
+
+bool ComputeThread::complete(DTree::iterator it, int pos, int alternative)
+	{
+	if(connection_is_open==false)
+		return false;
+
+	const DataCell& dc=(*it);
+
+	Json::Value req, header, content;
+	header["uuid"]="none";
+	header["cell_id"]=(Json::UInt64)dc.id().id;
+	if(dc.id().created_by_client)
+		header["cell_origin"]="client";
+	else
+		header["cell_origin"]="server";
+	header["msg_type"]="complete";
+	req["auth_token"]=authentication_token;
+	req["header"]=header;
+	std::string todo = it->textbuf;
+//	if(todo.size()>0 && todo[todo.size()-1]=='\n')
+//		todo=todo.substr(0, todo.size()-1);
+	size_t lst=todo.find_last_of("\n(){}[]\t");
+	if(lst!=std::string::npos)
+		todo=todo.substr(lst+1);
+
+	if(todo.size()==0)
+		return false;
+	
+	req["string"]=todo;
+	req["position"]=pos;
+	req["alternative"]=alternative;
+	
+	std::ostringstream str;
+	str << req << std::endl;
+	
+	// std::cerr << str.str() << std::endl;
+
+	server_pid=0;
+	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
+
+	return true;
 	}

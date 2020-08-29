@@ -508,19 +508,31 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	{
 	bool is_shift_return = get_editable() && event->keyval==GDK_KEY_Return && (event->state&Gdk::SHIFT_MASK);
 	//	bool is_shift_tab    = get_editable() && event->keyval==GDK_KEY_Tab && (event->state&Gdk::SHIFT_MASK);
+	bool is_tab = get_editable() && event->keyval==GDK_KEY_Tab;
 	bool retval=false;
 	// std::cerr << event->keyval << ", " << event->state << " pressed" << std::endl;
 
-	if(!is_shift_return)
+	if(!is_shift_return && !is_tab)
 		retval=Gtk::TextView::on_key_press_event(event);
 
 	Glib::RefPtr<Gtk::TextBuffer> textbuf=get_buffer();
-	// std::string tmp(textbuf->get_text(get_buffer()->begin(), get_buffer()->end()));
 
 	if(is_shift_return) {
 		content_changed(datacell);
 		content_execute(datacell);
 		return true;
+		}
+	if(is_tab) {
+		// Only complete if the last character is not whitespace.
+
+		Glib::RefPtr<Gtk::TextBuffer::Mark> ins = get_buffer()->get_insert();
+		Gtk::TextBuffer::iterator it=textbuf->get_iter_at_mark(ins);
+		int ipos=textbuf->get_slice(textbuf->begin(), it).bytes();
+		
+		if(complete_request(datacell, ipos))
+			return true;
+		else
+			retval=Gtk::TextView::on_key_press_event(event);				
 		}
 	//	else {
 	//		// If this was a real key press (i.e. not just SHIFT or ALT or similar), emit a
