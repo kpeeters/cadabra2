@@ -410,7 +410,7 @@ void NotebookWindow::load_css(const std::string& text_colour)
 	data += "textview text { color: "+text_colour+"; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
 	data += "GtkTextView { color: "+text_colour+"; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
 	data += "*:focus { background-color: #eee; }\n";
-	data += "*:selected { background-color: #ccc; }\n";
+	data += ".view text selection { color: #fff; background-color: #888; }\n";
 	data += "textview.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
 	data += "#ImageView { transition-property: padding, background-color; transition-duration: 1s; }\n";
 	data += "#CodeInput { font-family: monospace; }\n";

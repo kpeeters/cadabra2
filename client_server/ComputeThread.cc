@@ -605,7 +605,7 @@ bool ComputeThread::complete(DTree::iterator it, int pos, int alternative)
 	std::string todo = it->textbuf;
 //	if(todo.size()>0 && todo[todo.size()-1]=='\n')
 //		todo=todo.substr(0, todo.size()-1);
-	size_t lst=todo.find_last_of("\n(){}[]\t");
+	size_t lst=todo.find_last_of("\n(){}[]\t ");
 	if(lst!=std::string::npos)
 		todo=todo.substr(lst+1);
 
