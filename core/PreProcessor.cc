@@ -307,7 +307,7 @@ char32_t preprocessor::get_token_(char32_t prev_token)
 				else                        return ' ';
 				}
 			if(is_link_(prev_token) && !(is_opening_bracket_(c) || c=='\\' || prev_token=='$')) {
-				if(cur.accu.size()==0 || ! (cur.accu[0]=='@' || (cur.accu[0]=='\\' && cur.accu[1]=='@'))) {
+				if(cur.accu.size()==0 || ! (cur.accu.size()>3 || cur.accu[0]=='@' || (cur.accu[0]=='\\' && cur.accu[1]=='@'))) {
 					next_is_product_=true; // turn aaa_bbb into aaa_b bb (but keep @aaa_bbb)
 					}
 				}

@@ -284,6 +284,10 @@ int main(int, char **)
 		               "[a,b]",
 		               "\\comma[a][b]");
 
+		regression*=testit(
+		               "sort_product( B A C )",
+		               "sort_product(\\prod{B}{A}{C})");
+
 		//		  regression*=testit(
 		//			  "@substitute!(%){b_{p}->c_{p m n} A^{m n} + c_{p} }",
 		//			  "@substitute!(%){\\arrow{b_{p}}{\\sum{\\prod{c_{p m n}}{A^{m n}}{c_{p}}}}}");
