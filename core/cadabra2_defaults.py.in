@@ -19,6 +19,8 @@ import atexit
 import rlcompleter
 
 __cdbkernel__=cadabra2.__cdbkernel__
+__cdbkernel__.completer=rlcompleter.Completer()
+
 import os
 os.environ.setdefault('PATH', '')
 

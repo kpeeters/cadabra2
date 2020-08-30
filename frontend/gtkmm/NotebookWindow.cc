@@ -2146,6 +2146,7 @@ void NotebookWindow::unselect_output_cell()
 
 bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
 	{
+//	std::cerr << "handle_outbox_select " << it->textbuf << std::endl;
 	unselect_output_cell();
 
 	// Colour the background of the selected cell, in all canvasses.
@@ -2153,8 +2154,9 @@ bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
 		if(canvasses[i]->visualcells.find(&(*it))!=canvasses[i]->visualcells.end()) {
 			auto& outbox = canvasses[i]->visualcells[&(*it)].outbox;
 			outbox->image.set_state(Gtk::STATE_SELECTED);
-			// if(i==current_canvas)
-			//	outbox->grab_focus();
+//			std::cerr << "selecting" << std::endl;
+//			if(i==current_canvas)
+//				outbox->grab_focus();
 			// FIXME: need to remove focus from any CodeInput widget; the above does not do that.
 			}
 		}
