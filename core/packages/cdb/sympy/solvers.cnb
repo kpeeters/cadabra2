@@ -44,7 +44,7 @@
 			"cell_id" : 11180798987284830538,
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "def dsolve(ex, obj=None):\n   ret = $@(ex)$\n   sb = SympyBridge(ret)\n   if obj is None:\n      sb.from_sympy( str(sympy.dsolve( sb.to_sympy() )) )\n   else:\n      sbo = SympyBridge(obj)\n      sb.from_sympy( str(sympy.dsolve( sb.to_sympy(), sbo.to_sympy() )) )\n   return ret"
+			"source" : "def dsolve(ex, obj=None):\n   # FIXME: If ex is a list, convert to an Ex when it is pulled\n   # into an expression like below!\n   ret = $@(ex)$\n   sb = SympyBridge(ret)\n   if obj is None:\n      sb.from_sympy( str(sympy.dsolve( sb.to_sympy() )) )\n   else:\n      sbo = SympyBridge(obj)\n      sb.from_sympy( str(sympy.dsolve( sb.to_sympy(), sbo.to_sympy() )) )\n   return ret"
 		},
 		{
 			"cell_id" : 497397197071890198,
