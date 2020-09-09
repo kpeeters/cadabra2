@@ -322,15 +322,27 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	   "    </menu>"
 	   "  </menubar>"
 	   "  <toolbar name='ToolBar'>"
-	   "    <toolitem action='Open' />"
-	   //		"       <property name='tooltip_text' translatable='yes'>Open existing notebook</property>"
-	   //		"    </toolitem>"
-	   "    <toolitem action='EvaluateAll' name='run all'/>"
-	   "    <toolitem action='EvaluateStop' />"
+		"    <toolitem name='New' action='New'/>"
+		"    <toolitem name='Open' action='Open' />"
+		"    <toolitem name='Save' action='Save' />"
+		"    <toolitem name='SaveAs' action='SaveAs' />"
+		"    <separator />"
+		"    <toolitem name='Undo' action='EditUndo' />"
+		"    <separator />"
+		"    <toolitem name='RunAll' action='EvaluateAll' />"
+		"    <toolitem name='EvaluateStop' action='EvaluateStop' />"
 	   "  </toolbar>"
 	   "</ui>";
 
 	uimanager->add_ui_from_string(ui_info);
+
+	uimanager->get_widget("/ToolBar/New")->set_tooltip_text("New notebook");
+	uimanager->get_widget("/ToolBar/Open")->set_tooltip_text("Open existing notebook");
+	uimanager->get_widget("/ToolBar/Save")->set_tooltip_text("Save changes");
+	uimanager->get_widget("/ToolBar/SaveAs")->set_tooltip_text("Save as new notebook");
+	uimanager->get_widget("/ToolBar/Undo")->set_tooltip_text("Undo");
+	uimanager->get_widget("/ToolBar/RunAll")->set_tooltip_text("Run all cells");
+	uimanager->get_widget("/ToolBar/EvaluateStop")->set_tooltip_text("Stop evaluation");
 
 	// Main box structure dividing the window.
 	add(topbox);
