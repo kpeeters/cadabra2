@@ -1,0 +1,105 @@
+menubar {
+    margin: 0px;
+    background-color: #f5f6f7;
+}
+
+menubar label {
+    color: black;
+}
+
+menuitem:hover {
+    color: black;
+    background-color: #a1cca1;
+}
+
+menu {
+    padding: 0px;
+    background-color: white;
+}
+
+
+menubar > menuitem {
+    border-bottom: 1px solid #ddd;
+}
+
+toolbar {
+    background-color: #f5f6f7;
+    border-bottom: 1px solid #ddd;
+}
+
+tooltip {
+    background-color: transparent;
+}
+
+tooltip label {
+    background-color: #f5f6f7;
+    color: black;
+    border: 1px solid #aaa;
+    padding: 4px;
+    margin-top: -8px;
+}
+
+#statusbar {
+    border-top: 1px solid #ddd;
+    background-color: #f5f6f7;
+}
+
+dialog button:not(.titlebutton) {
+    background-image: none;
+    background-color: #f5f6f7;
+    padding: 0px;
+}
+
+dialog entry {
+    background-color: white;
+    padding: 5px;
+    min-height: 0px;
+}
+
+dialog button:not(.titlebutton):hover {
+    background-color: #a1cca1;
+}
+
+/*
+ * The following settings are overridden somewhere else
+ * and so have no effect; they are therefore added in the
+ * load_css() function of NotebookWindow.cc
+ */
+
+/*
+.titlebar {
+    margin: 0;
+    padding: 0;
+    box-shadow: inset 0 0 1px #ddd;
+    background-image: none;
+    background-color: #209020;
+    color: white;
+}
+
+.titlebar:backdrop {
+    background-color: #367d36;
+}
+
+.titlebar label:backdrop {
+    color: white;
+}
+
+.titlebar .titlebutton {
+    margin: 0px 0px 0px -8px;
+    padding: 0px 8px;
+}
+
+dialog .titlebar,
+dialog .titlebar:backdrop {
+    background-color: #666;
+}
+
+tooltip {
+    background-color: transparent;
+}
+
+toolbar button {
+    padding: 0px;
+    margin-right: 5px;
+}
+*/

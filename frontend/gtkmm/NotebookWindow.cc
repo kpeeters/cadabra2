@@ -416,6 +416,48 @@ void NotebookWindow::load_css(const std::string& text_colour)
 	data += "#CodeInput { font-family: monospace; }\n";
 	data += "#Console   { padding: 5px; }\n";
 
+	// Some of the css properties defined in gtk-cadabra.css are overridden, and so are included
+	// here to force them to be used
+#ifdef _MSC_VER
+	data += R"(
+		.titlebar {
+			margin: 0;
+			padding: 0;
+			box-shadow: inset 0 0 1px #ddd;
+			background-image: none;
+			background-color: #209020;
+			color: white;
+		}
+
+		.titlebar:backdrop {
+			background-color: #367d36;
+		}
+
+		.titlebar label:backdrop {
+			color: white;
+		}
+
+		.titlebar .titlebutton {
+			margin: 0px 0px 0px -8px;
+			padding: 0px 8px;
+		}
+
+		dialog .titlebar,
+		dialog .titlebar:backdrop {
+			background-color: #666;
+		}
+
+		tooltip {
+			background-color: transparent;
+		}
+
+		toolbar button {
+			padding: 0px;
+			margin-right: 5px;
+		}
+)";
+#endif
+
 	//	data += "scrolledwindow { kinetic-scrolling: false; }\n";
 
 	if(!css_provider->load_from_data(data)) {

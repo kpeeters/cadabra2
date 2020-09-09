@@ -34,7 +34,7 @@ text widgets and the like base background color */
 @define-color theme_base_color #ffffff;
 /*
 base background color of selections */
-@define-color theme_selected_bg_color #cce8ff;
+@define-color theme_selected_bg_color #a1cca1;
 /*
 text/foreground color of selections */
 @define-color theme_selected_fg_color #262626;
@@ -96,3 +96,4 @@ read if you used those and something break with a version upgrade you're on your
 
 @import url("gtk-contained.css");
 @import url("apps/gnome-terminal.css");
+@import url("gtk-cadabra.css");
