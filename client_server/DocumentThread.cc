@@ -183,6 +183,9 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	is_registered = data.get("is_registered", false).asBool();
 	is_anonymous = data.get("is_anonymous", false).asBool();
 	git_path = data.get("git_path", "").asString();
+	python_path = data.get("python_path", "").asString();
+	move_into_new_cell = data.get("move_into_new_cell", false).asBool();
+
 	if(git_path=="")
 		git_path="/usr/bin/git";
 	// Get the colours for syntax highlighting.
@@ -215,6 +218,8 @@ void DocumentThread::Prefs::save()
 		data["highlight"] = highlight;
 		data["is_registered"] = is_registered;
 		data["is_anonymous"] = is_anonymous;
+		data["python_path"] = python_path;
+		data["move_into_new_cell"] = move_into_new_cell;
 		for (const auto& lang : colours) {
 			for (const auto& kw : lang.second)
 				data["colours"][lang.first][kw.first] = kw.second;

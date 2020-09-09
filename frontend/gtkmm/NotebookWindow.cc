@@ -207,7 +207,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	actiongroup->add( Gtk::Action::create("KernelRestart", Gtk::Stock::REFRESH, "Restart"), Gtk::AccelKey("<control><alt>R"),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart) );
 
-	actiongroup->add(Gtk::Action::create("MenuCompare", "Compare"));
+	actiongroup->add(Gtk::Action::create("MenuTools", "Tools"));
+	actiongroup->add(Gtk::Action::create("ToolsCompare", "Compare"));
 	actiongroup->add(Gtk::Action::create("CompareFile", "Compare to file"),
 	                 sigc::mem_fun(*this, &NotebookWindow::compare_to_file));
 	actiongroup->add(Gtk::Action::create("CompareGit", "Compare with Git"));
@@ -217,9 +218,10 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	                 sigc::mem_fun(*this, &NotebookWindow::compare_git_choose));
 	actiongroup->add(Gtk::Action::create("CompareGitSpecific", "Manually enter commit hash"),
 	                 sigc::mem_fun(*this, &NotebookWindow::compare_git_specific));
-
 	actiongroup->add(Gtk::Action::create("CompareSelectGit", "Select Git Executable"),
 	                 sigc::mem_fun(*this, &NotebookWindow::select_git_path));
+	actiongroup->add(Gtk::Action::create("ToolsOptions", "Options"),
+		sigc::mem_fun(*this, &NotebookWindow::on_tools_options));
 
 	actiongroup->add( Gtk::Action::create("MenuHelp", "_Help") );
 	//	actiongroup->add( Gtk::Action::create("HelpNotebook", Gtk::Stock::HELP, "How to use the notebook"),
@@ -303,7 +305,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		   "      <menuitem action='KernelRestart' />"
 		   "    </menu>";
 	ui_info+=
-	   "    <menu action='MenuCompare'>"
+		"    <menu action='MenuTools'>"
+		"      <menu action='ToolsCompare'>"
 	   "      <menuitem action='CompareFile'/>"
 	   "      <menu action='CompareGit'>"
 	   "        <menuitem action='CompareGitLatest'/>"
@@ -313,6 +316,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	   "        <menuitem action='CompareSelectGit'/>"
 	   "      </menu>"
 	   "    </menu>"
+		"      <menuitem action='ToolsOptions'/>"
+		"    </menu>"
 	   "    <menu action='MenuHelp'>"
 	   //		"      <menuitem action='HelpNotebook' />"
 	   "      <menuitem action='HelpAbout' />"
@@ -591,8 +596,12 @@ void NotebookWindow::on_connect()
 	kernel_string = "connected";
 	dispatcher.emit();
 	console.initialize();
+	// prefs.python_path might end in a backslash which will raise an EOF syntax error, so we add a
+	// semicolon to the end of it and then remove the (empty) last element of the resulting list
+	if (!trim(prefs.python_path).empty())
+		console.send_input("sys.path = r'''" + prefs.python_path + ";'''.split(';')[:-1] + sys.path");
 	if (!name.empty())
-		console.send_input("sys.path.insert(0, r'" + name.substr(0, name.find_last_of("\\/")) + "')");
+		console.send_input("sys.path.insert(0, r'''" + name.substr(0, name.find_last_of("\\/")) + "''')");
 	}
 
 void NotebookWindow::on_disconnect(const std::string& reason)
@@ -1381,7 +1390,7 @@ void NotebookWindow::on_file_save_as()
 			else {
 				modified=false;
 				update_title();
-				console.send_input("sys.path.remove(r'" + old_name.substr(0, old_name.find_last_of("\\/")) + "'); sys.path.insert(0, r'" + name.substr(0, name.find_last_of("\\/")) + "')");
+			console.send_input("sys.path.remove(r'''" + old_name.substr(0, old_name.find_last_of("\\/")) + "'''); sys.path.insert(0, r'''" + name.substr(0, name.find_last_of("\\/")) + "''')");
 				}
 			break;
 			}
@@ -1573,6 +1582,11 @@ void NotebookWindow::on_edit_insert_above()
 	std::shared_ptr<ActionBase> action =
 	   std::make_shared<ActionAddCell>(newcell, current_cell->id(), ActionAddCell::Position::before);
 	queue_action(action);
+	if (prefs.move_into_new_cell) {
+		std::shared_ptr<ActionBase> action2 =
+			std::make_shared<ActionPositionCursor>(newcell.id(), ActionPositionCursor::Position::in);
+		queue_action(action2);
+	}
 	process_data();
 	}
 
@@ -1584,6 +1598,11 @@ void NotebookWindow::on_edit_insert_below()
 	std::shared_ptr<ActionBase> action =
 	   std::make_shared<ActionAddCell>(newcell, current_cell->id(), ActionAddCell::Position::after);
 	queue_action(action);
+	if (prefs.move_into_new_cell) {
+		std::shared_ptr<ActionBase> action2 =
+			std::make_shared<ActionPositionCursor>(newcell.id(), ActionPositionCursor::Position::in);
+		queue_action(action2);
+	}
 	process_data();
 	}
 
@@ -2175,6 +2194,71 @@ void NotebookWindow::on_prefs_use_defaults()
 		prefs.save();
 		}
 	}
+
+void NotebookWindow::on_tools_options()
+{
+	// Create the dialog box
+	Gtk::Dialog options("Options", false);
+	options.set_transient_for(*this);
+	options.get_content_area()->property_margin() = 5;
+	options.add_button("Apply", Gtk::RESPONSE_APPLY);
+	options.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+
+	// Helper functions for making option widgets
+	auto add_label = [&options](const char* text, Gtk::Align alignment) {
+		auto label = std::make_unique<Gtk::Label>();
+		label->set_markup(text);
+		label->set_halign(alignment);
+		options.get_content_area()->add(*label);
+		return label;
+	};
+	auto add_sep = [&options]() {
+		auto sep = std::make_unique<Gtk::Separator>();
+		sep->property_margin() = 5;
+		options.get_content_area()->add(*sep);
+		return sep;
+	};
+	auto add_checkbox = [&options](const char* label, bool active) {
+		auto cb = std::make_unique<Gtk::CheckButton>(label);
+		cb->set_active(active);
+		options.get_content_area()->add(*cb);
+		return cb;
+	};
+	auto add_entry = [&options](const Glib::ustring& val) {
+		auto entry = std::make_unique<Gtk::Entry>();
+		entry->set_text(val);
+		options.get_content_area()->add(*entry);
+		return entry;
+	};
+
+	// Add widgets & display
+	auto py_opts = add_label("<b>Cadabra/Python Options</b>", Gtk::ALIGN_CENTER);
+	auto pypath_label = add_label("Default Python Path (semicolon separated):", Gtk::ALIGN_START);
+	auto pypath = add_entry(prefs.python_path);
+	auto sep1 = add_sep();
+	auto gui_opts = add_label("<b>GUI Options</b>", Gtk::ALIGN_CENTER);
+	auto auto_move = add_checkbox("Automatically move into a created cell", prefs.move_into_new_cell);
+	auto sep2 = add_sep();
+	options.show_all();
+	int res = options.run();
+
+	// Options menu closed, run any updates
+	if (res == Gtk::RESPONSE_APPLY) {
+		if (prefs.python_path != pypath->get_text()) {
+			prefs.python_path = pypath->get_text();
+			Gtk::MessageDialog md(*this, "Changes to python path won't take effect until kernel is restarted; restart now?", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_YES_NO, true);
+			md.set_title("Python Path Changed");
+			md.set_modal();
+			md.set_position(Gtk::WindowPosition::WIN_POS_CENTER);
+			int res = md.run();
+			if (res == Gtk::RESPONSE_YES) {
+				on_kernel_restart();
+			}
+		}
+		prefs.move_into_new_cell = auto_move->get_active();
+	}
+
+}
 
 void NotebookWindow::refresh_highlighting()
 	{

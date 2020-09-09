@@ -206,6 +206,9 @@ namespace cadabra {
 			void on_prefs_highlight_syntax(bool on);
 			void on_prefs_choose_colours();
 			void on_prefs_use_defaults();
+
+			void on_tools_options();
+
 			void on_help_about();
 			void on_help() const;
 

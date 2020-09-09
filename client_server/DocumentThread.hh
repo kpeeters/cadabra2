@@ -104,6 +104,8 @@ namespace cadabra {
 					bool is_anonymous;
 					std::map<std::string, ColorMap> colours;
 					std::string git_path;
+					std::string python_path;
+					bool move_into_new_cell;
 				private:
 					Json::Value data;
 					std::string config_path;
