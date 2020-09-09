@@ -75,8 +75,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// We use CSS selectors for old-style and new-style (post 3.20) simultaneously.
 	// Run program with 'GTK_DEBUG=interactive' environment variable and press Ctrl-Shift-D
 	// to inspect.
-	if(prefs.highlight) load_css("black");
-	else                load_css("blue");
+	load_css();
 
 	//	auto screen = Gdk::Screen::get_default();
 	//	std::cerr << "cadabra-client: scale = " << screen->get_monitor_scale_factor(0) << std::endl;
@@ -417,8 +416,9 @@ NotebookWindow::~NotebookWindow()
 	{
 	}
 
-void NotebookWindow::load_css(const std::string& text_colour)
+void NotebookWindow::load_css()
 	{
+	std::string text_colour = prefs.highlight ? "black" : "blue";
 	Glib::ustring data = "";
 	data += "textview text { color: "+text_colour+"; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
 	data += "GtkTextView { color: "+text_colour+"; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
@@ -2128,11 +2128,11 @@ void NotebookWindow::on_prefs_highlight_syntax(bool on)
 				case DataCell::CellType::python:
 				case DataCell::CellType::latex:
 					if(on) {
-						load_css("black");
+					load_css();
 						visualcell.second.inbox->enable_highlighting(visualcell.first->cell_type, prefs);
 						}
 					else {
-						load_css("blue");
+					load_css();
 						visualcell.second.inbox->disable_highlighting();
 						}
 					break;
