@@ -1278,6 +1278,14 @@ void NotebookWindow::on_file_close()
 		hide();
 	}
 
+Glib::RefPtr<Gtk::FileFilter> create_filter(const Glib::ustring& name, const Glib::ustring& pattern)
+{
+	auto filter = Gtk::FileFilter::create();
+	filter->set_name(name);
+	filter->add_pattern(pattern);
+	return filter;
+}
+
 void NotebookWindow::on_file_open()
 	{
 	if(quit_safeguard(false)==false)
@@ -1287,6 +1295,8 @@ void NotebookWindow::on_file_open()
 	                              Gtk::FILE_CHOOSER_ACTION_OPEN);
 
 	dialog.set_transient_for(*this);
+	dialog.add_filter(create_filter("Cadabra notebooks (*.cnb)", "*.cnb"));
+	dialog.add_filter(create_filter("All files", "*"));
 	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
 
