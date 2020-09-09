@@ -287,13 +287,16 @@ def display(obj, delay_send=False):
                 out+=","+discr
             else:
                 first=False
-            out+= display(elm, True)
+            out+= "$"+display(elm, True)+"$"
         out+="$\\big]$";
         server.send(out, "latex_view", 0, False)
         # FIXME: send input_form version.
         
     elif hasattr(obj, "__module__") and hasattr(obj.__module__, "find") and obj.__module__.find("sympy")!=-1:
-        server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view", 0, False)
+        if delay_send:
+           return latex(obj)
+        else:
+           server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view", 0, False)
         
     else:
         # Failing all else, just dump a str representation to the notebook, asking
