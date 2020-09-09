@@ -365,6 +365,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	statusbarbox.pack_start(kernel_label);
 	statusbarbox.pack_start(kernel_spinner);
 	statusbarbox.pack_start(progressbar);
+	statusbarbox.set_name("statusbar");
 	progressbar.set_size_request(200,-1);
 	progressbar.set_text("idle");
 	progressbar.set_show_text(true);
