@@ -1,5 +1,5 @@
 {
-	"cell_id" : 16600244550298176585,
+	"cell_id" : 153469803931434802,
 	"cells" : 
 	[
 		{
@@ -25,13 +25,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775835,
+					"cell_id" : 7383066680787787249,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
 				},
 				{
-					"cell_id" : 9223372036854775836,
+					"cell_id" : 13136258987904215825,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left[\\mu,~\\discretionary{}{}{} \\nu,~\\discretionary{}{}{} \\rho,~\\discretionary{}{}{} \\sigma,~\\discretionary{}{}{} \\kappa,~\\discretionary{}{}{} \\gamma,~\\discretionary{}{}{} \\lambda\\right].\\end{dmath*}"
@@ -103,7 +103,7 @@
 			"cell_id" : 6890929525873944922,
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "def riemann_to_ricci(ex, R=$R$):\n    rl1:= @(R)^{a?}_{b? a? c?}     =  @(R)_{b? c?}, @(R)^{a?}_{b? c? a?}     = -@(R)_{b? c?}.\n    rl2:= @(R)_{a?}_{b?}^{a?}_{c?} =  @(R)_{b? c?}, @(R)_{a?}_{b? c?}^{a?}   = -@(R)_{b? c?}.\n    rl3:= @(R)_{b?}^{a?}_{c? a?}   =  @(R)_{b? c?}, @(R)_{b?}^{a?}_{a? c?}   = -@(R)_{b? c?}.\n    rl4:= @(R)_{b?}_{a?}^{c? a?}   =  @(R)_{b?}^{c?}.\n    rl5:= @(R)^{a?}_{a?} = @(R), @(R)_{a?}^{a?} = @(R).\n    rl6:= @(R)^{a?}_{a? b? c?} = R_{\n\n    substitute(ex, rl1+rl2+rl3+rl4+rl5, repeat=True)\n    return ex"
+			"source" : "def riemann_to_ricci(ex, R=$R$):\n    rl1:= @(R)^{a?}_{b? a? c?}     =  @(R)_{b? c?}, @(R)^{a?}_{b? c? a?}     = -@(R)_{b? c?}.\n    rl2:= @(R)_{a?}_{b?}^{a?}_{c?} =  @(R)_{b? c?}, @(R)_{a?}_{b? c?}^{a?}   = -@(R)_{b? c?}.\n    rl3:= @(R)_{b?}^{a?}_{c? a?}   =  @(R)_{b? c?}, @(R)_{b?}^{a?}_{a? c?}   = -@(R)_{b? c?}.\n    rl4:= @(R)_{b?}_{a?}^{c? a?}   =  @(R)_{b?}^{c?}.\n    rl5:= @(R)^{a?}_{a?} = @(R), @(R)_{a?}^{a?} = @(R).\n    rl6:= @(R)^{a?}_{a? b? c?} = 0.\n\n    substitute(ex, rl1+rl2+rl3+rl4+rl5, repeat=True)\n    return ex"
 		},
 		{
 			"cell_id" : 3773496488914727547,
@@ -112,13 +112,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775849,
+					"cell_id" : 9254795296086812746,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775850,
+							"cell_id" : 9775705670236367127,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "R^{a}_{b c a}-R^{a}_{b a c}"
@@ -137,13 +137,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775852,
+					"cell_id" : 11401984921286068745,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775853,
+							"cell_id" : 16470249316118331173,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "-2R_{b c}"
