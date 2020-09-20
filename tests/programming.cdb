@@ -203,7 +203,16 @@ def test07():
     print("Test 07c passed")
 
 test07()
- 
 
+def test08():
+    ex:= A C + B D + C ;
+    for term in ex.top().terms():
+        term.multiplier *= 3
+    
+    tst:= 3 A C + 3 B D + 3 C - @(ex);
+    assert(tst==0)
+    print("Test 08 passed")
 
- 
+test08()
+     
+     
