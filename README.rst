@@ -111,7 +111,7 @@ any issues. You can use either g++ or the clang++ compiler.
 
 Install the dependencies with::
 
-    sudo dnf install git python3-devel cmake gcc-c++ \
+    sudo dnf install git python3-devel make cmake gcc-c++ \
          pcre-devel gmp-devel libuuid-devel sqlite-devel \
          gtkmm30-devel boost-devel \
          texlive python3-matplotlib \
