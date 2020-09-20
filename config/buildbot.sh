@@ -63,18 +63,18 @@ function runbuild {
 
 # Parameters: VM name, package type, local ssh port, folder name on web server.
 
-runbuild "Ubuntu_20.04"        ".deb" 7030 ubuntu2004
-runbuild "Ubuntu_18.04"        ".deb" 7017 ubuntu1804
-runbuild "Fedora_28"           ".rpm" 7020 fedora28
-runbuild "Fedora_29"           ".rpm" 7025 fedora29               
-runbuild "Mint_19"             ".deb" 7022 mint19
+#runbuild "Ubuntu_20.04"        ".deb" 7030 ubuntu2004
+#runbuild "Ubuntu_18.04"        ".deb" 7017 ubuntu1804
+#runbuild "Fedora_28"           ".rpm" 7020 fedora28
+#runbuild "Fedora_29"           ".rpm" 7025 fedora29               
+#runbuild "Mint_19"             ".deb" 7022 mint19
 runbuild "Mint_20"             ".deb" 7026 mint20
-runbuild "OpenSUSE_15"         ".rpm" 7024 opensuse150
-runbuild "OpenSUSE_Tumbleweed" ".rpm" 7023 opensusetw
+#runbuild "OpenSUSE_15"         ".rpm" 7024 opensuse150
+#runbuild "OpenSUSE_Tumbleweed" ".rpm" 7023 opensusetw
 # runbuild "CentOS_7"            ".rpm" 7004 centos7      cmake/packaging clash
 # runbuild "Scientific_Linux_74" ".rpm" 7013 scientific7x
-runbuild "Debian_921"          ".deb" 7014 debian9
-runbuild "Debian_Buster"       ".deb" 7021 debian10
+#runbuild "Debian_921"          ".deb" 7014 debian9
+#runbuild "Debian_Buster"       ".deb" 7021 debian10
 
 # Outdated versions:
 # runbuild "Mint_18" ".deb" 7002 mint18                   ERROR
