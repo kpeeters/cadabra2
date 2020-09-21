@@ -134,6 +134,16 @@ namespace cadabra {
 			bool     rename_replacement_dummies(iterator, bool still_inside_algo=false);
 
 
+			/// Determines whether the indicated node is 'like a term in a
+			/// sum'.  This requires that the node is not a `\sum` node, not
+			/// a child of a `\prod` node, and that its parent rel is of
+			/// argument-type (p_none).
+			static bool     is_termlike(iterator);
+
+			/// Determines whether the indicated node is 'like a factor in a product'.
+			/// This requires that the parent is a `\prod' node.
+			static bool     is_factorlike(iterator);
+
 
 		protected:
 			Ex& tr;
@@ -169,16 +179,6 @@ namespace cadabra {
 			                               std::vector<unsigned int>& store);
 			static bool  compare_(const str_node&, const str_node&);
 
-
-			/// Determines whether the indicated node is 'like a term in a
-			/// sum'.  This requires that the node is not a `\sum` node, not
-			/// a child of a `\prod` node, and that its parent rel is of
-			/// argument-type (p_none).
-			bool     is_termlike(iterator);
-
-			/// Determines whether the indicated node is 'like a factor in a product'.
-			/// This requires that the parent is a `\prod' node.
-			bool     is_factorlike(iterator);
 
 			/// Take a single non-product node in a sum and wrap it in a
 			/// product node, so it can be handled on the same footing as a proper product.

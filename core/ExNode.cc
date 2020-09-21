@@ -2,6 +2,7 @@
 #include "ExNode.hh"
 #include "Cleanup.hh"
 #include "Exceptions.hh"
+#include "Algorithm.hh"
 #include "pythoncdb/py_kernel.hh"
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
@@ -326,8 +327,15 @@ void ExNode::update(bool first)
 				else      ++sibnxtit;
 				}
 			else {
-				if(first) sibnxtit=topit;
-				else      sibnxtit=ex->end(topit);
+				if(Algorithm::is_termlike(topit)) {
+					if(Ex::is_head(topit)==false && *Ex::parent(topit)->name=="\\sum")
+						sibnxtit=ex->end(topit);
+					else {
+						if(first) sibnxtit=topit;
+						else      sibnxtit=ex->end(topit);
+						}
+					}
+				else sibnxtit=ex->end(topit);
 				}
 			}
 		else if(factors_only) {

@@ -214,5 +214,23 @@ def test08():
     print("Test 08 passed")
 
 test08()
+
+def test09():
+    ex:= A + B(C+D) + Q(E);
+    for node in ex:
+       num=2
+       # print("node", node)
+       for term in node.terms():
+          # print("term", term)
+          term.multiplier *= num
+          num+=1
+    
+    tst:= 2A + 3 B(2C+3D) + 4Q(2E) - @(ex);
+    assert(tst==0)
+    print("Test 09 passed")
+
+test09()
+     
+     
      
      

@@ -68,6 +68,11 @@ tree_node_<T>::tree_node_(T&& val)
 	{
 	}
 
+class navigation_error : std::logic_error {
+	public:
+		navigation_error(const std::string& s) : std::logic_error(s) {};
+};
+		
 template <class T, class tree_node_allocator = std::allocator<tree_node_<T> > >
 class tree {
 	protected:
@@ -939,7 +944,10 @@ template <class T, class tree_node_allocator>
 template <typename iter>
 iter tree<T, tree_node_allocator>::parent(iter position) 
 	{
-	assert(position.node!=0);
+	if(position.node==0)
+		throw navigation_error("tree: attempt to navigate up past head node.");
+	
+//	assert(position.node!=0);
 	return iter(position.node->parent);
 	}
 

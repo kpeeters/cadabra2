@@ -822,9 +822,12 @@ bool Algorithm::is_termlike(iterator it)
 
 bool Algorithm::is_factorlike(iterator it)
 	{
-	if(tr.is_valid(tr.parent(it))) {
-		if(*tr.parent(it)->name=="\\prod")
+	try {
+		if(*Ex::parent(it)->name=="\\prod")
 			return true;
+		}
+	catch(navigation_error& er) {
+		return false;
 		}
 	return false;
 	}
