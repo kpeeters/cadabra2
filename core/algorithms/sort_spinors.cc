@@ -21,8 +21,10 @@ bool sort_spinors::can_apply(iterator it)
 	if(! (sp1 && sp1->majorana && db1)) return false;
 
 	// Only act if we are inside a product.
+	if(tr.is_head(it)) return false;
+	
 	auto par=tr.parent(it);
-	if(tr.is_valid(par)==false || *par->name!="\\prod")
+	if(*par->name!="\\prod")
 		return false;
 
 	one=it;

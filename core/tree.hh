@@ -34,7 +34,11 @@
 #include <queue>
 #include <algorithm>
 #include <cstddef>
+#include <iostream>
 
+// #include <boost/stacktrace.hpp>
+// #include <boost/exception/all.hpp>
+// typedef boost::error_info<struct tag_stacktrace, boost::stacktrace::stacktrace> traced;
 
 /// A node in the tree, combining links to other nodes as well as the actual data.
 template<class T>
@@ -68,9 +72,32 @@ tree_node_<T>::tree_node_(T&& val)
 	{
 	}
 
-class navigation_error : std::logic_error {
+// Throw an exception with a stacktrace.
+
+//template <class E>
+//void throw_with_trace(const E& e)
+//	{
+//	throw boost::enable_error_info(e)
+//		<< traced(boost::stacktrace::stacktrace());
+//	}
+
+class navigation_error : public std::logic_error {
 	public:
-		navigation_error(const std::string& s) : std::logic_error(s) {};
+		navigation_error(const std::string& s) : std::logic_error(s)
+			{
+//			assert(1==0);
+//			std::ostringstream str;
+//			std::cerr << boost::stacktrace::stacktrace() << std::endl;
+//			str << boost::stacktrace::stacktrace();
+//			stacktrace=str.str();
+			};
+
+//		virtual const char *what() const noexcept override
+//			{
+//			return (std::logic_error::what()+std::string("; ")+stacktrace).c_str();
+//			}
+//
+//		std::string stacktrace;
 };
 		
 template <class T, class tree_node_allocator = std::allocator<tree_node_<T> > >
@@ -296,7 +323,8 @@ class tree {
 		/// Return an iterator given a path from the 'top' node.
 		iterator        iterator_from_path(const path_t&, const iterator_base& top) const;
 				
-		/// Return iterator to the parent of a node.
+		/// Return iterator to the parent of a node. Throws a `navigation_error` if the node
+		/// does not have a parent.
 		template<typename	iter> static iter parent(iter);
 		/// Return iterator to the previous sibling of a node.
 		template<typename iter> static iter previous_sibling(iter);
@@ -945,9 +973,11 @@ template <typename iter>
 iter tree<T, tree_node_allocator>::parent(iter position) 
 	{
 	if(position.node==0)
+		throw navigation_error("tree: attempt to navigate from null iterator.");
+	 
+	if(position.node->parent==0) 
 		throw navigation_error("tree: attempt to navigate up past head node.");
-	
-//	assert(position.node!=0);
+
 	return iter(position.node->parent);
 	}
 
@@ -2387,7 +2417,7 @@ typename tree<T, tree_node_allocator>::iterator tree<T, tree_node_allocator>::lo
 		walk=parent(walk);
 		parents.insert(walk);
 		}
-	while( is_valid(parent(walk)) );
+	while( walk.node->parent );
 
 	// Walk up from 'two' until we encounter a node in parents.
 	walk=two;
@@ -2395,7 +2425,7 @@ typename tree<T, tree_node_allocator>::iterator tree<T, tree_node_allocator>::lo
 		walk=parent(walk);
 		if(parents.find(walk) != parents.end()) break;
 		}
-	while( is_valid(parent(walk)) );
+	while( walk.node->parent );
 
 	return walk;
 	}

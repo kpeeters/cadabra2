@@ -24,7 +24,7 @@ bool rewrite_indices::can_apply(iterator it)
 	if(*it->name=="\\prod" || is_single_term(it))
 		return true;
 
-	if(tr.is_valid(tr.parent(it))) { // FIXME: should eventually go into prod_wrap_single_term
+	if(tr.is_head(it)==false) { // FIXME: should eventually go into prod_wrap_single_term
 		const Derivative *der=kernel.properties.get<Derivative>(tr.parent(it));
 		if(der) {
 			if(it->fl.parent_rel==str_node::p_none) {

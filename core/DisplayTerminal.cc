@@ -81,7 +81,7 @@ bool DisplayTerminal::needs_brackets(Ex::iterator it)
 	{
 	// FIXME: may need looking at properties
 	// FIXME: write as individual parent/current tests
-	if(tree.is_valid(tree.parent(it))==false) return false;
+	if(tree.is_head(it)) return false;
 
 	//	Ex::iterator parent_it = tree.parent(it);
 	Ex::iterator child_it  = it;

@@ -58,7 +58,7 @@ def test04():
     \tau^{p}::ImplicitIndex(\tau^{p a b});        
     Tr{#}::Trace(indices=spinor);
     ex:= Tr( \sigma^{m} \tau^{n} );
-    explicit_indices(_);
+    explicit_indices(_)
     tst:= \sigma^{m}_{a b} \tau^{n b a} - @(ex);
     assert(tst==0)
     print("Test 04 passed")
@@ -73,7 +73,7 @@ def test05():
     \tau^{p}::ImplicitIndex(\tau^{p a b});        
     Tr{#}::Trace(indices=spinor);
     ex:= 1/3 Tr( \sigma^{m} \tau^{n} + \tau^{n} \sigma^{m} );
-    explicit_indices(_);
+    explicit_indices(_)
     tst:= 1/3 \sigma^{m}_{a b} \tau^{n b a} + 1/3 \tau^{n a b} \sigma^{m}_{b a} - @(ex);
     assert(tst==0)
     print("Test 05 passed")

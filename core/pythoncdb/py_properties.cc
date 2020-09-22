@@ -81,6 +81,7 @@ namespace cadabra {
 	{
 		std::ostringstream str;
 		str << "Attached property ";
+//		std::cerr << "going to print" << std::endl;
 		prop->latex(str); // FIXME: this should call 'str' on the property, which does not exist yet
 		str << " to " + Ex_as_str(for_obj) + ".";
 		return str.str();

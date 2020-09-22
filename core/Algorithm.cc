@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #if BOOST_VERSION > 105500
 #include <boost/core/demangle.hpp>
 #endif
+#include <boost/stacktrace.hpp>
 
 #include "properties/Accent.hh"
 #include "properties/Derivative.hh"
@@ -321,12 +322,14 @@ void Algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnod
 	{
 	assert(*it->multiplier==0);
 	if(it==topnode) return;
+	if(tr.is_head(it)) return;
+	
 	iterator walk=tr.parent(it);
 #ifdef DEBUG
 	std::cerr << "propagate_zeroes at " << *walk->name << std::endl;
 #endif
-	if(!tr.is_valid(walk))
-		return;
+//	if(!tr.is_valid(walk))
+//		return;
 
 	const Derivative *der=kernel.properties.get<Derivative>(walk);
 	const Trace *trace=kernel.properties.get<Trace>(walk);
@@ -413,7 +416,8 @@ void Algorithm::pushup_multiplier(iterator it)
 			while(sib!=tr.end(it)) {
 				multiply(sib->multiplier, *it->multiplier);
 				//				txtout << "going up" << std::endl;
-				pushup_multiplier(tr.parent(it));
+				if(tr.is_head(it)==false)
+					pushup_multiplier(tr.parent(it));
 				//				txtout << "back and back up" << std::endl;
 				pushup_multiplier(sib);
 				//				txtout << "back" << std::endl;
@@ -423,7 +427,7 @@ void Algorithm::pushup_multiplier(iterator it)
 			}
 		else {
 			//			txtout << "PUSHUP: " << *it->name << std::endl;
-			if(tr.is_valid(tr.parent(it))) {
+			if(tr.is_head(it)==false) {
 				//				txtout << "test propinherit" << std::endl;
 				//				iterator tmp=tr.parent(it);
 				// tmp not always valid?!? This one crashes hard with a loop!?!
@@ -531,7 +535,7 @@ bool Algorithm::check_consistency(iterator it) const
 	Stopwatch w1;
 	w1.start();
 	//	debugout << "checking consistency ... " << std::flush;
-	assert(tr.is_valid(tr.parent(it))==false);
+	assert(tr.is_head(it)==false);
 	//	iterator entry=it;
 	iterator end=it;
 	end.skip_children();
@@ -822,13 +826,9 @@ bool Algorithm::is_termlike(iterator it)
 
 bool Algorithm::is_factorlike(iterator it)
 	{
-	try {
-		if(*Ex::parent(it)->name=="\\prod")
-			return true;
-		}
-	catch(navigation_error& er) {
-		return false;
-		}
+	if(Ex::is_head(it)) return false;
+	if(*Ex::parent(it)->name=="\\prod")
+		return true;
 	return false;
 	}
 
@@ -858,9 +858,12 @@ bool Algorithm::is_nonprod_factor_in_prod(iterator it)
 	{
 	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit" && *it->name!="\\comma"
 	      && *it->name!="\\equals") {
-		if(tr.is_valid(tr.parent(it))) {
-			if(*tr.parent(it)->name=="\\prod")
+		try {
+			if(tr.is_head(it)==false && *tr.parent(it)->name=="\\prod")
 				return true;
+			}
+		catch(navigation_error& ex) {
+			// no parent, ignore
 			}
 		//		else return true;
 		}

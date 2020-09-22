@@ -112,13 +112,15 @@ bool evaluate::is_component(iterator it) const
 	// an existing components node, a scalar was replaced with an
 	// object built from a tensor.
 
-	do {
+	while(true) {
 		if(*it->name=="\\components") {
 			return true;
 			}
-		it=tr.parent(it);
+		if(tr.is_head(it)==false)
+			it=tr.parent(it);
+		else
+			break;
 		}
-	while(tr.is_valid(it));
 	return false;
 	}
 

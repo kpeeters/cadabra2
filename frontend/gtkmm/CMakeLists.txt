@@ -108,6 +108,7 @@ target_link_libraries(cadabra2-gtk
 	${GTKMM3_LIBRARIES} 
 	${SQLITE3_LIBRARIES} 
 	Threads::Threads
+#        dl
 )
 
 
