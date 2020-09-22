@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #if BOOST_VERSION > 105500
 #include <boost/core/demangle.hpp>
 #endif
-#include <boost/stacktrace.hpp>
+//#include <boost/stacktrace.hpp>
 
 #include "properties/Accent.hh"
 #include "properties/Derivative.hh"
