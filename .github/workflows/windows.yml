@@ -14,13 +14,13 @@ jobs:
       run:  git clone https://github.com/Microsoft/vcpkg && cd vcpkg && bootstrap-vcpkg.bat
 
     - name: install vcpkg packages
-      run:  vcpkg install mpir:x64-windows glibmm:x64-windows sqlite3:x64-windows boost-system:x64-windows boost-asio:x64-windows boost-uuid:x64-windows boost-program-options:x64-windows boost-signals2:x64-windows boost-property-tree:x64-windows boost-date-time:x64-windows boost-filesystem:x64-windows gtkmm:x64-windows
+      run:  cd vcpkg && vcpkg install mpir:x64-windows glibmm:x64-windows sqlite3:x64-windows boost-system:x64-windows boost-asio:x64-windows boost-uuid:x64-windows boost-program-options:x64-windows boost-signals2:x64-windows boost-property-tree:x64-windows boost-date-time:x64-windows boost-filesystem:x64-windows gtkmm:x64-windows
 
     - name: integrate vcpkg
-      run:  vcpkg integrate install
+      run:  cd vcpkg && vcpkg integrate install
 
     - name: configure
-      run:  mkdir build && cd build && cmake -DENABLE_MATHEMATICA=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo -DVCPKG_TARGET_TRIPLET=x84-windows -DCMAKE_INSTALL_PREFIX=C:\Cadabra -G "Visual Studio 16 2019" -A x64 ..
+      run:  mkdir build && cd build && cmake -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -DENABLE_MATHEMATICA=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo -DVCPKG_TARGET_TRIPLET=x84-windows -DCMAKE_INSTALL_PREFIX=C:\Cadabra -G "Visual Studio 16 2019" -A x64 ..
       
     - name: make
       run:  cd build && cmake --build --config RelWithDebInfo --target install
