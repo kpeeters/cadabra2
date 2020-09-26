@@ -4,7 +4,7 @@ def test01():
     \partial{#}::PartialDerivative;
     a::Depends(\partial{#});
     ex:= \int{ \partial_{0}{a} \partial_{0}{a} }{x};
-    integrate_by_parts(_, $a$);
+    integrate_by_parts(_, $a$)
     tst:= \int{ -a \partial_{0 0}{a} }{x} - @(ex);
     assert(tst==0)
     print("Test 01 passed")
@@ -16,7 +16,7 @@ def test02():
     \partial{#}::PartialDerivative;
     a::Depends(\partial{#});
     ex:= \int{ a \partial_{0}{\partial_{0}{a}} }{x};
-    integrate_by_parts(_, $\partial_{0}{a}$);
+    integrate_by_parts(_, $\partial_{0}{a}$)
     tst:= \int{ - \partial_{0}{a} \partial_{0}{a} }{x} - @(ex);
     assert(tst==0)
     print("Test 02 passed")
@@ -28,7 +28,7 @@ def test03():
     \nabla{#}::Derivative;
     a::Depends(\nabla{#});
     ex:= \int{ a \nabla_{0}{\nabla_{0}{a}} }{x};
-    integrate_by_parts(_, $a$);
+    integrate_by_parts(_, $a$)
     tst:= \int{ a \nabla_{0}{\nabla_{0}{a}} }{x} - @(ex);
     assert(tst==0)
     print("Test 03 passed")
@@ -39,7 +39,7 @@ def test04():
     __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative;        
     ex:= \int{ a \partial_{0 0}{b} c }{x};
-    integrate_by_parts(_, $b$);
+    integrate_by_parts(_, $b$)
     tst:= \int{ a \partial_{0 0}{b} c }{x} - @(ex);
     assert(tst==0)
     print("Test 04 passed")
@@ -75,9 +75,35 @@ def test06():
     {t,r}::Depends(\partial{#});
     \delta{#}::Accent;
     ex:=\int{ \partial{\delta{t}} \partial{t} r }{\tau};
-    integrate_by_parts(ex, $\delta{t}$);
+    integrate_by_parts(ex, $\delta{t}$)
     tst:= - \int{ \delta{t} \partial{ \partial{t} r} }{\tau} - @(ex);
     assert(tst==0)
     print("Test 06 passed")
 
 test06()
+
+def test07():
+    __cdbkernel__=create_scope()        
+    {A,B,C,D,E,F,F#}::Indices(full);
+    {a,b,c,d,e,f,f#}::Indices(space1);
+    {m,n,o,p,q,r,r#}::Indices(space2);
+    \partial{#}::PartialDerivative.
+    \delta{#}::Accent.
+    F_{A B C}::AntiSymmetric.
+    F_{a b c}::AntiSymmetric.
+    F_{m n p}::AntiSymmetric.
+    F_{#}::Depends(\partial{#}).
+    
+    ex:=\int{ c_{0} \partial_{a d}{ \delta{F_{a b c}}} F_{d b c}
+          + 2 c_{1} \partial_{a c}{ \delta{F_{m a b}}} F_{m c b} }{x};
+    
+    integrate_by_parts(ex, $\partial_{n?}{\delta{F_{m? a b}}}$)
+    tst:=\int{ -\partial_{a}{c_{0}} \partial_{d}{\delta{F_{a b c}}} F_{d b c}
+               - c_{0}  \partial_{d}{\delta{F_{a b c}}} \partial_{a}{ F_{d b c} }
+               - 2 \partial_{a}{c_{1}} \partial_{c}{\delta{F_{m a b}}} F_{m c b}
+               - 2 c_{1} \partial_{c}{\delta{F_{m a b}}} \partial_{a}{ F_{m c b} } }{x} - @(ex);
+    assert(tst==0)
+    print("Test 07 passed")
+
+test07()
+    

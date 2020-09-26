@@ -17,7 +17,7 @@ endif()
 if (VCPKG_TOOLCHAIN)
   message(STATUS "Found vcpkg at ${_VCPKG_ROOT_DIR}")
 else()
-  message(FATAL_ERROR "Cold not find vcpkg (required for building on Visual Studio)")
+  message(FATAL_ERROR "Could not find vcpkg (required for building on Visual Studio)")
 endif()
 
 if (VCPKG_TOOLCHAIN)

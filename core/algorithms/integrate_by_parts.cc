@@ -68,7 +68,7 @@ bool integrate_by_parts::derivative_acting_on_arg(iterator der_it) const
 
 	Ex_comparator comp(kernel.properties);
 	auto top=away_from.begin();
-	if( is_in( comp.equal_subtree(arg, top), {
+	if( is_in( comp.equal_subtree(top, arg), {
 	Ex_comparator::match_t::subtree_match,
 	Ex_comparator::match_t::match_index_less,
 	Ex_comparator::match_t::match_index_greater
@@ -124,6 +124,9 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 			// If this is a multiple partial derivative, we split off the
 			// outermost derivative and then look at the remaining argument.
 			split_off_single_derivative(int_it, fac);
+//			std::cerr << "after split-off:" << int_it << std::endl;
+//			std::cerr << " c1: " << int_and_derivative_related(int_it, fac) << std::endl;
+//			std::cerr << " c2: " << derivative_acting_on_arg(fac) << std::endl;
 			if(int_and_derivative_related(int_it, fac) && derivative_acting_on_arg(fac) ) {
 				// Generate one term with the derivative acting on all
 				// factors which come before the derivative node (if
