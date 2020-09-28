@@ -68,7 +68,7 @@ namespace cadabra {
 			std::string repr_() const;
 			
 			// Get existing cpp property by querying kernel
-			static std::shared_ptr<BoundProperty> get_from_kernel(Ex::iterator ex, bool ignore_parent_rel);
+			static std::shared_ptr<BoundProperty> get_from_kernel(Ex::iterator ex, const std::string& label, bool ignore_parent_rel);
 
 			// Return type is not the same as BoundPropertyBase, but this is ok
 			// by the standard as cpp_type* is convertible to property*

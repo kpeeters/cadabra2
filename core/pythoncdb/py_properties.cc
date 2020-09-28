@@ -161,12 +161,12 @@ namespace cadabra {
 
 
 	template <typename PropT, typename... ParentTs>
-	std::shared_ptr<BoundProperty<PropT, ParentTs...>> BoundProperty<PropT, ParentTs...>::get_from_kernel(Ex::iterator it, bool ignore_parent_rel)
+	std::shared_ptr<BoundProperty<PropT, ParentTs...>> BoundProperty<PropT, ParentTs...>::get_from_kernel(Ex::iterator it, const std::string& label, bool ignore_parent_rel)
 		
 	{
 		int tmp;
 		auto res = get_kernel_from_scope()->properties.get_with_pattern<PropT>(
-			it, tmp, "", false, ignore_parent_rel);
+			it, tmp, label, false, ignore_parent_rel);
 
 		if (res.first) {
 			return std::make_shared<BoundProperty<PropT, ParentTs...>>(
@@ -211,8 +211,8 @@ namespace cadabra {
 		using py_type = typename base_type::py_type;
 
 		return py_type(m, name.c_str(), py::multiple_inheritance())
-			.def_static("get", [](Ex_ptr ex, bool ipr) { return base_type::get_from_kernel(ex->begin(), ipr); }, py::arg("ex"), py::arg("ignore_parent_rel") = false)
-			.def_static("get", [](ExNode node, bool ipr) { return base_type::get_from_kernel(node.it, ipr); }, py::arg("exnode"), py::arg("ignore_parent_rel") = false)
+			.def_static("get", [](Ex_ptr ex, const std::string& label, bool ipr) { return base_type::get_from_kernel(ex->begin(), label, ipr); }, py::arg("ex"), py::arg("label") = "", py::arg("ignore_parent_rel") = false)
+			.def_static("get", [](ExNode node, const std::string& label, bool ipr) { return base_type::get_from_kernel(node.it, label, ipr); }, py::arg("exnode"), py::arg("label") = "", py::arg("ignore_parent_rel") = false)
 			.def("__str__", &BoundPropT::str_)
 			.def("__repr__", &BoundPropT::repr_)
 			.def("_latex_", &BoundPropT::latex_);
@@ -227,8 +227,8 @@ namespace cadabra {
 
 		return py_type(m, std::make_shared<cpp_type>()->name().c_str(), py::multiple_inheritance())
 			.def(py::init<Ex_ptr, Ex_ptr>(), py::arg("ex"), py::arg("param")=Ex{})
-			.def_static("get", [](Ex_ptr ex, bool ipr) { return base_type::get_from_kernel(ex->begin(), ipr); }, py::arg("ex"), py::arg("ignore_parent_rel") = false)
-			.def_static("get", [](ExNode node, bool ipr) { return base_type::get_from_kernel(node.it, ipr); }, py::arg("exnode"), py::arg("ignore_parent_rel") = false)
+			.def_static("get", [](Ex_ptr ex, const std::string& label, bool ipr) { return base_type::get_from_kernel(ex->begin(), label, ipr); }, py::arg("ex"), py::arg("label") = "", py::arg("ignore_parent_rel") = false)
+			.def_static("get", [](ExNode node, const std::string& label, bool ipr) { return base_type::get_from_kernel(node.it, label, ipr); }, py::arg("exnode"), py::arg("label") = "", py::arg("ignore_parent_rel") = false)
 			.def("__str__", &BoundPropT::str_)
 			.def("__repr__", &BoundPropT::repr_)
 			.def("_latex_", &BoundPropT::latex_);
