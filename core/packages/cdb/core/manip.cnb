@@ -1,5 +1,5 @@
 {
-	"cell_id" : 17861929796835786285,
+	"cell_id" : 8939832402042635504,
 	"cells" : 
 	[
 		{
@@ -69,16 +69,16 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 17563653769286187136,
+					"cell_id" : 9660593814012393825,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 4154075981521305160,
+							"cell_id" : 3115174394999505411,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "b + c + d → a"
+							"source" : "b + c + d -> a"
 						}
 					],
 					"source" : "\\begin{dmath*}{}b+c+d \\rightarrow a\\end{dmath*}"
@@ -99,7 +99,6 @@
 					"source" : "\\algorithm{multiply_through(ex: Ex, factor: Ex, auto_distribute=False) -> Ex}{Multiply all terms by the same factor.}"
 				}
 			],
-			"hidden" : true,
 			"source" : "\\algorithm{multiply_through(ex: Ex, factor: Ex, auto_distribute=False) -> Ex}{Multiply all terms by the same factor.}"
 		},
 		{
@@ -131,22 +130,68 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 18272229895028355971,
+					"cell_id" : 67333222124893618,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 16651077357600614390,
+							"cell_id" : 431374496524392974,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "\\less(k (a + b) , k c)"
+							"source" : "k (a + b) < k c"
 						}
 					],
 					"source" : "\\begin{dmath*}{}k \\left(a+b\\right) < k c\\end{dmath*}"
 				}
 			],
 			"source" : "multiply_through($a+b < c$, $k$);"
+		},
+		{
+			"cell_id" : 3396515398006428816,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 3396515398006428816,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{add_through(ex: Ex, factor: Ex) -> Ex}{Add a factor to both sides of an equation.}"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{add_through(ex: Ex, factor: Ex) -> Ex}{Add a factor to both sides of an equation.}"
+		},
+		{
+			"cell_id" : 544175776537438149,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def add_through(ex, factor):\n\t\"\"\"Adds a factor to both sides of ex\"\"\"\n\tfor arg in ex.top().args():\n\t\targ.replace($@(arg) + @(factor)$)\n\treturn ex"
+		},
+		{
+			"cell_id" : 16915415318035386515,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 8675834520474578860,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 10524366741323012146,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{\\mu} B_{\\nu} + D_{\\mu \\nu} = C_{\\mu \\nu} + D_{\\mu \\nu}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{\\mu} B_{\\nu}+D_{\\mu \\nu} = C_{\\mu \\nu}+D_{\\mu \\nu}\\end{dmath*}"
+				}
+			],
+			"source" : "add_through($A_{\\mu}B_{\\nu} = C_{\\mu \\nu}$, $D_{\\mu \\nu}$);"
 		},
 		{
 			"cell_id" : 3411326601020319930,
@@ -177,13 +222,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 2333542608271256301,
+					"cell_id" : 5167564699775966017,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 13837521036466429908,
+							"cell_id" : 9890927380270856187,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "a"
@@ -224,13 +269,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 6226166085554826324,
+					"cell_id" : 2188029536589519819,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 7615468095185460984,
+							"cell_id" : 8433912573591716984,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "b"
@@ -293,14 +338,14 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 5368862972035833671,
+					"cell_id" : 4386267152773659670,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\algorithm{to_rhs(ex: Ex, part: Ex, exact: bool = False) -> Ex}{Move the indicated term of the expression to the right-hand side.}\n\n\tIf \\verb|ex| is an equation or inequality which contains \\verb|part| on its left hand side, then moves \\verb|part| to the right hand side. \n\tIf \\verb|exact| is True then \\verb|part| must contain the multiplier of the term to be moved, including minus signs. "
+					"source" : "\\algorithm{to_rhs(ex: Ex, *parts: Ex..., match_type: str = \"all\") -> Ex}{Move the indicated term of the expression to the right-hand side.}\n\n\tIf \\verb|ex| is an equation or inequality which contains \\verb|part| on its left hand side, then moves all \\verb|parts| to the right hand side. \n\t\\verb|match_type| can be either \\verb|all| which will move all terms which contain each part as a factor, \\verb|numeric| which will move terms up to a numeric prefactor or \n     \\verb|exact| which will only move the term if the subtree matches exactly."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\algorithm{to_rhs(ex: Ex, part: Ex, exact: bool = False) -> Ex}{Move the indicated term of the expression to the right-hand side.}\n\n\tIf \\verb|ex| is an equation or inequality which contains \\verb|part| on its left hand side, then moves \\verb|part| to the right hand side. \n\tIf \\verb|exact| is True then \\verb|part| must contain the multiplier of the term to be moved, including minus signs. "
+			"source" : "\\algorithm{to_rhs(ex: Ex, *parts: Ex..., match_type: str = \"all\") -> Ex}{Move the indicated term of the expression to the right-hand side.}\n\n\tIf \\verb|ex| is an equation or inequality which contains \\verb|part| on its left hand side, then moves all \\verb|parts| to the right hand side. \n\t\\verb|match_type| can be either \\verb|all| which will move all terms which contain each part as a factor, \\verb|numeric| which will move terms up to a numeric prefactor or \n     \\verb|exact| which will only move the term if the subtree matches exactly."
 		},
 		{
 			"cell_id" : 2183163939635232499,
@@ -315,13 +360,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 14686879621652789083,
+					"cell_id" : 1694187291536723071,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 11576741042414304103,
+							"cell_id" : 4562928191778205879,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "0 = c + d-2a-b-j b-k b"
@@ -340,23 +385,23 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 1492289296415214000,
+					"cell_id" : 12104799498417908,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 588147199354771409,
+							"cell_id" : 11214471472925037762,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "0 = c-a + b"
+							"source" : "-\\partial_{\\alpha}(b_{\\beta})-\\partial_{\\beta}(a_{\\alpha}) = 0"
 						}
 					],
-					"source" : "\\begin{dmath*}{}0 = c-a+b\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-\\partial_{\\alpha}{b_{\\beta}}-\\partial_{\\beta}{a_{\\alpha}} = 0\\end{dmath*}"
 				}
 			],
 			"ignore_on_import" : true,
-			"source" : "to_rhs($a-b = c$);"
+			"source" : "\\partial{#}::Derivative.\nto_rhs($-\\partial_{\\alpha}{b_{\\beta}} - \\partial_{\\beta}{a_{\\alpha}} = 0$, $\\partial_{\\alpha}{b_{\\beta}}$, match_type=\"exact\");"
 		},
 		{
 			"cell_id" : 831589588542616074,
@@ -365,20 +410,20 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 11050184017969602000,
+					"cell_id" : 5886747838826691399,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\algorithm{to_lhs(ex: Ex, part: Ex) -> Ex}{Move the indicated term of the expression to the left-hand side.}\n\nComplement of \\algo{to_rhs}."
+					"source" : "\\algorithm{to_lhs(ex: Ex, *parts: Ex..., match_type: str = \"all\") -> Ex}{Move the indicated term of the expression to the left-hand side.}\n\nComplement of \\algo{to_rhs}."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\algorithm{to_lhs(ex: Ex, part: Ex) -> Ex}{Move the indicated term of the expression to the left-hand side.}\n\nComplement of \\algo{to_rhs}."
+			"source" : "\\algorithm{to_lhs(ex: Ex, *parts: Ex..., match_type: str = \"all\") -> Ex}{Move the indicated term of the expression to the left-hand side.}\n\nComplement of \\algo{to_rhs}."
 		},
 		{
 			"cell_id" : 5674786013392212620,
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "def to_lhs(ex, *parts, match_type=\"all\"):\n\t\"\"\"Moves part from the right to the left hand side of an equation or inequality\"\"\"\n\t# to_lhs is the same as to_rhs called on an equation with the sides swapped ;)\n\tswap_sides(ex)\n\tto_rhs(ex, *parts)\n\tswap_sides(ex)\t\n\treturn ex"
+			"source" : "def to_lhs(ex, *parts, match_type=\"all\"):\n\t\"\"\"Moves part from the right to the left hand side of an equation or inequality\"\"\"\n\t# to_lhs is the same as to_rhs called on an equation with the sides swapped ;)\n\tswap_sides(ex)\n\tto_rhs(ex, *parts, match_type=match_type)\n\tswap_sides(ex)\t\n\treturn ex"
 		},
 		{
 			"cell_id" : 4956212081149797277,
@@ -406,39 +451,6 @@
 			"cell_id" : 1368746495472243320,
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_id" : 3532119318246881807,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_id" : 6120079931902629024,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "2a + a k-b = c a + b k + a-4"
-						}
-					],
-					"source" : "\\begin{dmath*}{}2a+a k-b = c a+b k+a-4\\end{dmath*}"
-				},
-				{
-					"cell_id" : 16496028450382844638,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_id" : 2376821945973832416,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "a = (b k-4 + b) (k + 1-c)**(-1)"
-						}
-					],
-					"source" : "\\begin{dmath*}{}a = \\left(b k-4+b\\right) {\\left(k+1-c\\right)}^{-1}\\end{dmath*}"
-				}
-			],
 			"ignore_on_import" : true,
 			"source" : "ex := 2a + a * k - b = c * a + b * k + a - 4;\nisolate(ex, $a$);"
 		},
