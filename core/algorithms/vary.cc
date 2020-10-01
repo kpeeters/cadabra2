@@ -80,7 +80,7 @@ Algorithm::result_t vary::apply(iterator& it)
 					// the varied factor itself cannot get rid of nested
 					// products, that's for us to do at the top level prod.
 					cleanup_dispatch(kernel, tr, toclean);
-					std::cerr << toclean << std::endl;
+					// std::cerr << toclean << std::endl;
 					}
 
 				// restore original

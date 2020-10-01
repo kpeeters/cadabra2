@@ -2,10 +2,11 @@
 #pragma once
 
 #include "properties/Derivative.hh"
+#include "properties/Spinor.hh"
 
 namespace cadabra {
 
-	class PartialDerivative : public Derivative, virtual public property {
+	class PartialDerivative : public Derivative, public Inherit<Spinor>, virtual public property {
 		public :
 			virtual ~PartialDerivative() {};
 			virtual std::string name() const;

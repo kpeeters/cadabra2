@@ -40,7 +40,6 @@ def test02():
 test02()
 
 # Multiple ImplicitIndex objects
-
 def test03():
     __cdbkernel__=create_scope()
     {\chi,\psi, \lambda, \rho}::Spinor.
@@ -55,3 +54,21 @@ def test03():
 
 test03()
 
+# Spinors with partial derivatives on them should still be
+# detected as spinors.
+def test04():
+    __cdbkernel__=create_scope()  
+    {\chi, \psi, \psi_{m}}::Spinor(dimension=10, type=MajoranaWeyl).
+    {\chi, \psi, \psi_{m}}::AntiCommuting.
+    \bar{#}::DiracBar.
+    \Gamma{#}::GammaMatrix.
+    \partial{#}::PartialDerivative.
+    {\psi_{m}, \psi, \chi}::SortOrder.
+    ex:= \bar{\partial_{m}{\chi}} \Gamma_{m n p} \psi;
+    sort_spinors(_)
+    tst:= \bar{\psi} \Gamma_{m n p} \partial_{m}{\chi} - @(ex);
+    assert(tst==0)
+    print("Test 04 passed")
+
+test04()
+        

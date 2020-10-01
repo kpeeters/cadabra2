@@ -16,7 +16,6 @@ namespace cadabra {
 		public IndexInherit,
 		public TableauInherit,
 		public DependsInherit,
-	//                   public Inherit<Spinor>,
 		public Inherit<SortOrder>,
 		public CommutingAsProduct,
 		public NumericalFlat,

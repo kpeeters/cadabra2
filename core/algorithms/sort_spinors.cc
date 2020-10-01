@@ -17,7 +17,7 @@ bool sort_spinors::can_apply(iterator it)
 	const Spinor   *sp1=kernel.properties.get<Spinor>(it);
 	const DiracBar *db1=kernel.properties.get<DiracBar>(it);
 
-	// Only act if the node is a Dira conjugate Majorana spinor.
+	// Only act if the node is a Dirac conjugate Majorana spinor.
 	if(! (sp1 && sp1->majorana && db1)) return false;
 
 	// Only act if we are inside a product.
