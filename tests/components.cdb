@@ -268,14 +268,17 @@ test12()
 
 def test13():
     __cdbkernel__=create_scope()
-    {i,j,k}::Indices;
-    {i,j,k}::Integer(1..3);
+    {i,j,k}::Indices(values={1,2,3});
     \epsilon^{i j k}::EpsilonTensor;
     ex:=\epsilon^{i j k};
-    evaluate(ex, $$);
-    # Not finished  
+    evaluate(ex)
+    tst:= \components^{i j k}{ {1,2,3}=1, {1,3,2}=-1, {2,1,3}=-1, {2,3,1}=1, {3,1,2}=1, {3,2,1}=-1 } - @(ex);    
+    collect_components(tst)
+    assert(tst==0)
+    print("Test 13 passed")
 
-
+test13()
+        
 def test14():        
     __cdbkernel__=create_scope()
     {t,x,y,z}::Coordinate;        
