@@ -477,59 +477,47 @@ test27()
 # @collect_terms!(%);
 # @assert(tst32);
 # 
-# # Test 32: more drop & keep
-# #
-# @reset.
-# {\phi,\chi}::Weight(label=small, value=1).
-# \partial{#}::PartialDerivative.
-# \partial{#}::WeightInherit(label=all, type=Multiplicative).
-# obj:= \phi \partial_{0}{\phi} + \partial_{0}{\lambda};
-# @drop_weight!(%){small}{1};
-# tst:= \phi \partial_{0}{\phi} + \partial_{0}{\lambda} - @(obj);
-# @collect_terms!(%);
-# @assert(tst);
-# 
-# @reset.
-# {\phi,\chi}::Weight(label=small, value=1).
-# \lambda::Weight(label=small, value=3).
-# obj:= \phi \chi + \lambda;
-# @drop_weight!(%){small}{2};
-# tst:= \lambda - @(obj);
-# @collect_terms!(%);
-# @assert(tst);
-# 
-# @reset.
-# {\phi,\chi}::Weight(label=small, value=2).
-# \lambda::Weight(label=small, value=2).
-# obj:= ( \phi \chi + \lambda ) + ( \phi + \chi );
-# #           4          2           2       2
-# #             undefined                2
-# @drop_weight!(%){small}{2};
-# tst:= ( \phi \chi + \lambda ) - @(obj);
-# @sumflatten!(%);
-# @collect_terms!(%);
-# @assert(tst);
-# 
-# @reset.
-# {\phi,\chi}::Weight(label=small, value=2).
-# \lambda::Weight(label=small, value=2).
-# obj:= ( \phi \chi + \lambda ) + ( \phi + \chi );
-# #           4          2           2       2
-# #             undefined                2
-# @keep_weight!(%){small}{2};
-# tst:= (\phi + \chi) - @(obj);
-# @sumflatten!(%);
-# @collect_terms!(%);
-# @assert(tst);
-# 
-# # Test 33: collect_terms and wildcards at deeper levels
-# @reset.
-# obj33:= \commutator{B??}{\commutator{C??}{A??}} + \commutator{C??}{\commutator{B??}{A??};
-# @collect_terms!(%);
-# tst33:= \commutator{B??}{\commutator{C??}{A??}} + \commutator{C??}{\commutator{B??}{A??}} - @(obj33);
-# @collect_terms!(%);
-# @assert(tst33);
-# 
+
+# Test 32: more drop & keep
+def test32a():
+    __cdbkernel__=create_scope()
+    {\phi,\chi}::Weight(label=small, value=1).
+    \partial{#}::PartialDerivative.
+    \partial{#}::WeightInherit(label=all, type=multiplicative).
+    obj:= \phi \partial_{0}{\phi} + \partial_{0}{\lambda};
+    drop_weight(obj, $small=1$)
+    tst:= \phi \partial_{0}{\phi} + \partial_{0}{\lambda} - @(obj);
+    assert(tst==0)
+    print("Test 32a passed")
+
+test32a()
+
+def test32b():
+    __cdbkernel__=create_scope()
+    {\phi,\chi}::Weight(label=small, value=1).
+    \lambda::Weight(label=small, value=3).
+    obj:= \phi \chi + \lambda;
+    drop_weight(obj, $small=2$)
+    tst:= \lambda - @(obj);
+    assert(tst==0)
+    print("Test 32b passed")
+
+test32b()
+        
+def test32c():
+    __cdbkernel__=create_scope()
+    {\phi,\chi}::Weight(label=small, value=2).
+    \lambda::Weight(label=small, value=2).
+    obj:= Q ( \phi \chi + \lambda ) + ( \phi + \chi );
+    #           4          2           2       2
+    #             undefined                2
+    drop_weight(obj, $small=2$)
+    tst:= Q ( \phi \chi + \lambda ) - @(obj);
+    assert(tst==0)
+    print("Test 32c passed")
+
+test32c()
+
 # # Test34: canonicalorder
 # #
 # @reset.
@@ -543,23 +531,26 @@ test27()
 # @reset.
 # obj35a:= A B + B Q;
 # obj35b:= { A -> Z };
-# @vary!(obj35a)( Q -> Z );
-# @substitute!(%)( @(obj35b) );
+# vary(obj35a, $Q -> Z$)
+# substitute(_, obj35b)
 # tst35:= B Z - @(%);
 # @collect_terms!(%);
 # @assert(tst35);
 # 
-# # Test 36: two sets of anti-commuting objects
-# #
-# @reset.
-# {a,b}::AntiCommuting.
-# {a,c}::AntiCommuting.
-# obj36:= b*a;
-# @prodsort!(%);
-# tst36:= - a b - @(obj36);
-# @collect_terms!(%);
-# @assert(tst36);
-# 
+
+# Test 36: two sets of anti-commuting objects
+def test36():
+    __cdbkernel__=create_scope()
+    {a,b}::AntiCommuting.
+    {a,c}::AntiCommuting.
+    obj36:= b*a;
+    sort_product(_)
+    tst36:= - a b - @(obj36);
+    assert(tst36==0)
+    print("Test 36 passed")
+
+test36()
+
 # # Test 37: weight inheritance
 # #
 # @reset.
@@ -569,13 +560,17 @@ test27()
 # D_{a}( b c ) + D_{c}( d e );
 # @keep_weight!(%){grassmann}{3};
 # 
-# # Test 38: stupid nested expression bug
-# @reset.
-# obj37:= A - ( B - ( C - ( D - E ) ) );
-# @sumflatten!(%);
-# tst38:= A - B + C - D + E - @(obj37);
-# @collect_terms!(%);
-# @assert(tst38);
+
+# Test 38: stupid nested expression bug
+
+def test36():
+    __cdbkernel__=create_scope()
+    obj37:= A - ( B - ( C - ( D - E ) ) );
+    tst38:= A - B + C - D + E - @(obj37);
+    assert(tst38==0)
+    print("Test 38 passed")
+
+test36()
 
 def test28():
     ex:=k^{a}n_{c a}+2**{1/2} k_{c} 2**{1/2};
@@ -636,23 +631,32 @@ def test32():
     A::Depends(d{#}).
     B::Depends(d{#}).
     ex:= d{A B C};
-    unwrap(ex);
+    unwrap(ex)
     tst:= C d{A B} - @(ex);
     assert(tst==0)
     print("Test 32a passed")
     ex:= d{A B A C};
-    unwrap(ex);
+    unwrap(ex)
     tst:= - C d{A B A} - @(ex);
     assert(tst==0)
     print("Test 32b passed")
 
 test32()
+        
+def test33():
+    __cdbkernel__=create_scope()  
+    {\phi,\chi}::Weight(label=small, value=2).
+    ex:= \chi\chi + \phi = \phi + \chi;
+    keep_weight(ex, $small=2$, deep=True)    
+    tst:= (\phi = \phi + \chi) - @(ex);
+    assert(tst==$0=0$)
+    print("Test 33 passed")
 
-    
+test33()
+        
 # {A, B, C}::AntiCommuting.
 # d{#}::Derivative.
 # A::Depends(d{#}).
 # B::Depends(d{#}).
 # ex:= d_{B}{A B C};
 # unwrap(ex)
-
