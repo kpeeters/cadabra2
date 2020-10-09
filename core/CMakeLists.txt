@@ -472,26 +472,32 @@ install(
 
 # cadabra2cadabra
 install(
-  TARGETS 
-  cadabra2cadabra
-  DESTINATION 
-  bin
-  )
+   TARGETS 
+   cadabra2cadabra
+   DESTINATION 
+   bin
+   )
 
 if (MSVC AND NOT INSTALL_TARGETS_ONLY)
-	install_dlls_from("core")
+   install_dlls_from("core")
 endif()
 
 if(NOT MSVC)
-add_custom_target(deduplicate
-                  COMMAND rm -f "\$(DESTDIR)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2.1"
-                  COMMAND rm -f "\$(DESTDIR)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2cadabra.1"
-                  COMMAND rm -f "\$(DESTDIR)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2html.1"
-                  COMMAND rm -f "\$(DESTDIR)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2python.1"
-                  COMMAND rm -f "\$(DESTDIR)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2-gtk.1"
-                  COMMAND rm -f "\$(DESTDIR)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra-server.1"
-                  COMMENT "Removing manual pages from old location."
-                  )
+   if(CMAKE_GENERATOR MATCHES "Ninja")
+      set(destdir_expr "\$\${DESTDIR}")
+   else()
+      set(destdir_expr "\$(DESTDIR)")
+   endif()
+   
+   add_custom_target(deduplicate
+      COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2.1"
+      COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2cadabra.1"
+      COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2html.1"
+      COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2python.1"
+      COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2-gtk.1"
+      COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra-server.1"
+      COMMENT "Removing manual pages from old location."
+      )
 endif()             
 
 # manual pages
