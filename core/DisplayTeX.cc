@@ -166,6 +166,8 @@ void DisplayTeX::print_other(std::ostream& str, Ex::iterator it)
 				replacement.append_child(replacement.begin(), prop.second->obj.begin());
 				replacement.append_child(replacement.begin(), lt.begin());
 				Ex tmp(it);
+				// The overall multiplier has already been printed, so set to one now.
+				one(tmp.begin()->multiplier);
 				substitute subs(kernel, tmp, replacement);
 				auto lti=tmp.begin();
 				if(subs.can_apply(lti))
