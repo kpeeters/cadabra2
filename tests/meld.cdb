@@ -311,3 +311,17 @@ def test26():
 
 test26()
         
+def test27():
+    __cdbkernel__ = create_scope()
+    {\mu,\nu,\rho}::Indices(vector).
+    A^{\mu\nu}::AntiSymmetric.
+    B^{\mu\nu}::Symmetric.
+    C^{\mu\nu}::AntiSymmetric.
+    tr{#}::Trace.
+    {A^{\mu\nu},B^{\mu\nu},C^{\mu\nu}}::NonCommuting.
+    {A^{\mu\nu},B^{\mu\nu},C^{\mu\nu}}::SelfNonCommuting.
+    {A^{\mu\nu},B^{\mu\nu},C^{\mu\nu}}::ImplicitIndex.
+    ex:=a tr{A^{\mu\nu} B^{\mu\rho} B^{\nu\rho}}+b tr{C^{\mu\nu} A^{\mu\rho} B^{\nu\rho}}+c tr{C^{\mu\nu} B^{\mu\rho} A^{\nu\rho}};
+    meld(_)
+    assert(ex == $a tr{A^{\mu\nu} B^{\mu\rho} B^{\nu\rho}}+b tr{C^{\mu\nu} A^{\mu\rho} B^{\nu\rho}}+c tr{C^{\mu\nu} B^{\mu\rho} A^{\nu\rho}}$)
+    print("Test 27 passed")

@@ -4,8 +4,10 @@
 #include <numeric>
 #include "Adjform.hh"
 #include "Cleanup.hh"
+#include "properties/IndexInherit.hh"
 #include "properties/Symbol.hh"
 #include "properties/Coordinate.hh"
+#include "properties/Trace.hh"
 
 // Get the next permutation of term and return the number of swaps
 // required for the transformation
@@ -90,11 +92,16 @@ namespace cadabra {
 
 	bool has_indices(const cadabra::Kernel& kernel, cadabra::Ex::iterator it)
 	{
-		using namespace cadabra;
-		for (Ex::iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
+		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg)
 			if (is_index(kernel, beg))
 				return true;
+
+		if (*it->name == "\\prod") {
+			for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg)
+				if (has_indices(kernel, beg))
+					return true;
 		}
+
 		return false;
 	}
 
