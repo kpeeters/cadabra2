@@ -1,5 +1,5 @@
 {
-	"cell_id" : 16135317428634562849,
+	"cell_id" : 1811091607358021499,
 	"cells" : 
 	[
 		{
@@ -200,14 +200,14 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 17435029174984516970,
+					"cell_id" : 18204803698960052673,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\algorithm{apply_though(ex: Ex, op: Ex) -> Ex}{Apply an operator through both sides of an equation.}"
+					"source" : "\\algorithm{apply_through(ex: Ex, op: Ex) -> Ex}{Apply an operator through both sides of an equation.}"
 				}
 			],
 			"hidden" : true,
-			"source" : "\\algorithm{apply_though(ex: Ex, op: Ex) -> Ex}{Apply an operator through both sides of an equation.}"
+			"source" : "\\algorithm{apply_through(ex: Ex, op: Ex) -> Ex}{Apply an operator through both sides of an equation.}"
 		},
 		{
 			"cell_id" : 7129671199504928557,
