@@ -185,8 +185,12 @@ meld::result_t meld::apply(iterator& it)
 {
 	result_t res = result_t::l_no_action;
 
+	// std::cerr << "Examining node " << ex_to_string(kernel, it) << '\n';
+
 	APPLY_ROUTINE(traces);
 	APPLY_ROUTINE(tableaux);
+
+	// std::cerr << "Produced " << ex_to_string(kernel, it) << '\n';
 
 	cleanup_dispatch(kernel, tr, it);
 

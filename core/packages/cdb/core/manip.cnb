@@ -1,5 +1,5 @@
 {
-	"cell_id" : 8939832402042635504,
+	"cell_id" : 16135317428634562849,
 	"cells" : 
 	[
 		{
@@ -160,7 +160,6 @@
 					"source" : "\\algorithm{add_through(ex: Ex, factor: Ex) -> Ex}{Add a factor to both sides of an equation.}"
 				}
 			],
-			"hidden" : true,
 			"source" : "\\algorithm{add_through(ex: Ex, factor: Ex) -> Ex}{Add a factor to both sides of an equation.}"
 		},
 		{
@@ -191,7 +190,55 @@
 					"source" : "\\begin{dmath*}{}A_{\\mu} B_{\\nu}+D_{\\mu \\nu} = C_{\\mu \\nu}+D_{\\mu \\nu}\\end{dmath*}"
 				}
 			],
+			"ignore_on_import" : true,
 			"source" : "add_through($A_{\\mu}B_{\\nu} = C_{\\mu \\nu}$, $D_{\\mu \\nu}$);"
+		},
+		{
+			"cell_id" : 13652224870070875183,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 17435029174984516970,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{apply_though(ex: Ex, op: Ex) -> Ex}{Apply an operator through both sides of an equation.}"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{apply_though(ex: Ex, op: Ex) -> Ex}{Apply an operator through both sides of an equation.}"
+		},
+		{
+			"cell_id" : 7129671199504928557,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def apply_through(ex, op):\n\tfor part in ex.top().children():\n\t\tpart.replace($@(op){@(part)}$)\n\treturn ex"
+		},
+		{
+			"cell_id" : 1222096101185570042,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 2714158175673432224,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 8460382040574332022,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\partial(\\partial(x_{\\mu})) = \\partial(0)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\partial\\left(\\partial\\left(x_{\\mu}\\right)\\right) = \\partial\\left(0\\right)\\end{dmath*}"
+				}
+			],
+			"ignore_on_import" : true,
+			"source" : "apply_through($\\partial{x_{\\mu}} = 0$, $\\partial$);"
 		},
 		{
 			"cell_id" : 3411326601020319930,

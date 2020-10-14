@@ -226,7 +226,7 @@ def test21():
     meld(_)
     assert(ex==0)
 
-print("Test 21 passed in", timeit.timeit(test21,number=1000))
+print("Test 21 (using meld)         passed in", timeit.timeit(test21,number=1000))
 
 def test22():
     __cdbkernel__ = create_scope()
@@ -240,7 +240,7 @@ def test22():
     canonicalise(_)
     assert(ex==0)
 
-print("Test 22 passed in", timeit.timeit(test22,number=1000))
+print("Test 22 (using canonicalise) passed in", timeit.timeit(test22,number=1000))
 
 # import numpy as np
 # {n#}::Indices;
@@ -326,7 +326,7 @@ def test27():
 test27()
 
 # RiemannRule13 from MathTensor
-def test28()
+def test28():
     __cdbkernel__ = create_scope()
     R_{a b c d}::RiemannTensor;
     ex:= R_{a b c d} R_{e a g b} R_{c d e g}
@@ -338,4 +338,19 @@ def test28()
 test28()
 
 
-        
+def test29():
+    __cdbkernel__ = create_scope()
+    {\mu,\nu,\rho}::Indices(vector).
+    A^{\mu\nu}::AntiSymmetric.
+    B^{\mu\nu}::Symmetric.
+    C^{\mu\nu}::AntiSymmetric.
+    tr{#}::Trace.
+    {A^{\mu\nu},B^{\mu\nu},C^{\mu\nu}}::NonCommuting.
+    {A^{\mu\nu},B^{\mu\nu},C^{\mu\nu}}::SelfNonCommuting.
+    {A^{\mu\nu},B^{\mu\nu},C^{\mu\nu}}::ImplicitIndex.
+    ex:=a tr{A^{\mu\nu} B^{\mu\rho} B^{\nu\rho}}+b tr{C^{\mu\nu} A^{\mu\rho} B^{\nu\rho}}+c tr{C^{\mu\nu} B^{\mu\rho} A^{\nu\rho}};
+    meld(_)
+    assert(ex == $a tr{A^{\mu\nu} B^{\mu\rho} B^{\nu\rho}}+b tr{C^{\mu\nu} A^{\mu\rho} B^{\nu\rho}}+c tr{C^{\mu\nu} B^{\mu\rho} A^{\nu\rho}}$)
+    print("Test 29 passed")
+
+test29()
