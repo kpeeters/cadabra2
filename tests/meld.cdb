@@ -311,3 +311,31 @@ def test26():
 
 test26()
         
+# Portugal's example.
+def test27():
+    __cdbkernel__ = create_scope()
+    R_{a b c d}::RiemannTensor;
+    ex:= 2 R_{a b c d} R_{e f a k} R_{h c k b} R_{d h e f}
+        +4 R_{a b c d} R_{e f k a} R_{h b c e} R_{d k f h}
+        -  R_{a b c d} R_{e f k a} R_{h b f e} R_{c d k h}
+        +4 R_{a b c d} R_{h k d f} R_{e f k a} R_{h b c e};
+    meld(ex)
+    assert(ex==0)
+    print("Test 27 passed")
+
+test27()
+
+# RiemannRule13 from MathTensor
+def test28()
+    __cdbkernel__ = create_scope()
+    R_{a b c d}::RiemannTensor;
+    ex:= R_{a b c d} R_{e a g b} R_{c d e g}
+       -1/2 R_{p q r s} R_{t u p q} R_{r s t u};
+    meld(_)
+    assert(ex==0)
+    print("Test 28 passed")
+
+test28()
+
+
+        
