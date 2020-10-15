@@ -1,0 +1,6 @@
+import pickle
+
+def test01():
+	ex := A_{\mu} + B_{\mu};
+	obj = pickle.dumps(ex)
+	assert(ex == pickle.loads(obj))
