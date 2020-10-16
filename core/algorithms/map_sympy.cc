@@ -20,6 +20,7 @@ bool map_sympy::can_apply(iterator st)
 	if(*st->name=="\\components") return false;
 	if(*st->name=="\\equals") return false;
 	if(*st->name=="\\comma") return false;
+	if(*st->name=="\\arrow") return false;
 
 	left.clear();
 	index_factors.clear();
