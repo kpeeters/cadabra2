@@ -91,6 +91,7 @@ set(RTESTS
   symmetry
   vary
   young
+  serialize
 #  youngreduce
 #  yrtrace
   )

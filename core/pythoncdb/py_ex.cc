@@ -567,7 +567,11 @@ namespace cadabra {
 		.def("__add__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_add), py::is_operator{})
 		.def("__sub__", static_cast<Ex_ptr(*)(const Ex_ptr, const ExNode)>(&Ex_sub), py::is_operator{})
 		.def("__sub__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_sub), py::is_operator{})
-		.def("__mul__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_mul), py::is_operator{});
+		.def("__mul__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_mul), py::is_operator{})
+		.def(py::pickle(
+			[](const Ex_ptr& ex) { return py::make_tuple(Ex_as_input(ex)); },
+			[](py::tuple t) { return Ex_from_string(t[0].cast<std::string>(), true, get_kernel_from_scope()); }
+		));
 
 		pybind11::class_<ExNode>(m, "ExNode")
 		.def("__iter__", &ExNode::iter)
