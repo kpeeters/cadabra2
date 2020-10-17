@@ -7,6 +7,7 @@
 #include "InstallPrefix.hh"
 #include "NotebookWindow.hh"
 #include "DataCell.hh"
+
 #include <gtkmm/box.h>
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/messagedialog.h>
@@ -14,6 +15,8 @@
 #include <gtkmm/radioaction.h>
 #include <gtkmm/scrollbar.h>
 #include <fstream>
+#include <glib/gstdio.h>
+
 #include <gtkmm/entry.h>
 #if GTKMM_MINOR_VERSION < 10
 #include <gtkmm/main.h>
@@ -222,6 +225,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	                 sigc::mem_fun(*this, &NotebookWindow::select_git_path));
 	actiongroup->add(Gtk::Action::create("ToolsOptions", "Options"),
 		sigc::mem_fun(*this, &NotebookWindow::on_tools_options));
+	actiongroup->add(Gtk::Action::create("ToolsClearCache", "Clear Cache"),
+		sigc::mem_fun(*this, &NotebookWindow::on_tools_clear_cache));
 
 	actiongroup->add( Gtk::Action::create("MenuHelp", "_Help") );
 	//	actiongroup->add( Gtk::Action::create("HelpNotebook", Gtk::Stock::HELP, "How to use the notebook"),
@@ -307,16 +312,17 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	ui_info+=
 		"    <menu action='MenuTools'>"
 		"      <menu action='ToolsCompare'>"
-	   "      <menuitem action='CompareFile'/>"
-	   "      <menu action='CompareGit'>"
-	   "        <menuitem action='CompareGitLatest'/>"
-	   "        <menuitem action='CompareGitChoose'/>"
-	   "        <menuitem action='CompareGitSpecific'/>"
-	   "        <separator/>"
-	   "        <menuitem action='CompareSelectGit'/>"
+	   "        <menuitem action='CompareFile'/>"
+	   "        <menu action='CompareGit'>"
+	   "          <menuitem action='CompareGitLatest'/>"
+	   "          <menuitem action='CompareGitChoose'/>"
+	   "          <menuitem action='CompareGitSpecific'/>"
+	   "          <separator/>"
+	   "          <menuitem action='CompareSelectGit'/>"
+	   "        </menu>"
 	   "      </menu>"
-	   "    </menu>"
 		"      <menuitem action='ToolsOptions'/>"
+		"      <menuitem action='ToolsClearCache'/>"
 		"    </menu>"
 	   "    <menu action='MenuHelp'>"
 	   //		"      <menuitem action='HelpNotebook' />"
@@ -2258,6 +2264,45 @@ void NotebookWindow::on_tools_options()
 		prefs.move_into_new_cell = auto_move->get_active();
 	}
 
+}
+
+bool remove_recursive(const gchar* path)
+{
+	// If filename is a file then we have reached the end of the recursion tree
+	if (g_file_test(path, G_FILE_TEST_IS_REGULAR))
+		return g_remove(path) == 0;
+	bool success = true;
+	auto dir = g_dir_open(path, 0, NULL);
+	for (const gchar* child = g_dir_read_name(dir); child != NULL; child = g_dir_read_name(dir)) {
+		gchar* fullpath = g_strconcat(path, G_DIR_SEPARATOR_S, child, NULL);
+		success = remove_recursive(fullpath);
+		g_free(fullpath);
+		if (!success)
+			break;
+	}
+	g_dir_close(dir);
+	if (!success)
+		return false;
+
+	return g_remove(path) == 0;
+}
+
+void NotebookWindow::on_tools_clear_cache()
+{
+	Gtk::MessageDialog prog("Removing cached libary files, please wait...", false, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
+	prog.set_transient_for(*this);
+	prog.set_title("Clearing cache");
+	prog.show_all();
+
+	auto config_dir = Glib::ustring(g_get_user_config_dir()) + "/cadabra_packages";
+	bool success = remove_recursive(config_dir.c_str());
+
+	prog.set_message(success
+		? "Cache cleared!"
+		: "Failed to remove cached library files. You can manually remove them by deleting the cadabra_packages folder in your config directory"
+	);
+	
+	prog.run();
 }
 
 void NotebookWindow::refresh_highlighting()

@@ -208,6 +208,7 @@ namespace cadabra {
 			void on_prefs_use_defaults();
 
 			void on_tools_options();
+			void on_tools_clear_cache();
 
 			void on_help_about();
 			void on_help() const;
