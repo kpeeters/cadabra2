@@ -1192,6 +1192,9 @@ void NotebookWindow::interactive_execute()
 
 bool NotebookWindow::cell_complete_request(DTree::iterator it, int pos, int canvas_number)
 	{
+	if (!prefs.tab_completion)
+		return false;
+
 	int cnum=0;
 	if(undo_stack.size()>0) {
 		auto cmp = std::dynamic_pointer_cast<ActionCompleteText>(undo_stack.top());
@@ -2244,6 +2247,7 @@ void NotebookWindow::on_tools_options()
 	auto sep1 = add_sep();
 	auto gui_opts = add_label("<b>GUI Options</b>", Gtk::ALIGN_CENTER);
 	auto auto_move = add_checkbox("Automatically move into a created cell", prefs.move_into_new_cell);
+	auto tab_completion = add_checkbox("Show possible completions with TAB", prefs.tab_completion);
 	auto sep2 = add_sep();
 	options.show_all();
 	int res = options.run();
@@ -2262,6 +2266,7 @@ void NotebookWindow::on_tools_options()
 			}
 		}
 		prefs.move_into_new_cell = auto_move->get_active();
+		prefs.tab_completion = tab_completion->get_active();
 	}
 
 }
