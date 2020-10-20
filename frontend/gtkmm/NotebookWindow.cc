@@ -32,14 +32,20 @@ using namespace cadabra;
 // #define DEBUG 1
 
 NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
-	: DocumentThread(this),
-	  current_cell(doc.end()),
-	  cdbapp(c),
-	  console(sigc::mem_fun(this, &NotebookWindow::interactive_execute)),
-	  current_canvas(0),
-	  //	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO),
-	  kernel_spinner_status(false), title_prefix("Cadabra: "),
-	  modified(false), read_only(ro), crash_window_hidden(true), follow_cell(doc.end()), is_configured(false)
+	: DocumentThread(this)
+	, current_cell(doc.end())
+	, cdbapp(c)
+	, search_case_insensitive("Case insensitive", true)
+	, console(sigc::mem_fun(this, &NotebookWindow::interactive_execute))
+	, current_canvas(0)
+	, kernel_spinner_status(false)
+	, title_prefix("Cadabra: ")
+	, modified(false)
+	, read_only(ro)
+	, crash_window_hidden(true)
+	, follow_cell(doc.end())
+	, last_find_location(doc.end(), std::string::npos)
+	, is_configured(false)
 	{
 	// Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
@@ -125,6 +131,10 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_delete) );
 	actiongroup->add( Gtk::Action::create("EditSplit", "Split cell"), Gtk::AccelKey("<control>Return"),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_split) );
+	actiongroup->add( Gtk::Action::create("EditFind", Gtk::Stock::FIND), Gtk::AccelKey("<control>F"),
+	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_find) );
+	actiongroup->add( Gtk::Action::create("EditFindNext"), Gtk::AccelKey("<control>G"),
+	                  sigc::mem_fun(*this, &NotebookWindow::on_search_text_changed) );
 	actiongroup->add( Gtk::Action::create("EditMakeCellTeX", "Cell is LaTeX"), Gtk::AccelKey("<control><shift>L"),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
 	actiongroup->add( Gtk::Action::create("EditMakeCellPython", "Cell is Cadabra/Python"), Gtk::AccelKey("<control><shift>P"),
@@ -273,6 +283,9 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		   "      <separator/>"
 		   "      <menuitem action='EditSplit' />"
 		   "      <separator/>"
+		   "      <menuitem action='EditFind' />"
+		   "      <menuitem action='EditFindNext' />"			
+		   "      <separator/>"
 		   "      <menuitem action='EditMakeCellTeX' />"
 		   "      <menuitem action='EditMakeCellPython' />"
 		   "      <menuitem action='EditIgnoreCellOnImport' />"			
@@ -363,7 +376,14 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	topbox.pack_start(supermainbox, true, true);
 	topbox.pack_start(statusbarbox, false, false);
 	supermainbox.pack_start(mainbox, true, true);
-
+	mainbox.pack_start(searchbar, false, false);
+	searchbar.add(search_hbox);
+//	searchbar.set_halign(Gtk::ALIGN_START);
+	search_hbox.pack_start(searchentry, Gtk::PACK_EXPAND_WIDGET, 10);
+	searchentry.set_size_request(200, -1);
+	search_hbox.pack_start(search_case_insensitive, Gtk::PACK_SHRINK, 10);
+//	search_hbox.pack_start(search_result, Gtk::PACK_EXPAND_WIDGET, 10);
+	search_case_insensitive.set_active(true);
 
 	// Status bar
 	status_label.set_alignment( 0.0, 0.5 );
@@ -380,6 +400,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	progressbar.set_text("idle");
 	progressbar.set_show_text(true);
 
+	searchentry.signal_search_changed().connect(sigc::mem_fun(*this, &NotebookWindow::on_search_text_changed));
 
 	// The three main widgets
 	//	mainbox.pack_start(buttonbox, Gtk::PACK_SHRINK, 0);
@@ -897,6 +918,12 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 	if(current_cell==it)
 		current_cell=doc.end();
 
+	// Ensure we will not continue searching in this cell.
+	if(last_find_location.first==it) {
+		last_find_location.first=doc.end();
+		last_find_location.second=std::string::npos;
+		}
+	
 	DTree::iterator parent = DTree::parent(it);
 	assert(doc.is_valid(parent));
 
@@ -952,6 +979,8 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 			return rm;
 			});
 		}
+	modified=true;
+	update_title();
 	}
 
 void NotebookWindow::remove_all_cells()
@@ -1005,6 +1034,28 @@ void NotebookWindow::position_cursor(const DTree&, DTree::iterator it, int pos)
 	current_cell=it;
 	}
 
+void NotebookWindow::select_range(const DTree&, DTree::iterator it, int start, int len)
+	{
+	if(it->cell_type!=DataCell::CellType::python && it->cell_type!=DataCell::CellType::latex) {
+		std::cerr << "Warning: select_range called on cell which is not python or latex." << std::endl;
+		return;
+		}
+	
+	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end()) {
+		std::cerr << "cadabra-client: Cannot find cell to select range." << std::endl;
+		return;
+		}
+
+	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
+
+	auto start_it=target.inbox->edit.get_buffer()->begin();
+	start_it.forward_chars(start);
+	auto end_it=start_it;
+	end_it.forward_chars(len);
+	// std::cerr << start << ", " << len << std::endl;
+	target.inbox->edit.get_buffer()->select_range(start_it, end_it);
+	}
+
 size_t NotebookWindow::get_cursor_position(const DTree&, DTree::iterator it)
 	{
 	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end()) {
@@ -1021,33 +1072,54 @@ size_t NotebookWindow::get_cursor_position(const DTree&, DTree::iterator it)
 void NotebookWindow::scroll_current_cell_into_view()
 	{
 	if(current_cell==doc.end()) return;
+	scroll_cell_into_view(current_cell);
+	}
+
+void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
+	{
+//	std::cerr << "-----" << std::endl;
+//	std::cerr << "cell content to show: " << cell->textbuf << std::endl;
+	
 	if(current_canvas>=(int)canvasses.size()) return;
 
-	if(canvasses[current_canvas]->visualcells.find(&(*current_cell))==canvasses[current_canvas]->visualcells.end()) return;
+	if(canvasses[current_canvas]->visualcells.find(&(*cell))==canvasses[current_canvas]->visualcells.end()) return;
 
-	VisualCell& focusbox = canvasses[current_canvas]->visualcells[&(*current_cell)];
+	const VisualCell& focusbox = canvasses[current_canvas]->visualcells[&(*cell)];
 
 	if(focusbox.inbox==0) return;
 
-	Gtk::Allocation               al=focusbox.inbox->edit.get_allocation();
+	Gtk::Allocation               al;
+	if(cell->cell_type==DataCell::CellType::python ||
+		cell->cell_type==DataCell::CellType::latex)
+		al=focusbox.inbox->edit.get_allocation();
+	else if(cell->cell_type==DataCell::CellType::latex_view ||
+			  cell->cell_type==DataCell::CellType::output ||
+			  cell->cell_type==DataCell::CellType::verbatim)
+		al=focusbox.outbox->get_allocation();
+	else if(cell->cell_type==DataCell::CellType::image_png)
+		al=focusbox.imagebox->get_allocation();
+	else
+		return;
+	
 	Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
 
 	double upper_visible=va->get_value();
-	double lower_visible=va->get_value()+va->get_page_size();
+	double page_size    =va->get_page_size();
+	double lower_visible=va->get_value()+page_size;
+	
 
 	// When we get called, the busybox has its allocation done and size set. However,
 	// the edit box below still has its old position (but its correct height). So we
 	// should make sure that busybox.y+busybox.height+editbox.height is at the bottom
 	// of the scrollbox.
-	//std::cerr << "-----" << std::endl;
-	//std::cerr << "viewport = " << upper_visible << " - " << lower_visible << std::endl;
-	//std::cerr << "current_cell = " << al.get_y() << " height " << al.get_height() << std::endl;
+//	std::cerr << "viewport = " << upper_visible << " - " << lower_visible << std::endl;
+//	std::cerr << "cell to show = " << al.get_y() << " height " << al.get_height() << std::endl;
 
 	double should_be_visible = al.get_y()+al.get_height()+10;
 	double shift = should_be_visible - lower_visible;
-	//std::cerr << "position " << should_be_visible << " should be visible" << std::endl;
-	//std::cerr << "shift = " << shift << std::endl;
-	if(shift>0) {
+//	std::cerr << "position " << should_be_visible << " should be visible" << std::endl;
+//	std::cerr << "shift = " << shift << std::endl;
+	if(shift>0 || (-shift)>va->get_page_size()) {
 		va->set_value( upper_visible + shift);
 		}
 	}
@@ -1628,6 +1700,51 @@ void NotebookWindow::on_edit_delete()
 	   std::make_shared<ActionRemoveCell>(current_cell->id());
 	queue_action(action2);
 	process_data();
+	}
+
+void NotebookWindow::on_edit_find()
+	{
+	searchbar.set_search_mode(true);
+	searchbar.set_show_close_button(true);
+	searchentry.grab_focus();
+	search_result.set_text("");
+	}
+
+void NotebookWindow::on_search_text_changed()
+	{
+	const auto text = searchentry.get_text();
+	if(text.size()==0) return;
+
+	auto start = std::make_pair<DTree::iterator, size_t>(doc.begin(), 0);
+	if(last_find_location.second!=std::string::npos) {
+		select_range(doc, last_find_location.first, 0, 0);
+		start = last_find_location;
+		if(last_find_string.size()==text.size())
+			++start.second;
+		}
+	else {
+		}
+	
+	auto res = find_string(start.first, start.second, text, search_case_insensitive.get_active());
+	last_find_location=res;
+	last_find_string=text;
+	if(res.second!=std::string::npos) {
+		if(res.first->cell_type!=DataCell::CellType::python &&
+			res.first->cell_type!=DataCell::CellType::latex) {
+			search_result.set_text("Found.");
+			scroll_cell_into_view(res.first);
+			}
+		else {
+			current_cell=res.first;
+			search_result.set_text("Found.");
+			scroll_current_cell_into_view();
+			select_range(doc, res.first, res.second, text.size());
+			}
+		}
+	else {
+		last_find_string="";
+		search_result.set_text("Not found, try again to start from start.");
+		}
 	}
 
 void NotebookWindow::on_edit_split()

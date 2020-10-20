@@ -48,6 +48,8 @@ namespace cadabra {
 			virtual void   position_cursor(const DTree&, DTree::iterator, int pos) override;
 			virtual size_t get_cursor_position(const DTree&, DTree::iterator) override;
 
+			void           select_range(const DTree&, DTree::iterator, int start, int len);
+
 			virtual void on_connect() override;
 			virtual void on_disconnect(const std::string&) override;
 			virtual void on_network_error() override;
@@ -79,9 +81,12 @@ namespace cadabra {
 			// Ensure that the current cell is visible. This will assume
 			// that all size allocations of widgets inside the scrolled window
 			// have been made; it only does scrolling, based on the current
-			// allocations.
+			// allocations. Calls `scroll_cell_into_view`.
 			void scroll_current_cell_into_view();
 
+			// Ensure that the indicated cell is visible.
+			void scroll_cell_into_view(DTree::iterator cell);
+				
 			void set_name(const std::string&);
 			void set_title_prefix(const std::string&);
 
@@ -134,6 +139,11 @@ namespace cadabra {
 			Gtk::HBox                      supermainbox;
 			Gtk::VBox                      mainbox;
 			//			Gtk::HBox                      buttonbox;
+			Gtk::SearchBar                 searchbar;
+			Gtk::HBox                      search_hbox;
+			Gtk::SearchEntry               searchentry;
+			Gtk::CheckButton               search_case_insensitive;
+			Gtk::Label                     search_result;
 			Gtk::HBox                      statusbarbox;
 
 			Console console;
@@ -191,7 +201,8 @@ namespace cadabra {
 			void on_edit_split();
 			void on_edit_cell_is_latex();
 			void on_edit_cell_is_python();
-			void on_ignore_cell_on_import();			
+			void on_ignore_cell_on_import();
+			void on_edit_find();
 
 			void on_view_split();
 			void on_view_close();
@@ -214,6 +225,9 @@ namespace cadabra {
 			void on_help() const;
 
 			void on_kernel_restart();
+
+			/// Search handling.
+			void on_search_text_changed();
 
 			/// Clipboard handling
 			void on_clipboard_get(Gtk::SelectionData&, guint info);
@@ -261,6 +275,8 @@ namespace cadabra {
 			int             last_configure_width;
 			DTree::iterator follow_cell;
 
+			std::pair<DTree::iterator, size_t> last_find_location;
+			std::string                        last_find_string;
 
 			bool  is_configured;
 

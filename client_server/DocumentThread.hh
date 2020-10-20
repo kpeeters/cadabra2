@@ -83,6 +83,9 @@ namespace cadabra {
 			/// One undo step.
 			void undo();
 
+			/// Find string, return match, or a (doc.end(), std::string::npos).
+			std::pair<DTree::iterator, size_t> find_string(DTree::iterator start_it, size_t start_pos, const std::string& f, bool case_ins) const;
+			
 			friend ActionBase;
 			friend ActionAddCell;
 			friend ActionPositionCursor;

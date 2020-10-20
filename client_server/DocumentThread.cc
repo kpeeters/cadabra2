@@ -117,6 +117,50 @@ void DocumentThread::build_visual_representation()
 //	return doc;
 //	}
 
+template<typename charT>
+struct ci_equal {
+		ci_equal( const std::locale& loc ) : loc_(loc) {}
+		bool operator()(charT ch1, charT ch2) {
+		return std::toupper(ch1, loc_) == std::toupper(ch2, loc_);
+		}
+	private:
+		const std::locale& loc_;
+};
+
+template<typename T>
+int ci_find_substr( const T& str1, const T& str2, int start_pos, const std::locale& loc = std::locale() )
+	{
+	auto start=str1.begin();
+	start+=start_pos;
+	typename T::const_iterator it = std::search( start, str1.end(), 
+																str2.begin(), str2.end(), ci_equal<typename T::value_type>(loc) );
+	if ( it != str1.end() ) return it - str1.begin();
+	else return -1; 
+	}
+
+std::pair<DTree::iterator, size_t> DocumentThread::find_string(DTree::iterator start_it, size_t start_pos, const std::string& f, bool case_ins) const
+	{
+	// std::cerr << "finding from pos " << start_pos << ", " << &(*start_it) << ": " << start_it->textbuf.substr(0,30) << std::endl;
+	DTree::iterator doc_it=start_it;
+	while(doc_it!=doc.end()) {
+		//		std::cout << doc_it->textbuf << std::endl;
+		// FIXME: re-enable searching in output cells.
+		if(doc_it->hidden==false && (doc_it->cell_type==DataCell::CellType::python || doc_it->cell_type==DataCell::CellType::latex)) {
+			size_t pos;
+			if(case_ins) 
+				pos = ci_find_substr(doc_it->textbuf, f, start_pos);
+			else
+				pos = doc_it->textbuf.find(f, start_pos);
+
+			if(pos!=std::string::npos)
+				return std::make_pair(doc_it, pos);
+			}
+		start_pos=0; // after one fail, start next cell at zero
+		++doc_it;
+		}
+	return std::make_pair(doc.end(), std::string::npos);
+	}
+
 void DocumentThread::queue_action(std::shared_ptr<ActionBase> ab)
 	{
 	std::lock_guard<std::mutex> guard(stack_mutex);
