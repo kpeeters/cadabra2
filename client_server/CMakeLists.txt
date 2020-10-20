@@ -157,7 +157,11 @@ if(WIN32)
    target_link_libraries(cadabra-server ws2_32 mswsock bcrypt)
  endif()
  if(UNIX)
-   target_link_libraries(cadabra-server dl util)
+    if(${CMAKE_SYSTEM_NAME} MATCHES ".*BSD|DragonFly")
+       target_link_libraries(cadabra-server util)
+    else()
+       target_link_libraries(cadabra-server dl util)
+    endif()
  endif()
 
 # Client library
