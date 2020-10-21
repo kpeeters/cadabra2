@@ -133,7 +133,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_split) );
 	actiongroup->add( Gtk::Action::create("EditFind", Gtk::Stock::FIND), Gtk::AccelKey("<control>F"),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_find) );
-	actiongroup->add( Gtk::Action::create("EditFindNext"), Gtk::AccelKey("<control>G"),
+	actiongroup->add( Gtk::Action::create("EditFindNext", "Find next"), Gtk::AccelKey("<control>G"),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_search_text_changed) );
 	actiongroup->add( Gtk::Action::create("EditMakeCellTeX", "Cell is LaTeX"), Gtk::AccelKey("<control><shift>L"),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
