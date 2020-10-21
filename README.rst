@@ -396,14 +396,7 @@ Install all the dependencies with (this is a *very* slow process, be
 warned, it can easily take several hours, but at least it's automatic)::
   
     vcpkg install mpir:x64-windows glibmm:x64-windows sqlite3:x64-windows
-    vcpkg install boost-system:x64-windows \
-                  boost-asio:x64-windows
-                  boost-uuid:x64-windows
-                  boost-program-options:x64-windows
-                  boost-signals2:x64-windows
-                  boost-property-tree:x64-windows
-                  boost-date-time:x64-windows
-                  boost-filesystem:x64-windows
+    vcpkg install boost-system:x64-windows                   boost-asio:x64-windows                   boost-uuid:x64-windows                   boost-program-options:x64-windows                   boost-signals2:x64-windows boost-property-tree:x64-windows                   boost-date-time:x64-windows                   boost-filesystem:x64-windows boost-ublas:x64-windows
     vcpkg install gtkmm:x64-windows
     vcpkg integrate install
 
@@ -416,9 +409,7 @@ Now clone the cadabra repository and configure as::
     mkdir build
     cd build
     cmake -DCMAKE_TOOLCHAIN_FILE=[the path obtained in the last step]
-          -DCMAKE_BUILD_TYPE=RelWithDebInfo
-    		 -DVCPKG_TARGET_TRIPLET=x64-windows
-    		 -DCMAKE_INSTALL_PREFIX=C:\Cadabra
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_INSTALL_PREFIX=C:\Cadabra
           -G "Visual Studio 16 2019" -A x64 ..
 
 the latter all on one line, in which you replace the

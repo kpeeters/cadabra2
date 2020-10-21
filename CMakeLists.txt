@@ -202,6 +202,10 @@ configure_file(
 	"${CMAKE_CURRENT_BINARY_DIR}/postinst" 
 	@ONLY
 )
+configure_file(
+   config/install_script.iss.in
+   config/install_script.iss
+   )
 
 # Suffixes
 if(WIN32)
