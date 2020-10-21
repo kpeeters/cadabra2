@@ -709,6 +709,10 @@ bool NotebookWindow::on_key_press_event(GdkEventKey* event)
 	{
 	bool is_ctrl_up    = event->keyval==GDK_KEY_Up   && (event->state&Gdk::CONTROL_MASK);
 	bool is_ctrl_down  = event->keyval==GDK_KEY_Down && (event->state&Gdk::CONTROL_MASK);
+	bool is_ctrl_home  = event->keyval==GDK_KEY_Home && (event->state&Gdk::CONTROL_MASK);
+	bool is_ctrl_end   = event->keyval==GDK_KEY_End  && (event->state&Gdk::CONTROL_MASK);
+	bool is_pagedown   = event->keyval==GDK_KEY_Page_Down;
+	bool is_pageup     = event->keyval==GDK_KEY_Page_Up;
 
 	if(is_ctrl_up) {
 		std::shared_ptr<ActionBase> actionpos =
@@ -722,6 +726,34 @@ bool NotebookWindow::on_key_press_event(GdkEventKey* event)
 		   std::make_shared<ActionPositionCursor>(current_cell->id(), ActionPositionCursor::Position::next);
 		queue_action(actionpos);
 		process_todo_queue();
+		return true;
+		}
+	else if(is_ctrl_home) {
+//		std::shared_ptr<ActionBase> actionpos =
+//		   std::make_shared<ActionPositionCursor>(current_cell->id(), ActionPositionCursor::Position::in);
+//		queue_action(actionpos);
+//		process_todo_queue();
+		Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
+		va->set_value( va->get_lower() );
+		return true;
+		}
+	else if(is_ctrl_end) {
+//		std::shared_ptr<ActionBase> actionpos =
+//		   std::make_shared<ActionPositionCursor>(current_cell->id(), ActionPositionCursor::Position::in);
+//		queue_action(actionpos);
+//		process_todo_queue();
+		Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
+		va->set_value( va->get_upper() );
+		return true;
+		}
+	else if(is_pageup) {
+		Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
+		va->set_value( va->get_value()-va->get_page_increment() );
+		return true;
+		}
+	else if(is_pagedown) {
+		Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
+		va->set_value( va->get_value()+va->get_page_increment() );
 		return true;
 		}
 	else {
