@@ -109,6 +109,7 @@ namespace cadabra {
 					std::string git_path;
 					std::string python_path;
 					bool move_into_new_cell;
+					bool tab_completion;
 				private:
 					Json::Value data;
 					std::string config_path;

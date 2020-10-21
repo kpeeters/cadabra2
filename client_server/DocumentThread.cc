@@ -226,6 +226,7 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	git_path = data.get("git_path", "").asString();
 	python_path = data.get("python_path", "").asString();
 	move_into_new_cell = data.get("move_into_new_cell", false).asBool();
+	tab_completion = data.get("tab_completion", true).asBool();
 
 	if(git_path=="")
 		git_path="/usr/bin/git";
@@ -261,6 +262,7 @@ void DocumentThread::Prefs::save()
 		data["is_anonymous"] = is_anonymous;
 		data["python_path"] = python_path;
 		data["move_into_new_cell"] = move_into_new_cell;
+		data["tab_completion"] = tab_completion;
 		for (const auto& lang : colours) {
 			for (const auto& kw : lang.second)
 				data["colours"][lang.first][kw.first] = kw.second;
