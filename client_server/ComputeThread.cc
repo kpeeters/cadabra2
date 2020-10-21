@@ -602,12 +602,14 @@ bool ComputeThread::complete(DTree::iterator it, int pos, int alternative)
 	header["msg_type"]="complete";
 	req["auth_token"]=authentication_token;
 	req["header"]=header;
-	std::string todo = it->textbuf;
+	std::string todo = it->textbuf.substr(0,pos);
 //	if(todo.size()>0 && todo[todo.size()-1]=='\n')
 //		todo=todo.substr(0, todo.size()-1);
-	size_t lst=todo.find_last_of("\n(){}[]\t ");
+	// std::cerr << "to complete full: " << todo << std::endl;
+	size_t lst=todo.find_last_of("\n(){}[]:\t ");
 	if(lst!=std::string::npos)
 		todo=todo.substr(lst+1);
+	// std::cerr << "to complete strip: " << todo << std::endl;	
 
 	if(todo.size()==0)
 		return false;

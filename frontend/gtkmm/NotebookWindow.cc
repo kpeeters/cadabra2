@@ -454,7 +454,7 @@ void NotebookWindow::load_css()
 	Glib::ustring data = "";
 	data += "textview text { color: "+text_colour+"; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
 	data += "GtkTextView { color: "+text_colour+"; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
-	data += "*:focus { background-color: #eee; }\n";
+	data += "textview *:focus { background-color: #eee; }\n";
 	data += ".view text selection { color: #fff; background-color: #888; }\n";
 	data += "textview.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
 	data += "#ImageView { transition-property: padding, background-color; transition-duration: 1s; }\n";
@@ -1264,6 +1264,7 @@ void NotebookWindow::interactive_execute()
 
 bool NotebookWindow::cell_complete_request(DTree::iterator it, int pos, int canvas_number)
 	{
+	// std::cerr << "complete request" << std::endl;
 	int cnum=0;
 	if(undo_stack.size()>0) {
 		auto cmp = std::dynamic_pointer_cast<ActionCompleteText>(undo_stack.top());

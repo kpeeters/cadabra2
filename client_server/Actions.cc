@@ -278,15 +278,17 @@ void ActionCompleteText::execute(DocumentThread& cl, GUIBase& gb)
 	{
 	ActionBase::execute(cl, gb);
 
-	ref->textbuf.insert(insert_pos, text);
+	auto endpos = ref->textbuf.insert(insert_pos, text);
 	// std::cerr << "complete: textbuf now |" << ref->textbuf << "|" << std::endl;
 	gb.update_cell(cl.doc, ref);
+	gb.position_cursor(cl.doc, ref, insert_pos+text.size());
 	}
 
 void ActionCompleteText::revert(DocumentThread& cl, GUIBase& gb)
 	{
 	ref->textbuf.erase(insert_pos, text.size());
 	gb.update_cell(cl.doc, ref);
+	gb.position_cursor(cl.doc, ref, insert_pos);
 	}
 
 int ActionCompleteText::length() const
