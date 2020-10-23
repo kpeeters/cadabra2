@@ -178,6 +178,7 @@ namespace cadabra {
 		      pybind11::return_value_policy::take_ownership);
 
 		m.def("cdb2python", &cdb2python);
+		m.def("cdb2python_string", &cdb2python);
 		}
 
 	}

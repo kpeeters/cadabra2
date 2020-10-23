@@ -25,7 +25,7 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
 
     def __init__(self, **kwargs):
         ipykernel.kernelbase.Kernel.__init__(self, **kwargs)
-        self._parse_cadabra = cadabra2.cdb2python
+        self._parse_cadabra = cadabra2.cdb2python_string
 
         # attach the server class for callbacks
         self._cdb_server = Server(self)
@@ -48,7 +48,6 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
         try:
             #  main execution calls
             pycode = self._parse_cadabra(code, True)
-            print(pycode)
             self._execute_python(pycode)
 
         except KeyboardInterrupt:
