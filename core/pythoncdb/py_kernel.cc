@@ -8,6 +8,8 @@
 #include "properties/Derivative.hh"
 #include "properties/Accent.hh"
 
+#include "CdbPython.hh"
+
 #include "py_globals.hh"
 #include "py_helpers.hh"
 #include "py_kernel.hh"
@@ -175,6 +177,7 @@ namespace cadabra {
 		m.def("create_empty_scope", &create_empty_scope,
 		      pybind11::return_value_policy::take_ownership);
 
+		m.def("cdb2python", &cdb2python);
 		}
 
 	}

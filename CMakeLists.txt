@@ -107,7 +107,8 @@ else()
 	message(STATUS "Building in user mode")
 endif()
 
-option(ENABLE_JUPYTER "Enable building the Jupyter kernel" OFF)
+option(ENABLE_JUPYTER    "Enable building the Xeus-based Jupyter kernel" OFF)
+option(ENABLE_PY_JUPYTER "Enable building the pure-Python Jupyter kernel" ON)
 
 if(ENABLE_JUPYTER)
   message(STATUS "Building the Jupyter kernel")

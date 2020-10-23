@@ -2,9 +2,7 @@ import ipykernel.kernelbase
 import sys
 import traceback
 
-# only additional cadabra2 C++ function that required wrapping
-import cadabra_translator
-
+import cadabra2
 from cadabra2_jupyter.context import _exec_in_context, _attatch_kernel_server
 from cadabra2_jupyter.server import Server
 from cadabra2_jupyter import __version__
@@ -27,7 +25,7 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
 
     def __init__(self, **kwargs):
         ipykernel.kernelbase.Kernel.__init__(self, **kwargs)
-        self._parse_cadabra = cadabra_translator.parse_cadabra
+        self._parse_cadabra = cadabra2.cdb2python
 
         # attach the server class for callbacks
         self._cdb_server = Server(self)
@@ -49,7 +47,8 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
 
         try:
             #  main execution calls
-            pycode = self._parse_cadabra(code)
+            pycode = self._parse_cadabra(code, True)
+            print(pycode)
             self._execute_python(pycode)
 
         except KeyboardInterrupt:
