@@ -1,0 +1,7 @@
+[build-system]
+requires = [
+  "setuptools",
+  "wheel",
+  "jupyter>=1.0.0",
+  "jupyter-client>=6.1.7"
+]

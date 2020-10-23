@@ -1,0 +1,7 @@
+{
+  "argv": [
+    "@PYTHON_EXECUTABLE@", "-m", "cadabra2jupyter", "-f", "{connection_file}"
+  ],
+  "display_name":"Cadabra2",
+  "language":"python"
+}
