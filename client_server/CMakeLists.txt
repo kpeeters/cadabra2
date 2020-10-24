@@ -198,7 +198,7 @@ target_link_libraries(cadabra2latex cadabra_client)
 
 # Jupyter kernel
 if(ENABLE_JUPYTER)
-  print_header("Configuring Jupyter kernel build")
+  print_header("Configuring Xeus Jupyter kernel")
   find_package(xtl REQUIRED)
   find_package(nlohmann_json REQUIRED)
   find_library(UUID_LIBRARIES uuid REQUIRED)
@@ -212,7 +212,7 @@ if(ENABLE_JUPYTER)
     target_link_libraries(cadabra-jupyter-kernel ${JSONCPP_LIBRARIES}) 
   endif()
 else()
-  print_header("Not building Jupyter kernel")
+  message("-- Not building Xeus Jupyter kernel")
 endif()
 
 # Make sure sqlite3.dll is copied into the build directory on Windows.

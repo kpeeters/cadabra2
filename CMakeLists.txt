@@ -108,15 +108,13 @@ else()
 endif()
 
 option(ENABLE_JUPYTER    "Enable building the Xeus-based Jupyter kernel" OFF)
-option(ENABLE_PY_JUPYTER "Enable building the pure-Python Jupyter kernel" ON)
+option(ENABLE_PY_JUPYTER "Enable building the default Jupyter kernel"    ON)
 
 if(ENABLE_JUPYTER)
-  message(STATUS "Building the Jupyter kernel")
   # Currently only possible when building against Conda.
   set(CONDA_FOUND TRUE)
 else()
-  set(CONDA_FOUND FALSE)
-  message(STATUS "Not building the Jupyter kernel")
+   set(CONDA_FOUND FALSE)
 endif()
 
 option(BUILD_TESTS "Build tests" ON)
@@ -273,6 +271,24 @@ endif()
 # Add subdirectories to project.
 #---------------------------------------------------------------------------
 
+# Jupyter kernel
+print_header("Configuring Jupyter kernel")
+if(ENABLE_JUPYTER)
+  message(STATUS "Building the Xeus-based Jupyter kernel")
+  # Currently only possible when building against Conda.
+  set(CONDA_FOUND TRUE)
+else()
+   set(CONDA_FOUND FALSE)
+   if(ENABLE_PY_JUPYTER)
+      message(STATUS "Building the default Jupyter kernel")
+   else()
+      message(STATUS "Not building a Jupyter kernel")
+   endif()
+endif()
+if(ENABLE_PY_JUPYTER)
+   add_subdirectory(jupyterkernel)
+endif()
+
 # Core/packages
 add_subdirectory(client_server)
 add_subdirectory(core)
@@ -286,11 +302,6 @@ endif()
 # Tests
 if(BUILD_TESTS)
   add_subdirectory(tests)
-endif()
-
-# py jupyter kernel
-if(ENABLE_PY_JUPYTER)
-  add_subdirectory(jupyterkernel)
 endif()
 
 add_subdirectory(web2 EXCLUDE_FROM_ALL)

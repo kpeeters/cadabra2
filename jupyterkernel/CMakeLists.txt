@@ -1,13 +1,9 @@
 cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
 project(Cadabra)
 
-print_header("Configuring pure-Python Jupyter kernel")
 
-if(PYTHON_POSTFIX MATCHES 3)
-  message(STATUS "Python version 3.")
-else()
-  message(STATUS "Cannot build pure-Python Cadabra Jupyter kernel with Python version 2.")
-  return()
+if(PYTHON_POSTFIX MATCHES 2)
+   message(FATAL "Cannot build pure-Python Cadabra Jupyter kernel with Python version 2.")
 endif()
 
 configure_file(

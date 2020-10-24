@@ -6,7 +6,7 @@ project(Cadabra)
 # Preamble.
 #---------------------------------------------------------------------------
 
-print_header("Configuring frontend")
+print_header("Configuring native notebook frontend")
 
 set(INSTALL_LATEX_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2/latex")
 set(INSTALL_MAN_DIR      "${CMAKE_INSTALL_PREFIX}/share/cadabra2/manual")

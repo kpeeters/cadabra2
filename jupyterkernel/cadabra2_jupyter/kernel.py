@@ -21,7 +21,7 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
 
     @property
     def banner(self):
-        return "Info at http://cadabra.science/\nAvailable under the terms of the GNU General Public License v3"
+        return "Cadabra (C) 2001-2020 Kasper Peeters\nJupyter kernel by Fergus Baker\nMore info at https://cadabra.science/\nAvailable under the terms of the GNU General Public License v3"
 
     def __init__(self, **kwargs):
         ipykernel.kernelbase.Kernel.__init__(self, **kwargs)
