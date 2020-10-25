@@ -1,11 +1,19 @@
+def _latex_post_parser(text):
+    return (
+        text.replace("\\begin{dmath*}", "$")
+        .replace("\\end{dmath*}", "$")
+        .replace("\\discretionary{}{}{}", "")
+        .replace("~", "")
+    )
+
+
 class Server:
     def __init__(self, kernel_instance):
         self._kernel = kernel_instance
 
     def send(self, data, typestr, parent_id, last_in_sequence):
         if typestr == "latex_view":
-            data = data.replace("\\begin{dmath*}", "$").replace("\\end{dmath*}", "$")
-            data = data.replace("\\discretionary{}{}{}", "").replace("~","")
+            data = _latex_post_parser(data)
             self._kernel._send_result(data)
         elif typestr == "image_png":
             # todo
