@@ -5,7 +5,7 @@ class Server:
     def send(self, data, typestr, parent_id, last_in_sequence):
         if typestr == "latex_view":
             data = data.replace("\\begin{dmath*}", "$").replace("\\end{dmath*}", "$")
-            data = data.replace("\\discretionary{}{}{}", "").replace("~","")
+            data = data.replace("\\discretionary{}{}{}", "").replace("~", "")
             self._kernel._send_result(data)
         elif typestr == "image_png":
             # todo
