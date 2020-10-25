@@ -21,12 +21,14 @@ class _StdCatch:
         sys.stderr = sys.__stderr__
 
         for line in self.stdout.getvalue().splitlines():
-            self._kernel._send_code(line)
+            # insert missing newline
+            self._kernel._send_code(line + "\n")
 
         # ignore exc_type reporting, since it always gives 'JSON serializable'
         # error, echoing the same message as provided by the __stderr__ catch
         for line in self.stderr.getvalue().splitlines():
-            self._kernel._send_error(line)
+            # insert missing newline
+            self._kernel._send_error(line + "\n")
 
 
 class SandboxContext:
