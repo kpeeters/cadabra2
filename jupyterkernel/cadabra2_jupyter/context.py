@@ -37,3 +37,7 @@ class SandboxContext:
     def __call__(self, code):
         with _StdCatch():
             exec(code, self._sandbox)
+
+    @property
+    def namespace(self):
+        return self._sandbox.keys()

@@ -1,11 +1,15 @@
 import ipykernel.kernelbase
 import sys
 import traceback
+import re
+import string
 
 import cadabra2
 from cadabra2_jupyter.context import SandboxContext
 from cadabra2_jupyter.server import Server
 from cadabra2_jupyter import __version__
+
+_accepted_chars = string.ascii_letters
 
 
 class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
@@ -36,6 +40,7 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
     def do_execute(
         self, code, silent, store_history=True, user_expressions=None, allow_stdin=False
     ):
+        """ callback for iPython kernel: code execution """
         self.silent = silent
         # check for blank input
         if not code.strip():
@@ -61,6 +66,34 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
         else:
             return self._status_ok
 
+    def do_complete(self, code, cursor_pos):
+        """ callback for iPython kernel: code completion """
+
+        # if no code, or last character is not alphabetical
+        if not code or code[cursor_pos - 1] not in _accepted_chars:
+            return self._default_complete(cursor_pos)
+
+        # only choose up until current cursor position
+        code = code[:cursor_pos]
+
+        # get last 'word' item
+        last_item = re.compile(r"[\W\s]").split(code)[-1]
+
+        # sandbox namespace
+        namespace = self._sandbox_context.namespace
+
+        # find valid options
+        options = list(
+            filter(lambda i: re.match("^{}.*".format(last_item), i), namespace)
+        )
+        return {
+            "matches": sorted(options),
+            "cursor_start": cursor_pos - len(last_item),
+            "cursor_end": cursor_pos,
+            "status": "ok",
+            "metadata": dict(),
+        }
+
     @property
     def _status_ok(self):
         return {
@@ -68,6 +101,15 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
             "execution_count": self.execution_count,
             "payload": [],
             "user_expressions": {},
+        }
+
+    def _default_complete(self, cursor_pos):
+        return {
+            "matches": [],
+            "cursor_start": 0,
+            "cursor_end": cursor_pos,
+            "metadata": dict(),
+            "status": "ok",
         }
 
     def _execute_python(self, pycode):
