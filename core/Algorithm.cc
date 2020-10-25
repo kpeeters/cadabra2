@@ -74,7 +74,7 @@ Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
 	if(pm)
 		pm->group(typeid(*this).name());
 #endif
-
+	
 	result_t ret=result_t::l_no_action;
 	Ex::iterator start=tr.begin();
 	while(start!=tr.end()) {
