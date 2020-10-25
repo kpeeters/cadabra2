@@ -35,7 +35,7 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
         self._cdb_server = Server(self)
 
         # init the sandbox
-        self._sandbox_context = SandboxContext(self._cdb_server)
+        self._sandbox_context = SandboxContext(self)
 
     def do_execute(
         self, code, silent, store_history=True, user_expressions=None, allow_stdin=False
