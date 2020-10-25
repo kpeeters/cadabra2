@@ -17,9 +17,9 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
     implementation_version = __version__
     language_info = {
         "name": "cadabra2",
-        "codemirror_mode": "cadabra2",
-        "pygments_lexer": "cadabra2",
-        "mimetype": "text/cadabra2",
+        "codemirror_mode": "cadabra",
+        "pygments_lexer": "cadabra",
+        "mimetype": "text/cadabra",
         "file_extension": ".ipynb",
     }
 
