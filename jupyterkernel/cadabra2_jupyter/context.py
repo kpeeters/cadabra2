@@ -7,15 +7,33 @@ from cadabra2_jupyter import SITE_PATH
 # super important
 __cdbkernel__ = cadabra2.__cdbkernel__
 
-server = None  #  require so that server is in global namespace
-#  import cadabra2 defaults programatically so it shares global namespace
-with open(os.path.join(SITE_PATH, "cadabra2_defaults.py")) as f:
-    code = compile(f.read(), "cadabra2_defaults.py", "exec")
-exec(code, globals())
+#  setup stdout, stderr hook
+class _StdCatch:
+    def __enter__(self):
+        sys.stdout = self.stdout = StringIO()
+        sys.stderr = self.stderr = StringIO()
 
-def _attatch_kernel_server(instance):
-    global server
-    server = instance
+    def __exit__(self, exc_type, exc_val, exc_traceback):
+        global server
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
 
-def _exec_in_context(code):
-    exec(code, globals())
+        for line in self.stdout.getvalue().splitlines():
+            server._kernel._send_code(line)
+
+        # ignore exc_type reporting, since it always gives 'JSON serializable'
+        # error, echoing the same message as provided by the __stderr__ catch
+        for line in self.stderr.getvalue().splitlines():
+            server._kernel._send_error(line)
+
+
+class SandboxContext:
+    def __init__(self, server):
+        self._sandbox = {"server": server, "__cdbkernel__": cadabra2.__cdbkernel__}
+        with open(os.path.join(SITE_PATH, "cadabra2_defaults.py")) as f:
+            code = compile(f.read(), "cadabra2_defaults.py", "exec")
+        exec(code, self._sandbox)
+
+    def __call__(self, code):
+        with _StdCatch():
+            exec(code, self._sandbox)

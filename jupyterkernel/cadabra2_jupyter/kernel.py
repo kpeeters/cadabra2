@@ -3,7 +3,7 @@ import sys
 import traceback
 
 import cadabra2
-from cadabra2_jupyter.context import _exec_in_context, _attatch_kernel_server
+from cadabra2_jupyter.context import SandboxContext
 from cadabra2_jupyter.server import Server
 from cadabra2_jupyter import __version__
 
@@ -13,9 +13,9 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
     implementation_version = __version__
     language_info = {
         "name": "cadabra2",
-        "codemirror_mode": "python",
-        "pygments_lexer": "python",
-        "mimetype": "text/python",
+        "codemirror_mode": "cadabra2",
+        "pygments_lexer": "cadabra2",
+        "mimetype": "text/cadabra2",
         "file_extension": ".ipynb",
     }
 
@@ -29,7 +29,9 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
 
         # attach the server class for callbacks
         self._cdb_server = Server(self)
-        _attatch_kernel_server(self._cdb_server)
+
+        # init the sandbox
+        self._sandbox_context = SandboxContext(self._cdb_server)
 
     def do_execute(
         self, code, silent, store_history=True, user_expressions=None, allow_stdin=False
@@ -37,12 +39,8 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
         self.silent = silent
         # check for blank input
         if not code.strip():
-            return {
-                "status": "ok",
-                "execution_count": self.execution_count,
-                "payload": [],
-                "user_expressions": {},
-            }
+            return self._status_ok
+
         interrupted = False
 
         try:
@@ -61,16 +59,20 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
         if interrupted:
             return {"status": "abort", "execution_count": self.execution_count}
         else:
-            return {
-                "status": "ok",
-                "execution_count": self.execution_count,
-                "payload": [],
-                "user_expressions": {},
-            }
+            return self._status_ok
+
+    @property
+    def _status_ok(self):
+        return {
+            "status": "ok",
+            "execution_count": self.execution_count,
+            "payload": [],
+            "user_expressions": {},
+        }
 
     def _execute_python(self, pycode):
         """ executes python code in the cadabra context """
-        _exec_in_context(pycode)
+        self._sandbox_context(pycode)
 
     def _send_result(self, res_str):
         self.send_response(
