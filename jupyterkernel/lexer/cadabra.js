@@ -55,6 +55,11 @@
       else if (current.match(/:/g)) {
         if (stream.peek() == ':') {
           // handle property assign operator
+
+          // don't indent; have to update scopes
+          state.lastToken="::"
+          state.scopes.pop();
+          // consume second :
           stream.next();
           // eat property
           eatWord(stream);
@@ -125,8 +130,8 @@
       },
       indent: (state, textAfter) => {
         // so that properties don't indent oddly
-        console.log(state);
-        if (state.lastToken == ':') return 0;
+
+        if (state.lastToken == '::') return 0;
 
         // let python handle indents
         return pythonmode.indent(state, textAfter);
