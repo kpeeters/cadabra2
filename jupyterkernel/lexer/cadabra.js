@@ -53,12 +53,13 @@
         }
       }
       else if (current.match(/:/g)) {
+        // don't indent; have to update scopes
+
         if (stream.peek() == ':') {
           // handle property assign operator
-
-          // don't indent; have to update scopes
           state.lastToken="::"
           state.scopes.pop();
+
           // consume second :
           stream.next();
           // eat property
@@ -66,9 +67,13 @@
           return 'builtin';
         } else if (stream.peek() == '=') {
           // handle walrus assign operator
+          state.lastToken=":="
+          state.scopes.pop();
+
           stream.next();
           return 'operator';
-        }
+
+        } else return 'python';
       }
       else if (current.match(/[.;]$/gm)) {
         if ( isWhitespace(stream.peek()) ) {
@@ -131,6 +136,7 @@
       indent: (state, textAfter) => {
         // so that properties don't indent oddly
 
+        console.log(state);
         if (state.lastToken == '::') return 0;
 
         // let python handle indents
