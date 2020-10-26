@@ -37,6 +37,11 @@
       // get current token string
       var current = stream.current()
 
+      // ignore if string; use lookbehind to see if escaped
+      if (current.match(/(?<!\\)".*(?<!\\)"/g)) {
+        return 'python';
+      }
+
       if (current.match(/#/)) {
         if (stream.indentation()) {
           // python comment
@@ -119,6 +124,10 @@
         return ret;
       },
       indent: (state, textAfter) => {
+        // so that properties don't indent oddly
+        console.log(state);
+        if (state.lastToken == ':') return 0;
+
         // let python handle indents
         return pythonmode.indent(state, textAfter);
       }
