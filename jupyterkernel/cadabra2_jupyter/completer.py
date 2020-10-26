@@ -74,11 +74,10 @@ class CodeCompleter:
     def __call__(self, code, cursor_pos, namespace):
         # only choose up until current cursor position
         self.code = code[:cursor_pos]
-        print(self.code)
 
         last = self.get_last_word()
         matched_klass = self.get_class()
-        print("matched: ", matched_klass)
+
         if self.cursor_on_property(last):
             # cursor on cadabra property
             if last:
