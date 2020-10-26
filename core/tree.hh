@@ -1,7 +1,7 @@
 
 //	STL-like templated tree class.
 //
-// Copyright (C) 2001-2019 Kasper Peeters <kasper@phi-sci.com>
+// Copyright (C) 2001-2020 Kasper Peeters <kasper@phi-sci.com>
 // Distributed under the GNU General Public License version 3.
 //
 // Special permission to use tree.hh under the conditions of a 
@@ -9,8 +9,8 @@
 
 /** \mainpage tree.hh
     \author   Kasper Peeters
-    \version  3.13
-    \date     28-Mar-2019
+    \version  3.15
+    \date     26-Nov-2020
     \see      http://tree.phi-sci.com/
     \see      http://github.com/kpeeters/tree.hh/
 
@@ -34,11 +34,7 @@
 #include <queue>
 #include <algorithm>
 #include <cstddef>
-#include <iostream>
 
-// #include <boost/stacktrace.hpp>
-// #include <boost/exception/all.hpp>
-// typedef boost::error_info<struct tag_stacktrace, boost::stacktrace::stacktrace> traced;
 
 /// A node in the tree, combining links to other nodes as well as the actual data.
 template<class T>
@@ -599,19 +595,19 @@ template <class T, class tree_node_allocator>
 tree<T, tree_node_allocator>::~tree()
 	{
 	clear();
-	alloc_.destroy(head);
-	alloc_.destroy(feet);
-	alloc_.deallocate(head,1);
-	alloc_.deallocate(feet,1);
+	std::allocator_traits<decltype(alloc_)>::destroy(alloc_, head);
+	std::allocator_traits<decltype(alloc_)>::destroy(alloc_, feet);
+	std::allocator_traits<decltype(alloc_)>::deallocate(alloc_, head, 1);
+	std::allocator_traits<decltype(alloc_)>::deallocate(alloc_, feet, 1);
 	}
 
 template <class T, class tree_node_allocator>
 void tree<T, tree_node_allocator>::head_initialise_() 
    { 
-   head = alloc_.allocate(1,0); // MSVC does not have default second argument 
-	feet = alloc_.allocate(1,0);
-	alloc_.construct(head, tree_node_<T>());
-	alloc_.construct(feet, tree_node_<T>());
+   head = std::allocator_traits<decltype(alloc_)>::allocate(alloc_, 1, 0);
+   feet = std::allocator_traits<decltype(alloc_)>::allocate(alloc_, 1, 0);
+	std::allocator_traits<decltype(alloc_)>::construct(alloc_, head, tree_node_<T>());
+	std::allocator_traits<decltype(alloc_)>::construct(alloc_, feet, tree_node_<T>());	
 
    head->parent=0;
    head->first_child=0;
@@ -699,9 +695,8 @@ void tree<T, tree_node_allocator>::erase_children(const iterator_base& it)
 		prev=cur;
 		cur=cur->next_sibling;
 		erase_children(pre_order_iterator(prev));
-//		kp::destructor(&prev->data);
-		alloc_.destroy(prev);
-		alloc_.deallocate(prev,1);
+		std::allocator_traits<decltype(alloc_)>::destroy(alloc_, prev);
+		std::allocator_traits<decltype(alloc_)>::deallocate(alloc_, prev, 1);
 		}
 	it.node->first_child=0;
 	it.node->last_child=0;
@@ -720,9 +715,8 @@ void tree<T, tree_node_allocator>::erase_right_siblings(const iterator_base& it)
 		prev=cur;
 		cur=cur->next_sibling;
 		erase_children(pre_order_iterator(prev));
-//		kp::destructor(&prev->data);
-		alloc_.destroy(prev);
-		alloc_.deallocate(prev,1);
+		std::allocator_traits<decltype(alloc_)>::destroy(alloc_, prev);
+		std::allocator_traits<decltype(alloc_)>::deallocate(alloc_, prev, 1);
 		}
 	it.node->next_sibling=0;
 	if(it.node->parent!=0)
@@ -741,9 +735,8 @@ void tree<T, tree_node_allocator>::erase_left_siblings(const iterator_base& it)
 		prev=cur;
 		cur=cur->prev_sibling;
 		erase_children(pre_order_iterator(prev));
-//		kp::destructor(&prev->data);
-		alloc_.destroy(prev);
-		alloc_.deallocate(prev,1);
+		std::allocator_traits<decltype(alloc_)>::destroy(alloc_, prev);
+		std::allocator_traits<decltype(alloc_)>::deallocate(alloc_, prev, 1);
 		}
 	it.node->prev_sibling=0;
 	if(it.node->parent!=0)
@@ -773,9 +766,8 @@ iter tree<T, tree_node_allocator>::erase(iter it)
 		cur->next_sibling->prev_sibling=cur->prev_sibling;
 		}
 
-//	kp::destructor(&cur->data);
-	alloc_.destroy(cur);
-   alloc_.deallocate(cur,1);
+	std::allocator_traits<decltype(alloc_)>::destroy(alloc_, cur);
+	std::allocator_traits<decltype(alloc_)>::deallocate(alloc_, cur, 1);
 	return ret;
 	}
 
@@ -1054,9 +1046,8 @@ iter tree<T, tree_node_allocator>::append_child(iter position)
 	assert(position.node!=feet);
 	assert(position.node);
 
-	tree_node *tmp=alloc_.allocate(1,0);
-	alloc_.construct(tmp, tree_node_<T>());
-//	kp::constructor(&tmp->data);
+	tree_node *tmp=std::allocator_traits<decltype(alloc_)>::allocate(alloc_, 1, 0);
+	std::allocator_traits<decltype(alloc_)>::construct(alloc_, tmp, tree_node_<T>());
 	tmp->first_child=0;
 	tmp->last_child=0;
 
@@ -1081,9 +1072,8 @@ iter tree<T, tree_node_allocator>::prepend_child(iter position)
 	assert(position.node!=feet);
 	assert(position.node);
 
-	tree_node *tmp=alloc_.allocate(1,0);
-	alloc_.construct(tmp, tree_node_<T>());
-//	kp::constructor(&tmp->data);
+	tree_node *tmp=std::allocator_traits<decltype(alloc_)>::allocate(alloc_, 1, 0);
+	std::allocator_traits<decltype(alloc_)>::construct(alloc_, tmp, tree_node_<T>());
 	tmp->first_child=0;
 	tmp->last_child=0;
 
@@ -1112,9 +1102,8 @@ iter tree<T, tree_node_allocator>::append_child(iter position, const T& x)
 	assert(position.node!=feet);
 	assert(position.node);
 
-	tree_node* tmp = alloc_.allocate(1,0);
-	alloc_.construct(tmp, x);
-//	kp::constructor(&tmp->data, x);
+	tree_node *tmp=std::allocator_traits<decltype(alloc_)>::allocate(alloc_, 1, 0);
+	std::allocator_traits<decltype(alloc_)>::construct(alloc_, tmp, x);
 	tmp->first_child=0;
 	tmp->last_child=0;
 
@@ -1139,8 +1128,8 @@ iter tree<T, tree_node_allocator>::append_child(iter position, T&& x)
 	assert(position.node!=feet);
 	assert(position.node);
 
-	tree_node* tmp = alloc_.allocate(1,0);
-	alloc_.construct(tmp); // Here is where the move semantics kick in
+	tree_node *tmp=std::allocator_traits<decltype(alloc_)>::allocate(alloc_, 1, 0);
+	std::allocator_traits<decltype(alloc_)>::construct(alloc_, tmp); // Here is where the move semantics kick in
 	std::swap(tmp->data, x);
 
 	tmp->first_child=0;
@@ -1167,9 +1156,8 @@ iter tree<T, tree_node_allocator>::prepend_child(iter position, const T& x)
 	assert(position.node!=feet);
 	assert(position.node);
 
-	tree_node* tmp = alloc_.allocate(1,0);
-	alloc_.construct(tmp, x);
-//	kp::constructor(&tmp->data, x);
+	tree_node *tmp=std::allocator_traits<decltype(alloc_)>::allocate(alloc_, 1, 0);
+	std::allocator_traits<decltype(alloc_)>::construct(alloc_, tmp, x);
 	tmp->first_child=0;
 	tmp->last_child=0;
 
@@ -1194,8 +1182,8 @@ iter tree<T, tree_node_allocator>::prepend_child(iter position, T&& x)
 	assert(position.node!=feet);
 	assert(position.node);
 
-	tree_node* tmp = alloc_.allocate(1,0);
-	alloc_.construct(tmp);
+	tree_node *tmp=std::allocator_traits<decltype(alloc_)>::allocate(alloc_, 1, 0);
+	std::allocator_traits<decltype(alloc_)>::construct(alloc_, tmp);
 	std::swap(tmp->data, x);
 
 	tmp->first_child=0;
@@ -1299,9 +1287,8 @@ iter tree<T, tree_node_allocator>::insert(iter position, const T& x)
 		}
 	assert(position.node!=head); // Cannot insert before head.
 
-	tree_node* tmp = alloc_.allocate(1,0);
-	alloc_.construct(tmp, x);
-//	kp::constructor(&tmp->data, x);
+	tree_node *tmp=std::allocator_traits<decltype(alloc_)>::allocate(alloc_, 1, 0);
+	std::allocator_traits<decltype(alloc_)>::construct(alloc_, tmp, x);
 	tmp->first_child=0;
 	tmp->last_child=0;
 
@@ -1327,8 +1314,8 @@ iter tree<T, tree_node_allocator>::insert(iter position, T&& x)
 		position.node=feet; // Backward compatibility: when calling insert on a null node,
 		                    // insert before the feet.
 		}
-	tree_node* tmp = alloc_.allocate(1,0);
-	alloc_.construct(tmp);
+	tree_node *tmp=std::allocator_traits<decltype(alloc_)>::allocate(alloc_, 1, 0);
+	std::allocator_traits<decltype(alloc_)>::construct(alloc_, tmp);
 	std::swap(tmp->data, x); // Move semantics
 	tmp->first_child=0;
 	tmp->last_child=0;
@@ -1350,9 +1337,8 @@ iter tree<T, tree_node_allocator>::insert(iter position, T&& x)
 template <class T, class tree_node_allocator>
 typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_allocator>::insert(sibling_iterator position, const T& x)
 	{
-	tree_node* tmp = alloc_.allocate(1,0);
-	alloc_.construct(tmp, x);
-//	kp::constructor(&tmp->data, x);
+	tree_node *tmp=std::allocator_traits<decltype(alloc_)>::allocate(alloc_, 1, 0);
+	std::allocator_traits<decltype(alloc_)>::construct(alloc_, tmp, x);
 	tmp->first_child=0;
 	tmp->last_child=0;
 
@@ -1381,9 +1367,8 @@ template <class T, class tree_node_allocator>
 template <class iter>
 iter tree<T, tree_node_allocator>::insert_after(iter position, const T& x)
 	{
-	tree_node* tmp = alloc_.allocate(1,0);
-	alloc_.construct(tmp, x);
-//	kp::constructor(&tmp->data, x);
+	tree_node *tmp=std::allocator_traits<decltype(alloc_)>::allocate(alloc_, 1, 0);
+	std::allocator_traits<decltype(alloc_)>::construct(alloc_, tmp, x);
 	tmp->first_child=0;
 	tmp->last_child=0;
 
@@ -1406,10 +1391,9 @@ template <class T, class tree_node_allocator>
 template <class iter>
 iter tree<T, tree_node_allocator>::insert_after(iter position, T&& x)
 	{
-	tree_node* tmp = alloc_.allocate(1,0);
-	alloc_.construct(tmp);
+	tree_node *tmp=std::allocator_traits<decltype(alloc_)>::allocate(alloc_, 1, 0);
+	std::allocator_traits<decltype(alloc_)>::construct(alloc_, tmp);
 	std::swap(tmp->data, x); // move semantics
-//	kp::constructor(&tmp->data, x);
 	tmp->first_child=0;
 	tmp->last_child=0;
 
@@ -1483,9 +1467,8 @@ iter tree<T, tree_node_allocator>::replace(iter position, const iterator_base& f
 //	std::cout << "warning!" << position.node << std::endl;
 	erase_children(position);	
 //	std::cout << "no warning!" << std::endl;
-	tree_node* tmp = alloc_.allocate(1,0);
-	alloc_.construct(tmp, (*from));
-//	kp::constructor(&tmp->data, (*from));
+	tree_node *tmp=std::allocator_traits<decltype(alloc_)>::allocate(alloc_, 1, 0);
+	std::allocator_traits<decltype(alloc_)>::construct(alloc_, tmp, (*from));
 	tmp->first_child=0;
 	tmp->last_child=0;
 	if(current_to->prev_sibling==0) {
@@ -1506,8 +1489,8 @@ iter tree<T, tree_node_allocator>::replace(iter position, const iterator_base& f
 	tmp->next_sibling=current_to->next_sibling;
 	tmp->parent=current_to->parent;
 //	kp::destructor(&current_to->data);
-	alloc_.destroy(current_to);
-	alloc_.deallocate(current_to,1);
+	std::allocator_traits<decltype(alloc_)>::destroy(alloc_, current_to);
+	std::allocator_traits<decltype(alloc_)>::deallocate(alloc_, current_to, 1);
 	current_to=tmp;
 	
 	// only at this stage can we fix 'last'
