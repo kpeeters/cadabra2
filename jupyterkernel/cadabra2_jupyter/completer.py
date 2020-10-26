@@ -43,12 +43,17 @@ properties = [
 
 
 import re
+import string
 
 
 class CodeCompleter:
     def __init__(self, kernel):
         self._kernel = kernel
         self.code = ""
+
+    @property
+    def triggers(self):
+        return string.ascii_letters + ":;."
 
     def get_last_word(self):
         return re.compile(r"[\W\s]").split(self.code)[-1]
@@ -65,7 +70,8 @@ class CodeCompleter:
     def match_member(self, last, klass):
         """ matches last word in the namespace of the currently selected class """
         instance = self._kernel._sandbox_context._sandbox[klass]
-        return self.match(last, dir(instance))
+        #  filter out hidden namespace, unless typing hidden namespace
+        return self.match(last, (i for i in dir(instance) if "__" not in i))
 
     def get_class(self):
         """ get class currently behind cursor  """

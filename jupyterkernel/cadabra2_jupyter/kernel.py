@@ -70,7 +70,7 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
         """ callback for iPython kernel: code completion """
 
         # if no code, or last character is whitespace
-        if not code or code[-1] == " ":
+        if not code or code[-1] not in self._completer.triggers:
             return self._default_complete(cursor_pos)
 
         # sandbox namespace
