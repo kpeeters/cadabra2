@@ -233,6 +233,10 @@ div.icon_background div.icon_text {
 	 font-weight: 400;
 	 transition-duration: 0.5s;  
 }
+div.icon_background img.jupyter_icon {
+    margin-left: 5px;
+    opacity: 1.0;
+}
 div.firstline {
 	 position: relative;
 	 top: 6px;
