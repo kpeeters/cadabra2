@@ -27,8 +27,15 @@ install(FILES
    cadabra2_jupyter/__init__.py
    cadabra2_jupyter/__main__.py
    cadabra2_jupyter/context.py
-   cadabra2_jupyter/kernel.py   
-   cadabra2_jupyter/server.py      
+   cadabra2_jupyter/completer.py
+   cadabra2_jupyter/kernel.py
+   cadabra2_jupyter/server.py
    DESTINATION
    "${PYTHON_SITE_PATH}/cadabra2_jupyter"
    )
+
+install(FILES
+  lexer/cadabra.js
+  DESTINATION
+  "${PYTHON_SITE_PATH}/notebook/static/components/codemirror/mode/cadabra"
+  )
