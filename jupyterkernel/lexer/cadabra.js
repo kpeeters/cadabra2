@@ -144,4 +144,5 @@
       }
     }
   });
+    CodeMirror.defineMIME("text/cadabra2", "cadabra");
 });
