@@ -256,7 +256,7 @@ if __name__ == '__main__':
                 exec(cmp)
                 # would be nice to be able to continue from here on the command line, but that requires
                 # pulling in the right locals/globals
-                #            sh.interact(banner='Info at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\n', locals(), globals())
+                #            sh.interact(banner='Info at https://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\n', locals(), globals())
     else:
         sh.runsource("import os; import sys; install_prefix=os.path.realpath(sys.argv[0]); install_prefix=install_prefix.replace('/bin/cadabra2','${PYTHON_SITE_PATH_REL}'); sys.path.append(install_prefix); print('Cadabra @CADABRA_VERSION_MAJOR@.@CADABRA_VERSION_MINOR@.@CADABRA_VERSION_PATCH@ (build @CADABRA_VERSION_BUILD@ dated @CADABRA_VERSION_DATE@)'); print ('Copyright (C) @COPYRIGHT_YEARS@  Kasper Peeters <kasper.peeters@phi-sci.com>'); f=open('${PYTHON_SITE_PATH}/cadabra2_defaults.py'); code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); exec(code); f.close(); print('Using SymPy version '+sympy.__version__);")
-        sh.interact(banner='Info at http://cadabra.science/\nAvailable under the terms of the GNU General Public License v3\n')
+        sh.interact(banner='Info at https://cadabra.science/\nAvailable under the terms of the GNU General Public License v3\n')
