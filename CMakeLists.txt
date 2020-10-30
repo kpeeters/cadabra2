@@ -191,10 +191,10 @@ endif()
 # Ensure that all installed binaries have an RPATH setting
 # which enables them to find libtexengine, libcadabra_client and
 # libcadabra_server without any ld.so.conf settings.
-SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
-SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+# SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+# SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+# SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+# SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 configure_file(
 	"${CMAKE_CURRENT_SOURCE_DIR}/config/postinst.in"
