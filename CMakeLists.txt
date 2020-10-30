@@ -188,13 +188,16 @@ endif()
 # Configure the various parts of Cadabra.
 #---------------------------------------------------------------------------
 
-# Ensure that all installed binaries have an RPATH setting
-# which enables them to find libtexengine, libcadabra_client and
-# libcadabra_server without any ld.so.conf settings.
-# SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
-# SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-# SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-# SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+# if(MATHEMATICA_FOUND)
+#    # To avoid issues finding Mathematica's libWSTP64i4,
+#    # when linking to Mathematica we set the RPATH.
+#    # That's not something we want to do in general, as e.g. Debian's
+#    # packages are not supposed to set RPATH.
+#    SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+#    SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+#    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+#    SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+# endif()
 
 configure_file(
 	"${CMAKE_CURRENT_SOURCE_DIR}/config/postinst.in"
@@ -223,8 +226,9 @@ endif()
 #---------------------------------------------------------------------------
 
 if(ENABLE_MATHEMATICA)
-	print_header("Configuring Mathematica")
-	find_package(Mathematica COMPONENTS WSTP)
+   print_header("Configuring Mathematica")
+   set(Mathematica_USE_STATIC_LIBRARIES TRUE)
+   find_package(Mathematica COMPONENTS WSTP)
 endif()
 
 

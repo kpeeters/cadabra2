@@ -246,7 +246,7 @@ if(MATHEMATICA_FOUND)
       ${LOCAL_SRC_FILES}
       MMACdb.cc  
       algorithms/map_mma.cc
-   )
+      )
 endif()
 
 set(IMAGES
@@ -493,9 +493,11 @@ if(NOT MSVC)
       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2.1"
       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2cadabra.1"
       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2html.1"
+      COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2latex.1"      
       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2python.1"
       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2-gtk.1"
       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra-server.1"
+      COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2-cli.1"
       COMMENT "Removing manual pages from old location."
       )
 endif()             
