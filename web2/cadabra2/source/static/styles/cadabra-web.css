@@ -13,6 +13,7 @@ body {
 	 line-height: 1.4;
 	 background: white;
 	 text-align: justify;
+         hyphens: auto;
 }
 a {
   color: #209020;
@@ -483,6 +484,14 @@ div.distrotxt code {
 	 margin-left: 10px;
 	 margin-top: 5px;
 	 margin-bottom:5px;
+}
+div#main > dl dt.author {
+    font-size: 17px;
+    font-style: oblique;
+}
+span.author {
+    font-size: 17px;
+    font-style: oblique;
 }
 
 /* Young tableaux */

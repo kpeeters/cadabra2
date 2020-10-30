@@ -7,26 +7,34 @@
 {% block main %}
 
 <h1>People and support</h1>
-<h2>Developers</h2>
+<h2>Development</h2>
 <p>
-  Cadabra is written by Kasper Peeters with help from various contributors
-  listed below.
+  Cadabra is designed and written by <span class="author">Kasper
+  Peeters</span> with help from various contributors listed below.
 </p>
+
+<h2>Contributors</h2>
+<dl>
+  <dt class="author">Dominic Price</dt>
+  <dd>Conversion to pybind, the Windows port, the logic that enables
+importing notebooks into other notebooks, the meld algorithm
+implementation.</dd>
+  <dt class="author">Connor Behan</dt>
+  <dd>Improvements to trace operators and various other parts.</dd>
+  <dt class="author">Fergus Baker</dt>
+  <dd>The new default Jupyter kernel.</dd>
+</dl>
 
 <h2>Acknowledgements</h2>
 <p>
 Special thanks to José M. Martín-García (for the xPerm
 canonicalisation code), James Allen (for writing much of the original
-factoring code), Dominic Price (for the conversion to pybind, the
-Windows port and the logic that enables importing notebooks into other
-notebooks), Connor Behan (for patches to improve trace operators and
-various other parts), Fergus Baker (for the new Jupyter kernel), Leo
-Brewin (for writing beautiful tutorials), Mattia Scomparin (for
-contributing tutorial notebooks) the Software Sustainability Institute
-and the Institute of Advanced Study (for financial support). Thanks to
-the many people who have sent me bug reports (keep 'm coming), and
-thanks to all of you who use Cadabra, sent feedback or cited the
-Cadabra papers.
+factoring code), Leo Brewin (for writing beautiful
+tutorials), Mattia Scomparin (for contributing tutorial notebooks) the
+Software Sustainability Institute and the Institute of Advanced Study
+(for financial support). Thanks to the many people who have sent me
+bug reports (keep 'm coming), and thanks to all of you who use
+Cadabra, sent feedback or cited the Cadabra papers.
 </p>
 <p>
   The name Cadabra is an implicit acknowledgement to
@@ -36,7 +44,7 @@ Roo</a>, who introduced me to his (so far unpublished) Pascal program
 physicist-friendly way of dealing with fermions and tensor symmetries,
 and a formula history mechanism still not found in any other
 comparable computer algebra system. Cadabra was originally planned to be
-``my private C++ version of <tt>Abra</tt>'', and even though it does not
+"my private C++ version of <tt>Abra</tt>", and even though it does not
 show much similarity anymore, the development was to a large extent
 inspired by <tt>Abra</tt>.
 </p>
