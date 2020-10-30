@@ -83,7 +83,7 @@ void lr_tensor::do_filledtableau(iterator& it)
 	yngtab::LR_tensor(one,two,999,prod.get_back_insert_iterator());
 
 	Ex rep;
-	iterator top=rep.set_head(str_node("\\oplus"));
+	iterator top=rep.set_head(str_node("\\sum"));
 
 	if(singlet_rules) tabs_to_singlet_rules(prod, top);
 	else              tabs_to_tree(prod, top, tab1, even_only);
@@ -122,7 +122,7 @@ void lr_tensor::do_tableau(iterator& it)
 	yngtab::LR_tensor(one,two,999,prod.get_back_insert_iterator());
 
 	Ex rep;
-	iterator top=rep.set_head(str_node("\\oplus"));
+	iterator top=rep.set_head(str_node("\\sum"));
 	iterator tt;
 	yngtab::tableaux<yngtab::tableau>::tableau_container_t::iterator tabit=prod.storage.begin();
 	while(tabit!=prod.storage.end()) {

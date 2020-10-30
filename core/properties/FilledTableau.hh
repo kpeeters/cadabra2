@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Props.hh"
+#include "properties/ImplicitIndex.hh"
 
 namespace cadabra {
 
-	class FilledTableau : public property {
+	class FilledTableau : public ImplicitIndex, virtual public property {
 		public:
 			virtual ~FilledTableau() {};
 			virtual std::string name() const override;

@@ -5,6 +5,11 @@ using namespace cadabra;
 
 // #define DEBUG 1
 
+sym::sym(const Kernel& k, Ex& tr, const std::vector<unsigned int>& slots, bool s)
+	: Algorithm(k, tr), sign(s), argloc_2_treeloc(slots)
+	{
+	}
+
 sym::sym(const Kernel& k, Ex& tr, Ex& objs, bool s)
 	: Algorithm(k, tr), objects(objs), sign(s)
 	{
@@ -18,9 +23,21 @@ bool sym::can_apply(iterator it)
 		if(!is_single_term(it))
 			return false;
 
-	argloc_2_treeloc.clear();
 	prod_wrap_single_term(it);
-	bool located=locate_object_set(objects, tr.begin(it), tr.end(it), argloc_2_treeloc);
+	bool located=false;
+	if(objects.size()>0) {
+		argloc_2_treeloc.clear();
+		located=locate_object_set(objects, tr.begin(it), tr.end(it), argloc_2_treeloc);
+		}
+	else {
+		objects.set_head(str_node("\\comma"));
+		for(size_t i=0; i<argloc_2_treeloc.size(); ++i) {
+			auto ind=begin_index(it);
+			ind+=argloc_2_treeloc[i];
+			// FIXME: verify that indices are not out-of-range.
+			objects.append_child(Ex::iterator(ind));
+			}
+		}
 	prod_unwrap_single_term(it);
 	return located;
 	}

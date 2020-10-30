@@ -24,7 +24,7 @@ bool distribute::can_apply(iterator st)
 
 	sibling_iterator facs=tr.begin(st);
 	while(facs!=tr.end(st)) {
-		if(*(*facs).name=="\\sum")
+		if(*(*facs).name=="\\sum" || *(*facs).name=="\\oplus")
 			return true;
 		//		if(*st->name=="\\indexbracket" || *st->name=="\\diff") break; // only first argument is object
 		++facs;
@@ -49,8 +49,10 @@ Algorithm::result_t distribute::apply(iterator& prod)
 	// "facs" iterates over all child nodes of the distributable (top-level) node
 	sibling_iterator facs=tr.begin(prod);
 	while(facs!=tr.end(prod)) {
-		if(*(*facs).name=="\\sum") {
+		std::string sumname=*(*facs).name;
+		if(sumname=="\\sum" || sumname=="\\oplus") {
 			sibling_iterator se=rep.begin(top);
+			rep.begin()->name=facs->name;
 			// "se" iterates over all nodes in the replacement \sum
 			while(se!=rep.end(top)) {
 				if(interrupted)

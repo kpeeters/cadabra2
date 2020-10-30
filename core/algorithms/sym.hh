@@ -9,6 +9,7 @@ namespace cadabra {
 	class sym : virtual public Algorithm {
 		public:
 			sym(const Kernel&, Ex&, Ex&, bool sign);
+			sym(const Kernel&, Ex&, const std::vector<unsigned int>&, bool sign);
 
 			virtual bool     can_apply(iterator) override;
 			virtual result_t apply(iterator& it) override;

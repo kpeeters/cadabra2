@@ -121,6 +121,8 @@ namespace cadabra {
 		def_algo<rename_dummies, std::string, std::string>(m, "rename_dummies", true, false, 0, py::arg("set") = "", py::arg("to") = "");
 		def_algo<sym, Ex, bool>(m, "sym", true, false, 0, py::arg("items"), py::arg("antisymmetric") = false);
 		def_algo<sym, Ex, bool>(m, "asym", true, false, 0, py::arg("items"), py::arg("antisymmetric") = true);
+		def_algo<sym, std::vector<unsigned int>, bool>(m, "slot_sym", true, false, 0, py::arg("items"), py::arg("antisymmetric") = false);
+		def_algo<sym, std::vector<unsigned int>, bool>(m, "slot_asym", true, false, 0, py::arg("items"), py::arg("antisymmetric") = true);
 		def_algo<factor_in, Ex>(m, "factor_in", true, false, 0, py::arg("factors"));
 		def_algo<factor_out, Ex, bool>(m, "factor_out", true, false, 0, py::arg("factors"), py::arg("right") = false);
 		def_algo<fierz, Ex>(m, "fierz", true, false, 0, py::arg("spinors"));

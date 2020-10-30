@@ -91,6 +91,7 @@ namespace cadabra {
 		k->inject_property(wi4, Ex_from_string("\\wedge{#}", false, k), wa4);
 
 		k->inject_property(new IndexInherit(), Ex_from_string("\\sum{#}", false, k), 0);
+		k->inject_property(new TableauInherit(), Ex_from_string("\\sum{#}", false, k), 0);
 		k->inject_property(new CommutingAsSum(), Ex_from_string("\\sum{#}", false, k), 0);
 		k->inject_property(new DependsInherit(), Ex_from_string("\\sum{#}", false, k), 0);
 		auto wi = new WeightInherit();

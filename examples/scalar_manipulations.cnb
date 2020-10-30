@@ -1,5 +1,5 @@
 {
-	"cell_id" : 16196410739394470454,
+	"cell_id" : 1542815176026264577,
 	"cells" : 
 	[
 		{
@@ -9,14 +9,14 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 7640017755221737874,
+					"cell_id" : 14916212167479302859,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\section*{Using Cadabra and Sympy together}\n\nThis notebook illustrates the interaction of Cadabra with Sympy. In particular, it shows how Cadabra expressions\ncan be manipulated by Sympy if they are index-free (i.e.~non-tensors). {\\bfseries Note:} this functionality changed\nsubstantially in Cadabra version 2.1.5.\n"
+					"source" : "\\section*{Using Cadabra and Sympy together}\n\nThis notebook illustrates the interaction of Cadabra with Sympy. In particular, it shows how Cadabra expressions\ncan be manipulated by Sympy if they are index-free (i.e.~non-tensors). \n"
 				}
 			],
 			"hidden" : true,
-			"source" : "\\section*{Using Cadabra and Sympy together}\n\nThis notebook illustrates the interaction of Cadabra with Sympy. In particular, it shows how Cadabra expressions\ncan be manipulated by Sympy if they are index-free (i.e.~non-tensors). {\\bfseries Note:} this functionality changed\nsubstantially in Cadabra version 2.1.5.\n"
+			"source" : "\\section*{Using Cadabra and Sympy together}\n\nThis notebook illustrates the interaction of Cadabra with Sympy. In particular, it shows how Cadabra expressions\ncan be manipulated by Sympy if they are index-free (i.e.~non-tensors). \n"
 		},
 		{
 			"cell_id" : 10411792927078810246,
@@ -41,13 +41,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775809,
+					"cell_id" : 12084712706933189544,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775810,
+							"cell_id" : 911308375363496897,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "((\\sin(x))**2 + (\\cos(x))**2) (x)**(-1)"
@@ -68,11 +68,11 @@
 					"cell_id" : 1766423708678417973,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "Note the use of \\LaTeX{} notation for things like trigonometric functions. \nYou can then directly call Sympy algorithms on these Cadabra expressions, for instance\nto integrate them:"
+					"source" : "Note the use of LaTeX notation for things like trigonometric functions. \nYou can then directly call Sympy algorithms on these Cadabra expressions, for instance\nto integrate them:"
 				}
 			],
 			"hidden" : true,
-			"source" : "Note the use of \\LaTeX{} notation for things like trigonometric functions. \nYou can then directly call Sympy algorithms on these Cadabra expressions, for instance\nto integrate them:"
+			"source" : "Note the use of LaTeX notation for things like trigonometric functions. \nYou can then directly call Sympy algorithms on these Cadabra expressions, for instance\nto integrate them:"
 		},
 		{
 			"cell_id" : 3398547768646584936,
@@ -81,13 +81,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775812,
+					"cell_id" : 9343616583459681111,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775813,
+							"cell_id" : 6782510545756949711,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "\\log(x)"
@@ -121,13 +121,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775815,
+					"cell_id" : 8563520574857683365,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775816,
+							"cell_id" : 12784937444110165655,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "\\log(x)"
@@ -145,14 +145,14 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 4404009003303455389,
+					"cell_id" : 7919340226687139919,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "You can do more complicated things as well, like integrals and sums. Here is an example which is\nfirst entered in Cadabra form (which is inert), and then fed through Sympy, which then immediately evaluates the\nexpression. Again note the use of \nstandard \\LaTeX{}-like constructions to write down integrals."
+					"source" : "You can do more complicated things as well, like integrals and sums. Here is an example which is\nfirst entered in Cadabra form (which is inert), and then fed through Sympy, which then immediately evaluates the\nexpression. Again note the use of \nstandard LaTeX-like constructions to write down integrals."
 				}
 			],
 			"hidden" : true,
-			"source" : "You can do more complicated things as well, like integrals and sums. Here is an example which is\nfirst entered in Cadabra form (which is inert), and then fed through Sympy, which then immediately evaluates the\nexpression. Again note the use of \nstandard \\LaTeX{}-like constructions to write down integrals."
+			"source" : "You can do more complicated things as well, like integrals and sums. Here is an example which is\nfirst entered in Cadabra form (which is inert), and then fed through Sympy, which then immediately evaluates the\nexpression. Again note the use of \nstandard LaTeX-like constructions to write down integrals."
 		},
 		{
 			"cell_id" : 12991923136293708135,
@@ -161,13 +161,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775818,
+					"cell_id" : 1307839535286498757,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775819,
+							"cell_id" : 13238458580983966670,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "\\int{\\sin(x) \\cos(x)}{x}"
@@ -185,13 +185,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775821,
+					"cell_id" : 7251354515576734153,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775822,
+							"cell_id" : 8639485629815394987,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : " 1/2 (\\sin(x))**2"
@@ -241,13 +241,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775824,
+					"cell_id" : 3380156906360224407,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775825,
+							"cell_id" : 11034951294697500112,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "\\sin(x) \\cos(x)"
@@ -265,13 +265,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775827,
+					"cell_id" : 14550447764943918688,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\sin{\\left (x \\right )} \\cos{\\left (x \\right )}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\sin{\\left(x \\right)} \\cos{\\left(x \\right)}\\end{dmath*}"
 				},
 				{
-					"cell_id" : 9223372036854775828,
+					"cell_id" : 716943003587016946,
 					"cell_origin" : "server",
 					"cell_type" : "output",
 					"source" : "\\begin{verbatim}<class 'sympy.core.mul.Mul'>\n\\end{verbatim}"
@@ -286,13 +286,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775829,
+					"cell_id" : 13834612060647643402,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\frac{1}{2} \\sin^{2}{\\left (x \\right )}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\frac{\\sin^{2}{\\left(x \\right)}}{2}\\end{dmath*}"
 				},
 				{
-					"cell_id" : 9223372036854775830,
+					"cell_id" : 14218633917144485457,
 					"cell_origin" : "server",
 					"cell_type" : "output",
 					"source" : "\\begin{verbatim}<class 'sympy.core.mul.Mul'>\n\\end{verbatim}"
@@ -339,13 +339,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775831,
+					"cell_id" : 8755739646203446044,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775832,
+							"cell_id" : 4633034892534112462,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "(x)**3-(x)**2-4"
@@ -363,13 +363,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775834,
+					"cell_id" : 14621200589602393116,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775835,
+							"cell_id" : 4420972744022514719,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "{2,  -  1/2  -  1/2 \\sqrt(7) I,  -  1/2  +  1/2 \\sqrt(7) I}"
@@ -387,13 +387,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775837,
+					"cell_id" : 16075642444052030254,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775838,
+							"cell_id" : 12394760018522149275,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "{2,  -  1/2  -  1/2 \\sqrt(7) I,  -  1/2  +  1/2 \\sqrt(7) I}"
@@ -427,25 +427,25 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775840,
+					"cell_id" : 9575058002247352878,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left[r,~\\discretionary{}{}{} t\\right].\\end{dmath*}"
 				},
 				{
-					"cell_id" : 9223372036854775841,
+					"cell_id" : 9523872899850364290,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
 				},
 				{
-					"cell_id" : 9223372036854775842,
+					"cell_id" : 6408392917206142766,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775843,
+							"cell_id" : 16185976381202249742,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "((\\sin(r))**2 + (\\cos(r))**2) A_{m} \\partial_{r}(r)-A_{m} + \\int{(r)**2}{r} B_{m}"
@@ -463,13 +463,13 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775845,
+					"cell_id" : 4150077815070160771,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775846,
+							"cell_id" : 1615245382528559203,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : " 1/3 (r)**3 B_{m}"
@@ -487,25 +487,25 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775848,
+					"cell_id" : 685873939168141190,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left[r,~\\discretionary{}{}{} t\\right].\\end{dmath*}"
 				},
 				{
-					"cell_id" : 9223372036854775849,
+					"cell_id" : 9426482827362871044,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[\\mu,~\\discretionary{}{}{} \\nu\\right].\\end{dmath*}"
 				},
 				{
-					"cell_id" : 9223372036854775850,
+					"cell_id" : 14502480910956507473,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775851,
+							"cell_id" : 9004909283005715232,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "\\partial_{\\mu}(A^{\\mu \\nu})"
@@ -514,13 +514,13 @@
 					"source" : "\\begin{dmath*}{}\\partial_{\\mu}{A^{\\mu \\nu}}\\end{dmath*}"
 				},
 				{
-					"cell_id" : 9223372036854775852,
+					"cell_id" : 17233674530249551186,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775853,
+							"cell_id" : 17646672638256660103,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "{A^{t t} -> t (\\sin(r))**2, A^{r r} -> \\int{(\\cos(r))**2}{r}}"
@@ -538,19 +538,19 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775855,
+					"cell_id" : 14959790866480424319,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775856,
+							"cell_id" : 8943423547000812848,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "\\components^{\\nu}({{r} = (\\cos(r))**2, {t} = (\\sin(r))**2})"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\square{}^{\\nu}\\left\\{\\begin{aligned}\\square{}^{r}= & {\\left(\\cos{r}\\right)}^{2}\\\\[-.5ex]\n\\square{}^{t}= & {\\left(\\sin{r}\\right)}^{2}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\square{}^{\\nu}\\left\\{\\begin{aligned}\\square{}^{r}& = {\\left(\\cos{r}\\right)}^{2}\\\\[-.5ex]\n\\square{}^{t}& = {\\left(\\sin{r}\\right)}^{2}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
 				}
 			],
 			"source" : "evaluate(ex, rl);"
@@ -578,10 +578,10 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775858,
+					"cell_id" : 15500405529655309606,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\int_{0}^{2} \\sin{\\left (x \\right )}\\, dx\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\int\\limits_{0}^{2} \\sin{\\left(x \\right)}\\, dx\\end{dmath*}"
 				}
 			],
 			"source" : "from sympy import *\nx,y=var('x,y')\ni = Integral(sin(x),(x,0,2));"
@@ -593,10 +593,10 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775860,
+					"cell_id" : 13117686658944900562,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}- \\cos{\\left (2 \\right )} + 1\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}1 - \\cos{\\left(2 \\right)}\\end{dmath*}"
 				}
 			],
 			"source" : "i.doit();"

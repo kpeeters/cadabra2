@@ -7,6 +7,9 @@
 #include "properties/LaTeXForm.hh"
 #include "properties/Derivative.hh"
 #include "properties/Accent.hh"
+#include "properties/Tableau.hh"
+#include "properties/FilledTableau.hh"
+#include "properties/TableauInherit.hh"
 
 #define nbsp   " "
 //(( parent.utf8_output?(unichar(0x00a0)):" "))
@@ -68,6 +71,8 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 				return true;
 			}
 		}
+
+	if(parent=="\\oplus" && child=="\\otimes") return true;
 
 	if(parent=="\\pow" && (child=="\\prod" || child=="\\sum" || child=="\\oplus" || der)) return  true;
 
@@ -200,17 +205,16 @@ void DisplayTeX::print_tableau(std::ostream& str, Ex::iterator it)
 		str << "\\, ";
 		}
 
-	str << texify(*it->name);
+	str << "\\ydiagram{";
 	auto sib=tree.begin(it);
-	str << "{";
 	while(sib!=tree.end(it)) {
-		str << "{";
-		dispatch(str, sib);
-		str << "}";
+		str << *sib->multiplier;
 		++sib;
+		if(sib!=tree.end(it))
+			str << ",";
 		}
 	str << "}";
-
+	
 	if(needs_brackets(it))
 		str << "\\right)";
 	}
@@ -226,12 +230,9 @@ void DisplayTeX::print_ftableau(std::ostream& str, Ex::iterator it)
 		str << "\\, ";
 		}
 
-	str << texify(*it->name);
+	str << "\\ytableaushort{";
 	auto sib=tree.begin(it);
-	str << "{";
 	while(sib!=tree.end(it)) {
-		if(sib!=tree.begin(it))
-			str << ",";
 		if(*sib->name!="\\comma") {
 			str << "{";
 			dispatch(str, sib);
@@ -247,6 +248,8 @@ void DisplayTeX::print_ftableau(std::ostream& str, Ex::iterator it)
 				}
 			}
 		++sib;
+		if(sib!=tree.end(it))
+			str << ",";
 		}
 	str << "}";
 
@@ -458,26 +461,26 @@ void DisplayTeX::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, 
 
 void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	{
-	if(*it->name=="\\prod")                print_productlike(str, it, " ");
-	else if(*it->name=="\\sum" || *it->name=="\\oplus") print_sumlike(str, it);
-	else if(*it->name=="\\frac")           print_fraclike(str, it);
-	else if(*it->name=="\\comma")          print_commalike(str, it);
-	else if(*it->name=="\\arrow")          print_arrowlike(str, it);
-	else if(*it->name=="\\inner")          print_dot(str, it);
-	else if(*it->name=="\\pow")            print_powlike(str, it);
-	else if(*it->name=="\\int")            print_intlike(str, it);
-	else if(*it->name=="\\equals" || *it->name=="\\unequals")         print_equalitylike(str, it);
-	else if(*it->name=="\\commutator")     print_commutator(str, it, true);
-	else if(*it->name=="\\anticommutator") print_commutator(str, it, false);
-	else if(*it->name=="\\components")     print_components(str, it);
-	else if(*it->name=="\\wedge")          print_wedgeproduct(str, it);
-	else if(*it->name=="\\conditional")    print_conditional(str, it);
-	else if(*it->name=="\\greater" || *it->name=="\\less")  print_relation(str, it);
-	else if(*it->name=="\\indexbracket")   print_indexbracket(str, it);
-	else if(*it->name=="\\tableau")        print_tableau(str, it);
-	else if(*it->name=="\\ftableau")       print_ftableau(str, it);
-	else if(*it->name=="\\ldots")          print_dots(str, it);
-	else                                   print_other(str, it);
+	if(*it->name=="\\prod")                                   print_productlike(str, it, " ");
+	else if(*it->name=="\\sum" || *it->name=="\\oplus")       print_sumlike(str, it);
+	else if(*it->name=="\\frac")                              print_fraclike(str, it);
+	else if(*it->name=="\\comma")                             print_commalike(str, it);
+	else if(*it->name=="\\arrow")                             print_arrowlike(str, it);
+	else if(*it->name=="\\inner")                             print_dot(str, it);
+	else if(*it->name=="\\pow")                               print_powlike(str, it);
+	else if(*it->name=="\\int")                               print_intlike(str, it);
+	else if(*it->name=="\\equals" || *it->name=="\\unequals") print_equalitylike(str, it);
+	else if(*it->name=="\\commutator")                        print_commutator(str, it, true);
+	else if(*it->name=="\\anticommutator")                    print_commutator(str, it, false);
+	else if(*it->name=="\\components")                        print_components(str, it);
+	else if(*it->name=="\\wedge")                             print_wedgeproduct(str, it);
+	else if(*it->name=="\\conditional")                       print_conditional(str, it);
+	else if(*it->name=="\\greater" || *it->name=="\\less")    print_relation(str, it);
+	else if(*it->name=="\\indexbracket")                      print_indexbracket(str, it);
+	else if(*it->name=="\\ldots")                             print_dots(str, it);
+	else if(kernel.properties.get<Tableau>(it))               print_tableau(str, it);
+	else if(kernel.properties.get<FilledTableau>(it))         print_ftableau(str, it);
+	else                                                      print_other(str, it);
 	}
 
 void DisplayTeX::print_commalike(std::ostream& str, Ex::iterator it)
@@ -576,6 +579,14 @@ void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std
 	str_node::bracket_t previous_bracket_=str_node::b_invalid;
 //	bool beginning_of_group=true;
 	Ex::sibling_iterator ch=tree.begin(it);
+	bool prev_is_tableau=false;
+	if(ch!=tree.end(it)) {
+		const Tableau        *tab =kernel.properties.get<Tableau>(ch);
+		const FilledTableau  *ftab=kernel.properties.get<FilledTableau>(ch);
+		const TableauInherit *itab=kernel.properties.get<TableauInherit>(ch);
+		if(tab || ftab || itab)
+			prev_is_tableau=true;
+		}
 	while(ch!=tree.end(it)) {
 		str_node::bracket_t current_bracket_=(*ch).fl.bracket;
 		if(previous_bracket_!=current_bracket_) {
@@ -590,14 +601,26 @@ void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std
 			if(current_bracket_!=str_node::b_none)
 				print_closing_bracket(str, current_bracket_, str_node::p_none);
 			}
-
-		if(ch!=tree.end(it)) {
-			if(print_star) {
-				if(tight_star) str << inbetween;
-				else str << " " << inbetween << " ";
+		else {
+			const Tableau       *tab =kernel.properties.get<Tableau>(ch);
+			const FilledTableau *ftab=kernel.properties.get<FilledTableau>(ch);
+			const TableauInherit *itab=kernel.properties.get<TableauInherit>(ch);
+			if(tab || ftab || itab) {
+				if(prev_is_tableau)
+					str << " \\otimes ";
+				else
+					str << " ";
+				prev_is_tableau=true;
 				}
 			else {
-				str << " ";
+				prev_is_tableau=false;
+				if(print_star) {
+					if(tight_star) str << inbetween;
+					else str << " " << inbetween << " ";
+					}
+				else {
+					str << " ";
+					}
 				}
 			}
 		previous_bracket_=current_bracket_;
@@ -618,6 +641,14 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 	unsigned int steps=0;
 
 	Ex::sibling_iterator ch=tree.begin(it);
+	bool prev_is_tableau=false;
+	if(ch!=tree.end(it)) {
+		const Tableau        *tab =kernel.properties.get<Tableau>(ch);
+		const FilledTableau  *ftab=kernel.properties.get<FilledTableau>(ch);
+		const TableauInherit *itab=kernel.properties.get<TableauInherit>(ch);
+		if(tab || ftab || itab)
+			prev_is_tableau=true;
+		}
 	while(ch!=tree.end(it)) {
 		//		if(ch!=tree.begin(it))
 		//			str << "%\n"; // prevent LaTeX overflow.
@@ -626,8 +657,20 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 			str << "%\n"; // prevent LaTeX overflow.
 			}
 		if(*ch->multiplier>=0 && ch!=tree.begin(it)) {
-			if(*it->name=="\\sum")
-				str << "+";
+			if(*it->name=="\\sum") {
+				const Tableau       *tab =kernel.properties.get<Tableau>(ch);
+				const FilledTableau *ftab=kernel.properties.get<FilledTableau>(ch);
+				const TableauInherit *itab=kernel.properties.get<TableauInherit>(ch);
+				if(tab || ftab || itab) {
+					if(prev_is_tableau)
+						str << " \\oplus ";
+					else
+						str << "+";
+					prev_is_tableau=true;
+					}
+				else
+					str << "+";
+				}
 			else
 				str << *it->name << "{}";
 			}

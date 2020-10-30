@@ -1,6 +1,11 @@
+% This is the LaTeX preamble code used for all typesetting by the
+% notebook UI. It is very similar to ../client_server/notebook.tex;
+% keep them in sync.
+
 \usepackage{setspace}
 \usepackage[fleqn]{amsmath}
 \usepackage{color}
+\usepackage{ytableau}
 \usepackage{etoolbox}
 \usepackage{amssymb}
 \usepackage[utf8]{inputenc}
@@ -160,6 +165,7 @@
 	  \advance\accvspace by -\ytsize%
  \fi}\kern-\maxw}}
  
+\ytableausetup{centertableaux}
 
 % Document start.
 

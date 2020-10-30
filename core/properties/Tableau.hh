@@ -2,10 +2,11 @@
 #pragma once
 
 #include "Props.hh"
+#include "properties/ImplicitIndex.hh"
 
 namespace cadabra {
 
-	class Tableau : public property {
+	class Tableau : public ImplicitIndex, virtual public property {
 		public:
 			virtual ~Tableau() {};
 			virtual std::string name() const override;
