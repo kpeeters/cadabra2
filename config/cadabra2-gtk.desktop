@@ -8,6 +8,7 @@ Icon=cadabra2-gtk
 Categories=Math;Science;Education;
 Exec=cadabra2-gtk %f
 Terminal=false
+Keywords="computer algebra", "physics", "mathematics"
 MimeType=application/cadabra;application/x-cadabra;
 
 
