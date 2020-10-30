@@ -2443,7 +2443,7 @@ bool remove_recursive(const gchar* path)
 
 void NotebookWindow::on_tools_clear_cache()
 {
-	Gtk::MessageDialog prog("Removing cached libary files, please wait...", false, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
+	Gtk::MessageDialog prog("Removing cached library files, please wait...", false, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
 	prog.set_transient_for(*this);
 	prog.set_title("Clearing cache");
 	prog.show_all();
