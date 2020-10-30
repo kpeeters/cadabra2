@@ -507,8 +507,10 @@ if(NOT MSVC)
   install(
     FILES
     ../man/man1/cadabra2.1
+    ../man/man1/cadabra2-cli.1    
     ../man/man1/cadabra2cadabra.1
-    ../man/man1/cadabra2html.1
+    ../man/man1/cadabra2html.1 
+    ../man/man1/cadabra2latex.1
     ../man/man1/cadabra2python.1  
     DESTINATION
     share/man/man1
