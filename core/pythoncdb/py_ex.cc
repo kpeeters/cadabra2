@@ -401,6 +401,11 @@ namespace cadabra {
 		return ex->number_of_children(it);
 		}
 
+	long Ex_int_cast(Ex_ptr ex)
+		{
+		return ex->to_integer(); // this will throw an exception if the object is not integer
+		}
+	
 	std::string Ex_head(Ex_ptr ex)
 		{
 		if (ex->begin() == ex->end())
@@ -555,6 +560,7 @@ namespace cadabra {
 		.def("__setitem__", &Ex_setitem)
 		.def("__setitem__", &Ex_setitem_iterator)
 		.def("__len__", &Ex_len)
+		.def("__int__", &Ex_int_cast)			
 		.def("head", &Ex_head)
 		.def("mult", &Ex_get_mult)
 		.def("__iter__", &Ex_iter)
@@ -595,6 +601,7 @@ namespace cadabra {
 		.def("append_child", &ExNode::append_child)
 		.def("append_child", &ExNode::append_child_it)
 		.def("erase", &ExNode::erase)
+      .def("ex", &ExNode::get_ex)
 		.def_property("name", &ExNode::get_name, &ExNode::set_name)
 		.def_property("parent_rel", &ExNode::get_parent_rel, &ExNode::set_parent_rel)
 		.def_property("multiplier", &ExNode::get_multiplier, &ExNode::set_multiplier)

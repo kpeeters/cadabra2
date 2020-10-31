@@ -15,8 +15,8 @@ namespace cadabra {
 			sibling_iterator tab1, tab2;
 
 		private:
-			void do_tableau(iterator&);
-			void do_filledtableau(iterator&);
+			void do_tableau(iterator&, int dimension);
+			void do_filledtableau(iterator&, int dimension);
 		};
 
 	}

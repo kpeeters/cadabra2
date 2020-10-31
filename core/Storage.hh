@@ -171,6 +171,8 @@ namespace cadabra {
 			/// FIXME: add tests for integers as well.
 			bool          is_rational() const;
 			multiplier_t  to_rational() const;
+			bool          is_integer() const;
+			long          to_integer() const;
 
 			/// Display expression in Python/Cadabra input form. This is
 			/// fairly straightforward so not handled with a separate

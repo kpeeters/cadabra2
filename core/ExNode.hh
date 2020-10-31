@@ -21,6 +21,10 @@
 /// Iterators are much safer than in C++, because they carry the
 /// tree modification interface themselves, and can thus compute
 /// their next value for any destructive operation.
+///
+/// Note that ExNode does not really behave like a Python iterator
+/// in the strict sense: it does not return copies of nodes in the
+/// tree, but rather objects which know how to modify the tree.
 
 class ExNode : public cadabra::IndexClassifier {
 	public:
@@ -40,6 +44,9 @@ class ExNode : public cadabra::IndexClassifier {
 		std::string get_name() const;
 		void        set_name(std::string);
 
+		/// Create a copy of the Ex pointed to by this iterator.
+		cadabra::Ex get_ex() const;
+		
 		cadabra::str_node::parent_rel_t get_parent_rel() const;
 		void                            set_parent_rel(cadabra::str_node::parent_rel_t);
 

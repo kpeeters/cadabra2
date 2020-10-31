@@ -132,6 +132,21 @@ namespace cadabra {
 		return *(begin()->multiplier);
 		}
 
+	bool Ex::is_integer() const
+		{
+		if(begin()!=end())
+			if(begin()->is_integer())
+				return true;
+		return false;
+		}
+
+	long Ex::to_integer() const
+		{
+		if(!is_integer())
+			throw InternalError("Called to_integer() on non-integer Ex");
+		return to_long(*(begin()->multiplier));
+		}
+
 	std::ostream& Ex::print_python(std::ostream& str, Ex::iterator it)
 		{
 		std::string name(*(*it).name);

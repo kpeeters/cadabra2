@@ -51,7 +51,9 @@ Algorithm::result_t tabdimension::apply(iterator& it)
 			++sib;
 			++currow;
 			}
+		auto tmp=it->multiplier;
 		node_one(it);
+		it->multiplier=tmp;
 		multiply(it->multiplier, one.dimension(dimension));
 		}
 	else {
@@ -61,7 +63,9 @@ Algorithm::result_t tabdimension::apply(iterator& it)
 			one.add_row(to_long(*sib->multiplier));
 			++sib;
 			}
+		auto tmp=it->multiplier;
 		node_one(it);
+		it->multiplier=tmp;
 		multiply(it->multiplier, one.dimension(dimension));
 		}
 	cleanup_dispatch(kernel, tr, it);

@@ -116,4 +116,42 @@ def test29():
     assert(tst==0)
     print('Test 29 passed')
 
-test27b()
+test29()
+
+# The 8x8 tensor product in Young tableaux.
+#
+def test30():
+    \tableau{#}::Tableau(dimension=3);
+    \ftableau{#}::FilledTableau(dimension=3);
+    ex:=\tableau{2}{1}\tableau{2}{1};
+    lr_tensor(_)
+    q=[int(tab_dimension(t.ex())) for t in ex.top().terms()]
+    assert(q==[27,10,10,16,1])
+    print("Test 30a passed")
+    ex:=\ftableau{c,c}{c}\ftableau{a,a}{b};
+    lr_tensor(_)
+    q=[int(tab_dimension(t.ex())) for t in ex.top().terms()]
+    assert(q==[27,10,10,8,8,1])
+    print("Test 30b passed")
+
+test30()
+    
+# def test30():
+# \tableau{#}::Tableau(dimension=10);
+# ex:=\tableau{2}{2}\tableau{2}{2} \tableau{2};
+# converge(ex):
+#     lr_tensor(ex)
+#     distribute(ex)
+# 
+# q=[]
+# p=[]
+# for t in ex.top().terms():
+#     p.append(t.ex())
+#     q.append(int(tab_dimension(t.ex())))
+# 
+#     
+# assert(q==[
+
+
+
+    

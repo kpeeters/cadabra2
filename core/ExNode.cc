@@ -278,6 +278,11 @@ void ExNode::set_name(std::string nm)
 	it->name = name_set.insert(nm).first;
 	}
 
+cadabra::Ex ExNode::get_ex() const
+	{
+	return Ex(it);
+	}
+
 str_node::parent_rel_t ExNode::get_parent_rel() const
 	{
 	if(!ex->is_valid(it))

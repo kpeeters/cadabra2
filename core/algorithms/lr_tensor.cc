@@ -19,6 +19,7 @@ bool lr_tensor::can_apply(iterator it)
 		tab2=tr.end(it);
 		while(sib!=tr.end(it)) {
 			if(kernel.properties.get<Tableau>(sib)) {
+				// FIXME: test that tab2 has the same dimension!
 				if(tab1==tr.end(it))
 					tab1=sib;
 				else {
@@ -51,15 +52,18 @@ bool lr_tensor::can_apply(iterator it)
 
 Algorithm::result_t lr_tensor::apply(iterator& it)
 	{
-	if(kernel.properties.get<Tableau>(tab1)) do_tableau(it);
-	else                                     do_filledtableau(it);
+	const Tableau       *t1=kernel.properties.get<Tableau>(tab1);
+	const FilledTableau *f1=kernel.properties.get<FilledTableau>(tab1);
+	
+	if(t1) do_tableau(it, t1->dimension);
+	else   do_filledtableau(it, f1->dimension);
 
 	return result_t::l_applied;
 	}
 
 // The format is \ftab{a,b,c}{d,e}{f}.
 //
-void lr_tensor::do_filledtableau(iterator& it)
+void lr_tensor::do_filledtableau(iterator& it, int dimension)
 	{
 	bool even_only=false;
 	bool singlet_rules=false;
@@ -80,7 +84,7 @@ void lr_tensor::do_filledtableau(iterator& it)
 	tree_to_numerical_tab(tab1, one);
 	tree_to_numerical_tab(tab2, two);
 
-	yngtab::LR_tensor(one,two,999,prod.get_back_insert_iterator());
+	yngtab::LR_tensor(one,two,dimension,prod.get_back_insert_iterator());
 
 	Ex rep;
 	iterator top=rep.set_head(str_node("\\sum"));
@@ -99,7 +103,7 @@ void lr_tensor::do_filledtableau(iterator& it)
 	cleanup_dispatch(kernel, tr, it);
 	}
 
-void lr_tensor::do_tableau(iterator& it)
+void lr_tensor::do_tableau(iterator& it, int dimension)
 	{
 	bool even_only=false;
 	// FIXME: put arguments back in
@@ -119,7 +123,7 @@ void lr_tensor::do_tableau(iterator& it)
 		two.add_row(to_long(*sib->multiplier));
 		++sib;
 		}
-	yngtab::LR_tensor(one,two,999,prod.get_back_insert_iterator());
+	yngtab::LR_tensor(one,two,dimension,prod.get_back_insert_iterator());
 
 	Ex rep;
 	iterator top=rep.set_head(str_node("\\sum"));
