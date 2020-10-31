@@ -200,7 +200,7 @@ namespace cadabra {
 	/// are more non-index children.
 
 	template<class T>
-	class Inherit {
+	class Inherit : virtual public property {
 		public:
 			virtual ~Inherit() {};
 			virtual std::string name() const

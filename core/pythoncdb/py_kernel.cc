@@ -7,6 +7,8 @@
 #include "properties/CommutingAsSum.hh"
 #include "properties/Derivative.hh"
 #include "properties/Accent.hh"
+#include "properties/Tableau.hh"
+#include "properties/FilledTableau.hh"
 
 #include "CdbPython.hh"
 
@@ -72,6 +74,9 @@ namespace cadabra {
 		k->inject_property(new CommutingAsProduct(), Ex_from_string("\\prod{#}", false, k), 0);
 		k->inject_property(new DependsInherit(), Ex_from_string("\\prod{#}", false, k), 0);
 		k->inject_property(new NumericalFlat(), Ex_from_string("\\prod{#}", false, k), 0);
+		k->inject_property(new Inherit<Tableau>(), Ex_from_string("\\prod{#}", false, k), 0);
+		k->inject_property(new Inherit<FilledTableau>(), Ex_from_string("\\prod{#}", false, k), 0);
+
 		auto wi2 = new WeightInherit();
 		wi2->combination_type = WeightInherit::multiplicative;
 		auto wa2 = Ex_from_string("label=all, type=multiplicative", false, k);
@@ -91,7 +96,8 @@ namespace cadabra {
 		k->inject_property(wi4, Ex_from_string("\\wedge{#}", false, k), wa4);
 
 		k->inject_property(new IndexInherit(), Ex_from_string("\\sum{#}", false, k), 0);
-		k->inject_property(new TableauInherit(), Ex_from_string("\\sum{#}", false, k), 0);
+		k->inject_property(new Inherit<Tableau>(), Ex_from_string("\\sum{#}", false, k), 0);
+		k->inject_property(new Inherit<FilledTableau>(), Ex_from_string("\\sum{#}", false, k), 0);
 		k->inject_property(new CommutingAsSum(), Ex_from_string("\\sum{#}", false, k), 0);
 		k->inject_property(new DependsInherit(), Ex_from_string("\\sum{#}", false, k), 0);
 		auto wi = new WeightInherit();
