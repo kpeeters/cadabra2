@@ -15,6 +15,11 @@ if [ "${CDB_PLATFORM}" = "" ]; then
 fi
 
 function runbuild {
+    # Want this platform?
+    if [ "${CDB_PLATFORM}" != "ALL" -a "${CDB_PLATFORM}" != "$1" ]; then
+        echo "Not building $1."
+        return 0
+    fi
 	 # Start the VM and wait for it to come up.
 	 echo "Starting build bot for $1, ssh port $3"
 	 ssh buildbothost "nohup VBoxHeadless -s '$1' > /tmp/buildbot.out 2> /tmp/buildbot.err < /dev/null &"
@@ -68,21 +73,20 @@ function runbuild {
 
 # Parameters: VM name, package type, local ssh port, folder name on web server.
 
-if [ "${CDB_PLATFORM}" = "ALL" ]; then
-   runbuild "Mint_20"             ".deb" 7026 mint20
-   runbuild "Ubuntu_20.04"        ".deb" 7030 ubuntu2004
-   runbuild "Ubuntu_18.04"        ".deb" 7017 ubuntu1804
-   runbuild "Fedora_28"           ".rpm" 7020 fedora28
-   runbuild "Fedora_29"           ".rpm" 7025 fedora29               
-   runbuild "Fedora_32"           ".rpm" 7027 fedora32
-   runbuild "Mint_19"             ".deb" 7022 mint19
-   runbuild "OpenSUSE_15"         ".rpm" 7024 opensuse150
-   runbuild "OpenSUSE_Tumbleweed" ".rpm" 7023 opensusetw
-   runbuild "Debian_921"          ".deb" 7014 debian9
-   runbuild "Debian_Buster"       ".deb" 7021 debian10
-   # runbuild "CentOS_7"            ".rpm" 7004 centos7      cmake/packaging clash
-   # runbuild "Scientific_Linux_74" ".rpm" 7013 scientific7x
-fi
+runbuild "Mint_20"             ".deb" 7026 mint20
+runbuild "Ubuntu_20.04"        ".deb" 7030 ubuntu2004
+runbuild "Ubuntu_18.04"        ".deb" 7017 ubuntu1804
+runbuild "Fedora_28"           ".rpm" 7020 fedora28
+runbuild "Fedora_29"           ".rpm" 7025 fedora29               
+runbuild "Fedora_32"           ".rpm" 7027 fedora32
+runbuild "Mint_19"             ".deb" 7022 mint19
+runbuild "OpenSUSE_15"         ".rpm" 7024 opensuse150
+runbuild "OpenSUSE_Tumbleweed" ".rpm" 7023 opensusetw
+runbuild "Debian_921"          ".deb" 7014 debian9
+runbuild "Debian_Buster"       ".deb" 7021 debian10
+# runbuild "CentOS_7"            ".rpm" 7004 centos7      cmake/packaging clash
+# runbuild "Scientific_Linux_74" ".rpm" 7013 scientific7x
+
 
 # Outdated versions:
 # runbuild "Mint_18" ".deb" 7002 mint18                   ERROR
