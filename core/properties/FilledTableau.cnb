@@ -1,62 +1,90 @@
-
 {
+	"cell_id" : 3709770344770575223,
 	"cells" : 
 	[
-		
 		{
+			"cell_id" : 18315175544081447475,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
+					"cell_id" : 6317143617777149814,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\property{FilledTableau}{A Young tableau with labelled boxes.}\n\nIndicates that the object is a Young\n  tableau with labelled boxes. The arguments\n  of a \\prop{Tableau} property denote the contents, given as lists,"
+					"source" : "\\property{Tableau}{A Young-tableau object with unlabelled boxes.}\n\nDeclares that the object carrying this property is used to label a Young tableau with\nunlabelled boxes (Young diagram). The arguments of such objects denote the lenghts of the rows.\nThe \\verb|dimension| argument of the property sets the dimension.\n\nCan be used in combination with the \\verb|lr_tensor| and \\verb|tab_dimension| algorithms\nto compute tensor product representations."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\property{FilledTableau}{A Young tableau with labelled boxes.}\n\nIndicates that the object is a Young\n  tableau with labelled boxes. The arguments\n  of a \\prop{Tableau} property denote the contents, given as lists,"
+			"source" : "\\property{FilledTableau}{A Young-tableau object with labelled boxes.}\n\nDeclares that the object carrying this property is used to label a Young tableau with\nlabelled boxes. The arguments of such objects are comma-separated lists of the contents\nof the boxes in each row. The \\verb|dimension| argument of the property sets the dimension.\n\nCan be used in combination with the \\verb|lr_tensor| and \\verb|tab_dimension| algorithms\nto compute tensor product representations."
 		},
-		
 		{
+			"cell_id" : 4814324193159731260,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
+					"cell_id" : 213677400209917287,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\ftableau((a, b, c) (d, e) f)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property FilledTableau to~}\\ytableaushort{{\\#}}.\\end{dmath*}"
+				},
+				{
+					"cell_id" : 9402199389898434983,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 12576212416202906894,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\tableau({c, c} , c) \\tableau({a, a} , b)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\ytableaushort{{c}{c},{c}} \\otimes \\ytableaushort{{a}{a},{b}}\\end{dmath*}"
+				},
+				{
+					"cell_id" : 13867533788213360416,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 16962364561868398097,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\tableau({c, c, a, a} , {c, b}) + \\tableau({c, c, a, a} , c , b) + \\tableau({c, c, a} , {c, a, b}) + \\tableau({c, c, a} , {c, a} , b) + \\tableau({c, c, a} , {c, b} , a) + \\tableau({c, c} , {c, a} , {a, b})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\ytableaushort{{c}{c}{a}{a},{c}{b}} \\oplus \\ytableaushort{{c}{c}{a}{a},{c},{b}} \\oplus \\ytableaushort{{c}{c}{a},{c}{a}{b}} \\oplus \\ytableaushort{{c}{c}{a},{c}{a},{b}} \\oplus \\ytableaushort{{c}{c}{a},{c}{b},{a}} \\oplus \\ytableaushort{{c}{c},{c}{a},{a}{b}}\\end{dmath*}"
 				}
 			],
-			"source" : "\\ftableau{#}::FilledTableau.\nex:=\\ftableau{a,b,c}{d,e}{f};"
+			"source" : "\\tableau{#}::FilledTableau(dimension=3);\nex:=\\tableau{c,c}{c}\\tableau{a,a}{b};\nlr_tensor(_);"
 		},
-		
 		{
+			"cell_id" : 6195976348837135823,
 			"cell_origin" : "client",
-			"cell_type" : "latex",
+			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
-					"cell_origin" : "client",
+					"cell_id" : 697290612421312528,
+					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "See \\prop{Tableau} for information about adding the dimension of the permutation group."
+					"source" : "{}$\\big[$$\\verb|27|$,\\discretionary{}{}{} $\\verb|10|$,\\discretionary{}{}{} $\\verb|10|$,\\discretionary{}{}{} $\\verb|8|$,\\discretionary{}{}{} $\\verb|8|$,\\discretionary{}{}{} $\\verb|1|$$\\big]$"
 				}
 			],
-			"hidden" : true,
-			"source" : "See \\prop{Tableau} for information about adding the dimension of the permutation group."
+			"source" : "q=[int(tab_dimension(t.ex())) for t in ex.top().terms()];"
 		},
-		
 		{
+			"cell_id" : 10192517807076031993,
 			"cell_origin" : "client",
-			"cell_type" : "latex",
+			"cell_type" : "input",
 			"source" : ""
 		}
 	],
 	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"version" : 1
 }
-

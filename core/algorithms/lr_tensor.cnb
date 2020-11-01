@@ -1,44 +1,70 @@
 {
+	"cell_id" : 3529167709221557556,
 	"cells" : 
 	[
 		{
+			"cell_id" : 13034055670763138185,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 1827403652131020063,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\algorithm{lr_tensor}{Compute the tensor project of two Young tableaux}\n\nCompute the tensor product of two tableaux or filled tableaux. The\nalgorithm acts on objects which have the \\prop{Tableau}\nor \\prop{FilledTableau} property, through which it is possible to\nset the dimension. The standard Littlewoord-Richardson algorithm is\nused to construct the tableaux in the tensor product. An example\nwith \\prop{Tableau} objects is given below."
+					"source" : "\\algorithm{lr_tensor}{Compute the tensor product of two Young tableaux}\n\nCompute the tensor product of two tableaux or filled tableaux. The\nalgorithm acts on objects which have the \\prop{Tableau}\nor \\prop{FilledTableau} property, through which it is possible to\nset the dimension. The standard Littlewoord-Richardson algorithm is\nused to construct the tableaux in the tensor product. An example\nwith \\prop{Tableau} objects is given below."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\algorithm{lr_tensor}{Compute the tensor project of two Young tableaux}\n\nCompute the tensor product of two tableaux or filled tableaux. The\nalgorithm acts on objects which have the \\prop{Tableau}\nor \\prop{FilledTableau} property, through which it is possible to\nset the dimension. The standard Littlewoord-Richardson algorithm is\nused to construct the tableaux in the tensor product. An example\nwith \\prop{Tableau} objects is given below."
+			"source" : "\\algorithm{lr_tensor}{Compute the tensor product of two Young tableaux}\n\nCompute the tensor product of two tableaux or filled tableaux. The\nalgorithm acts on objects which have the \\prop{Tableau}\nor \\prop{FilledTableau} property, through which it is possible to\nset the dimension. The standard Littlewoord-Richardson algorithm is\nused to construct the tableaux in the tensor product. An example\nwith \\prop{Tableau} objects is given below."
 		},
 		{
+			"cell_id" : 16444213282225630456,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 7013982910635865128,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\tableau{{2}{2}} \\tableau{{2}{2}{1}}\\end{dmath*}"
+					"cells" : 
+					[
+						{
+							"cell_id" : 6896144092362820956,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\tableau(2 , 2) \\tableau(2 , 2 , 1)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\ydiagram{2,2} \\otimes \\ydiagram{2,2,1}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 18383779963759909769,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\tableau{{4}{4}{1}}+\\tableau{{4}{3}{2}}+\\tableau{{4}{3}{1}{1}}+\\tableau{{4}{2}{2}{1}}+\\tableau{{3}{3}{2}{1}}+\\tableau{{3}{3}{1}{1}{1}}+\\tableau{{3}{2}{2}{2}}+\\tableau{{3}{2}{2}{1}{1}}+\\tableau{{2}{2}{2}{2}{1}}\\end{dmath*}"
+					"cells" : 
+					[
+						{
+							"cell_id" : 6438556487849008423,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\tableau(4 , 4 , 1) + \\tableau(4 , 3 , 2) + \\tableau(4 , 3 , 1 , 1) + \\tableau(4 , 2 , 2 , 1) + \\tableau(3 , 3 , 2 , 1) + \\tableau(3 , 3 , 1 , 1 , 1) + \\tableau(3 , 2 , 2 , 2) + \\tableau(3 , 2 , 2 , 1 , 1) + \\tableau(2 , 2 , 2 , 2 , 1)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\ydiagram{4,4,1} \\oplus \\ydiagram{4,3,2} \\oplus \\ydiagram{4,3,1,1} \\oplus \\ydiagram{4,2,2,1} \\oplus \\ydiagram{3,3,2,1} \\oplus \\ydiagram{3,3,1,1,1} \\oplus \\ydiagram{3,2,2,2} \\oplus \\ydiagram{3,2,2,1,1} \\oplus \\ydiagram{2,2,2,2,1}\\end{dmath*}"
 				}
 			],
 			"source" : "\\tableau{#}::Tableau(dimension=10).\nex:=\\tableau{2}{2} \\tableau{2}{2}{1};\nlr_tensor(_);"
 		},
 		{
+			"cell_id" : 8976033163574012771,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 5151218776706305939,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "The same example, but now with \\prop{FilledTableau} objects, is"
@@ -48,58 +74,103 @@
 			"source" : "The same example, but now with \\prop{FilledTableau} objects, is"
 		},
 		{
+			"cell_id" : 9523266717767366903,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 11355820928989299880,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\ftableau{{0}{0},{1}{1}} \\ftableau{{a}{a},{b}{b}}\\end{dmath*}"
+					"cells" : 
+					[
+						{
+							"cell_id" : 216113284021982139,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\ftableau({0, 0} , {1, 1}) \\ftableau({a, a} , {b, b})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\ytableaushort{{0}{0},{1}{1}} \\otimes \\ytableaushort{{a}{a},{b}{b}}\\end{dmath*}"
 				}
 			],
 			"source" : "\\ftableau{#}::FilledTableau(dimension=10).\nex:=\\ftableau{0,0}{1,1} \\ftableau{a,a}{b,b};"
 		},
 		{
+			"cell_id" : 5195300418742761648,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 5296348393282597622,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\ftableau{{0}{0}{a}{a},{1}{1}{b}{b}}+\\ftableau{{0}{0}{a}{a},{1}{1}{b},{b}}+\\ftableau{{0}{0}{a}{a},{1}{1},{b}{b}}+\\ftableau{{0}{0}{a},{1}{1}{b},{a},{b}}+\\ftableau{{0}{0}{a},{1}{1},{a}{b},{b}}+\\ftableau{{0}{0},{1}{1},{a}{a},{b}{b}}\\end{dmath*}"
+					"cells" : 
+					[
+						{
+							"cell_id" : 172526134674294674,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\ftableau({0, 0, a, a} , {1, 1, b, b}) + \\ftableau({0, 0, a, a} , {1, 1, b} , b) + \\ftableau({0, 0, a, a} , {1, 1} , {b, b}) + \\ftableau({0, 0, a} , {1, 1, b} , a , b) + \\ftableau({0, 0, a} , {1, 1} , {a, b} , b) + \\ftableau({0, 0} , {1, 1} , {a, a} , {b, b})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\ytableaushort{{0}{0}{a}{a},{1}{1}{b}{b}} \\oplus \\ytableaushort{{0}{0}{a}{a},{1}{1}{b},{b}} \\oplus \\ytableaushort{{0}{0}{a}{a},{1}{1},{b}{b}} \\oplus \\ytableaushort{{0}{0}{a},{1}{1}{b},{a},{b}} \\oplus \\ytableaushort{{0}{0}{a},{1}{1},{a}{b},{b}} \\oplus \\ytableaushort{{0}{0},{1}{1},{a}{a},{b}{b}}\\end{dmath*}"
 				}
 			],
 			"source" : "lr_tensor(_);"
 		},
 		{
+			"cell_id" : 5845876384223724695,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 11331787825651452460,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\ftableau{{1}} \\ftableau{{2}} \\ftableau{{3}} \\ftableau{{4}}\\end{dmath*}"
+					"cells" : 
+					[
+						{
+							"cell_id" : 16271400071290618863,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\ftableau(1) \\ftableau(2) \\ftableau(3) \\ftableau(4)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\ytableaushort{{1}} \\otimes \\ytableaushort{{2}} \\otimes \\ytableaushort{{3}} \\otimes \\ytableaushort{{4}}\\end{dmath*}"
 				}
 			],
 			"source" : "ex:=\\ftableau{1} \\ftableau{2} \\ftableau{3} \\ftableau{4};"
 		},
 		{
+			"cell_id" : 2051960691195043819,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 131905216012038794,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\ftableau{{1}{2}{3}{4}}+\\ftableau{{1}{2}{3},{4}}+\\ftableau{{1}{2}{4},{3}}+\\ftableau{{1}{2},{3}{4}}+\\ftableau{{1}{2},{3},{4}}+\\ftableau{{1}{3}{4},{2}}+\\ftableau{{1}{3},{2}{4}}+\\ftableau{{1}{3},{2},{4}}+\\ftableau{{1}{4},{2},{3}}+\\ftableau{{1},{2},{3},{4}}\\end{dmath*}"
+					"cells" : 
+					[
+						{
+							"cell_id" : 14250555613362516514,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\ftableau({1, 2, 3, 4}) + \\ftableau({1, 2, 3} , 4) + \\ftableau({1, 2, 4} , 3) + \\ftableau({1, 2} , {3, 4}) + \\ftableau({1, 2} , 3 , 4) + \\ftableau({1, 3, 4} , 2) + \\ftableau({1, 3} , {2, 4}) + \\ftableau({1, 3} , 2 , 4) + \\ftableau({1, 4} , 2 , 3) + \\ftableau(1 , 2 , 3 , 4)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\ytableaushort{{1}{2}{3}{4}} \\oplus \\ytableaushort{{1}{2}{3},{4}} \\oplus \\ytableaushort{{1}{2}{4},{3}} \\oplus \\ytableaushort{{1}{2},{3}{4}} \\oplus \\ytableaushort{{1}{2},{3},{4}} \\oplus \\ytableaushort{{1}{3}{4},{2}} \\oplus \\ytableaushort{{1}{3},{2}{4}} \\oplus \\ytableaushort{{1}{3},{2},{4}} \\oplus \\ytableaushort{{1}{4},{2},{3}} \\oplus \\ytableaushort{{1},{2},{3},{4}}\\end{dmath*}"
 				}
 			],
 			"source" : "converge(ex):\n   lr_tensor(_)\n   distribute(_)\n;"
 		},
 		{
+			"cell_id" : 12366589379348825691,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""

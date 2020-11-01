@@ -1,53 +1,85 @@
 {
+	"cell_id" : 3709770344770575223,
 	"cells" : 
 	[
 		{
+			"cell_id" : 18315175544081447475,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 6317143617777149814,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\property{Tableau}{Make object a Young tableau}\n\nIndicates that the object is a Young\n  diagram, i.e.~a tableau without labels in the boxes. The arguments\n  of a \\prop{Tableau} property denote the lengths of the\n  successive rows,"
+					"source" : "\\property{Tableau}{A Young-tableau object with unlabelled boxes.}\n\nDeclares that the object carrying this property is used to label a Young tableau with\nunlabelled boxes (Young diagram). The arguments of such objects denote the lenghts of the rows.\nThe \\verb|dimension| argument of the property sets the dimension.\n\nCan be used in combination with the \\verb|lr_tensor| and \\verb|tab_dimension| algorithms\nto compute tensor product representations."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\property{Tableau}{Make object a Young tableau}\n\nIndicates that the object is a Young\n  diagram, i.e.~a tableau without labels in the boxes. The arguments\n  of a \\prop{Tableau} property denote the lengths of the\n  successive rows,"
+			"source" : "\\property{Tableau}{A Young-tableau object with unlabelled boxes.}\n\nDeclares that the object carrying this property is used to label a Young tableau with\nunlabelled boxes (Young diagram). The arguments of such objects denote the lenghts of the rows.\nThe \\verb|dimension| argument of the property sets the dimension.\n\nCan be used in combination with the \\verb|lr_tensor| and \\verb|tab_dimension| algorithms\nto compute tensor product representations."
 		},
 		{
+			"cell_id" : 4814324193159731260,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 5472831286544245,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\tableau{{4}{2}{1}}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Tableau to~}\\ydiagram{1}.\\end{dmath*}"
+				},
+				{
+					"cell_id" : 16824604591112637874,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 10673774897090337872,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\tableau(2 , 1) \\tableau(2 , 1)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\ydiagram{2,1} \\otimes \\ydiagram{2,1}\\end{dmath*}"
+				},
+				{
+					"cell_id" : 17444505558726063598,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 8552454844429597034,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\tableau(4 , 2) + \\tableau(4 , 1 , 1) + \\tableau(3 , 3) + 2\\tableau(3 , 2 , 1) + \\tableau(2 , 2 , 2)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\ydiagram{4,2} \\oplus \\ydiagram{4,1,1} \\oplus \\ydiagram{3,3} \\oplus 2\\, \\ydiagram{3,2,1} \\oplus \\ydiagram{2,2,2}\\end{dmath*}"
 				}
 			],
-			"source" : "\\tableau{#}::Tableau.\nex:=\\tableau{4}{2}{1};"
+			"source" : "\\tableau{#}::Tableau(dimension=3);\nex:=\\tableau{2}{1}\\tableau{2}{1};\nlr_tensor(_);"
 		},
 		{
+			"cell_id" : 6195976348837135823,
 			"cell_origin" : "client",
-			"cell_type" : "latex",
+			"cell_type" : "input",
 			"cells" : 
 			[
 				{
-					"cell_origin" : "client",
+					"cell_id" : 13849739628876949020,
+					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "For several algorithms, the dimension of the permutation group\nassociated to the tableau must be known; this can be added as in the\nexample below,"
+					"source" : "{}$\\big[$$\\verb|27|$,\\discretionary{}{}{} $\\verb|10|$,\\discretionary{}{}{} $\\verb|10|$,\\discretionary{}{}{} $\\verb|16|$,\\discretionary{}{}{} $\\verb|1|$$\\big]$"
 				}
 			],
-			"hidden" : true,
-			"source" : "For several algorithms, the dimension of the permutation group\nassociated to the tableau must be known; this can be added as in the\nexample below,"
+			"source" : "q=[int(tab_dimension(t.ex())) for t in ex.top().terms()];"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "\\tableau{#}::Tableau(dimension=10)."
-		},
-		{
+			"cell_id" : 10192517807076031993,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
