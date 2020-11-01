@@ -1,12 +1,15 @@
 {
+	"cell_id" : 15611848448601612261,
 	"cells" : 
 	[
 		{
+			"cell_id" : 11069807106896465679,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 13772716889928113498,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\section*{Programming in Cadabra}\n\nCadabra is fully programmable in Python. At the most basic level this means that you can make functions\nwhich combine various Cadabra algorithms together, or write loops which repeat certain Cadabra algorithms.\nAt a more advanced level, you can inspect the expression tree and manipulate individual subexpressions,\nor construct expressions from elementary building blocks. "
@@ -16,11 +19,13 @@
 			"source" : "\\section*{Programming in Cadabra}\n\nCadabra is fully programmable in Python. At the most basic level this means that you can make functions\nwhich combine various Cadabra algorithms together, or write loops which repeat certain Cadabra algorithms.\nAt a more advanced level, you can inspect the expression tree and manipulate individual subexpressions,\nor construct expressions from elementary building blocks. "
 		},
 		{
+			"cell_id" : 16380332542575924812,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 10341321852235865106,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\subsection*{Fundamental Cadabra objects: Ex and ExNode}\n\nThe two fundamental Cadabra objects are the \\verb|Ex| and the \\verb|ExNode|. An object of type \\verb|Ex| \nrepresents a mathematical expression, and is what is generated if you type a line containing \\verb|:=|, as in"
@@ -30,16 +35,19 @@
 			"source" : "\\subsection*{Fundamental Cadabra objects: Ex and ExNode}\n\nThe two fundamental Cadabra objects are the \\verb|Ex| and the \\verb|ExNode|. An object of type \\verb|Ex| \nrepresents a mathematical expression, and is what is generated if you type a line containing \\verb|:=|, as in"
 		},
 		{
+			"cell_id" : 14618390770609029772,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 6425573256407897,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 2272933481458126939,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "A + B"
@@ -48,6 +56,7 @@
 					"source" : "\\begin{dmath*}{}A+B\\end{dmath*}"
 				},
 				{
+					"cell_id" : 14416483452317882508,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}<class 'cadabra2.Ex'>\\end{verbatim}"
@@ -56,30 +65,35 @@
 			"source" : "ex:=A+B;\ntype(ex);"
 		},
 		{
+			"cell_id" : 14138459692123482407,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 2847848244353766819,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "An object of type \\verb|ExNode| is best thought of as an iterator. It can be used to walk an expression\ntree, and modify it in place. The most trivial way to get an iterator is to call the \\verb|top| member of\nan \\verb|Ex| object; think of this as returning a pointer to the topmost node of an expression,"
+					"source" : "An object of type \\verb|ExNode| is best thought of as an iterator. It can be used to walk an expression\ntree, and modify it in place (which is somewhat different from normal Python iterators; a point we will return\nto shortly). The most trivial way to get an iterator is to call the \\verb|top| member of\nan \\verb|Ex| object; think of this as returning a pointer to the topmost node of an expression,"
 				}
 			],
 			"hidden" : true,
-			"source" : "An object of type \\verb|ExNode| is best thought of as an iterator. It can be used to walk an expression\ntree, and modify it in place. The most trivial way to get an iterator is to call the \\verb|top| member of\nan \\verb|Ex| object; think of this as returning a pointer to the topmost node of an expression,"
+			"source" : "An object of type \\verb|ExNode| is best thought of as an iterator. It can be used to walk an expression\ntree, and modify it in place (which is somewhat different from normal Python iterators; a point we will return\nto shortly). The most trivial way to get an iterator is to call the \\verb|top| member of\nan \\verb|Ex| object; think of this as returning a pointer to the topmost node of an expression,"
 		},
 		{
+			"cell_id" : 5475362040304825870,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 4889801859931027187,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}A + B\\end{verbatim}"
 				},
 				{
+					"cell_id" : 8111178036103804680,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}<class 'cadabra2.ExNode'>\\end{verbatim}"
@@ -88,11 +102,13 @@
 			"source" : "ex.top();\ntype(ex.top());"
 		},
 		{
+			"cell_id" : 15665387514835589348,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 11679348138325456437,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "You will also encounter \\verb|ExNode|s when you do a standard Python iteration\nover the elements of an \\verb|Ex|, as in"
@@ -102,36 +118,43 @@
 			"source" : "You will also encounter \\verb|ExNode|s when you do a standard Python iteration\nover the elements of an \\verb|Ex|, as in"
 		},
 		{
+			"cell_id" : 17819639350499126772,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 18089991928180463935,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}<class 'cadabra2.ExNode'>\\end{verbatim}"
 				},
 				{
+					"cell_id" : 928705785378809404,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}A + B\\end{verbatim}"
 				},
 				{
+					"cell_id" : 10171488758885056085,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}<class 'cadabra2.ExNode'>\\end{verbatim}"
 				},
 				{
+					"cell_id" : 13380492898109088727,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}A\\end{verbatim}"
 				},
 				{
+					"cell_id" : 5149422238246026784,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}<class 'cadabra2.ExNode'>\\end{verbatim}"
 				},
 				{
+					"cell_id" : 3989053911783578317,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}B\\end{verbatim}"
@@ -140,11 +163,13 @@
 			"source" : "for n in ex:\n\ttype(n);\n\tdisplay(n)"
 		},
 		{
+			"cell_id" : 4137387624913381815,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 16884227773422108099,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "As you can see, this `iterates' over the elements of the expression, but in a perhaps somewhat unexpected\nway. We will discuss this in more detail in the next section. Important to remember from the example above\nis that the `pointers' to the individual elements of the expression are \\verb|ExNode| objects. \nThere are various other ways to obtain such pointers, using various types of `filtering', more on that\nbelow as well.\n\nOnce you have an \\verb|ExNode| pointing to a subexpression in an expression, you can query it further\nfor details about that subexpression. "
@@ -154,16 +179,19 @@
 			"source" : "As you can see, this `iterates' over the elements of the expression, but in a perhaps somewhat unexpected\nway. We will discuss this in more detail in the next section. Important to remember from the example above\nis that the `pointers' to the individual elements of the expression are \\verb|ExNode| objects. \nThere are various other ways to obtain such pointers, using various types of `filtering', more on that\nbelow as well.\n\nOnce you have an \\verb|ExNode| pointing to a subexpression in an expression, you can query it further\nfor details about that subexpression. "
 		},
 		{
+			"cell_id" : 10963956834816626859,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 6445329138816839629,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 16041054156969959119,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "A_{m n}"
@@ -172,11 +200,13 @@
 					"source" : "\\begin{dmath*}{}A_{m n}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 6671395703449228930,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}m\\end{verbatim}"
 				},
 				{
+					"cell_id" : 15687146476081198667,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}n\\end{verbatim}"
@@ -185,11 +215,13 @@
 			"source" : "ex:= A_{m n};\nfor i in ex.top().free_indices():\n\tdisplay(i)"
 		},
 		{
+			"cell_id" : 4019018513960059958,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 1841284369902058108,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "The example above shows how, starting from an iterator which points to the top of the expression, you can\nget a new iterator which can iterate over all free indices. "
@@ -199,11 +231,191 @@
 			"source" : "The example above shows how, starting from an iterator which points to the top of the expression, you can\nget a new iterator which can iterate over all free indices. "
 		},
 		{
+			"cell_id" : 17357805698574501177,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 16163878881460526284,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{ExNode and Python iterators}\n\nBefore we continue, we should make a comment on how \\verb|ExNode| objects relate to Python iterators.\nFor many purposes, \\verb|ExNode| objects behave as you expect from Python iterators: they allow you to loop over nodes of\nan \\verb|Ex| expression, you can call \\verb|next(...)| on them, and so on. However, there are some slight differences, which have to do with the fact that\nCadabra wants to give you access to the nodes of the original \\verb|Ex|, so that you can modify this original\n\\verb|Ex| in place. Consider for instance this example with a Python list of integers, with standard iterators:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{ExNode and Python iterators}\n\nBefore we continue, we should make a comment on how \\verb|ExNode| objects relate to Python iterators.\nFor many purposes, \\verb|ExNode| objects behave as you expect from Python iterators: they allow you to loop over nodes of\nan \\verb|Ex| expression, you can call \\verb|next(...)| on them, and so on. However, there are some slight differences, which have to do with the fact that\nCadabra wants to give you access to the nodes of the original \\verb|Ex|, so that you can modify this original\n\\verb|Ex| in place. Consider for instance this example with a Python list of integers, with standard iterators:"
+		},
+		{
+			"cell_id" : 18379624562437637500,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 121314811918743201,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "{}$\\big[$$\\verb|1|$,\\discretionary{}{}{} $\\verb|2|$,\\discretionary{}{}{} $\\verb|3|$,\\discretionary{}{}{} $\\verb|4|$,\\discretionary{}{}{} $\\verb|5|$$\\big]$"
+				},
+				{
+					"cell_id" : 17839365611770309449,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "{}$\\big[$$\\verb|1|$,\\discretionary{}{}{} $\\verb|2|$,\\discretionary{}{}{} $\\verb|3|$,\\discretionary{}{}{} $\\verb|4|$,\\discretionary{}{}{} $\\verb|5|$$\\big]$"
+				}
+			],
+			"source" : "q=[1,2,3,4,5];\nfor element in q:\n   element=0\nq;"
+		},
+		{
+			"cell_id" : 8306700484487211471,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 4168922270321543427,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "It still produces the original list at the end of the day, because each \\verb|element| is a \\emph{copy} of the\nelement in the list. With \\verb|ExNode|s you can actually modify the original \\verb|Ex|, as this example shows:"
+				}
+			],
+			"hidden" : true,
+			"source" : "It still produces the original list at the end of the day, because each \\verb|element| is a \\emph{copy} of the\nelement in the list. With \\verb|ExNode|s you can actually modify the original \\verb|Ex|, as this example shows:"
+		},
+		{
+			"cell_id" : 4630927477786015140,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 4235260673562839613,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 8812632743831006438,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A + B + C + D"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A+B+C+D\\end{dmath*}"
+				},
+				{
+					"cell_id" : 8077598135092445731,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 54572110013314483,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "Q + Q + Q + Q"
+						}
+					],
+					"source" : "\\begin{dmath*}{}Q+Q+Q+Q\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=A + B + C + D;\nfor element in ex.top().terms():\n   element.replace($Q$)\nex;"
+		},
+		{
+			"cell_id" : 4078572040632098996,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 3291457110345453070,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "In this case, \\verb|element| is not an \\verb|Ex| corresponding to each of the 5 terms, but\nrather an \\verb|ExNode|, which is more like a pointer into the \\verb|Ex| object. The \\verb|replace|\nmember function allows you to replace the building blocks of the original \\verb|ex| expression.\n\nIf you want to get a proper \\verb|Ex| object (so a \\emph{copy} of the element in the expression\nover which you are iterating), more like what you would get if iteration over Cadabra's expressions\nwas an ordinary Python iteration, then you can use \\verb|ExNode.ex()|:"
+				}
+			],
+			"hidden" : true,
+			"source" : "In this case, \\verb|element| is not an \\verb|Ex| corresponding to each of the 5 terms, but\nrather an \\verb|ExNode|, which is more like a pointer into the \\verb|Ex| object. The \\verb|replace|\nmember function allows you to replace the building blocks of the original \\verb|ex| expression.\n\nIf you want to get a proper \\verb|Ex| object (so a \\emph{copy} of the element in the expression\nover which you are iterating), more like what you would get if iteration over Cadabra's expressions\nwas an ordinary Python iteration, then you can use \\verb|ExNode.ex()|:"
+		},
+		{
+			"cell_id" : 13338472805876454539,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 8548759806933419273,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 12305928970509592519,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A + 2B + 3C + 4D"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A+2B+3C+4D\\end{dmath*}"
+				},
+				{
+					"cell_id" : 3046719146128378641,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 16359987555073575085,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A + 2B + 3C + 4D"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A+2B+3C+4D\\end{dmath*}"
+				},
+				{
+					"cell_id" : 13459390553453667032,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 10976535573212848309,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "3C"
+						}
+					],
+					"source" : "\\begin{dmath*}{}3C\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= A + 2 B + 3 C + 4 D;\nlst=[]\nfor element in ex.top().terms():\n   lst.append( element.ex() )\nex;\nlst[2];"
+		},
+		{
+			"cell_id" : 2779093920101567345,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9182058936686247795,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Here the list \\verb|lst| contains copies of the individual terms of the \\verb|ex| expression.\n\nA good way to remember about this is to keep in mind that Cadabra tries its best to allow you to modify\nexpressions \\emph{in-place}. The \\verb|ExNode| iterators provide that functionality."
+				}
+			],
+			"hidden" : true,
+			"source" : "Here the list \\verb|lst| contains copies of the individual terms of the \\verb|ex| expression.\n\nA good way to remember about this is to keep in mind that Cadabra tries its best to allow you to modify\nexpressions \\emph{in-place}. The \\verb|ExNode| iterators provide that functionality."
+		},
+		{
+			"cell_id" : 419058726958978058,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 12917610346077137892,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\subsection*{Traversing the expression tree}\n\nThe \\verb|ExNode| iterator can be instructed to traverse expressions in various ways. The most basic\niterator is obtained by using standard Python iteration with a \\verb|for| loop,"
@@ -213,16 +425,19 @@
 			"source" : "\\subsection*{Traversing the expression tree}\n\nThe \\verb|ExNode| iterator can be instructed to traverse expressions in various ways. The most basic\niterator is obtained by using standard Python iteration with a \\verb|for| loop,"
 		},
 		{
+			"cell_id" : 1562086486740641567,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 12410381233438750897,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 14386922931961145661,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "A + B + C_{m} D^{m}"
@@ -234,11 +449,13 @@
 			"source" : "ex:= A + B + C_{m} D^{m};"
 		},
 		{
+			"cell_id" : 15221357359172369652,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 7445041969873337852,
 					"cell_origin" : "server",
 					"cell_type" : "output",
 					"source" : "\\begin{verbatim}A + B + C_{m} D^{m}\nA\nB\nC_{m} D^{m}\nC_{m}\nm\nD^{m}\nm\n\\end{verbatim}"
@@ -247,11 +464,13 @@
 			"source" : "for n in ex:\n\tprint(str(n))"
 		},
 		{
+			"cell_id" : 10501994233898575362,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 704383322132262896,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "The iterator obtained in this way traverses the expression tree node by node, and when you ask it\nto print what it is pointing to, it prints the entire subtree of the node it is currently visiting.\nIf you are only interested in the name of the node, not the\nentire expression below it, you can use the \\verb|.name| member of the iterator:"
@@ -261,11 +480,13 @@
 			"source" : "The iterator obtained in this way traverses the expression tree node by node, and when you ask it\nto print what it is pointing to, it prints the entire subtree of the node it is currently visiting.\nIf you are only interested in the name of the node, not the\nentire expression below it, you can use the \\verb|.name| member of the iterator:"
 		},
 		{
+			"cell_id" : 7114346388970120519,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 10182545959028033598,
 					"cell_origin" : "server",
 					"cell_type" : "output",
 					"source" : "\\begin{verbatim}\\sum\nA\nB\n\\prod\nC\nm\nD\nm\n\\end{verbatim}"
@@ -274,11 +495,13 @@
 			"source" : "for n in ex:\n\tprint(str(n.name))"
 		},
 		{
+			"cell_id" : 10210203266960726041,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9630575658409744830,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Often, this kind of `brute force' iteration over expression elements is not very useful. A more powerful\niterator is obtained by asking for all nodes in the subtree which have a certain name. This can be the name of \na tensor, or the name of a special node, such as a product or sum,"
@@ -288,11 +511,13 @@
 			"source" : "Often, this kind of `brute force' iteration over expression elements is not very useful. A more powerful\niterator is obtained by asking for all nodes in the subtree which have a certain name. This can be the name of \na tensor, or the name of a special node, such as a product or sum,"
 		},
 		{
+			"cell_id" : 2424768294203788101,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 2014866901964486825,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}C_{m}\\end{verbatim}"
@@ -301,11 +526,13 @@
 			"source" : "for n in ex[\"C\"]:\n\tdisplay(n)"
 		},
 		{
+			"cell_id" : 9903842259378342150,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9849116786585471912,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}C_{m} D^{m}\\end{verbatim}"
@@ -314,11 +541,13 @@
 			"source" : "for n in ex[\"\\\\prod\"]:\n\tdisplay(n)"
 		},
 		{
+			"cell_id" : 10588142595263796342,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 10808031586959552824,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "The above two examples used an iterator obtained directly from an \\verb|Ex| object. \nVarious ways of obtaining iterators over special nodes can be obtained by using member functions of\n\\verb|ExNode| objects themselves. So one often uses a construction in which one first asks for an iterator\nto the top of an expression, and then requests from that iterator a new one which can iterate over\nvarious special nodes. The example below obtains an iterator over all top-level terms in an expression, and\nthen loops over its values."
@@ -328,21 +557,25 @@
 			"source" : "The above two examples used an iterator obtained directly from an \\verb|Ex| object. \nVarious ways of obtaining iterators over special nodes can be obtained by using member functions of\n\\verb|ExNode| objects themselves. So one often uses a construction in which one first asks for an iterator\nto the top of an expression, and then requests from that iterator a new one which can iterate over\nvarious special nodes. The example below obtains an iterator over all top-level terms in an expression, and\nthen loops over its values."
 		},
 		{
+			"cell_id" : 11464792304275148656,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 4394727638444626529,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}A\\end{verbatim}"
 				},
 				{
+					"cell_id" : 1554351456974996679,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}B\\end{verbatim}"
 				},
 				{
+					"cell_id" : 1396820566587439115,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}C_{m} D^{m}\\end{verbatim}"
@@ -351,11 +584,13 @@
 			"source" : "for n in ex.top().terms():\n\tdisplay(n)"
 		},
 		{
+			"cell_id" : 10977028249929669045,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 8727796298696264427,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Two special types of iterators are those which iterate only over all arguments or only over all indices\nof a sub-expression. These are discussed in the next section."
@@ -365,11 +600,13 @@
 			"source" : "Two special types of iterators are those which iterate only over all arguments or only over all indices\nof a sub-expression. These are discussed in the next section."
 		},
 		{
+			"cell_id" : 8386740853543185461,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9210025781643367835,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\subsection*{Arguments and indices}\n\nThere are various ways to obtain iterators which iterate over all arguments or all indices\nof an expression. The following example, with a derivative acting on a product, prints the \nargument of the derivative as well as all free indices."
@@ -379,21 +616,25 @@
 			"source" : "\\subsection*{Arguments and indices}\n\nThere are various ways to obtain iterators which iterate over all arguments or all indices\nof an expression. The following example, with a derivative acting on a product, prints the \nargument of the derivative as well as all free indices."
 		},
 		{
+			"cell_id" : 6168677497397138422,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 17261803845107424940,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Derivative to~}\\nabla{\\#}.\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9873753640405935280,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 5436539438039946572,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "\\nabla_{m}(A^{n}_{p} V^{p})"
@@ -405,11 +646,13 @@
 			"source" : "\\nabla{#}::Derivative;\nex:= \\nabla_{m}{ A^{n}_{p} V^{p} };"
 		},
 		{
+			"cell_id" : 114405730338281393,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 15847114993895123593,
 					"cell_origin" : "server",
 					"cell_type" : "output",
 					"source" : "\\begin{verbatim}A^{n}_{p} V^{p}\nm\nn\n\\end{verbatim}"
@@ -418,11 +661,13 @@
 			"source" : "for nabla in ex[r'\\nabla']:\n\tfor arg in nabla.args():\n\t\tprint(str(arg))\n\tfor i in nabla.free_indices():\n\t\tprint(str(i))"
 		},
 		{
+			"cell_id" : 13699803665641708663,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 15997637797326181384,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\subsection*{Example: covariant derivatives}\n\nThe following example shows how you might implement the expansion of a covariant derivative\ninto partial derivatives and connection terms."
@@ -432,16 +677,19 @@
 			"source" : "\\subsection*{Example: covariant derivatives}\n\nThe following example shows how you might implement the expansion of a covariant derivative\ninto partial derivatives and connection terms."
 		},
 		{
+			"cell_id" : 2872016859968266906,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : "def expand_nabla(ex):\n    for nabla in ex[r'\\nabla']:\n        nabla.name=r'\\partial'\n        dindex = nabla.indices().__next__() \n        for arg in nabla.args():             \n            ret:=0;\n            for index in arg.free_indices():\n                t2:= @(arg);\n                if index.parent_rel==sub:\n                    t1:= -\\Gamma^{p}_{@(dindex) @(index)};\n                    t2[index]:= _{p};\n                else:\n                    t1:=  \\Gamma^{@(index)}_{@(dindex) p};\n                    t2[index]:= ^{p};\n                ret += Ex(str(nabla.multiplier)) * t1 * t2\n            nabla += ret\n    return ex"
 		},
 		{
+			"cell_id" : 7237528541769121977,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 15359169329483093600,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "The sample expressions below show how this automatically takes care of not\nintroducing connections for dummy indices, and how it automatically handles indices which\nare more complicated than single symbols."
@@ -451,21 +699,25 @@
 			"source" : "The sample expressions below show how this automatically takes care of not\nintroducing connections for dummy indices, and how it automatically handles indices which\nare more complicated than single symbols."
 		},
 		{
+			"cell_id" : 17469792546183949,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 4611657941845445055,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Derivative to~}\\nabla{\\#}.\\end{dmath*}"
 				},
 				{
+					"cell_id" : 16721602649639875551,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 1971978125933515575,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : " 1/2 \\nabla_{a}(h^{b}_{c})"
@@ -474,11 +726,13 @@
 					"source" : "\\begin{dmath*}{}\\frac{1}{2}\\nabla_{a}{h^{b}\\,_{c}}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 12329008971607097549,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 11268549708438857109,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : " 1/2 \\partial_{a}(h^{b}_{c}) +  1/2 \\Gamma^{b}_{a p} h^{p}_{c} -  1/2 \\Gamma^{p}_{a c} h^{b}_{p}"
@@ -490,16 +744,19 @@
 			"source" : "\\nabla{#}::Derivative;\nex:= 1/2 \\nabla_{a}{ h^{b}_{c} }; \nexpand_nabla(ex);"
 		},
 		{
+			"cell_id" : 8847950111214242351,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 14579838225112781037,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 670483492207020752,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : " 1/4 \\nabla_{a}(v_{b} w^{b})"
@@ -508,11 +765,13 @@
 					"source" : "\\begin{dmath*}{}\\frac{1}{4}\\nabla_{a}\\left(v_{b} w^{b}\\right)\\end{dmath*}"
 				},
 				{
+					"cell_id" : 7192521991910884351,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 14234065611728877339,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : " 1/4 \\partial_{a}(v_{b} w^{b})"
@@ -524,16 +783,19 @@
 			"source" : "ex:= 1/4 \\nabla_{a}{ v_{b} w^{b} };\nexpand_nabla(ex);"
 		},
 		{
+			"cell_id" : 5955745636040271481,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 4792471961978253002,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 9062010348280049351,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "\\nabla_{\\hat{a}}(h_{b c} v^{c})"
@@ -542,11 +804,13 @@
 					"source" : "\\begin{dmath*}{}\\nabla_{\\widehat{a}}\\left(h_{b c} v^{c}\\right)\\end{dmath*}"
 				},
 				{
+					"cell_id" : 16288256561314012077,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 5483924240174076388,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "\\partial_{\\hat{a}}(h_{b c} v^{c})-\\Gamma^{p}_{\\hat{a} b} h_{p c} v^{c}"
@@ -558,6 +822,7 @@
 			"source" : "ex:= \\nabla_{\\hat{a}}{ h_{b c} v^{c} };\nexpand_nabla(ex);"
 		},
 		{
+			"cell_id" : 2378579335486944368,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
