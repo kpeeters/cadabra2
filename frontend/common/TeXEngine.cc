@@ -466,9 +466,11 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// The options below are chosen so they are compatible with MikTeX (https://docs.miktex.org/manual/pdftex.html),
 	// standard TeXLive on Linux and OSX. We use pdflatex because several latex distributions do not seem to have
 	// a 'latex' command anymore which supports all these options (e.g. MikTeX).
+	// For some reason, recent pdflatex versions no longer do anything with --halt-on-error, so we
+	// now also add the -interaction=nonstopmode (errorstopmode does not work either).
 
 	std::string latex_stdout, latex_stderr;
-	tpl::Process latex_proc("pdflatex --halt-on-error --output-format=dvi "+nf, "",
+	tpl::Process latex_proc("pdflatex --halt-on-error -interaction=nonstopmode --output-format=dvi "+nf, "",
 	[&](const char *bytes, size_t n) {
 		latex_stdout=std::string(bytes,n);
 		},
