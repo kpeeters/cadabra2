@@ -583,8 +583,7 @@ void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std
 	if(ch!=tree.end(it)) {
 		const Tableau        *tab =kernel.properties.get<Tableau>(ch);
 		const FilledTableau  *ftab=kernel.properties.get<FilledTableau>(ch);
-		const TableauInherit *itab=kernel.properties.get<TableauInherit>(ch);
-		if(tab || ftab || itab)
+		if(tab || ftab)
 			prev_is_tableau=true;
 		}
 	while(ch!=tree.end(it)) {
@@ -604,8 +603,7 @@ void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std
 		else {
 			const Tableau       *tab =kernel.properties.get<Tableau>(ch);
 			const FilledTableau *ftab=kernel.properties.get<FilledTableau>(ch);
-			const TableauInherit *itab=kernel.properties.get<TableauInherit>(ch);
-			if(tab || ftab || itab) {
+			if(tab || ftab) {
 				if(prev_is_tableau)
 					str << " \\otimes ";
 				else
@@ -645,8 +643,7 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 	if(ch!=tree.end(it)) {
 		const Tableau        *tab =kernel.properties.get<Tableau>(ch);
 		const FilledTableau  *ftab=kernel.properties.get<FilledTableau>(ch);
-		const TableauInherit *itab=kernel.properties.get<TableauInherit>(ch);
-		if(tab || ftab || itab)
+		if(tab || ftab)
 			prev_is_tableau=true;
 		}
 	while(ch!=tree.end(it)) {
@@ -660,8 +657,7 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 			if(*it->name=="\\sum") {
 				const Tableau       *tab =kernel.properties.get<Tableau>(ch);
 				const FilledTableau *ftab=kernel.properties.get<FilledTableau>(ch);
-				const TableauInherit *itab=kernel.properties.get<TableauInherit>(ch);
-				if(tab || ftab || itab) {
+				if(tab || ftab) {
 					if(prev_is_tableau)
 						str << " \\oplus ";
 					else
