@@ -16,9 +16,10 @@ typedef websocketpp::client<websocketpp::config::asio_client> client;
 
 using namespace cadabra;
 
-ComputeThread::ComputeThread(int server_port, std::string token)
+ComputeThread::ComputeThread(int server_port, std::string token, std::string ip_address)
 	: gui(0), docthread(0), connection_is_open(false), restarting_kernel(false), server_pid(0),
-	  server_stdout(0), server_stderr(0), forced_server_port(server_port), forced_server_token(token)
+	  server_stdout(0), server_stderr(0), forced_server_port(server_port), forced_server_token(token),
+	  forced_server_ip_address(ip_address)
 	{
 	// The ComputeThread constructor (but _not_ the run() member!) is
 	// always run on the gui thread, so we can grab the gui thread id
@@ -79,7 +80,7 @@ void ComputeThread::try_connect()
 	                                  websocketpp::lib::placeholders::_2));
 
 	std::ostringstream uristr;
-	uristr << "ws://127.0.0.1:" << port;
+	uristr << "ws://" << forced_server_ip_address << ":" << port;
 	websocketpp::lib::error_code ec;
 	connection = wsclient.get_connection(uristr.str(), ec);
 	if (ec) {

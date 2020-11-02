@@ -35,7 +35,7 @@ Cadabra::Cadabra(int argc, char **argv)
 	                   Gio::APPLICATION_HANDLES_OPEN |
 	                   Gio::APPLICATION_NON_UNIQUE),
 	  compute(0), compute_thread(0),
-	  server_port(0)
+	  server_port(0), server_ip_address("127.0.0.1")
 	{
 	// https://stackoverflow.com/questions/43886686/how-does-one-make-gtk3-look-native-on-windows-7
 	//	https://github.com/shoes/shoes3/wiki/Changing-Gtk-theme-on-Windows
@@ -53,6 +53,11 @@ Cadabra::Cadabra(int argc, char **argv)
 	                      's',
 	                      "Connect to running server on given port.",
 	                      "number");
+	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_STRING,
+	                      "server-ip-address",
+	                      'a',
+	                      "Connect to running server on given ip address.",
+	                      "string");
 	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_FILENAME,
 	                      "token",
 	                      't',
@@ -93,6 +98,7 @@ int Cadabra::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& opti
 		return -1;
 
 	get_arg_value(options, "server-port", server_port);
+	get_arg_value(options, "server-ip-address", server_ip_address);	
 	get_arg_value(options, "token",       server_token);
 //	std::cerr << server_port << ", " << server_token << std::endl;
 	return -1;
@@ -100,7 +106,7 @@ int Cadabra::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& opti
 
 void Cadabra::on_activate()
 	{
-	compute = new cadabra::ComputeThread(server_port, server_token);
+	compute = new cadabra::ComputeThread(server_port, server_token, server_ip_address);
 	compute_thread = new std::thread(&cadabra::ComputeThread::run, compute);
 
 	auto nw = new cadabra::NotebookWindow(this);

@@ -29,4 +29,5 @@ class Cadabra : public Gtk::Application {
 
 		int server_port;
 		std::string server_token;
+		std::string server_ip_address;
 	};
