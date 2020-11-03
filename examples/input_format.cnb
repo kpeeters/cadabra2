@@ -1,45 +1,52 @@
 {
+	"cell_id" : 17995742875800745261,
 	"cells" : 
 	[
 		{
+			"cell_id" : 7233586445452571067,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 3554338300210336886,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\section*{Input format}\n\\subsection*{Mathematical expressions}\n\nThe input format of Cadabra is closely related to the notation used by\n\\LaTeX{} to denote tensorial expressions. That is, one can use not only\nbracketed notation to denote child objects, like in \n\\begin{verbatim}\nobject[child,child]\n\\end{verbatim}\nbut also the usual sub- and superscript notation like\n\\begin{verbatim}\nobject^{child child}_{child}\n\\end{verbatim}\nOne can use backslashes in the names of objects as well, just as in\n\\LaTeX{}. All of the symbols that one enters this way are considered\n``passive'', that is, they will go into the expression tree just like\none has entered them. \n\n"
+					"source" : "\\section*{Input format}\n\\subsection*{Mathematical expressions}\n\nThe input format of Cadabra is closely related to the notation used by\nLaTeX to denote tensorial expressions. That is, one can use not only\nbracketed notation to denote child objects, like in \n\\begin{verbatim}\nobject[child,child]\n\\end{verbatim}\nbut also the usual sub- and superscript notation like\n\\begin{verbatim}\nobject^{child child}_{child}\n\\end{verbatim}\nOne can use backslashes in the names of objects as well, just as in\nLaTeX. All of the symbols that one enters this way are considered\n``passive'', that is, they will go into the expression tree just like\none has entered them. \n\n"
 				}
 			],
 			"hidden" : true,
-			"source" : "\\section*{Input format}\n\\subsection*{Mathematical expressions}\n\nThe input format of Cadabra is closely related to the notation used by\n\\LaTeX{} to denote tensorial expressions. That is, one can use not only\nbracketed notation to denote child objects, like in \n\\begin{verbatim}\nobject[child,child]\n\\end{verbatim}\nbut also the usual sub- and superscript notation like\n\\begin{verbatim}\nobject^{child child}_{child}\n\\end{verbatim}\nOne can use backslashes in the names of objects as well, just as in\n\\LaTeX{}. All of the symbols that one enters this way are considered\n``passive'', that is, they will go into the expression tree just like\none has entered them. \n\n"
+			"source" : "\\section*{Input format}\n\\subsection*{Mathematical expressions}\n\nThe input format of Cadabra is closely related to the notation used by\nLaTeX to denote tensorial expressions. That is, one can use not only\nbracketed notation to denote child objects, like in \n\\begin{verbatim}\nobject[child,child]\n\\end{verbatim}\nbut also the usual sub- and superscript notation like\n\\begin{verbatim}\nobject^{child child}_{child}\n\\end{verbatim}\nOne can use backslashes in the names of objects as well, just as in\nLaTeX. All of the symbols that one enters this way are considered\n``passive'', that is, they will go into the expression tree just like\none has entered them. \n\n"
 		},
 		{
+			"cell_id" : 3565968931941232174,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 14108138496162031989,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Expressions are entered by using the `\\verb|:=|' operator, as in"
 				}
 			],
-			"hidden" : true,
 			"source" : "Expressions are entered by using the `\\verb|:=|' operator, as in"
 		},
 		{
+			"cell_id" : 11168178429144848554,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 162743159304939194,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 8867733089192382465,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "A + B + C_{m} C^{m}"
@@ -51,11 +58,13 @@
 			"source" : "ex:=A+B+C_{m} C^{m};"
 		},
 		{
+			"cell_id" : 1591872224667350552,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 14532919110662461854,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Expressions (the `\\verb|ex|' above) are ordinary Python objects (of type \\verb|cadabra2.Ex|), and their names can thus only contain normal \nalphanumeric symbols. "
@@ -65,11 +74,13 @@
 			"source" : "Expressions (the `\\verb|ex|' above) are ordinary Python objects (of type \\verb|cadabra2.Ex|), and their names can thus only contain normal \nalphanumeric symbols. "
 		},
 		{
+			"cell_id" : 4694010193013820647,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 2256005163083726401,
 					"cell_origin" : "server",
 					"cell_type" : "verbatim",
 					"source" : "\\begin{verbatim}<class 'cadabra2.Ex'>\\end{verbatim}"
@@ -78,11 +89,13 @@
 			"source" : "type(ex);"
 		},
 		{
+			"cell_id" : 1369026216775059075,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 14215033375371077236,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Lines  always have to be terminated with either a ``;'' or a ``:''. \nThese delimiting symbols act in the same way as in Maple: the second form suppresses the output of the entered\nexpression. Long expressions can, because of these\ndelimiters, be spread over many subsequent input lines. Any line\nstarting with a ``\\#'' sign is considered to be a comment (even when\nit appears within a multi-line expression). Comments are always\nignored completely (they do not end up in the expression tree."
@@ -92,30 +105,35 @@
 			"source" : "Lines  always have to be terminated with either a ``;'' or a ``:''. \nThese delimiting symbols act in the same way as in Maple: the second form suppresses the output of the entered\nexpression. Long expressions can, because of these\ndelimiters, be spread over many subsequent input lines. Any line\nstarting with a ``\\#'' sign is considered to be a comment (even when\nit appears within a multi-line expression). Comments are always\nignored completely (they do not end up in the expression tree."
 		},
 		{
+			"cell_id" : 9939973578136241108,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 600935945505413330,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "When entering maths as above (using the `\\verb|:=|' assignment operator) you do not need to indicate that\nthe right-hand side is mathematics. There are situations, however, when you do need to give Cadabra a hint\nthat what you type is maths, not Python. In this case, you add dollar symbols, just as in \\LaTeX{},"
+					"source" : "When entering maths as above (using the `\\verb|:=|' assignment operator) you do not need to indicate that\nthe right-hand side is mathematics. There are situations, however, when you do need to give Cadabra a hint\nthat what you type is maths, not Python. In this case, you add dollar symbols, just as in LaTeX,"
 				}
 			],
 			"hidden" : true,
-			"source" : "When entering maths as above (using the `\\verb|:=|' assignment operator) you do not need to indicate that\nthe right-hand side is mathematics. There are situations, however, when you do need to give Cadabra a hint\nthat what you type is maths, not Python. In this case, you add dollar symbols, just as in \\LaTeX{},"
+			"source" : "When entering maths as above (using the `\\verb|:=|' assignment operator) you do not need to indicate that\nthe right-hand side is mathematics. There are situations, however, when you do need to give Cadabra a hint\nthat what you type is maths, not Python. In this case, you add dollar symbols, just as in LaTeX,"
 		},
 		{
+			"cell_id" : 7824582319615562940,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 13761891641704533245,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 13355639495689827370,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "A + B + D"
@@ -127,11 +145,13 @@
 			"source" : "substitute($A + B + C$, $C -> D$);"
 		},
 		{
+			"cell_id" : 8279289810202898585,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 13481872891682365066,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "As you can see, this uses an `inline' definition of a mathematical expression, without giving it a name."
@@ -141,11 +161,13 @@
 			"source" : "As you can see, this uses an `inline' definition of a mathematical expression, without giving it a name."
 		},
 		{
+			"cell_id" : 11875472874179676467,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 4812370376625991741,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\subsection*{Algorithms}"
@@ -155,11 +177,13 @@
 			"source" : "\\subsection*{Algorithms}"
 		},
 		{
+			"cell_id" : 11333938729236975341,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 8847384480363199435,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Algorithms are ordinary Python functions, which act on \\verb|cadabra2.Ex| objects. "
@@ -169,6 +193,7 @@
 			"source" : "Algorithms are ordinary Python functions, which act on \\verb|cadabra2.Ex| objects. "
 		},
 		{
+			"cell_id" : 17499779172771751965,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""

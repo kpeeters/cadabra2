@@ -1,4 +1,7 @@
+print_header("Configuring documentation")
+
 set(HTMLOUTDIR ${CMAKE_SOURCE_DIR}/web2/cadabra2/source/notebooks)
+set(BOOKOUTDIR ${CMAKE_BINARY_DIR}/book)
 set(TOCOUTDIR  ${CMAKE_SOURCE_DIR}/web2/cadabra2/source/)
 set(MANOUTDIR  ${CMAKE_SOURCE_DIR}/web2/cadabra2/source/manual)
 set(CNBDIR     ${CMAKE_SOURCE_DIR}/examples)
@@ -41,6 +44,21 @@ set(TUTORIALS
   ref_implicit_versus_explicit
   ref_selecting
   )
+
+# The Book
+set(BOOK_PARTS
+   input_format
+   ref_printing
+   ref_patterns
+   ref_properties
+   ref_indices
+   ref_derivatives
+   ref_default_simplification
+   ref_programming
+   ref_import
+   ref_implicit_versus_explicit
+   ref_selecting
+)   
 
 # 3rd party contributions
 
@@ -230,3 +248,35 @@ foreach(TUT ${CONTRIBS})
   add_custom_target("${TUT}_cnb" ALL echo -n DEPENDS ${HTMLOUTDIR}/${TUT}.html ${HTMLOUTDIR}/${TUT}.cnb )		
 endforeach()
 
+file(MAKE_DIRECTORY ${BOOKOUTDIR})
+
+# The Cadabra Book.
+
+foreach(BOOK_PART ${BOOK_PARTS})
+   message(STATUS "Found book section ${BOOK_PART}")
+   set(ALLTEX ${ALLTEX} ${BOOKOUTDIR}/${BOOK_PART}.tex)
+   add_custom_command(
+      OUTPUT   ${BOOKOUTDIR}/${BOOK_PART}.tex
+      DEPENDS  ${CNBDIR}/${BOOK_PART}.cnb ${DC}
+      COMMAND  ${CMAKE_INSTALL_PREFIX}/bin/cadabra2latex
+      ARGS    --segment ${CNBDIR}/${BOOK_PART}.cnb ${BOOKOUTDIR}/${BOOK_PART}.tex
+      COMMENT "Creating ${BOOK_PART}.tex")
+   add_custom_target("${BOOK_PART}" ALL echo -n DEPENDS ${BOOKOUTDIR}/${BOOK_PART}.tex)
+endforeach()
+message(STATUS "Book will be created in ${BOOKOUTDIR}")
+add_custom_command(
+   OUTPUT   ${BOOKOUTDIR}/the_cadabra_book.pdf
+   DEPENDS  ${CMAKE_SOURCE_DIR}/doc/the_cadabra_book.tex ${CMAKE_SOURCE_DIR}/doc/book_cover.pdf ${ALLTEX}
+   COMMAND  cp
+   ARGS     ${CMAKE_SOURCE_DIR}/doc/the_cadabra_book.tex ${BOOKOUTDIR}/
+   COMMAND  cp
+   ARGS     ${CMAKE_SOURCE_DIR}/doc/book_cover.pdf ${BOOKOUTDIR}/
+   COMMAND  pdflatex
+   ARGS     the_cadabra_book.tex
+   COMMAND  pdflatex
+   ARGS     the_cadabra_book.tex
+   COMMAND  pdflatex
+   ARGS     the_cadabra_book.tex
+   WORKING_DIRECTORY ${BOOKOUTDIR}
+   COMMENT  "Creating the_cadabra_book.pdf")
+add_custom_target(book ALL echo -n DEPENDS ${BOOKOUTDIR}/the_cadabra_book.pdf)

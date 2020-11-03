@@ -1,5 +1,5 @@
 \documentclass[11pt]{book}
-\usepackage[scale=.75]{geometry}
+\usepackage[scale=.7]{geometry}
 \usepackage{textfit}
 \usepackage{relsize}
 \usepackage{setspace}
@@ -14,6 +14,7 @@
 \usepackage{amssymb}
 \usepackage[parfill]{parskip}
 \usepackage{graphicx}
+\usepackage{wallpaper}
 %\usepackage{tableaux}
 \def\specialcolon{\mathrel{\mathop{:}}\hspace{-.5em}}
 \renewcommand{\bar}[1]{\overline{#1}}
@@ -68,7 +69,7 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 \fancyfoot[LE,RO]{{\small\thepage}}
-\fancyfoot[LO,RE]{{\tiny\href{http://cadabra.science}{{\tt http://cadabra.science}}}}
+\fancyfoot[LO,RE]{}
 
 % \makeatletter\def\old@comma{,}\catcode`\,=13 \def,{%
 % \ifmmode\old@comma\discretionary{}{}{}\else\old@comma\fi}\makeatother
@@ -180,25 +181,104 @@
 
 \begin{document}
 \pagestyle{empty}
+\ThisLRCornerWallPaper{1.0}{book_cover}
 \begin{flushright}
 \today
 \end{flushright}
 \vspace{6ex}
-\hspace{-3mm}{\bf \scaletowidth{7cm}{The Cadabra Book}}~\\[.8ex] 
-{\it A field-theory motivated approach to symbolic computer algebra}\\[6ex]
-{\large\bf Copyright \copyright~2001--2020 ~Kasper Peeters}\\[25ex]
-\vfill
-\noindent {\smaller This manual is available under the terms of the GNU Free
+{\bf \scaletowidth{15cm}{The Cadabra Book}}~\\[.8ex] 
+{\it\large A field-theory motivated approach to symbolic computer algebra}\\[6ex]
+{\bf \scaletowidth{5cm}{Kasper Peeters}}
+\newpage
+\pagestyle{empty}
+\hbox{~}
+\noindent {\smaller This book is available under the terms of the GNU Free
 Documentation License, version 1.2.\\
 The accompanying software is available under the terms of the GNU
 General Public License, version 3.}
-\newpage
+\vfill
+\noindent {\large\bf Copyright \copyright~2001-2020 ~Kasper Peeters}\\[3ex]
+\href{mailto:kasper.peeters@cadabra.science}{kasper.peeters@cadabra.science}
+
+\pagestyle{fancy} 
+\tableofcontents
+
+\chapter{Introduction and overview}
+\section{Cadabra's design philosophy}
+
+Cadabra is built around the fact that many computations do not have
+one single and unique path between the starting point and the end
+result. When we do computations on paper, we often take bits of an
+expression apart, do some manipulations on them, stick them back into
+the main expression, and so on. Often, the manipulations that we do
+are far from uniquely determined by the problem, and often there is no
+way even in principle for a computer to figure out what is 'the best'
+thing to do.
+
+What we need the computer to do, in such a case, is to be good at
+performing simple but tedious steps, without enforcing on the user how
+to do a particular computation. In other words, we want the computer
+algebra system to be a scratchpad, leaving us in control of which
+steps to take, not forcing us to return to a 'canonical' expression at
+every stage.
+
+Most existing computer algebra systems allow for this kind of work
+flow only by requiring to stick clumsy 'inert' or 'hold' arguments
+onto expressions, by default always 'simplifying' every input to some
+form they think is best. Cadabra starts from the other end of the
+spectrum, and as a general rule keeps your expression untouched,
+unless you explicitly ask for something to be done to it.
+
+Another key issue in the design of symbolic computer algebra systems
+has always been whether or not there should be a distinction between
+the 'data language' (the language used to write down mathematical
+expressions), the 'manipulation language' (the language used to write
+down what you want to do with those expressions) and the
+'implementation language' (the language used to implement algorithms
+which act on mathematical expressions). Many computer algebra systems
+take the approach in which these languages are the same (Axiom,
+Reduce, Sympy) or mostly the same apart from a small core which uses a
+different implementation language (Mathematica, Maple). The Cadabra
+project is rooted in the idea that for many applications, it is better
+to keep a clean distinction between these three languages. Cadabra
+writes mathematics using LaTeX, is programmable in Python, and is
+under the hood largely written in C++.
+
+\section{History}
+
+Cadabra was originally written around 2001 to solve <a
+href="https://arxiv.org/abs/hep-th/0010167">a number</a> <a
+href="https://arxiv.org/abs/hep-th/0307298">of problems</a> related to
+higher-derivative supergravity. It was then expanded and polished, and
+first saw its public release <a
+href="https://arxiv.org/abs/hep-th/0701238">in 2007</a>.  During the
+years that followed, it became clear that several design decisions
+were not ideal, such as the use of a custom programming language and
+the lack of functionality for component computations. Over the course
+of 2015-2016 a large rewrite took place, which resulted in Cadabra
+2.x.  This new version is programmable in Python and does both
+abstract and component computations. This new web site, with new
+tutorials and all manual pages accessible online, will also hopefully
+help to make Cadabra easier to use.
+
 
 \chapter{The input format}
 \input{input_format.tex}
 \input{ref_printing.tex}
+\input{ref_properties.tex}
+\input{ref_indices.tex}
+\input{ref_implicit_versus_explicit.tex}
 
 \chapter{Mathematical properties}
+\input{ref_derivatives.tex}
 
+\chapter{Manipulating expressions}
+\input{ref_selecting.tex}
+\input{ref_import.tex}
+\input{ref_default_simplification}
+\input{ref_patterns}
+
+\chapter{Writing your own packages}
+\input{ref_programming}
 
 \end{document}

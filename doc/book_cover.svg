@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg833"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="book_cover.svg">
+  <defs
+     id="defs827" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.61871843"
+     inkscape:cx="154.6211"
+     inkscape:cy="321.39625"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1875"
+     inkscape:window-height="1763"
+     inkscape:window-x="0"
+     inkscape:window-y="360"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata830">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#9bd79b;fill-opacity:1;stroke:none;stroke-width:0.13571434;stroke-miterlimit:4;stroke-dasharray:0.54285732, 0.54285732;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect1436-3-6"
+       width="25.048092"
+       height="26.597569"
+       x="163.6929"
+       y="142.77937"
+       transform="matrix(0.96700399,0.25476122,-0.2588613,0.9659145,0,0)" />
+    <rect
+       style="fill:#9bd79b;fill-opacity:1;stroke:none;stroke-width:0.13571434;stroke-miterlimit:4;stroke-dasharray:0.54285732, 0.54285732;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect1436-3-6-7"
+       width="25.048092"
+       height="26.59757"
+       x="-9.6981936"
+       y="253.62148"
+       transform="matrix(0.92289196,-0.38505899,0.38114029,0.92451722,0,0)" />
+    <rect
+       style="fill:#61bc61;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:0.79999999, 0.79999999;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect1436"
+       width="36.776287"
+       height="39.342075"
+       x="71.700958"
+       y="218.06932"
+       transform="rotate(-7.1250162)" />
+    <rect
+       style="fill:#9bd79b;fill-opacity:1;stroke:none;stroke-width:0.13571434;stroke-miterlimit:4;stroke-dasharray:0.54285732, 0.54285732;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect1436-3-6-5"
+       width="25.048092"
+       height="26.59757"
+       x="178.34175"
+       y="173.5835"
+       transform="matrix(0.99996857,0.00792816,-0.01217031,0.99992594,0,0)" />
+    <rect
+       style="fill:#61bc61;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:0.79999999, 0.79999999;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect1436-3"
+       width="36.776287"
+       height="39.342075"
+       x="199.03294"
+       y="139.15643"
+       transform="rotate(14.880521)" />
+    <g
+       transform="matrix(0.34697754,0,0,0.34697754,62.081393,140.27066)"
+       id="g1399">
+      <rect
+         inkscape:export-ydpi="268.37686"
+         inkscape:export-xdpi="268.37686"
+         inkscape:export-filename="/home/kasper/git/cadabra2/web2/cadabra2/source/static/icons/cadabra2.png"
+         y="231.51273"
+         x="209.72197"
+         height="171.69885"
+         width="171.69885"
+         id="rect2383"
+         style="fill:#209020;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.30114079;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <g
+         inkscape:export-ydpi="268.37686"
+         inkscape:export-xdpi="268.37686"
+         inkscape:export-filename="/home/kasper/git/cadabra2/web2/cadabra2/source/static/icons/cadabra2.png"
+         style="fill:#ffffff;fill-opacity:1"
+         transform="matrix(6.9414746,0,0,7.9409743,-266.38771,131.33628)"
+         id="g4402">
+        <g
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="g4404"
+           transform="matrix(0.24857143,0,0,-0.24857143,-43.5,130.5)"
+           xml:space="preserve"
+           stroke-miterlimit="10.433"
+           font-style="normal"
+           font-variant="normal"
+           font-weight="normal"
+           font-stretch="normal"
+           font-size-adjust="none"
+           letter-spacing="normal"
+           word-spacing="normal"><path
+             style="fill:#ffffff;fill-opacity:1;stroke-width:0"
+             inkscape:connector-curvature="0"
+             d="m 498.44,439.52 0.01,0.05 0.01,0.05 0.01,0.04 0.02,0.05 0.02,0.1 0.01,0.05 0.01,0.04 0.02,0.05 0.01,0.05 0.01,0.05 v 0.06 l 0.01,0.05 0.01,0.05 v 0.05 0.03 0.03 c 0,0.7 -0.7,0.7 -1.25,0.7 l -4.63,-3.59 c -2.29,2.54 -5.67,3.59 -9.11,3.59 -16.04,0 -24.86,-12.21 -24.86,-22.42 0,-9.41 7.52,-13.45 16.24,-13.45 4.18,0 8.42,1.3 12.2,4.09 4.84,3.58 5.73,8.17 5.73,8.42 0,0.7 -0.7,0.7 -1.14,0.7 -0.95,0 -1,-0.11 -1.25,-0.95 -2.04,-6.33 -8.52,-9.91 -14.2,-9.91 -3.03,0 -5.73,0.69 -7.77,2.29 -2.69,2.04 -2.89,5.42 -2.89,6.77 0,1.44 0.8,10.76 5.73,16.54 2.69,3.19 7.52,5.58 13,5.58 6.08,0 8.62,-4.59 8.62,-8.97 0,-0.55 -0.15,-1.25 -0.15,-1.74 0,-0.75 0.65,-0.75 1.35,-0.75 1.09,0 1.14,0.05 1.39,1.1 z"
+             id="path4406" /><path
+             style="fill:#ffffff;fill-opacity:1;stroke-width:0"
+             inkscape:connector-curvature="0"
+             d="m 506.15,421.32 0.02,0.04 0.02,0.04 0.05,0.08 0.05,0.07 0.06,0.07 0.05,0.06 0.05,0.06 0.06,0.05 0.06,0.05 0.05,0.05 0.06,0.04 0.06,0.04 0.06,0.03 0.06,0.03 0.05,0.03 0.06,0.03 0.06,0.02 0.06,0.02 0.05,0.02 0.06,0.01 0.05,0.02 0.05,0.01 0.05,0.01 h 0.05 l 0.05,0.01 h 0.05 l 0.04,0.01 h 0.04 0.04 0.04 0.03 0.03 0.03 c 1.22,0 2.09,-0.63 3.04,-1.36 0.83,-0.59 1.91,-1.29 2.68,-1.29 1.22,0 2.09,1.26 2.09,2.13 0,0.8 -0.52,1.15 -0.7,1.25 -0.41,0.28 -5.79,1.26 -6.38,1.26 -1.88,0 -4.15,-1.39 -4.15,-3.94 0,-1.92 1.47,-4.46 2.37,-5.82 -6.79,-1.57 -8.71,-6.8 -8.71,-9.59 0,-4.29 3.62,-6.31 7.98,-6.31 l 0.14,1.6 c -0.63,0 -2.09,0.14 -2.93,0.87 -0.87,0.73 -1.11,1.54 -1.11,2.69 0,1.32 0.63,4.32 1.67,6.13 0.8,1.33 1.99,2.48 4.05,3.04 v 0 c 1.35,-1.99 2.3,-3.59 2.3,-5.9 0,-2.54 -1.33,-6.83 -3.98,-6.83 l -0.14,-1.6 c 4.71,0 8.51,4.88 8.51,10.74 0,3.52 -1.74,5.26 -3.1,6.41 -1.29,1.09 -2.17,1.82 -3.18,2.83 -1.81,1.77 -1.91,2.16 -2.05,2.79 z"
+             id="path4408" /><path
+             style="fill:#ffffff;fill-opacity:1;stroke-width:0"
+             inkscape:connector-curvature="0"
+             d="m 521,393 2.12,8.61 c 0.67,-0.87 3,-3.06 7.92,-3.06 l -0.03,1.6 c -2.97,0 -6.84,1.36 -6.84,4.95 0,0.67 0.35,2.1 0.63,3.11 0.17,0.76 1.29,5.23 1.36,5.54 0.31,1.22 0.91,3.59 3.69,5.68 2.87,2.16 5.62,2.45 6.88,2.45 2.37,0 2.37,-1.54 2.37,-2.1 0,-0.83 -0.63,-4.01 -1.54,-5.58 v 0 c -1.32,0.28 -2.51,0.28 -3.21,0.28 l -0.1,-1.6 c 0.56,0 1.01,0 1.64,-0.14 -0.77,-0.42 -1.5,-0.42 -2.13,-0.42 -1.04,0 -1.15,0.04 -1.85,0.21 v 0 c 0.46,0.21 0.77,0.35 2.34,0.35 l 0.1,1.6 c -1.5,0 -4.67,0 -4.67,-2.09 0,-1.64 2.3,-1.68 4.01,-1.68 1.01,0 2.44,0 4.29,0.74 0.31,-0.49 0.42,-1.22 0.42,-1.85 0,-1.22 -0.73,-5.06 -2.06,-6.9 -1.25,-1.71 -3.17,-2.55 -5.33,-2.55 l 0.03,-1.6 c 7.81,0 11.79,5.3 11.79,9.69 0,2.02 -0.81,3.63 -2.37,4.74 1.53,1.26 2.64,3.49 2.64,5.55 0,2.82 -2.02,4.95 -6.2,4.95 -5.16,0 -11.37,-3.28 -12.76,-8.93 l -5.27,-21.09 c -0.14,-0.49 -0.14,-0.56 -0.14,-0.6 0,-0.63 0.59,-0.63 1.12,-0.63 0.7,0 0.97,0 1.15,0.77 z"
+             id="path4410" /></g>      </g>
+    </g>
+  </g>
+</svg>

@@ -134,10 +134,10 @@ namespace cadabra {
 	/// Export a document to a single self-contained LaTeX file, with the exception of
 	/// images which get saved as separate numbered files.
 
-	std::string export_as_LaTeX(const DTree& doc, const std::string& image_file_base);
+	std::string export_as_LaTeX(const DTree& doc, const std::string& image_file_base, bool for_embedding=false);
 	void        LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str,
 	                          const std::string& preamble_string, const std::string& image_file_base,
-	                          int& image_num);
+	                          int& image_num, bool for_embedding);
 
 	/// Export a document to a python-like file (converting text cells to comments
 	/// and python cells to python code, dropping output cells).

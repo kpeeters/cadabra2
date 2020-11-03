@@ -507,34 +507,39 @@ DataCell::id_t DataCell::id() const
 	return serial_number;
 	}
 
-std::string cadabra::export_as_LaTeX(const DTree& doc, const std::string& image_file_base)
+std::string cadabra::export_as_LaTeX(const DTree& doc, const std::string& image_file_base, bool for_embedding)
 	{
 	// Load the pre-amble from file.
-	std::string pname = cadabra::install_prefix()+"/share/cadabra2/notebook.tex";
-	std::ifstream preamble(pname);
-	if(!preamble)
-		throw std::logic_error("Cannot open LaTeX preamble at "+pname);
-	std::stringstream buffer;
-	buffer << preamble.rdbuf();
-	// std::cerr << "Using preamble at " << pname << std::endl;
-	std::string preamble_string = buffer.str();
+	std::string preamble_string;
+	if(!for_embedding) {
+		std::string pname = cadabra::install_prefix()+"/share/cadabra2/notebook.tex";
+		std::ifstream preamble(pname);
+		if(!preamble)
+			throw std::logic_error("Cannot open LaTeX preamble at "+pname);
+		std::stringstream buffer;
+		buffer << preamble.rdbuf();
+		// std::cerr << "Using preamble at " << pname << std::endl;
+		preamble_string = buffer.str();
+		}
 
 	// Open the LaTeX file for writing.
 	std::ostringstream str;
 	int image_num=0;
-	LaTeX_recurse(doc, doc.begin(), str, preamble_string, image_file_base, image_num);
+	LaTeX_recurse(doc, doc.begin(), str, preamble_string, image_file_base, image_num, for_embedding);
 
 	return str.str();
 	}
 
 void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str,
                             const std::string& preamble_string, const std::string& image_file_base,
-                            int& image_num)
+                            int& image_num, bool for_embedding)
 	{
 	switch(it->cell_type) {
 		case DataCell::CellType::document:
-			str << preamble_string;
-			str << "\\begin{document}\n";
+			if(!for_embedding) {
+				str << preamble_string;
+				str << "\\begin{document}\n";
+				}
 			break;
 		case DataCell::CellType::python:
 			str << "\\begin{python}\n";
@@ -543,7 +548,7 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 			str << "\\begin{python}\n";
 			break;
 		case DataCell::CellType::verbatim:
-			str << "\\begin{verbatim}\n";
+//			str << "\\begin{verbatim}\n";
 			break;
 		case DataCell::CellType::latex:
 			break;
@@ -584,8 +589,8 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 				lr=std::regex_replace(lr, std::regex(R"(\\left\\\{)"),            "\\brwrap{\\{}{");
 				lr=std::regex_replace(lr, std::regex(R"(\\right\\\})"),           "}{\\}}");
 				lr=std::regex_replace(lr, std::regex(R"(\\right\.)"),            "}{.}");
-				lr=std::regex_replace(lr, std::regex(R"(\\begin\{verbatim\})"), "");
-				lr=std::regex_replace(lr, std::regex(R"(\\end\{verbatim\})"),   "");
+//				lr=std::regex_replace(lr, std::regex(R"(\\begin\{verbatim\})"), "");
+//				lr=std::regex_replace(lr, std::regex(R"(\\end\{verbatim\})"),   "");
 				lr=std::regex_replace(lr, std::regex(R"(\\begin\{dmath\*\})"),  "\\begin{adjustwidth}{1em}{0cm}$");
 				lr=std::regex_replace(lr, std::regex(R"(\\end\{dmath\*\})"),    "$\\end{adjustwidth}");
 				str << lr << "\n";
@@ -599,7 +604,7 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 			str << "\\end{python}\n";
 			break;
 		case DataCell::CellType::verbatim:
-			str << "\\end{verbatim}\n";
+//			str << "\\end{verbatim}\n";
 			break;
 		case DataCell::CellType::document:
 		case DataCell::CellType::latex:
@@ -613,14 +618,16 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 	if(doc.number_of_children(it)>0) {
 		DTree::sibling_iterator sib=doc.begin(it);
 		while(sib!=doc.end(it)) {
-			LaTeX_recurse(doc, sib, str, preamble_string, image_file_base, image_num);
+			LaTeX_recurse(doc, sib, str, preamble_string, image_file_base, image_num, for_embedding);
 			++sib;
 			}
 		}
 
 	switch(it->cell_type) {
 		case DataCell::CellType::document:
-			str << "\\end{document}\n";
+			if(!for_embedding) {
+				str << "\\end{document}\n";
+				}
 			break;
 		case DataCell::CellType::python:
 		case DataCell::CellType::output:
