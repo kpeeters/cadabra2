@@ -24,6 +24,7 @@ const std::set<std::string> cadabra::symbols::greek {
 	"\\tau",
 	"\\upsilon",
 	"\\phi",
+	"\\varphi",
 	"\\chi",
 	"\\psi",
 	"\\omega",
