@@ -1,5 +1,5 @@
 {
-	"cell_id" : 36207891471477439,
+	"cell_id" : 9785580926210345772,
 	"cells" : 
 	[
 		{
@@ -9,14 +9,14 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 1081564940559116795,
+					"cell_id" : 14935582325842510854,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\section*{Patterns, conditionals and regular expressions}\n\nPatterns in Cadabra are quite a bit different from those in other\ncomputer algebra systems, because they are more tuned towards the\npattern matching of objects common in tensorial expressions, rather\nthan generic tree structures.\n\nName patterns are constructed by writing a single question mark behind\nthe name, as in"
+					"source" : "\\section*{Patterns, conditionals and regular expressions}\n\nPatterns in Cadabra are quite a bit different from those in other\ncomputer algebra systems, because they are more tuned towards the\npattern matching of objects common in tensorial expressions, rather\nthan generic tree structures. Cadabra knows about three different\npattern types: \\emph{name patterns} (for single names), \\emph{object patterns} \n(for things which include indices and arguments) and \n\\emph{dummy patterns} (things for which the name is irrelevant, like indices). \n\nName patterns are things which match a single name in an object, \nwithout indices or arguments. They are constructed by writing a single question mark behind\nthe name, as in"
 				}
 			],
 			"hidden" : true,
-			"source" : "\\section*{Patterns, conditionals and regular expressions}\n\nPatterns in Cadabra are quite a bit different from those in other\ncomputer algebra systems, because they are more tuned towards the\npattern matching of objects common in tensorial expressions, rather\nthan generic tree structures.\n\nName patterns are constructed by writing a single question mark behind\nthe name, as in"
+			"source" : "\\section*{Patterns, conditionals and regular expressions}\n\nPatterns in Cadabra are quite a bit different from those in other\ncomputer algebra systems, because they are more tuned towards the\npattern matching of objects common in tensorial expressions, rather\nthan generic tree structures. Cadabra knows about three different\npattern types: \\emph{name patterns} (for single names), \\emph{object patterns} \n(for things which include indices and arguments) and \n\\emph{dummy patterns} (things for which the name is irrelevant, like indices). \n\nName patterns are things which match a single name in an object, \nwithout indices or arguments. They are constructed by writing a single question mark behind\nthe name, as in"
 		},
 		{
 			"cell_id" : 5668875961888500930,
@@ -288,14 +288,14 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9706677170689892845,
+					"cell_id" : 11546578025647429991,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "So be aware that the full pattern symbol needs to be used on the right-hand side (in contrast to some other computer algebra systems).\n\nNote that you can also use patterns to remove or add indices or\narguments, as in"
+					"source" : "So be aware that the full pattern symbol needs to be used on the right-hand side (in contrast to many other computer algebra systems).\n\nNote that you can also use patterns to remove or add indices or\narguments, as in"
 				}
 			],
 			"hidden" : true,
-			"source" : "So be aware that the full pattern symbol needs to be used on the right-hand side (in contrast to some other computer algebra systems).\n\nNote that you can also use patterns to remove or add indices or\narguments, as in"
+			"source" : "So be aware that the full pattern symbol needs to be used on the right-hand side (in contrast to many other computer algebra systems).\n\nNote that you can also use patterns to remove or add indices or\narguments, as in"
 		},
 		{
 			"cell_id" : 6969189981675113763,

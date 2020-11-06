@@ -15,7 +15,6 @@
 \usepackage[parfill]{parskip}
 \usepackage{graphicx}
 \usepackage{wallpaper}
-%\usepackage{tableaux}
 \def\specialcolon{\mathrel{\mathop{:}}\hspace{-.5em}}
 \renewcommand{\bar}[1]{\overline{#1}}
 \newcommand{\algorithm}[2]{{\tt\Large\detokenize{#1}}\\[1ex]
@@ -28,8 +27,6 @@
 \newcommand{\prop}[1]{{\tt \detokenize{#1}}}
 \renewcommand{\author}[1]{{\bfseries #1}}
 \newcommand{\email}[1]{, {\tt #1}}
-%\makeatletter\def\old@comma{,}\catcode`\,=13 \def,{%
-%\ifmmode\old@comma\discretionary{}{}{}\else\old@comma\fi}\makeatother
 
 % Math expressions wrapped in \brwrap will get typeset with
 % round brackets around them, which have the appropriate size.
@@ -49,11 +46,16 @@
 \hyphenpenalty=10
 \raggedright
 
+%\usepackage[most]{tcolorbox}
+
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 \lstnewenvironment{python}[1][]{\lstset{language=python,
    columns=fullflexible,
    xleftmargin=1em,
    belowskip=0pt,
+%   aboveskip=5pt,
    tabsize=3,
+   backgroundcolor=\color{backcolour},   
    commentstyle={}, % otherwise {#} cadabra arguments look ugly
    breaklines=true,   
    basicstyle=\small\ttfamily\color{blue},
@@ -79,104 +81,6 @@
 \lineskiplimit=0mm
 \lineskip=1.5ex
 
-% Typesetting Young tableaux, originally in a separate style
-% file, now included to avoid path searching problems. 
-% Some internals for the typesetting macros below; nothing
-% user-servicable here; please read on.
-
-\def\@tabforc#1#2#3{\expandafter\tabf@rc\expandafter#1{#2 \^}{#3}}
-\def\tabf@@rc#1#2#3\tabf@@rc#4{\def#1{#2}#4\tabf@rc#1{#3}{#4}}
-\long\def\ReturnAfterFi#1\fi{\fi#1}
-    \def\tabf@rc#1#2#3{%
-      \def\temp@ty{#2}%
-      \ifx\@empty\temp@ty
-      \else
-        \ReturnAfterFi{%
-          \tabf@@rc#1#2\tabf@@rc{#3}%
-        }%
-      \fi
-    }%
-
-% Sorry, some global registers for sizes and keeping track of
-% measurements.
-    
-\newdimen\ytsize\ytsize=2mm
-\newdimen\ytfsize\ytfsize=4mm
-\newcount\repcnt
-\newdimen\acchspace
-\newdimen\accvspace
-\newdimen\raiseh
-\newdimen\maxw
-
-\newcommand\phrule[1]{\hbox{\vbox to0pt{\hrule height .2pt width#1\vss}}}
-
-% Typeset a Young tableau with filled boxes. Takes a single 
-% argument which is a string of symbols for each row,
-% separated by commas. Examples:
-%
-%   \ftableau{abc,de}
-%   \ftableau{ab{d_2},f{g_3}}
-
-\newcommand\ftableau[1]{%
-\def\ctest{,}
-\def\Ktest{\^}
-\acchspace=0ex
-\accvspace=0ex
-\maxw=0ex
-\vbox{\hbox{%
-\@tabforc\thisel{#1}{%
- \ifx\thisel\Ktest{%
-     \ifnum\maxw=0\maxw=\acchspace\fi%
-     \raisebox{\accvspace}{\vbox to \ytfsize{\hbox to
-		 0pt{\vrule height \ytfsize\hss}}}\kern\acchspace\kern-\maxw}
- \else\ifx\thisel\ctest
-     \ifnum\maxw=0\maxw=\acchspace\fi%
-     \raisebox{\accvspace}{\vbox to \ytfsize{\hbox to 0pt{\vrule height \ytfsize\hss}}}%
-     \kern\acchspace\acchspace=0ex
-	  \advance\accvspace by -\ytfsize
- \else
-     \setbox3=\hbox{$\thisel$}%
-	  \raiseh=\ytfsize%
-	  \advance\raiseh by -1ex%
-	  \divide\raiseh by 2%
-     \advance\acchspace by-\ytfsize%
-     \raisebox{\accvspace}{\vbox to \ytfsize{\hrule\hbox to%
-        \ytfsize{\vrule height \ytfsize\hskip.5ex%
-         \raisebox{\raiseh}{\tiny$\thisel$}\hss}\vss\phrule{\ytfsize}}}%
- \fi\fi}}}}
-
-% Typeset a Young tableau with unlabelled boxes. Takes a single 
-% argument which is a string of numbers, one for the length of
-% each row of the tableau. Example:
-%
-%   \tableau{{10}{8}{3}}
-%
-% typesets a tableau with 10 boxes in the 1st row, 8 in the 2nd
-% and 3 in the 3rd. Curly brackets can be omitted if numbers
-% are less than 10.
-
-\newcommand\tableau[1]{%
-\def\stest{ }
-\def\Ktest{\^}
-\acchspace=0ex
-\accvspace=0ex
-\maxw=0ex
-\hbox{%
-\@tabforc\thisel{#1}{%
- \ifx\thisel\Ktest{}
- \else
-     \repcnt=\thisel%
-     \loop{}%
-     \advance\acchspace by-\ytsize%
-     \raisebox{\accvspace}{\vbox to \ytsize{\hrule \hbox to%
-			\ytsize{\vrule height \ytsize\hss}\vss\phrule{\ytsize}}}%
-     \advance\repcnt by -1\ifnum\repcnt>1{}\repeat%
-     \ifnum\maxw=0\maxw=\acchspace\fi%
-     \raisebox{\accvspace}{\vbox to \ytsize{\hbox to 0pt{\vrule height \ytsize\hss}}}%
-     \kern\acchspace\acchspace=0ex%
-	  \advance\accvspace by -\ytsize%
- \fi}\kern-\maxw}}
- 
 \ytableausetup{centertableaux} % smalltableaux
 
 \begin{document}
@@ -193,15 +97,16 @@
 \pagestyle{empty}
 \hbox{~}
 \noindent {\smaller This book is available under the terms of the GNU Free
-Documentation License, version 1.2.\\
-The accompanying software is available under the terms of the GNU
-General Public License, version 3.}
+Documentation License, version~1.2.\\
+The Cadabra software is available under the terms of the GNU
+General Public License, version~3.}
 \vfill
 \noindent {\large\bf Copyright \copyright~2001-2020 ~Kasper Peeters}\\[3ex]
 \href{mailto:kasper.peeters@cadabra.science}{kasper.peeters@cadabra.science}
 
-\pagestyle{fancy} 
 \tableofcontents
+
+\pagestyle{fancy} 
 
 \chapter{Introduction and overview}
 \section{Cadabra's design philosophy}
@@ -280,5 +185,8 @@ help to make Cadabra easier to use.
 
 \chapter{Writing your own packages}
 \input{ref_programming}
+
+\chapter{Algorithms}
+\input{distribute}
 
 \end{document}

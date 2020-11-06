@@ -253,7 +253,7 @@ file(MAKE_DIRECTORY ${BOOKOUTDIR})
 # The Cadabra Book.
 
 foreach(BOOK_PART ${BOOK_PARTS})
-   message(STATUS "Found book section ${BOOK_PART}")
+#   message(STATUS "Found book section ${BOOK_PART}")
    set(ALLTEX ${ALLTEX} ${BOOKOUTDIR}/${BOOK_PART}.tex)
    add_custom_command(
       OUTPUT   ${BOOKOUTDIR}/${BOOK_PART}.tex
@@ -262,6 +262,17 @@ foreach(BOOK_PART ${BOOK_PARTS})
       ARGS    --segment ${CNBDIR}/${BOOK_PART}.cnb ${BOOKOUTDIR}/${BOOK_PART}.tex
       COMMENT "Creating ${BOOK_PART}.tex")
    add_custom_target("${BOOK_PART}" ALL echo -n DEPENDS ${BOOKOUTDIR}/${BOOK_PART}.tex)
+endforeach()
+foreach(ALGO_PART ${ALGOS})
+#   message(STATUS "Found book algorithm section ${ALGO_PART}")
+   set(ALLTEX ${ALLTEX} ${BOOKOUTDIR}/${ALGO_PART}.tex)
+   add_custom_command(
+      OUTPUT   ${BOOKOUTDIR}/${ALGO_PART}.tex
+      DEPENDS  ${ALGODIR}/${ALGO_PART}.cnb ${DC}
+      COMMAND  ${CMAKE_INSTALL_PREFIX}/bin/cadabra2latex
+      ARGS    --segment ${ALGODIR}/${ALGO_PART}.cnb ${BOOKOUTDIR}/${ALGO_PART}.tex
+      COMMENT "Creating ${ALGO_PART}.tex")
+   add_custom_target("${ALGO_PART}" ALL echo -n DEPENDS ${BOOKOUTDIR}/${ALGO_PART}.tex)
 endforeach()
 message(STATUS "Book will be created in ${BOOKOUTDIR}")
 add_custom_command(

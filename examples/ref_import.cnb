@@ -1,5 +1,5 @@
 {
-	"cell_id" : 8781633447072324819,
+	"cell_id" : 8589337354142072464,
 	"cells" : 
 	[
 		{
@@ -277,6 +277,106 @@
 		},
 		{
 			"cell_id" : 18362525774477466829,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 5471488843845048840,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Cadabra's expressions can also be written to disk using Python's pickle functionality. This makes the code slightly less\nmessy, but note that the file will no longer be human-readable. If you use the pickle module, the example above would read:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Cadabra's expressions can also be written to disk using Python's pickle functionality. This makes the code slightly less\nmessy, but note that the file will no longer be human-readable. If you use the pickle module, the example above would read:"
+		},
+		{
+			"cell_id" : 3330220280430081959,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 17984593104865150603,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 5159751946892680671,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{m n} \\sin(x)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{m n} \\sin{x}\\end{dmath*}"
+				},
+				{
+					"cell_id" : 3227544683490869462,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9174965331626861211,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "B_{m n}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}B_{m n}\\end{dmath*}"
+				}
+			],
+			"source" : "import pickle\n\nex1:= A_{m n} \\sin{x};\nex2:= B_{m n};\nwith open(\"output.pkl\", \"wb\") as file:\n   pickle.dump(ex1, file)\n   pickle.dump(ex2, file)"
+		},
+		{
+			"cell_id" : 8396342817603552752,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "with open(\"output.pkl\", \"rb\") as file:\n   ex3=pickle.load(file)\n   ex4=pickle.load(file)"
+		},
+		{
+			"cell_id" : 13954138713009803288,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 5156660075745956210,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 11648319486263924817,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{m n} \\sin(x)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{m n} \\sin{x}\\end{dmath*}"
+				},
+				{
+					"cell_id" : 16686590355822369460,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 8221793975087585259,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "B_{m n}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}B_{m n}\\end{dmath*}"
+				}
+			],
+			"source" : "ex3;\nex4;"
+		},
+		{
+			"cell_id" : 4146470860102493543,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
