@@ -27,7 +27,7 @@ else()
   message("-- Found sqlite library path ${SQLITE3_LIBRARIES}")
   set(SQLITE3_LIBRARY ${SQLITE3_LIBRARIES})
   set(SQLITE3_INCLUDE_DIR ${SQLITE3_INCLUDE_DIRS})
-  set(SQLTE3_FOUND)
+  set(SQLITE3_FOUND)
 endif()
 
 # Handle the QUIETLY and REQUIRED arguments and set SQLITE3_FOUND to TRUE if all listed variables are TRUE.
