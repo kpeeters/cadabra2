@@ -188,6 +188,7 @@ def test06():
 test06()
 
 def test07():
+    __cdbkernel__ = create_scope()
     {a,b,c,d#,z}::Indices.
     ex:= 1/2 D_{b} C^{a b c} A_{c};
     fi=ex.top().free_indices()
@@ -205,6 +206,7 @@ def test07():
 test07()
 
 def test08():
+    __cdbkernel__ = create_scope()
     ex:= A C + B D + C ;
     for term in ex.top().terms():
         term.multiplier *= 3
@@ -216,6 +218,7 @@ def test08():
 test08()
 
 def test09():
+    __cdbkernel__ = create_scope()
     ex:= A + B(C+D) + Q(E);
     for node in ex:
        num=2
@@ -231,6 +234,15 @@ def test09():
 
 test09()
      
-     
-     
-     
+def test10():     
+    __cdbkernel__ = create_scope()
+    A_{m n p}::TableauSymmetry(shape={1,1}, indices={1,2});
+    p = TableauSymmetry.get($A_{m n p}$)
+    p.attach($B_{m n p}$)
+    ex:= B_{m n p} - B_{m p n};
+    meld(ex)
+    tst:= 2 B_{m n p} - @(ex);
+    assert(tst==0)
+    print("Test 10 passed")
+
+test10()

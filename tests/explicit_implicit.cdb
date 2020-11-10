@@ -98,3 +98,10 @@ test05()
 # ex := \sigma^{p} \theta \tau^{m};
 # tst:= \sigma^{p}_{a b} \theta^{b} \tau^{m a c};
 #         
+
+{A^{a \alpha}, B^{b}_{\alpha}}::NonCommuting;
+A^{a}::ImplicitIndex(A^{a \alpha});
+B^{b}::ImplicitIndex(B^{b}_{\alpha});
+ex:=(A^a)^\alpha (B^b)_{\alpha};
+print(tree(ex))
+combine(ex);

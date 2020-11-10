@@ -66,6 +66,8 @@ namespace cadabra {
 			std::string latex_() const;
 			/// Python-parseable form. FIXME: not correct right now.
 			std::string repr_() const;
+			/// Attach this property to a different symbol.
+			void attach(Ex_ptr ex) const;
 			
 			// Get existing cpp property by querying kernel
 			static std::shared_ptr<BoundProperty> get_from_kernel(Ex::iterator ex, const std::string& label, bool ignore_parent_rel);

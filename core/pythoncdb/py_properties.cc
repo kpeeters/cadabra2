@@ -187,6 +187,16 @@ namespace cadabra {
 	}
 
 	template <typename PropT, typename... ParentTs>
+	void BoundProperty<PropT, ParentTs...>::attach(Ex_ptr obj) const
+		{
+//		std::cerr << "Attaching property to " << obj << std::endl;
+		Kernel *kernel = get_kernel_from_scope();
+		Properties& props = kernel->properties;
+
+		props.insert_prop(*obj, get_prop());
+		}
+
+	template <typename PropT, typename... ParentTs>
 	std::string BoundProperty<PropT, ParentTs...>::str_() const
 		{
 		return BoundPropertyBase::str_();
@@ -214,6 +224,7 @@ namespace cadabra {
 		return py_type(m, name.c_str(), py::multiple_inheritance())
 			.def_static("get", [](Ex_ptr ex, const std::string& label, bool ipr) { return base_type::get_from_kernel(ex->begin(), label, ipr); }, py::arg("ex"), py::arg("label") = "", py::arg("ignore_parent_rel") = false)
 			.def_static("get", [](ExNode node, const std::string& label, bool ipr) { return base_type::get_from_kernel(node.it, label, ipr); }, py::arg("exnode"), py::arg("label") = "", py::arg("ignore_parent_rel") = false)
+			.def("attach", &BoundPropT::attach)
 			.def("__str__", &BoundPropT::str_)
 			.def("__repr__", &BoundPropT::repr_)
 			.def("_latex_", &BoundPropT::latex_);
@@ -230,6 +241,7 @@ namespace cadabra {
 			.def(py::init<Ex_ptr, Ex_ptr>(), py::arg("ex"), py::arg("param")=Ex{})
 			.def_static("get", [](Ex_ptr ex, const std::string& label, bool ipr) { return base_type::get_from_kernel(ex->begin(), label, ipr); }, py::arg("ex"), py::arg("label") = "", py::arg("ignore_parent_rel") = false)
 			.def_static("get", [](ExNode node, const std::string& label, bool ipr) { return base_type::get_from_kernel(node.it, label, ipr); }, py::arg("exnode"), py::arg("label") = "", py::arg("ignore_parent_rel") = false)
+			.def("attach", &BoundPropT::attach)
 			.def("__str__", &BoundPropT::str_)
 			.def("__repr__", &BoundPropT::repr_)
 			.def("_latex_", &BoundPropT::latex_);

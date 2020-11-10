@@ -312,8 +312,8 @@ namespace cadabra {
 			//		property_map_t::iterator      get_equivalent(Ex::iterator,
 			//																	  property_map_t::iterator=props.begin());
 
-		private:
 			void insert_prop(const Ex&, const property *);
+		private:
 			void insert_list_prop(const std::vector<Ex>&, const list_property *);
 			bool check_label(const property *, const std::string&) const;
 			bool check_label(const labelled_property *, const std::string&) const;			
