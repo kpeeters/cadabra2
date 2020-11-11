@@ -258,4 +258,14 @@ def test11():
      print("Test 11 passed")
 
 test11()
+
+def test12():
+   __cdbkernel__ = create_scope()
+   sub:=3 q;
+   ex:=A^{@(sub)};
+   tst:= A^{3*q} - @(ex);
+   assert(tst==0)
+   print("Test 12 passed")
+
+test12()
      

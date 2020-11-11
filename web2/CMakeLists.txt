@@ -294,6 +294,10 @@ add_custom_command(
    ARGS     the_cadabra_book.tex
    COMMAND  pdflatex
    ARGS     the_cadabra_book.tex
+   COMMAND  cp
+   ARGS     the_cadabra_book.pdf ${CMAKE_SOURCE_DIR}/web2/cadabra2/source
    WORKING_DIRECTORY ${BOOKOUTDIR}
    COMMENT  "Creating the_cadabra_book.pdf")
 add_custom_target(book ALL echo -n DEPENDS ${BOOKOUTDIR}/the_cadabra_book.pdf)
+
+

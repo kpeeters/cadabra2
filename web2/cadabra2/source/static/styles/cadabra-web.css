@@ -265,6 +265,12 @@ div.icon_background:hover svg path {
 	 fill: white;
 }
 
+/* Book */
+
+div.book_cover {
+    width: 33%;
+    border: 1px solid #777;
+}
 
 /* Notebooks */
 
