@@ -80,10 +80,10 @@ namespace cadabra {
 	std::string BoundPropertyBase::str_() const
 	{
 		std::ostringstream str;
-		str << "Attached property ";
+		str << "Property ";
 //		std::cerr << "going to print" << std::endl;
 		prop->latex(str); // FIXME: this should call 'str' on the property, which does not exist yet
-		str << " to " + Ex_as_str(for_obj) + ".";
+		str << " attached to " + Ex_as_str(for_obj) + ".";
 		return str.str();
 	}
 
@@ -94,17 +94,17 @@ namespace cadabra {
 		//	HERE: this text should go away, property should just print itself in a python form,
 		//   the decorating text should be printed in a separate place.
 
-		str << "\\text{Attached property ";
+		str << "\\text{Property ";
 		prop->latex(str);
 		std::string bare = Ex_as_latex(for_obj);
 
 		if (dynamic_cast<const LaTeXForm*>(prop)) {
 			bare = std::regex_replace(bare, std::regex(R"(\\)"), "$\\backslash{}$}");
 			bare = std::regex_replace(bare, std::regex(R"(#)"), "\\#");
-			str << " to {\\tt " + bare + "}.";
+			str << " attached to {\\tt " + bare + "}.";
 		}
 		else {
-			str << " to~}" + bare + ".";
+			str << " attached to~}" + bare + ".";
 		}
 
 		return str.str();
@@ -193,7 +193,9 @@ namespace cadabra {
 		Kernel *kernel = get_kernel_from_scope();
 		Properties& props = kernel->properties;
 
-		props.insert_prop(*obj, get_prop());
+		const auto *thisprop = get_prop();
+		thisprop->validate(*kernel, *obj);
+		props.master_insert(*obj, thisprop);
 		}
 
 	template <typename PropT, typename... ParentTs>

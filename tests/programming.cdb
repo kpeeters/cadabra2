@@ -246,3 +246,16 @@ def test10():
     print("Test 10 passed")
 
 test10()
+
+def test11():
+   __cdbkernel__ = create_scope()
+   R_{m n p q}::RiemannTensor;
+   p = RiemannTensor.get($R_{m n p q}$)
+   try:
+     p.attach($A_{m n}$)
+     assert(1==0)
+   except RuntimeError:
+     print("Test 11 passed")
+
+test11()
+     

@@ -264,7 +264,7 @@ namespace cadabra {
 			/// Register a property for the indicated Ex. Takes both normal and list
 			/// properties and works out which insert calls to make. The property ownership
 			/// is transferred to us on using this call.
-			std::string master_insert(Ex proptree, property *thepropbase);
+			std::string master_insert(Ex proptree, const property *thepropbase);
 
 			void        clear();
 
@@ -312,8 +312,10 @@ namespace cadabra {
 			//		property_map_t::iterator      get_equivalent(Ex::iterator,
 			//																	  property_map_t::iterator=props.begin());
 
-			void insert_prop(const Ex&, const property *);
 		private:
+			// Insert a property. Do not use this directly, use the public
+			// interface `master_insert` instead.
+			void insert_prop(const Ex&, const property *);
 			void insert_list_prop(const std::vector<Ex>&, const list_property *);
 			bool check_label(const property *, const std::string&) const;
 			bool check_label(const labelled_property *, const std::string&) const;			

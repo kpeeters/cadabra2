@@ -577,13 +577,13 @@ d,e should have their property removed.
 // Insert a property for the given pattern Ex. Determines whether the property
 // is a list property or a normal one, and dispatches accordingly.
 
-std::string Properties::master_insert(Ex proptree, property *thepropbase)
+std::string Properties::master_insert(Ex proptree, const property *thepropbase)
 	{
 	std::ostringstream str;
 
 	Ex::sibling_iterator st=proptree.begin();
 
-	list_property *thelistprop=dynamic_cast<list_property *>(thepropbase);
+	const list_property *thelistprop=dynamic_cast<const list_property *>(thepropbase);
 	if(thelistprop) { // a list property
 		std::vector<Ex> objs;
 		if(*st->name=="\\comma") {
@@ -602,7 +602,7 @@ std::string Properties::master_insert(Ex proptree, property *thepropbase)
 		// but we need the patterns to have parent_rel set to p_sub and p_super in order to avoid
 		// special cases in the pattern matcher later.
 		// DOCME: the above
-		if(dynamic_cast<Indices *>(thelistprop)) {
+		if(dynamic_cast<const Indices *>(thelistprop)) {
 			std::vector<Ex> objs2;
 			for(auto& obj: objs) {
 				Ex obj2(obj);
@@ -621,7 +621,7 @@ std::string Properties::master_insert(Ex proptree, property *thepropbase)
 			}
 		}
 	else {   // a normal property
-		property *theprop=thepropbase;
+		const property *theprop=thepropbase;
 		assert(theprop);
 		if(*st->name=="\\comma") {
 			Ex::sibling_iterator sib=proptree.begin(st);

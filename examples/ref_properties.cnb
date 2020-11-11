@@ -1,12 +1,15 @@
 {
+	"cell_id" : 16024244566890424791,
 	"cells" : 
 	[
 		{
+			"cell_id" : 1873743992778418631,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 7846921569529807949,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\section*{Object properties and declaration}\n\\subsection*{Generic properties}\n\nSymbols in Cadabra have no a-priori ``meaning''. If you write\n\\verb|\\Gamma|, the program will not know that it is supposed to be,\nfor instance, a Clifford algebra generator.  You will have to declare\nthe properties of symbols, i.e.~you have to tell Cadabra explicitly that\nif you write \\verb|\\Gamma|, you actually mean a Clifford algebra\ngenerator. This indirect way of attaching a meaning to a symbol has\nthe advantage that you can use whatever notation you like; if you\nprefer to write \\verb|\\gamma|, or perhaps even \\verb|\\rho| if your\npaper uses that, then this is perfectly possible (object properties\nare a bit like ``attributes'' in {\\tt Mathematica} or ``domains'' in\n{\\tt Axiom} and {\\tt MuPAD}).\n\nProperties are all written using capitals to separate words, as in\n{\\tt AntiSymmetric}. This makes it easier to distinguish them from\ncommands. Properties of objects are declared by using the ``::''\ncharacters.  This can be done ``at first use'', i.e.~by just adding\nthe property to the object when it first appears in the input. As an\nexample, one can write"
@@ -16,11 +19,13 @@
 			"source" : "\\section*{Object properties and declaration}\n\\subsection*{Generic properties}\n\nSymbols in Cadabra have no a-priori ``meaning''. If you write\n\\verb|\\Gamma|, the program will not know that it is supposed to be,\nfor instance, a Clifford algebra generator.  You will have to declare\nthe properties of symbols, i.e.~you have to tell Cadabra explicitly that\nif you write \\verb|\\Gamma|, you actually mean a Clifford algebra\ngenerator. This indirect way of attaching a meaning to a symbol has\nthe advantage that you can use whatever notation you like; if you\nprefer to write \\verb|\\gamma|, or perhaps even \\verb|\\rho| if your\npaper uses that, then this is perfectly possible (object properties\nare a bit like ``attributes'' in {\\tt Mathematica} or ``domains'' in\n{\\tt Axiom} and {\\tt MuPAD}).\n\nProperties are all written using capitals to separate words, as in\n{\\tt AntiSymmetric}. This makes it easier to distinguish them from\ncommands. Properties of objects are declared by using the ``::''\ncharacters.  This can be done ``at first use'', i.e.~by just adding\nthe property to the object when it first appears in the input. As an\nexample, one can write"
 		},
 		{
+			"cell_id" : 13187362062085411141,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 8221627658201150468,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property AntiSymmetric to~}F_{m n p}.\\end{dmath*}"
@@ -29,11 +34,13 @@
 			"source" : "F_{m n p}::AntiSymmetric;"
 		},
 		{
+			"cell_id" : 7636864876509176699,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 12584534138819510366,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "This declares the object to be anti-symmetric in its indices. The property\ninformation is stored separately, so that further appearances of the\n``\\verb|F_{m n p}|'' object will automatically share this property. \nA list of all properties is available from the manual pages on the web site.\n\nNote that properties are attached to patterns, Therefore, you can have"
@@ -43,16 +50,19 @@
 			"source" : "This declares the object to be anti-symmetric in its indices. The property\ninformation is stored separately, so that further appearances of the\n``\\verb|F_{m n p}|'' object will automatically share this property. \nA list of all properties is available from the manual pages on the web site.\n\nNote that properties are attached to patterns, Therefore, you can have"
 		},
 		{
+			"cell_id" : 11981126734626687991,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 11452579552056933733,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Symmetric to~}R_{m n}.\\end{dmath*}"
 				},
 				{
+					"cell_id" : 12593961078534850153,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetry to~}R_{m n p q}.\\end{dmath*}"
@@ -61,11 +71,13 @@
 			"source" : "R_{m n}::Symmetric;\nR_{m n p q}::RiemannTensor;"
 		},
 		{
+			"cell_id" : 5342420475339720929,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 10127782755222349559,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "at the same time. The program will not warn you if you use\nincompatible properties, so if you make a declaration like above and\nthen later on do"
@@ -75,11 +87,13 @@
 			"source" : "at the same time. The program will not warn you if you use\nincompatible properties, so if you make a declaration like above and\nthen later on do"
 		},
 		{
+			"cell_id" : 16352428007357235833,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 17527508896735945989,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property AntiSymmetric to~}R_{m n}.\\end{dmath*}"
@@ -88,11 +102,13 @@
 			"source" : "R_{m n}::AntiSymmetric;"
 		},
 		{
+			"cell_id" : 15913947998439108974,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 1008868390112717372,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "this may lead to undefined results."
@@ -102,11 +118,13 @@
 			"source" : "this may lead to undefined results."
 		},
 		{
+			"cell_id" : 10025164847893429769,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 12812617753453879770,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "The fact that objects are attached to patterns also means that you can\nuse something like wildcards. In the following declaration,"
@@ -116,11 +134,13 @@
 			"source" : "The fact that objects are attached to patterns also means that you can\nuse something like wildcards. In the following declaration,"
 		},
 		{
+			"cell_id" : 11903162008471267303,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 16577956284977901148,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[m\\#,~\\discretionary{}{}{} n\\#\\right].\\end{dmath*}"
@@ -129,11 +149,13 @@
 			"source" : "{m#, n#}::Indices(vector);"
 		},
 		{
+			"cell_id" : 4195311491037587033,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 3977418742316137404,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "the entire infinite set of objects $m1, m2, m3, \\ldots$ and $n1, n2,\nn3, \\ldots$ are declared to be in the dummy index set\n``vector'' (this way of declaring ranges of objects is\nsimilar to the ``autodeclare'' declaration method of FORM). "
@@ -143,11 +165,13 @@
 			"source" : "the entire infinite set of objects $m1, m2, m3, \\ldots$ and $n1, n2,\nn3, \\ldots$ are declared to be in the dummy index set\n``vector'' (this way of declaring ranges of objects is\nsimilar to the ``autodeclare'' declaration method of FORM). "
 		},
 		{
+			"cell_id" : 5536004295914482032,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 12339143931885338645,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Properties can be assigned to an entire list of symbols with one\ncommand, namely by attaching the property to the list. For example,"
@@ -157,11 +181,13 @@
 			"source" : "Properties can be assigned to an entire list of symbols with one\ncommand, namely by attaching the property to the list. For example,"
 		},
 		{
+			"cell_id" : 8851937856391613984,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 10242614262625606826,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}\\left[n,~\\discretionary{}{}{} m,~\\discretionary{}{}{} p,~\\discretionary{}{}{} q\\right].\\end{dmath*}"
@@ -170,11 +196,13 @@
 			"source" : "{n, m, p, q}::Integer(1..d);"
 		},
 		{
+			"cell_id" : 11212186920236991312,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 1076256994014976479,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "This associates the property ``Integer'' to each and every symbol in\nthe list.  However, there is also a concept of ``list properties'',\nwhich are properties which are associated to the list as a\nwhole. Examples of list properties are ``AntiCommuting'' or\n``Indices''."
@@ -184,11 +212,13 @@
 			"source" : "This associates the property ``Integer'' to each and every symbol in\nthe list.  However, there is also a concept of ``list properties'',\nwhich are properties which are associated to the list as a\nwhole. Examples of list properties are ``AntiCommuting'' or\n``Indices''."
 		},
 		{
+			"cell_id" : 8949535369725784252,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 8618739558652318788,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Objects can have more than one property attached to them, and one\nshould therefore not confuse properties with the ``type'' of the\nobject. Consider for instance"
@@ -198,21 +228,25 @@
 			"source" : "Objects can have more than one property attached to them, and one\nshould therefore not confuse properties with the ``type'' of the\nobject. Consider for instance"
 		},
 		{
+			"cell_id" : 8425453185210856818,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 7187790816160951991,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}x.\\end{dmath*}"
 				},
 				{
+					"cell_id" : 8479664987816470973,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetryWeylTensor to~}W_{m n p q}.\\end{dmath*}"
 				},
 				{
+					"cell_id" : 299508483589117623,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}W_{m n p q}.\\end{dmath*}"
@@ -221,11 +255,13 @@
 			"source" : "x::Coordinate;\nW_{m n p q}::WeylTensor;\nW_{m n p q}::Depends(x);"
 		},
 		{
+			"cell_id" : 2657066693349526767,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 16136563802631081521,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "This attaches two completely independent properties to the pattern\n$W_{m n p q}$."
@@ -235,11 +271,13 @@
 			"source" : "This attaches two completely independent properties to the pattern\n$W_{m n p q}$."
 		},
 		{
+			"cell_id" : 4331078423184753435,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 4105695659204625161,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "In the examples above, several properties had arguments\n(e.g. ``\\verb|vector|'' or ``\\verb|1..d|''). The general form of these\narguments is a set of key-value pairs, as in\n"
@@ -249,11 +287,13 @@
 			"source" : "In the examples above, several properties had arguments\n(e.g. ``\\verb|vector|'' or ``\\verb|1..d|''). The general form of these\narguments is a set of key-value pairs, as in\n"
 		},
 		{
+			"cell_id" : 17703789208275282885,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 16300946463127941557,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetry to~}T_{m n p q}.\\end{dmath*}"
@@ -262,11 +302,13 @@
 			"source" : "T_{m n p q}::TableauSymmetry(shape={2,1}, indices={0,2,1});"
 		},
 		{
+			"cell_id" : 4732372589842197888,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 14394312001827728418,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "In the simple cases discussed so far, the key and the equal sign was\nsuppressed. This is allowed because one of the keys plays the role of\nthe default key. Therefore, the following two are equivalent,\n"
@@ -276,16 +318,19 @@
 			"source" : "In the simple cases discussed so far, the key and the equal sign was\nsuppressed. This is allowed because one of the keys plays the role of\nthe default key. Therefore, the following two are equivalent,\n"
 		},
 		{
+			"cell_id" : 12384953340328900440,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 7580296103947475880,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}\\left[m,~\\discretionary{}{}{} n\\right].\\end{dmath*}"
 				},
 				{
+					"cell_id" : 1877851181871684039,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}\\left[m,~\\discretionary{}{}{} n\\right].\\end{dmath*}"
@@ -294,11 +339,13 @@
 			"source" : "{ m, n }::Integer(range=0..d);\n{ m, n }::Integer(0..d);"
 		},
 		{
+			"cell_id" : 16167969896591755140,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 252799586075103098,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "See the detailed documentation of the individual properties for\nallowed keys and the one which is taken as the default."
@@ -308,11 +355,13 @@
 			"source" : "See the detailed documentation of the individual properties for\nallowed keys and the one which is taken as the default."
 		},
 		{
+			"cell_id" : 1760446223062694014,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 18322724454023722463,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Finally, there is a concept of ``inherited properties''. Consider\ne.g.~a sum of spinors, declared as"
@@ -322,21 +371,25 @@
 			"source" : "Finally, there is a concept of ``inherited properties''. Consider\ne.g.~a sum of spinors, declared as"
 		},
 		{
+			"cell_id" : 4649639139262084299,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 3580666952276410048,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Spinor to~}\\left[\\psi_{1},~\\discretionary{}{}{} \\psi_{2},~\\discretionary{}{}{} \\psi_{3}\\right].\\end{dmath*}"
 				},
 				{
+					"cell_id" : 16885831544614794528,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 8148475282577177565,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "\\psi_{1} + \\psi_{2} + \\psi_{3}"
@@ -348,11 +401,13 @@
 			"source" : "{\\psi_1, \\psi_2, \\psi_3}::Spinor;\nex:= \\psi_1 + \\psi_2 + \\psi_3;"
 		},
 		{
+			"cell_id" : 17760244410863267067,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 1449664974568614276,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Here the sum has inherited the property ``Spinor'', even though it does\nnot have normal or intrinsic property of this type. Properties can\nalso inherit from each other, e.g."
@@ -362,16 +417,19 @@
 			"source" : "Here the sum has inherited the property ``Spinor'', even though it does\nnot have normal or intrinsic property of this type. Properties can\nalso inherit from each other, e.g."
 		},
 		{
+			"cell_id" : 9462074610843212781,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 12770109660043468401,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 13372884232421891240,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "\\Gamma_{p o i u y}"
@@ -383,16 +441,19 @@
 			"source" : "\\Gamma_{#}::GammaMatrix.\nex:=\\Gamma_{p o i u y};"
 		},
 		{
+			"cell_id" : 7700199035098393129,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 10899488318427932986,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 3919161428498386016,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "-\\Gamma_{i o p u y}"
@@ -404,11 +465,13 @@
 			"source" : "canonicalise(_);"
 		},
 		{
+			"cell_id" : 1850364838553237390,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 12810926342201765034,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "The \\prop{GammaMatrix} property inherits from\n\\prop{AntiSymmetric} property, and therefore the \\verb|\\Gamma| object is automatically anti-symmetric in its\nindices. \nindices. "
@@ -418,11 +481,13 @@
 			"source" : "The \\prop{GammaMatrix} property inherits from\n\\prop{AntiSymmetric} property, and therefore the \\verb|\\Gamma| object is automatically anti-symmetric in its\nindices. \nindices. "
 		},
 		{
+			"cell_id" : 2125938839653920378,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 11907919364945406225,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\subsection*{List properties and symbol groups}\n\nSome properties are not naturally associated to a single symbol or\nobject, but have to do with collections of them. A simple example of\nsuch a property is \\prop{AntiCommuting}. Although it sometimes\nmakes sense to say that ``$\\psi_m$ is anticommuting'' (meaning that\n$\\psi_m \\psi_n = - \\psi_n \\psi_m$), it happens just as often that you\nwant to say ``$\\psi$ and $\\chi$ anticommute'' (meaning that $\\psi\\chi\n= - \\chi\\psi$). The latter property is clearly relating two different\nobjects. \n\nAnother example is dummy indices. While it may make sense to say that\n``$m$ is a dummy index'', this does not allow the program to\nsubstitute $m$ with another index when a clash of dummy index names\noccurs (e.g.~upon substitution of one expression into another). More\nuseful is to say that ``$m$, $n$, and $p$ are dummy indices of the\nsame type'', so that the program can relabel a pair of $m$'s into a\npair of $p$'s when necessary.\n\nIn Cadabra such properties are called ``list properties''. You can\nassociate a list property to a list of symbols by simply writing,\ne.g.~for the first example above,"
@@ -432,11 +497,13 @@
 			"source" : "\\subsection*{List properties and symbol groups}\n\nSome properties are not naturally associated to a single symbol or\nobject, but have to do with collections of them. A simple example of\nsuch a property is \\prop{AntiCommuting}. Although it sometimes\nmakes sense to say that ``$\\psi_m$ is anticommuting'' (meaning that\n$\\psi_m \\psi_n = - \\psi_n \\psi_m$), it happens just as often that you\nwant to say ``$\\psi$ and $\\chi$ anticommute'' (meaning that $\\psi\\chi\n= - \\chi\\psi$). The latter property is clearly relating two different\nobjects. \n\nAnother example is dummy indices. While it may make sense to say that\n``$m$ is a dummy index'', this does not allow the program to\nsubstitute $m$ with another index when a clash of dummy index names\noccurs (e.g.~upon substitution of one expression into another). More\nuseful is to say that ``$m$, $n$, and $p$ are dummy indices of the\nsame type'', so that the program can relabel a pair of $m$'s into a\npair of $p$'s when necessary.\n\nIn Cadabra such properties are called ``list properties''. You can\nassociate a list property to a list of symbols by simply writing,\ne.g.~for the first example above,"
 		},
 		{
+			"cell_id" : 11645948506859110217,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 12491873823462977295,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property AntiCommuting to~}\\left[\\psi,~\\discretionary{}{}{} \\chi\\right].\\end{dmath*}"
@@ -445,11 +512,13 @@
 			"source" : "{ \\psi, \\chi }::AntiCommuting;"
 		},
 		{
+			"cell_id" : 17022724486968829841,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 3785515124818444956,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Note that you can also attach normal properties to multiple symbols in one go using this\nnotation. The program will figure out automatically whether you want\nto associate a normal property or a list property to the symbols in\nthe list.\n\nLists are ordered, although the ordering does not necessarily mean\nanything for all list properties (it is relevant for\ne.g.~\\prop{SortOrder} but irrelevant for e.g.~\\prop{AntiCommuting}).\n"
@@ -459,6 +528,105 @@
 			"source" : "Note that you can also attach normal properties to multiple symbols in one go using this\nnotation. The program will figure out automatically whether you want\nto associate a normal property or a list property to the symbols in\nthe list.\n\nLists are ordered, although the ordering does not necessarily mean\nanything for all list properties (it is relevant for\ne.g.~\\prop{SortOrder} but irrelevant for e.g.~\\prop{AntiCommuting}).\n"
 		},
 		{
+			"cell_id" : 16961965256527519584,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 10819283058881207059,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{Querying properties}\n\nFor many built-in algorithms, assigning properties is sufficient to the objects which appear in your expressions\nwill be enough to make them work. However, sometimes you may want to explicitly query whether a particular symbol\nhas a particular property. The following example shows how this works."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{Querying properties}\n\nFor many built-in algorithms, assigning properties is sufficient to the objects which appear in your expressions\nwill be enough to make them work. However, sometimes you may want to explicitly query whether a particular symbol\nhas a particular property. The following example shows how this works."
+		},
+		{
+			"cell_id" : 9613954587245120616,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 12508488708618370447,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Property Symmetric attached to~}A_{m n}.\\end{dmath*}"
+				},
+				{
+					"cell_id" : 6086779892467904583,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}A_{m n} is symmetric.\n\\end{verbatim}"
+				}
+			],
+			"source" : "A_{m n}::Symmetric;\nif Symmetric.get($A_{m n}$):\n   print(\"A_{m n} is symmetric.\")\nif AntiSymmetric.get($A_{m n}$):\n   print(\"A_{m n} is anti-symmetric.\")"
+		},
+		{
+			"cell_id" : 2963590779224402878,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 17663256730765935192,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The object returned by \\verb|Property.get(...)| is either \\verb|None| or the property which you asked about.\nIt is possible to do something with that property, e.g. attach it to another symbol. In the example below,\nwe start off with one tensor with a symmetry, and then attach it to another symbol."
+				}
+			],
+			"hidden" : true,
+			"source" : "The object returned by \\verb|Property.get(...)| is either \\verb|None| or the property which you asked about.\nIt is possible to do something with that property, e.g. attach it to another symbol. In the example below,\nwe start off with one tensor with a symmetry, and then attach it to another symbol."
+		},
+		{
+			"cell_id" : 9956511188880238921,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 5651396505343552990,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Property TableauSymmetry attached to~}A_{m n p}.\\end{dmath*}"
+				},
+				{
+					"cell_id" : 10945815225780151485,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 5559233594360017677,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "B_{m n p}-B_{m p n}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}B_{m n p}-B_{m p n}\\end{dmath*}"
+				},
+				{
+					"cell_id" : 13557277793536352717,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 15521744502411664671,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "2B_{m n p}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}2B_{m n p}\\end{dmath*}"
+				}
+			],
+			"source" : "A_{m n p}::TableauSymmetry(shape={1,1}, indices={1,2});\np = TableauSymmetry.get($A_{m n p}$)\np.attach($B_{m n p}$)\nex:= B_{m n p} - B_{m p n};\ncanonicalise(_);"
+		},
+		{
+			"cell_id" : 6719052246250031707,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
