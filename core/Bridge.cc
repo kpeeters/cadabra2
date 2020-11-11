@@ -20,7 +20,8 @@ void pull_in(std::shared_ptr<Ex> ex, Kernel *kernel)
 			std::shared_ptr<Ex> pull_ex = fetch_from_python(pobj);
 			if(pull_ex) {
 //				acted=true;
-				multiplier_t mult = *(it->multiplier);
+				multiplier_t mult           = *(it->multiplier);
+				str_node::parent_rel_t prel = (it->fl.parent_rel);
 				auto topnode_it   = pull_ex->begin();
 				auto at_arg       = ex->begin(it);
 
@@ -37,6 +38,7 @@ void pull_in(std::shared_ptr<Ex> ex, Kernel *kernel)
 				// FIXME: prepend_children is broken!
 				//				ex->prepend_children(it, ex->begin(topnode_it), ex->end(topnode_it)); // add children of ex
 				multiply(it->multiplier, mult);
+				it->fl.parent_rel=prel;
 				rr.rename_replacement_dummies(it, false);
 				}
 			else throw ArgumentException("Python object '"+pobj+"' does not exist.");
