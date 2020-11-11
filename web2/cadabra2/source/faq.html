@@ -1,57 +1,107 @@
 
-<dl>
-  <dt>Why not build the tensor functionality into Sympy, and wedge
-	 into Sympy's expression parser in <code>sympy.parsing.sympy_parser</code>?
-  </dt>
-  <dd>
-	 Cadabra uses the philosophy that expressions should be represented
-	 in their own language, not Python. However, one can do something
-	 like that in Sympy, by only feeding expressions in string form to
-	 the logic in <code>sympy.parsing.sympy_parser</code>. So in a
-	 sense Sympy supports this Cadabraesque mode of working, even
-	 though the tutorials and examples do not emphasise it.
+{% extends "layout.html" %}
 
-	 The reason why Cadabra nevertheless uses its own parser, and its
-	 own tree representation of expressions, is simply that an enormous
-	 amount of work would have to be done to rewrite the lot so that it
-	 fits into the Sympy framework. Moreover, little would be gained by
-	 doing this: almost all functionality which is in Sympy and which
-	 would make sense when applied to tensors (think of taking
-	 derivatives, or pattern matching) would require a lot of extra
-	 Sympy code to extend it beyond scalars.
+{% block title %}Cadabra: Frequently Asked Questions{% endblock %}
 
-	 The way things are now the separation is clean, localised, and
-	 relatively easy to maintain. If you would ever rewrite
-	 Cadabra+Sympy from scratch you might take a different approach,
-	 but that's not going to happen soon.
-  </dd>
+{% block head %}{%- endblock %}
 
-  <dt>Why an independent notebook interface instead of building on
-	 IPython?
-  </dt>
-  <dd>
-	 <p>There are a number of reasons for this. For starters, Cadabra's
-	 notebook interface predates IPython (that is, a publically
-	 available version of it) by quite a few years. That by itself is
-	 of course not a very good reason to keep developing the Cadabra
-	 notebook interface, but it does play a certain role.</p>
+{% block main %}
 
-	 <p>A more important reason has to do with the fact that there are,
-	 despite what one might think at first inspection, quite a few
-	 differences between IPython/Jupyter and the Cadabra interface. The
-	 most obvious one is that Cadabra is a native application, which
-	 does not rely on a web browser to display its results. I still
-	 think that native applications have their place, as they tend to
-	 look and feel much better than web apps.</p>
+<h1>Frequently Asked Questions</h1>
 
-	 <p>IPython/Jupyter tend to be focussed a lot on data-centric
-	 problems, and less so on being a nice front-end for symbolic
-	 mathematics. These two do differ.</p>
+<input type="radio" name="collapse" id="dummy" checked="checked">
 
-	 <p>Another reason to keep developing the Cadabra notebook
-	 interface is that it allows me much more flexibility in trying new
-	 features and ideas. As a consequence, Cadabra for instance has a
-	 way to open multiple views on the same notebook. 
-	 </p>
-  </dd>
-</dl>
+<h2>Installation</h2>
+
+<div class='faq_item'>
+  <input type="radio" name="collapse" id="q_01_01">    
+  <h3 class="handle">
+    <label for="q_01_01">Starting the Jupyter kernel gives an error.</label>
+  </h3>
+  <div class="content">
+    <p>
+    </p>
+  </div>
+</div>
+
+<h2>How to...</h2>
+
+<div class='faq_item'>
+  <input type="radio" name="collapse" id="q_02_01">    
+  <h3 class="handle">
+    <label for="q_02_01">What is the difference between free, fixed
+    and independent indices?</label>
+  </h3>
+  <div class="content">
+    When you declare an index set, you can give it...
+  </div>
+</div>
+
+<h2>Design and philosophy</h2>
+
+
+<div class='faq_item'>
+  <input type="radio" name="collapse" id="q_03_01">    
+  <h3 class="handle">
+    <label for="q_03_01">Why not build the tensor functionality into
+      Sympy, and wedge into Sympy's expression parser?
+    </label>
+  </h3>
+  <div class="content">
+    Cadabra uses the philosophy that expressions should be represented
+    in their own language, not Python. However, one can do something
+    like that in Sympy, by only feeding expressions in string form to
+    the logic in <code>sympy.parsing.sympy_parser</code>. So in a
+    sense Sympy supports this Cadabraesque mode of working, even
+    though the tutorials and examples do not emphasise it.
+
+    The reason why Cadabra nevertheless uses its own parser, and its
+    own tree representation of expressions, is simply that an enormous
+    amount of work would have to be done to rewrite the lot so that it
+    fits into the Sympy framework. Moreover, little would be gained by
+    doing this: almost all functionality which is in Sympy and which
+    would make sense when applied to tensors (think of taking
+    derivatives, or pattern matching) would require a lot of extra
+    Sympy code to extend it beyond scalars.
+
+    The way things are now the separation is clean, localised, and
+    relatively easy to maintain. If you would ever rewrite
+    Cadabra+Sympy from scratch you might take a different approach,
+    but that's not going to happen soon.
+  </div>
+</div>
+
+<div class='faq_item'>
+  <input type="radio" name="collapse" id="q_03_02" >    
+  <h3 class="handle">
+    <label for="q_03_02">Why an independent notebook interface instead of building on
+      IPython?</label>
+  </h3>
+  <div class="content">
+    There are a number of reasons for this. For starters, Cadabra's
+      notebook interface predates IPython (that is, a publically
+      available version of it) by quite a few years. That by itself is
+      of course not a very good reason to keep developing the Cadabra
+      notebook interface, but it does play a certain role.
+
+    <p>A more important reason has to do with the fact that there are,
+      despite what one might think at first inspection, quite a few
+      differences between IPython/Jupyter and the Cadabra interface. The
+      most obvious one is that Cadabra is a native application, which
+      does not rely on a web browser to display its results. I still
+      think that native applications have their place, as they tend to
+      look and feel much better than web apps.</p>
+
+    <p>IPython/Jupyter tend to be focussed a lot on data-centric
+      problems, and less so on being a nice front-end for symbolic
+      mathematics. These two do differ.</p>
+
+    <p>Another reason to keep developing the Cadabra notebook
+      interface is that it allows me much more flexibility in trying new
+      features and ideas. As a consequence, Cadabra for instance has a
+      way to open multiple views on the same notebook. 
+  </div>
+</div>
+
+
+{%- endblock %}
