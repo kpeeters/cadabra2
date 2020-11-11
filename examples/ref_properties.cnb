@@ -534,14 +534,14 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 10819283058881207059,
+					"cell_id" : 3108229061098778346,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\subsection*{Querying properties}\n\nFor many built-in algorithms, assigning properties is sufficient to the objects which appear in your expressions\nwill be enough to make them work. However, sometimes you may want to explicitly query whether a particular symbol\nhas a particular property. The following example shows how this works."
+					"source" : "\\subsection*{Querying properties}\n\nFor many built-in algorithms, assigning properties to the objects which appear in your expressions\nwill be enough to make them work. However, sometimes you may want to explicitly query whether a particular symbol\nhas a particular property. The following example shows how this works."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\subsection*{Querying properties}\n\nFor many built-in algorithms, assigning properties is sufficient to the objects which appear in your expressions\nwill be enough to make them work. However, sometimes you may want to explicitly query whether a particular symbol\nhas a particular property. The following example shows how this works."
+			"source" : "\\subsection*{Querying properties}\n\nFor many built-in algorithms, assigning properties to the objects which appear in your expressions\nwill be enough to make them work. However, sometimes you may want to explicitly query whether a particular symbol\nhas a particular property. The following example shows how this works."
 		},
 		{
 			"cell_id" : 9613954587245120616,

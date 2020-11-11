@@ -277,13 +277,19 @@ endforeach()
 message(STATUS "Book will be created in ${BOOKOUTDIR}")
 add_custom_command(
    OUTPUT   ${BOOKOUTDIR}/the_cadabra_book.pdf
-   DEPENDS  ${CMAKE_SOURCE_DIR}/doc/the_cadabra_book.tex ${CMAKE_SOURCE_DIR}/doc/book_cover.pdf ${ALLTEX}
+   DEPENDS  ${CMAKE_SOURCE_DIR}/doc/the_cadabra_book.tex
+            ${CMAKE_SOURCE_DIR}/doc/book_cover.pdf 
+            ${CMAKE_SOURCE_DIR}/doc/the_cadabra_book.bib ${ALLTEX}   
    COMMAND  cp
-   ARGS     ${CMAKE_SOURCE_DIR}/doc/the_cadabra_book.tex ${BOOKOUTDIR}/
+   ARGS     ${CMAKE_SOURCE_DIR}/doc/the_cadabra_book.tex
+            ${CMAKE_SOURCE_DIR}/doc/the_cadabra_book.bib
+            ${BOOKOUTDIR}/
    COMMAND  cp
    ARGS     ${CMAKE_SOURCE_DIR}/doc/book_cover.pdf ${BOOKOUTDIR}/
    COMMAND  pdflatex
    ARGS     the_cadabra_book.tex
+   COMMAND  biber
+   ARGS     the_cadabra_book
    COMMAND  pdflatex
    ARGS     the_cadabra_book.tex
    COMMAND  pdflatex

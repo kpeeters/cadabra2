@@ -1,5 +1,7 @@
 \documentclass[11pt]{book}
 \usepackage[scale=.7]{geometry}
+\usepackage{charter}
+\usepackage[backend=biber, sorting=none]{biblatex}
 \usepackage{textfit}
 \usepackage{relsize}
 \usepackage{setspace}
@@ -9,7 +11,7 @@
 \usepackage[fleqn]{amsmath}
 \usepackage{color}
 \usepackage{changepage}
-\usepackage[colorlinks=true, urlcolor=black, plainpages=false, pdfpagelabels]{hyperref}
+\usepackage[colorlinks=true, linkcolor=red, citecolor=red, urlcolor=black, plainpages=false, pdfpagelabels]{hyperref}
 \usepackage{etoolbox}
 \usepackage{amssymb}
 \usepackage[parfill]{parskip}
@@ -44,7 +46,7 @@
 \relpenalty=10
 \binoppenalty=10
 \hyphenpenalty=10
-\raggedright
+%\raggedright
 
 %\usepackage[most]{tcolorbox}
 
@@ -82,6 +84,21 @@
 \lineskip=1.5ex
 
 \ytableausetup{centertableaux} % smalltableaux
+
+% Chapter and section headers.
+\usepackage[compact]{titlesec}
+
+\newcommand{\chapterformat}[1]{\LARGE\larger\bfseries \hspace{3mm}#1}
+
+\titleformat{\chapter}[block]
+  {\large\bfseries}{}{0pt}{\hfill{\color[rgb]{.5,.5,.5}{%
+  \bfseries\scaletoheight{2cm}{\thechapter}}}%
+\\\hbox{~}\hfill\chapterformat}
+
+
+
+\bibliography{the_cadabra_book}
+
 
 \begin{document}
 \pagestyle{empty}
@@ -151,20 +168,17 @@ under the hood largely written in C++.
 
 \section{History}
 
-Cadabra was originally written around 2001 to solve <a
-href="https://arxiv.org/abs/hep-th/0010167">a number</a> <a
-href="https://arxiv.org/abs/hep-th/0307298">of problems</a> related to
-higher-derivative supergravity. It was then expanded and polished, and
-first saw its public release <a
-href="https://arxiv.org/abs/hep-th/0701238">in 2007</a>.  During the
-years that followed, it became clear that several design decisions
-were not ideal, such as the use of a custom programming language and
-the lack of functionality for component computations. Over the course
-of 2015-2016 a large rewrite took place, which resulted in Cadabra
-2.x.  This new version is programmable in Python and does both
-abstract and component computations. This new web site, with new
-tutorials and all manual pages accessible online, will also hopefully
-help to make Cadabra easier to use.
+Cadabra was originally written around 2001 to solve a number of
+problems related to higher-derivative
+supergravity~\cite{Peeters:2000qj,Peeters:2003pv}. It was then
+expanded and polished, and first saw its public release in
+2007~\cite{kas_cdb_hep}.  During the years that followed, it became
+clear that several design decisions were not ideal, such as the use of
+a custom programming language and the lack of functionality for
+component computations. Over the course of 2015-2016 a large rewrite
+took place, which resulted in Cadabra 2.x~\cite{Peeters:2018dyg}.
+This new version is programmable in Python and does both abstract and
+component computations.
 
 
 \chapter{The input format}
@@ -188,5 +202,9 @@ help to make Cadabra easier to use.
 
 \chapter{Algorithms}
 \input{distribute}
+
+%\bibliographystyle{cadabra}
+
+\printbibliography
 
 \end{document}
