@@ -523,6 +523,14 @@ namespace cadabra {
 			}
 		}
 
+	void Ex_cleanup(Ex_ptr ex)
+	{
+		Kernel* kernel = get_kernel_from_scope();
+		pre_clean_dispatch_deep(*kernel, *ex);
+		cleanup_dispatch_deep(*kernel, *ex);
+		check_index_consistency(*kernel, *ex, (*ex).begin());
+		call_post_process(*kernel, ex);
+	}
 
 	Ex_ptr map_sympy_wrapper(Ex_ptr ex, std::string head, pybind11::args args)
 		{
@@ -569,6 +577,7 @@ namespace cadabra {
 		.def("state", &Ex::state)
 		.def("reset", &Ex::reset_state)
 		.def("changed", &Ex::changed_state)
+		.def("cleanup", &Ex_cleanup)
 		.def("__add__", static_cast<Ex_ptr(*)(const Ex_ptr, const ExNode)>(&Ex_add), py::is_operator{})
 		.def("__add__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_add), py::is_operator{})
 		.def("__sub__", static_cast<Ex_ptr(*)(const Ex_ptr, const ExNode)>(&Ex_sub), py::is_operator{})
