@@ -28,6 +28,7 @@ set(PACKAGES
   core/component
   core/manip
   core/solve
+  core/trace
   utils/node
   utils/develop
   sympy/solvers
