@@ -1,5 +1,5 @@
 {
-	"cell_id" : 2591451759941222879,
+	"cell_id" : 8176786609067457502,
 	"cells" : 
 	[
 		{
@@ -130,14 +130,14 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 17939170552338832337,
+					"cell_id" : 5333473821107834285,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\algorithm{remove_zero_components}{Remove all components of an expression that are equal to zero.}"
+					"source" : "\\algorithm{remove_zero_components(ex: Ex) -> Ex}{Remove all components of an expression that are equal to zero.}"
 				}
 			],
 			"hidden" : true,
-			"source" : "\\algorithm{remove_zero_components}{Remove all components of an expression that are equal to zero.}"
+			"source" : "\\algorithm{remove_zero_components(ex: Ex) -> Ex}{Remove all components of an expression that are equal to zero.}"
 		},
 		{
 			"cell_id" : 9384605071867656007,

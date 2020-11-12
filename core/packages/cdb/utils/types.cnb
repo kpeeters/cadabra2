@@ -1,17 +1,69 @@
 {
+	"cell_id" : 3055175442602437687,
 	"cells" : 
 	[
 		{
+			"cell_id" : 9256297574510892724,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9256297574510892724,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\package{cdb.utils.types}{Determining semantic properties of nodes}\n\nThis package contains simple wrappers for various useful checks on nodes to determine semantic information based on their name, \nnumber of children, etc..."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\package{cdb.utils.types}{Determining semantic properties of nodes}\n\nThis package contains simple wrappers for various useful checks on nodes to determine semantic information based on their name, \nnumber of children, etc..."
+		},
+		{
+			"cell_id" : 5684905940070203990,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 14027713561723842750,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{is_relational_operator(node: ExNode) -> bool}{Returns True for $=$, $<$ and $>$ nodes}"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{is_relational_operator(node: ExNode) -> bool}{Returns True for $=$, $<$ and $>$ nodes}"
+		},
+		{
+			"cell_id" : 1429712140485337784,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : "def is_relational_operator(node):\n\treturn node.name in [r'\\equals', r'\\less', r'\\greater']"
 		},
 		{
+			"cell_id" : 16326753075780368906,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 15503606750955089630,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{is_relational_expression(ex: Ex) -> bool}{Returns True for expressions which contain a top node which is a relational\noperator and exactly two children}"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{is_relational_expression(ex: Ex) -> bool}{Returns True for expressions which contain a top node which is a relational\noperator and exactly two children}"
+		},
+		{
+			"cell_id" : 18335364954917430677,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : "def is_relational_expression(ex):\n\treturn is_relational_operator(ex.top()) and n_args(ex.top()) == 2"
 		},
 		{
+			"cell_id" : 5422877163838814435,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
