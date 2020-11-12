@@ -277,25 +277,28 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	// std::cerr << msg->get_payload() << std::endl;
 
 	// Parse the JSON message.
-	Json::Value  root;
-	Json::Reader reader;
-	bool success = reader.parse( msg->get_payload(), root );
-	if ( !success ) {
+	nlohmann::json root;
+	
+	try {
+		root=nlohmann::json::parse(msg->get_payload());
+		}
+	catch(nlohmann::json::exception& e) {
 		std::cerr << "cadabra-client: cannot parse message" << std::endl;
 		return;
 		}
-	const Json::Value header   = root["header"];
-	const Json::Value content  = root["content"];
-	const Json::Value msg_type = root["msg_type"];
+	const nlohmann::json& header  = root["header"];
+	const nlohmann::json& content = root["content"];
+	const std::string msg_type    = root.value("msg_type", "");
+
 	DataCell::id_t parent_id;
-	parent_id.id = header["parent_id"].asUInt64();
-	if(header["parent_origin"].asString()=="client")
+	parent_id.id = header["parent_id"].get<uint64_t>();
+	if(header.value("parent_origin", "")=="client")
 		parent_id.created_by_client=true;
 	else
 		parent_id.created_by_client=false;
 	DataCell::id_t cell_id;
-	cell_id.id = header["cell_id"].asUInt64();
-	if(header["cell_origin"].asString()=="client")
+	cell_id.id = header["cell_id"].get<uint64_t>();
+	if(header["cell_origin"].get<std::string>()=="client")
 		cell_id.created_by_client=true;
 	else
 		cell_id.created_by_client=false;
@@ -307,19 +310,19 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	else if (cell_id.id == interactive_cell || std::find(console_child_ids.begin(), console_child_ids.end(), parent_id.id) != console_child_ids.end()) {
 		docthread->on_interactive_output(root);
 		}
-	else if (msg_type.asString().find("csl_") == 0) {
+	else if (msg_type.find("csl_") == 0) {
 		root["header"]["from_server"] = true;
 		docthread->on_interactive_output(root);
 		}
-	else if(msg_type.asString()=="completed") {
+	else if(msg_type=="completed") {
 		// std::cerr << "received completion of " << content["original"] << " -> " << content["completed"] << std::endl;
 
 		// Finally, the action to add the output cell.
-		std::string toadd=content["completed"].asString();
+		std::string toadd=content["completed"].get<std::string>();
 		if(toadd.size()>0) {
-			toadd=toadd.substr(content["original"].asString().size());
-			int pos=content["position"].asInt();
-			int alternative=content["alternative"].asInt();
+			toadd=toadd.substr(content["original"].get<std::string>().size());
+			int pos=content["position"].get<int>();
+			int alternative=content["alternative"].get<int>();
 			std::shared_ptr<ActionBase> action =
 				std::make_shared<ActionCompleteText>(cell_id, pos, toadd, alternative);
 			docthread->queue_action(action);
@@ -327,7 +330,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		}
 	else {
 		try {
-			bool finished = header["last_in_sequence"].asBool();
+			bool finished = header["last_in_sequence"].get<bool>();
 
 			if (finished) {
 				std::shared_ptr<ActionBase> rs_action =
@@ -336,9 +339,9 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 				cell_finished_running(parent_id);
 				}
 
-			if (content["output"].asString().size() > 0) {
-				if (msg_type.asString() == "output") {
-					std::string output = "\\begin{verbatim}" + content["output"].asString() + "\\end{verbatim}";
+			if (content.count("output")>0 && content["output"].get<std::string>().size() > 0) {
+				if (msg_type == "output") {
+					std::string output = "\\begin{verbatim}" + content["output"].get<std::string>() + "\\end{verbatim}";
 
 					// Stick an AddCell action onto the stack. We instruct the
 					// action to add this result output cell as a child of the
@@ -350,8 +353,8 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
 					}
-				else if (msg_type.asString() == "verbatim") {
-					std::string output = "\\begin{verbatim}" + content["output"].asString() + "\\end{verbatim}";
+				else if (msg_type == "verbatim") {
+					std::string output = "\\begin{verbatim}" + content["output"].get<std::string>() + "\\end{verbatim}";
 
 					// Stick an AddCell action onto the stack. We instruct the
 					// action to add this result output cell as a child of the
@@ -363,23 +366,23 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
 					}
-				else if (msg_type.asString() == "latex_view") {
+				else if (msg_type == "latex_view") {
 					// std::cerr << "received latex cell " << content["output"].asString() << std::endl;
-					DataCell result(cell_id, DataCell::CellType::latex_view, content["output"].asString());
+					DataCell result(cell_id, DataCell::CellType::latex_view, content["output"].get<std::string>());
 					std::shared_ptr<ActionBase> action =
 					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
 					}
-				else if (msg_type.asString() == "input_form") {
-					DataCell result(cell_id, DataCell::CellType::input_form, content["output"].asString());
+				else if (msg_type == "input_form") {
+					DataCell result(cell_id, DataCell::CellType::input_form, content["output"].get<std::string>());
 					std::shared_ptr<ActionBase> action =
 					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
 					}
-				else if (msg_type.asString() == "error") {
-					std::string error = "{\\color{red}{\\begin{verbatim}" + content["output"].asString()
+				else if (msg_type == "error") {
+					std::string error = "{\\color{red}{\\begin{verbatim}" + content["output"].get<std::string>()
 					                    + "\\end{verbatim}}}";
-					if (msg_type.asString() == "fault") {
+					if (msg_type == "fault") {
 						error = "{\\color{red}{Kernel fault}}\\begin{small}" + error + "\\end{small}";
 						}
 
@@ -401,15 +404,15 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 
 					// FIXME: iterate over all cells and set the running flag to false.
 					}
-				else if (msg_type.asString() == "image_png") {
-					DataCell result(cell_id, DataCell::CellType::image_png, content["output"].asString());
+				else if (msg_type == "image_png") {
+					DataCell result(cell_id, DataCell::CellType::image_png, content["output"].get<std::string>());
 					std::shared_ptr<ActionBase> action =
 					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
 					}
 				else {
 					std::cerr << "cadabra-client: received cell we did not expect: "
-					          << msg_type.asString() << std::endl;
+					          << msg_type << std::endl;
 					}
 				}
 			}
@@ -438,12 +441,12 @@ void ComputeThread::execute_interactive(const std::string& code)
 	if (code.substr(0, 7) == "reset()")
 		return restart_kernel();
 
-	Json::Value req, header, content;
+	nlohmann::json req, header, content;
 
-	header["msg_type"] = "execute_request";
-	header["cell_id"] = static_cast<Json::UInt64>(interactive_cell);
+	header["msg_type"]    = "execute_request";
+	header["cell_id"]     = interactive_cell;
 	header["interactive"] = true;
-	content["code"] = code.c_str();
+	content["code"]       = code.c_str();
 
 	req["auth_token"] = authentication_token;
 	req["header"]     = header;
@@ -498,9 +501,9 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		   std::make_shared<ActionSetRunStatus>(it->id(), true);
 		docthread->queue_action(rs_action);
 
-		Json::Value req, header, content;
+		nlohmann::json req, header, content;
 		header["uuid"]="none";
-		header["cell_id"]=(Json::UInt64)dc.id().id;
+		header["cell_id"]=dc.id().id;
 		if(dc.id().created_by_client)
 			header["cell_origin"]="client";
 		else
@@ -542,7 +545,7 @@ void ComputeThread::stop()
 	if(connection_is_open==false)
 		return;
 
-	Json::Value req, header, content;
+	nlohmann::json req, header, content;
 	header["uuid"]="none";
 	header["msg_type"]="execute_interrupt";
 	req["auth_token"]=authentication_token;
@@ -570,7 +573,7 @@ void ComputeThread::restart_kernel()
 	gui->on_kernel_runstatus(false);
 
 	// std::cerr << "cadabra-client: restarting kernel" << std::endl;
-	Json::Value req, header, content;
+	nlohmann::json req, header, content;
 	header["uuid"]="none";
 	header["msg_type"]="exit";
 	header["from_server"] = true;
@@ -593,9 +596,9 @@ bool ComputeThread::complete(DTree::iterator it, int pos, int alternative)
 
 	const DataCell& dc=(*it);
 
-	Json::Value req, header, content;
+	nlohmann::json req, header, content;
 	header["uuid"]="none";
-	header["cell_id"]=(Json::UInt64)dc.id().id;
+	header["cell_id"]=dc.id().id;
 	if(dc.id().created_by_client)
 		header["cell_origin"]="client";
 	else

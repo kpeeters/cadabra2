@@ -12,8 +12,8 @@
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 #include <boost/algorithm/string/replace.hpp>
-#include <json/json.h>
 
+#include "nlohmann/json.hpp"
 #include <internal/uuid.h>
 
 #include "Config.hh"
@@ -357,10 +357,11 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 	{
 	//	std::cout << json_msg << std::endl;
 
-	Json::Value  root;   // will contains the root value after parsing.
-	Json::Reader reader;
-	bool parsingSuccessful = reader.parse( json_msg, root );
-	if ( !parsingSuccessful ) {
+	nlohmann::json root;
+	try {
+		root = nlohmann::json::parse(json_msg);
+		}
+	catch(nlohmann::json::exception& ex) {
 //#ifndef ENABLE_JUPYTER
 //		snoop::log(snoop::error) << "Cannot parse message " << json_msg << snoop::flush;
 //#endif
@@ -368,21 +369,21 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 		}
 
 	// Check that this message is authenticated.
-	std::string auth_token = root["auth_token"].asString();
+	std::string auth_token = root.value("auth_token", "");
 	if(auth_token!=authentication_token) {
 		std::cerr << "Received block with incorrect authentication token: " << auth_token << "." << std::endl;
 		return;
 		}
 
-	const Json::Value content    = root["content"];
-	const Json::Value header     = root["header"];
-	std::string msg_type = header["msg_type"].asString();
+	const auto& content    = root["content"];
+	const auto& header     = root["header"];
+	std::string msg_type = header["msg_type"].get<std::string>();
 	// std::cerr << "received msg_type |" << msg_type << "|" << std::endl;
 
 	if(msg_type=="execute_request") {
-		std::string code = content.get("code","").asString();
+		std::string code = content.value("code","");
 		// std::cerr << code << std::endl;
-		uint64_t id = header.get("cell_id", 0).asUInt64();
+		uint64_t id = header.value("cell_id", uint64_t(0));
 		std::unique_lock<std::mutex> lock(block_available_mutex);
 		block_queue.push(Block(hdl, code, id));
 		block_available.notify_one();
@@ -404,8 +405,8 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 
 		}
 	else if(msg_type=="complete") {
-		std::string str=root["string"].asString();
-		int alternative=root["alternative"].asInt();
+		std::string str=root["string"].get<std::string>();
+		int alternative=root["alternative"].get<int>();
 		std::string todo="print(__cdbkernel__.completer.complete(\""+str+"\", "+std::to_string(alternative)+"))";
 		// std::cerr << todo << std::endl;
 		std::string res=run_string(todo, true);
@@ -416,7 +417,7 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 		if(res=="None")
 			res="";
 		//std::cerr << res << "|" << std::endl;
-		on_complete_finished(hdl, header.get("cell_id",0).asUInt64(), root["position"].asInt(), alternative, str, res);
+		on_complete_finished(hdl, header["cell_id"].get<uint64_t>(), root["position"].get<int>(), alternative, str, res);
 		}
 	else if(msg_type=="exit") {
 		exit(-1);
@@ -439,16 +440,16 @@ uint64_t Server::send(const std::string& output, const std::string& msg_type, ui
 	//	if(msg_type=="output")
 	//		std::cerr << "Cell " << msg_type << " timing: " << server_stopwatch << " (in python: " << sympy_stopwatch << ")" << std::endl;
 	// Make a JSON message.
-	Json::Value json, content, header;
+	nlohmann::json json, content, header;
 
-	auto return_cell_id=cadabra::generate_uuid<Json::UInt64>();
+	auto return_cell_id=cadabra::generate_uuid<uint64_t>();
 	if(parent_id==0)
-		header["parent_id"]=(Json::Value::UInt64)current_id;
+		header["parent_id"]=current_id;
 	else
-		header["parent_id"]=(Json::Value::UInt64)parent_id;
+		header["parent_id"]=parent_id;
 
 	header["parent_origin"]="client";
-	header["cell_id"]=(Json::Value::UInt64)return_cell_id;
+	header["cell_id"]=return_cell_id;
 	header["cell_origin"]="server";
 	header["time_total_microseconds"]=std::to_string(server_stopwatch.seconds()*1e6L + server_stopwatch.useconds());
 	header["time_sympy_microseconds"]=std::to_string(sympy_stopwatch.seconds()*1e6L  + sympy_stopwatch.useconds());
@@ -479,12 +480,12 @@ void Server::on_block_error(Block blk)
 	std::lock_guard<std::mutex> lock(ws_mutex);
 
 	// Make a JSON message.
-	Json::Value json, content, header;
+	nlohmann::json json, content, header;
 
-	auto return_cell_id=cadabra::generate_uuid<Json::UInt64>();
-	header["parent_id"]=(Json::Value::UInt64)blk.cell_id;
+	auto return_cell_id=cadabra::generate_uuid<uint64_t>();
+	header["parent_id"]=blk.cell_id;
 	header["parent_origin"]="client";
-	header["cell_id"]=(Json::Value::UInt64)return_cell_id;
+	header["cell_id"]=return_cell_id;
 	header["cell_origin"]="server";
 	header["last_in_sequence"]=true;
 	content["output"]=blk.error;
@@ -505,9 +506,9 @@ void Server::on_complete_finished(websocketpp::connection_hdl hdl, uint64_t id, 
 //	std::lock_guard<std::mutex> lock(ws_mutex); // Called from the receiving thread!
 
 	// Make a JSON message.
-	Json::Value json, content, header;
+	nlohmann::json json, content, header;
 
-	header["cell_id"]=(Json::Value::UInt64)id;
+	header["cell_id"]=id;
 	json["msg_type"]="completed";
 	content["original"]=original;
 	content["completed"]=completed;
@@ -528,12 +529,12 @@ void Server::on_kernel_fault(Block blk)
 	std::lock_guard<std::mutex> lock(ws_mutex);
 
 	// Make a JSON message.
-	Json::Value json, content, header;
+	nlohmann::json json, content, header;
 
-	auto return_cell_id=cadabra::generate_uuid<Json::UInt64>();
-	header["parent_id"]=(Json::Value::UInt64)blk.cell_id;
+	auto return_cell_id=cadabra::generate_uuid<uint64_t>();
+	header["parent_id"]=blk.cell_id;
 	header["parent_origin"]="client";
-	header["cell_id"]=(Json::Value::UInt64)return_cell_id;
+	header["cell_id"]=return_cell_id;
 	header["cell_origin"]="server";
 	header["last_in_sequence"]=true;
 	content["output"]=blk.error;

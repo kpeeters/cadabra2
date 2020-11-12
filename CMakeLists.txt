@@ -227,6 +227,7 @@ endif()
 
 if(ENABLE_MATHEMATICA)
    print_header("Configuring Mathematica")
+   cmake_policy(SET CMP0077 NEW)
    set(Mathematica_USE_STATIC_LIBRARIES TRUE)
    find_package(Mathematica COMPONENTS WSTP)
 endif()

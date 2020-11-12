@@ -155,6 +155,7 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 	auto wins = get_windows();
 	auto nw = static_cast<cadabra::NotebookWindow *>(wins[0]);
 	nw->set_name(files[0]->get_path());
+	snoop::log("open") << "command-line" << snoop::flush;
 	nw->load_file(text);
 	Gtk::Application::on_open(files, hint);
 	}

@@ -10,6 +10,8 @@
 #include <iostream>
 #include "base64.hh"
 #include <internal/uuid.h>
+#include <iomanip>
+
 
 using namespace cadabra;
 
@@ -33,7 +35,7 @@ bool DataCell::id_t::operator<(const DataCell::id_t& other) const
 	}
 
 DataCell::id_t::id_t()
-	: id(generate_uuid<Json::UInt64>())
+	: id(generate_uuid<uint64_t>())
 	, created_by_client(true)
 	{
 	}
@@ -286,16 +288,16 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 
 std::string cadabra::JSON_serialise(const DTree& doc)
 	{
-	Json::Value json;
+	nlohmann::json json;
 	JSON_recurse(doc, doc.begin(), json);
 
 	std::ostringstream str;
-	str << json;
+	str << std::setfill('\t') << std::setw(1) << json;
 
 	return str.str();
 	}
 
-void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& json)
+void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, nlohmann::json& json)
 	{
 	switch(it->cell_type) {
 		case DataCell::CellType::document:
@@ -330,7 +332,7 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 			//			assert(1==0);
 			//			// NOT YET FUNCTIONAL
 			//			json["cell_type"]="section";
-			//			Json::Value child;
+			//			nlohmann::json child;
 			//			child["content"]="test";
 			//			json.append(child);
 			//			break;
@@ -353,12 +355,12 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 		}
 
 	if(doc.number_of_children(it)>0) {
-		Json::Value cells;
+		nlohmann::json cells=nlohmann::json::array();
 		DTree::sibling_iterator sib=doc.begin(it);
 		while(sib!=doc.end(it)) {
-			Json::Value thiscell;
+			nlohmann::json thiscell;
 			JSON_recurse(doc, sib, thiscell);
-			cells.append(thiscell);
+			cells.push_back(thiscell);
 			++sib;
 			}
 		json["cells"]=cells;
@@ -367,131 +369,129 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 
 void cadabra::JSON_deserialise(const std::string& cj, DTree& doc)
 	{
-	Json::Reader reader;
-	Json::Value  root;
+	nlohmann::json  root;
 
-	bool ret = reader.parse( cj, root );
-	if ( !ret ) {
+	try {
+		root=nlohmann::json::parse(cj);
+		}
+	catch(nlohmann::json::exception& e) {
 		std::cerr << "cannot parse json file" << std::endl;
 		return;
 		}
 
 	// Setup main document.
-	DataCell top(DataCell::CellType::document);
+	DataCell::id_t id;
+	id.id=root.value("cell_id", generate_uuid<uint64_t>());
+	DataCell top(id, DataCell::CellType::document);
 	DTree::iterator doc_it = doc.set_head(top);
 
 	// Determine whether this is a Jupyter notebook or a Cadabra
 	// notebook.
-	const Json::Value desc = root["description"];
-	if(!desc) 
+	if(root.count("description") == 0) {
 		root = cadabra::ipynb2cnb(root);
-
-	// std::cerr << root << std::endl;
+		}
 	
 	// Scan through json file.
-	const Json::Value cells = root["cells"];
+	const nlohmann::json& cells = root["cells"];
 	JSON_in_recurse(doc, doc_it, cells);
 	}
 
-void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value& cells)
+void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const nlohmann::json& cells)
 	{
 	try {
-		for(unsigned int c=0; c<cells.size(); ++c) {
-			const Json::Value celltype         = cells[c]["cell_type"];
-			const Json::Value cell_id          = cells[c].get("cell_id", generate_uuid<Json::UInt64>()).asUInt64();
-			const Json::Value cell_origin      = cells[c]["cell_origin"];
-			const Json::Value textbuf          = cells[c]["source"];
-			const Json::Value hidden           = cells[c]["hidden"];
-			const Json::Value ignored          = cells[c]["ignore_on_import"];
+		for(const auto& cell: cells) {
+			const nlohmann::json& textbuf = cell["source"];
 
 			DTree::iterator last=doc.end();
 			DataCell::id_t id;
-			id.id=cell_id.asUInt64();
-			if(cell_origin=="server")
+			id.id=cell.value("cell_id", generate_uuid<uint64_t>());
+
+			if(cell.value("cell_origin", "")=="server")
 				id.created_by_client=false;
 			else
 				id.created_by_client=true;
-
+			
 			bool hide=false;
-			if(hidden.asBool())
+			if(cell.value("hidden", false))
 				hide=true;
 
-			if(celltype.asString()=="input" || celltype.asString()=="code") {
+			std::string cell_type = cell.value("cell_type", "");
+			if(cell_type=="input" || cell_type=="code") {
 				std::string res;
-				if(textbuf.isArray()) {
-					for(auto& el: textbuf)
-						res+=el.asString();
+				if(textbuf.is_array()) {
+					for(const auto& el: textbuf)
+						res+=el.get<std::string>();
 					}
 				else {
-					res=textbuf.asString();
+					res=textbuf.get<std::string>();
 					}
 				DataCell dc(id, cadabra::DataCell::CellType::python, res, hide);
 				last=doc.append_child(loc, dc);
 				}
-			else if(celltype.asString()=="output") {
-				DataCell dc(id, cadabra::DataCell::CellType::output, textbuf.asString(), hide);
+			else if(cell_type=="output") {
+				DataCell dc(id, cadabra::DataCell::CellType::output, textbuf.get<std::string>(), hide);
 				last=doc.append_child(loc, dc);
 				}
-			else if(celltype.asString()=="error") {
-				DataCell dc(id, cadabra::DataCell::CellType::error, textbuf.asString(), hide);
+			else if(cell_type=="error") {
+				DataCell dc(id, cadabra::DataCell::CellType::error, textbuf.get<std::string>(), hide);
 				last=doc.append_child(loc, dc);
 				}
-			else if(celltype.asString()=="verbatim") {
-				DataCell dc(id, cadabra::DataCell::CellType::verbatim, textbuf.asString(), hide);
+			else if(cell_type=="verbatim") {
+				DataCell dc(id, cadabra::DataCell::CellType::verbatim, textbuf.get<std::string>(), hide);
 				last=doc.append_child(loc, dc);
 				}
-			else if(celltype.asString()=="input_form") {
-				DataCell dc(id, cadabra::DataCell::CellType::input_form, textbuf.asString(), hide);
+			else if(cell_type=="input_form") {
+				DataCell dc(id, cadabra::DataCell::CellType::input_form, textbuf.get<std::string>(), hide);
 				last=doc.append_child(loc, dc);
 				}
-			else if(celltype.asString()=="latex_view") {
+			else if(cell_type=="latex_view") {
 				std::string res;
-				if(textbuf.isArray()) {
+				if(textbuf.is_array()) {
 					for(auto& el: textbuf)
-						res+=el.asString();
+						res+=el.get<std::string>();
 					}
 				else {
-					res=textbuf.asString();
+					res=textbuf.get<std::string>();
 					}
 				DataCell dc(id, cadabra::DataCell::CellType::latex_view, res, false);
 				last=doc.append_child(loc, dc);
 				}
-			else if(celltype.asString()=="latex" || celltype.asString()=="markdown") {
+			else if(cell_type=="latex" || cell_type=="markdown") {
 				std::string res;
-				if(textbuf.isArray()) {
+				if(textbuf.is_array()) {
 					for(auto& el: textbuf)
-						res+=el.asString();
+						res+=el.get<std::string>();
 					}
 				else {
-					res=textbuf.asString();
+					res=textbuf.get<std::string>();
 					}
 				bool hide_jupyter=hide;
-				if(cells[c].isMember("cells")==false) hide_jupyter=true;
+				if(cell.count("cells")==0) hide_jupyter=true;
 
 				DataCell dc(id, cadabra::DataCell::CellType::latex, res, hide_jupyter);
 				last=doc.append_child(loc, dc);
 
 				// IPython/Jupyter notebooks only have the input LaTeX cell, not the output cell,
 				// which we need.
-				if(cells[c].isMember("cells")==false) {
+				if(cell.count("cells")==0) {
 					DataCell dc(id, cadabra::DataCell::CellType::latex_view, res, hide);
 					doc.append_child(last, dc);
 					}
 				}
-			else if(celltype.asString()=="image_png") {
-				DataCell dc(id, cadabra::DataCell::CellType::image_png, textbuf.asString(), hide);
+			else if(cell_type=="image_png") {
+				DataCell dc(id, cadabra::DataCell::CellType::image_png, textbuf.get<std::string>(), hide);
 				last=doc.append_child(loc, dc);
 				}
 			else {
-				std::cerr << "cadabra-client: found unknown cell type '"+celltype.asString()+"', ignoring" << std::endl;
+				std::cerr << "cadabra-client: found unknown cell type '"+cell_type+"', ignoring" << std::endl;
 				continue;
 				}
 
 			if(last!=doc.end()) {
-				if(ignored.asBool())
+				if(cell.value("ignore_on_import", false))
 					last->ignore_on_import=true;
-				if(cells[c].isMember("cells")) {
-					const Json::Value subcells = cells[c]["cells"];
+				if(cell.count("cells")>0) {
+					const nlohmann::json& subcells = cell["cells"];
 					JSON_in_recurse(doc, last, subcells);
 					}
 				}
@@ -683,10 +683,10 @@ void cadabra::python_recurse(const DTree& doc, DTree::iterator it, std::ostrings
 //    return str;
 //    }
 
-Json::Value cadabra::ipynb2cnb(const Json::Value& root)
+nlohmann::json cadabra::ipynb2cnb(const nlohmann::json& root)
 	{
 	auto nbf = root["nbformat"];
-	Json::Value json;
+	nlohmann::json json;
 
 	if(!nbf)
 		return json;
@@ -694,24 +694,24 @@ Json::Value cadabra::ipynb2cnb(const Json::Value& root)
 	json["description"]="Cadabra JSON notebook format";
 	json["version"]=1.0;
 
-	Json::Value cells;
-	const Json::Value& jucells=root["cells"];
+	nlohmann::json cells=nlohmann::json::array();
+	const nlohmann::json& jucells=root["cells"];
 	
 	// Jupyter notebooks just have a single array of cells; walk
 	// through and add to our "cells" array.
 
 	for(unsigned int c=0; c<jucells.size(); ++c) {
-		Json::Value cell;
-		if(jucells[c]["cell_type"].asString()=="markdown")
+		nlohmann::json cell;
+		if(jucells[c]["cell_type"].get<std::string>()=="markdown")
 			cell["cell_type"]="latex";
 		else
 			cell["cell_type"]="input";
 		cell["hidden"]=false;
-		const Json::Value& source=jucells[c]["source"];
+		const nlohmann::json& source=jucells[c]["source"];
 		// Jupyter stores the source line-by-line in an array 'source'.
 		std::string block;
 		for(unsigned int l=0; l<source.size(); ++l) {
-			std::string line=source[l].asString();
+			std::string line=source[l].get<std::string>();
 			if(line.size()>0) {
 				if(line[0]=='#') {
 					std::string sub="";
@@ -735,7 +735,67 @@ Json::Value cadabra::ipynb2cnb(const Json::Value& root)
 				}
 			}
 		cell["source"]=block;
-		cells.append(cell);
+		cells.push_back(cell);
+		}
+
+	json["cells"] = cells;
+	
+	return json;
+	}
+
+nlohmann::json cadabra::cnb2ipynb(const nlohmann::json& root)
+	{
+	auto nbf = root["nbformat"];
+	nlohmann::json json;
+
+	if(!nbf)
+		return json;
+
+	json["description"]="Cadabra JSON notebook format";
+	json["version"]=1.0;
+
+	nlohmann::json cells=nlohmann::json::array();
+	const nlohmann::json& jucells=root["cells"];
+	
+	// Jupyter notebooks just have a single array of cells; walk
+	// through and add to our "cells" array.
+
+	for(unsigned int c=0; c<jucells.size(); ++c) {
+		nlohmann::json cell;
+		if(jucells[c]["cell_type"].get<std::string>()=="markdown")
+			cell["cell_type"]="latex";
+		else
+			cell["cell_type"]="input";
+		cell["hidden"]=false;
+		const nlohmann::json& source=jucells[c]["source"];
+		// Jupyter stores the source line-by-line in an array 'source'.
+		std::string block;
+		for(unsigned int l=0; l<source.size(); ++l) {
+			std::string line=source[l].get<std::string>();
+			if(line.size()>0) {
+				if(line[0]=='#') {
+					std::string sub="";
+					line=line.substr(1);
+					int inc=0;
+					while(line.size()>0 && line[0]=='#') {
+						if(inc<2) {
+							sub+="sub";
+							inc+=1;
+							}
+						line=line.substr(1);
+						}
+					if(line.size()==0)
+						continue;
+					if(line[line.size()-1]=='\n')
+						line=line.substr(0,line.size()-1);
+					block+="\\"+sub+"section*{"+trim(line)+"}\n";
+					}
+				else
+					block+=line;
+				}
+			}
+		cell["source"]=block;
+		cells.push_back(cell);
 		}
 
 	json["cells"] = cells;

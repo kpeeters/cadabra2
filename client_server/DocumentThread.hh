@@ -78,7 +78,7 @@ namespace cadabra {
 
 			void load_from_string(const std::string&);
 
-			virtual void on_interactive_output(const Json::Value& msg);
+			virtual void on_interactive_output(const nlohmann::json& msg);
 
 			/// One undo step.
 			void undo();
@@ -111,8 +111,8 @@ namespace cadabra {
 					bool move_into_new_cell;
 					bool tab_completion;
 				private:
-					Json::Value data;
-					std::string config_path;
+					nlohmann::json data;
+					std::string    config_path;
 				};
 			Prefs prefs;
 

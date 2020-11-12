@@ -9,7 +9,6 @@
 
 #ifndef CDBPYTHON_NO_NOTEBOOK
 #include "DataCell.hh"
-#include "json/json.h"
 #endif
 
 std::string cadabra::escape_quotes(const std::string& line)

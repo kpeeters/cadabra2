@@ -3,7 +3,6 @@
 
 #include <gtkmm/dialog.h>
 #include <gtkmm/grid.h>
-#include <json/json.h>
 #include <gtkmm/colorbutton.h>
 #include <vector>
 #include <memory>

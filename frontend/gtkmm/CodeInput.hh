@@ -6,7 +6,6 @@
 #include <gtkmm/box.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/separator.h>
-#include <json/json.h>
 
 namespace cadabra {
 

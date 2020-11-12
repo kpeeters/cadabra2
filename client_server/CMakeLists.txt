@@ -19,12 +19,6 @@ find_package(GLIBMM  REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(Threads REQUIRED)
 find_package(Boost 1.53.0 COMPONENTS system program_options date_time filesystem REQUIRED)
-if(ENABLE_SYSTEM_JSONCPP)
-  message("-- Linking against system-provided jsoncpp")
-  find_package(JSONCPP REQUIRED)
-else()
-  message("-- Linking against included jsoncpp")
-endif()
 
 #---------------------------------------------------------------------------
 # Enumerate input files.
@@ -57,15 +51,6 @@ set(CADABRA_CLIENT_SRC
    ${CADABRA_LIBS_DIR}/whereami/whereami.c
    )
 
-if(NOT ENABLE_SYSTEM_JSONCPP)
-  list(APPEND CADABRA_SERVER_SRC
-    ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp
-    )
-  list(APPEND CADABRA_CLIENT_SRC
-    ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp
-    )
-endif() 
-
 set(JUPYTER_KERNEL_SRC
     cadabra-jupyter-kernel.cc
     cadabra-jupyter-kernel.hh
@@ -75,7 +60,6 @@ set(JUPYTER_KERNEL_SRC
     ${CADABRA_CORE_DIR}/DataCell.cc
     ${CADABRA_CORE_DIR}/CdbPython.cc 
     ${CADABRA_CORE_DIR}/Stopwatch.cc 
-    ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
     ${CADABRA_LIBS_DIR}/whereami/whereami.c
     ${CADABRA_LIBS_DIR}/base64/base64.cc
     )
@@ -102,20 +86,12 @@ include_directories(
    "${CADABRA_LIBS_DIR}/websocketpp" 
    "${CADABRA_LIBS_DIR}/internal/include"
    "${CADABRA_LIBS_DIR}/whereami"
-   "${CADABRA_LIBS_DIR}/base64"   
+   "${CADABRA_LIBS_DIR}/base64"
+   "${CADABRA_LIBS_DIR}/nlohmann"      
    ${Boost_INCLUDE_DIRS}
    ${PYTHON_INCLUDE_DIRS}
    ${SQLITE3_INCLUDE_DIR}
 )
-if(ENABLE_SYSTEM_JSONCPP)
-  include_directories(
-    ${JSONCPP_INCLUDE_DIRS}
-    )
-else()
-  include_directories(
-    "${CADABRA_LIBS_DIR}/jsoncpp"
-    )
-endif()
 
 add_definitions(
    -D_WEBSOCKETPP_CPP11_STL_
@@ -148,11 +124,6 @@ target_link_libraries(cadabra-server
    ${GLIBMM3_LIBRARIES} 
    Threads::Threads
    )
-if(ENABLE_SYSTEM_JSONCPP)
-  target_link_libraries(cadabra-server
-    ${JSONCPP_LIBRARIES}
-    )
-endif()
 if(WIN32)
    target_link_libraries(cadabra-server ws2_32 mswsock bcrypt)
  endif()
@@ -173,11 +144,6 @@ target_link_libraries(cadabra_client
   ${GLIBMM3_LIBRARIES}
   Threads::Threads
   )
-if(ENABLE_SYSTEM_JSONCPP)
-  target_link_libraries(cadabra_client
-    ${JSONCPP_LIBRARIES}
-    )
-endif()
 if(WIN32)
   target_link_libraries(cadabra_client ws2_32 bcrypt)
 endif()
@@ -208,9 +174,6 @@ if(ENABLE_JUPYTER)
   target_compile_definitions(cadabra-jupyter-kernel PRIVATE CDB_DONT_ACQUIRE_GIL=1)  
   message("-- UUID library at ${UUID_LIBRARIES}")
   target_link_libraries(cadabra-jupyter-kernel xeus Threads::Threads uuid ${Boost_LIBRARIES} ${GLIBMM3_LIBRARIES} ${PYTHON_LIBRARIES})
-  if(ENABLE_SYSTEM_JSONCPP)
-    target_link_libraries(cadabra-jupyter-kernel ${JSONCPP_LIBRARIES}) 
-  endif()
 else()
   message("-- Not building Xeus Jupyter kernel")
 endif()

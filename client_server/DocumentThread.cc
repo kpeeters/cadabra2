@@ -13,7 +13,6 @@
 
 #include <internal/unistd.h>
 #include <sys/types.h>
-#include <json/json.h>
 #ifndef EMSCRIPTEN
 #include <glibmm/miscutils.h>
 #include "Snoop.hh"
@@ -35,7 +34,7 @@ DocumentThread::DocumentThread(GUIBase* g)
 
 	}
 
-void DocumentThread::on_interactive_output(const Json::Value& )
+void DocumentThread::on_interactive_output(const nlohmann::json& )
 	{
 
 	}
@@ -219,36 +218,36 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 				}
 			}
 		}
-	font_step = data.get("font_step", 0).asInt();
-	highlight = data.get("highlight", false).asBool();
-	is_registered = data.get("is_registered", false).asBool();
-	is_anonymous = data.get("is_anonymous", false).asBool();
-	git_path = data.get("git_path", "").asString();
-	python_path = data.get("python_path", "").asString();
-	move_into_new_cell = data.get("move_into_new_cell", false).asBool();
-	tab_completion = data.get("tab_completion", true).asBool();
+	font_step          = data.value("font_step", 0);
+	highlight          = data.value("highlight", false);
+	is_registered      = data.value("is_registered", false);
+	is_anonymous       = data.value("is_anonymous", false);
+	git_path           = data.value("git_path", "");
+	python_path        = data.value("python_path", "");
+	move_into_new_cell = data.value("move_into_new_cell", false);
+	tab_completion     = data.value("tab_completion", true);
 
 	if(git_path=="")
 		git_path="/usr/bin/git";
 	// Get the colours for syntax highlighting.
-	auto python_colours = data.get("colours", Json::Value()).get("python", Json::Value());
-	colours["python"]["keyword"] = (python_colours.get("keyword", "RoyalBlue").asString());
-	colours["python"]["operator"] = (python_colours.get("operator", "SlateGray").asString());
-	colours["python"]["brace"] = (python_colours.get("brace", "SlateGray").asString());
-	colours["python"]["string"] = (python_colours.get("string", "ForestGreen").asString());
-	colours["python"]["comment"] = (python_colours.get("comment", "Silver").asString());
-	colours["python"]["object"] = (python_colours.get("object", "DarkGray").asString());
-	colours["python"]["number"] = (python_colours.get("number", "Sienna").asString());
-	colours["python"]["maths"] = (python_colours.get("maths", "Olive").asString());
-	colours["python"]["function"] = (python_colours.get("function", "FireBrick").asString());
-	colours["python"]["decorator"] = (python_colours.get("decorator", "DarkViolet").asString());
-	colours["python"]["class"] = (python_colours.get("class", "MediumOrchid").asString());
+	auto python_colours = data["colours"]["python"];
+	colours["python"]["keyword"]   = python_colours.value("keyword", "RoyalBlue");
+	colours["python"]["operator"]  = python_colours.value("operator", "SlateGray");
+	colours["python"]["brace"]     = python_colours.value("brace", "SlateGray");
+	colours["python"]["string"]    = python_colours.value("string", "ForestGreen");
+	colours["python"]["comment"]   = python_colours.value("comment", "Silver");
+	colours["python"]["object"]    = python_colours.value("object", "DarkGray");
+	colours["python"]["number"]    = python_colours.value("number", "Sienna");
+	colours["python"]["maths"]     = python_colours.value("maths", "Olive");
+	colours["python"]["function"]  = python_colours.value("function", "FireBrick");
+	colours["python"]["decorator"] = python_colours.value("decorator", "DarkViolet");
+	colours["python"]["class"]     = python_colours.value("class", "MediumOrchid");
 
-	auto latex_colours = data.get("colours", Json::Value()).get("latex", Json::Value());
-	colours["latex"]["command"] = (latex_colours.get("command", "rgb(52,101,164)").asString());
-	colours["latex"]["parameter"] = (latex_colours.get("brace", "rgb(245,121,0)").asString());
-	colours["latex"]["comment"] = (latex_colours.get("comment", "Silver").asString());
-	colours["latex"]["maths"] = (latex_colours.get("maths", "Sienna").asString());
+	auto latex_colours = data["colours"]["latex"];
+	colours["latex"]["command"]    = latex_colours.value("command", "rgb(52,101,164)");
+	colours["latex"]["parameter"]  = latex_colours.value("brace", "rgb(245,121,0)");
+	colours["latex"]["comment"]    = latex_colours.value("comment", "Silver");
+	colours["latex"]["maths"]      = latex_colours.value("maths", "Sienna");
 #endif
 	}
 

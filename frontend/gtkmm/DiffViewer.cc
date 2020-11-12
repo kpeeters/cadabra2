@@ -1,8 +1,8 @@
 #include <internal/difflib.h>
 #include <internal/string_tools.h>
-#include <json/json.h>
 
 #include "DiffViewer.hh"
+#include "nlohmann/json.hpp"
 
 const Gdk::RGBA color_insert("rgb(200, 255, 200)");
 const Gdk::RGBA color_delete("rgb(255, 200, 200)");
@@ -182,12 +182,12 @@ DiffViewer::Cells DiffViewer::make_cells(std::istream& stream)
 	{
 	Cells ret;
 
-	Json::Value nb;
+	nlohmann::json nb;
 	stream >> nb;
 	nb = nb["cells"];
 	for (auto it = nb.begin(); it != nb.end(); ++it) {
-		ret.first.push_back((*it)["cell_id"].asString());
-		ret.second.push_back((*it)["source"].asString());
+		ret.first.push_back((*it)["cell_id"].get<std::string>());
+		ret.second.push_back((*it)["source"].get<std::string>());
 		}
 
 	return ret;

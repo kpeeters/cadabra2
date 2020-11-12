@@ -1,7 +1,7 @@
 #pragma once
 
 #include <gtkmm.h>
-#include <json/json.h>
+#include "nlohmann/json.hpp"
 #include <queue>
 #include <list>
 
@@ -34,7 +34,7 @@ namespace cadabra {
 			void set_input(const Glib::ustring& line, size_t range_start = std::string::npos, size_t range_end = std::string::npos);
 			std::string grab_input();
 			void send_input(const std::string& code);
-			void signal_message(const Json::Value& msg);
+			void signal_message(const nlohmann::json& msg);
 
 			void set_height(int px);
 
@@ -55,7 +55,7 @@ namespace cadabra {
 
 			bool needs_focus;
 			std::string collect;
-			std::queue<Json::Value> message_queue;
+			std::queue<nlohmann::json> message_queue;
 			std::queue<std::string> run_queue;
 			Gtk::ScrolledWindow win;
 			TextViewProxy input;

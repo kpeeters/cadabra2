@@ -1,7 +1,7 @@
 #include "../Config.hh"
 #include <fstream>
-#include "json/json.h"
 #include "py_helpers.hh"
+#include "nlohmann/json.hpp"
 
 namespace cadabra {
 
@@ -27,14 +27,14 @@ namespace cadabra {
 
 	std::string read_manual(const char* category, const char* name)
 		{
-		Json::Value root;
-		Json::Reader reader;
 		std::ifstream ifs(std::string(CMAKE_INSTALL_PREFIX) + "/share/cadabra2/manual/" + category + "/" + name + ".cnb");
-		bool parsing_successful = reader.parse(ifs, root, false);
-		if (!parsing_successful) {
+		try {
+			nlohmann::json root=nlohmann::json::parse(ifs);
+			return (*root["cells"].begin())["source"].get<std::string>();
+			}
+		catch(nlohmann::json::exception& ex) {
 			return "Failed to collect help information";
 			}
-		return (*root["cells"].begin())["source"].asString();
 		}
 
 	}

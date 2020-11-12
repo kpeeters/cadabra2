@@ -693,7 +693,7 @@ void NotebookWindow::process_todo_queue()
 		md.signal_response().connect(sigc::mem_fun(*this, &NotebookWindow::on_crash_window_closed));
 		md.run();
 
-		Json::Value req;
+		nlohmann::json req;
 		req["msg_type"] = "exit";
 		req["header"]["from_server"] = true;
 		on_interactive_output(req);
@@ -931,7 +931,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 	//		setup_focus_after_allocate(it);
 	}
 
-void NotebookWindow::on_interactive_output(const Json::Value& msg)
+void NotebookWindow::on_interactive_output(const nlohmann::json& msg)
 	{
 	console.signal_message(msg);
 	}
@@ -1427,7 +1427,7 @@ void NotebookWindow::on_file_open()
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
 			name = dialog.get_filename();
-			snoop::log("open") << name << snoop::flush;
+			snoop::log("open") << "menu" << snoop::flush;
 			std::ifstream file(name);
 			std::string content, line;
 

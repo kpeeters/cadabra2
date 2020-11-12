@@ -98,7 +98,7 @@ bool TextViewProxy::on_key_press_event(GdkEventKey* key_event)
 	}
 
 Console::Console(sigc::slot<void> run_slot)
-	: id_(generate_uuid<Json::UInt64>())
+	: id_(generate_uuid<uint64_t>())
 	, needs_focus(false)
 	, input(*this)
 	{
@@ -214,7 +214,7 @@ std::string Console::grab_input()
 	return ret;
 	}
 
-void Console::signal_message(const Json::Value& message)
+void Console::signal_message(const nlohmann::json& message)
 	{
 	message_queue.push(message);
 	dispatch_message();
@@ -227,13 +227,17 @@ void Console::process_message_queue()
 	set_sensitive(false);
 
 	while (!message_queue.empty()) {
-		const Json::Value& msg = message_queue.front();
+		const nlohmann::json& msg = message_queue.front();
 
-		std::string msg_type = msg["msg_type"].asString();
+//		std::cerr << msg.dump(3) << std::endl;
+		
+		std::string msg_type = msg.value("msg_type", "");
 		if (msg_type.empty())
-			msg_type = msg["header"]["msg_type"].asString();
-		std::string content = msg["content"]["output"].asString();
-		bool from_server = msg["header"]["from_server"].asBool();
+			msg_type = msg["header"]["msg_type"].get<std::string>();
+		std::string content;
+		if(msg.count("content")>0)
+			content = msg["content"].value("output", "");
+		bool from_server = msg["header"].value("from_server", false);
 
 		if (from_server) {
 			std::string in = input.get_buffer()->get_text();

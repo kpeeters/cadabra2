@@ -72,6 +72,7 @@ include_directories(
 	"${CADABRA_LIBS_DIR}/internal/include"
 	"${CADABRA_LIBS_DIR}/websocketpp"
 	"${CADABRA_LIBS_DIR}/tiny-process-library"
+	"${CADABRA_LIBS_DIR}/nlohmann"   
 	${Boost_INCLUDE_DIRS}
 	${SQLITE3_INCLUDE_DIR}  
 	)

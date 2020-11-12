@@ -105,7 +105,7 @@ namespace cadabra {
 
 			virtual void set_compute_thread(ComputeThread* compute) override;
 
-			virtual void on_interactive_output(const Json::Value& msg) override;
+			virtual void on_interactive_output(const nlohmann::json& msg) override;
 
 		protected:
 			virtual bool on_key_press_event(GdkEventKey*) override;

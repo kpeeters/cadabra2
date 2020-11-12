@@ -5,7 +5,7 @@
 #include <mutex>
 
 #include "tree.hh"
-#include "json/json.h"
+#include "nlohmann/json.hpp"
 
 namespace cadabra {
 
@@ -52,7 +52,7 @@ namespace cadabra {
 				public:
 					id_t();
 
-					Json::UInt64  id;
+					uint64_t  id;
 					bool      created_by_client;
 
 					bool operator<(const id_t& other) const;
@@ -111,12 +111,12 @@ namespace cadabra {
 	/// the document tree.
 
 	std::string JSON_serialise(const DTree&);
-	void        JSON_recurse(const DTree&, DTree::iterator, Json::Value&);
+	void        JSON_recurse(const DTree&, DTree::iterator, nlohmann::json&);
 
 	/// Load a document from .cnb format, i.e. the inverse of the above.
 
 	void        JSON_deserialise(const std::string&, DTree&);
-	void        JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value& cells);
+	void        JSON_in_recurse(DTree& doc, DTree::iterator loc, const nlohmann::json& cells);
 
 	/// Export a document to a single self-contained HTML file containing inline CSS.
 
@@ -151,5 +151,9 @@ namespace cadabra {
 	/// Convert the JSON of a Jupyter notebook (with Cadabra contents)
 	/// to the JSON of a Cadabra notebook.
 	
-	Json::Value ipynb2cnb(const Json::Value&);
+	nlohmann::json ipynb2cnb(const nlohmann::json&);
+
+	/// Convert the JSON of a Cadabra notebook to a Jupyter notebook.
+
+	nlohmann::json cnb2ipynb(const nlohmann::json&);
 }

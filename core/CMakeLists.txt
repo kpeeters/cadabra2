@@ -41,11 +41,6 @@ find_package(Boost 1.53 COMPONENTS system)
 # GMPXX
 find_package(GMPXX REQUIRED)
 
-# JSONCPP (if using the system-provided one)
-if(ENABLE_SYSTEM_JSONCPP)
-  find_package(JSONCPP REQUIRED)
-endif()
-
 #---------------------------------------------------------------------------
 # Enumerate input files and directories.
 #---------------------------------------------------------------------------
@@ -235,12 +230,6 @@ set(LOCAL_SRC_FILES
    ${ALGORITHM_SRC_FILES}
    ${PROPERTY_SRC_FILES}
    )
-if(ENABLE_SYSTEM_JSONCPP)
-else()
-  list(APPEND LOCAL_SRC_FILES
-    ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp
-    )
-endif() 
 if(MATHEMATICA_FOUND)
    set(LOCAL_SRC_FILES 
       ${LOCAL_SRC_FILES}
@@ -264,20 +253,10 @@ include_directories(
    "${CADABRA_LIBS_DIR}/whereami"
    "${CADABRA_LIBS_DIR}/base64"   
    "${CADABRA_LIBS_DIR}/dbg"   
-   "${CADABRA_LIBS_DIR}/linenoise"  
+   "${CADABRA_LIBS_DIR}/linenoise"
+   "${CADABRA_LIBS_DIR}/nlohmann"     
    ${Boost_INCLUDE_DIRS}
    )
-if(ENABLE_SYSTEM_JSONCPP)
-   include_directories(
-     ${JSONCPP_INCLUDE_DIRS}
-   )
-else()
-  include_directories(
-    "${CADABRA_LIBS_DIR}/jsoncpp"
-    )
-endif() 
-# FIXME: 2nd line is to find Config.hh
-# FIXME: the client_server bit should go back to client_server eventually
 
 
 #---------------------------------------------------------------------------
@@ -312,11 +291,6 @@ elseif(CMAKE_SHARED_LINKER_FLAGS MATCHES ".*-Wl,--no-undefined.*")
   target_link_libraries(cadabra2 PRIVATE ${PYTHON_LIBRARIES})
 endif()
 
-if(ENABLE_SYSTEM_JSONCPP)
-  target_link_libraries(cadabra2 PRIVATE
-    ${JSONCPP_LIBRARIES}
-    )
-endif()
 if(MATHEMATICA_FOUND)
    target_link_libraries(cadabra2 PRIVATE ${Mathematica_WSTP_LIBRARIES})
 endif()
@@ -340,64 +314,31 @@ add_executable(test_preprocessor
 )
 
 # cadabra2python executable
-if(ENABLE_SYSTEM_JSONCPP)
-  add_executable(cadabra2python 
-    cadabra2python.cc 
-    CdbPython.cc
-    InstallPrefix.cc    
-    DataCell.cc
-    ${CADABRA_LIBS_DIR}/whereami/whereami.c
-    ${CADABRA_LIBS_DIR}/base64/base64.cc
-    )
-  target_link_libraries(cadabra2python 
-    ${Boost_LIBRARIES}
-#    ${GLIBMM3_LIBRARIES}     
-    ${PYTHON_LIBRARIES}
-    ${JSONCPP_LIBRARIES}
-    )
-else()
-  add_executable(cadabra2python 
-    cadabra2python.cc 
-    CdbPython.cc
-    InstallPrefix.cc
-    DataCell.cc
-    ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
-    ${CADABRA_LIBS_DIR}/whereami/whereami.c
-    ${CADABRA_LIBS_DIR}/base64/base64.cc
-    )
-  target_link_libraries(cadabra2python 
-    ${Boost_LIBRARIES} 
-    ${PYTHON_LIBRARIES}
-#    ${GLIBMM3_LIBRARIES}     
-    )
-endif()
+add_executable(cadabra2python 
+   cadabra2python.cc 
+   CdbPython.cc
+   InstallPrefix.cc    
+   DataCell.cc
+   ${CADABRA_LIBS_DIR}/whereami/whereami.c
+   ${CADABRA_LIBS_DIR}/base64/base64.cc
+   )
+target_link_libraries(cadabra2python 
+   ${Boost_LIBRARIES}
+   #    ${GLIBMM3_LIBRARIES}     
+   ${PYTHON_LIBRARIES}
+   )
 
 # cadabra2cadabra
-if(ENABLE_SYSTEM_JSONCPP)
-  add_executable(cadabra2cadabra 
-    cadabra2cadabra.cc 
-    DataCell.cc 
-    InstallPrefix.cc
-    ${CADABRA_LIBS_DIR}/whereami/whereami.c
-    ${CADABRA_LIBS_DIR}/base64/base64.cc
-    )
-  target_link_libraries(cadabra2cadabra
-    ${Boost_LIBRARIES}
-    ${JSONCPP_LIBRARIES}
-    )
-else()
-  add_executable(cadabra2cadabra 
-    cadabra2cadabra.cc 
-    DataCell.cc 
-    InstallPrefix.cc
-    ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
-    ${CADABRA_LIBS_DIR}/whereami/whereami.c
-    ${CADABRA_LIBS_DIR}/base64/base64.cc
-    )
-  target_link_libraries(cadabra2cadabra
-    ${Boost_LIBRARIES}
-    )
-endif()
+add_executable(cadabra2cadabra 
+   cadabra2cadabra.cc 
+   DataCell.cc 
+   InstallPrefix.cc
+   ${CADABRA_LIBS_DIR}/whereami/whereami.c
+   ${CADABRA_LIBS_DIR}/base64/base64.cc
+   )
+target_link_libraries(cadabra2cadabra
+   ${Boost_LIBRARIES}
+   )
 
 # Mathematica WSTP test
 if(MATHEMATICA_FOUND)
