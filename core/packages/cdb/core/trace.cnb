@@ -1,5 +1,5 @@
 {
-	"cell_id" : 6758102857076279035,
+	"cell_id" : 4804704193557178778,
 	"cells" : 
 	[
 		{
@@ -22,7 +22,7 @@
 			"cell_id" : 17733580437840025116,
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "from cdb.utils.node import n_indices, nth_child, empty_sum\nfrom collections import defaultdict"
+			"source" : "from cdb.utils.node import n_indices, nth_child, empty_sum\nfrom cdb.utils.develop import inherit_kernel\nfrom collections import defaultdict"
 		},
 		{
 			"cell_id" : 8325441738150275359,
@@ -44,7 +44,7 @@
 			"cell_id" : 12226727171243122299,
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "def combine_traces(ex):\n\tdef recurse(node):\n\t\tif node.name == \"\\\\sum\":\n\t\t\t# Enumerate all trace terms\n\t\t\tnodes = defaultdict(list)\n\t\t\tfor i, child in enumerate(node.children()):\n\t\t\t\tif child.name == \"\\\\prod\":\n\t\t\t\t\t# Only allow Trace nodes with scalars outside\n\t\t\t\t\tcan_move = False\n\t\t\t\t\tname = \"\"\n\t\t\t\t\tfor obj in child.children():\n\t\t\t\t\t\tif Trace.get(obj) is not None:\n\t\t\t\t\t\t\tif can_move: # Already hit a Trace node, can't move\n\t\t\t\t\t\t\t\tbreak\n\t\t\t\t\t\t\tname = obj.name\n\t\t\t\t\t\t\tcan_move = True\n\t\t\t\t\t\telif n_indices(obj) != 0 or ImplicitIndex.get(obj) is not None:\n\t\t\t\t\t\t\tcan_move = False\n\t\t\t\t\t\t\tbreak\n\t\t\t\t\tif can_move:\n\t\t\t\t\t\tnodes[obj.name].append(i)\n\t\t\t\telif Trace.get(child) is not None:\n\t\t\t\t\tnodes[child.name].append(i)\n\n\t\t\t# Combine traces\n\t\t\tfor t in nodes:\n\t\t\t\tnew_node = node.append_child(Ex(t + \"{}\")).append_child(empty_sum())\n\t\t\t\tfor i, child in enumerate(node.children()):\n\t\t\t\t\tif i in nodes[t]:\n\t\t\t\t\t\tnew_term = new_node.append_child(child)\n\t\t\t\t\t\t# Remove the existing Trace\n\t\t\t\t\t\tif new_term.name == \"\\\\prod\":\n\t\t\t\t\t\t\tfor obj in new_term.children():\n\t\t\t\t\t\t\t\tif Trace.get(obj) is not None:\n\t\t\t\t\t\t\t\t\tr = nth_child(obj, 0)\n\t\t\t\t\t\t\t\t\tr := @(r):\n\t\t\t\t\t\t\t\t\tobj = obj.replace(r)\n\t\t\t\t\t\telif Trace.get(new_term) is not None:\n\t\t\t\t\t\t\tr = nth_child(new_term, 0)\n\t\t\t\t\t\t\tr := @(r):\n\t\t\t\t\t\t\tnew_term = new_term.replace(r)\n\n\t\t\t# Remove old terms\n\t\t\tindices = list(i for t in nodes for i in nodes[t])\n\t\t\tfor i, child in enumerate(node.children()):\n\t\t\t\tif i in indices:\n\t\t\t\t\tchild.erase()\n\t\t\t\n\t\telse:\n\t\t\t# Go deeper\n\t\t\tfor child in node.children():\n\t\t\t\trecurse(child)\n\trecurse(ex.top())\n\tex.cleanup()\n\treturn ex"
+			"source" : "def combine_traces(ex):\n\t__cdbkernel__ = inherit_kernel()\n\tdef recurse(node):\n\t\tnonlocal __cdbkernel__\n\t\tif node.name == \"\\\\sum\":\n\t\t\t# Enumerate all trace terms\n\t\t\tnodes = defaultdict(list)\n\t\t\tfor i, child in enumerate(node.children()):\n\t\t\t\tif child.name == \"\\\\prod\":\n\t\t\t\t\t# Only allow Trace nodes with scalars outside\n\t\t\t\t\tcan_move = False\n\t\t\t\t\tname = \"\"\n\t\t\t\t\tfor obj in child.children():\n\t\t\t\t\t\tif Trace.get(obj) is not None:\n\t\t\t\t\t\t\tif can_move: # Already hit a Trace node, can't move\n\t\t\t\t\t\t\t\tbreak\n\t\t\t\t\t\t\tname = obj.name\n\t\t\t\t\t\t\tcan_move = True\n\t\t\t\t\t\telif n_indices(obj) != 0 or ImplicitIndex.get(obj) is not None:\n\t\t\t\t\t\t\tcan_move = False\n\t\t\t\t\t\t\tbreak\n\t\t\t\t\tif can_move:\n\t\t\t\t\t\tnodes[obj.name].append(i)\n\t\t\t\telif Trace.get(child) is not None:\n\t\t\t\t\tnodes[child.name].append(i)\n\n\t\t\t# Combine traces\n\t\t\tfor t in nodes:\n\t\t\t\tnew_node = node.append_child(Ex(t + \"{}\")).append_child(empty_sum())\n\t\t\t\tfor i, child in enumerate(node.children()):\n\t\t\t\t\tif i in nodes[t]:\n\t\t\t\t\t\tnew_term = new_node.append_child(child)\n\t\t\t\t\t\t# Remove the existing Trace\n\t\t\t\t\t\tif new_term.name == \"\\\\prod\":\n\t\t\t\t\t\t\tfor obj in new_term.children():\n\t\t\t\t\t\t\t\tif Trace.get(obj) is not None:\n\t\t\t\t\t\t\t\t\tr = nth_child(obj, 0)\n\t\t\t\t\t\t\t\t\tr := @(r):\n\t\t\t\t\t\t\t\t\tr *= Ex(obj.multiplier)\n\t\t\t\t\t\t\t\t\tobj = obj.replace(r)\n\t\t\t\t\t\telif Trace.get(new_term) is not None:\n\t\t\t\t\t\t\tr = nth_child(new_term, 0)\n\t\t\t\t\t\t\tr := @(r):\n\t\t\t\t\t\t\tr *= Ex(new_term.multiplier)\n\t\t\t\t\t\t\tnew_term = new_term.replace(r)\n\n\t\t\t# Remove old terms\n\t\t\tindices = list(i for t in nodes for i in nodes[t])\n\t\t\tfor i, child in enumerate(node.children()):\n\t\t\t\tif i in indices:\n\t\t\t\t\tchild.erase()\n\t\t\t\n\t\telse:\n\t\t\t# Go deeper\n\t\t\tfor child in node.children():\n\t\t\t\trecurse(child)\n\trecurse(ex.top())\n\tex.cleanup()\n\treturn ex"
 		},
 		{
 			"cell_id" : 1491461674503604418,
@@ -53,44 +53,14 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9584761355266840172,
+					"cell_id" : 1302745897165290177,
 					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_id" : 18164379685260386451,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "TrB(R_{\\mu}) + k f Tr(A_{\\mu}) + Tr(B_{\\mu}) + l TrB(m L_{\\mu}) + a Tr(C_{\\mu} + b D_{\\mu}) = K_{\\mu}"
-						}
-					],
-					"source" : "\\begin{dmath*}{}TrB\\left(R_{\\mu}\\right) \\oplus k f Tr\\left(A_{\\mu}\\right) \\oplus Tr\\left(B_{\\mu}\\right) \\oplus l TrB\\left(m L_{\\mu}\\right) \\oplus a Tr\\left(C_{\\mu}+b D_{\\mu}\\right) = K_{\\mu}\\end{dmath*}"
-				},
-				{
-					"cell_id" : 9968081237573196552,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_id" : 7719599516258347937,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "TrB(R_{\\mu} + l m L_{\\mu}) + Tr(k f A_{\\mu} + B_{\\mu} + a (C_{\\mu} + b D_{\\mu})) = K_{\\mu}"
-						}
-					],
-					"source" : "\\begin{dmath*}{}TrB\\left(R_{\\mu}+l m L_{\\mu}\\right) \\oplus Tr\\left(k f A_{\\mu}+B_{\\mu} \\oplus a \\left(C_{\\mu}+b D_{\\mu}\\right)\\right) = K_{\\mu}\\end{dmath*}"
-				},
-				{
-					"cell_id" : 2464905091865287483,
-					"cell_origin" : "server",
-					"cell_type" : "verbatim",
-					"source" : "\\begin{verbatim}{\\equals}  (4 000001849A461720)\n  1:{\\sum}  (4 000001849A460960)\n  2:  {TrB}  (4 00000184FF485CB0)\n  3:    {\\sum}  (4 00000184FF4867B0)\n  4:      {R}  (4 00000184FF485890)\n  5:        _{\\mu}  (4 00000184FF4864F0)\n  6:      {\\prod}  (4 00000184FF485EC0)\n  7:        {l}  (4 00000184FF486910)\n  8:        {m}  (4 000001849A461F60)\n  9:        {L}  (4 000001849A4615C0)\n 10:          _{\\mu}  (4 000001849A4620C0)\n 11:  {Tr}  (4 000001849A460330)\n 12:    {\\sum}  (4 000001849A460D80)\n 13:      {\\prod}  (4 000001849A462430)\n 14:        {k}  (4 000001849A45FAF0)\n 15:        {f}  (4 000001849A460280)\n 16:        {A}  (4 000001849A461930)\n 17:          _{\\mu}  (4 000001849A460800)\n 18:      {B}  (4 000001849A462A60)\n 19:        _{\\mu}  (4 000001849A462850)\n 20:      {\\prod}  (4 000001849A463770)\n 21:        {a}  (4 000001849A4631F0)\n 22:        {\\sum}  (4 00000184FF486230)\n 23:          {C}  (4 00000184FF485730)\n 24:            _{\\mu}  (4 00000184FF485AA0)\n 25:          {\\prod}  (4 00000184FF4841E0)\n 26:            {b}  (4 00000184FF485F70)\n 27:            {D}  (4 00000184FF486020)\n 28:              _{\\mu}  (4 00000184FF486650)\n 29:{K}  (4 000001849A45FA40)\n 30:  _{\\mu}  (4 000001849A460120)\n\\end{verbatim}"
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}Test 1 passed\n\\end{verbatim}"
 				}
 			],
 			"ignore_on_import" : true,
-			"source" : "Tr{#}::Trace.\nTrB{#}::Trace.\nex := TrB{R_{\\mu}} + k * f * Tr{A_{\\mu}} + Tr{B_{\\mu}} + l * TrB{m * L_{\\mu}} + a * Tr{C_{\\mu} + b * D_{\\mu}} = K_{\\mu};\ncombine_traces(ex);\ntree(ex);"
+			"source" : "def test01():\n\t__cdbkernel__ = create_scope()\n\tTr{#}::Trace.\n\t{A, B, C, D}::NonCommuting.\n\tex := Tr{A B C D + C D A B + B C D A} - 2 * Tr{3 * D A B C}:\n\tcombine_traces(ex)\n\tassert ex == $Tr{A B C D + C D A B + B C D A - 6 D A B C}$\n\tprint(\"Test 1 passed\")\ntest01()"
 		},
 		{
 			"cell_id" : 2285946178549455777,

@@ -1,5 +1,5 @@
 {
-	"cell_id" : 10707977486229131670,
+	"cell_id" : 7900896013554414286,
 	"cells" : 
 	[
 		{
@@ -17,6 +17,12 @@
 			],
 			"hidden" : true,
 			"source" : "\\package{cdb.utils.develop}{Helper functions to aid development, debugging and testing}\n\nThis package contains some standardised functionality to aid in development of library code and Python algorithms"
+		},
+		{
+			"cell_id" : 13348113113731925581,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "import inspect"
 		},
 		{
 			"cell_id" : 15845148038835594810,
@@ -85,7 +91,29 @@
 			"source" : "def test_algo(expected, verbose=False):\n\t\"\"\"\n\tExample usage:\n\t\t@test_algo($a + b + c$)\n\t\tdef sort_sum_test():\n\t\t\tex := b + a + c.\n\t\t\treturn sort_sum(ex)\n\t\"\"\"\n\tdef decorator(func):\n\t\tdef wrapper(*args, **kwargs):\n\t\t\tres = func(*args, **kwargs)\n\t\t\tif res == expected:\n\t\t\t\tprint(func.__name__ + \" passed\")\n\t\t\telse:\n\t\t\t\tprint(func.__name__ + \" FAILED\")\n\t\t\t\tprint(\"Expected: \" + str(expected))\n\t\t\t\tif verbose: print(tree(expected))\n\t\t\t\tprint(\"Produced: \" + str(res))\n\t\t\t\tif verbose: print(tree(res))\n\t\t\t\traise CadabraTestError\n\t\t\treturn res\n\t\treturn wrapper\n\treturn decorator"
 		},
 		{
+			"cell_id" : 17571440201905887785,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 10305645619436861364,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{inherit_kernel() -> Kernel}{Move up stack frames until one which defines the \\_\\_cdbkernel\\_\\_ variable is located and return \nit. If no Kernel object is foundthen None is returned}"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{inherit_kernel() -> Kernel}{Move up stack frames until one which defines the \\_\\_cdbkernel\\_\\_ variable is located and return \nit. If no Kernel object is foundthen None is returned}"
+		},
+		{
 			"cell_id" : 460414117077303111,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def inherit_kernel():\n\tframe = inspect.stack()[1][0]\n\twhile \"__cdbkernel__\" not in frame.f_locals:\n\t\tframe = frame.f_back\n\t\tif frame is None:\n\t\t\treturn None\n\treturn frame.f_locals[\"__cdbkernel__\"]"
+		},
+		{
+			"cell_id" : 13850153861758424314,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
