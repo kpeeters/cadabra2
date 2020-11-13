@@ -42,6 +42,7 @@ public:
 private:
 	void set_histfile();
 	std::string histfile;
+	std::string site_path;
 
 	std::string to_string(PyObject* obj);
 	std::string sanitize(std::string s);
