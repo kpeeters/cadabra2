@@ -745,60 +745,62 @@ nlohmann::json cadabra::ipynb2cnb(const nlohmann::json& root)
 
 nlohmann::json cadabra::cnb2ipynb(const nlohmann::json& root)
 	{
-	auto nbf = root["nbformat"];
-	nlohmann::json json;
+	nlohmann::json ipynb, kernelspec, lang;
 
-	if(!nbf)
-		return json;
+	ipynb["nbformat"]=4;
+	ipynb["nbformat_minor"]=4;
 
-	json["description"]="Cadabra JSON notebook format";
-	json["version"]=1.0;
+	kernelspec["display_name"]="Cadabra2";
+	kernelspec["language"]="python";
+	kernelspec["name"]="cadabra2";
+
+	lang["codemirror_mode"]="cadabra";
+	lang["file_extension"]=".ipynb";
+	lang["mimetype"]="text/cadabra";
+	lang["name"]="cadabra2";
+	lang["pygments_lexer"]="cadabra";
+	
+	ipynb["metadata"] = {
+		{"kernelspec", kernelspec},
+		{"language_info", lang}
+	};
 
 	nlohmann::json cells=nlohmann::json::array();
-	const nlohmann::json& jucells=root["cells"];
 	
 	// Jupyter notebooks just have a single array of cells; walk
-	// through and add to our "cells" array.
+	// through and setup our cells array.
 
-	for(unsigned int c=0; c<jucells.size(); ++c) {
+	for(const auto& cdb: root["cells"]) {
 		nlohmann::json cell;
-		if(jucells[c]["cell_type"].get<std::string>()=="markdown")
-			cell["cell_type"]="latex";
-		else
-			cell["cell_type"]="input";
-		cell["hidden"]=false;
-		const nlohmann::json& source=jucells[c]["source"];
-		// Jupyter stores the source line-by-line in an array 'source'.
-		std::string block;
-		for(unsigned int l=0; l<source.size(); ++l) {
-			std::string line=source[l].get<std::string>();
-			if(line.size()>0) {
-				if(line[0]=='#') {
-					std::string sub="";
-					line=line.substr(1);
-					int inc=0;
-					while(line.size()>0 && line[0]=='#') {
-						if(inc<2) {
-							sub+="sub";
-							inc+=1;
-							}
-						line=line.substr(1);
-						}
-					if(line.size()==0)
-						continue;
-					if(line[line.size()-1]=='\n')
-						line=line.substr(0,line.size()-1);
-					block+="\\"+sub+"section*{"+trim(line)+"}\n";
-					}
-				else
-					block+=line;
-				}
+		if(cdb["cell_type"]=="python") {
+			cell["cell_type"]="code";
+			cell["source"]=nlohmann::json::array();
+			cell["source"].push_back(cdb["source"]);
+			cell["metadata"]=nlohmann::json::object();
+			cell["outputs"]=nlohmann::json::array();
+			cell["execution_count"]={};			
 			}
-		cell["source"]=block;
-		cells.push_back(cell);
+		if(cdb["cell_type"]=="input") {
+			cell["cell_type"]="code";
+			cell["source"]=nlohmann::json::array();
+			cell["source"].push_back(cdb["source"]);
+			cell["metadata"]=nlohmann::json::object();
+			cell["outputs"]=nlohmann::json::array();
+			cell["execution_count"]={};
+			}
+		else if(cdb["cell_type"]=="latex") {
+			cell["cell_type"]="markdown";
+			cell["source"]=nlohmann::json::array();
+			cell["source"].push_back(cdb["source"]);
+			cell["metadata"]=nlohmann::json::object();
+			}
+
+		if(cell.is_null()==false)
+			cells.push_back(cell);
+		
 		}
 
-	json["cells"] = cells;
+	ipynb["cells"] = cells;
 	
-	return json;
+	return ipynb;
 	}

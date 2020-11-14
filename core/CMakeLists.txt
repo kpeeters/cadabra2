@@ -328,6 +328,21 @@ target_link_libraries(cadabra2python
    ${PYTHON_LIBRARIES}
    )
 
+# cadabra2ipynb executable
+add_executable(cadabra2ipynb
+   cadabra2ipynb.cc 
+   CdbPython.cc
+   InstallPrefix.cc    
+   DataCell.cc
+   ${CADABRA_LIBS_DIR}/whereami/whereami.c
+   ${CADABRA_LIBS_DIR}/base64/base64.cc
+   )
+target_link_libraries(cadabra2ipynb
+   ${Boost_LIBRARIES}
+   #    ${GLIBMM3_LIBRARIES}     
+   ${PYTHON_LIBRARIES}
+   )
+
 # cadabra2cadabra
 add_executable(cadabra2cadabra 
    cadabra2cadabra.cc 
@@ -411,6 +426,14 @@ install(
     bin
 )
 
+# cadabra2ipynb
+install(
+  TARGETS 
+    cadabra2ipynb
+  DESTINATION 
+    bin
+)
+
 # cadabra2cadabra
 install(
    TARGETS 
@@ -436,6 +459,7 @@ if(NOT MSVC)
       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2html.1"
       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2latex.1"      
       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2python.1"
+      COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2ipynb.1"      
       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2-gtk.1"
       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra-server.1"
       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2-cli.1"
@@ -450,6 +474,7 @@ if(NOT MSVC)
     ../man/man1/cadabra2.1
     ../man/man1/cadabra2-cli.1    
     ../man/man1/cadabra2cadabra.1
+    ../man/man1/cadabra2ipynb.1
     ../man/man1/cadabra2html.1 
     ../man/man1/cadabra2latex.1
     ../man/man1/cadabra2python.1  

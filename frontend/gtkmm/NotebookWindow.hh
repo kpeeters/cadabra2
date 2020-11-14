@@ -17,6 +17,8 @@
 #include <thread>
 #include <mutex>
 
+#include "nlohmann/json.hpp"
+
 #include "DocumentThread.hh"
 #include "ComputeThread.hh"
 #include "Console.hh"
@@ -184,6 +186,7 @@ namespace cadabra {
 			void on_file_close();
 			void on_file_save();
 			void on_file_save_as();
+			void on_file_save_as_jupyter();			
 			void on_file_export_html();
 			void on_file_export_html_segment();
 			void on_file_export_latex();
