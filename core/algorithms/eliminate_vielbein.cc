@@ -4,8 +4,8 @@
 
 using namespace cadabra;
 
-eliminate_vielbein::eliminate_vielbein(const Kernel& k, Ex& e, Ex& pref)
-	: eliminate_converter(k, e, pref)
+eliminate_vielbein::eliminate_vielbein(const Kernel& k, Ex& e, Ex& pref, bool redundant)
+	: eliminate_converter(k, e, pref, redundant)
 	{
 	}
 

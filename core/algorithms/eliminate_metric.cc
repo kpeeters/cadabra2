@@ -8,8 +8,8 @@
 
 using namespace cadabra;
 
-eliminate_metric::eliminate_metric(const Kernel& k, Ex& e, Ex& pref)
-	: eliminate_converter(k, e, pref)
+eliminate_metric::eliminate_metric(const Kernel& k, Ex& e, Ex& pref, bool redundant)
+	: eliminate_converter(k, e, pref, redundant)
 	{
 	}
 
@@ -22,8 +22,8 @@ bool eliminate_metric::is_conversion_object(iterator fit) const
 	else return false;
 	}
 
-eliminate_converter::eliminate_converter(const Kernel& k, Ex& e, Ex& pref)
-	: Algorithm(k, e), preferred(pref)
+eliminate_converter::eliminate_converter(const Kernel& k, Ex& e, Ex& pref, bool redun)
+	: Algorithm(k, e), preferred(pref), redundant(redun)
 	{
 	}
 
@@ -128,19 +128,23 @@ Algorithm::result_t eliminate_converter::apply(iterator& it)
 		if(is_conversion_object(fit)) {
 			index_iterator ind1=index_iterator::begin(kernel.properties, fit), ind2=ind1;
 			++ind2;
+            
+            if (!redundant || (ind_free.find(Ex(ind1)) == ind_free.end() &&
+                               ind_free.find(Ex(ind2)) == ind_free.end()))  {
+                // 1st index to 2nd index conversion?
+                if(handle_one_index(ind1, ind2, fit, objs)) {
+                    res=result_t::l_applied;
+                    break;
+                    }
 
-			// 1st index to 2nd index conversion?
-			if(handle_one_index(ind1, ind2, fit, objs)) {
-				res=result_t::l_applied;
-				break;
-				}
+                // 2nd index to 1st index conversion?
+                if(handle_one_index(ind2, ind1, fit, objs)) {
+                    res=result_t::l_applied;
+                    break;
+                    }
+                }
+            }
 
-			// 2nd index to 1st index conversion?
-			if(handle_one_index(ind2, ind1, fit, objs)) {
-				res=result_t::l_applied;
-				break;
-				}
-			}
 		++fit;
 		}
 

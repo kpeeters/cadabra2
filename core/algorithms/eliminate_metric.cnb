@@ -1,71 +1,185 @@
 {
-	"cells" : 
-	[
+	"cell_id": 12201017813844474228,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 11200548926868858386,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\algorithm{eliminate_metric}{Eliminate metrics by raising or lowering indices.}\n\nEliminate metric and inverse metric objects by raising or lowering indices."
+					"cell_id": 706940583944905291,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{eliminate_metric}{Eliminate metrics by raising or lowering indices.}\n\nEliminate metric and inverse metric objects by raising or lowering indices."
 				}
 			],
-			"hidden" : true,
-			"source" : "\\algorithm{eliminate_metric}{Eliminate metrics by raising or lowering indices.}\n\nEliminate metric and inverse metric objects by raising or lowering indices."
+			"hidden": true,
+			"source": "\\algorithm{eliminate_metric}{Eliminate metrics by raising or lowering indices.}\n\nEliminate metric and inverse metric objects by raising or lowering indices."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 9501239282791426272,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}g_{m p} g^{p m}\\end{dmath*}"
+					"cell_id": 13340122236411534882,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11333410999712696013,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "g_{m p} g^{p m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}g_{m p} g^{p m}\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}g^{p}\\,_{p}\\end{dmath*}"
+					"cell_id": 17894985963178002384,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5593101152482251246,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "g^{p}_{p}"
+						}
+					],
+					"source": "\\begin{dmath*}{}g^{p}\\,_{p}\\end{dmath*}"
 				}
 			],
-			"source" : "{m, n, p, q, r}::Indices(vector, position=fixed).\n{m, n, p, q, r}::Integer(0..9).\ng_{m n}::Metric.\ng^{m n}::InverseMetric.\ng_{m}^{n}::KroneckerDelta.\ng^{m}_{n}::KroneckerDelta.\nex:=g_{m p} g^{p m};\neliminate_metric(_);"
+			"source": "{m, n, p, q, r}::Indices(vector, position=fixed).\n{m, n, p, q, r}::Integer(0..9).\ng_{m n}::Metric.\ng^{m n}::InverseMetric.\ng_{m}^{n}::KroneckerDelta.\ng^{m}_{n}::KroneckerDelta.\nex:=g_{m p} g^{p m};\neliminate_metric(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 7815987119515900884,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}10\\end{dmath*}"
+					"cell_id": 11832355180757837612,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1419432383822709486,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "10"
+						}
+					],
+					"source": "\\begin{dmath*}{}10\\end{dmath*}"
 				}
 			],
-			"source" : "eliminate_kronecker(_);"
+			"source": "eliminate_kronecker(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 11136087069753532813,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Related algorithms are \\algo{eliminate_kronecker} and \\algo{eliminate_vielbein}."
+					"cell_id": 10975080456446455892,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Related algorithms are \\algo{eliminate_kronecker} and \\algo{eliminate_vielbein}."
 				}
 			],
-			"hidden" : true,
-			"source" : "Related algorithms are \\algo{eliminate_kronecker} and \\algo{eliminate_vielbein}."
+			"hidden": true,
+			"source": "Related algorithms are \\algo{eliminate_kronecker} and \\algo{eliminate_vielbein}."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 668070063135773764,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 2955225009111573646,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "It is sometimes useful to eliminate only those metrics which have two\ndummy indices (so as to avoid changing indices on non-metric factors),\nas in the following example:"
+				}
+			],
+			"hidden": true,
+			"source": "It is sometimes useful to eliminate only those metrics which have two\ndummy indices (so as to avoid changing indices on non-metric factors),\nas in the following example:"
+		},
+		{
+			"cell_id": 7674476649362588094,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 2830738818925621002,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Indices(position=fixed) attached to~}\\left[a,~\\discretionary{}{}{} b,~\\discretionary{}{}{} c,~\\discretionary{}{}{} d,~\\discretionary{}{}{} e,~\\discretionary{}{}{} f\\right].\\end{dmath*}"
+				},
+				{
+					"cell_id": 9384043968720976150,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Metric attached to~}g_{a b}.\\end{dmath*}"
+				},
+				{
+					"cell_id": 3632907748806720927,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property TableauSymmetry attached to~}g^{a b}.\\end{dmath*}"
+				},
+				{
+					"cell_id": 14029841914135557336,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16107652404209191630,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "X_{a} g^{a b} g_{b c} g^{c d} g_{d e} g^{e f}"
+						}
+					],
+					"source": "\\begin{dmath*}{}X_{a} g^{a b} g_{b c} g^{c d} g_{d e} g^{e f}\\end{dmath*}"
+				},
+				{
+					"cell_id": 11123767540161473056,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10523281001881141507,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "X_{e} g^{e f}"
+						}
+					],
+					"source": "\\begin{dmath*}{}X_{e} g^{e f}\\end{dmath*}"
+				}
+			],
+			"source": "{a,b,c,d,e,f}::Indices(position=fixed);\ng_{a b}::Metric;\ng^{a b}::InverseMetric;\nex:=X_{a} g^{a b} g_{b c} g^{c d} g_{d e} g^{e f};\neliminate_metric(ex, repeat=True, redundant=True);"
+		},
+		{
+			"cell_id": 10177437379030071371,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 1237014864296849726,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Without the \\verb|redundant=True| option, this would have reduced the \nexpression to $X^{f}$."
+				}
+			],
+			"hidden": true,
+			"source": "Without the \\verb|redundant=True| option, this would have reduced the \nexpression to $X^{f}$."
+		},
+		{
+			"cell_id": 8153574234349350675,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
 }

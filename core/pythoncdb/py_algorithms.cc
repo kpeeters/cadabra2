@@ -103,8 +103,8 @@ namespace cadabra {
 		def_algo<complete, Ex>(m, "complete", false, false, 0, py::arg("add"));
 		def_algo<decompose, Ex>(m, "decompose", false, false, 0, py::arg("basis"));
 		def_algo<drop_weight, Ex>(m, "drop_weight", false, false, 0, py::arg("condition") = Ex{});
-		def_algo<eliminate_metric, Ex>(m, "eliminate_metric", true, false, 0, py::arg("preferred") = Ex{});
-		def_algo<eliminate_vielbein, Ex>(m, "eliminate_vielbein", true, false, 0, py::arg("preferred") = Ex{});		
+		def_algo<eliminate_metric, Ex,bool>(m, "eliminate_metric", true, false, 0, py::arg("preferred") = Ex{}, py::arg("redundant") = false);
+		def_algo<eliminate_vielbein, Ex,bool>(m, "eliminate_vielbein", true, false, 0, py::arg("preferred") = Ex{},py::arg("redundant")= false);		
 		def_algo<keep_weight, Ex>(m, "keep_weight", false, false, 0, py::arg("condition"));
 		def_algo<lower_free_indices, bool>(m, "lower_free_indices", true, false, 0, py::arg("lower") = true);
 		def_algo<lower_free_indices, bool>(m, "raise_free_indices", true, false, 0, py::arg("lower") = false);

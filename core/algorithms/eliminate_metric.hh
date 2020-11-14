@@ -8,7 +8,7 @@ namespace cadabra {
 
 	class eliminate_converter : public Algorithm {
 		public:
-			eliminate_converter(const Kernel&, Ex&, Ex&);
+			eliminate_converter(const Kernel&, Ex&, Ex&, bool);
 
 			virtual bool     can_apply(iterator) override;
 			virtual result_t apply(iterator&) override;
@@ -19,6 +19,7 @@ namespace cadabra {
 		private:
 			Ex          preferred;
 			index_map_t ind_dummy, ind_free;
+            bool        redundant;
 
 			/// See if the conversion which turns index 'i1' into index
 			/// 'i2' can be applied on the expression, so that it gets a
@@ -33,7 +34,7 @@ namespace cadabra {
 
 	class eliminate_metric : public eliminate_converter {
 		public:
-			eliminate_metric(const Kernel&, Ex&, Ex&);
+			eliminate_metric(const Kernel&, Ex&, Ex&, bool);
 
 		protected:
 			virtual bool is_conversion_object(iterator) const override;
