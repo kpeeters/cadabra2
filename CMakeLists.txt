@@ -253,8 +253,7 @@ endif()
 add_subdirectory(libs/pybind11)
 
 message(STATUS "Found python ${PYTHON_LIBRARIES}")
-
-find_package (Python COMPONENTS Interpreter)
+#find_package (Python COMPONENTS Interpreter)
 
 message(STATUS "Python version is ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.")
 set(PYTHON_SITE_PATH ${CMAKE_INSTALL_FULL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
