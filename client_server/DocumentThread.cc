@@ -198,28 +198,42 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	{
 #ifndef EMSCRIPTEN
 	config_path=std::string(Glib::get_user_config_dir()) + "/cadabra2.conf";
-	if (!use_defaults) {
-		std::ifstream f(config_path);
-		if (f)
-			f >> data;
-		else {
-			data = nlohmann::json::object();
-			
-			// Backwards compatibility, check to see if cadabra.conf exists
-			// and if so take the is_registered variable from there
-			std::ifstream old_f(std::string(Glib::get_user_config_dir()) + "/cadabra.conf");
-			if (old_f) {
-				std::string line;
-				while (old_f.good()) {
-					std::getline(old_f, line);
-					if (line.find("registered=true") != std::string::npos) {
-						data["is_registered"] = true;
-						break;
+	try {
+
+		if (!use_defaults) {
+			std::ifstream f(config_path);
+			if (f) {
+				try {
+					f >> data;
+					}
+				catch(nlohmann::json::exception& ex) {
+					std::cerr << "Config file " << config_path << " is not JSON; ignoring." << std::endl;
+					data = nlohmann::json::object();					
+					}
+				}
+			else {
+				data = nlohmann::json::object();
+				
+				// Backwards compatibility, check to see if cadabra.conf exists
+				// and if so take the is_registered variable from there
+				std::ifstream old_f(std::string(Glib::get_user_config_dir()) + "/cadabra.conf");
+				if (old_f) {
+					std::string line;
+					while (old_f.good()) {
+						std::getline(old_f, line);
+						if (line.find("registered=true") != std::string::npos) {
+							data["is_registered"] = true;
+							break;
+							}
 						}
 					}
 				}
 			}
 		}
+	catch(std::exception& ex) {
+		data = nlohmann::json::object();
+		}
+	
 	font_step          = data.value("font_step", 0);
 	highlight          = data.value("highlight", false);
 	is_registered      = data.value("is_registered", false);
@@ -231,8 +245,13 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 
 	if(git_path=="")
 		git_path="/usr/bin/git";
+
 	// Get the colours for syntax highlighting.
-	auto python_colours = data["colours"]["python"];
+	if(data.count("colours")==0) 
+		data["colours"]={ {"python", nlohmann::json::object() }, {"latex", nlohmann::json::object() } };
+
+	const auto& python_colours = data["colours"]["python"];
+	
 	colours["python"]["keyword"]   = python_colours.value("keyword", "RoyalBlue");
 	colours["python"]["operator"]  = python_colours.value("operator", "SlateGray");
 	colours["python"]["brace"]     = python_colours.value("brace", "SlateGray");
@@ -245,7 +264,7 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	colours["python"]["decorator"] = python_colours.value("decorator", "DarkViolet");
 	colours["python"]["class"]     = python_colours.value("class", "MediumOrchid");
 
-	auto latex_colours = data["colours"]["latex"];
+	const auto& latex_colours = data["colours"]["latex"];
 	colours["latex"]["command"]    = latex_colours.value("command", "rgb(52,101,164)");
 	colours["latex"]["parameter"]  = latex_colours.value("brace", "rgb(245,121,0)");
 	colours["latex"]["comment"]    = latex_colours.value("comment", "Silver");
