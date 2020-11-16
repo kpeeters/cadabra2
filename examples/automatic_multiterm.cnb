@@ -1,0 +1,208 @@
+{
+	"cell_id": 3391536610896426838,
+	"cells": [
+		{
+			"cell_id": 9970128145502107243,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 16204355368752002978,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "This notebook illustrates how the automatic multi-term simplification algorithm \\algo{meld} can\nbe used in a \\verb|post_process| function to simplify expressions immediately."
+				}
+			],
+			"hidden": true,
+			"source": "This notebook illustrates how the automatic multi-term simplification algorithm \\algo{meld} can\nbe used in a \\verb|post_process| function to simplify expressions immediately."
+		},
+		{
+			"cell_id": 16589852709921553693,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def post_process(ex):\n    meld(ex)\n    collect_terms(ex)"
+		},
+		{
+			"cell_id": 1137909878511905740,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3984991681506874828,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property TableauSymmetry attached to~}R_{a b c d}.\\end{dmath*}"
+				}
+			],
+			"source": "R_{a b c d}::RiemannTensor;"
+		},
+		{
+			"cell_id": 10442559150589961051,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16272566471204925814,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1708705026185000243,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R_{a b c d} + R_{b c a d} + R_{c a b d}"
+						}
+					],
+					"source": "\\begin{dmath*}{}R_{a b c d}+R_{b c a d}+R_{c a b d}\\end{dmath*}"
+				}
+			],
+			"source": "ex:=R_{a b c d} + R_{b c a d} + R_{c a b d};"
+		},
+		{
+			"cell_id": 17665426107502293019,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 4864102099047927703,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property AntiSymmetric attached to~}A^{a b c}.\\end{dmath*}"
+				}
+			],
+			"source": "A^{a b c}::AntiSymmetric;"
+		},
+		{
+			"cell_id": 11231869119195730671,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 775906003630772013,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Symmetric attached to~}S_{a b c}.\\end{dmath*}"
+				}
+			],
+			"source": "S_{a b c}::Symmetric;"
+		},
+		{
+			"cell_id": 15440997254477550604,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 228473189702070848,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9500934661811827513,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R_{a b c d} A^{a b c}"
+						}
+					],
+					"source": "\\begin{dmath*}{}R_{a b c d} A^{a b c}\\end{dmath*}"
+				}
+			],
+			"source": "ex:=R_{a b c d} A^{a b c};"
+		},
+		{
+			"cell_id": 6001193804290926265,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16452054599630373227,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17144787782815941213,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(A^{a b c} + A^{c a b}) S_{a b c}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(A^{a b c}+A^{c a b}\\right) S_{a b c}\\end{dmath*}"
+				}
+			],
+			"source": "ex:= (A^{a b c} + A^{c a b}) S_{a b c};"
+		},
+		{
+			"cell_id": 14929753163657422384,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 1137671033037866650,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1039654011058708309,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "2A^{a b c} S_{a b c}"
+						}
+					],
+					"source": "\\begin{dmath*}{}2A^{a b c} S_{a b c}\\end{dmath*}"
+				}
+			],
+			"source": "meld(ex, repeat=True);"
+		},
+		{
+			"cell_id": 10182337157813236277,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16001156654425651111,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 15399389374269644662,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(a-b) A^{a b c}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(a-b\\right) A^{a b c}\\end{dmath*}"
+				}
+			],
+			"source": "ex:= a A^{a b c} + b A^{b a c};"
+		},
+		{
+			"cell_id": 2655562479605535632,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3165433391968790005,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14527276633063001349,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 3/2 R_{a b c d} R_{a b c d}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{3}{2}R_{a b c d} R_{a b c d}\\end{dmath*}"
+				}
+			],
+			"source": "ex:=R_{a b c d} R_{a b c d} + R_{a b c d} R_{a c b d};"
+		},
+		{
+			"cell_id": 12588425984072827898,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}
