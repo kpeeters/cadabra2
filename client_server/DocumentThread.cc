@@ -203,6 +203,8 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 		if (f)
 			f >> data;
 		else {
+			data = nlohmann::json::object();
+			
 			// Backwards compatibility, check to see if cadabra.conf exists
 			// and if so take the is_registered variable from there
 			std::ifstream old_f(std::string(Glib::get_user_config_dir()) + "/cadabra.conf");
