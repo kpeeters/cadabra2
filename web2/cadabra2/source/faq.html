@@ -14,12 +14,22 @@
 <h2>Installation</h2>
 
 <div class='faq_item'>
-  <input type="radio" name="collapse" id="q_01_01">    
+  <input type="radio" name="collapse" id="q_01_02">    
   <h3 class="handle">
-    <label for="q_01_01">Starting the Jupyter kernel gives an error.</label>
+    <label for="q_01_02">I get a 'Generic LaTeX error' when evaluating a cell.</label>
   </h3>
   <div class="content">
     <p>
+      This is typically caused by a missing LaTeX package. The error
+      dialog may give you a hint, but if you want to see the full
+      LaTeX error, take note of the file name in the error dialog, and
+      try to run that file through <tt>latex</tt> by hand.
+    </p>
+    <p>
+      The most common missing package is <tt>ytableau</tt>, which you
+      can get on Debian/Ubuntu systems by installing
+      the <tt>texlive-science</tt> package and on Fedora by
+      installing <tt>texlive-ytableau</tt>.
     </p>
   </div>
 </div>
@@ -33,7 +43,20 @@
     and independent indices?</label>
   </h3>
   <div class="content">
-    When you declare an index set, you can give it...
+    When you declare an index set, you can give it a <tt>position</tt>
+    property, which takes one of three
+    values <tt>free</tt>, <tt>fixed</tt>
+    or <tt>independent</tt>. Indices which are <tt>free</tt> can be
+    raised or lowered at will, and pairs can be at the same position;
+    these are typically used in case there is no metric associated to
+    them. Indices which have a different meaning when they are in
+    subscript or superscript position should, instead, be
+    declared <tt>fixed</tt>; this is what you would typically do in
+    special/general relativity, where the difference between an upper
+    or lower index is a factor of the metric. Cadabra can still swap
+    the position of pairs of indices in e.g. the <tt>canonicalise</tt>
+    function. If you want Cadabra to never touch the position of
+    indices in a set, declare them <tt>independent</tt>.
   </div>
 </div>
 
