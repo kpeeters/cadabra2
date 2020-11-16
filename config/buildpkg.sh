@@ -16,12 +16,12 @@ if [ -f /etc/redhat-release ]; then
         source /opt/rh/rh-python36/enable
         source /opt/rh/devtoolset-7/enable
         sudo alternatives --install /usr/bin/python python /usr/bin/python3.6 60
-        cmake3 -DPACKAGING_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr ..
+        cmake3 -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
     else
-        cmake -DPACKAGING_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr ..
+        cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
     fi
 else
-    cmake -DPACKAGING_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr ..
+    cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
 fi
 make
 if [ -n "${centos}" -o -n "${scilin}"  ]; then
