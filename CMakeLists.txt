@@ -88,7 +88,6 @@ endif()
 # Include packaging logic.
 include(cmake/packaging.cmake)
 
-
 #---------------------------------------------------------------------------
 # User options and other notifications
 #---------------------------------------------------------------------------
@@ -209,17 +208,6 @@ configure_file(
    config/install_script.iss
    )
 
-# Suffixes
-if(WIN32)
-	set(STATIC_LIB_SUFFIX "lib")
-	set(SHARED_LIB_SUFFIX "dll")
-	set(PYTHON_MOD_SUFFIX "pyd")
-else()
-	set(STATIC_LIB_SUFFIX "a")
-	set(SHARED_LIB_SUFFIX "so")
-	set(PYTHON_MOD_SUFFIX "so")
-endif()
-
 
 #---------------------------------------------------------------------------
 # Configure Mathematica (if enabled).
@@ -256,8 +244,27 @@ message(STATUS "Found python ${PYTHON_LIBRARIES}")
 #find_package (Python COMPONENTS Interpreter)
 
 message(STATUS "Python version is ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.")
-set(PYTHON_SITE_PATH ${CMAKE_INSTALL_FULL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
-message(STATUS "Installing Python package in ${PYTHON_SITE_PATH}")
+# We used to install in a different location; let's remove files from there
+# if we find them on install.
+set(OLD_PYTHON_SITE_PATH ${CMAKE_INSTALL_FULL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
+if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
+   # Debian packages install all their Python things in 'dist-packages', not 'site-packages'.
+   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/dist-packages)
+else()
+   # For everyone else there is 'site-packages'
+   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
+endif()
+message(STATUS "Installing Python module in ${PYTHON_SITE_PATH}")
+# We need to give our Python module an abi-name extension
+# so that it can be installed in a folder which does not
+# contain the abi name. See
+# https://www.python.org/dev/peps/pep-3149/
+execute_process(
+	COMMAND ${PYTHON_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_config_var('SOABI'))"
+	OUTPUT_VARIABLE PYTHON_SOABI
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+	)
+message(STATUS "Python abi name ${PYTHON_SOABI}")
 
 string(REGEX REPLACE "^${CMAKE_INSTALL_PREFIX}" "" PYTHON_SITE_PATH_REL ${PYTHON_SITE_PATH})
 set(PYTHON_SITE_PATH_REL ${PYTHON_SITE_PATH_REL})
@@ -265,9 +272,21 @@ set(PYTHON_SITE_PATH_REL ${PYTHON_SITE_PATH_REL})
 if(NOT WIN32)
   execute_process(
 	 COMMAND ${PYTHON_EXECUTABLE} -c "import site; print (site.getsitepackages()[0]);"
-	 OUTPUT_VARIABLE OLD_PYTHON_SITE_PATH
+	 OUTPUT_VARIABLE OLDER_PYTHON_SITE_PATH
 	 OUTPUT_STRIP_TRAILING_WHITESPACE
 	 )
+endif()
+
+# Suffixes
+if(WIN32)
+	set(STATIC_LIB_SUFFIX "lib")
+	set(SHARED_LIB_SUFFIX "dll")
+	set(PYTHON_MOD_SUFFIX "pyd")
+else()
+	set(STATIC_LIB_SUFFIX "a")
+	set(SHARED_LIB_SUFFIX "so")
+	set(PYTHON_MOD_EXT    "so")   
+	set(PYTHON_MOD_SUFFIX "${PYTHON_SOABI}.so")
 endif()
 
 

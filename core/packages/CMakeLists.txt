@@ -8,9 +8,10 @@ project(Cadabra)
 
 print_header("Configuring packages")
 
-set(PYTHON_CDB_PACKAGE_PATH ${PYTHON_SITE_PATH}/cdb)
-set(SOURCE_PACKAGEDIR       ${CMAKE_SOURCE_DIR}/core/packages/cdb)
-set(PACKAGEDIR              ${CMAKE_BINARY_DIR}/core/packages/cdb)
+set(PYTHON_CDB_PACKAGE_PATH    ${PYTHON_SITE_PATH}/cdb)
+set(OLDPYTHON_CDB_PACKAGE_PATH ${OLD_PYTHON_SITE_PATH}/cdb)
+set(SOURCE_PACKAGEDIR          ${CMAKE_SOURCE_DIR}/core/packages/cdb)
+set(PACKAGEDIR                 ${CMAKE_BINARY_DIR}/core/packages/cdb)
 
 #---------------------------------------------------------------------------
 # Enumerate packages
@@ -66,8 +67,11 @@ endforeach()
 
 foreach(PACKAGE ${OLDPACKAGES})
   get_filename_component(PINSTALL ${PACKAGE} DIRECTORY)
-  # FIXME: remove old packages in the global site path
-  # install(CODE     "execute_process(COMMAND rm -f ${OLD_PYTHON_SITE_PATH}/cdbcadabra2.${PYTHON_MOD_SUFFIX})")
+  # Remove old packages in the global site path
+  if(NOT WIN32)
+     remove_file(${OLD_PYTHON_SITE_PATH}/${PACKAGEDIR}/${PACKAGE}.py)
+     remove_file(${OLDER_PYTHON_SITE_PATH}/${PACKAGEDIR}/${PACKAGE}.py)
+  endif()
   install(
     FILES 
       "${PACKAGEDIR}/${PACKAGE}.py" 
@@ -90,11 +94,11 @@ install(
   DIRECTORY DESTINATION 
     ${PYTHON_CDB_PACKAGE_PATH} 
   DIRECTORY_PERMISSIONS 
-    OWNER_READ 
-	OWNER_WRITE 
-	OWNER_EXECUTE
-	GROUP_READ 
-	GROUP_EXECUTE
-    WORLD_READ 
-	WORLD_EXECUTE
+  OWNER_READ 
+  OWNER_WRITE 
+  OWNER_EXECUTE
+  GROUP_READ 
+  GROUP_EXECUTE
+  WORLD_READ 
+  WORLD_EXECUTE
 )

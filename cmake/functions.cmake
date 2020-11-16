@@ -25,6 +25,9 @@ endmacro()
 macro(remove_file FILENAME)
 	install(CODE "execute_process(COMMAND rm -f ${FILENAME})")
 endmacro()
+macro(remove_dir DIRNAME)
+	install(CODE "execute_process(COMMAND rmdir ${DIRNAME})")
+endmacro()
 
 # Inserts an install directive to copy all dlls from
 # the build directory of SUBPROJECT to the Install

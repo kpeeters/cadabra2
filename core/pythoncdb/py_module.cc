@@ -10,6 +10,8 @@
 #include "py_stopwatch.hh"
 #include "py_tableau.hh"
 
+#include "Kernel.hh"
+
 namespace cadabra {
 	namespace py = pybind11;
 
