@@ -73,6 +73,10 @@ static std::chrono::time_point<std::chrono::system_clock, u64_millis> u64_to_tim
 // Date.getTimezoneOffset(); so if you are in zone GMT+2,
 // it returns -120.
 
+#if defined(_WIN32)
+  #define timegm _mkgmtime
+#endif
+
 int local_utc_offset_minutes()
 	{
 	time_t t  = time ( NULL );
