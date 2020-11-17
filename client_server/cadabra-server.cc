@@ -46,9 +46,9 @@ int main(int argc, char **argv)
 	std::string pythonhome=Glib::getenv("PYTHONHOME");
 	std::string pythonpath=Glib::getenv("PYTHONPATH");
 
-	std::string s = getRegKey("SOFTWARE\\Python\\PythonCore\\3.7", "", false);
+	std::string s = getRegKey("SOFTWARE\\Python\\PythonCore\\"+PYTHON_VERSION_MAJOR+"."+PYTHON_VERSION_MINOR, "", false);
 	if(s=="")
-		s = getRegKey("SOFTWARE\\Python\\PythonCore\\3.7", "", true);
+		s = getRegKey("SOFTWARE\\Python\\PythonCore\\"+PYTHON_VERSION_MAJOR+"."+PYTHON_VERSION_MINOR, "", true);
 	
 //	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + Glib::get_home_dir()+"/Anaconda3");
 //	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + Glib::get_home_dir()+"/Anaconda3");
