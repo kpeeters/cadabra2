@@ -62,8 +62,8 @@ See `Building Cadabra as C++ library`_ for instructions on how to
 build the entire Cadabra functionality as a library which you can use
 in a C++ program.
 
-See `Building a Jupyter kernel`_  for instructions on how to build a
-Jupyter kernel for Cadabra sessions.
+See `Building a Jupyter kernel`_ for information on the Jupyter kernel
+for Cadabra sessions.
 
 
 Linux (Debian/Ubuntu/Mint)
@@ -452,11 +452,20 @@ binary installer does).
 Building a Jupyter kernel
 -------------------------
 
-The Cadabra build scripts are now able to build a Jupyter kernel for
-Cadabra, so that you can use the Cadabra notation inside a Jupyter
-notebook session. For full instructions, see
-`building a Jupyter kernel <https://github.com/kpeeters/cadabra2/blob/master/JUPYTER.rst>`_. This is
-*experimental* at the moment; all feedback is welcome.
+As of version 2.3.4 the standard build process (as described above)
+also creates a Jupyter kernel, which is written in Python on top of
+`ipykernel` (thanks to Fergus Baker). This should work on most
+platforms out-of-the-box; you do not need to do anything else. The
+Jupyter kernel allows you to use Cadabra notation inside a Jupyter
+notebook session.
+
+The distribution also still contains code for the 'old' Jupyter
+kernel, which is written in C++ on top of `xeus`. Building this kernel
+is more complicated mainly because of this dependency, and there is
+not much of an advantage over the Python kernel; it's mainly left in
+the tree for future reference, For full instructions on how to build
+the old `xeus`-based kernel, see
+https://github.com/kpeeters/cadabra2/blob/master/JUPYTER.rst.
 
 
 Tutorials and other help
