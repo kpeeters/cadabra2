@@ -14,6 +14,31 @@
 <h2>Installation</h2>
 
 <div class='faq_item'>
+  <input type="radio" name="collapse" id="q_01_01">    
+  <h3 class="handle">
+    <label for="q_01_01">The Jupyter kernel does not start.</label>
+  </h3>
+  <div class="content">
+    <p>
+      In order for Jupyter to start the Cadabra kernel, it has to be
+      able to find the <tt>cadabra2</tt> and <tt>cadabra2_jupyter</tt>
+      modules. If you are using a binary package, these things will be
+      installed in a path searched by the system python, but if you
+      built from source, they may not be.
+    </p>
+    <p>
+      Typically, if you configure with <tt>cmake ..</tt> with no
+      further options, the installation will be into
+      <tt>/usr/local/lib/python3.7/site-packages</tt> (possibly with a
+      different python version number). You need to add this to
+      your <tt>PYTHONPATH</tt>, e.g. using
+      <div class="output">  export PYTHONPATH=${PYTHONPATH}:/usr/local/lib/python3.7/site-packages</div>
+      in the terminal, before starting <tt>jupyter notebook</tt> from there.
+    </p>
+  </div>
+</div>
+
+<div class='faq_item'>
   <input type="radio" name="collapse" id="q_01_02">    
   <h3 class="handle">
     <label for="q_01_02">I get a 'Generic LaTeX error' when evaluating a cell.</label>
