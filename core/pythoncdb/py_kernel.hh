@@ -73,15 +73,6 @@ namespace cadabra {
 
 	/// \ingroup pythoncore
 	///
-	/// Inject properties directly into the Kernel, even if the kernel is not yet
-	/// on the Python stack (needed when we create a new local scope: in this case we
-	/// create the kernel and pass it back to be turned into local __cdbkernel__ by
-	/// Python, but we want to populate the kernel with defaults before we hand it
-	/// back).
-	void inject_defaults(Kernel*);
-
-	/// \ingroup pythoncore
-	///
 	/// Get a pointer to the currently visible kernel.
 	Kernel *get_kernel_from_scope();
 
