@@ -72,7 +72,7 @@ namespace cadabra {
 		.export_values();
 
 		pybind11::class_<Kernel>(m, "Kernel", pybind11::dynamic_attr())
-		.def(pybind11::init<>())
+		.def(pybind11::init<bool>())
 			.def_readonly_static("version",        &Kernel::version)
 			.def_readonly_static("build",          &Kernel::build)			
 			.def_readonly("scalar_backend", &Kernel::scalar_backend);

@@ -13,7 +13,7 @@ namespace cadabra {
 
 	class Kernel {
 		public:
-			Kernel(bool inject_defaults);
+			Kernel(bool inject_defaults=true);
 			Kernel(const Kernel& other) = delete;
 			~Kernel();
 
