@@ -35,22 +35,26 @@
       // big long basic if/else parser
 
       // get current token string
-      var current = stream.current()
+      var current = stream.current();
 
       // ignore if string; use lookbehind to see if escaped
-      if (current.match(/(?<!\\)".*(?<!\\)"/g)) {
+      if (current.match(/^(?<!\\)".*(?<!\\)"/g)) {
         return 'python';
       }
 
       if (current.match(/#/)) {
-        if (stream.indentation()) {
+        // comments must have "# [text]", else considered as operators.
+        if (stream.indentation() == stream.column()) {
           // python comment
           return 'python';
         } else {
           // escape python comments
           stream.backUp(current.length-1);
-          return null;
+          return "operator";
         }
+      }
+      else if (current.match(/\?/g)) {
+        return 'operator';
       }
       else if (current.match(/:/g)) {
         // don't indent; have to update scopes
@@ -116,7 +120,7 @@
     // efficiently with doing explicit checks for positioning, but this code
     // doesn't need to run particularly fast, so for convenience
     // grouping together
-    const triggers = /[:#_;.$\\]/gm
+    const triggers = /[\?:#_;.$\\]/gm
 
     return {
       startState: () => {
