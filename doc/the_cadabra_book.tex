@@ -126,6 +126,32 @@ General Public License, version~3.}
 \pagestyle{fancy} 
 
 \chapter{Introduction and overview}
+\section{Bird's eye overview}
+
+Cadabra is a symbolic computer algebra system (CAS) designed to solve
+problems in physics, in particular (but not limited to) those which
+deal with classical and quantum field theory. Its input format is a
+subset of TeX, which means that throughout your computations the maths
+will all stay in a form which is hopefully already familiar to you.
+It has a large number of facilities which make it easy to work with
+tensors, anti-commuting objects, implicit indices, implicit coordinate
+dependence and so on; things which help to keep mathematical
+expressions compact and readable, so that your notebooks resemble what
+you would do with pen-and-paper.
+
+% Concrete types of problems you can solve include:
+% \begin{itemize}
+%   \item 
+% \end{itemize}
+
+Cadabra is at its core a Python module (written in C++ and exposed to
+Python using pybind11), which also contains a pre-parser which turns
+Cadabra's language into pure Python. You can use through a command
+line client, a graphical notebook interface, or via Jupyter through
+the Cadabra kernel. You can, if you want to, also use it from Python
+directly, or as a C++ library.
+
+
 \section{Cadabra's design philosophy}
 
 Cadabra is built around the fact that many computations do not have
