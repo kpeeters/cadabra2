@@ -33,9 +33,9 @@ using namespace linenoise;
 		}
 
 Shell::Shell(Flags flags)
-	: globals(NULL)
+	: site_path(cadabra::install_prefix() + "/lib/python" + std::to_string(PY_MAJOR_VERSION) + "." + std::to_string(PY_MINOR_VERSION) + "/" + std::string(PYTHON_SITE_DIST))
+	, globals(NULL)
 	, flags(flags)
-	, site_path(cadabra::install_prefix() + "/lib/python" + std::to_string(PY_MAJOR_VERSION) + "." + std::to_string(PY_MINOR_VERSION) + "/site-packages")
 {
 	bool no_colour = flags & Flags::NoColour;
 	colour_error   = no_colour ? "" : "\033[31m";
