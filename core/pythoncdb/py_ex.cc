@@ -574,6 +574,7 @@ namespace cadabra {
 		.def("__iter__", &Ex_iter)
 		.def("top", &Ex_top)
 		.def("matches", &Ex_matches)
+		.def("matches", &Ex_matches_Ex)			
 		.def("state", &Ex::state)
 		.def("reset", &Ex::reset_state)
 		.def("changed", &Ex::changed_state)

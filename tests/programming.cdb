@@ -269,3 +269,17 @@ def test12():
 
 test12()
      
+def test13():
+    __cdbkernel__ = create_scope()
+    {m,n}::Indices(values={a,b});
+    {\mu,\nu}::Indices(values={0,1,2,3});
+    assert( $A_{m n}$.matches($A_{a b}$) == True )
+    assert( $A_{m n}$.matches($A_{a a}$) == True )
+    assert( $A_{m n}$.matches($A_{a c}$) == False )
+    assert( $A_{m n}$.matches($A_{0 1}$) == False )
+    assert( $A_{\mu\nu}$.matches($A_{0 1}$) == True )
+    assert( $A_{\mu\nu}$.matches($A^{0 1}$) == True )     
+    assert( $A_{\mu\nu}$.matches($A_{0 4}$) == False )                    
+    print("Test 13 passed")
+
+test13()
