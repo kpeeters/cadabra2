@@ -559,12 +559,14 @@ div#main div.faq_item h3 {
 }
 div#main div.faq_item label:hover {
     cursor: pointer;
+    background-color: #e0e0e0;
 }
 input[name="collapse"] {
     display: none; 
 }
 div#main div.faq_item .content {
     margin-left: 60px;
+    margin-right: 60px;
     max-height: 0px;
     overflow-y: hidden;
     transition: max-height 0.5s;

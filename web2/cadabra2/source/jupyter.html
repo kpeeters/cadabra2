@@ -36,7 +36,10 @@
 <div class="output">  jupyter notebook</div>
 <p class="hyphenate">
   The 'New' button in the top-right of the screen should then give you
-  the option of creating a new notebook with a 'Cadabra2' kernel.
+  the option of creating a new notebook with a 'Cadabra2' kernel. If
+  that fails, and the error messages produced by Jupyter indicate that
+  it cannot find the Cadabra kernel, you may need
+  to <a href="faq.html#q_01_01">adjust your <tt>PYTHONPATH</tt></a>.
 </p>
 
 <!--<h2>Old Xeus-based kernel</h2>
@@ -68,7 +71,8 @@
   notebooks (with extension <tt>.cnb</tt>) are not the same file
   format. You can read notebooks created in Jupyter into the Cadabra
   <tt>cadabra2-gtk</tt> client, and you can (as of version 2.3.3)
-  export Cadabra notebooks as Jupyter notebooks, but it is good to
+  export Cadabra notebooks as Jupyter notebooks (or convert them using
+  the <tt>cadabra2ipynb</tt> command-line utility), but it is good to
   keep this in mind.
 </p>
 <p class="hyphenate">

@@ -14,6 +14,7 @@
 <h2>Installation</h2>
 
 <div class='faq_item'>
+  <a name="q_01_01"></a>
   <input type="radio" name="collapse" id="q_01_01">    
   <h3 class="handle">
     <label for="q_01_01">The Jupyter kernel does not start.</label>
@@ -32,8 +33,14 @@
       <tt>/usr/local/lib/python3.7/site-packages</tt> (possibly with a
       different python version number). You need to add this to
       your <tt>PYTHONPATH</tt>, e.g. using
-      <div class="output">  export PYTHONPATH=${PYTHONPATH}:/usr/local/lib/python3.7/site-packages</div>
-      in the terminal, before starting <tt>jupyter notebook</tt> from there.
+      <div class='verbatim'>
+        <div class="source donthyphenate">
+          <pre class='output'>export PYTHONPATH=${PYTHONPATH}:/usr/local/lib/python3.7/site-packages</pre>
+        </div>
+      </div>
+      in the terminal, before starting <tt>jupyter notebook</tt> from
+      there. You can stick this into the <tt>~/.bashrc</tt> file to
+      make it automatic at every terminal start.
     </p>
   </div>
 </div>
@@ -53,7 +60,8 @@
     <p>
       The most common missing package is <tt>ytableau</tt>, which you
       can get on Debian/Ubuntu systems by installing
-      the <tt>texlive-science</tt> package and on Fedora by
+      the <tt>texlive-science</tt> package (or on older versions,
+      the <tt>texlive-math-extra</tt> package) and on Fedora by
       installing <tt>texlive-ytableau</tt>.
     </p>
   </div>
@@ -85,6 +93,34 @@
   </div>
 </div>
 
+<h2>Error messages</h2>
+
+<div class='faq_item'>
+  <input type="radio" name="collapse" id="q_04_01">    
+  <h3 class="handle">
+    <label for="q_04_01">RuntimeError: Dependencies on derivatives
+    are not yet handled in the sympy bridge.</label>
+  </h3>
+  <div class="content">
+    This error occurs when you try to use the <tt>evaluate</tt>
+    algorithm on an expression with derivatives, and the expression
+    contains objects which were declared with a
+    property <tt>::Depends(\partial{&#35;})</tt> or something to that
+    extent.
+
+    To avoid the issue, there are two ways out. Either declare the
+    dependence of that object directly on the coordinate. So instead
+    do something like
+    <div class='verbatim'>
+      <div class="source donthyphenate">
+        <pre class='output'>x::Coordinate;
+A::Depends(x);</pre></div></div>
+    The other alternative is to simply switch off automatic
+    simplification, by using the <tt>simplify=False</tt> argument to
+    the <tt>evaluate</tt> function.
+  </div>
+</div>
+  
 <h2>Design and philosophy</h2>
 
 
