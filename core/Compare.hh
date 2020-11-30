@@ -35,8 +35,11 @@ namespace cadabra {
 	///  2      | structure different, one < two
 	/// -2      | structure different, one > two
 	///
+	/// @param one                 object
+	/// @param two                 pattern
 	/// @param mod_prel            see below
 	/// @param checksets           ignored FIXME: remove
+	/// @param compare_multiplier  whether to match the multiplier field too.
 	/// @param literal_wildcards   whether to treat wildcard names as ordinary names.
 	///
 	/// The mod_prel variable determines whether parent relations are taken into

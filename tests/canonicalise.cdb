@@ -817,8 +817,7 @@ test54()
        
 def test55():
    __cdbkernel__=create_scope()
-   {m,n,p,q}::Integer;       
-   {m,n,p,q}::Indices(values={0,1,2,3});       
+   {m,n,p,q}::Indices(values={1,2,3,4});
    R_{m n p q}::RiemannTensor;
    ex:=R_{3 m 4 3};
    canonicalise(_)

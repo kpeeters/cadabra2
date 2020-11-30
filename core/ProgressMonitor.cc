@@ -27,6 +27,9 @@ std::string ProgressMonitor::Total::str() const
 	std::ostringstream s;
 
 	s << name << ": " << call_count << " calls, " << total_steps << " steps, " << time_spent.count() << " ms";
+	for(const auto& msg: messages)
+		s << "; " << msg;
+
 	return s.str();
 	}
 
@@ -41,7 +44,8 @@ void ProgressMonitor::group(std::string name)
 		auto now=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
 		tot.time_spent  += (now - blk.started);
 		tot.total_steps += blk.total_steps;
-		call_stack.pop();
+		tot.messages.reserve(tot.messages.size() + std::distance(blk.messages.begin(), blk.messages.end()));
+		tot.messages.insert(tot.messages.end(), blk.messages.begin(), blk.messages.end());
 		}
 	else {
 		// Insert an entry on the call stack.
@@ -70,6 +74,11 @@ void ProgressMonitor::progress(int n, int total)
 	call_stack.top().total_steps=total;
 	}
 
+void ProgressMonitor::message(const std::string& msg)
+	{
+	call_stack.top().messages.push_back(msg);
+	}
+
 long ProgressMonitor::Total::time_spent_as_long() const
 	{
 	return time_spent.count();
@@ -83,6 +92,8 @@ void ProgressMonitor::print() const
 		          << tot.call_count << " calls, "
 		          //					 << (long)tot.time_spent << " ms, "
 		          << tot.total_steps << " steps" << std::endl;
+		for(const auto& msg: tot.messages)
+			std::cerr << "  " << msg << std::endl;
 		}
 	}
 

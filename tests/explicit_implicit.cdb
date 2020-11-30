@@ -80,6 +80,73 @@ def test05():
         
 test05()
 
+# A more complicated example for the pattern matcher,
+# matching indices to index values, both symbolically
+# and numerically.        
+def test06():
+    __cdbkernel__=create_scope()
+    {r,t}::Coordinate;
+    {\mu,\nu}::Indices(spacetime, values={r,t});
+    {a,b,c,d}::Indices(group, values={0,1});
+    \partial{#}::PartialDerivative;
+    ex:= \partial_{\mu}(A_{a b}) \partial_{\mu}(A_{b a});
+    A_{a b}::Depends(r,t);
+    {q1,q2}::Depends(r,t);
+    rl:= { A_{0 0} = q1, A_{1 1} = q2 };
+    evaluate(ex, rl, simplify=False)
+    tst:= \partial_{t}{q1} \partial_{t}{q1}
+         +\partial_{r}{q1} \partial_{r}{q1}
+         +\partial_{t}{q2} \partial_{t}{q2}
+         +\partial_{r}{q2} \partial_{r}{q2}
+         - @(ex);
+    assert(tst==0)
+    print("Test 06 passed")
+        
+test06()
+        
+def test07():
+    __cdbkernel__=create_scope()
+    {r,t,v,w}::Coordinate;
+    {\mu,\nu}::Indices(spacetime, values={r,t});
+    {a,b,c,d}::Indices(group, values={v,w});
+    \partial{#}::PartialDerivative;
+    ex:= \partial_{\mu}(A_{a b}) \partial_{\mu}(A_{b a});
+    A_{a b}::Depends(r,t);
+    evaluate(ex, simplify=False)
+    tst:=\partial_{t}(A_{w w}) \partial_{t}(A_{w w}) + \partial_{r}(A_{w w}) \partial_{r}(A_{w w}) + \partial_{t}(A_{v w}) \partial_{t}(A_{w v}) + \partial_{r}(A_{v w}) \partial_{r}(A_{w v}) + \partial_{t}(A_{w v}) \partial_{t}(A_{v w}) + \partial_{r}(A_{w v}) \partial_{r}(A_{v w}) + \partial_{t}(A_{v v}) \partial_{t}(A_{v v}) + \partial_{r}(A_{v v}) \partial_{r}(A_{v v}) - @(ex);
+    assert(tst==0)
+    print("Test 07 passed")
+
+test07()
+        
+
+        
+# The original question:
+    
+# Tr{#}::Trace;
+# {\mu,\nu}::Indices(spacetime, values={0,1,2,3});
+# #, position=fixed);
+# {r,t}::Coordinate;
+# {a,b,c,d}::Indices(group, values={r,t});
+# A::ImplicitIndex(A_{a b});
+# \partial{#}::PartialDerivative;
+# A::Depends(\partial{#});
+# ex:= Tr( \partial_{\mu}{A} \partial^{\mu}{A} );
+# explicit_indices(_);
+# A_{a b}::Depends(r,t);
+# #\partial{#});
+# #{q1, q2}::Depends(\partial{#});
+# # \mu
+# rl:= { A_{r r} = q1, A_{t t} = q2 };
+# evaluate(ex, simplify=False);    
+# evaluate(ex, rl, simplify=False);
+# tst:= \partial_{\mu}{q1} \partial^{\mu}{q1} + \partial_{\mu}{q2} \partial^{\mu}{q2} - @(ex);
+# assert(tst==0)
+# print("Test 06 passed")
+    
+
+
+
 #ex:= \chi \psi \sigma^{n} \chi;
 #explicit_indices(_);
         
@@ -99,6 +166,8 @@ test05()
 # tst:= \sigma^{p}_{a b} \theta^{b} \tau^{m a c};
 #         
 
+# The `combine` algorithm puts objects in the
+# wrong order!
 {A^{a \alpha}, B^{b}_{\alpha}}::NonCommuting;
 A^{a}::ImplicitIndex(A^{a \alpha});
 B^{b}::ImplicitIndex(B^{b}_{\alpha});

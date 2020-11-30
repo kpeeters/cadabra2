@@ -636,13 +636,26 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 	// is not position=free: this would require converting the index
 	// with a metric, and that should be done by the user using
 	// rewrite_indices.
+	//
+	// Also flag an error if there is more than one index type (we do
+	// not handle those cases yet).
 
 	auto fu = tr.begin(it);
+	const Indices *unique_indices=0;
 	while(fu!=tr.end(it)) {
-		if(fu->is_index() && fu->fl.parent_rel==str_node::p_super) {
+		if(fu->is_index()) {
 			const Indices *ind = kernel.properties.get<Indices>(fu);
-			if(ind && ind->position_type!=Indices::free)
-				throw RuntimeException("All indices on derivatives need to be lowered first.");
+			if(ind!=unique_indices) {
+				if(unique_indices==0)
+					unique_indices=ind;
+				else
+					throw RuntimeException("All indices on a single derivative need to be of the same type.");
+				}
+			
+			if(fu->fl.parent_rel==str_node::p_super) {
+				if(ind && ind->position_type!=Indices::free)
+					throw RuntimeException("All indices on derivatives need to be lowered first.");
+				}
 			}
 		++fu;
 		}
@@ -695,20 +708,46 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 		// its value.
 		std::map<Ex, int, tree_exact_less_for_indexmap_obj> d2p;
 
+		Ex_comparator comp(kernel.properties);
+
 		sibling_iterator rhs = tr.begin(iv);
 		++rhs;
 		auto deps=dependencies(rhs);
 
+		if(deps.size()==0) {
+			pm->message("No dependencies for " + *rhs->name);
+			tr.erase(iv);
+			return true;
+			}
+
+		// If one of the dependencies is '\partial{#}', replace this will all the
+		// index values that can appear in the derivative.
+		auto dit = deps.begin();
+		while(dit!=deps.end()) {
+			comp.clear();
+			if(*(dit->begin()->name)=="\\partial") { // FIXME: do a proper full-tree comparison with '\partial{#}'.
+//			if(comp.equal_subtree("\partial{#}", *dit, Ex_comparator::useprops_t::never, true)==Ex_comparator::match_t::subtree_match) {
+				deps.erase(dit);
+				for(const auto& ival: unique_indices->values)
+					deps.insert(ival);
+				break;
+				}
+			++dit;
+			}
+
 		// If the argument does not depend on anything, all derivatives
 		// would produce zero. Remove this \equals node from the tree.
 		if(deps.size()==0) {
+			pm->message("No relevant dependencies for " + *rhs->name);
 			tr.erase(iv);
 			return true;
 			}
 
 		// All indices on \partial can take any of the values of the
 		// dependencies, EXCEPT when the index is a dummy index OR
-		// when the index on the partial is a Coordinate.
+		// when the index on the partial is a Coordinate. And of course
+		// we should check that the indices can actually take the
+		// values of the dependencies.
 		//
 		// In the 1st exceptional case, we firstly need to ensure
 		// that both indices in the dummy pair take the same value
@@ -727,12 +766,32 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 #ifdef DEBUG
 			std::cerr << "dep " << obj << std::endl;
 #endif
-			cb.original.push_back(obj);
+			if(unique_indices) {
+//				std::cerr << "checking that deps are in values" << std::endl;
+				for(const auto& allowed: unique_indices->values) {
+					comp.clear();
+					if(comp.equal_subtree(allowed.begin(), obj.begin(), Ex_comparator::useprops_t::never, true)<=Ex_comparator::match_t::subtree_match) {
+						cb.original.push_back(obj);
+						break;
+						}
+					}
+				}
+			else
+				cb.original.push_back(obj);
 			}
+
+		if(cb.original.size()==0) {
+			// We may have had dependencies, but none of the index values can take those
+			// values. So all is zero.
+			tr.erase(iv);
+			return true;
+			}
+
 		cb.multiple_pick=true;
 		cb.block_length=1;
 		for(size_t n=0; n<ni; ++n) {
-			// If this child is a coordinate, take it out of the combinatorics.
+			// If this child is a coordinate, take it out of the combinatorics
+			// of summing over index values (it's a single value).
 			if(kernel.properties.get<Coordinate>(tr.child(it, n), true)!=0)
 				continue;
 
@@ -774,6 +833,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 		// derivative, create an entry in the \components node.
 
 		for(unsigned int i=0; i<cb.size() || cb.size()==0; ++i) {
+			// 'i' runs over all index combinations.
 #ifdef DEBUG
 			std::cerr << "Index combination " << i << std::endl;
 #endif
@@ -830,6 +890,9 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 					done=true;
 					}
 				if(!done) {
+					// If we get here, the index value was not fixed because it is part of an
+					// already fixed dummy pair. And it was not fixed because the index was a
+					// Coordinate. 
 					size_t fromj=cb_j;
 					Ex iname(tr.child(it,j));
 					auto fi = d2p.find(iname);

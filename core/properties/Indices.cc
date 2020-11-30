@@ -32,7 +32,7 @@ property::match_t Indices::equals(const property *other) const
 	return property::equals(other);
 	}
 
-bool Indices::parse(Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals)
+bool Indices::parse(Kernel& kernel, std::shared_ptr<Ex> ex, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator ki=keyvals.begin();
 	while(ki!=keyvals.end()) {
@@ -68,18 +68,22 @@ bool Indices::parse(Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals)
 
 			// If all values are indices, add an `Integer' property for the object,
 			// listing these integers.
-//			bool is_number=true;
+			bool is_number=true;
 			for(auto& val: values)
 				if(!val.begin()->is_integer()) {
-//					is_number=false;
+					is_number=false;
 					break;
 					}
-			// FIXME: inject other property.
-			//			if(is_number) {
-			//				Ex from(values[0]), to(values[values.size()-1]);
-			//				std::cerr << "Injecting Integer property" << std::endl;
-			//				kernel.inject_property(new Integer(), ex, std::make_shared<Ex>("0..4"));
-			//				}
+			if(is_number) {
+				Ex from(values[0]), to(values[values.size()-1]);
+//				std::cerr << "Injecting Integer property" << std::endl;
+				// FIXME: this assumes that the values are in a continuous range (as Integer cannot
+				// represent anything else at this stage).
+				kernel.inject_property(new Integer(), ex,
+											  kernel.ex_from_string(std::to_string(values[0].to_integer())+".."
+																			+std::to_string(values[values.size()-1].to_integer())
+																			));
+				}
 			}
 		else throw ConsistencyException("Property 'Indices' does not accept key '"+ki->first+"'.");
 		++ki;

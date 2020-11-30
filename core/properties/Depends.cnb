@@ -1,244 +1,321 @@
 {
-	"cells" : 
-	[
+	"cell_id": 15383381436396341334,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 6020749098024884238,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\property{Depends}{Makes an object implicitly dependent on other objects.}\n\nMakes an object implicitly dependent on other objects, i.e.~assumes\nthat the indicated object is a function of the arguments of the\nproperty. For example"
+					"cell_id": 4910824880255499277,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\property{Depends}{Makes an object implicitly dependent on other objects.}\n\nMakes an object implicitly dependent on other objects, i.e.~assumes\nthat the indicated object is a function of the arguments of the\nproperty. For example"
 				}
 			],
-			"hidden" : true,
-			"source" : "\\property{Depends}{Makes an object implicitly dependent on other objects.}\n\nMakes an object implicitly dependent on other objects, i.e.~assumes\nthat the indicated object is a function of the arguments of the\nproperty. For example"
+			"hidden": true,
+			"source": "\\property{Depends}{Makes an object implicitly dependent on other objects.}\n\nMakes an object implicitly dependent on other objects, i.e.~assumes\nthat the indicated object is a function of the arguments of the\nproperty. For example"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 10933035081687051752,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}x.\\end{dmath*}"
+					"cell_id": 17730837097666924186,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Coordinate to~}x.\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\phi.\\end{dmath*}"
+					"cell_id": 4424240274618919769,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Depends to~}\\phi.\\end{dmath*}"
 				}
 			],
-			"source" : "x::Coordinate;\n\\phi::Depends(x);"
+			"source": "x::Coordinate;\n\\phi::Depends(x);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 2649437745767218223,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "makes $\\phi$ an implicit function of $x$. Instead of indicating the\ncoordinate on which the object depends, it is also possible to\nindicate which derivatives would yield a non-zero answer, as in"
+					"cell_id": 16910720361941362315,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "makes $\\phi$ an implicit function of $x$. Instead of indicating the\ncoordinate on which the object depends, it is also possible to\nindicate which derivatives would yield a non-zero answer, as in"
 				}
 			],
-			"hidden" : true,
-			"source" : "makes $\\phi$ an implicit function of $x$. Instead of indicating the\ncoordinate on which the object depends, it is also possible to\nindicate which derivatives would yield a non-zero answer, as in"
+			"hidden": true,
+			"source": "makes $\\phi$ an implicit function of $x$. Instead of indicating the\ncoordinate on which the object depends, it is also possible to\nindicate which derivatives would yield a non-zero answer, as in"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 2225917996266670719,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Derivative to~}\\nabla{\\#}.\\end{dmath*}"
+					"cell_id": 17311460073182692618,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Derivative to~}\\nabla{\\#}.\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\phi.\\end{dmath*}"
+					"cell_id": 17530187230455340883,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Depends to~}\\phi.\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 18264881303581541750,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\nabla_{m}(\\phi c \\sin(y))"
+							"cell_id": 5318602600250318696,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{m}(\\phi c \\sin(y))"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\nabla_{m}\\left(\\phi c \\sin{y}\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\nabla_{m}\\left(\\phi c \\sin{y}\\right)\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 2519536452405989300,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "c \\sin(y) \\nabla_{m}(\\phi)"
+							"cell_id": 2105272590527625871,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "c \\sin(y) \\nabla_{m}(\\phi)"
 						}
 					],
-					"source" : "\\begin{dmath*}{}c \\sin{y} \\nabla_{m}{\\phi}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}c \\sin{y} \\nabla_{m}{\\phi}\\end{dmath*}"
 				}
 			],
-			"source" : "\\nabla{#}::Derivative;\n\\phi::Depends(\\nabla{#});\nex:=\\nabla_{m}{\\phi c \\sin{y}};\nunwrap(_);"
+			"source": "\\nabla{#}::Derivative;\n\\phi::Depends(\\nabla{#});\nex:=\\nabla_{m}{\\phi c \\sin{y}};\nunwrap(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 9917880054462086620,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "(Note: if you did this in Cadabra 1.x you could write \\verb|Depends(\\nabla)|; this is no longer \npossible in 2.x and you need to write the full pattern \\verb|Depends(\\nabla{#})|). \nFinally, it is possible to use an index name to indicate on which\ncoordinates a field depends,"
+					"cell_id": 7573189513765282444,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "(Note: if you did this in Cadabra 1.x you could write \\verb|Depends(\\nabla)|; this is no longer \npossible in 2.x and you need to write the full pattern \\verb|Depends(\\nabla{#})|). \nFinally, it is possible to use an index name to indicate on which\ncoordinates a field depends,"
 				}
 			],
-			"hidden" : true,
-			"source" : "(Note: if you did this in Cadabra 1.x you could write \\verb|Depends(\\nabla)|; this is no longer \npossible in 2.x and you need to write the full pattern \\verb|Depends(\\nabla{#})|). \nFinally, it is possible to use an index name to indicate on which\ncoordinates a field depends,"
+			"source": "(Note: if you did this in Cadabra 1.x you could write \\verb|Depends(\\nabla)|; this is no longer \npossible in 2.x and you need to write the full pattern \\verb|Depends(\\nabla{#})|). \nFinally, it is possible to use an index name to indicate on which\ncoordinates a field depends,"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 779241970792918393,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "To make a tensor with any type and number of indices \\prop{Depend} on something else,\nuse"
-				}
-			],
-			"hidden" : true,
-			"source" : "To make a tensor with any type and number of indices \\prop{Depend} on something else,\nuse"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}h\\left(\\#\\right).\\end{dmath*}"
+					"cell_id": 2959988321147213328,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Derivative attached to~}\\nabla{\\#}.\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 5778576878287523724,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Indices(position=free) attached to~}\\left[\\mu,~\\discretionary{}{}{} \\nu\\right].\\end{dmath*}"
+				},
+				{
+					"cell_id": 17728765352013426296,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Depends attached to~}\\chi.\\end{dmath*}"
+				},
+				{
+					"cell_id": 16027798804825528227,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\nabla_{m}(c d h^{0 t} h_{t 0} h^{0}_{0})"
+							"cell_id": 16892754417118162490,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{\\mu}(\\chi) + \\nabla_{\\mu}(\\rho)"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\nabla_{m}\\left(c d h^{0 t} h_{t 0} h^{0}\\,_{0}\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\nabla_{\\mu}{\\chi}+\\nabla_{\\mu}{\\rho}\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 16911408471678705912,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "c d \\nabla_{m}(h^{0 t} h_{t 0} h^{0}_{0})"
+							"cell_id": 7695447514682173235,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{\\mu}(\\chi)"
 						}
 					],
-					"source" : "\\begin{dmath*}{}c d \\nabla_{m}\\left(h^{0 t} h_{t 0} h^{0}\\,_{0}\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\nabla_{\\mu}{\\chi}\\end{dmath*}"
 				}
 			],
-			"source" : "h{#}::Depends(\\nabla{#});\nex:=\\nabla_{m}{ c d h^{0 t} h_{t 0} h^{0}_{0} };\nunwrap(_);"
+			"source": "\\nabla{#}::Derivative;\n{\\mu,\\nu}::Indices;\n\\chi::Depends(\\mu);\nex:=\\nabla_{\\mu}{\\chi} + \\nabla_{\\mu}{\\rho};\nunwrap(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 15454189233784161729,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[m,~\\discretionary{}{}{} n,~\\discretionary{}{}{} p,~\\discretionary{}{}{} q\\right].\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\phi.\\end{dmath*}"
+					"cell_id": 5207881987443951320,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "To make a tensor with any type and number of indices \\prop{Depend} on something else,\nuse"
 				}
 			],
-			"source" : "{m,n,p,q}::Indices(vector);\n\\phi::Depends(m);"
+			"hidden": true,
+			"source": "To make a tensor with any type and number of indices \\prop{Depend} on something else,\nuse"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 5208397427434026018,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\nIf you want to make an object depend on more than one thing, you need\nto specify them all in one \\prop{Depends} property. If you specify\nthem in two separate properties, the last property will overwrite\nthe previous one. Therefore, you get"
+					"cell_id": 7796681554320905148,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Depends to~}h\\left(\\#\\right).\\end{dmath*}"
+				},
+				{
+					"cell_id": 15888095070088685022,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 15103775522095930169,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{m}(c d h^{0 t} h_{t 0} h^{0}_{0})"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{m}\\left(c d h^{0 t} h_{t 0} h^{0}\\,_{0}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 8327134344680474765,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3527694145945193084,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "c d \\nabla_{m}(h^{0 t} h_{t 0} h^{0}_{0})"
+						}
+					],
+					"source": "\\begin{dmath*}{}c d \\nabla_{m}\\left(h^{0 t} h_{t 0} h^{0}\\,_{0}\\right)\\end{dmath*}"
 				}
 			],
-			"hidden" : true,
-			"source" : "\nIf you want to make an object depend on more than one thing, you need\nto specify them all in one \\prop{Depends} property. If you specify\nthem in two separate properties, the last property will overwrite\nthe previous one. Therefore, you get"
+			"source": "h{#}::Depends(\\nabla{#});\nex:=\\nabla_{m}{ c d h^{0 t} h_{t 0} h^{0}_{0} };\nunwrap(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 17340488615041470285,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Accent to~}\\widehat{\\#}.\\end{dmath*}"
+					"cell_id": 7339588896490186114,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[m,~\\discretionary{}{}{} n,~\\discretionary{}{}{} p,~\\discretionary{}{}{} q\\right].\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left(x, \\linebreak[0] y\\right).\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}A.\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}A.\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\widehat{A}\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+					"cell_id": 13810305355999156769,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Depends to~}\\phi.\\end{dmath*}"
 				}
 			],
-			"source" : "\\hat{#}::Accent;\n{x,y}::Coordinate;\n\\partial{#}::PartialDerivative;\nA::Depends(\\hat{#});\nA::Depends(x);\nex:=\\hat{A};\nunwrap(ex);"
+			"source": "{m,n,p,q}::Indices(vector);\n\\phi::Depends(m);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 12321058079793781466,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 17893413500898855549,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\nIf you want to make an object depend on more than one thing, you need\nto specify them all in one \\prop{Depends} property. If you specify\nthem in two separate properties, the last property will overwrite\nthe previous one. Therefore, you get"
+				}
+			],
+			"hidden": true,
+			"source": "\nIf you want to make an object depend on more than one thing, you need\nto specify them all in one \\prop{Depends} property. If you specify\nthem in two separate properties, the last property will overwrite\nthe previous one. Therefore, you get"
+		},
+		{
+			"cell_id": 8106929047029971935,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15873721191759500494,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Accent to~}\\widehat{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_id": 11321432652759574780,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left(x, \\linebreak[0] y\\right).\\end{dmath*}"
+				},
+				{
+					"cell_id": 1058409645044592999,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_id": 13844808077340533221,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Depends to~}A.\\end{dmath*}"
+				},
+				{
+					"cell_id": 13216314927744868318,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Depends to~}A.\\end{dmath*}"
+				},
+				{
+					"cell_id": 14657993155715685903,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\widehat{A}\\end{dmath*}"
+				},
+				{
+					"cell_id": 14452584277662090922,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source": "\\hat{#}::Accent;\n{x,y}::Coordinate;\n\\partial{#}::PartialDerivative;\nA::Depends(\\hat{#});\nA::Depends(x);\nex:=\\hat{A};\nunwrap(ex);"
+		},
+		{
+			"cell_id": 17546269387797006387,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
 }

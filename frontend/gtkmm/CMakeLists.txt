@@ -152,19 +152,8 @@ if (NOT INSTALL_TARGETS_ONLY)
 	# BUT: package managers really do not like this approach, so we're back to doing the proper thing and
 	# hope window managers will eventually fix this.
 	
-#	if(APPLE OR ${CMAKE_SYSTEM_NAME} MATCHES ".*BSD|DragonFly")
 	set(ICON_PREFIX "${CMAKE_INSTALL_PREFIX}")
-#	else()
-#	set(ICON_PREFIX "/usr")
-#	endif()
 
-	#set(ICON_THEME ${ICON_PREFIX}/share/icons/hicolor/index.theme)
-	#if(EXISTS "${ICON_THEME}")
-	#   message("-- ${ICON_THEME} exists, good")
-	#else()
-	#   message("-- Will copy index.theme from /usr/share/icons/hicolor/index.theme")
-	#	install(CODE     "execute_process(COMMAND cp /usr/share/icons/hicolor/index.theme ${ICON_THEME})")
-	#endif()
 	set(ICON_PREFIX_WITH_DESTDIR $ENV{DESTDIR}${ICON_PREFIX})
 	install(FILES    ${CADABRA_IMAGES_DIR}/64x64/cadabra2-gtk.png     DESTINATION ${ICON_PREFIX}/share/icons/hicolor/64x64/apps)
 	install(FILES    ${CADABRA_IMAGES_DIR}/128x128/cadabra2-gtk.png   DESTINATION ${ICON_PREFIX}/share/icons/hicolor/128x128/apps)
