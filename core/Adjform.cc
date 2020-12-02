@@ -4,6 +4,7 @@
 #include <numeric>
 #include "Adjform.hh"
 #include "Cleanup.hh"
+#include "Compare.hh"
 #include "properties/IndexInherit.hh"
 #include "properties/Symbol.hh"
 #include "properties/Coordinate.hh"
@@ -112,11 +113,10 @@ namespace cadabra {
 
 	Adjform::Adjform(Ex::iterator it, IndexMap& index_map, const Kernel& kernel)
 	{
-		Ex_hasher hasher(HashFlags::HASH_IGNORE_PARENT_REL);
 		for (Ex::iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
 			if (is_index(kernel, beg)) {
 				beg.skip_children();
-				push_back(index_map.get_free_index(hasher(beg)));
+				push_back(index_map.get_free_index(beg));
 			}
 		}
 	}
@@ -305,6 +305,23 @@ namespace cadabra {
 		return res;
 	}
 
+	bool Adjform::compare(Ex::iterator a, Ex::iterator b, const Kernel& kernel)
+	{
+		Ex_comparator comp(kernel.properties);
+		auto res = comp.equal_subtree(a, b);
+		if (res == Ex_comparator::match_t::subtree_match) {
+			return true;
+		}
+		else if (res == Ex_comparator::match_t::match_index_greater || res == Ex_comparator::match_t::match_index_less) {
+			IndexMap index_map(kernel);
+			Adjform aa(a, index_map, kernel), bb(b, index_map, kernel);
+			return aa == bb;
+		}
+		else {
+			return false;
+		}
+	}
+
 	bool is_free_index(Adjform::value_type idx)
 	{
 		return idx < 0;
@@ -315,16 +332,31 @@ namespace cadabra {
 		return idx >= 0;
 	}
 
-	Adjform::value_type IndexMap::get_free_index(Ex_hasher::result_t index)
+	IndexMap::IndexMap(const Kernel& kernel)
+		: comp(std::make_unique<Ex_comparator>(kernel.properties))
+		, data(std::make_unique<Ex>("\\comma"))
 	{
-		auto pos = std::find(data.begin(), data.end(), index);
-		if (pos == data.end()) {
-			data.push_back(index);
-			return -(Adjform::value_type)data.size();
+
+	}
+
+	IndexMap::~IndexMap()
+	{
+		
+	}
+
+	Adjform::value_type IndexMap::get_free_index(Ex::iterator index)
+	{
+		Adjform::value_type i = 0;
+		Ex::iterator head = data->begin();
+		for (Ex::sibling_iterator beg = head.begin(), end = head.end(); beg != end; ++beg) {
+			comp->clear();
+			auto res = comp->equal_subtree(index, beg, Ex_comparator::useprops_t::never, true);
+			if (res == Ex_comparator::match_t::subtree_match)
+				return -(i + 1);
+			++i;
 		}
-		else {
-			return -(Adjform::value_type)std::distance(data.begin(), pos) - 1;
-		}
+		data->append_child(head, index);
+		return -(Adjform::value_type)data->begin().number_of_children();
 	}
 
 	AdjformEx::rational_type AdjformEx::zero = 0;

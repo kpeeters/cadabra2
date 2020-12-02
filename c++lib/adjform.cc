@@ -2,24 +2,27 @@
 #include <iostream>
 
 using namespace cadabra;
+using namespace cadabra::cpplib;
 
-int main(int, char **)
-	{
-	Kernel kernel;
-	
-	auto ex1 = kernel.ex_from_string("X_{a} dX_{b} B^{a b}");
-	auto ex2 = kernel.ex_from_string("X_{b} dX_{a} C^{b a}");	
-	IndexMap im;
-	
-	AdjformEx adex1( ex1->begin(), im, kernel );
-	AdjformEx adex2( ex2->begin(), im, kernel );
+int main(int, char**)
+{
+	Kernel k(true);
+	pprint_enable_utf8();
+    //{\mu,\nu}::Indices(vector).
+    //tr{#}::Trace.
+    //u^{\mu}::SelfNonCommuting.
+    //u^{\mu}::ImplicitIndex.
+    //ex:=tr{A u^{\nu} u^{\mu} u^{\mu} u^{\nu} + B u^{\mu} u^{\mu} u^{\nu} u^{\nu}}:
+    //meld(_);
 
-	std::cerr << adex1.compare(adex2) << std::endl;
+	inject_property<SelfNonCommuting>(k, "{A,B,C,D }");
+	inject_property<Trace>(k, "tr{#}");
 
-	TerminalStream ss(kernel, std::cerr);
-	ss << ex1 << std::endl;
-	ss << ex2 << std::endl;
-	ss << adex1 << std::endl;
-	ss << adex2 << std::endl;
+	auto ex = R"(tr(A B C D + B C D A)"_ex(k);
+	meld m(k, *ex);
+	std::cout << pprint(k, ex) << '\n';
+	m.apply_pre_order();
+	std::cout << pprint(k, ex) << '\n';
+	// assert ex == $2 * Tr{ A B C D }$
 	
-	}
+}
