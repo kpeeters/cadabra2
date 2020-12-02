@@ -6,6 +6,7 @@
 #include <iosfwd>
 #include <cstdint>
 #include <string>
+#include "Compare.hh"
 #include "Hash.hh"
 #include "Kernel.hh"
 #include "Storage.hh"
@@ -56,6 +57,8 @@ namespace cadabra {
 		uint64_t max_lehmer_code() const;
 		std::string to_string() const;
 
+		static bool compare(Ex::iterator a, Ex::iterator b, const Kernel& kernel);
+
 	private:
 		array_type data;
 	};
@@ -70,9 +73,12 @@ namespace cadabra {
 	class IndexMap
 	{
 	public:
-		Adjform::value_type get_free_index(Ex_hasher::result_t index);
+		IndexMap(const Kernel& kernel);
+		~IndexMap();
+		Adjform::value_type get_free_index(Ex::iterator index);
 	private:
-		std::vector<Ex_hasher::result_t> data;
+		std::unique_ptr<Ex_comparator> comp;
+		std::unique_ptr<Ex> data;
 	};
 
 	class AdjformEx

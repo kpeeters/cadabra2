@@ -2,12 +2,13 @@
 #include <numeric>
 #include "properties/Trace.hh"
 #include "properties/TableauBase.hh"
+#include "properties/NonCommuting.hh"
 #include "Cleanup.hh"
 #include "Hash.hh"
 #include "meld.hh"
 #include "collect_terms.hh"
 #include "DisplayTerminal.hh"
-
+#include "properties/SelfNonCommuting.hh"
 #include <boost/numeric/ublas/matrix.hpp> 
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/matrix_proxy.hpp>
@@ -124,6 +125,26 @@ std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim)
 	}
 }
 
+template <typename FilterFunc>
+std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim, FilterFunc filter)
+{
+	if (*it->name == delim) {
+		// Loop over children creating a list
+		std::vector<Ex::iterator> res;
+		Ex::sibling_iterator beg = it.begin(), end = it.end();
+		while (beg != end) {
+			if (filter(beg))
+				res.push_back(beg);
+			++beg;
+		}
+		return res;
+	}
+	else {
+		// Return a list containing only 'it'
+		return filter(it) ? std::vector<Ex::iterator>(1, it) : std::vector<Ex::iterator>{};
+	}
+}
+
 bool has_TableauBase(const Kernel& kernel, Ex::iterator it)
 {
 	if (*it->name == "\\prod" || *it->name == "\\sum") {
@@ -151,6 +172,7 @@ bool has_Trace(const Kernel& kernel, Ex::iterator it)
 
 meld::meld(const Kernel& kernel, Ex& ex)
 	: Algorithm(kernel, ex)
+	, index_map(kernel)
 {
 
 }
@@ -314,16 +336,7 @@ bool meld::can_apply_tableaux(iterator it)
 
 bool meld::can_apply_traces(iterator it)
 {
-	if (has_Trace(kernel, it))
-		return true;
-
-	if (*it->name == "\\sum") {
-		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
-			if (has_Trace(kernel, beg))
-				return true;
-		}
-	}
-	return false;
+	return has_Trace(kernel, it);
 }
 
 meld::result_t meld::apply_tableaux(iterator it)
@@ -346,11 +359,7 @@ meld::result_t meld::apply_tableaux(iterator it)
 
 	// A list of all the adjforms encountered so far
 	std::vector<AdjformEx> adjforms;
-	auto terms = split_ex(it, "\\sum");
-	terms.erase(
-		std::remove_if(terms.begin(), terms.end(), [this](Ex::iterator it) { return !has_indices(kernel, it); }),
-		terms.end()
-	);
+	auto terms = split_ex(it, "\\sum", [this](Ex::iterator it) { return has_indices(kernel, it); });
 	for (size_t term_idx = 0; term_idx < terms.size(); ++term_idx) {
 		auto cur_adjform = symmetrize(terms[term_idx]);
 		if (cur_adjform.empty()) {
@@ -487,129 +496,210 @@ meld::result_t meld::apply_tableaux(iterator it)
 //-------------------------------------------------
 // do_trace stuff
 
-void cycle_vec(std::vector<size_t>& vec, size_t n)
+bool has_NonCommuting(const Kernel& kernel, Ex::iterator it)
 {
-	n %= vec.size();
-
+	return kernel.properties.get<NonCommuting>(it) != nullptr || kernel.properties.get<SelfNonCommuting>(it) != nullptr;
 }
 
-struct TraceTerm
+Ex get_noncommuting(const Kernel& kernel, Ex::iterator it)
 {
-	TraceTerm(Ex::iterator it, mpq_class parent_multiplier, const Kernel& kernel, IndexMap& index_map);
-	Ex::iterator it;
-	Adjform names, indices;
-	mpq_class parent_multiplier;
-	std::vector<size_t> pushes;
-};
-
-TraceTerm::TraceTerm(Ex::iterator it, mpq_class parent_multiplier, const Kernel& kernel, IndexMap& index_map)
-	: it(it)
-	, parent_multiplier(parent_multiplier)
-{
-	Ex_hasher hasher(HashFlags::HASH_IGNORE_TOP_MULTIPLIER | HashFlags::HASH_IGNORE_INDICES);
+	Ex res("\\prod");
 	auto terms = split_ex(it, "\\prod");
 	for (const auto& term : terms) {
-		names.push_back(index_map.get_free_index(hasher(term)));
-		pushes.push_back(0);
-		for (Ex::sibling_iterator beg = term.begin(), end = term.end(); beg != end; ++beg) {
-			if (is_index(kernel, beg)) {
-				beg.skip_children();
-				indices.push_back(index_map.get_free_index(hasher(term)));
-				++pushes.back();
-			}
-		}
+		if (has_NonCommuting(kernel, term))
+			res.append_child(res.begin(), term);
 	}
+	return res;
 }
 
-std::vector<TraceTerm> collect_trace_terms(Ex::iterator it, const Kernel& kernel, IndexMap& index_map)
+Ex combine_commuting(const Kernel& kernel, Ex::iterator a, Ex::iterator b)
 {
-	// If a trace node just return all the children
-	if (has_Trace(kernel, it)) {
-		Ex::sibling_iterator beg = it.begin(), end = it.end();
-		if (beg == end)
-			return {};
-		if (*beg->name != "\\sum")
-			return { TraceTerm(beg, *it->multiplier, kernel, index_map) };
-		std::vector<TraceTerm> ret;
-		for (Ex::sibling_iterator a = beg.begin(), b = beg.end(); a != b; ++a)
-			ret.emplace_back(a, *it->multiplier, kernel, index_map);
-		return ret;
+	Ex res("\\prod");
+	auto commuting = res.append_child(res.begin(), str_node("\\sum"));
+	auto noncommuting = res.begin();
+
+	auto a_commuting = res.append_child(commuting, str_node("\\prod"));
+	multiply(a_commuting->multiplier, *a->multiplier);
+	for (Ex::sibling_iterator beg = a.begin(), end = a.end(); beg != end; ++beg) {
+		if (!has_NonCommuting(kernel, beg))
+			res.append_child(a_commuting, (Ex::iterator)beg);
+		else
+			res.append_child(noncommuting, (Ex::iterator)beg);
 	}
 
-	// If a sum node, collect all trace nodes
-	if (*it->name == "\\sum") {
-		std::vector<TraceTerm> ret;
-		for (Ex::sibling_iterator a = it.begin(), b = it.end(); a != b; ++a) {
-			if (has_Trace(kernel, a)) {
-				auto nodes = collect_trace_terms(a, kernel, index_map);
-				ret.insert(ret.end(), nodes.begin(), nodes.end());
-			}
-		}
-		return ret;
-	}
-
-	// Else return nothing
-	return {};
-}
-
-meld::result_t meld::apply_traces(iterator it)
-{
-	auto terms = collect_trace_terms(it, kernel, index_map);
-	if (terms.empty())
-		return result_t::l_no_action;
-
-	auto res = result_t::l_no_action;
-	for (size_t i = 0; i < terms.size() - 1; ++i) {
-		for (size_t j = i + 1; j < terms.size(); ++j) {
-			auto perm = terms[j];
-			do {
-				if (terms[i].names == perm.names && terms[i].indices == perm.indices) {
-					multiply(terms[i].it->multiplier, 1 + ((terms[j].parent_multiplier * *terms[j].it->multiplier) / (terms[i].parent_multiplier * *terms[i].it->multiplier)));
-					tr.erase(terms[j].it);
-					terms.erase(terms.begin() + j);
-					--j;
-					if (*terms[i].it->multiplier == 0) {
-						// Modify the loop
-						if (j != terms.size() - 1) {
-							++i;
-							j = i;
-						}
-					}
-					res = result_t::l_applied;
-					break;
-				}
-
-				perm.names.rotate(1);
-				perm.indices.rotate(perm.pushes.back());
-				std::rotate(perm.pushes.begin(), perm.pushes.end() - 1, perm.pushes.end());
-			} while (perm.names != terms[j].names || perm.indices != terms[j].indices);
-		}
-	}
-
-	// Clean up empty traces
-	auto is_empty_trace = [this](iterator tst) {
-		if (!has_Trace(kernel, tst))
-			return false;
-		if (tst.number_of_children() == 0)
-			return true;
-		if (*tst.begin()->name == "\\sum" && tst.begin().number_of_children() == 0)
-			return true;
-		return false;
-	};
-
-	if (*it->name == "\\sum") {
-		Ex::sibling_iterator beg = it.begin(), end = it.end();
-		while (beg != end) {
-			if (is_empty_trace(beg))
-				beg = tr.erase(beg);
-			else
-				++beg;
-		}
-	}
-	else {
-		if (is_empty_trace(it))
-			it = tr.erase(it);
+	auto b_commuting = res.append_child(commuting, str_node("\\prod"));
+	multiply(b_commuting->multiplier, *b->multiplier);
+	for (Ex::sibling_iterator beg = b.begin(), end = b.end(); beg != end; ++beg) {
+		if (!has_NonCommuting(kernel, beg))
+			res.append_child(b_commuting, (Ex::iterator)beg);
 	}
 
 	return res;
 }
+
+void cycle_ex(Ex& tr, Ex::iterator parent)
+{
+	Ex to_move = parent.begin();
+	tr.erase(parent.begin());
+	tr.append_child(parent, to_move.begin());
+}
+
+meld::result_t meld::apply_traces(iterator it)
+{
+	result_t res = result_t::l_no_action;
+	auto terms = split_ex(it.begin(), "\\sum", [](Ex::iterator it) { return *it->name == "\\prod"; });
+
+	Ex names = get_noncommuting(kernel, terms[0]);
+	names.begin()->name = name_set.insert("\\comma").first;
+	
+	for (size_t i = 0; i < terms.size(); ++i) {
+		Ex i_terms = get_noncommuting(kernel, terms[i]);
+		for (size_t j = i + 1; j < terms.size(); ++j) {
+			Ex j_terms = get_noncommuting(kernel, terms[j]);
+			const size_t N = j_terms.begin().number_of_children();
+			if (N != i_terms.begin().number_of_children())
+				continue;
+			for (size_t k = 0; k < N; ++k) {
+				if (Adjform::compare(i_terms.begin(), j_terms.begin(), kernel)) {
+					res = result_t::l_applied;
+					terms[i] = tr.replace(terms[i], combine_commuting(kernel, terms[i], terms[j]).begin());
+					tr.erase(terms[j]);
+					terms.erase(terms.begin() + j);
+					--j;
+					break;
+				}
+				cycle_ex(tr, j_terms.begin());
+			}
+		}
+	}
+
+	return res;
+}
+
+//
+//void cycle_vec(std::vector<size_t>& vec, size_t n)
+//{
+//	n %= vec.size();
+//
+//}
+//
+//struct TraceTerm
+//{
+//	TraceTerm(Ex::iterator it, mpq_class parent_multiplier, const Kernel& kernel, IndexMap& index_map);
+//	Ex::iterator it;
+//	Adjform names, indices;
+//	mpq_class parent_multiplier;
+//	std::vector<size_t> pushes;
+//};
+//
+//TraceTerm::TraceTerm(Ex::iterator it, mpq_class parent_multiplier, const Kernel& kernel, IndexMap& index_map)
+//	: it(it)
+//	, parent_multiplier(parent_multiplier)
+//{
+//	Ex_hasher hasher(HashFlags::HASH_IGNORE_TOP_MULTIPLIER | HashFlags::HASH_IGNORE_INDICES);
+//	auto terms = split_ex(it, "\\prod");
+//	for (const auto& term : terms) {
+//		names.push_back(index_map.get_free_index(hasher(term)));
+//		pushes.push_back(0);
+//		for (Ex::sibling_iterator beg = term.begin(), end = term.end(); beg != end; ++beg) {
+//			if (is_index(kernel, beg)) {
+//				beg.skip_children();
+//				indices.push_back(index_map.get_free_index(hasher(term)));
+//				++pushes.back();
+//			}
+//		}
+//	}
+//}
+//
+//std::vector<TraceTerm> collect_trace_terms(Ex::iterator it, const Kernel& kernel, IndexMap& index_map)
+//{
+//	// If a trace node just return all the children
+//	if (has_Trace(kernel, it)) {
+//		Ex::sibling_iterator beg = it.begin(), end = it.end();
+//		if (beg == end)
+//			return {};
+//		if (*beg->name != "\\sum")
+//			return { TraceTerm(beg, *it->multiplier, kernel, index_map) };
+//		std::vector<TraceTerm> ret;
+//		for (Ex::sibling_iterator a = beg.begin(), b = beg.end(); a != b; ++a)
+//			ret.emplace_back(a, *it->multiplier, kernel, index_map);
+//		return ret;
+//	}
+//
+//	// If a sum node, collect all trace nodes
+//	if (*it->name == "\\sum") {
+//		std::vector<TraceTerm> ret;
+//		for (Ex::sibling_iterator a = it.begin(), b = it.end(); a != b; ++a) {
+//			if (has_Trace(kernel, a)) {
+//				auto nodes = collect_trace_terms(a, kernel, index_map);
+//				ret.insert(ret.end(), nodes.begin(), nodes.end());
+//			}
+//		}
+//		return ret;
+//	}
+//
+//	// Else return nothing
+//	return {};
+//}
+//
+//meld::result_t meld::apply_traces(iterator it)
+//{
+//	auto terms = collect_trace_terms(it, kernel, index_map);
+//	if (terms.empty())
+//		return result_t::l_no_action;
+//
+//	auto res = result_t::l_no_action;
+//	for (size_t i = 0; i < terms.size() - 1; ++i) {
+//		for (size_t j = i + 1; j < terms.size(); ++j) {
+//			auto perm = terms[j];
+//			do {
+//				if (terms[i].names == perm.names && terms[i].indices == perm.indices) {
+//					multiply(terms[i].it->multiplier, 1 + ((terms[j].parent_multiplier * *terms[j].it->multiplier) / (terms[i].parent_multiplier * *terms[i].it->multiplier)));
+//					tr.erase(terms[j].it);
+//					terms.erase(terms.begin() + j);
+//					--j;
+//					if (*terms[i].it->multiplier == 0) {
+//						// Modify the loop
+//						if (j != terms.size() - 1) {
+//							++i;
+//							j = i;
+//						}
+//					}
+//					res = result_t::l_applied;
+//					break;
+//				}
+//
+//				perm.names.rotate(1);
+//				perm.indices.rotate(perm.pushes.back());
+//				std::rotate(perm.pushes.begin(), perm.pushes.end() - 1, perm.pushes.end());
+//			} while (perm.names != terms[j].names || perm.indices != terms[j].indices);
+//		}
+//	}
+//
+//	// Clean up empty traces
+//	auto is_empty_trace = [this](iterator tst) {
+//		if (!has_Trace(kernel, tst))
+//			return false;
+//		if (tst.number_of_children() == 0)
+//			return true;
+//		if (*tst.begin()->name == "\\sum" && tst.begin().number_of_children() == 0)
+//			return true;
+//		return false;
+//	};
+//
+//	if (*it->name == "\\sum") {
+//		Ex::sibling_iterator beg = it.begin(), end = it.end();
+//		while (beg != end) {
+//			if (is_empty_trace(beg))
+//				beg = tr.erase(beg);
+//			else
+//				++beg;
+//		}
+//	}
+//	else {
+//		if (is_empty_trace(it))
+//			it = tr.erase(it);
+//	}
+//
+//	return res;
+//}
