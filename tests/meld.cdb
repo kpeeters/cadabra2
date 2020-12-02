@@ -122,7 +122,7 @@ def test12():
     assert(ex==0)
     print("Test 12 passed")
    
-#test12() # passes, commented out to speed up
+test12()
 
 def test13():
     __cdbkernel__ = create_scope()
@@ -385,7 +385,7 @@ def test31():
     {A^{\mu\nu},B^{\mu\nu},C^{\mu\nu}}::SelfNonCommuting.
     {A^{\mu\nu},B^{\mu\nu},C^{\mu\nu}}::ImplicitIndex.
     ex:=tr{a A^{\mu\nu} B^{\mu\rho} B^{\nu\rho} + b C^{\mu\nu} A^{\mu\rho} B^{\nu\rho} +c C^{\mu\nu} B^{\mu\rho} A^{\nu\rho}};
-    meld(_);
+    meld(_)
     assert(ex == $tr{a A^{\mu\nu} B^{\mu\rho} B^{\nu\rho} + b C^{\mu\nu} A^{\mu\rho} B^{\nu\rho} +c C^{\mu\nu} B^{\mu\rho} A^{\nu\rho}}$)
 
 test31()

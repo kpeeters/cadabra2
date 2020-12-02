@@ -539,7 +539,7 @@ Ex combine_commuting(const Kernel& kernel, Ex::iterator a, Ex::iterator b)
 
 void cycle_ex(Ex& tr, Ex::iterator parent)
 {
-	Ex to_move = parent.begin();
+Ex to_move(parent.begin());
 	tr.erase(parent.begin());
 	tr.append_child(parent, to_move.begin());
 }
