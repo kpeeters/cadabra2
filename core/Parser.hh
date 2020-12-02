@@ -26,16 +26,14 @@ You should have received a copy of the GNU General Public License
 
 #include "Storage.hh"
 
-/// \ingroup core
-///
-/// Parser module, which takes the string output of the
-/// preprocessor.hh module and turns it into an Ex expression
-/// tree. The output of preprocessor.hh is assumed to be
-/// valid and consistent, so the code here is rather simple.
-
-
-
 namespace cadabra {
+
+   /// \ingroup core
+   ///
+   /// Class which turns the string output of a `preprocessor`
+   /// object and turns it into an Ex expression tree. The output of
+   /// `preprocessor` is assumed to be valid and consistent, so the
+   /// code here is rather simple.
 
 	class Parser {
 		public:
@@ -47,9 +45,9 @@ namespace cadabra {
 
 			void remove_empty_nodes();
 
-			// Finalise the parsed expression. This function should be
-			// called when no further operator>> calls are going to be made,
-			// and is necessary to ensure that the tree is consistent.
+			/// Finalise the parsed expression. This function should be
+			/// called when no further operator>> calls are going to be made,
+			/// and is necessary to ensure that the tree is consistent.
 			void finalise();
 			bool string2tree(const std::string& inp);
 
