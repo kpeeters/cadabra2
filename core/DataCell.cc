@@ -593,6 +593,8 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 //				lr=std::regex_replace(lr, std::regex(R"(\\end\{verbatim\})"),   "");
 				lr=std::regex_replace(lr, std::regex(R"(\\begin\{dmath\*\})"),  "\\begin{adjustwidth}{1em}{0cm}$");
 				lr=std::regex_replace(lr, std::regex(R"(\\end\{dmath\*\})"),    "$\\end{adjustwidth}");
+				lr=std::regex_replace(lr, std::regex(R"(\\algorithm\{(.*)_(.*)\})"), "\\algorithm{$1\\textunderscore{}$2}");
+				lr=std::regex_replace(lr, std::regex(R"(\\algorithm\{(.*)_(.*)\})"), "\\algorithm{$1\\textunderscore{}$2}");				
 				str << lr << "\n";
 				}
 			}

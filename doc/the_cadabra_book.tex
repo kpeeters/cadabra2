@@ -19,8 +19,12 @@
 \usepackage{wallpaper}
 \def\specialcolon{\mathrel{\mathop{:}}\hspace{-.5em}}
 \renewcommand{\bar}[1]{\overline{#1}}
-\newcommand{\algorithm}[2]{{\tt\Large\detokenize{#1}}\\[1ex]
-{\emph{#2}}\\[1ex]
+%\newcommand{\algorithm}[2]{{\tt\Large\detokenize{#1}}\\[1ex]
+%  {\emph{#2}}\\[1ex]
+%}
+\usepackage{cprotect}
+\newcommand{\algorithm}[2]{\subsection{\texttt{#1}}
+{\emph{#2}}\\
 }
 \newcommand{\property}[2]{{\tt\Large\detokenize{#1}}\\[1ex]
 {\emph{#2}}\\[1ex]
@@ -207,6 +211,7 @@ This new version is programmable in Python and does both abstract and
 component computations.
 
 
+%==================================================================
 \chapter{The input format}
 \input{input_format.tex}
 \input{ref_printing.tex}
@@ -214,22 +219,107 @@ component computations.
 \input{ref_indices.tex}
 \input{ref_implicit_versus_explicit.tex}
 
+%==================================================================
 \chapter{Mathematical properties}
 \input{ref_derivatives.tex}
 
+%==================================================================
 \chapter{Manipulating expressions}
 \input{ref_selecting.tex}
 \input{ref_import.tex}
 \input{ref_default_simplification}
 \input{ref_patterns}
 
+%==================================================================
 \chapter{Writing your own packages}
 \input{ref_programming}
 
+%==================================================================
 \chapter{Algorithms}
-\input{distribute}
 
-%\bibliographystyle{cadabra}
+\section{Substitution and variation}
+
+\input{distribute}
+\input{product_rule}
+\input{substitute}
+\input{vary}
+\input{expand_power}
+\input{unwrap}
+\input{integrate_by_parts}
+
+\section{Metrics and bundles}
+
+\input{eliminate_kronecker}
+\input{eliminate_metric}
+\input{eliminate_vielbein  }
+\input{einsteinify}
+\input{epsilon_to_delta}
+\input{expand_delta}
+\input{reduce_delta}
+
+\section{Index manipulations}
+
+\input{combine}
+\input{explicit_indices}
+\input{lower_free_indices}
+\input{raise_free_indices}
+\input{split_index}
+\input{untrace}
+\input{rename_dummies}
+\input{rewrite_indices}
+\input{expand}
+
+\section{Tensor component values}
+
+\input{complete}
+\input{evaluate}
+
+\section{Factorisation}
+
+\input{factor_in}
+\input{factor_out}
+
+\section{Spinors and fermions}
+
+\input{expand_diracbar}
+\input{fierz}
+\input{join_gamma}
+\input{sort_spinors}
+\input{split_gamma}
+
+\section{Sorting and canonicalisation}
+  
+\input{asym}
+\input{canonicalise}
+\input{young_project_product}
+\input{young_project_tensor}
+\input{meld}
+\input{sort_product}
+\input{sort_sum}
+
+\section{Weights and perturbations}
+
+\input{drop_weight}
+\input{keep_weight}
+
+\section{Simplification}
+
+\input{collect_factors}
+\input{collect_terms}
+\input{map_sympy}
+\input{simplify}
+
+\section{Representations}
+
+\input{decompose}
+\input{decompose_product}
+\input{lr_tensor}
+
+\section{Sub-expression manipulation}
+
+\input{replace_match}
+\input{take_match}
+\input{zoom}
 
 \printbibliography
 
