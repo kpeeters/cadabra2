@@ -204,12 +204,12 @@ configure_file(
 	@ONLY
 )
 configure_file(
-   config/install_script.iss.in
-   config/install_script.iss
+   "${CMAKE_CURRENT_SOURCE_DIR}/config/install_script.iss.in"
+   "${CMAKE_CURRENT_SOURCE_DIR}/config/install_script.iss"
    )
 configure_file(
-   config/pre_install.rtf.in
-   config/pre_install.rtf
+   "${CMAKE_CURRENT_SOURCE_DIR}/config/pre_install.rtf.in"
+   "${CMAKE_CURRENT_SOURCE_DIR}/config/pre_install.rtf"
    )
 
 
