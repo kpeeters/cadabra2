@@ -43,7 +43,10 @@ if (VCPKG_TOOLCHAIN)
 		set(VCPKG_BIN_DIRS 
 			${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin
 		)
-	endif()
+   endif()
+
+   message(STATUS "VCPKG_LIB_DIRS = ${VCPKG_LIB_DIRS}")
+   message(STATUS "VCPKG_BIN_DIRS = ${VCPKG_BIN_DIRS}")   
 
 	function(windows_find_file VAR FNAME FEXT)
 		set(TMPVAR "")
