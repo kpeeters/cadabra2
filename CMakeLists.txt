@@ -207,6 +207,10 @@ configure_file(
    config/install_script.iss.in
    config/install_script.iss
    )
+configure_file(
+   config/pre_install.rtf.in
+   config/pre_install.rtf
+   )
 
 
 #---------------------------------------------------------------------------

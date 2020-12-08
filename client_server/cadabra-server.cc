@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 	std::string pythonhome=Glib::getenv("PYTHONHOME");
 	std::string pythonpath=Glib::getenv("PYTHONPATH");
 
-	std::string s = getRegKey(std::string("SOFTWARE\\Python\\PythonCore\\")+PYTHON_VERSION_MAJOR+"."+PYTHON_VERSION_MINOR, "", false);
+	std::string s = getRegKey(std::string("SOFTWARE\\Python\\PythonCore\\")+PYTHON_VERSION_MAJOR+"."+PYTHON_VERSION_MINOR+"\\InstallPath", "", false);
 	if(s=="")
 		s = getRegKey(std::string("SOFTWARE\\Python\\PythonCore\\")+PYTHON_VERSION_MAJOR+"."+PYTHON_VERSION_MINOR, "", true);
 	
