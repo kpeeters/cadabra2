@@ -546,7 +546,26 @@ void help()
 
 int main(int argc, char* argv[])
 {
-	// Collect arguments
+
+#ifdef _WIN32
+   // FIXME: duplicate of code in cadabra-server.cc
+	// The Anaconda people _really_ do not understand packaging...
+	// We are going to find out the installation path for Anaconda/Miniconda
+	// by querying a registry key.
+	std::string pythonhome=Glib::getenv("PYTHONHOME");
+	std::string pythonpath=Glib::getenv("PYTHONPATH");
+
+	std::string s = getRegKey(std::string("SOFTWARE\\Python\\PythonCore\\")+PYTHON_VERSION_MAJOR+"."+PYTHON_VERSION_MINOR+"\\InstallPath", "", false);
+	if(s=="") {
+		s = getRegKey(std::string("SOFTWARE\\Python\\PythonCore\\")+PYTHON_VERSION_MAJOR+"."+PYTHON_VERSION_MINOR, "", true);
+		}
+	
+	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + s);
+	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + s);
+#endif
+
+
+// Collect arguments
 	std::vector<std::string> opts, scripts;
 	bool accept_opts = true;
 	for (int i = 1; i < argc; ++i) {
