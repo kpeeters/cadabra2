@@ -5,9 +5,11 @@
 #ifndef _WIN32
 #include <sys/types.h>
 #include <pwd.h>
+#endif
+#ifdef _WIN32
 #include <Windows.h>
 #include <glibmm/miscutils.h>
-#endif
+#endf
 #include <regex>
 #include <internal/string_tools.h>
 #include "cadabra2-cli.hh"
