@@ -5,6 +5,8 @@
 #ifndef _WIN32
 #include <sys/types.h>
 #include <pwd.h>
+#include <Windows.h>
+#include <glibmm/miscutils.h>
 #endif
 #include <regex>
 #include <internal/string_tools.h>
