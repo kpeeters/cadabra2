@@ -35,8 +35,8 @@ configure_file(
 find_package(Boost 1.53 COMPONENTS system)
 
 # Find glibmm (for base64)
-# This is now disabled because we had issues on Conda, where glibmm in some
-# find_package(GLIBMM  REQUIRED)
+# Conda will probably go belly-up again...
+find_package(GLIBMM  REQUIRED)
 
 # GMPXX
 find_package(GMPXX REQUIRED)
