@@ -89,9 +89,9 @@ int main(int argc, char **argv)
 	}
 
 
-#if defined(_WIN32) && defined(NDEBUG)
-int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-	{
-	return main(__argc, __argv);
-	}
-#endif
+// #if defined(_WIN32) && defined(NDEBUG)
+// int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+// 	{
+// 	return main(__argc, __argv);
+// 	}
+// #endif
