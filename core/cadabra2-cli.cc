@@ -9,7 +9,7 @@
 #ifdef _WIN32
 #include <Windows.h>
 #include <glibmm/miscutils.h>
-#endf
+#endif
 #include <regex>
 #include <internal/string_tools.h>
 #include "cadabra2-cli.hh"
