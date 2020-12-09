@@ -26,7 +26,8 @@ find_package(Boost 1.53.0 COMPONENTS system program_options date_time filesystem
 
 set(CADABRA_SERVER_SRC
    cadabra-server.cc
-   Server.cc 
+   Server.cc
+   Snoop.cc
    ${CADABRA_CORE_DIR}/InstallPrefix.cc
    ${CADABRA_CORE_DIR}/DataCell.cc
    ${CADABRA_CORE_DIR}/CdbPython.cc 
@@ -113,7 +114,7 @@ endif()
 target_link_libraries(cadabra-server
    pybind11::embed
    ${Boost_LIBRARIES}
-#  ${SQLITE3_LIBRARIES}
+   ${SQLITE3_LIBRARIES}
    ${PYTHON_LIBRARIES}
    ${GLIBMM3_LIBRARIES} 
    Threads::Threads
