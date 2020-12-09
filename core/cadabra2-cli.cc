@@ -16,6 +16,33 @@
 #include "InstallPrefix.hh"
 #include "PreClean.hh"
 
+#ifdef _WIN32
+
+std::string getRegKey(const std::string& location, const std::string& name, bool system)
+	{
+	HKEY key;
+	TCHAR value[1024]; 
+	DWORD bufLen = 1024*sizeof(TCHAR);
+	long ret;
+	ret = RegOpenKeyExA(system?HKEY_LOCAL_MACHINE:HKEY_CURRENT_USER, location.c_str(), 0, KEY_QUERY_VALUE, &key);
+	if( ret != ERROR_SUCCESS ){
+		return std::string();
+		}
+	ret = RegQueryValueExA(key, name.c_str(), 0, 0, (LPBYTE) value, &bufLen);
+	RegCloseKey(key);
+	if ( (ret != ERROR_SUCCESS) || (bufLen > 1024*sizeof(TCHAR)) ){
+		return std::string();
+		}
+	std::string stringValue = std::string(value, (size_t)bufLen - 1);
+	size_t i = stringValue.length();
+	while( i > 0 && stringValue[i-1] == '\0' ){
+		--i;
+		}
+	return stringValue.substr(0,i); 
+	}
+
+#endif
+
 using namespace linenoise;
 
 	std::string replace_all(std::string const& original, std::string const& from, std::string const& to )
