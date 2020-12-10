@@ -30,6 +30,7 @@ set(CADABRA_SERVER_SRC
    Snoop.cc
    ${CADABRA_CORE_DIR}/InstallPrefix.cc
    ${CADABRA_CORE_DIR}/DataCell.cc
+   ${CADABRA_CORE_DIR}/Exceptions.cc
    ${CADABRA_CORE_DIR}/CdbPython.cc 
    ${CADABRA_CORE_DIR}/Stopwatch.cc 
    ${CADABRA_LIBS_DIR}/whereami/whereami.c
@@ -42,6 +43,7 @@ set(CADABRA_CLIENT_SRC
    Actions.cc 
    Snoop.cc 
    ${CADABRA_CORE_DIR}/DataCell.cc 
+   ${CADABRA_CORE_DIR}/Exceptions.cc 
    ${CADABRA_CORE_DIR}/InstallPrefix.cc
    ${CADABRA_LIBS_DIR}/whereami/whereami.c
    )

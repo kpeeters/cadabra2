@@ -2,6 +2,7 @@
 #include "InstallPrefix.hh"
 #include "Config.hh"
 #include "DataCell.hh"
+#include "Exceptions.hh"
 #include <sstream>
 #include <fstream>
 #include <regex>
@@ -687,11 +688,11 @@ void cadabra::python_recurse(const DTree& doc, DTree::iterator it, std::ostrings
 
 nlohmann::json cadabra::ipynb2cnb(const nlohmann::json& root)
 	{
-	auto nbf = root["nbformat"];
+	int nbf = root.value("nbformat", 0);
 	nlohmann::json json;
 
-	if(!nbf)
-		return json;
+	if(nbf==0)
+		throw RuntimeException("Not a Jupyter notebook.");
 
 	json["description"]="Cadabra JSON notebook format";
 	json["version"]=1.0;

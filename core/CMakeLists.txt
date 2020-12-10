@@ -319,6 +319,7 @@ add_executable(cadabra2python
    CdbPython.cc
    InstallPrefix.cc    
    DataCell.cc
+   Exceptions.cc   
    ${CADABRA_LIBS_DIR}/whereami/whereami.c
    ${CADABRA_LIBS_DIR}/base64/base64.cc
    )
@@ -334,6 +335,7 @@ add_executable(cadabra2ipynb
    CdbPython.cc
    InstallPrefix.cc    
    DataCell.cc
+   Exceptions.cc   
    ${CADABRA_LIBS_DIR}/whereami/whereami.c
    ${CADABRA_LIBS_DIR}/base64/base64.cc
    )
@@ -348,6 +350,7 @@ add_executable(cadabra2cadabra
    cadabra2cadabra.cc 
    DataCell.cc 
    InstallPrefix.cc
+   Exceptions.cc
    ${CADABRA_LIBS_DIR}/whereami/whereami.c
    ${CADABRA_LIBS_DIR}/base64/base64.cc
    )

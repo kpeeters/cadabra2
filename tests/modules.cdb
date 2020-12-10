@@ -36,6 +36,14 @@ def test03():
 test03()
 
 
+from ipynb_module import ex as ex5
+
+def test04():
+    assert(ex5==$A_{m n p}$)
+    print("Test 04 passed")
+
+test04()
+
 
 # import module02
 # 
