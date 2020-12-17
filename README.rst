@@ -448,6 +448,11 @@ It should be possible to simply copy the C:\Cadabra folder to a
 different machine and run it there (that is essentially what the
 binary installer does).
 
+To create an installer, make sure you have Inno installer
+available. Then run, from the `cadabra2/config` directory::
+
+  "C:\Program Files (x86)\Inno Setup 6\ISCC" install_script.iss
+
 
 Building a Jupyter kernel
 -------------------------

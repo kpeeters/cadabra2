@@ -79,6 +79,7 @@ runbuild "Ubuntu_18.04"        ".deb" 7017 ubuntu1804
 runbuild "Fedora_28"           ".rpm" 7020 fedora28
 runbuild "Fedora_29"           ".rpm" 7025 fedora29               
 runbuild "Fedora_32"           ".rpm" 7027 fedora32
+runbuild "Fedora_33"           ".rpm" 7031 fedora33
 runbuild "Mint_19"             ".deb" 7022 mint19
 runbuild "OpenSUSE_15"         ".rpm" 7024 opensuse150
 runbuild "OpenSUSE_Tumbleweed" ".rpm" 7023 opensusetw
