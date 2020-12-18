@@ -99,7 +99,9 @@ void TeXView::TeXArea::update_image(std::shared_ptr<TeXEngine::TeXRequest> conte
 	                                 content->width(), content->height(),
 	                                 4*content->width());
 
-	set_size_request(pixbuf->get_width(), pixbuf->get_height());
+	if(pixbuf)
+		set_size_request(pixbuf->get_width(), pixbuf->get_height());
+
 	//	update=true;
 	scale_=scale;
 	// HERE

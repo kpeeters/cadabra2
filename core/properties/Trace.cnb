@@ -1,0 +1,165 @@
+{
+	"cell_id": 17765795687326672545,
+	"cells": [
+		{
+			"cell_id": 5657055628871889371,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 15838817502290331855,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\property{Trace(indices: Ex)}{Declares a trace operator}\n\nDeclares the object to be a trace operator, optionally indicating the index set over which\nthe trace acts. In the basic form, without argument, the trace will be understood to act on\nall implicit index sets of objects inside it:"
+				}
+			],
+			"hidden": true,
+			"source": "\\property{Trace(indices: Ex)}{Declares a trace operator}\n\nDeclares the object to be a trace operator, optionally indicating the index set over which\nthe trace acts. In the basic form, without argument, the trace will be understood to act on\nall implicit index sets of objects inside it:"
+		},
+		{
+			"cell_id": 16432476374370762544,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14701796796581272745,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Trace attached to~}Tr\\left(\\#\\right).\\end{dmath*}"
+				},
+				{
+					"cell_id": 10467861451438837866,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property ImplicitIndex attached to~}\\left[A,~\\discretionary{}{}{} B\\right].\\end{dmath*}"
+				},
+				{
+					"cell_id": 15736966627107438757,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7868561666184191975,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "Tr(A B C)"
+						}
+					],
+					"source": "\\begin{dmath*}{}{\\rm Tr}\\left(A B C\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 10051836574681228751,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8920474380952069443,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "C Tr(A B)"
+						}
+					],
+					"source": "\\begin{dmath*}{}C {\\rm Tr}\\left(A B\\right)\\end{dmath*}"
+				}
+			],
+			"source": "Tr{#}::Trace;\nTr{#}::LaTeXForm(\"{\\rm Tr}\").\n{A,B}::ImplicitIndex;\nex:= Tr( A B C );\nuntrace(_);"
+		},
+		{
+			"cell_id": 8784944214298213045,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 4610301361330547467,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If you have multiple implicit index sets, you can indicate the set over which you want to trace\nby using the optional \\verb|indices| argument, as in:"
+				}
+			],
+			"hidden": true,
+			"source": "If you have multiple implicit index sets, you can indicate the set over which you want to trace\nby using the optional \\verb|indices| argument, as in:"
+		},
+		{
+			"cell_id": 4261831302810446873,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3425732590941563836,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Indices(position=free) attached to~}\\left[a,~\\discretionary{}{}{} b,~\\discretionary{}{}{} c,~\\discretionary{}{}{} d\\right].\\end{dmath*}"
+				},
+				{
+					"cell_id": 14898627914478378462,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Indices(position=free) attached to~}\\left[i,~\\discretionary{}{}{} j,~\\discretionary{}{}{} k,~\\discretionary{}{}{} l\\right].\\end{dmath*}"
+				},
+				{
+					"cell_id": 11052125327420618799,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Trace attached to~}tr\\left(\\#\\right).\\end{dmath*}"
+				},
+				{
+					"cell_id": 14508075882197669737,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property ImplicitIndex attached to~}A.\\end{dmath*}"
+				},
+				{
+					"cell_id": 3292992286301537879,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property ImplicitIndex attached to~}B.\\end{dmath*}"
+				},
+				{
+					"cell_id": 16701574396990242092,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 427207694120458052,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "tr(A B)"
+						}
+					],
+					"source": "\\begin{dmath*}{}tr\\left(A B\\right)\\end{dmath*}"
+				}
+			],
+			"source": "{a,b,c,d}::Indices(vector);\n{i,j,k,l}::Indices(group);\ntr{#}::Trace(indices=group);\nA::ImplicitIndex(A_{i j});\nB::ImplicitIndex(B_{a b});\nex:= tr(A B);"
+		},
+		{
+			"cell_id": 2995113146223563270,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3067489343184685005,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8398508392970649808,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "B tr(A)"
+						}
+					],
+					"source": "\\begin{dmath*}{}B tr\\left(A\\right)\\end{dmath*}"
+				}
+			],
+			"source": "untrace(_);"
+		},
+		{
+			"cell_id": 12526507910491638554,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

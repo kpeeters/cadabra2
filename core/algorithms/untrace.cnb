@@ -1,171 +1,159 @@
 {
-	"cell_id" : 17473324490989807474,
-	"cells" : 
-	[
+	"cell_id": 17473324490989807474,
+	"cells": [
 		{
-			"cell_id" : 17620023483363172328,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 17620023483363172328,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 13214722607572420305,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\algorithm{untrace}{Take objects out of traces}\n\nWhen a trace contains objects which do not carry any implicit indices on which the \ntrace acts, the \\algo{untrace} algorithm can be used to take them out of the\ntrace. This is similar to the way in which \\algo{unwrap} takes objects out of\nderivatives when they do not depend on the object with respect to which the derivative \nis taken."
+					"cell_id": 7700461705362123739,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{untrace}{Take objects out of traces}\n\nWhen a trace contains objects which do not carry any implicit indices on which the \ntrace acts, the \\algo{untrace} algorithm can be used to take them out of the\ntrace. This is similar to the way in which \\algo{unwrap} takes objects out of\nderivatives when they do not depend on the object with respect to which the derivative \nis taken."
 				}
 			],
-			"hidden" : true,
-			"source" : "\\algorithm{untrace}{Take objects out of traces}\n\nWhen a trace contains objects which do not carry any implicit indices on which the \ntrace acts, the \\algo{untrace} algorithm can be used to take them out of the\ntrace. This is similar to the way in which \\algo{unwrap} takes objects out of\nderivatives when they do not depend on the object with respect to which the derivative \nis taken."
+			"hidden": true,
+			"source": "\\algorithm{untrace}{Take objects out of traces}\n\nWhen a trace contains objects which do not carry any implicit indices on which the \ntrace acts, the \\algo{untrace} algorithm can be used to take them out of the\ntrace. This is similar to the way in which \\algo{unwrap} takes objects out of\nderivatives when they do not depend on the object with respect to which the derivative \nis taken."
 		},
 		{
-			"cell_id" : 12842358434533101410,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 12842358434533101410,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 12118716233802889858,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Unless you declare objects to have a \\prop{ImplicitIndex} property, they will be taken out. The minimal example does not specify these indices, e.g."
+					"cell_id": 14029965045660066717,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Unless you declare objects to have a \\prop{ImplicitIndex} property, they will be taken out. The minimal example does not specify these indices, e.g."
 				}
 			],
-			"hidden" : true,
-			"source" : "Unless you declare objects to have a \\prop{ImplicitIndex} property, they will be taken out. The minimal example does not specify these indices, e.g."
+			"hidden": true,
+			"source": "Unless you declare objects to have a \\prop{ImplicitIndex} property, they will be taken out. The minimal example does not specify these indices, e.g."
 		},
 		{
-			"cell_id" : 9535091562390105121,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 9535091562390105121,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_id" : 1222142395953423326,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 12470129597878327812,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_id" : 16340700521415068976,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "tr(q A B)"
+							"cell_id": 14929967836227092198,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "tr(q A B)"
 						}
 					],
-					"source" : "\\begin{dmath*}{}tr\\left(q A B\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}tr\\left(q A B\\right)\\end{dmath*}"
 				},
 				{
-					"cell_id" : 15979629137288914996,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 14602620579978943179,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_id" : 6101318762459049479,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "q tr(A B)"
+							"cell_id": 1773090927971160558,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "q tr(A B)"
 						}
 					],
-					"source" : "\\begin{dmath*}{}q tr\\left(A B\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}q tr\\left(A B\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "{A,B}::ImplicitIndex.\ntr{#}::Trace.\nex:= tr( q A B );\nuntrace(_);"
+			"source": "{A,B}::ImplicitIndex.\ntr{#}::Trace.\nex:= tr( q A B );\nuntrace(_);"
 		},
 		{
-			"cell_id" : 599709734600671488,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 599709734600671488,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 6801199231042999205,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "In the declaration of a trace, it is possible to indicate over which indices the trace is being taken."
+					"cell_id": 6801199231042999205,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "In the declaration of a trace, it is possible to indicate over which indices the trace is being taken."
 				}
 			],
-			"hidden" : true,
-			"source" : "In the declaration of a trace, it is possible to indicate over which indices the trace is being taken."
+			"hidden": true,
+			"source": "In the declaration of a trace, it is possible to indicate over which indices the trace is being taken."
 		},
 		{
-			"cell_id" : 14632792720123745310,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "{a,b,c}::Indices(spinor).\n{m,n,p}::Indices(vector).\nC::ImplicitIndex(C_{a b}).\nD::ImplicitIndex(D_{a b}).\nE::ImplicitIndex(E^{m n}).\nTr{#}::Trace(indices=spinor)."
+			"cell_id": 14632792720123745310,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "{a,b,c}::Indices(spinor).\n{m,n,p}::Indices(vector).\nC::ImplicitIndex(C_{a b}).\nD::ImplicitIndex(D_{a b}).\nE::ImplicitIndex(E^{m n}).\nTr{#}::Trace(indices=spinor)."
 		},
 		{
-			"cell_id" : 14282261514648391593,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 14282261514648391593,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_id" : 7769183754058014831,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 1628602802577310529,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_id" : 11195164057524721675,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "Tr(C D E)"
+							"cell_id": 3495019957146126718,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "Tr(C D E)"
 						}
 					],
-					"source" : "\\begin{dmath*}{}Tr\\left(C D E\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}Tr\\left(C D E\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "ex:= Tr( C D E );"
+			"source": "ex:= Tr( C D E );"
 		},
 		{
-			"cell_id" : 7947298485656223155,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 7947298485656223155,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_id" : 1210476478210584205,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 17084545913981834117,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_id" : 1197184137079986897,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "E Tr(C D)"
+							"cell_id": 2107438105775406723,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "E Tr(C D)"
 						}
 					],
-					"source" : "\\begin{dmath*}{}E Tr\\left(C D\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}E Tr\\left(C D\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "untrace(_);"
+			"source": "untrace(_);"
 		},
 		{
-			"cell_id" : 13091146635063293823,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 13091146635063293823,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 17865201676022650852,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Note how, even though $E$ has implicit indices, it has been moved out of the trace, as the\nlatter is declared to be a trace over spinor indices, not vector indices."
+					"cell_id": 17938807333085018593,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Note how, even though $E$ has implicit indices, it has been moved out of the trace, as the\nlatter is declared to be a trace over spinor indices, not vector indices."
 				}
 			],
-			"hidden" : true,
-			"source" : "Note how, even though $E$ has implicit indices, it has been moved out of the trace, as the\nlatter is declared to be a trace over spinor indices, not vector indices."
+			"hidden": true,
+			"source": "Note how, even though $E$ has implicit indices, it has been moved out of the trace, as the\nlatter is declared to be a trace over spinor indices, not vector indices."
 		},
 		{
-			"cell_id" : 4484332793243439838,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"source" : ""
+			"cell_id": 13319255015209183503,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
 }
