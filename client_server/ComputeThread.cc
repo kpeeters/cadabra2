@@ -283,7 +283,15 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		root=nlohmann::json::parse(msg->get_payload());
 		}
 	catch(nlohmann::json::exception& e) {
-		std::cerr << "cadabra-client: cannot parse message" << std::endl;
+		std::cerr << "cadabra-client: cannot parse message." << std::endl;
+		return;
+		}
+	if(root.count("header")==0) {
+		std::cerr << "cadabra-client: received message without 'header'." << std::endl;
+		return;
+		}
+	if(root.count("content")==0) {
+		std::cerr << "cadabra-client: received message without 'content'." << std::endl;
 		return;
 		}
 	const nlohmann::json& header  = root["header"];
@@ -291,14 +299,14 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	const std::string msg_type    = root.value("msg_type", "");
 
 	DataCell::id_t parent_id;
-	parent_id.id = header["parent_id"].get<uint64_t>();
+	parent_id.id = header.value("parent_id", uint64_t(0));
 	if(header.value("parent_origin", "")=="client")
 		parent_id.created_by_client=true;
 	else
 		parent_id.created_by_client=false;
 	DataCell::id_t cell_id;
 	cell_id.id = header["cell_id"].get<uint64_t>();
-	if(header["cell_origin"].get<std::string>()=="client")
+	if(header.value("cell_origin", "")=="client")
 		cell_id.created_by_client=true;
 	else
 		cell_id.created_by_client=false;
