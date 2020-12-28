@@ -119,8 +119,22 @@ def test07():
 
 test07()
         
+def test08():
+    __cdbkernel__=create_scope()
+    {a,b,c,d}::Indices(vector).
+    tr{#}::Trace(indices=vector).
+    A::ImplicitIndex(A_{a b}).
+    B::ImplicitIndex(B_{a b}).
+    C::ImplicitIndex(C_{a b}).
+    D::ImplicitIndex(D_{a b}).
+    ex:=tr(c A B) tr(C D);
+    explicit_indices(_);
+    tst:= c A_{a b} B_{b a} C_{c d} D_{d c} - @(ex);
+    print("Test 08 passed")
 
-        
+test08()
+    
+    
 # The original question:
     
 # Tr{#}::Trace;

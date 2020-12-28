@@ -46,8 +46,18 @@ namespace cadabra {
 			                                bool move_out=false) const;
 
 			void     classify_add_index(Ex::iterator it, index_map_t& ind_free, index_map_t& ind_dummy) const;
+
+			/// Classify indices bottom-up, that is, given a node, it goes up the tree to find
+         /// all free and dummy indices in the product in which this node would end up if a full
+         /// distribute would be done on the entire expression.
+
 			void     classify_indices_up(Ex::iterator, index_map_t& ind_free, index_map_t& ind_dummy) const;
+
+         /// Classify indices top-down, that is, finds the free indices and all dummy
+         /// index pairs used in the full subtree below a given node.
+
 			void     classify_indices(Ex::iterator, index_map_t& ind_free, index_map_t& ind_dummy) const;
+			
 			int      max_numbered_name_one(const std::string& nm, const index_map_t * one) const;
 			int      max_numbered_name(const std::string&, const index_map_t *m1, const index_map_t *m2=0,
 			                           const index_map_t *m3=0, const index_map_t *m4=0, const index_map_t *m5=0) const;

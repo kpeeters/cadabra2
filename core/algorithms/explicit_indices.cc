@@ -89,6 +89,8 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 
 	// Classify all free and dummy indices already present. Any new
 	// indices cannot be taken from these.
+//	std::cerr << "acting at " << it << std::endl;
+	
 	ind_free_sum.clear();
 	ind_dummy_sum.clear();
 	classify_indices(it, ind_free_sum, ind_dummy_sum);
@@ -116,6 +118,7 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 				sibling_iterator args=tr.begin(factor);
 				while(args!=tr.end(factor)) {
 					if(args->fl.parent_rel==str_node::p_none) {
+						res=result_t::l_applied;
 						handle_factor(args, trace!=0);
 						break;
 						}
@@ -123,6 +126,7 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 					}
 				}
 			else {
+				res=result_t::l_applied;				
 				handle_factor(factor, trace!=0);
 				}
 			++factor;
@@ -147,8 +151,17 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 		it=parit;
 		it = tr.flatten_and_erase(it);
 		}
-	cleanup_dispatch(kernel, tr, it);
+	if(*it->name=="\\sum" && tr.number_of_children(it)==1)
+		it = tr.flatten_and_erase(it);
+	// It looks like we will have trouble if we also flatten the
+	// \prod node, becuase then rename_dummies will only act on
+	// the first factor we introduced, and fail to rename
+	// properly.
+//	cleanup_dispatch(kernel, tr, it);
 
+//	std::cerr << "after explicit_indicex: " << tr.begin() << std::endl;
+//	std::cerr << "and it is now " << it << std::endl;
+	
 	return res;
 	}
 

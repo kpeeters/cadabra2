@@ -131,8 +131,10 @@ namespace cadabra {
 			// The set to which the first index belongs..
 			std::string get_index_set_name(iterator it) const;
 
+			/// Rename the dummies in the sub-tree starting with head at the given iterator.
+			/// Ensures that no dummies in this sub-tree overlap with the indices elsewhere
+			/// in the tree.			
 			bool     rename_replacement_dummies(iterator, bool still_inside_algo=false);
-
 
 			/// Determines whether the indicated node is 'like a term in a
 			/// sum'.  This requires that the node is not a `\sum` node, not

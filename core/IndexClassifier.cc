@@ -8,7 +8,7 @@
 #include "properties/IndexInherit.hh"
 #include <sstream>
 
-// #define DEBUG
+// #define DEBUG 1
 
 using namespace cadabra;
 
@@ -156,11 +156,11 @@ void IndexClassifier::classify_add_index(Ex::iterator it, index_map_t& ind_free,
 		}
 	}
 
-// This classifies indices bottom-up, that is, given a node, it goes up the tree to find
-// all free and dummy indices in the product in which this node would end up if a full
-// distribute would be done on the entire expression.
 void IndexClassifier::classify_indices_up(Ex::iterator it, index_map_t& ind_free, index_map_t& ind_dummy)  const
 	{
+#ifdef DEBUG
+	std::cerr << "classify_indices_up at " << it << std::endl;
+#endif
 loopie:
 	if(Ex::is_head(it)) return;
 	Ex::iterator par=Ex::parent(it);
@@ -180,8 +180,14 @@ loopie:
 		// children; add the indices thus found to the maps since they will end up in our factor.
 		Ex::sibling_iterator sit=par.begin();
 		while(sit!=par.end()) {
+#ifdef DEBUG
+			std::cerr << "checking " << sit << std::endl;
+#endif
 			if(sit!=Ex::sibling_iterator(it)) {
 				if(sit->is_index()==false) {
+#ifdef DEBUG
+					std::cerr << "classifying at " << sit << std::endl;
+#endif
 					index_map_t factor_free, factor_dummy;
 					classify_indices(sit, factor_free, factor_dummy);
 
@@ -264,8 +270,6 @@ void IndexClassifier::dumpmap(std::ostream& str, const index_map_t& mp) const
 	str << std::endl;
 	}
 
-// This classifies indices top-down, that is, finds the free indices and all dummy
-// index pairs used in the full subtree below a given node.
 void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, index_map_t& ind_dummy) const
 	{
 	const IndexInherit *inh=kernel.properties.get<IndexInherit>(it);

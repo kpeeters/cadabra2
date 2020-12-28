@@ -40,7 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <sstream>
 
-// #define DEBUG
+//#define DEBUG
 
 using namespace cadabra;
 
@@ -272,8 +272,10 @@ Algorithm::result_t Algorithm::apply_deep(Ex::iterator& it)
 			result_t res = apply(work);
 			if(res==Algorithm::result_t::l_applied || res==Algorithm::result_t::l_applied_no_new_dummies) {
 				some_changes_somewhere=result_t::l_applied;
-				if(res==Algorithm::result_t::l_applied)
+				if(res==Algorithm::result_t::l_applied) {
+//					std::cerr << "rename replacement on " << work << std::endl;
 					rename_replacement_dummies(work, true);
+					}
 				deepest_action=tr.depth(work);
 				// If we got a zero at 'work', we need to propagate this up the tree and
 				// then restart our post-order traversal such that everything that has
@@ -660,7 +662,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 	index_map_t ind_free, ind_dummy;
 	index_map_t ind_free_full, ind_dummy_full;
 
-	if(still_inside_algo) {
+	if(false && still_inside_algo) {
 		if(tr.is_head(two)==false)
 			classify_indices_up(tr.parent(two), ind_free_full, ind_dummy_full);
 		}
@@ -675,6 +677,9 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 	std::cerr << "free indices above us" << std::endl;
 	for(auto& ii: ind_free_full)
 		std::cerr << ii.first << std::endl;
+	std::cerr << "dummy indices above us" << std::endl;
+	for(auto& ii: ind_dummy_full)
+		std::cerr << ii.first << std::endl;
 #endif
 
 	index_map_t must_be_empty;
@@ -684,7 +689,9 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 	determine_intersection(ind_dummy_full, ind_dummy, must_be_empty);
 	index_map_t::iterator it=must_be_empty.begin();
 	while(it!=must_be_empty.end()) {
-		// std::cerr << "double index pair" << std::endl;
+#ifdef DEBUG
+		std::cerr << "double index pair" << std::endl;
+#endif
 		Ex the_key=(*it).first;
 		const Indices *dums=kernel.properties.get<Indices>(it->second, true);
 		if(!dums)
