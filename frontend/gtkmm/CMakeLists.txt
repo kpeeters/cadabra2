@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
 project(CadabraGtkmm)
 
 
@@ -19,7 +19,7 @@ set(INSTALL_ICONS_DIR share/icons CACHE PATH "Installation directory for icons."
 #---------------------------------------------------------------------------
 
 find_package(Threads)
-find_package(SQLite3)
+find_package(SQLITE3)
 find_package(GLIBMM)
 find_package(GTKMM3)
 find_package(Boost 1.45.0 COMPONENTS system)

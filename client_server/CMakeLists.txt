@@ -16,8 +16,13 @@ set(INSTALL_LATEX_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2")
 #---------------------------------------------------------------------------
 
 find_package(GLIBMM  REQUIRED)
-find_package(SQLite3 REQUIRED)
-find_package(Threads REQUIRED)
+find_package(SQLITE3 REQUIRED)
+# Don't set pthreads to required. Either we're on a platform where explict
+# linking with -lpthread is the norm (e.g. Linux) and it'll be found, or we're
+# on a platform that include pthreads by default (e.g. BSD, macOS) where this
+# won't find anything, or we're on a road-much-less-traveled OS where the user
+# can figure out what's wrong without a hard error here.
+find_package(Threads)
 find_package(Boost 1.53.0 COMPONENTS system program_options date_time filesystem REQUIRED)
 
 #---------------------------------------------------------------------------

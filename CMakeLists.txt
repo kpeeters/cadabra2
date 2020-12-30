@@ -5,6 +5,9 @@ cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
 set(CMAKE_CXX_STANDARD 14)
 project(Cadabra)
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(MACOS TRUE)
+endif()
 
 #---------------------------------------------------------------------------
 # Preamble
