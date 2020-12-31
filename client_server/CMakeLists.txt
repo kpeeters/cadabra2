@@ -60,6 +60,7 @@ set(JUPYTER_KERNEL_SRC
     Server.cc
     ${CADABRA_CORE_DIR}/InstallPrefix.cc
     ${CADABRA_CORE_DIR}/DataCell.cc
+    ${CADABRA_CORE_DIR}/Exceptions.cc 
     ${CADABRA_CORE_DIR}/CdbPython.cc 
     ${CADABRA_CORE_DIR}/Stopwatch.cc 
     ${CADABRA_LIBS_DIR}/whereami/whereami.c
