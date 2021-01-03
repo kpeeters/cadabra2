@@ -41,8 +41,8 @@ kernel for Jupyter.
 Installation
 -------------
 
-Cadabra builds on Linux, macOS, OpenBSD and Windows. Select your
-system from the list below for detailed instructions.
+Cadabra builds on Linux, macOS, OpenBSD, FreeBSD and Windows. Select
+your system from the list below for detailed instructions.
 
 - `Linux (Debian/Ubuntu/Mint)`_
 - `Linux (Fedora 24 and later)`_
@@ -51,6 +51,7 @@ system from the list below for detailed instructions.
 - `Linux (Arch/Manjaro)`_
 - `Linux (Solus)`_
 - `OpenBSD`_
+- `FreeBSD`_
 - `macOS`_
 - `Windows`_
 
@@ -303,7 +304,24 @@ Any feedback on this platform is welcome as this is not our
 development platform and testing is done only occasionally.
 
 
-	 
+FreeBSD
+~~~~~~~
+
+The recommended way to install Cadabra is through::
+
+  pkg install cadabra2
+
+It is also possible to build and install Cadabra from the port::
+
+  cd /usr/ports/math/cadabra2 && make install clean
+
+The command-line version is now available as ``cadabra2`` and the
+notebook interface as ``cadabra2-gtk``.
+
+Any feedback on this platform is welcome as this is not our
+development platform.
+
+
 macOS
 ~~~~~
 
