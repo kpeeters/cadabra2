@@ -480,10 +480,6 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	                       );
 	auto latex_exit_status=latex_proc.get_exit_status();
 
-	erase_file(tmppath+".aux");
-	erase_file(tmppath+".log");
-	erase_file(tmppath+".out");
-
 	std::string err=handle_latex_errors(latex_stdout+latex_stderr, latex_exit_status);
 	setenv("TEXINPUTS", oldtexinputs.c_str(), 1);
 
@@ -500,6 +496,10 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		err += "TMPDIR = "+tmpdir+"\n";
 		throw TeXException(err);
 		}
+
+	erase_file(tmppath+".aux");
+	erase_file(tmppath+".log");
+	erase_file(tmppath+".out");
 
 	erase_file(tmppath+".tex");
 
