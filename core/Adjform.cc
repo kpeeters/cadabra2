@@ -378,15 +378,17 @@ namespace cadabra {
 		set(adjform, value);
 	}
 
-	AdjformEx::AdjformEx(Ex::iterator it, IndexMap& index_map, const Kernel& kernel)
+	AdjformEx::AdjformEx(Ex& tr, Ex::iterator it, IndexMap& index_map, const Kernel& kernel)
 		: prefactor(str_node("\\prod"))
 		, tensor(str_node("\\prod"))
 	{
 		set(Adjform(it, index_map, kernel));
 
 		if (*it->name == "\\prod") {
+			Ex_comparator comp(kernel.properties);
+
 			for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
-				if (has_indices(kernel, beg))
+				if (has_indices(kernel, beg) || !comp.can_move_to_front(tr, it, beg))
 					tensor.append_child(tensor.begin(), (Ex::iterator)beg);
 				else
 					prefactor.append_child(prefactor.begin(), (Ex::iterator)beg);

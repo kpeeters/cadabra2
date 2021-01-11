@@ -92,7 +92,7 @@ namespace cadabra {
 		AdjformEx();
 		AdjformEx(const Adjform& adjform, const rational_type& value = 1, const Ex& prefactor = Ex());
 		AdjformEx(const Adjform& adjform, const rational_type& value, Ex::iterator prefactor);
-		AdjformEx(Ex::iterator it, IndexMap& index_map, const Kernel& kernel);
+		AdjformEx(Ex& tr, Ex::iterator it, IndexMap& index_map, const Kernel& kernel);
 
 		// Check if 'other' is a linear multiple of 'this' and return
 		// the numeric factor if so, otherwise returns 0
