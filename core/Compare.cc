@@ -18,7 +18,7 @@
 #include "properties/SortOrder.hh"
 
 // In order to enable/disable debug output, also flip the swith in 'report' below.
-//#define DEBUG(ln) ln
+// #define DEBUG(ln) ln
 #define DEBUG(ln)
 
 namespace cadabra {
@@ -60,6 +60,7 @@ namespace cadabra {
 				else return -mult;
 				}
 
+			DEBUG( std::cerr << "auto? " << one->is_autodeclare_wildcard() << ", " << two->is_numbered_symbol() << std::endl; );
 			if( (one->is_autodeclare_wildcard() && two->is_numbered_symbol()) ||
 			      (two->is_autodeclare_wildcard() && one->is_numbered_symbol()) ) {
 				if( one->name_only() != two->name_only() ) {
@@ -71,6 +72,8 @@ namespace cadabra {
 				if(*one->name < *two->name) return mult;
 				else return -mult;
 				}
+
+			DEBUG( std::cerr << "match despite difference: " << *one->name << " and " << *two->name << std::endl; );			
 			}
 
 		// Compare parent relations.
@@ -855,7 +858,7 @@ namespace cadabra {
 					}
 				}
 
-			if(one->name==two->name) {
+			if(name_match_with_autodeclare(one, two)) {
 				if(nobrackets || (one->multiplier == two->multiplier) ) {
 					if(ignore_parent_rel || one->fl.parent_rel==two->fl.parent_rel) return report( match_t::node_match );
 					report( (one->fl.parent_rel < two->fl.parent_rel)
@@ -864,6 +867,10 @@ namespace cadabra {
 
 				if(*one->multiplier < *two->multiplier) return report(match_t::no_match_less);
 				else                                    return report(match_t::no_match_greater);
+				}
+			else if( ((one->is_autodeclare_wildcard() && two->is_numbered_symbol()) ||
+						 (two->is_autodeclare_wildcard() && one->is_numbered_symbol()) ) && one->name_only()==two->name_only() ) {
+				return report(match_t::node_match);
 				}
 			else {
 				if( *one->name < *two->name ) return report(match_t::no_match_less);
@@ -876,6 +883,16 @@ namespace cadabra {
 		return report(match_t::no_match_less);
 		}
 
+	bool Ex_comparator::name_match_with_autodeclare(Ex::sibling_iterator one, Ex::sibling_iterator two) const
+		{
+		if(one->name==two->name) return true;
+		if((one->is_autodeclare_wildcard() && two->is_numbered_symbol()) ||
+			(two->is_autodeclare_wildcard() && one->is_numbered_symbol()) ) {
+			if( one->name_only()==two->name_only() )
+				return true;
+			}
+		return false;
+		}
 
 	Ex_comparator::match_t Ex_comparator::match_subproduct(const Ex& tr,
 	      Ex::sibling_iterator lhs,

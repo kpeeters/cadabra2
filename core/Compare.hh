@@ -368,6 +368,10 @@ namespace cadabra {
 			std::string tab() const;
 			match_t     report(match_t r) const;
 
+			/// Match the `name` elements of a node, but take into account that
+			/// one of them can be an autodeclare name `XXX#`.
+			bool name_match_with_autodeclare(Ex::sibling_iterator one, Ex::sibling_iterator two) const;
+			
 			static int offset;
 		};
 

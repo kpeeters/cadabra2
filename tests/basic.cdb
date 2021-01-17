@@ -343,3 +343,25 @@ def test38():
 
 test38()
 
+def test39():
+    __cdbkernel__=create_scope()
+    A#_{a b c}::AntiSymmetric;
+    tst:=A1_{a b c} + A1_{a c b};
+    canonicalise(_)
+    assert(tst==0)
+    print("Test 39 passed")
+
+test39()
+        
+def test40():
+    __cdbkernel__=create_scope()
+    {a,b,c,d,e,f,g,h}::Indices(position=independent);
+    T#^{a b c}_{e f}::TableauSymmetry(shape={1,1}, indices={3,4});
+    ex:=T1^{a b c}_{e f} T2^{e f g}_{h i} - T1^{a b c}_{e f} T2^{f e g}_{h i};
+    canonicalise(ex)
+    tst:=2 T1^{a b c}_{e f} T2^{e f g}_{h i} - @(ex);
+    assert(tst==0)
+    print("Test 40 passed")
+
+test40()
+        
