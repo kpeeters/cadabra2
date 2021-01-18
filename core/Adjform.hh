@@ -84,23 +84,23 @@ namespace cadabra {
 	class AdjformEx
 	{
 	public:
-		using rational_type = mpq_class;
-		using map_t = std::map<Adjform, rational_type>;
+		using integer_type = int32_t;
+		using map_t = std::map<Adjform, integer_type>;
 		using iterator = map_t::iterator;
 		using const_iterator = map_t::const_iterator;
 
 		AdjformEx();
-		AdjformEx(const Adjform& adjform, const rational_type& value = 1, const Ex& prefactor = Ex());
-		AdjformEx(const Adjform& adjform, const rational_type& value, Ex::iterator prefactor);
-		AdjformEx(Ex::iterator it, IndexMap& index_map, const Kernel& kernel);
+		AdjformEx(const Adjform& adjform, const integer_type& value = 1, const Ex& prefactor = Ex());
+		AdjformEx(const Adjform& adjform, const integer_type& value, Ex::iterator prefactor);
+		AdjformEx(Ex& tr, Ex::iterator it, IndexMap& index_map, const Kernel& kernel);
 
 		// Check if 'other' is a linear multiple of 'this' and return
 		// the numeric factor if so, otherwise returns 0
-		rational_type compare(const AdjformEx& other) const;
+		integer_type compare(const AdjformEx& other) const;
 
 		void combine(const AdjformEx& other); // Add all contributions from 'other' into 'this'
-		void combine(const AdjformEx& other, rational_type factor);
-		void multiply(const rational_type& k); // Multiply all terms by a constant factor
+		void combine(const AdjformEx& other, integer_type factor);
+		void multiply(const integer_type& k); // Multiply all terms by a constant factor
 
 		iterator begin();
 		const_iterator begin() const;
@@ -119,11 +119,11 @@ namespace cadabra {
 		Ex& get_tensor_ex();
 
 		// Get the value of the term, or zero if it doesn't exist
-		const rational_type& get(const Adjform& adjform) const;
+		const integer_type& get(const Adjform& adjform) const;
 		// Sets the given term to value, creating/removing the term if required
-		void set(const Adjform& adjform, const rational_type& value = 1);
+		void set(const Adjform& adjform, const integer_type& value = 1);
 		// Adds value to the given term, creating/removing the term if required
-		void add(const Adjform& adjform, const rational_type& value = 1);
+		void add(const Adjform& adjform, const integer_type& value = 1);
 
 		// Symmetrize in the given indices
 		// e.g. if the only term is abcd then
@@ -143,12 +143,12 @@ namespace cadabra {
 
 	private:
 		// Unsafe (but faster) versions of the public functions
-		void set_(const Adjform& adjform, const rational_type& value = 1);
-		void add_(const Adjform& adjform, const rational_type& value = 1);
+		void set_(const Adjform& adjform, const integer_type& value = 1);
+		void add_(const Adjform& adjform, const integer_type& value = 1);
 		map_t data;
 		Ex prefactor;
 		Ex tensor;
-		static rational_type zero;
+		static integer_type zero;
 	};
 }
 
