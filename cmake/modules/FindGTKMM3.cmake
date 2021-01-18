@@ -2,7 +2,7 @@ if(WIN32)
 #  windows_find_library(GTKMM3 "gtkmm.dll" "glib;sigc++;pango")
   windows_find_library(GTKMM3_LIBRARIES
 	gtk gdk gdk_pixbuf pangocairo pango atk gio gobject
-	gmodule glib cairo-gobject cairo libintl atkmm cairomm
+	gmodule glib cairo-gobject cairo intl atkmm cairomm
 	gdkmm giomm glibmm gtkmm pangomm
   )
   if (GTKMM3_LIBRARIES)
