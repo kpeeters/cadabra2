@@ -359,20 +359,22 @@ namespace cadabra {
 		return -(Adjform::value_type)data->begin().number_of_children();
 	}
 
-	AdjformEx::rational_type AdjformEx::zero = 0;
+	AdjformEx::integer_type AdjformEx::zero = 0;
 
 	AdjformEx::AdjformEx()
 	{
 
 	}
 
-	AdjformEx::AdjformEx(const Adjform& adjform, const AdjformEx::rational_type& value, const Ex& prefactor)
+	AdjformEx::AdjformEx(const Adjform& adjform, const AdjformEx::integer_type& value, const Ex& prefactor)
 		: prefactor(prefactor)
 	{
+		sizeof(mpq_class);
+		sizeof(int64_t);
 		set(adjform, value);
 	}
 
-	AdjformEx::AdjformEx(const Adjform& adjform, const rational_type& value, Ex::iterator prefactor)
+	AdjformEx::AdjformEx(const Adjform& adjform, const integer_type& value, Ex::iterator prefactor)
 		: prefactor(prefactor)
 	{
 		set(adjform, value);
@@ -412,7 +414,7 @@ namespace cadabra {
 		one(tensor_begin->multiplier);
 	}
 
-	AdjformEx::rational_type AdjformEx::compare(const AdjformEx& other) const
+	AdjformEx::integer_type AdjformEx::compare(const AdjformEx& other) const
 	{
 		// Early failure checks
 		if (data.empty() || data.size() != other.data.size())
@@ -421,7 +423,7 @@ namespace cadabra {
 		// Find the numeric factor between the first two terms, then loop over all
 		// other terms checking that the factor is the same. If not, return 0
 		auto a_it = data.begin(), b_it = other.data.begin(), a_end = data.end();
-		rational_type factor = a_it->second / b_it->second;
+		integer_type factor = a_it->second / b_it->second;
 		while (a_it != a_end) {
 			if (a_it->first != b_it->first)
 				return 0;
@@ -438,13 +440,13 @@ namespace cadabra {
 			add(kv.first, kv.second);
 	}
 
-	void AdjformEx::combine(const AdjformEx& other, AdjformEx::rational_type factor)
+	void AdjformEx::combine(const AdjformEx& other, AdjformEx::integer_type factor)
 	{
 		for (const auto& kv : other.data)
 			add(kv.first, kv.second * factor);
 	}
 
-	void AdjformEx::multiply(const AdjformEx::rational_type& k)
+	void AdjformEx::multiply(const AdjformEx::integer_type& k)
 	{
 		for (auto& kv : data)
 			kv.second *= k;
@@ -519,19 +521,19 @@ namespace cadabra {
 		return tensor;
 	}
 
-	const AdjformEx::rational_type& AdjformEx::get(const Adjform& adjform) const
+	const AdjformEx::integer_type& AdjformEx::get(const Adjform& adjform) const
 	{
 		auto pos = data.find(adjform);
 		return (pos == data.end()) ? zero : pos->second;
 	}
 
-	void AdjformEx::set(const Adjform& term, const AdjformEx::rational_type& value)
+	void AdjformEx::set(const Adjform& term, const AdjformEx::integer_type& value)
 	{
 		if (!term.empty())
 			set_(term, value);
 	}
 
-	void AdjformEx::set_(const Adjform& term, const AdjformEx::rational_type& value)
+	void AdjformEx::set_(const Adjform& term, const AdjformEx::integer_type& value)
 	{
 		if (value != 0)
 			data[term] = value;
@@ -539,13 +541,13 @@ namespace cadabra {
 			data.erase(term);
 	}
 
-	void AdjformEx::add(const Adjform& term, const AdjformEx::rational_type& value)
+	void AdjformEx::add(const Adjform& term, const AdjformEx::integer_type& value)
 	{
 		if (!term.empty())
 			add_(term, value);
 	}
 
-	void AdjformEx::add_(const Adjform& term, const AdjformEx::rational_type& value)
+	void AdjformEx::add_(const Adjform& term, const AdjformEx::integer_type& value)
 	{
 		auto elem = data.find(term);
 		if (elem == data.end() && value != 0) {

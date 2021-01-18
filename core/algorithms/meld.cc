@@ -342,8 +342,8 @@ bool similar_tensor_form(const Kernel& kernel, Ex& tr, Ex::iterator it1, Ex::ite
 meld::result_t meld::apply_tableaux(iterator it)
 {
 	using namespace boost::numeric::ublas;
-	using matrix_type = matrix<AdjformEx::rational_type>;
-	using vector_type = vector<AdjformEx::rational_type>;
+	using matrix_type = matrix<mpq_class>;
+	using vector_type = vector<mpq_class>;
 
 	result_t res = result_t::l_no_action;
 
@@ -368,7 +368,7 @@ meld::result_t meld::apply_tableaux(iterator it)
 		// ensure that when solving for linear dependence there are as many
 		// unknowns as equations
 		matrix_type coeffs;
-		LinearSolver<AdjformEx::rational_type> solver;
+		LinearSolver<mpq_class> solver;
 
 		// The adjform in position 'i' of 'mapping' represents the term corresponding
 		// to the 'i'th row of 'coeffs'
@@ -425,7 +425,7 @@ meld::result_t meld::apply_tableaux(iterator it)
 						// Ensure that the next term is bigger than any other term to begin with
 						Adjform next_term;
 						next_term.push_back(std::numeric_limits<Adjform::value_type>::max());
-						AdjformEx::rational_type sum = 0;
+						mpq_class sum = 0;
 						for (size_t i = 0; i < adjforms.size(); ++i) {
 							if (lhs_its[i] != adjforms[i].end() && lhs_its[i]->first == cur_term) {
 								sum += x(i) * lhs_its[i]->second;
@@ -437,7 +437,7 @@ meld::result_t meld::apply_tableaux(iterator it)
 								next_term = lhs_its[i]->first;
 						}
 
-						AdjformEx::rational_type rhs_sum;
+						mpq_class rhs_sum;
 						if (rhs_it == cur_adjform.end() || rhs_it->first != cur_term) {
 							rhs_sum = 0;
 						}
