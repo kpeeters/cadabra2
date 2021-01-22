@@ -1,7 +1,9 @@
 #include "../Config.hh"
+#include "../InstallPrefix.hh"
 #include <fstream>
 #include "py_helpers.hh"
 #include "nlohmann/json.hpp"
+#include <iostream>
 
 namespace cadabra {
 
@@ -27,13 +29,14 @@ namespace cadabra {
 
 	std::string read_manual(const char* category, const char* name)
 		{
-		std::ifstream ifs(std::string(CMAKE_INSTALL_PREFIX) + "/share/cadabra2/manual/" + category + "/" + name + ".cnb");
+		std::string manual_page = std::string(cadabra::cmake_install_prefix()) + "/share/cadabra2/manual/" + category + "/" + name + ".cnb";
+		std::ifstream ifs(manual_page);
 		try {
 			nlohmann::json root=nlohmann::json::parse(ifs);
 			return (*root["cells"].begin())["source"].get<std::string>();
 			}
 		catch(nlohmann::json::exception& ex) {
-			return "Failed to collect help information";
+			return "Failed to collect help information; no info at "+manual_page+".";
 			}
 		}
 

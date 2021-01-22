@@ -1,5 +1,6 @@
 #include "py_properties.hh"
 #include "py_kernel.hh"
+#include "py_helpers.hh"
 
 #include "properties/Accent.hh"
 #include "properties/AntiCommuting.hh"
@@ -223,7 +224,7 @@ namespace cadabra {
 //		using cpp_type = typename base_type::cpp_type;
 		using py_type = typename base_type::py_type;
 
-		return py_type(m, name.c_str(), py::multiple_inheritance())
+		return py_type(m, name.c_str(), py::multiple_inheritance(), read_manual("properties", name.c_str()).c_str())
 			.def_static("get", [](Ex_ptr ex, const std::string& label, bool ipr) { return base_type::get_from_kernel(ex->begin(), label, ipr); }, py::arg("ex"), py::arg("label") = "", py::arg("ignore_parent_rel") = false)
 			.def_static("get", [](ExNode node, const std::string& label, bool ipr) { return base_type::get_from_kernel(node.it, label, ipr); }, py::arg("exnode"), py::arg("label") = "", py::arg("ignore_parent_rel") = false)
 			.def("attach", &BoundPropT::attach)
@@ -239,14 +240,16 @@ namespace cadabra {
 		using cpp_type = typename base_type::cpp_type;
 		using py_type = typename base_type::py_type;
 
-		return py_type(m, std::make_shared<cpp_type>()->name().c_str(), py::multiple_inheritance())
+		return py_type(m, std::make_shared<cpp_type>()->name().c_str(), py::multiple_inheritance(), read_manual("properties", std::make_shared<cpp_type>()->name().c_str()).c_str())
 			.def(py::init<Ex_ptr, Ex_ptr>(), py::arg("ex"), py::arg("param")=Ex{})
+
 			.def_static("get", [](Ex_ptr ex, const std::string& label, bool ipr) { return base_type::get_from_kernel(ex->begin(), label, ipr); }, py::arg("ex"), py::arg("label") = "", py::arg("ignore_parent_rel") = false)
 			.def_static("get", [](ExNode node, const std::string& label, bool ipr) { return base_type::get_from_kernel(node.it, label, ipr); }, py::arg("exnode"), py::arg("label") = "", py::arg("ignore_parent_rel") = false)
 			.def("attach", &BoundPropT::attach)
 			.def("__str__", &BoundPropT::str_)
 			.def("__repr__", &BoundPropT::repr_)
-			.def("_latex_", &BoundPropT::latex_);
+			.def("_latex_", &BoundPropT::latex_)
+			;
 	}
 
 
@@ -395,10 +398,10 @@ namespace cadabra {
 		def_prop<Py_Vielbein>(m);
 		def_prop<Py_InverseVielbein>(m);
 
-		py::enum_<Indices::position_t>(py_indices, "position_t")
-			.value("free", Indices::free)
-			.value("fixed", Indices::fixed)
-			.value("independent", Indices::independent)
+		py::enum_<Indices::position_t>(py_indices, "position_t", "How to interpret the sub/super-script position of the indices.")
+			.value("free", Indices::free,   "Index positions are arbitrary.")
+			.value("fixed", Indices::fixed, "Index positions are fixed, but can be changed by canonicalisation.")
+			.value("independent", Indices::independent, "Index positions are independent and should never change.")
 			.export_values();
 
 

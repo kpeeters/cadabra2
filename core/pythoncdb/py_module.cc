@@ -23,6 +23,9 @@ namespace cadabra {
 
 	PYBIND11_MODULE(cadabra2, m)
 		{
+		py::options options;
+		options.disable_function_signatures();
+
 		m.def("init_ipython", &init_ipython);
 
 		// These must be initialized in the order of which

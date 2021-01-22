@@ -30,3 +30,9 @@ std::string cadabra::install_prefix()
 #endif
 	}
 
+const char *cadabra::cmake_install_prefix()
+	{
+	static const char prefix[]=CMAKE_INSTALL_PREFIX;
+
+	return prefix;
+	}
