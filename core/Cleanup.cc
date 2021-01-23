@@ -798,6 +798,12 @@ namespace cadabra {
 				ret=true;
 				zero(it->multiplier);
 				}
+		if(!(c1->is_rational() && c2->is_rational())) {
+			if(subtree_compare(0, c1, c2)!=0) {
+				ret=true;
+				zero(it->multiplier);
+				}
+			}
 
 		return ret;
 		}

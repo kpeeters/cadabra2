@@ -830,3 +830,14 @@ def test55():
    print("Test 55 passed")
 
 test55()
+
+def test56():
+   __cdbkernel__=create_scope()
+   {t,r}::Coordinate;
+   {a,b}::Indices(values={t,r},position=fixed);
+   A_{a b}::Diagonal;
+   ex:=A_{t r} + A_{r r} + A_{r t} + A_{t t};
+   assert(str(ex)=='A_{r r} + A_{t t}')
+   print("Test 56 passed")
+
+test56()
