@@ -8,7 +8,7 @@ if [ -f /etc/redhat-release ]; then
 else
     echo "Updating .deb system..."
     sudo apt update
-    sudo apt -y upgrade
+    sudo apt upgrade -y
 fi
 
 cd ${HOME}/cadabra2
