@@ -2,6 +2,15 @@
 
 #sudo rm -Rf ${HOME}/cadabra2
 #git clone https://github.com/kpeeters/cadabra2
+if [ -f /etc/redhat-release ]; then
+    echo "Updating .rpm system..."
+    sudo yum update -y
+else
+    echo "Updating .deb system..."
+    sudo apt get update
+    sudo apt get -y upgrade
+fi
+
 cd ${HOME}/cadabra2
 sudo ls 
 git pull origin
