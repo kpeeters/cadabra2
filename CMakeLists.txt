@@ -72,7 +72,7 @@ endif()
 #   )
 
 # Turn Mathematica support on/off.
-option(ENABLE_MATHEMATICA "Enable Mathematica support" ON)
+option(ENABLE_MATHEMATICA "Enable Mathematica support" OFF)
 
 # Are we trying to build cadabra as a c++ library?
 option(BUILD_AS_CPP_LIBRARY "Build cadabra as a C++ library" OFF)
