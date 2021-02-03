@@ -1,0 +1,91 @@
+{
+	"cell_id": 1093201800894685878,
+	"cells": [
+		{
+			"cell_id": 9551562792113345335,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 10193244651179153720,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "This is work-in-progress."
+				}
+			],
+			"hidden": true,
+			"source": "This is work-in-progress."
+		},
+		{
+			"cell_id": 13378244708702775521,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "{i,j,k,l,m,n,q}::Indices(space).\n{i,j,k,l,m,n,q}::Integer(1..4).\n{a,b,c,d,e,f,g}::Indices(group).\n{a,b,c,d,e,f,g}::Integer(1..3).\n\\epsilon^{a b c}::EpsilonTensor.\n\\epsilon_{i j k l}::EpsilonTensor.\n\\delta_{i j}::KroneckerDelta."
+		},
+		{
+			"cell_id": 14244909242721652665,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def thooft_symbols():\n   \\eta^{a}_{i j}::TableauSymmetry(shape={1,1}, indices={1,2}).\n   rl := { \\eta^{a}_{i j} \\eta^{a}_{k l} -> \\delta_{i k} \\delta_{j l} - \\delta_{i l} \\delta_{k j} + \\epsilon_{i j k l}, \n           \\epsilon^{a b c} \\eta^{b}_{i k} \\eta^{c}_{j l} -> -\\delta_{i j} \\eta^{a}_{k l} - \\delta_{k l} \\eta^{a}_{i j} \n               + \\delta_{i l} \\eta^{a}_{k j} + \\delta_{k j} \\eta^{a}_{i l},\n           \\eta^{a}_{i k} \\eta^{b}_{k j} -> -\\delta^{a b} \\delta_{i j} + \\epsilon^{a b c} \\eta^{c}_{i j}, \n           \\epsilon_{i j l k} \\eta^{a}_{l m} -> - \\delta_{i m} \\eta^{a}_{j k} - \\delta_{j m} \\eta^{a}_{k i} - \\delta_{k m} \\eta^{a}_{i j},\n           \\epsilon_{i j k l} \\eta^{a}_{k l} -> - 2 \\eta^{a}_{i j} \n         }:\n   return rl"
+		},
+		{
+			"cell_id": 12233334157585209624,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 5794629913266740770,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16176927491324925232,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\eta^{a}_{i j} \\eta^{a}_{k l}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\eta^{a}\\,_{i j} \\eta^{a}\\,_{k l}\\end{dmath*}"
+				},
+				{
+					"cell_id": 8908317684532789837,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5106167770278682541,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "{\\eta^{a}_{i j} \\eta^{a}_{k l} -> \\delta_{i k} \\delta_{j l}-\\delta_{i l} \\delta_{k j} + \\epsilon_{i j k l}, \\epsilon^{a b c} \\eta^{b}_{i k} \\eta^{c}_{j l} -> -\\delta_{i j} \\eta^{a}_{k l}-\\delta_{k l} \\eta^{a}_{i j} + \\delta_{i l} \\eta^{a}_{k j} + \\delta_{k j} \\eta^{a}_{i l}, \\eta^{a}_{i k} \\eta^{b}_{k j} -> -\\delta^{a b} \\delta_{i j} + \\epsilon^{a b c} \\eta^{c}_{i j}, \\epsilon_{i j l k} \\eta^{a}_{l m} -> -\\delta_{i m} \\eta^{a}_{j k}-\\delta_{j m} \\eta^{a}_{k i}-\\delta_{k m} \\eta^{a}_{i j}, \\epsilon_{i j k l} \\eta^{a}_{k l} -> -2\\eta^{a}_{i j}}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left[\\eta^{a}\\,_{i j} \\eta^{a}\\,_{k l} \\rightarrow \\delta_{i k} \\delta_{j l}-\\delta_{i l} \\delta_{k j}+\\epsilon_{i j k l},~\\discretionary{}{}{} \\epsilon^{a b c} \\eta^{b}\\,_{i k} \\eta^{c}\\,_{j l} \\rightarrow -\\delta_{i j} \\eta^{a}\\,_{k l}-\\delta_{k l} \\eta^{a}\\,_{i j}+\\delta_{i l} \\eta^{a}\\,_{k j}+\\delta_{k j} \\eta^{a}\\,_{i l},~\\discretionary{}{}{} \\eta^{a}\\,_{i k} \\eta^{b}\\,_{k j} \\rightarrow -\\delta^{a b} \\delta_{i j}+\\epsilon^{a b c} \\eta^{c}\\,_{i j},~\\discretionary{}{}{} \\epsilon_{i j l k} \\eta^{a}\\,_{l m} \\rightarrow -\\delta_{i m} \\eta^{a}\\,_{j k}-\\delta_{j m} \\eta^{a}\\,_{k i}-\\delta_{k m} \\eta^{a}\\,_{i j},~\\discretionary{}{}{} \\epsilon_{i j k l} \\eta^{a}\\,_{k l} \\rightarrow -2\\eta^{a}\\,_{i j}\\right]\\end{dmath*}"
+				},
+				{
+					"cell_id": 1907482009801816494,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7793857489603711042,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\delta_{i k} \\delta_{j l}-\\delta_{i l} \\delta_{k j} + \\epsilon_{i j k l}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\delta_{i k} \\delta_{j l}-\\delta_{i l} \\delta_{k j}+\\epsilon_{i j k l}\\end{dmath*}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "ex:=\\eta^{a}_{i j} \\eta^{a}_{k l};\nsubstitute(ex, thooft_symbols());"
+		},
+		{
+			"cell_id": 18158312902258495406,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}
