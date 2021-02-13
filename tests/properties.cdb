@@ -1,0 +1,22 @@
+
+def test01():
+    __cdbkernel__=create_scope()
+    try:
+        {c,d}::Coordinate;
+        {a,b,c,d}::Indices;
+        assert(1==0)
+    except RuntimeError as e:
+        print("Test 01 passed")
+
+test01()
+
+def test02():
+    __cdbkernel__=create_scope()
+    try:
+        {a,b,c,d}::Indices;
+        {c,d}::Coordinate;
+        assert(1==0)
+    except RuntimeError as e:
+        print("Test 02 passed")
+
+test02()
