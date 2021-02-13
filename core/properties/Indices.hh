@@ -15,7 +15,8 @@ namespace cadabra {
 				return "name";
 				};
 			virtual match_t equals(const property *) const override;
-
+			virtual void    validate(const Kernel&, const Ex&) const;
+			
 			//		virtual void display(std::ostream&) const override;
 			virtual void latex(std::ostream&) const override;
 

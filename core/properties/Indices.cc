@@ -2,6 +2,7 @@
 #include "Kernel.hh"
 #include "properties/Indices.hh"
 #include "properties/Integer.hh"
+#include "properties/Coordinate.hh"
 #include "Exceptions.hh"
 #include "Functional.hh"
 
@@ -107,6 +108,17 @@ void Indices::latex(std::ostream& str) const
 			break;
 		}
 	}
+
+void Indices::validate(const Kernel& k, const Ex& ex) const
+	{
+	do_list(ex, ex.begin(), [&k](Ex::iterator i) {
+									if(k.properties.get<Coordinate>(i))
+										throw ConsistencyException("Object already has a Coordinate property attached to it.");
+									return true;
+									}
+		);
+	}
+
 
 void Indices::collect_index_values(Ex::iterator ind_values)
 	{

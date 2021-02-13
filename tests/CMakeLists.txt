@@ -85,6 +85,7 @@ set(RTESTS
   substitute
   canonicalise
   derivative
+  properties
   relativity
   spinors
   sympy_cdb
