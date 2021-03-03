@@ -111,7 +111,8 @@ void run_python_functions(std::shared_ptr<Ex> ex, Kernel *kernel)
 			
 			Ex repl = res.cast<Ex>();
 			Ex::iterator tmpit=it;
-			ex->move_ontop(tmpit, repl.begin());
+			rset_t::iterator mult=tmpit->multiplier;
+			ex->move_ontop(tmpit, repl.begin())->multiplier=mult;
 			}
 		it=nxt;
 		}
