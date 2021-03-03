@@ -35,7 +35,7 @@ Algorithm::result_t expand_delta::apply(iterator& st)
 	// tensors in the product (if any). Store these sets in `implicit_sets`.
 	std::vector<std::vector<Ex>> implicit_sets;
 	
-	if(*(tr.parent(st)->name)=="\\prod") {
+	if(tr.is_head(st)==false && *(tr.parent(st)->name)=="\\prod") {
 		sibling_iterator oth=tr.begin(tr.parent(st));
 		while(oth!=tr.end(tr.parent(st))) {
 			if(oth!=st) {
