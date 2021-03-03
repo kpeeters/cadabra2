@@ -630,8 +630,9 @@ void NotebookWindow::on_connect()
 	// semicolon to the end of it and then remove the (empty) last element of the resulting list
 	if (!trim(prefs.python_path).empty())
 		console.send_input("sys.path = r'''" + prefs.python_path + ";'''.split(';')[:-1] + sys.path");
-	if (!name.empty())
-		console.send_input("sys.path.insert(0, r'''" + name.substr(0, name.find_last_of("\\/")) + "''')");
+	if (!name.empty()) {
+		console.send_input("os.chdir(r'''" + name.substr(0, name.find_last_of("\\/")) + "''')");
+	}
 	}
 
 void NotebookWindow::on_disconnect(const std::string& reason)
@@ -1506,7 +1507,7 @@ void NotebookWindow::on_file_save_as()
 			else {
 				modified=false;
 				update_title();
-			console.send_input("sys.path.remove(r'''" + old_name.substr(0, old_name.find_last_of("\\/")) + "'''); sys.path.insert(0, r'''" + name.substr(0, name.find_last_of("\\/")) + "''')");
+				console.send_input("os.chdir(r'''" + name.substr(0, name.find_last_of("\\/")) + "''')");
 				}
 			break;
 			}
