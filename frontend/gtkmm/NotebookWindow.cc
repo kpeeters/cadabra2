@@ -2174,7 +2174,7 @@ void NotebookWindow::compare_git_latest()
 		auto commit = run_git_command("log --pretty=format:%h -n 1");
 		compare_git(trim(commit));
 		}
-	catch (const std::runtime_error& ex) {
+	catch (const std::exception& ex) {
 		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 		error_dialog.set_transient_for(*this);
 		error_dialog.set_title("Git error");
@@ -2247,7 +2247,7 @@ void NotebookWindow::compare_git_choose()
 
 		compare_git(trim(commit_hash));
 		}
-	catch (const std::runtime_error& ex) {
+	catch (const std::exception& ex) {
 		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 		error_dialog.set_transient_for(*this);
 		error_dialog.set_title("Git error");
@@ -2280,7 +2280,7 @@ void NotebookWindow::compare_git_specific()
 
 		compare_git(trim(commit_hash));
 		}
-	catch (const std::runtime_error& ex) {
+	catch (const std::exception& ex) {
 		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 		error_dialog.set_transient_for(*this);
 		error_dialog.set_title("Git error");

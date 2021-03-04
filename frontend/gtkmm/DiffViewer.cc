@@ -186,7 +186,7 @@ DiffViewer::Cells DiffViewer::make_cells(std::istream& stream)
 	stream >> nb;
 	nb = nb["cells"];
 	for (auto it = nb.begin(); it != nb.end(); ++it) {
-		ret.first.push_back((*it)["cell_id"].get<std::string>());
+		ret.first.push_back(std::to_string((*it)["cell_id"].get<uint64_t>()));
 		ret.second.push_back((*it)["source"].get<std::string>());
 		}
 
