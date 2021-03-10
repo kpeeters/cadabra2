@@ -2201,7 +2201,6 @@ class GitChooseModelColumns : public Gtk::TreeModel::ColumnRecord {
 
 void NotebookWindow::compare_git_choose()
 	{
-#ifndef _MSC_VER
 	try {
 		std::string commit_hash;
 		std::string max_entries = "15";
@@ -2253,12 +2252,6 @@ void NotebookWindow::compare_git_choose()
 		error_dialog.set_title("Git error");
 		error_dialog.run();
 		}
-#else
-	Gtk::MessageDialog not_supported_dialog("Due to a bug in the Windows version of Gtkmm this feature isn't currently supported. Sorry for the inconvenience!");
-	not_supported_dialog.set_transient_for(*this);
-	not_supported_dialog.set_title("Feature not supported");
-	not_supported_dialog.run();
-#endif
 	}
 
 void NotebookWindow::compare_git_specific()
