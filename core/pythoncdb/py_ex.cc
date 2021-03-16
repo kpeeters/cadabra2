@@ -283,6 +283,17 @@ namespace cadabra {
 		return str.str();
 		}
 
+	Ex_comparator::match_t ExNode_compare(const ExNode& lhs, const ExNode& rhs, const std::string& use_props, bool ignore_parent_rel)
+	{
+		Ex_comparator comp(get_kernel_from_scope()->properties);
+		Ex_comparator::useprops_t up = Ex_comparator::useprops_t::always;
+		if (use_props == "not_at_top")
+			up = Ex_comparator::useprops_t::not_at_top;
+		else if (use_props == "never")
+			up = Ex_comparator::useprops_t::never;
+		return comp.equal_subtree(lhs.it, rhs.it, up, ignore_parent_rel);
+	}
+
 	std::string print_tree(Ex *ex)
 		{
 		std::ostringstream str;
@@ -549,6 +560,16 @@ namespace cadabra {
 		.export_values()
 		;
 
+		pybind11::enum_<Ex_comparator::match_t>(m, "match_t")
+			.value("node_match", Ex_comparator::match_t::node_match)
+			.value("subtree_match", Ex_comparator::match_t::subtree_match)
+			.value("match_index_less", Ex_comparator::match_t::match_index_less)
+			.value("match_index_greater", Ex_comparator::match_t::match_index_greater)
+			.value("no_match_indexpos_less", Ex_comparator::match_t::no_match_indexpos_less)
+			.value("no_match_indexpos_greater", Ex_comparator::match_t::no_match_indexpos_greater)
+			.value("no_match_less", Ex_comparator::match_t::no_match_less)
+			.value("no_match_greater", Ex_comparator::match_t::no_match_greater);
+
 		pybind11::class_<Ex, Ex_ptr >(m, "Ex")
 		.def(py::init(&Ex_from_string), py::arg("input_form"), py::arg("make_ref") = true, py::arg("kernel") = nullptr)
 		.def(py::init(&Ex_from_int), py::arg("num"), py::arg("make_ref") = true)
@@ -612,6 +633,8 @@ namespace cadabra {
 			.def("append_child", &ExNode::append_child_it, "Append the node pointed to by the given ExNode as a child of the node pointed to by the ExNode.")
 			.def("erase", &ExNode::erase, "Erase the node pointed to by the ExNode.")
 			.def("ex", &ExNode::get_ex, "Obtain a copy of the node pointed to by the ExNode.")
+			.def("compare", &ExNode_compare,
+				py::arg("other"), py::arg("use_props") = "always", py::arg("ignore_parent_rel") = false)
 			.def_property("name", &ExNode::get_name, &ExNode::set_name, "Set the name property of the node pointed to by the ExNode.")
 			.def_property("parent_rel", &ExNode::get_parent_rel, &ExNode::set_parent_rel)
 			.def_property("multiplier", &ExNode::get_multiplier, &ExNode::set_multiplier)

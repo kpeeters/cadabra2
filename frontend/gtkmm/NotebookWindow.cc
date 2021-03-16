@@ -630,8 +630,9 @@ void NotebookWindow::on_connect()
 	// semicolon to the end of it and then remove the (empty) last element of the resulting list
 	if (!trim(prefs.python_path).empty())
 		console.send_input("sys.path = r'''" + prefs.python_path + ";'''.split(';')[:-1] + sys.path");
-	if (!name.empty())
-		console.send_input("sys.path.insert(0, r'''" + name.substr(0, name.find_last_of("\\/")) + "''')");
+	if (!name.empty()) {
+		console.send_input("os.chdir(r'''" + name.substr(0, name.find_last_of("\\/")) + "''')");
+	}
 	}
 
 void NotebookWindow::on_disconnect(const std::string& reason)
@@ -1506,7 +1507,7 @@ void NotebookWindow::on_file_save_as()
 			else {
 				modified=false;
 				update_title();
-			console.send_input("sys.path.remove(r'''" + old_name.substr(0, old_name.find_last_of("\\/")) + "'''); sys.path.insert(0, r'''" + name.substr(0, name.find_last_of("\\/")) + "''')");
+				console.send_input("os.chdir(r'''" + name.substr(0, name.find_last_of("\\/")) + "''')");
 				}
 			break;
 			}
@@ -2173,7 +2174,7 @@ void NotebookWindow::compare_git_latest()
 		auto commit = run_git_command("log --pretty=format:%h -n 1");
 		compare_git(trim(commit));
 		}
-	catch (const std::runtime_error& ex) {
+	catch (const std::exception& ex) {
 		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 		error_dialog.set_transient_for(*this);
 		error_dialog.set_title("Git error");
@@ -2200,7 +2201,6 @@ class GitChooseModelColumns : public Gtk::TreeModel::ColumnRecord {
 
 void NotebookWindow::compare_git_choose()
 	{
-#ifndef _MSC_VER
 	try {
 		std::string commit_hash;
 		std::string max_entries = "15";
@@ -2246,18 +2246,12 @@ void NotebookWindow::compare_git_choose()
 
 		compare_git(trim(commit_hash));
 		}
-	catch (const std::runtime_error& ex) {
+	catch (const std::exception& ex) {
 		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 		error_dialog.set_transient_for(*this);
 		error_dialog.set_title("Git error");
 		error_dialog.run();
 		}
-#else
-	Gtk::MessageDialog not_supported_dialog("Due to a bug in the Windows version of Gtkmm this feature isn't currently supported. Sorry for the inconvenience!");
-	not_supported_dialog.set_transient_for(*this);
-	not_supported_dialog.set_title("Feature not supported");
-	not_supported_dialog.run();
-#endif
 	}
 
 void NotebookWindow::compare_git_specific()
@@ -2279,7 +2273,7 @@ void NotebookWindow::compare_git_specific()
 
 		compare_git(trim(commit_hash));
 		}
-	catch (const std::runtime_error& ex) {
+	catch (const std::exception& ex) {
 		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 		error_dialog.set_transient_for(*this);
 		error_dialog.set_title("Git error");

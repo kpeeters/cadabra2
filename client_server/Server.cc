@@ -15,6 +15,7 @@
 
 #include "nlohmann/json.hpp"
 #include <internal/uuid.h>
+#include <internal/string_tools.h>
 
 #include "Config.hh"
 //#ifndef ENABLE_JUPYTER
@@ -96,6 +97,43 @@ PYBIND11_EMBEDDED_MODULE(cadabra2_internal, m)
 	.def("handles", &Server::handles)
 	.def("architecture", &Server::architecture);
 	}
+
+std::string parse_error(const std::string& error, const std::string& input)
+{
+	try {
+		// Find syntax errors
+		std::regex syntax_error(R"(SyntaxError: \('([^']+)', \('<string>', (\d+), (\d+),.*)");
+		std::smatch sm;
+		if (std::regex_match(error, sm, syntax_error)) {
+			std::string error_type = sm[1];
+			size_t line_no = stoi(sm[2]) - 1;
+			size_t col_no = stoi(sm[3]);
+			return
+				"SyntaxError: " + error_type + "\n" +
+				"Line " + std::to_string(line_no) + ", column " + std::to_string(col_no) + "\n" + 
+				nth_line(input, line_no - 1) + "\n" +
+				std::string(col_no > 1 ? col_no - 2 : 0, ' ') + "^";
+		}
+
+		// Find other errors
+		std::regex exception_name(R"(([a-zA-Z_][a-zA-Z0-9_]*):.*)");
+		std::string first_line = nth_line(error, 0);
+		if (std::regex_match(first_line, sm, exception_name)) {
+			std::string name = sm[1];
+			std::regex line_no(R"(<string>\((\d+)\): <module>)");
+			std::smatch lm;
+			if (std::regex_search(error, lm, line_no)) {
+				size_t l = stoi(lm[1]) - 1;
+				return std::regex_replace(error, line_no, "Notebook Cell (Line " + std::to_string(l) + "): " + nth_line(input, l - 1));
+			}
+		}
+
+		return error;
+	}
+	catch (std::exception& e) {
+		return error;
+	}
+}
 
 void Server::init()
 	{
@@ -197,7 +235,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 		//    https://github.com/pybind/pybind11/issues/1490
 		// Note: the restore() has the side effect of making the
 		// error come back on any future pybind11::exec() call.
-		std::string reason=ex.what();
+		std::string reason=parse_error(ex.what(), newblk);
 		ex.restore();
 		throw std::runtime_error(reason);
 		}

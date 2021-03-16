@@ -64,12 +64,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 9660593814012393825,
+					"cell_id": 15753048423258376233,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 3115174394999505411,
+							"cell_id": 14599138290757730189,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "b + c + d -> a"
@@ -78,6 +78,7 @@
 					"source": "\\begin{dmath*}{}b+c+d \\rightarrow a\\end{dmath*}"
 				}
 			],
+			"ignore_on_import": true,
 			"source": "eq_to_subrule($a = b + c + d$);"
 		},
 		{
@@ -195,14 +196,13 @@
 					"source": "\\algorithm{apply_through(ex: Ex, op: Ex) -> Ex}{Apply an operator through both sides of an equation.}"
 				}
 			],
-			"hidden": true,
 			"source": "\\algorithm{apply_through(ex: Ex, op: Ex) -> Ex}{Apply an operator through both sides of an equation.}"
 		},
 		{
 			"cell_id": 7129671199504928557,
 			"cell_origin": "client",
 			"cell_type": "input",
-			"source": "def apply_through(ex, op):\n\tfor part in ex.top().children():\n\t\tpart.replace($@(op){@(part)}$)\n\treturn ex"
+			"source": "def apply_through(ex, op):\n\tfor child in ex.top().children():\n\t\tapp := @(op);\n\t\tfor node in app[\"#\"]:\n\t\t\tnode.replace($@(child)$)\n\t\tchild.replace($@(app)$)\n\treturn ex"
 		},
 		{
 			"cell_id": 1222096101185570042,
@@ -210,12 +210,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 8996600129604686681,
+					"cell_id": 7950008471833711645,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 1736617114436561176,
+							"cell_id": 10130557258786852976,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\partial(\\partial(x_{\\mu})) = \\partial(0)"
@@ -225,7 +225,7 @@
 				}
 			],
 			"ignore_on_import": true,
-			"source": "apply_through($\\partial{x_{\\mu}} = 0$, $\\partial$);"
+			"source": "apply_through($\\partial{x_{\\mu}} = 0$, $\\partial{#}$);"
 		},
 		{
 			"cell_id": 3411326601020319930,
