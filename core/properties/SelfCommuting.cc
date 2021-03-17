@@ -10,5 +10,5 @@ std::string SelfCommuting::name() const
 
 int SelfCommuting::sign() const
 	{
-	return -1;
+	return 1;
 	}
