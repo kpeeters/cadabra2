@@ -15,24 +15,28 @@ namespace cadabra {
 		return list;
 		}
 
-
 	ProgressMonitor *get_progress_monitor()
 		{
-		ProgressMonitor *pm = nullptr;
-
 		try {
 			pybind11::dict globals = get_globals();
+			ProgressMonitor* pm;
 			if (scope_has(globals, "__cdb_progress_monitor__")) {
 				pm = globals["__cdb_progress_monitor__"].cast<ProgressMonitor*>();
-				return pm;
 				}
-			pm = new ProgressMonitor();
-			globals["__cdb_progress_monitor__"] = pm;
+			else {
+				if (scope_has(globals, "server") && globals["server"].attr("send_progress_update")) {
+					pm = new ProgressMonitor(globals["server"].attr("send_progress_update"));
+				}
+				else
+					pm = new ProgressMonitor();
+				globals["__cdb_progress_monitor__"] = pm;
+				}
+			return pm;
 			}
 		catch (pybind11::error_already_set& ex) {
 			std::cerr << "*!?!?" << ex.what() << std::endl;
+			return nullptr;
 			}
-		return pm;
 		}
 
 

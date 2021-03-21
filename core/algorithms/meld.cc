@@ -23,7 +23,7 @@ std::string ex_to_string(const Kernel& kernel, const Ex& ex)
 	std::ostringstream ss;
 	DisplayTerminal dt(kernel, ex, true);
 	dt.output(ss);
-	return "$" + ss.str() + "$";
+	return ss.str();
 }
 
 std::string ex_to_string(const Kernel& kernel, Ex::iterator it)
@@ -409,6 +409,8 @@ meld::result_t meld::apply_tableaux(iterator it)
 	}
 
 	for (auto& terms : patterns) {
+		ScopedProgressGroup group(pm, "Melding terms of form " + ex_to_string(kernel, terms[0]), terms.size());
+
 		// 'coeffs' is a square matrix which enough terms of the young projection to
 		// ensure that when solving for linear dependence there are as many
 		// unknowns as equations
@@ -422,6 +424,7 @@ meld::result_t meld::apply_tableaux(iterator it)
 		// A list of all the adjforms encountered so far
 		std::vector<AdjformEx> adjforms;
 		for (size_t term_idx = 0; term_idx < terms.size(); ++term_idx) {
+			group.progress();
 			auto cur_adjform = symmetrize(terms[term_idx]);
 			if (cur_adjform.empty()) {
 				// Empty adjform means that the term is identically

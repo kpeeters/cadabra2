@@ -108,17 +108,19 @@ Algorithm::result_t simplify::apply(iterator& it)
 		switch(kernel.scalar_backend) {
 			case Kernel::scalar_backend_t::sympy:
 				wrap.push_back("simplify");
-				if(pm) pm->group("sympy");
-				sympy::apply(kernel, prod, top, wrap, args_, "");
-				if(pm) pm->group();
+					{
+					ScopedProgressGroup group(pm, "sympy");
+					sympy::apply(kernel, prod, top, wrap, args_, "");
+					}
 				break;
 			case Kernel::scalar_backend_t::mathematica:
 #ifdef MATHEMATICA_FOUND
 				wrap.push_back("FullSimplify");
 				//				args_.push_back("Trig -> False");
-				if(pm) pm->group("mathematica");
-				MMA::apply_mma(kernel, prod, top, wrap, args_, "");
-				if(pm) pm->group();
+				{
+					ScopedProgressGroup(pm, "mathematica");
+					MMA::apply_mma(kernel, prod, top, wrap, args_, "");
+				}
 #endif
 				break;
 			}

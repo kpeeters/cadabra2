@@ -87,7 +87,7 @@ class Server {
 		/// Returns the serial number of the new cell sent.
 
 		virtual uint64_t         send(const std::string& output, const std::string& msg_type, uint64_t parent_id=0, bool last_in_sequence=false);
-
+		void                     send_progress_update(const std::string& msg, int n, int total);
 		void                     send_json(const std::string&);
 
 		bool handles(const std::string& otype) const;

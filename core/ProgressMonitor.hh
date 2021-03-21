@@ -6,6 +6,7 @@
 #include <stack>
 #include <map>
 #include <vector>
+#include <functional>
 
 /// \ingroup core
 ///
@@ -15,7 +16,7 @@
 
 class ProgressMonitor {
 	public:
-		ProgressMonitor();
+		ProgressMonitor(std::function<void(const std::string&, int, int)> report = nullptr, int report_level = 2);
 		virtual ~ProgressMonitor();
 
 		/// Start a new named group, or close the innermost one in case
@@ -24,14 +25,14 @@ class ProgressMonitor {
 		/// object, one for each group name. These `Totals` blocks can
 		/// be retrieved from the `totals` function.
 		/// FIXME: call this `block`.
-		
-		void group(std::string name="");
+		void group(std::string name = "", int total = 0, int level = -1);
 
 		/// Set the progress of the current top-level block to be `n`
 		/// out of `total` steps. It is possible to change `totals` at
 		/// every call (e.g. in situations where the algorithm cannot
 		/// possibly figure out how many total steps there are to take.
-		
+		void progress(); // Increment current step by 1
+		void progress(int n);
 		void progress(int n, int total);
 
 		/// Log out-of-band messages to the current block.
@@ -42,6 +43,11 @@ class ProgressMonitor {
 		
 		void print() const;
 
+		/// Callback for reporting a progress update
+		std::function<void(const std::string&, int, int)> report;
+
+		// Level above which to report progress updates and not only add to totals
+		int report_level;
 
 		/// Object to accumulate total time and call counts for a
 		/// particular named execution group.
@@ -66,7 +72,6 @@ class ProgressMonitor {
 		std::vector<Total> totals() const;
 
 	private:
-
 		/// A single element of the nested `group` call stack.  Every
 		/// time a `group` function is called with a non-empty name,
 		/// a new `Block` is pushed onto the call stack. When `group`
@@ -77,12 +82,13 @@ class ProgressMonitor {
 		
 		class Block {
 			public:
-				Block();
+				Block(const std::string& name, int level);
 
 				std::string               name;
 				std::chrono::milliseconds started;
 				int                       step, total_steps;
-				std::vector<std::string>  messages;                
+				std::vector<std::string>  messages;
+				int level;
 			};
 
 		std::stack<Block>            call_stack;
@@ -90,3 +96,16 @@ class ProgressMonitor {
 	};
 
 
+class ScopedProgressGroup
+{
+public:
+	ScopedProgressGroup(ProgressMonitor* pm, const std::string& name, int total = 0, int level = -1);
+	~ScopedProgressGroup();
+
+	void progress();
+	void progress(int n);
+	void progress(int n, int total);
+
+private:
+	ProgressMonitor* pm;
+};

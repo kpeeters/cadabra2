@@ -394,13 +394,14 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	status_label.set_size_request(200,-1);
 	status_label.set_justify(Gtk::JUSTIFY_LEFT);
 	kernel_label.set_justify(Gtk::JUSTIFY_LEFT);
+	kernel_label.set_text("server: not connected");
 	statusbarbox.pack_start(status_label);
 	statusbarbox.pack_start(kernel_label);
 	statusbarbox.pack_start(kernel_spinner);
 	statusbarbox.pack_start(progressbar);
 	statusbarbox.set_name("statusbar");
 	progressbar.set_size_request(200,-1);
-	progressbar.set_text("idle");
+	progressbar.set_text("Idle");
 	progressbar.set_show_text(true);
 
 	searchentry.signal_search_changed().connect(sigc::mem_fun(*this, &NotebookWindow::on_search_text_changed));
@@ -637,7 +638,7 @@ void NotebookWindow::on_connect()
 		console.send_input("sys.path = r'''" + prefs.python_path + ";'''.split(';')[:-1] + sys.path");
 	if (!name.empty()) {
 		console.send_input("os.chdir(r'''" + name.substr(0, name.find_last_of("\\/")) + "''')");
-	}
+		}
 	}
 
 void NotebookWindow::on_disconnect(const std::string& reason)
@@ -672,7 +673,7 @@ void NotebookWindow::process_todo_queue()
 	// Update the status/kernel messages into the corresponding widgets.
 		{
 		std::lock_guard<std::mutex> guard(status_mutex);
-		kernel_label.set_text(kernel_string);
+		kernel_label.set_text("server: " + kernel_string);
 
 		if(kernel_spinner_status) {
 			kernel_spinner.show();
@@ -944,6 +945,23 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 void NotebookWindow::on_interactive_output(const nlohmann::json& msg)
 	{
 	console.signal_message(msg);
+	}
+
+void NotebookWindow::set_progress(const std::string& msg, int cur_step, int total_steps, bool pulse)
+	{
+	std::lock_guard<std::mutex> guard(status_mutex);
+	if (total_steps == 0) {
+		progressbar.set_text(msg);
+		progressbar.set_fraction(0.0);
+		}
+	else {
+		double frac = (double)cur_step / total_steps;
+		progressbar.set_text(msg + " (" + std::to_string(cur_step) + "/" + std::to_string(total_steps) + ")");
+		progressbar.set_fraction(frac);
+		}
+
+	if (pulse)
+		progressbar.pulse();
 	}
 
 void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)

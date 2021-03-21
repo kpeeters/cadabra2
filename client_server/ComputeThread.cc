@@ -322,6 +322,13 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		root["header"]["from_server"] = true;
 		docthread->on_interactive_output(root);
 		}
+	else if (msg_type == "progress_update") {
+		std::string msg = content.value<std::string>("msg", "Idle");
+		int n = content.value<int>("n", 0);
+		int total = content.value<int>("total", 0);
+		int pulse = content.value<bool>("pulse", false);
+		docthread->set_progress(msg, n, total, pulse);
+	}
 	else if(msg_type=="completed") {
 		// std::cerr << "received completion of " << content["original"] << " -> " << content["completed"] << std::endl;
 

@@ -1062,11 +1062,11 @@ void evaluate::simplify_components(iterator it)
 		auto rhs1 = tr.begin(eqs);
 		++rhs1;
 		iterator nd=rhs1;
-		if(pm) pm->group("scalar_backend");
-		// std::cerr << "simplify at " << Ex(nd) << std::endl;
-		simp.apply_generic(nd, false, false, 0);
-		if(pm) pm->group();
-
+			{
+			ScopedProgressGroup group(pm, "scalar_backend");
+			// std::cerr << "simplify at " << Ex(nd) << std::endl;
+			simp.apply_generic(nd, false, false, 0);
+			}
 		if(nd->is_zero()) {
 			// std::cerr << "component zero " << nd.node << std::endl;
 			tr.erase(eqs);

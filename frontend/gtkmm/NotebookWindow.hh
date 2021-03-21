@@ -110,7 +110,7 @@ namespace cadabra {
 			virtual void set_compute_thread(ComputeThread* compute) override;
 
 			virtual void on_interactive_output(const nlohmann::json& msg) override;
-
+			virtual void set_progress(const std::string& msg, int cur_step, int total_steps, bool pulse) override;
 		protected:
 			virtual bool on_key_press_event(GdkEventKey*) override;
 			virtual bool on_delete_event(GdkEventAny*) override;
@@ -188,7 +188,7 @@ namespace cadabra {
 			void on_file_close();
 			void on_file_save();
 			void on_file_save_as();
-			void on_file_save_as_jupyter();			
+			void on_file_save_as_jupyter();
 			void on_file_export_html();
 			void on_file_export_html_segment();
 			void on_file_export_latex();

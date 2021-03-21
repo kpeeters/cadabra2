@@ -68,11 +68,9 @@ void Algorithm::set_progress_monitor(ProgressMonitor *pm_)
 Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
 	{
 #if BOOST_VERSION > 105500
-	if(pm)
-		pm->group(boost::core::demangle(typeid(*this).name()).c_str());
+	ScopedProgressGroup(pm, boost::core::demangle(typeid(*this).name()));
 #else
-	if(pm)
-		pm->group(typeid(*this).name());
+	ScopedProgressGroup(typeid(*this).name());
 #endif
 	
 	result_t ret=result_t::l_no_action;
@@ -101,7 +99,6 @@ Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
 
 	cleanup_dispatch_deep(kernel, tr);
 
-	if(pm) pm->group();
 	return ret;
 	}
 
@@ -114,11 +111,9 @@ Algorithm::result_t Algorithm::apply_generic(bool deep, bool repeat, unsigned in
 Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool repeat, unsigned int depth)
 	{
 #if BOOST_VERSION > 105500
-	if(pm)
-		pm->group(boost::core::demangle(typeid(*this).name()).c_str());
+	ScopedProgressGroup(pm, boost::core::demangle(typeid(*this).name()));
 #else
-	if(pm)
-		pm->group(typeid(*this).name());
+	ScopedProgressGroup(typeid(*this).name());
 #endif
 
 	result_t ret=result_t::l_no_action;
@@ -190,7 +185,6 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 	//		std::cerr << "exit apply_generic\n" << Ex(it) << std::endl;
 	//		}
 
-	if(pm) pm->group();
 	return ret;
 	}
 

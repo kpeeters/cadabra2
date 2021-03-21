@@ -95,7 +95,8 @@ PYBIND11_EMBEDDED_MODULE(cadabra2_internal, m)
 	pybind11::class_<Server>(m, "Server")
 	.def("send", &Server::send)
 	.def("handles", &Server::handles)
-	.def("architecture", &Server::architecture);
+	.def("architecture", &Server::architecture)
+	.def("send_progress_update", &Server::send_progress_update);
 	}
 
 std::string parse_error(const std::string& error, const std::string& input)
@@ -505,6 +506,29 @@ uint64_t Server::send(const std::string& output, const std::string& msg_type, ui
 
 	return return_cell_id;
 	}
+
+void Server::send_progress_update(const std::string& msg, int n, int total)
+{
+	nlohmann::json json, content, header;
+
+	header["parent_id"] = 0;
+	header["parent_origin"] = "client";
+	header["cell_id"] = 0;
+	header["cell_origin"] = "server";
+
+	content["msg"] = msg;
+	content["n"] = n;
+	content["total"] = total;
+
+	json["header"] = header;
+	json["content"] = content;
+	json["msg_type"] = "progress_update";
+
+	std::ostringstream str;
+	str << json << std::endl;
+
+	send_json(str.str());
+}
 
 void Server::send_json(const std::string& msg)
 	{
