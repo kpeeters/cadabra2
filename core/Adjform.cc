@@ -146,6 +146,18 @@ namespace cadabra {
 		return data != other.data;
 	}
 
+	Adjform& Adjform::operator *= (const Adjform& other)
+	{
+		for (auto index : other)
+			push_back(index);
+		return *this;
+	}
+
+	Adjform operator * (Adjform lhs, const Adjform& rhs)
+	{
+		return lhs *= rhs;
+	}
+
 	Adjform::const_reference Adjform::operator [] (Adjform::size_type idx) const
 	{
 		return data[idx];
@@ -412,6 +424,49 @@ namespace cadabra {
 		Ex::iterator tensor_begin = tensor.begin();
 		cleanup_dispatch(kernel, tensor, tensor_begin);
 		one(tensor_begin->multiplier);
+	}
+
+	AdjformEx& AdjformEx::operator += (const AdjformEx& other)
+	{
+		for (const auto& kv : other.data)
+			add(kv.first, kv.second);
+		return *this;
+	}
+
+	AdjformEx operator + (AdjformEx lhs, const AdjformEx& rhs)
+	{
+		return lhs += rhs;
+	}
+
+	AdjformEx& AdjformEx::operator *= (const AdjformEx& other)
+	{
+		map_t old_data;
+		std::swap(data, old_data);
+		for (const auto& kv1 : old_data) {
+			for (const auto& kv2 : other.data) {
+				add(kv1.first * kv2.first, kv1.second * kv2.second);
+			}
+		}
+		return *this;
+	}
+
+	AdjformEx operator * (AdjformEx lhs, const AdjformEx& rhs)
+	{
+		return lhs *= rhs;
+	}
+
+	AdjformEx& AdjformEx::operator *= (const Adjform& other)
+	{
+		map_t old_data;
+		std::swap(data, old_data);
+		for (const auto& kv1 : old_data)
+			add(kv1.first * other, kv1.second);
+		return *this;
+	}
+
+	AdjformEx operator * (AdjformEx lhs, const Adjform& rhs)
+	{
+		return lhs *= rhs;
 	}
 
 	AdjformEx::integer_type AdjformEx::compare(const AdjformEx& other) const

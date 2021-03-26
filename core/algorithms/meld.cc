@@ -158,6 +158,52 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 	AdjformEx sym(tr, it, index_map, kernel);
 	auto prod = sym.get_tensor_ex().begin();
 	auto terms = split_ex(prod, "\\prod");
+	sym.clear();
+
+	// Project term by term, adding to overall object
+	for (const auto& term : split_ex(prod, "\\prod")) {
+		AdjformEx term_decomp;
+		auto tb = kernel.properties.get<TableauBase>(term);
+		if (tb) {
+			size_t n_tabs = tb->size(kernel.properties, sym.get_tensor_ex(), term);
+			for (size_t i = 0; i < n_tabs; ++i) {
+				auto tab = tb->get_tab(kernel.properties, sym.get_tensor_ex(), prod, i);
+				// Normalisation for this decomposition is the product of hook lengths of all other diagrams
+				AdjformEx::integer_type norm = 1;
+				for (size_t j = 0; j < n_tabs; ++j) {
+					if (i != j)
+						norm *= tb->get_tab(kernel.properties, sym.get_tensor_ex(), prod, j).hook_length_prod().get_si();
+				}
+				Adjform ident(term, index_map, kernel);
+				AdjformEx decomp(ident, norm);
+				// Antisymmetrize
+				for (size_t col = 0; col < tab.row_size(0); ++col) {
+					std::vector<size_t> indices(tab.begin_column(col), tab.end_column(col));
+					std::sort(indices.begin(), indices.end());
+					decomp.apply_young_symmetry(indices, true);
+				}
+				// Symmetrize
+				for (size_t row = 0; row < tab.number_of_rows(); ++row) {
+					std::vector<size_t> indices(tab.begin_row(row), tab.end_row(row));
+					std::sort(indices.begin(), indices.end());
+					decomp.apply_young_symmetry(indices, false);
+				}
+				term_decomp += decomp;
+			}
+			// If any term is 0 then the whole thing is 0
+			if (term_decomp.empty()) {
+				sym.clear();
+				break;
+			}
+		}
+		else {
+			term_decomp.add(Adjform(term, index_map, kernel));
+		}
+		if (sym.empty()) // First term
+			sym += term_decomp;
+		else
+			sym *= term_decomp;
+	}
 
 	// Symmetrize in identical tensors
 	// Map holding hash of tensor -> { number of indices, {pos1, pos2, ...} }
@@ -182,51 +228,6 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 				ident.second.positions, ident.second.n_indices,
 				ident.second.generate_commutation_matrix(kernel));
 		}
-	}
-
-	// Young project antisymmetric components
-	pos = 0;
-	for (auto& it : terms) {
-		auto tb = kernel.properties.get<TableauBase>(it);
-		if (tb) {
-			int siz = tb->size(kernel.properties, tr, it);
-			if (siz > 0) {
-				auto tab = tb->get_tab(kernel.properties, tr, it, 0);
-				for (size_t col = 0; col < tab.row_size(0); ++col) {
-					if (tab.column_size(col) > 1) {
-						std::vector<size_t> indices;
-						for (auto beg = tab.begin_column(col), end = tab.end_column(col); beg != end; ++beg)
-							indices.push_back(*beg + pos);
-						std::sort(indices.begin(), indices.end());
-						sym.apply_young_symmetry(indices, true);
-					}
-				}
-			}
-		}
-		pos += it.number_of_children();
-	}
-
-	// Young project symmetric components
-	pos = 0;
-	for (auto& it : terms) {
-		// Apply the symmetries
-		auto tb = kernel.properties.get<TableauBase>(it);
-		if (tb) {
-			int siz = tb->size(kernel.properties, tr, it);
-			if (siz > 0) {
-				auto tab = tb->get_tab(kernel.properties, tr, it, 0);
-				for (size_t row = 0; row < tab.number_of_rows(); ++row) {
-					if (tab.row_size(row) > 1) {
-						std::vector<size_t> indices;
-						for (auto beg = tab.begin_row(row), end = tab.end_row(row); beg != end; ++beg)
-							indices.push_back(*beg + pos);
-						std::sort(indices.begin(), indices.end());
-						sym.apply_young_symmetry(indices, false);
-					}
-				}
-			}
-		}
-		pos += it.number_of_children();
 	}
 	return sym;
 }
@@ -460,6 +461,7 @@ meld::result_t meld::apply_tableaux(iterator it)
 				}
 
 				if (has_solution) {
+					res = result_t::l_applied;
 					node_zero(terms[term_idx]);
 					terms.erase(terms.begin() + term_idx);
 					--term_idx;
