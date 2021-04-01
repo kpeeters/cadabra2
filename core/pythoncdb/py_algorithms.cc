@@ -139,6 +139,6 @@ namespace cadabra {
 		def_algo<unwrap, Ex>(m, "unwrap", true, false, 0, py::arg("wrapper") = Ex{});
 //		def_algo_preorder<young_reduce, const Ex*>(m, "young_reduce", true, false, 0, py::arg("pattern") = nullptr);
 //		def_algo_preorder<young_reduce_trace>(m, "young_reduce_trace", true, false, 0);
-		def_algo_preorder<meld>(m, "meld", true, false, 0);
+		def_algo_preorder<meld, bool>(m, "meld", true, false, 0, py::arg("symmetrize_as_sum") = false);
 		}
 	}

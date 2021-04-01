@@ -70,9 +70,10 @@ std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim, Fi
 
 
 
-meld::meld(const Kernel& kernel, Ex& ex)
+meld::meld(const Kernel& kernel, Ex& ex, bool symmetrize_as_sum)
 	: Algorithm(kernel, ex)
 	, index_map(kernel)
+	, symmetrize_as_sum(symmetrize_as_sum)
 {
 
 }
@@ -155,6 +156,7 @@ struct Ident {
 
 AdjformEx meld::symmetrize(Ex::iterator it)
 {
+	std::cerr << "Symmetrizing " << ex_to_string(kernel, it) << " with " << (symmetrize_as_sum ? "sum" : "product") << " of tableaux:\n";
 	AdjformEx sym(tr, it, index_map, kernel);
 	auto prod = sym.get_tensor_ex().begin();
 	auto terms = split_ex(prod, "\\prod");
@@ -163,32 +165,60 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 	// Project term by term, adding to overall object
 	for (const auto& term : split_ex(prod, "\\prod")) {
 		AdjformEx term_decomp;
+		if (!symmetrize_as_sum)
+			term_decomp.add(Adjform(term, index_map, kernel));
+		
 		auto tb = kernel.properties.get<TableauBase>(term);
 		if (tb) {
 			size_t n_tabs = tb->size(kernel.properties, sym.get_tensor_ex(), term);
 			for (size_t i = 0; i < n_tabs; ++i) {
+				std::cerr << "\t[";
 				auto tab = tb->get_tab(kernel.properties, sym.get_tensor_ex(), prod, i);
-				// Normalisation for this decomposition is the product of hook lengths of all other diagrams
-				AdjformEx::integer_type norm = 1;
-				for (size_t j = 0; j < n_tabs; ++j) {
-					if (i != j)
-						norm *= tb->get_tab(kernel.properties, sym.get_tensor_ex(), prod, j).hook_length_prod().get_si();
+				if (symmetrize_as_sum) {
+					// Normalisation for this decomposition is the product of hook lengths of all other diagrams
+					AdjformEx::integer_type norm = 1;
+					for (size_t j = 0; j < n_tabs; ++j) {
+						if (i != j)
+							norm *= tb->get_tab(kernel.properties, sym.get_tensor_ex(), prod, j).hook_length_prod().get_si();
+					}
+					Adjform ident(term, index_map, kernel);
+					AdjformEx decomp(ident, norm);
+					// Antisymmetrize
+					for (size_t col = 0; col < tab.row_size(0); ++col) {
+						std::vector<size_t> indices(tab.begin_column(col), tab.end_column(col));
+						std::sort(indices.begin(), indices.end());
+						decomp.apply_young_symmetry(indices, true);
+					}
+					// Symmetrize
+					for (size_t row = 0; row < tab.number_of_rows(); ++row) {
+						std::vector<size_t> indices(tab.begin_row(row), tab.end_row(row));
+						std::cerr << " [";
+						for (auto i : indices) std::cerr << i << " ";
+						std::cerr << "] ";
+						std::sort(indices.begin(), indices.end());
+						decomp.apply_young_symmetry(indices, false);
+					}
+
+					term_decomp += decomp;
 				}
-				Adjform ident(term, index_map, kernel);
-				AdjformEx decomp(ident, norm);
-				// Antisymmetrize
-				for (size_t col = 0; col < tab.row_size(0); ++col) {
-					std::vector<size_t> indices(tab.begin_column(col), tab.end_column(col));
-					std::sort(indices.begin(), indices.end());
-					decomp.apply_young_symmetry(indices, true);
+				else {
+					// Antisymmetrize
+					for (size_t col = 0; col < tab.row_size(0); ++col) {
+						std::vector<size_t> indices(tab.begin_column(col), tab.end_column(col));
+						std::sort(indices.begin(), indices.end());
+						term_decomp.apply_young_symmetry(indices, true);
+					}
+					// Symmetrize
+					for (size_t row = 0; row < tab.number_of_rows(); ++row) {
+						std::vector<size_t> indices(tab.begin_row(row), tab.end_row(row));
+						std::cerr << " [";
+						for (auto i : indices) std::cerr << i << " ";
+						std::cerr << "] ";
+						std::sort(indices.begin(), indices.end());
+						term_decomp.apply_young_symmetry(indices, false);
+					}
 				}
-				// Symmetrize
-				for (size_t row = 0; row < tab.number_of_rows(); ++row) {
-					std::vector<size_t> indices(tab.begin_row(row), tab.end_row(row));
-					std::sort(indices.begin(), indices.end());
-					decomp.apply_young_symmetry(indices, false);
-				}
-				term_decomp += decomp;
+				std::cerr << "]\n";
 			}
 			// If any term is 0 then the whole thing is 0
 			if (term_decomp.empty()) {
@@ -229,6 +259,7 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 				ident.second.generate_commutation_matrix(kernel));
 		}
 	}
+	std::cerr << "to get:\n" << sym << '\n';
 	return sym;
 }
 
