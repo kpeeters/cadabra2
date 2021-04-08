@@ -504,6 +504,16 @@ void CodeInput::disable_highlighting()
 		hl_conn.disconnect();
 	}
 
+void CodeInput::relay_cursor_pos(std::function<void(int, int)> callback)
+	{
+	edit.get_buffer()->property_cursor_position().signal_changed().connect([this, callback]() {
+		auto iter = edit.get_buffer()->get_iter_at_mark(edit.get_buffer()->get_insert());
+		auto line = iter.get_line() + 1;
+		auto line_offset = iter.get_line_offset() + 1;
+		callback(line, line_offset);
+		});
+	}
+
 bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	{
 	bool is_shift_return = get_editable() && event->keyval==GDK_KEY_Return && (event->state&Gdk::SHIFT_MASK);

@@ -96,6 +96,8 @@ namespace cadabra {
 			void refresh_highlighting();
 			void on_help_register();
 
+			void set_statusbar_message(int ln, int ch);
+
 			/// Functionality for the diff viewer.
 			void select_git_path();
 			void compare_to_file();
