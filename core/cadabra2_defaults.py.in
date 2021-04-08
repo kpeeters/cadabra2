@@ -316,14 +316,14 @@ class Console(object):
         the notebook cells to allow evaluation of expressions for 
         debugging/logging purposes
         """
-        def log(self, obj):
+        def log(self, *objs):
                 """
                 Sends a string representation of obj to the console
                 """
                 if server.architecture() == "terminal":
-                        print(text)
+                        print(*objs)
                 elif server.architecture() == "client-server":
-                        server.send(unicode(obj), "csl_out", 0, False)
+                        server.send(" ".join(str(obj) for obj in objs), "csl_out", 0, False)
 
         def clear(self):
                 """
