@@ -40,6 +40,9 @@ namespace cadabra {
 		bool operator == (const Adjform& other) const;
 		bool operator != (const Adjform& other) const;
 
+		Adjform& operator *= (const Adjform& other);
+		friend Adjform operator * (Adjform lhs, const Adjform& rhs);
+
 		const_reference operator [] (size_type idx) const;
 
 		size_type size() const;
@@ -93,6 +96,13 @@ namespace cadabra {
 		AdjformEx(const Adjform& adjform, const integer_type& value = 1, const Ex& prefactor = Ex());
 		AdjformEx(const Adjform& adjform, const integer_type& value, Ex::iterator prefactor);
 		AdjformEx(Ex& tr, Ex::iterator it, IndexMap& index_map, const Kernel& kernel);
+
+		AdjformEx& operator += (const AdjformEx& other);
+		friend AdjformEx operator + (AdjformEx lhs, const AdjformEx& rhs);
+		AdjformEx& operator *= (const AdjformEx& other);
+		friend AdjformEx operator * (AdjformEx lhs, const AdjformEx& rhs);
+		AdjformEx& operator *= (const Adjform& other);
+		friend AdjformEx operator * (AdjformEx lhs, const Adjform& rhs);
 
 		// Check if 'other' is a linear multiple of 'this' and return
 		// the numeric factor if so, otherwise returns 0

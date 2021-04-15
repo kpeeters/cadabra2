@@ -23,6 +23,7 @@ set(PACKAGES
   core/solve
   core/trace
   utils/node
+  utils/indices
   utils/develop
   sympy/solvers
   gauge_theory/instantons

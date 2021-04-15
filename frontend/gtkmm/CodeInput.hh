@@ -64,6 +64,8 @@ namespace cadabra {
 			void enable_highlighting(DataCell::CellType cell_type, const Prefs& prefs);
 			void disable_highlighting();
 
+			void relay_cursor_pos(std::function<void(int, int)> callback);
+
 			/// Handle mouse buttons.
 
 			bool handle_button_press(GdkEventButton *);

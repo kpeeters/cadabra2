@@ -10,7 +10,7 @@ namespace cadabra {
     class meld : public Algorithm
     {
         public:
-            meld(const Kernel& kernel, Ex& ex);
+            meld(const Kernel& kernel, Ex& ex, bool symmetrize_as_sum);
             virtual ~meld();
 
             virtual bool can_apply(iterator it) override;
@@ -26,6 +26,7 @@ namespace cadabra {
             result_t apply_tableaux(iterator it);
 
             IndexMap index_map;
+				bool symmetrize_as_sum;
     };
 
 }

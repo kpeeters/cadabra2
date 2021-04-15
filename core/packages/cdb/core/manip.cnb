@@ -64,12 +64,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 15753048423258376233,
+					"cell_id": 1231767427432608563,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 14599138290757730189,
+							"cell_id": 2956203403061753577,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "b + c + d -> a"
@@ -123,12 +123,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 67333222124893618,
+					"cell_id": 2887283422742923798,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 431374496524392974,
+							"cell_id": 5607098118281175915,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "k (a + b) < k c"
@@ -167,12 +167,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 8675834520474578860,
+					"cell_id": 9720663929603140956,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 10524366741323012146,
+							"cell_id": 10454479142087391198,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "A_{\\mu} B_{\\nu} + D_{\\mu \\nu} = C_{\\mu \\nu} + D_{\\mu \\nu}"
@@ -196,6 +196,7 @@
 					"source": "\\algorithm{apply_through(ex: Ex, op: Ex) -> Ex}{Apply an operator through both sides of an equation.}"
 				}
 			],
+			"hidden": true,
 			"source": "\\algorithm{apply_through(ex: Ex, op: Ex) -> Ex}{Apply an operator through both sides of an equation.}"
 		},
 		{
@@ -210,12 +211,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 7950008471833711645,
+					"cell_id": 17643016095692415648,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 10130557258786852976,
+							"cell_id": 17377967479870284885,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\partial(\\partial(x_{\\mu})) = \\partial(0)"
@@ -254,12 +255,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 5167564699775966017,
+					"cell_id": 9232980289343368380,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 9890927380270856187,
+							"cell_id": 7650472233492719121,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "a"
@@ -298,12 +299,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 2188029536589519819,
+					"cell_id": 11709535240682201585,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 8433912573591716984,
+							"cell_id": 13877803436156210079,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "b"
@@ -355,7 +356,129 @@
 			"cell_id": 12899144978785485126,
 			"cell_origin": "client",
 			"cell_type": "input",
-			"source": "def get_factor(node, term):\n\t\"\"\"If node is a product containing term, then return node without term. Otherwise, return None\"\"\"\n\tif term.matches(node):\n\t\treturn Ex(node.multiplier / term.top().multiplier)\n\n\tif node.name == r'\\prod':\n\t\tret = $@(node)$\n\t\tfor elem in ret.top().children():\n\t\t\tif term.matches(elem):\n\t\t\t\tfactor = elem.multiplier\n\t\t\t\telem.erase()\n\t\t\t\tret.top().multiplier *= factor\n\t\t\t\treturn ret\n\n\treturn None"
+			"source": "def get_factor(node, term):\n\t\"\"\"If node is a product containing term, then return node without term. Otherwise, return None\"\"\"\n\tif term.matches(node):\n\t\treturn substitute($@(node)$, $@(term) -> 1$)\n\n\tif node.name == r'\\prod':\n\t\tret = $@(node)$\n\t\tfor elem in ret.top().children():\n\t\t\tif term.matches(elem):\n\t\t\t\tfactor = elem.multiplier\n\t\t\t\telem.erase()\n\t\t\t\tret.top().multiplier *= factor\n\t\t\t\treturn ret\n\n\treturn None"
+		},
+		{
+			"cell_id": 6640730744419052590,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 2447757695444069929,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11353889507680660796,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 3/2 "
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{3}{2}\\end{dmath*}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "get_factor($3/2 R$.top(), $R$);"
+		},
+		{
+			"cell_id": 16431542648255979031,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 30848241778554462,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{get_basis_component(ex: Ex, basis: Ex) -> Ex}{Returns the multiplicative coefficients of \\texttt{basis} in \\texttt{ex}}"
+				}
+			],
+			"source": "\\algorithm{get_basis_component(ex: Ex, basis: Ex) -> Ex}{Returns the multiplicative coefficients of \\texttt{basis} in \\texttt{ex}}"
+		},
+		{
+			"cell_id": 13837484073210088531,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def get_basis_component(ex, basis):\n\tcoeff = take_match($@(ex)$, $@(basis) Q??$)\n\tsubstitute(coeff, $@(basis) -> 1$)\n\tif ex == coeff:\n\t\treturn $0$\n\telse:\n\t\treturn $@(coeff)$"
+		},
+		{
+			"cell_id": 9594057414621049635,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16102671816984278626,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16215812578025033456,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{\\mu \\nu} \\exp(i k_{\\mu} x^{\\mu}) + B_{\\mu \\nu} \\exp(-i k_{\\mu} x^{\\mu})"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{\\mu \\nu} \\exp\\left(i k_{\\mu} x^{\\mu}\\right)+B_{\\mu \\nu} \\exp\\left(-i k_{\\mu} x^{\\mu}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 3121979421771299112,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5653504327284017440,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "B_{\\mu \\nu}"
+						}
+					],
+					"source": "\\begin{dmath*}{}B_{\\mu \\nu}\\end{dmath*}"
+				},
+				{
+					"cell_id": 724265581768911366,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17952817033461765105,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\exp(i k_{\\mu} x^{\\mu})"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\exp\\left(i k_{\\mu} x^{\\mu}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 11823143836272174168,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2203812047172188274,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{\\mu \\nu} \\exp(i x^{\\mu}) + B_{\\mu \\nu} \\exp(-i x^{\\mu})"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{\\mu \\nu} \\exp\\left(i x^{\\mu}\\right)+B_{\\mu \\nu} \\exp\\left(-i x^{\\mu}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 2563792950653075125,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2527418973058329912,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0"
+						}
+					],
+					"source": "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "test := A_{\\mu\\nu} \\exp(i*k_\\mu*x^{\\mu})+B_{\\mu\\nu} \\exp(-i*k_\\mu*x^{\\mu});\nget_basis_component(test, $\\exp(-i*k_\\mu*x^{\\mu})$);\nget_basis_component(test, $A_{\\mu\\nu}$);\nget_basis_component(test, $k_{\\mu}$);\nget_basis_component(test, $C_{\\mu\\nu}$);"
 		},
 		{
 			"cell_id": 560186604802672427,
@@ -384,12 +507,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 1694187291536723071,
+					"cell_id": 13131403568144277521,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 4562928191778205879,
+							"cell_id": 9493999741510812343,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "0 = c + d-2a-b-j b-k b"
@@ -407,12 +530,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 12104799498417908,
+					"cell_id": 15999046563881551767,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 11214471472925037762,
+							"cell_id": 17760236547502669845,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "-\\partial_{\\alpha}(b_{\\beta})-\\partial_{\\beta}(a_{\\alpha}) = 0"
@@ -464,14 +587,72 @@
 			"cell_id": 15010735023331358315,
 			"cell_origin": "client",
 			"cell_type": "input",
-			"source": "def isolate(ex, term, divide_through = True):\n\t\"\"\"Isolates a term on the left hand side of an equation or inequality\"\"\"\n\tassert(ex.top().name in [r'\\equals', r'\\less', r'\\greater'])\n\tassert(n_args(ex.top()) == 2)\n\n\t# Move everything to the rhs\n\tto_rhs(ex)\n\n\tlhs = nth_arg(ex.top(), 0)\n\trhs = nth_arg(ex.top(), 1)\n\n\t# Gather all terms containing the isolating term\n\tfactors = $0$\n\tif get_factor(rhs, term) is not None:\n\t\tfactors -= get_factor(rhs, term)\n\t\trhs.replace($0$)\n\telif rhs.name == r'\\sum':\n\t\tfor i in reversed(range(n_args(rhs))):\n\t\t\tnode = nth_arg(rhs, i)\n\t\t\tfactor = get_factor(node, term)\n\t\t\tif factor is not None:\n\t\t\t\tfactors -= factor\n\t\t\t\tif n_args(rhs) == 1:\n\t\t\t\t\tnode.replace($0$)\n\t\t\t\telse:\n\t\t\t\t\tnode.erase()\n\t# Move the isolated term over to the left hand side\n\tif divide_through:\n\t\tlhs.replace($@(term)$)\n\t\trhs.replace($\\frac{@(rhs)}{@(factors)}$)\n\telse:\n\t\tlhs.replace($@(term) @(factors)$)\n\n\treturn ex"
+			"source": "def isolate(ex, term, divide_through = True):\n\t\"\"\"Isolates a term on the left hand side of an equation or inequality\"\"\"\n\tassert(ex.top().name in [r'\\equals', r'\\less', r'\\greater'])\n\tassert(n_args(ex.top()) == 2)\n\n\t# Move everything to the rhs\n\tto_rhs(ex)\n\tlhs = nth_arg(ex.top(), 0)\n\trhs = nth_arg(ex.top(), 1)\n\n\t# Gather all terms containing the isolating term\n\tfactors = $0$\n\tif get_factor(rhs, term) is not None:\n\t\tfactors -= get_factor(rhs, term)\n\t\trhs.replace($0$)\n\telif rhs.name == r'\\sum':\n\t\tfor i in reversed(range(n_args(rhs))):\n\t\t\tnode = nth_arg(rhs, i)\n\t\t\tfactor = get_factor(node, term)\n\t\t\tif factor is not None:\n\t\t\t\tfactors -= factor\n\t\t\t\tif n_args(rhs) == 1:\n\t\t\t\t\tnode.replace($0$)\n\t\t\t\telse:\n\t\t\t\t\tnode.erase()\n\t# Move the isolated term over to the left hand side\n\tif divide_through:\n\t\tlhs.replace($@(term)$)\n\t\trhs.replace($\\frac{@(rhs)}{@(factors)}$)\n\telse:\n\t\tlhs.replace($@(term) @(factors)$)\n\treturn ex"
 		},
 		{
 			"cell_id": 1368746495472243320,
 			"cell_origin": "client",
 			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 2873619635301860056,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13925632780223323022,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "2a +  1/2 a k-b = c a + b k + a-4"
+						}
+					],
+					"source": "\\begin{dmath*}{}2a+\\frac{1}{2}a k-b = c a+b k+a-4\\end{dmath*}"
+				},
+				{
+					"cell_id": 3371428283246160850,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11163140055737119195,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "a = (b k-4 + b) (1-c)**(-1)"
+						}
+					],
+					"source": "\\begin{dmath*}{}a = \\left(b k-4+b\\right) {\\left(1-c\\right)}^{-1}\\end{dmath*}"
+				},
+				{
+					"cell_id": 18420991104162350602,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 990642930475677695,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  3/2 R + 5\\Lambda = T \\kappa"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{3}{2}R+5\\Lambda = T \\kappa\\end{dmath*}"
+				},
+				{
+					"cell_id": 14637382425423859095,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17517195226234096204,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R =  -  2/3 T \\kappa +  10/3 \\Lambda"
+						}
+					],
+					"source": "\\begin{dmath*}{}R =  - \\frac{2}{3}T \\kappa+\\frac{10}{3}\\Lambda\\end{dmath*}"
+				}
+			],
 			"ignore_on_import": true,
-			"source": "ex := 2a + a * k - b = c * a + b * k + a - 4;\nisolate(ex, $a$);"
+			"source": "ex := 2a + 1/2 a * k - b = c * a + b * k + a - 4;\nisolate(ex, $a$, True);\nex2 := -3/2 R + 5\\Lambda = T\\kappa;\nisolate(ex2, $R$);"
 		},
 		{
 			"cell_id": 772577804236751633,

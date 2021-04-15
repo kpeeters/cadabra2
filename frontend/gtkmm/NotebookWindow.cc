@@ -606,6 +606,11 @@ void NotebookWindow::update_title()
 		}
 	}
 
+void NotebookWindow::set_statusbar_message(int ln, int ch)
+	{
+	status_label.set_text(" Line: " + std::to_string(ln) + "\tCol: " + std::to_string(ch));
+	}
+
 void NotebookWindow::set_stop_sensitive(bool s)
 	{
 	Gtk::Widget *stop = uimanager->get_widget("/ToolBar/EvaluateStop");
@@ -668,7 +673,6 @@ void NotebookWindow::process_todo_queue()
 		{
 		std::lock_guard<std::mutex> guard(status_mutex);
 		kernel_label.set_text(kernel_string);
-		status_label.set_text(status_string);
 
 		if(kernel_spinner_status) {
 			kernel_spinner.show();
@@ -835,6 +839,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 					global_buffer=ci->buffer;
 					}
 				else ci = new CodeInput(it, global_buffer,scale/display_scale,prefs);
+				using namespace std::placeholders;
+				ci->relay_cursor_pos(std::bind(&NotebookWindow::set_statusbar_message, this, _1, _2));
 				if(read_only)
 					ci->edit.set_editable(false);
 				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
