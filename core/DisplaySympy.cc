@@ -96,7 +96,8 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 		// A few symbols are reserved by sympy.
 			{"N", "sympyN"},
 			{"O", "sympyO"},
-			{"S", "sympyS"}
+			{"S", "sympyS"},
+			{"Q", "sympyQ"}
 		};
 
 	regex_map = {
