@@ -14,6 +14,7 @@
 #include <boost/numeric/ublas/matrix_proxy.hpp>
 #include <boost/numeric/ublas/lu.hpp>
 
+// #define DEBUG 1
 
 using namespace cadabra;
 
@@ -156,7 +157,9 @@ struct Ident {
 
 AdjformEx meld::symmetrize(Ex::iterator it)
 {
+#ifdef DEBUG
 	std::cerr << "Symmetrizing " << ex_to_string(kernel, it) << " with " << (symmetrize_as_sum ? "sum" : "product") << " of tableaux:\n";
+#endif
 	AdjformEx sym(tr, it, index_map, kernel);
 	auto prod = sym.get_tensor_ex().begin();
 	auto terms = split_ex(prod, "\\prod");
@@ -172,7 +175,9 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 		if (tb) {
 			size_t n_tabs = tb->size(kernel.properties, sym.get_tensor_ex(), term);
 			for (size_t i = 0; i < n_tabs; ++i) {
+#ifdef DEBUG
 				std::cerr << "\t[";
+#endif
 				auto tab = tb->get_tab(kernel.properties, sym.get_tensor_ex(), prod, i);
 				if (symmetrize_as_sum) {
 					// Normalisation for this decomposition is the product of hook lengths of all other diagrams
@@ -192,9 +197,11 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 					// Symmetrize
 					for (size_t row = 0; row < tab.number_of_rows(); ++row) {
 						std::vector<size_t> indices(tab.begin_row(row), tab.end_row(row));
+#ifdef DEBUG
 						std::cerr << " [";
 						for (auto i : indices) std::cerr << i << " ";
 						std::cerr << "] ";
+#endif
 						std::sort(indices.begin(), indices.end());
 						decomp.apply_young_symmetry(indices, false);
 					}
@@ -211,14 +218,18 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 					// Symmetrize
 					for (size_t row = 0; row < tab.number_of_rows(); ++row) {
 						std::vector<size_t> indices(tab.begin_row(row), tab.end_row(row));
+#ifdef DEBUG
 						std::cerr << " [";
 						for (auto i : indices) std::cerr << i << " ";
 						std::cerr << "] ";
+#endif
 						std::sort(indices.begin(), indices.end());
 						term_decomp.apply_young_symmetry(indices, false);
 					}
 				}
+#ifdef DEBUG
 				std::cerr << "]\n";
+#endif
 			}
 			// If any term is 0 then the whole thing is 0
 			if (term_decomp.empty()) {
@@ -259,7 +270,9 @@ AdjformEx meld::symmetrize(Ex::iterator it)
 				ident.second.generate_commutation_matrix(kernel));
 		}
 	}
+#ifdef DEBUG
 	std::cerr << "to get:\n" << sym << '\n';
+#endif
 	return sym;
 }
 
