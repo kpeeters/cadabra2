@@ -16,7 +16,7 @@ jobs:
           python-version: 3.7
 
     - name: get dependencies
-      run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev texlive-base libmpfr-dev libmpc-dev && python3 --version && which python3 && python3 -m pip install sympy gmpy2
+      run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev texlive-base libmpfr-dev libmpc-dev && python3 --version && which python3 && python3 -m pip install --upgrade pip && python3 -m pip install wheel && python3 -m pip install sympy gmpy2
 
     - name: configure
       run:  mkdir build && cd build && cmake -DENABLE_MATHEMATICA=OFF ..
