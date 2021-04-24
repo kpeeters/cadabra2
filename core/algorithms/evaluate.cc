@@ -715,7 +715,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 		auto deps=dependencies(rhs);
 
 		if(deps.size()==0) {
-			pm->message("No dependencies for " + *rhs->name);
+//			pm->message("No dependencies for " + *rhs->name);
 			tr.erase(iv);
 			return true;
 			}
