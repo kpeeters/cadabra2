@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <functional>
 #include "Props.hh"
 
 /// \ingroup core
@@ -23,17 +24,29 @@ namespace cadabra {
 			/// Create an Ex expression object from a string, which will be parsed.
 			std::shared_ptr<Ex> ex_from_string(const std::string&);
 
-
+			
 			Properties properties;
 
 			/// Settings.
 			enum class scalar_backend_t { sympy, mathematica } scalar_backend;
 			bool                                               call_embedded_python_functions;
-			
+
 
 			const static std::string version;
 			const static std::string build  ;
 
+			// Warnings 
+			enum class warn_t {
+				notset   = 0,
+				debug    = 10,
+				info     = 20,
+				warning  = 30,
+				error    = 40,
+				critical = 50
+			};
+			warn_t warning_level;
+			std::function<void(const std::string&)> warning_callback;
+			void warn(const std::string& msg, warn_t level = warn_t::warning) const;
 		};
 
 	}

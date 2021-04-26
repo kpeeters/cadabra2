@@ -317,22 +317,25 @@ class Console(object):
         debugging/logging purposes
         """
         def log(self, *objs):
-                """
-                Sends a string representation of obj to the console
-                """
-                if server.architecture() == "terminal":
-                        print(*objs)
-                elif server.architecture() == "client-server":
-                        server.send(" ".join(str(obj) for obj in objs), "csl_out", 0, False)
+            """Sends a string representation of objs to the console"""
+            if server.architecture() == "terminal":
+                print(*objs)
+            elif server.architecture() == "client-server":
+                server.send(" ".join(str(obj) for obj in objs), "csl_out", 0, False)
 
         def clear(self):
-                """
-                Clears the output of the console window
-                """
-                if server.architecture() == "client-server":
-                        server.send("", "csl_clear", 0, False)
+            """Clears the output of the console window"""
+            if server.architecture() == "client-server":
+                server.send("", "csl_clear", 0, False)
+
+        def warn(self, msg):
+            if server.architecture() == "terminal":
+                print("Warning: " + msg)
+            elif server.architecture() == "client-server":
+                server.send(msg, "csl_warn", 0, False)
 
 console = Console()
+__cdbkernel__.configure_warnings(callback=console.warn)
     
 # Set display hooks to catch certain objects and print them
 # differently. Should probably eventually be done cleaner.
