@@ -96,7 +96,7 @@ add_definitions(
 # Targets.
 #---------------------------------------------------------------------------
 
-if(MSVC AND CADABRA_DEBUG_BUILD)
+if ((NOT MSVC) OR (MSVC AND CADABRA_DEBUG_BUILD) OR (MSVC AND MSVC_TARGET_CONSOLE))
 	add_executable(cadabra2-gtk ${cadabra_gtk_src})
 else()
 	add_executable(cadabra2-gtk WIN32 ${cadabra_gtk_src})
