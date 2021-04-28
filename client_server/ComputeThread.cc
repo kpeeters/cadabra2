@@ -327,7 +327,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		int n = content.value<int>("n", 0);
 		int total = content.value<int>("total", 0);
 		int pulse = content.value<bool>("pulse", false);
-		docthread->set_progress(msg, n, total, pulse);
+		docthread->set_progress(msg, n, total);
 	}
 	else if(msg_type=="completed") {
 		// std::cerr << "received completion of " << content["original"] << " -> " << content["completed"] << std::endl;

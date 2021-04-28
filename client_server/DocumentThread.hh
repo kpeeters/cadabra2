@@ -80,7 +80,7 @@ namespace cadabra {
 
 			virtual void on_interactive_output(const nlohmann::json& msg);
 
-			virtual void set_progress(const std::string& msg, int cur_step, int total_steps, bool pulse);
+			virtual void set_progress(const std::string& msg, int cur_step, int total_steps);
 
 			/// One undo step.
 			void undo();

@@ -46,9 +46,13 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	, follow_cell(doc.end())
 	, last_find_location(doc.end(), std::string::npos)
 	, is_configured(false)
+	, status_line(-1)
+	, status_col(-1)
+	, progress_frac(0)
 	{
 	// Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
+	dispatch_update_status.connect(sigc::mem_fun(*this, &NotebookWindow::update_status));
 
 	// Set the window icon.
 	set_icon_name("cadabra2-gtk");
@@ -607,9 +611,15 @@ void NotebookWindow::update_title()
 		}
 	}
 
-void NotebookWindow::set_statusbar_message(int ln, int ch)
+void NotebookWindow::set_statusbar_message(const std::string& message, int line, int col)
 	{
-	status_label.set_text(" Line: " + std::to_string(ln) + "\tCol: " + std::to_string(ch));
+		{
+		std::lock_guard<std::mutex> guard(status_mutex);
+		status_string = message;
+		status_line = line;
+		status_col = col;
+		}
+	dispatch_update_status.emit();
 	}
 
 void NotebookWindow::set_stop_sensitive(bool s)
@@ -841,7 +851,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 					}
 				else ci = new CodeInput(it, global_buffer,scale/display_scale,prefs);
 				using namespace std::placeholders;
-				ci->relay_cursor_pos(std::bind(&NotebookWindow::set_statusbar_message, this, _1, _2));
+				ci->relay_cursor_pos(std::bind(&NotebookWindow::set_statusbar_message, this, "", _1, _2));
 				if(read_only)
 					ci->edit.set_editable(false);
 				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
@@ -947,21 +957,41 @@ void NotebookWindow::on_interactive_output(const nlohmann::json& msg)
 	console.signal_message(msg);
 	}
 
-void NotebookWindow::set_progress(const std::string& msg, int cur_step, int total_steps, bool pulse)
+void NotebookWindow::set_progress(const std::string& msg, int cur_step, int total_steps)
 	{
+		{
+		std::lock_guard<std::mutex> guard(status_mutex);
+		if (total_steps == 0) {
+			progress_string = msg;
+			progress_frac = 0.0;
+			}
+		else {
+			progress_frac = (double)cur_step / total_steps;
+			progress_string = msg + " (" + std::to_string(cur_step) + "/" + std::to_string(total_steps) + ")";
+			}
+		}
+	dispatch_update_status.emit();
+	}
+
+void NotebookWindow::update_status()
+	{
+	// This should only be called from dispatch_update_status!
+
+	// Update status and progress, kernel status is taken card of in process_action_queue
 	std::lock_guard<std::mutex> guard(status_mutex);
-	if (total_steps == 0) {
-		progressbar.set_text(msg);
-		progressbar.set_fraction(0.0);
+	progressbar.set_text(progress_string);
+	progressbar.set_fraction(progress_frac);
+
+	if (status_line < 0 || status_col < 0) {
+		status_label.set_text(status_string);
 		}
 	else {
-		double frac = (double)cur_step / total_steps;
-		progressbar.set_text(msg + " (" + std::to_string(cur_step) + "/" + std::to_string(total_steps) + ")");
-		progressbar.set_fraction(frac);
+		std::string pos = " Line: " + std::to_string(status_line) + "   Col: " + std::to_string(status_col);
+		if (status_string == "")
+			status_label.set_text(pos);
+		else
+			status_label.set_text(pos + "   |   " + status_string);
 		}
-
-	if (pulse)
-		progressbar.pulse();
 	}
 
 void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)

@@ -96,7 +96,7 @@ namespace cadabra {
 			void refresh_highlighting();
 			void on_help_register();
 
-			void set_statusbar_message(int ln, int ch);
+			void set_statusbar_message(const std::string& message = "", int line = -1, int col = -1);
 
 			/// Functionality for the diff viewer.
 			void select_git_path();
@@ -110,7 +110,7 @@ namespace cadabra {
 			virtual void set_compute_thread(ComputeThread* compute) override;
 
 			virtual void on_interactive_output(const nlohmann::json& msg) override;
-			virtual void set_progress(const std::string& msg, int cur_step, int total_steps, bool pulse) override;
+			virtual void set_progress(const std::string& msg, int cur_step, int total_steps) override;
 		protected:
 			virtual bool on_key_press_event(GdkEventKey*) override;
 			virtual bool on_delete_event(GdkEventAny*) override;
@@ -174,7 +174,11 @@ namespace cadabra {
 			// compute thread and then updated into the gui on the gui thread.
 
 			std::mutex                     status_mutex;
-			std::string                    status_string, kernel_string;
+			std::string                    status_string, kernel_string, progress_string;
+			double                         progress_frac;
+			int                            status_line, status_col;
+			Glib::Dispatcher               dispatch_update_status;
+			void                           update_status();
 
 			// Name and modification data.
 			void             update_title();
