@@ -23,6 +23,7 @@
 #include "../algorithms/expand.hh"
 #include "../algorithms/expand_delta.hh"
 #include "../algorithms/expand_diracbar.hh"
+#include "../algorithms/expand_dummies.hh"
 #include "../algorithms/expand_power.hh"
 #include "../algorithms/explicit_indices.hh"
 #include "../algorithms/factor_in.hh"
@@ -87,6 +88,7 @@ namespace cadabra {
 		def_algo<expand>(m, "expand", true, false, 0);
 		def_algo<expand_delta>(m, "expand_delta", true, false, 0);
 		def_algo<expand_diracbar>(m, "expand_diracbar", true, false, 0);
+		def_algo<expand_dummies, const Ex*>(m, "expand_dummies", true, false, 0, py::arg("components") = nullptr);
 		def_algo<expand_power>(m, "expand_power", true, false, 0);
 		def_algo<explicit_indices>(m, "explicit_indices", true, false, 0);
 		def_algo<flatten_sum>(m, "flatten_sum", true, false, 0);
