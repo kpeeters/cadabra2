@@ -9,6 +9,11 @@ import sys
 # or \property{...}{...} command and use this to output HTML
 # code to produce a table-of-contents of all manual pages.
 
+# FIXME: the regex expressions below should be exchanged for
+# something that parses latex properly, in order to deal with
+# nested curly bracket situations. At the moment this will fail
+# to correctly detect things like \algorithm{foobar}{Something {in} brackets}.
+
 def scan_file(prevcat, dir, filename, ext):
     with open(dir+filename+ext) as jsonfile:
         data = json.load(jsonfile)
@@ -16,21 +21,23 @@ def scan_file(prevcat, dir, filename, ext):
 
         # is this a multi-algorithm file?
         count=0
+        package_name=""
         for cell in data["cells"]:
             if not "cells" in cell:
                 continue
             src = cell["cells"][0]["source"]
-            m = re.search('\\\\algorithm{(.*)}{(.*)}', src)
+            src = src.replace('\n',' ')
+            m = re.search('\\\\algorithm{(.*)}.*', src)
             if m:
                 count+=1
-            m = re.search('\\\\property{(.*)}{(.*)}', src)
+            m = re.search('\\\\property{(.*)}.*', src)
             if m:
                 count+=1
-            m = re.search('\\\\package{(.*)}{(.*)}', src)
+            m = re.search('\\\\package{([^}]*)}{([^}]*)}.*', src)
             if m:
                 package_name=m.group(1)
                 package_desc=m.group(2)
-        is_multi = (count>1)
+        is_multi = (package_name!="")
 
         if is_multi:
             print('<h3>'+package_name+'</h3>')
@@ -41,7 +48,8 @@ def scan_file(prevcat, dir, filename, ext):
             if not "cells" in cell:
                 continue
             src = cell["cells"][0]["source"]
-            m = re.search('\\\\algorithm{(.*)}{(.*)}', src)
+            src = src.replace('\n',' ')
+            m = re.search('\\\\algorithm{([^}]*)}{([^}]*)}.*', src)
             if m:
                 algo=m.group(1)
                 desc=m.group(2)
@@ -52,12 +60,12 @@ def scan_file(prevcat, dir, filename, ext):
                     prevcat=cat
                 if is_multi:
                     cat=''
-                m2 = re.search('(.*)\(.*', algo)
+                m2 = re.search('([^\(]*)\(.*', algo)
                 if m2:
                     algo = m2.group(1)
                 print('<tr><td>'+cat+'<td></td><td><a href="manual/'+filename+'.html">'+algo+'</a></td>')
                 print('<td>'+desc+'</td></tr>')
-            m = re.search('\\\\property{(.*)}{(.*)}', src)
+            m = re.search('\\\\property{([^}]*)}{([^}]*)}', src)
             if m:
                 algo=m.group(1)
                 desc=m.group(2)

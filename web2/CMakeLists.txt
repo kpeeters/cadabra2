@@ -169,6 +169,11 @@ set(PROPS
 set(PACKAGES
   cdb/core/manip
   cdb/core/component
+  cdb/core/trace
+  cdb/utils/develop
+  cdb/utils/indices
+  cdb/utils/node  
+  cdb/utils/types    
   cdb/sympy/solvers
   cdb/relativity/abstract
   cdb/relativity/schwarzschild

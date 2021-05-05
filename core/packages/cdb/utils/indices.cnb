@@ -8,6 +8,21 @@
 			"source": "from cdb.utils.node import n_indices\nfrom copy import copy"
 		},
 		{
+			"cell_id": 13419242331187320623,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 4122877639113717994,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\package{cdb.utils.indices}{Additional functionality to deal with indices}"
+				}
+			],
+			"hidden": true,
+			"source": "\\package{cdb.utils.indices}{Additional functionality to deal with indices}"
+		},
+		{
 			"cell_id": 13857590062838682174,
 			"cell_origin": "client",
 			"cell_type": "latex",
@@ -20,7 +35,7 @@
 				}
 			],
 			"hidden": true,
-			"source": "\\algorithm{all_index_positions(ex: ExNode) -> Generator[Ex]}{Generate all possible combinations of covariant \nand contravariant indices}"
+			"source": "\\algorithm{all_index_positions(ex: ExNode) -> Generator[Ex]}{Generate all possible combinations of covariant and contravariant indices}"
 		},
 		{
 			"cell_id": 10479853794613744564,
@@ -169,14 +184,14 @@
 			"cell_type": "latex",
 			"cells": [
 				{
-					"cell_id": 6139461622435338788,
+					"cell_id": 6309883738445027171,
 					"cell_origin": "client",
 					"cell_type": "latex_view",
-					"source": "\\algorithm{replace_index(ex: Ex, top_name: str, old_index: str, new_index: str) -> Ex}{Renames with \\texttt{new\\_index}\nall occurences of indices named \\texttt{old\\_index} in any subtree whose top node is named \\texttt{top\\_name}}\n\\textbf{Note:}~This is useful for avoiding triple index-repeated errors due to the presence of tensor idnices in the argument of\nthe exponential function i.e. $\\exp(\\pm i k_\\lambda x^\\lambda)$"
+					"source": "\\algorithm{replace_index(ex: Ex, top_name: str, old_index: str, new_index: str) -> Ex}{Rename indices}\n\nRenames with \\texttt{new\\_index}\nall occurences of indices named \\texttt{old\\_index} in any subtree whose top node is named \\texttt{top\\_name}\n\\textbf{Note:}~This is useful for avoiding triple index-repeated errors due to the presence of tensor idnices in the argument of\nthe exponential function i.e. $\\exp(\\pm i k_\\lambda x^\\lambda)$"
 				}
 			],
 			"hidden": true,
-			"source": "\\algorithm{replace_index(ex: Ex, top_name: str, old_index: str, new_index: str) -> Ex}{Renames with \\texttt{new\\_index}\nall occurences of indices named \\texttt{old\\_index} in any subtree whose top node is named \\texttt{top\\_name}}\n\\textbf{Note:}~This is useful for avoiding triple index-repeated errors due to the presence of tensor idnices in the argument of\nthe exponential function i.e. $\\exp(\\pm i k_\\lambda x^\\lambda)$"
+			"source": "\\algorithm{replace_index(ex: Ex, top_name: str, old_index: str, new_index: str) -> Ex}{Rename indices}\n\nRenames with \\texttt{new\\_index}\nall occurences of indices named \\texttt{old\\_index} in any subtree whose top node is named \\texttt{top\\_name}\n\\textbf{Note:}~This is useful for avoiding triple index-repeated errors due to the presence of tensor idnices in the argument of\nthe exponential function i.e. $\\exp(\\pm i k_\\lambda x^\\lambda)$"
 		},
 		{
 			"cell_id": 12268357943789445408,

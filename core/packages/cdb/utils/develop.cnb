@@ -1,124 +1,117 @@
 {
-	"cell_id" : 7900896013554414286,
-	"cells" : 
-	[
+	"cell_id": 7900896013554414286,
+	"cells": [
 		{
-			"cell_id" : 3008518946232599177,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 3008518946232599177,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 12015957794285357231,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\package{cdb.utils.develop}{Helper functions to aid development, debugging and testing}\n\nThis package contains some standardised functionality to aid in development of library code and Python algorithms"
+					"cell_id": 12015957794285357231,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\package{cdb.utils.develop}{Helper functions to aid development, debugging and testing}\n\nThis package contains some standardised functionality to aid in development of library code and Python algorithms"
 				}
 			],
-			"hidden" : true,
-			"source" : "\\package{cdb.utils.develop}{Helper functions to aid development, debugging and testing}\n\nThis package contains some standardised functionality to aid in development of library code and Python algorithms"
+			"hidden": true,
+			"source": "\\package{cdb.utils.develop}{Helper functions to aid development, debugging and testing}\n\nThis package contains some standardised functionality to aid in development of library code and Python algorithms"
 		},
 		{
-			"cell_id" : 13348113113731925581,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "import inspect"
+			"cell_id": 13348113113731925581,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "import inspect"
 		},
 		{
-			"cell_id" : 15845148038835594810,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 15845148038835594810,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 10973448106380277246,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\algorithm{time_algo(algo: function, ex: Ex, *args: <mixed>, iterations: int = 100) -> float}{Simple function to time the \nexecution of an algorithm with given inputs. The arguments in *args are passed directly, but ex is copied before each\ninvocation and so remains unmodified.}"
+					"cell_id": 11938570826720444108,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{time_algo(algo: function, ex: Ex, *args: <mixed>, iterations: int = 100) -> float}{Simple function to time the \nexecution of an algorithm with given inputs.}\n\nThe arguments in *args are passed directly, but ex is copied before each\ninvocation and so remains unmodified."
 				}
 			],
-			"hidden" : true,
-			"source" : "\\algorithm{time_algo(algo: function, ex: Ex, *args: <mixed>, iterations: int = 100) -> float}{Simple function to time the \nexecution of an algorithm with given inputs. The arguments in *args are passed directly, but ex is copied before each\ninvocation and so remains unmodified.}"
+			"source": "\\algorithm{time_algo(algo: function, ex: Ex, *args: <mixed>, iterations: int = 100) -> float}{Simple function to time the execution of an algorithm with given inputs.}\n\nThe arguments in *args are passed directly, but ex is copied before each\ninvocation and so remains unmodified."
 		},
 		{
-			"cell_id" : 5937432672654218849,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "def time_algo(algo, ex, *args, iterations=100):\n\ts = Stopwatch()\n\tfor i in range(iterations):\n\t\ttmp := @(ex);\n\t\ts.start()\n\t\talgo(tmp, *args)\n\t\ts.stop()\n\treturn (s.seconds() + s.useconds() / 1000000) / iterations"
+			"cell_id": 5937432672654218849,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def time_algo(algo, ex, *args, iterations=100):\n\ts = Stopwatch()\n\tfor i in range(iterations):\n\t\ttmp := @(ex);\n\t\ts.start()\n\t\talgo(tmp, *args)\n\t\ts.stop()\n\treturn (s.seconds() + s.useconds() / 1000000) / iterations"
 		},
 		{
-			"cell_id" : 15332315745938100730,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 15332315745938100730,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 11894560304174452086,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\algorithm{CadabraTestError}{Exception derived from AssertionError raised by testing functions when an assertion fails}"
+					"cell_id": 11894560304174452086,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{CadabraTestError}{Exception derived from AssertionError raised by testing functions when an assertion fails}"
 				}
 			],
-			"hidden" : true,
-			"source" : "\\algorithm{CadabraTestError}{Exception derived from AssertionError raised by testing functions when an assertion fails}"
+			"hidden": true,
+			"source": "\\algorithm{CadabraTestError}{Exception derived from AssertionError raised by testing functions when an assertion fails}"
 		},
 		{
-			"cell_id" : 11180569447504398263,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "class CadabraTestError(AssertionError):\n\tpass"
+			"cell_id": 11180569447504398263,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "class CadabraTestError(AssertionError):\n\tpass"
 		},
 		{
-			"cell_id" : 3479765664248597757,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 3479765664248597757,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 1725375402949435254,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\algorithm{test_algo(expected: Ex, verbose: bool)}{ Decorator to aid defining unit tests for algorithms. This\tadds the \nboilerplate code and adds an assert for the test.}"
+					"cell_id": 14998088897783344386,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{test_algo(expected: Ex, verbose: bool)}{Decorator to aid defining unit tests for algorithms.}\n\nThis\tadds the boilerplate code and adds an assert for the test."
 				}
 			],
-			"hidden" : true,
-			"source" : "\\algorithm{test_algo(expected: Ex, verbose: bool)}{ Decorator to aid defining unit tests for algorithms. This\tadds the \nboilerplate code and adds an assert for the test.}"
+			"hidden": true,
+			"source": "\\algorithm{test_algo(expected: Ex, verbose: bool)}{Decorator to aid defining unit tests for algorithms.}\n\nThis\tadds the boilerplate code and adds an assert for the test."
 		},
 		{
-			"cell_id" : 15123798302514262900,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "def test_algo(expected, verbose=False):\n\t\"\"\"\n\tExample usage:\n\t\t@test_algo($a + b + c$)\n\t\tdef sort_sum_test():\n\t\t\tex := b + a + c.\n\t\t\treturn sort_sum(ex)\n\t\"\"\"\n\tdef decorator(func):\n\t\tdef wrapper(*args, **kwargs):\n\t\t\tres = func(*args, **kwargs)\n\t\t\tif res == expected:\n\t\t\t\tprint(func.__name__ + \" passed\")\n\t\t\telse:\n\t\t\t\tprint(func.__name__ + \" FAILED\")\n\t\t\t\tprint(\"Expected: \" + str(expected))\n\t\t\t\tif verbose: print(tree(expected))\n\t\t\t\tprint(\"Produced: \" + str(res))\n\t\t\t\tif verbose: print(tree(res))\n\t\t\t\traise CadabraTestError\n\t\t\treturn res\n\t\treturn wrapper\n\treturn decorator"
+			"cell_id": 15123798302514262900,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def test_algo(expected, verbose=False):\n\t\"\"\"\n\tExample usage:\n\t\t@test_algo($a + b + c$)\n\t\tdef sort_sum_test():\n\t\t\tex := b + a + c.\n\t\t\treturn sort_sum(ex)\n\t\"\"\"\n\tdef decorator(func):\n\t\tdef wrapper(*args, **kwargs):\n\t\t\tres = func(*args, **kwargs)\n\t\t\tif res == expected:\n\t\t\t\tprint(func.__name__ + \" passed\")\n\t\t\telse:\n\t\t\t\tprint(func.__name__ + \" FAILED\")\n\t\t\t\tprint(\"Expected: \" + str(expected))\n\t\t\t\tif verbose: print(tree(expected))\n\t\t\t\tprint(\"Produced: \" + str(res))\n\t\t\t\tif verbose: print(tree(res))\n\t\t\t\traise CadabraTestError\n\t\t\treturn res\n\t\treturn wrapper\n\treturn decorator"
 		},
 		{
-			"cell_id" : 17571440201905887785,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 17571440201905887785,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 10305645619436861364,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\algorithm{inherit_kernel() -> Kernel}{Move up stack frames until one which defines the \\_\\_cdbkernel\\_\\_ variable is located and return \nit. If no Kernel object is foundthen None is returned}"
+					"cell_id": 309410713532683075,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{inherit_kernel() -> Kernel}{Find a kernel in the stack.}\n\nMove up stack frames until one which defines the \\_\\_cdbkernel\\_\\_ variable is located and return \nit. If no Kernel object is foundthen None is returned"
 				}
 			],
-			"hidden" : true,
-			"source" : "\\algorithm{inherit_kernel() -> Kernel}{Move up stack frames until one which defines the \\_\\_cdbkernel\\_\\_ variable is located and return \nit. If no Kernel object is foundthen None is returned}"
+			"hidden": true,
+			"source": "\\algorithm{inherit_kernel() -> Kernel}{Find a kernel in the stack.}\n\nMove up stack frames until one which defines the \\_\\_cdbkernel\\_\\_ variable is located and return \nit. If no Kernel object is foundthen None is returned"
 		},
 		{
-			"cell_id" : 460414117077303111,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "def inherit_kernel():\n\tframe = inspect.stack()[1][0]\n\twhile \"__cdbkernel__\" not in frame.f_locals:\n\t\tframe = frame.f_back\n\t\tif frame is None:\n\t\t\treturn None\n\treturn frame.f_locals[\"__cdbkernel__\"]"
+			"cell_id": 460414117077303111,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def inherit_kernel():\n\tframe = inspect.stack()[1][0]\n\twhile \"__cdbkernel__\" not in frame.f_locals:\n\t\tframe = frame.f_back\n\t\tif frame is None:\n\t\t\treturn None\n\treturn frame.f_locals[\"__cdbkernel__\"]"
 		},
 		{
-			"cell_id" : 13850153861758424314,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 13850153861758424314,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
 }

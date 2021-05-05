@@ -49,6 +49,7 @@
 					"source": "\\algorithm{nth_index(ex_node: ExNode|Ex, n: int) -> ExNode}{Gets the nth index of an ExNode object}"
 				}
 			],
+			"hidden": true,
 			"source": "\\algorithm{nth_index(ex_node: ExNode|Ex, n: int) -> ExNode}{Gets the nth index of an ExNode object}"
 		},
 		{
