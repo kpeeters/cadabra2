@@ -39,7 +39,7 @@ void DocumentThread::on_interactive_output(const nlohmann::json& )
 
 	}
 
-void DocumentThread::set_progress(const std::string& msg, int cur_step, int total_steps, bool pulse)
+void DocumentThread::set_progress(const std::string& msg, int cur_step, int total_steps)
 	{
 
 	}

@@ -49,12 +49,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 1184524235586520614,
+					"cell_id": 10625918768741539985,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 2821058693954465550,
+							"cell_id": 5744285270842328701,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "A_{\\mu \\nu \\rho}"
@@ -63,26 +63,12 @@
 					"source": "\\begin{dmath*}{}A_{\\mu \\nu \\rho}\\end{dmath*}"
 				},
 				{
-					"cell_id": 1744148089519024472,
+					"cell_id": 808607824366024774,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 7885337047834252569,
-							"cell_origin": "server",
-							"cell_type": "input_form",
-							"source": "A_{\\mu \\nu \\rho}"
-						}
-					],
-					"source": "\\begin{dmath*}{}A_{\\mu \\nu \\rho}\\end{dmath*}"
-				},
-				{
-					"cell_id": 6164027245710337221,
-					"cell_origin": "server",
-					"cell_type": "latex_view",
-					"cells": [
-						{
-							"cell_id": 15642212266083842673,
+							"cell_id": 7391862823510323362,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "A_{\\mu \\nu}^{\\rho}"
@@ -91,12 +77,12 @@
 					"source": "\\begin{dmath*}{}A_{\\mu \\nu}\\,^{\\rho}\\end{dmath*}"
 				},
 				{
-					"cell_id": 696146594008453644,
+					"cell_id": 17820102242399456702,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 51787115934766317,
+							"cell_id": 4056150914491624274,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "A_{\\mu}^{\\nu}_{\\rho}"
@@ -105,12 +91,12 @@
 					"source": "\\begin{dmath*}{}A_{\\mu}\\,^{\\nu}\\,_{\\rho}\\end{dmath*}"
 				},
 				{
-					"cell_id": 6919803711315933441,
+					"cell_id": 11153558184430743234,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 3832090161179235824,
+							"cell_id": 4690332253586664815,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "A_{\\mu}^{\\nu \\rho}"
@@ -119,12 +105,12 @@
 					"source": "\\begin{dmath*}{}A_{\\mu}\\,^{\\nu \\rho}\\end{dmath*}"
 				},
 				{
-					"cell_id": 6220968787723553864,
+					"cell_id": 17054390684282561432,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 6787380106231356571,
+							"cell_id": 5447125216017949069,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "A^{\\mu}_{\\nu \\rho}"
@@ -133,12 +119,12 @@
 					"source": "\\begin{dmath*}{}A^{\\mu}\\,_{\\nu \\rho}\\end{dmath*}"
 				},
 				{
-					"cell_id": 9977542077458645129,
+					"cell_id": 13468401569599865394,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 4248447537957791580,
+							"cell_id": 399306766743001184,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "A^{\\mu}_{\\nu}^{\\rho}"
@@ -147,12 +133,12 @@
 					"source": "\\begin{dmath*}{}A^{\\mu}\\,_{\\nu}\\,^{\\rho}\\end{dmath*}"
 				},
 				{
-					"cell_id": 11669411595182078567,
+					"cell_id": 17321927018441561683,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 13623013279860063030,
+							"cell_id": 5814884726611788367,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "A^{\\mu \\nu}_{\\rho}"
@@ -161,12 +147,12 @@
 					"source": "\\begin{dmath*}{}A^{\\mu \\nu}\\,_{\\rho}\\end{dmath*}"
 				},
 				{
-					"cell_id": 14089902074985533349,
+					"cell_id": 16957255301193719326,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 17762905998369654605,
+							"cell_id": 5138394693482285977,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "A^{\\mu \\nu \\rho}"
@@ -205,12 +191,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 1483223743871992743,
+					"cell_id": 13795957434526174235,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 13162345581886357024,
+							"cell_id": 13060781541372264531,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "h_{\\mu \\nu} = A_{\\mu \\nu} \\exp(i k_{\\mu} x^{\\mu})"
@@ -219,12 +205,12 @@
 					"source": "\\begin{dmath*}{}h_{\\mu \\nu} = A_{\\mu \\nu} \\exp\\left(i k_{\\mu} x^{\\mu}\\right)\\end{dmath*}"
 				},
 				{
-					"cell_id": 5173324596001915086,
+					"cell_id": 9993906878758157671,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 8545234020279105964,
+							"cell_id": 17742477934095676240,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "h_{\\mu \\nu} = A_{\\mu \\nu} \\exp(i k_{\\alpha} x^{\\alpha})"
@@ -238,6 +224,162 @@
 		},
 		{
 			"cell_id": 11510030216175255073,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 14243730794336119716,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{get_indices(node: ExNode) -> List[Ex]}{Return a list of all indices inside \\texttt{Node}}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{get_indices(node: ExNode) -> List[Ex]}{Return a list of all indices inside \\texttt{Node}}"
+		},
+		{
+			"cell_id": 4114061066973510892,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def get_indices(node):\n\t# Require monomial structure\n\tif isinstance(node, Ex):\n\t\tnode = node.top()\n\tassert node.name != r\"\\sum\" and node.name != r\"\\equals\", f\"get_indices() requires a monomial structure, got {node.name}\"\n\n\tindices = []\n\tinherits_indices = (IndexInherit.get(node) is not None)\n\n\t# Walk through children collecting indices recursively\n\tfor child in node.children():\n\t\tif child.parent_rel == parent_rel_t.super or child.parent_rel == parent_rel_t.sub:\n\t\t\t# Discard integers, symbols and coordinates\n\t\t\tsymb = Symbol.get(child)\n\t\t\tcoord = Coordinate.get(child)\n\t\t\tinteger = child.name == \"1\"\n\t\t\tif not (symb or coord or integer):\n\t\t\t\tindex = child.ex()\n\t\t\t\tindex.top().parent_rel = parent_rel_t.none\n\t\t\t\tindices.append(index)\n\t\telif inherits_indices:\n\t\t\tindices.extend(get_indices(child))\n\n\treturn indices"
+		},
+		{
+			"cell_id": 7471126205299592191,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3926702791067015050,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3419282733763189790,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "a_{\\mu} \\partial_{\\sigma}(b_{\\mu} b_{\\lambda}) \\delta(p_{\\rho} p^{\\rho}) + g_{\\sigma \\lambda} g_{\\kappa} g^{\\kappa} = p_{\\sigma} p_{\\lambda}"
+						}
+					],
+					"source": "\\begin{dmath*}{}a_{\\mu} \\partial_{\\sigma}\\left(b_{\\mu} b_{\\lambda}\\right) \\delta\\left(p_{\\rho} p^{\\rho}\\right)+g_{\\sigma \\lambda} g_{\\kappa} g^{\\kappa} = p_{\\sigma} p_{\\lambda}\\end{dmath*}"
+				},
+				{
+					"cell_id": 467978901566468640,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}Caught error\\end{verbatim}"
+				},
+				{
+					"cell_id": 9282048507038981528,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "{}$\\big[$$\\sigma$,\\discretionary{}{}{} $\\lambda$$\\big]$"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "\\partial{#}::Derivative.\nex := 0 + a_{\\mu} \\partial_{\\sigma}{b_{\\mu}b_{\\lambda}} \\delta{p_{\\rho}p^{\\rho}} + g_{\\sigma\\lambda}g_{\\kappa}g^{\\kappa} = p_{\\sigma}p_{\\lambda};\ntry: \n\tget_indices(ex);\nexcept AssertionError:\n\t\"Caught error\";\nget_indices(ex[1]);"
+		},
+		{
+			"cell_id": 9875547432092551433,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 2437072492852689017,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{get_dummy_indices(node: ExNode) -> List[Ex]}{Return a list of all dummy indices inside \\texttt{Node}}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{get_dummy_indices(node: ExNode) -> List[Ex]}{Return a list of all dummy indices inside \\texttt{Node}}"
+		},
+		{
+			"cell_id": 16142500167825125558,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def get_dummy_indices(node):\n\tindices = get_indices(node)\n\tdummies = []\n\tfor pos, idx in enumerate(indices):\n\t\tif idx in dummies:\n\t\t\tcontinue\n\t\ttry:\n\t\t\tother = indices.index(idx, pos + 1)\n\t\t\tdummies.append(idx)\n\t\texcept ValueError:\n\t\t\tpass\n\treturn dummies"
+		},
+		{
+			"cell_id": 5826709331712786624,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3965206875785443255,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 12964034287132943198,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "a_{\\mu} \\partial_{\\sigma}(b_{\\mu} b_{\\lambda}) \\delta(p_{\\rho} p^{\\rho})"
+						}
+					],
+					"source": "\\begin{dmath*}{}a_{\\mu} \\partial_{\\sigma}\\left(b_{\\mu} b_{\\lambda}\\right) \\delta\\left(p_{\\rho} p^{\\rho}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 5118101628968331098,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "{}$\\big[$$\\mu$$\\big]$"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "\\partial{#}::Derivative.\nex := a_{\\mu} \\partial_{\\sigma}{b_{\\mu}b_{\\lambda}} \\delta{p_{\\rho}p^{\\rho}};\nget_dummy_indices(ex);"
+		},
+		{
+			"cell_id": 8198227195091703517,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 16224454427660616799,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{get_free_indices(node: ExNode) -> List[Ex]}{Return a list of all free indices inside \\texttt{Node}}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{get_free_indices(node: ExNode) -> List[Ex]}{Return a list of all free indices inside \\texttt{Node}}"
+		},
+		{
+			"cell_id": 12107868658700828741,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def get_free_indices(node):\n\t# Find a monomial\n\tif isinstance(node, Ex):\n\t\tnode = node.top()\n\twhile node.name == r\"\\sum\" or node.name == r\"\\equals\":\n\t\tfor child in node.children():\n\t\t\tif child.name != \"1\":\n\t\t\t\tnode = child\n\t\t\t\tbreak\n\t\telse:\n\t\t\treturn []\n\tindices = get_indices(node)\n\t# Find all repeated indices\n\tdummies = []\n\tfor pos, idx in enumerate(indices):\n\t\tif idx in dummies:\n\t\t\tcontinue\n\t\ttry:\n\t\t\tother = indices.index(idx, pos + 1)\n\t\t\tdummies.append(idx)\n\t\texcept ValueError:\n\t\t\tpass\n\n\t# Remove all instances of dummies from the set of indices and return\n\tfor dummy in dummies:\n\t\tindices = [i for i in indices if i != dummy]\n\treturn indices"
+		},
+		{
+			"cell_id": 13119901376492792968,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 669024716363112975,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6297175375627481469,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "a_{\\mu} \\partial_{\\sigma}(b_{\\mu} b_{\\lambda}) \\delta(p_{\\rho} p^{\\rho}) + g_{\\sigma \\lambda} g_{\\kappa} g^{\\kappa} = p_{\\sigma} p_{\\lambda}"
+						}
+					],
+					"source": "\\begin{dmath*}{}a_{\\mu} \\partial_{\\sigma}\\left(b_{\\mu} b_{\\lambda}\\right) \\delta\\left(p_{\\rho} p^{\\rho}\\right)+g_{\\sigma \\lambda} g_{\\kappa} g^{\\kappa} = p_{\\sigma} p_{\\lambda}\\end{dmath*}"
+				},
+				{
+					"cell_id": 4595981957722617540,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "{}$\\big[$$\\sigma$,\\discretionary{}{}{} $\\lambda$$\\big]$"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "\\partial{#}::Derivative.\nex := 0 + a_{\\mu} \\partial_{\\sigma}{b_{\\mu}b_{\\lambda}} \\delta{p_{\\rho}p^{\\rho}} + g_{\\sigma\\lambda}g_{\\kappa}g^{\\kappa} = p_{\\sigma}p_{\\lambda};\nget_free_indices(ex);"
+		},
+		{
+			"cell_id": 16310576225572836586,
 			"cell_origin": "client",
 			"cell_type": "input",
 			"source": ""

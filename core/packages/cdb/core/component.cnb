@@ -1,227 +1,299 @@
 {
-	"cell_id" : 8176786609067457502,
-	"cells" : 
-	[
+	"cell_id": 8176786609067457502,
+	"cells": [
 		{
-			"cell_id" : 11457506631850813640,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 11457506631850813640,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 10008607845695988739,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\package{cdb.core.component}{Simple access to component expressions}\n\nThis package contains helper functions to access components of tensors, as they are computed by e.g.~\\algo{evaluate}."
+					"cell_id": 10008607845695988739,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\package{cdb.core.component}{Simple access to component expressions}\n\nThis package contains helper functions to access components of tensors, as they are computed by e.g.~\\algo{evaluate}."
 				}
 			],
-			"hidden" : true,
-			"source" : "\\package{cdb.core.component}{Simple access to component expressions}\n\nThis package contains helper functions to access components of tensors, as they are computed by e.g.~\\algo{evaluate}."
+			"hidden": true,
+			"source": "\\package{cdb.core.component}{Simple access to component expressions}\n\nThis package contains helper functions to access components of tensors, as they are computed by e.g.~\\algo{evaluate}."
 		},
 		{
-			"cell_id" : 6181105877766386294,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "from cdb.utils.node import nth_arg, n_args"
+			"cell_id": 6181105877766386294,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "from cdb.utils.node import n_children\nfrom cdb.core.manip import get_lhs, get_rhs\nfrom cdb.utils.indices import get_free_indices"
 		},
 		{
-			"cell_id" : 11505235534497815577,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 11505235534497815577,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 13577366159339639059,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\algorithm{get_component(ex: Ex, component: Ex) -> Ex}{Extract a single component from an expression.}\n\nGets a component of an expression resulting from an \\algo{evaluate} command. \nThe \\verb|component| argument for vector-like objects should be e.g.~\\verb|$t$|,\nand for higher-rank tensors like e.g.~\\verb|$x, t$|."
+					"cell_id": 9280419895947204080,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{get_component(ex: Ex, component: Ex) -> Ex}{Extract a single component from an expression.}\n\nGets a component of an expression including those from an \\algo{evaluate} command. \nThe \\verb|component| argument for vector-like objects should be e.g.~\\verb|$t$|,\nand for higher-rank tensors like e.g.~\\verb|$x, t$|."
 				}
 			],
-			"hidden" : true,
-			"source" : "\\algorithm{get_component(ex: Ex, component: Ex) -> Ex}{Extract a single component from an expression.}\n\nGets a component of an expression resulting from an \\algo{evaluate} command. \nThe \\verb|component| argument for vector-like objects should be e.g.~\\verb|$t$|,\nand for higher-rank tensors like e.g.~\\verb|$x, t$|."
+			"hidden": true,
+			"source": "\\algorithm{get_component(ex: Ex, component: Ex) -> Ex}{Extract a single component from an expression.}\n\nGets a component of an expression including those from an \\algo{evaluate} command. \nThe \\verb|component| argument for vector-like objects should be e.g.~\\verb|$t$|,\nand for higher-rank tensors like e.g.~\\verb|$x, t$|."
 		},
 		{
-			"cell_id" : 2743671539812446348,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "def get_component(ex, components):\n\t\"\"\"Gets a particular component of an expression\"\"\"\n\t# The components paramater needs to have a head '\\comma' node\n\t# so let's quickly make sure that's true.\n\tif components.head() != r'\\comma':\n\t\tbit = $@(components)$\n\t\tcomponents.top().name = r'\\comma'\n\t\tcomponents.top().append_child(bit)\n\n\t# If this module is imported, Cadabra might complain that the components are \n\t# free indices, so we need to tell it that the the components are coordinates\n\t#Coordinate(components, $ $)\t\n\n\t# Extract when components is the head object\n\tif ex.head() == r'\\components':\n\t\t# Sift through all the '\\equals' nodes until we\n\t\t# find the one we want\n\t\tfor node in ex.top()[r'\\equals']:\n\t\t\targ = nth_arg(node, 0)\n\t\t\tif $@(arg)$ == components:\n\t\t\t\tres = nth_arg(node, 1)\n\t\t\t\treturn $@(res)$\n\t\t# Couldn't find that component :(\n\t\traise Exception(\"Component {} not found in expression\".format(str(components)))\n\t# Extract from something multiterm\n\telse:\n\t\t# Start the expression as a comma for convenience, we will change\n\t\t# this to the head node of the expression at the end\n\t\tres = $\\comma$\n\t\tfor node in ex.top().args():\n\t\t\tif node.name == r'\\components':\n\t\t\t\tterm = get_component($@(node)$, components)\n\t\t\telse:\n\t\t\t\tterm = $@(node)$\n\t\t\tres.top().append_child(term)\n\t\tres.top().name = ex.top().name\n\t\treturn res"
+			"cell_id": 2743671539812446348,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def get_component(ex, components):\n\t\"\"\"Gets a particular component of an expression\"\"\"\n\t# Work on a copy of ex\n\tex = ex.top().ex()\n\n\t# Replace all free indices with the components\n\tfree_indices = get_free_indices(ex.top())\n\tif components.top().name != r\"\\comma\":\n\t\ttmp = Ex(r'\\comma')\n\t\ttmp.top().append_child(components.top())\n\t\tcomponents = tmp\n\tassert len(free_indices) == n_children(components.top()), f\"Expression contains {len(free_indices)} free indices, but {n_children(components.top())} components supplied\"\n\tfor index, component in zip(free_indices, components.top().children()):\n\t\tnode = next(ex[index.top().name], None)\n\t\tchanged = True\n\t\twhile changed:\n\t\t\tfor node in ex[index.top().name]:\n\t\t\t\tif node.parent_rel == parent_rel_t.super or node.parent_rel == parent_rel_t.sub:\n\t\t\t\t\tpr = node.parent_rel\n\t\t\t\t\tnode.replace(component.ex())\n\t\t\t\t\tnode.parent_rel = pr\n\t\t\t\t\tbreak\n\t\t\telse:\n\t\t\t\tchanged = False\n\n\t# Replace all component nodes with the particular component we are looking for\n\tfor node in ex[r'\\components']:\n\t\t# Sift through \\equals nodes finding the one with the right components\n\t\tfor candidate in node[r'\\equals']:\n\t\t\targ = get_lhs(candidate)\n\t\t\tif arg == components:\n\t\t\t\tnode = node.replace(get_rhs(candidate))\n\t\t\t\tbreak\n\t\telse:\n\t\t\tnode = node.replace($0$)\n\n\t# The components paramater needs to have a head '\\comma' node\n\t# so let's quickly make sure that's true.\n\tif components.head() != r'\\comma':\n\t\tbit = $@(components)$\n\t\tcomponents.top().name = r'\\comma'\n\t\tcomponents.top().append_child(bit)\n\n\treturn ex"
 		},
 		{
-			"cell_id" : 3091027410461552154,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 3091027410461552154,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_id" : 13790438723981981433,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left[t,~\\discretionary{}{}{} x\\right].\\end{dmath*}"
+					"cell_id": 10702135062815239023,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Coordinate attached to~}\\left[t,~\\discretionary{}{}{} x\\right].\\end{dmath*}"
 				},
 				{
-					"cell_id" : 6585730608062079511,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[i,~\\discretionary{}{}{} j\\right].\\end{dmath*}"
+					"cell_id": 7913033517866597731,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Indices(position=free) attached to~}\\left[i,~\\discretionary{}{}{} j\\right].\\end{dmath*}"
 				},
 				{
-					"cell_id" : 4687258342932784630,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 7270033254803685303,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_id" : 2882509989814794757,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "a_{i}"
+							"cell_id": 12003858549170534122,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "b_{i} = a_{i}"
 						}
 					],
-					"source" : "\\begin{dmath*}{}a_{i}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}b_{i} = a_{i}\\end{dmath*}"
 				},
 				{
-					"cell_id" : 4500686143986621624,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 6142898072093974525,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_id" : 762773063794805061,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\components_{i}({{t} = 1, {x} = 2})"
+							"cell_id": 16609044361570361619,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "b_{i} = \\components_{i}({{t} = 1, {x} = 2})"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\square{}_{i}\\left\\{\\begin{aligned}\\square{}_{t}= & 1\\\\[-.5ex]\n\\square{}_{x}= & 2\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source": "\\begin{dmath*}{}b_{i} = \\square{}_{i}\\left\\{\\begin{aligned}\\square{}_{t}& = 1\\\\[-.5ex]\n\\square{}_{x}& = 2\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+				},
+				{
+					"cell_id": 15779107546857997208,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2447125086089804696,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "b_{x} = 2"
+						}
+					],
+					"source": "\\begin{dmath*}{}b_{x} = 2\\end{dmath*}"
 				}
 			],
-			"ignore_on_import" : true,
-			"source" : "{t,x}::Coordinate;\n{i,j}::Indices(values={t,x});\nex:= a_{i};\nevaluate(ex, $a_{t}=1, a_{x}=2$);"
+			"ignore_on_import": true,
+			"source": "{t,x}::Coordinate;\n{i,j}::Indices(values={t,x});\nex:= b_{i} = a_{i};\nevaluate(ex, $a_{t}=1, a_{x}=2$, rhsonly=True);\nget_component(ex, $x$);"
 		},
 		{
-			"cell_id" : 5606391277831315157,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 5679090421226085066,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_id" : 5509550843997306103,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 5006167440808421109,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_id" : 1441692765197866998,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "2"
+							"cell_id": 18189614503928553251,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0 = 6(\\Phi)**1 a2 k_{\\nu} k_{\\mu}-(\\Phi)**1 b2 \\eta^{\\sigma \\rho} \\partial_{\\rho}(z) \\omega (c)**(-1) B_{\\nu \\sigma} k_{\\mu}-2(\\Phi)**1 a2 k_{\\mu} k_{\\nu} + (\\Phi)**1 b2 \\partial_{\\sigma}(z) \\omega (c)**(-1) B_{\\nu \\mu} k_{\\rho} \\eta^{\\sigma \\rho} + (\\Phi)**1 b2 \\eta^{\\sigma \\rho} \\partial_{\\rho}(z) \\omega (c)**(-1) B_{\\nu \\mu} k_{\\sigma}-(\\Phi)**1 b2 \\partial_{\\alpha}(z) \\omega (c)**(-1) B_{\\rho \\mu} k_{\\nu} \\eta^{\\alpha \\rho} -  1/2 A_{\\rho \\sigma} k_{\\nu} A_{\\beta \\alpha} k_{\\mu} \\eta^{\\beta \\rho} \\eta^{\\sigma \\alpha} -  1/2 A_{\\rho \\sigma} A_{\\beta \\alpha} k_{\\nu} k_{\\mu} \\eta^{\\beta \\rho} \\eta^{\\sigma \\alpha} +  1/4 A_{\\alpha \\beta} k_{\\nu} A_{\\sigma \\rho} k_{\\mu} \\eta^{\\beta \\sigma} \\eta^{\\rho \\alpha}"
 						}
 					],
-					"source" : "\\begin{dmath*}{}2\\end{dmath*}"
-				}
-			],
-			"ignore_on_import" : true,
-			"source" : "get_component(ex, $x$);"
-		},
-		{
-			"cell_id" : 16409402158754707338,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
-				{
-					"cell_id" : 5333473821107834285,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\algorithm{remove_zero_components(ex: Ex) -> Ex}{Remove all components of an expression that are equal to zero.}"
-				}
-			],
-			"hidden" : true,
-			"source" : "\\algorithm{remove_zero_components(ex: Ex) -> Ex}{Remove all components of an expression that are equal to zero.}"
-		},
-		{
-			"cell_id" : 9384605071867656007,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "def remove_zero_components(ex):\n\t\"\"\"Removes all components of an expression that are equal to 0\"\"\"\n\tfor node in ex[r'\\equals']:\n\t\tif nth_arg(node, 0).name == r'\\comma':\n\t\t\tif nth_arg(node, 1).multiplier == 0:\n\t\t\t\tnode.erase()\n\treturn ex"
-		},
-		{
-			"cell_id" : 16820310678693438548,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_id" : 11335533851764470440,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_id" : 8454698034353519672,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "a_{i} a_{j}"
-						}
-					],
-					"source" : "\\begin{dmath*}{}a_{i} a_{j}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}0 = 6{\\Phi}^{1} {a_{2}} k_{\\nu} k_{\\mu}-{\\Phi}^{1} {b_{2}} \\eta^{\\sigma \\rho} \\partial_{\\rho}\\left(z\\right) \\omega {c}^{-1} B_{\\nu \\sigma} k_{\\mu}-2{\\Phi}^{1} {a_{2}} k_{\\mu} k_{\\nu}+{\\Phi}^{1} {b_{2}} \\partial_{\\sigma}\\left(z\\right) \\omega {c}^{-1} B_{\\nu \\mu} k_{\\rho} \\eta^{\\sigma \\rho}+{\\Phi}^{1} {b_{2}} \\eta^{\\sigma \\rho} \\partial_{\\rho}\\left(z\\right) \\omega {c}^{-1} B_{\\nu \\mu} k_{\\sigma}-{\\Phi}^{1} {b_{2}} \\partial_{\\alpha}\\left(z\\right) \\omega {c}^{-1} B_{\\rho \\mu} k_{\\nu} \\eta^{\\alpha \\rho} - \\frac{1}{2}A_{\\rho \\sigma} k_{\\nu} A_{\\beta \\alpha} k_{\\mu} \\eta^{\\beta \\rho} \\eta^{\\sigma \\alpha} - \\frac{1}{2}A_{\\rho \\sigma} A_{\\beta \\alpha} k_{\\nu} k_{\\mu} \\eta^{\\beta \\rho} \\eta^{\\sigma \\alpha}+\\frac{1}{4}A_{\\alpha \\beta} k_{\\nu} A_{\\sigma \\rho} k_{\\mu} \\eta^{\\beta \\sigma} \\eta^{\\rho \\alpha}\\end{dmath*}"
 				},
 				{
-					"cell_id" : 3443829469399784960,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 13426140165273122169,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_id" : 5583668205410070713,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\components_{i j}({{x, x} = (k)**2, {x, y} = k l, {x, z} = k m, {y, x} = k l, {y, y} = (l)**2, {y, z} = l m, {z, x} = k m, {z, y} = l m, {z, z} = (m)**2})"
+							"cell_id": 7820754601545462471,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0 = 6(\\Phi)**1 a2 k_{t} k_{t}-(\\Phi)**1 b2 \\eta^{\\sigma \\rho} \\partial_{\\rho}(z) \\omega (c)**(-1) B_{t \\sigma} k_{t}-2(\\Phi)**1 a2 k_{t} k_{t} + (\\Phi)**1 b2 \\partial_{\\sigma}(z) \\omega (c)**(-1) B_{t t} k_{\\rho} \\eta^{\\sigma \\rho} + (\\Phi)**1 b2 \\eta^{\\sigma \\rho} \\partial_{\\rho}(z) \\omega (c)**(-1) B_{t t} k_{\\sigma}-(\\Phi)**1 b2 \\partial_{\\alpha}(z) \\omega (c)**(-1) B_{\\rho t} k_{t} \\eta^{\\alpha \\rho} -  1/2 A_{\\rho \\sigma} k_{t} A_{\\beta \\alpha} k_{t} \\eta^{\\beta \\rho} \\eta^{\\sigma \\alpha} -  1/2 A_{\\rho \\sigma} A_{\\beta \\alpha} k_{t} k_{t} \\eta^{\\beta \\rho} \\eta^{\\sigma \\alpha} +  1/4 A_{\\alpha \\beta} k_{t} A_{\\sigma \\rho} k_{t} \\eta^{\\beta \\sigma} \\eta^{\\rho \\alpha}"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\square{}_{i}{}_{j}\\left\\{\\begin{aligned}\\square{}_{x}{}_{x}= & {k}^{2}\\\\[-.5ex]\n\\square{}_{x}{}_{y}= & k l\\\\[-.5ex]\n\\square{}_{x}{}_{z}= & k m\\\\[-.5ex]\n\\square{}_{y}{}_{x}= & k l\\\\[-.5ex]\n\\square{}_{y}{}_{y}= & {l}^{2}\\\\[-.5ex]\n\\square{}_{y}{}_{z}= & l m\\\\[-.5ex]\n\\square{}_{z}{}_{x}= & k m\\\\[-.5ex]\n\\square{}_{z}{}_{y}= & l m\\\\[-.5ex]\n\\square{}_{z}{}_{z}= & {m}^{2}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
-				},
-				{
-					"cell_id" : 7287190375061321435,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_id" : 17063748820522396204,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\components_{i j}({{x, x} = (k)**2, {x, y} = k l, {x, z} = 0, {y, x} = k l, {y, y} = (l)**2, {y, z} = l m, {z, x} = 0, {z, y} = l m, {z, z} = (m)**2})"
-						}
-					],
-					"source" : "\\begin{dmath*}{}\\square{}_{i}{}_{j}\\left\\{\\begin{aligned}\\square{}_{x}{}_{x}= & {k}^{2}\\\\[-.5ex]\n\\square{}_{x}{}_{y}= & k l\\\\[-.5ex]\n\\square{}_{x}{}_{z}= & 0\\\\[-.5ex]\n\\square{}_{y}{}_{x}= & k l\\\\[-.5ex]\n\\square{}_{y}{}_{y}= & {l}^{2}\\\\[-.5ex]\n\\square{}_{y}{}_{z}= & l m\\\\[-.5ex]\n\\square{}_{z}{}_{x}= & 0\\\\[-.5ex]\n\\square{}_{z}{}_{y}= & l m\\\\[-.5ex]\n\\square{}_{z}{}_{z}= & {m}^{2}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
-				},
-				{
-					"cell_id" : 15670649603979469154,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_id" : 12155786866166233505,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\components_{i j}({{x, x} = (k)**2, {x, y} = k l, {y, x} = k l, {y, y} = (l)**2, {y, z} = l m, {z, y} = l m, {z, z} = (m)**2})"
-						}
-					],
-					"source" : "\\begin{dmath*}{}\\square{}_{i}{}_{j}\\left\\{\\begin{aligned}\\square{}_{x}{}_{x}= & {k}^{2}\\\\[-.5ex]\n\\square{}_{x}{}_{y}= & k l\\\\[-.5ex]\n\\square{}_{y}{}_{x}= & k l\\\\[-.5ex]\n\\square{}_{y}{}_{y}= & {l}^{2}\\\\[-.5ex]\n\\square{}_{y}{}_{z}= & l m\\\\[-.5ex]\n\\square{}_{z}{}_{y}= & l m\\\\[-.5ex]\n\\square{}_{z}{}_{z}= & {m}^{2}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source": "\\begin{dmath*}{}0 = 6{\\Phi}^{1} {a_{2}} k_{t} k_{t}-{\\Phi}^{1} {b_{2}} \\eta^{\\sigma \\rho} \\partial_{\\rho}\\left(z\\right) \\omega {c}^{-1} B_{t \\sigma} k_{t}-2{\\Phi}^{1} {a_{2}} k_{t} k_{t}+{\\Phi}^{1} {b_{2}} \\partial_{\\sigma}\\left(z\\right) \\omega {c}^{-1} B_{t t} k_{\\rho} \\eta^{\\sigma \\rho}+{\\Phi}^{1} {b_{2}} \\eta^{\\sigma \\rho} \\partial_{\\rho}\\left(z\\right) \\omega {c}^{-1} B_{t t} k_{\\sigma}-{\\Phi}^{1} {b_{2}} \\partial_{\\alpha}\\left(z\\right) \\omega {c}^{-1} B_{\\rho t} k_{t} \\eta^{\\alpha \\rho} - \\frac{1}{2}A_{\\rho \\sigma} k_{t} A_{\\beta \\alpha} k_{t} \\eta^{\\beta \\rho} \\eta^{\\sigma \\alpha} - \\frac{1}{2}A_{\\rho \\sigma} A_{\\beta \\alpha} k_{t} k_{t} \\eta^{\\beta \\rho} \\eta^{\\sigma \\alpha}+\\frac{1}{4}A_{\\alpha \\beta} k_{t} A_{\\sigma \\rho} k_{t} \\eta^{\\beta \\sigma} \\eta^{\\rho \\alpha}\\end{dmath*}"
 				}
 			],
-			"ignore_on_import" : true,
-			"source" : "{x, y, z}::Coordinate.\n{i, j}::Indices(values={x, y, z}, position=fixed).\nex := a_{i}a_{j};\nevaluate(ex, $a_{x} = k, a_{y} = l, a_{z} = m$);\nsubstitute(ex, $k m -> 0$);\nremove_zero_components(ex);"
+			"ignore_on_import": true,
+			"source": "ex := 0 = \n\t6(\\Phi)**1 a2 k_{\\nu} k_{\\mu}-\n\t(\\Phi)**1 b2 \\eta^{\\sigma \\rho} \\partial_{\\rho}(z) \\omega (c)**(-1) B_{\\nu \\sigma} k_{\\mu}-\n\t2(\\Phi)**1 a2 k_{\\mu} k_{\\nu} + \n\t(\\Phi)**1 b2 \\partial_{\\sigma}(z) \\omega (c)**(-1) B_{\\nu \\mu} k_{\\rho} \\eta^{\\sigma \\rho} + \n\t(\\Phi)**1 b2 \\eta^{\\sigma \\rho} \\partial_{\\rho}(z) \\omega (c)**(-1) B_{\\nu \\mu} k_{\\sigma}-\n\t(\\Phi)**1 b2 \\partial_{\\alpha}(z) \\omega (c)**(-1) B_{\\rho \\mu} k_{\\nu} \\eta^{\\alpha \\rho} -  \n\t1/2 A_{\\rho \\sigma} k_{\\nu} A_{\\beta \\alpha} k_{\\mu} \\eta^{\\beta \\rho} \\eta^{\\sigma \\alpha} -  \n\t1/2 A_{\\rho \\sigma} A_{\\beta \\alpha} k_{\\nu} k_{\\mu} \\eta^{\\beta \\rho} \\eta^{\\sigma \\alpha} +  \n\t1/4 A_{\\alpha \\beta} k_{\\nu} A_{\\sigma \\rho} k_{\\mu} \\eta^{\\beta \\sigma} \\eta^{\\rho \\alpha};\nget_component(ex, $t, t$);"
 		},
 		{
-			"cell_id" : 2548545959295068830,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 16409402158754707338,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 5333473821107834285,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{remove_zero_components(ex: Ex) -> Ex}{Remove all components of an expression that are equal to zero.}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{remove_zero_components(ex: Ex) -> Ex}{Remove all components of an expression that are equal to zero.}"
+		},
+		{
+			"cell_id": 9384605071867656007,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def remove_zero_components(ex):\n\t\"\"\"Removes all components of an expression that are equal to 0\"\"\"\n\tfor node in ex[r'\\equals']:\n\t\tif get_lhs(node).head() == r'\\comma':\n\t\t\tif get_rhs(node).top().multiplier == 0:\n\t\t\t\tnode.erase()\n\treturn ex"
+		},
+		{
+			"cell_id": 16820310678693438548,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 4375173011433589475,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2725614521603779721,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "a_{i} a_{j}"
+						}
+					],
+					"source": "\\begin{dmath*}{}a_{i} a_{j}\\end{dmath*}"
+				},
+				{
+					"cell_id": 15596320799981300764,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17539437833194849023,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\components_{i j}({{x, x} = (k)**2, {x, y} = k l, {x, z} = 0, {y, x} = k l, {y, y} = (l)**2, {y, z} = l m, {z, x} = 0, {z, y} = l m, {z, z} = (m)**2})"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\square{}_{i}{}_{j}\\left\\{\\begin{aligned}\\square{}_{x}{}_{x}& = {k}^{2}\\\\[-.5ex]\n\\square{}_{x}{}_{y}& = k l\\\\[-.5ex]\n\\square{}_{x}{}_{z}& = 0\\\\[-.5ex]\n\\square{}_{y}{}_{x}& = k l\\\\[-.5ex]\n\\square{}_{y}{}_{y}& = {l}^{2}\\\\[-.5ex]\n\\square{}_{y}{}_{z}& = l m\\\\[-.5ex]\n\\square{}_{z}{}_{x}& = 0\\\\[-.5ex]\n\\square{}_{z}{}_{y}& = l m\\\\[-.5ex]\n\\square{}_{z}{}_{z}& = {m}^{2}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+				},
+				{
+					"cell_id": 9710818811944152525,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11681310114441799183,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\components_{i j}({{x, x} = (k)**2, {x, y} = k l, {y, x} = k l, {y, y} = (l)**2, {y, z} = l m, {z, y} = l m, {z, z} = (m)**2})"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\square{}_{i}{}_{j}\\left\\{\\begin{aligned}\\square{}_{x}{}_{x}& = {k}^{2}\\\\[-.5ex]\n\\square{}_{x}{}_{y}& = k l\\\\[-.5ex]\n\\square{}_{y}{}_{x}& = k l\\\\[-.5ex]\n\\square{}_{y}{}_{y}& = {l}^{2}\\\\[-.5ex]\n\\square{}_{y}{}_{z}& = l m\\\\[-.5ex]\n\\square{}_{z}{}_{y}& = l m\\\\[-.5ex]\n\\square{}_{z}{}_{z}& = {m}^{2}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "{x, y, z}::Coordinate.\n{i, j}::Indices(values={x, y, z}, position=fixed).\nex := a_{i}a_{j};\nevaluate(ex, $a_{x} = k, a_{y} = l, a_{z} = m$)\nsubstitute(ex, $k m -> 0$);\nremove_zero_components(ex);"
+		},
+		{
+			"cell_id": 2548545959295068830,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 17475987741362274274,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{components_to_subrule(ex: Ex) -> Ex}{Turn a component expression (the result of a \\texttt{evaluate} command)\ninto a set of substitution rules}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{components_to_subrule(ex: Ex) -> Ex}{Turn a component expression (the result of a \\texttt{evaluate} command)\ninto a set of substitution rules}"
+		},
+		{
+			"cell_id": 3321195237657858341,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def components_to_subrule(ex):\n\tassert ex.top().name == r\"\\equals\", \"components_to_subrules requires an equation type expression\"\n\tres = Ex(r\"\\comma\")\n\n\tcomponents = ex[1]\n\tindices = [index.name for index in components.top().indices()]\n\tfor rule in components[r\"\\equals\"]:\n\t\tcoordinates = [index.name for index in get_lhs(rule).top().args()]\n\t\t# Replace indices of lhs with component coordinates\n\t\tpat = ex[0]\n\t\tfor index, coordinate in zip(indices, coordinates):\n\t\t\tfor node in pat[index]:\n\t\t\t\t# Ensure we've hit an index\n\t\t\t\tif node.parent_rel == parent_rel_t.super or node.parent_rel == parent_rel_t.sub:\n\t\t\t\t\tnode.name = coordinate\n\t\t\t\t\tbreak\n\t\t\telse:\n\t\t\t\traise RuntimeError(\"could not find index for coordinate substitution\")\n\t\tfilledrule = Ex(r\"\\arrow\")\n\t\tfilledrule.top().append_child(pat)\n\t\tfilledrule.top().append_child(get_rhs(rule))\n\t\tres.top().append_child(filledrule)\n\treturn res"
+		},
+		{
+			"cell_id": 3334462144877032844,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 7640103236893243329,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2627810145891272135,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "b_{i j} = a_{i} a_{j}"
+						}
+					],
+					"source": "\\begin{dmath*}{}b_{i j} = a_{i} a_{j}\\end{dmath*}"
+				},
+				{
+					"cell_id": 7085476904939279437,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14912669988470921544,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "b_{i j} = \\components_{i j}({{x, x} = (k)**2, {x, y} = k l, {x, z} = k m, {y, x} = k l, {y, y} = (l)**2, {y, z} = l m, {z, x} = k m, {z, y} = l m, {z, z} = (m)**2})"
+						}
+					],
+					"source": "\\begin{dmath*}{}b_{i j} = \\square{}_{i}{}_{j}\\left\\{\\begin{aligned}\\square{}_{x}{}_{x}& = {k}^{2}\\\\[-.5ex]\n\\square{}_{x}{}_{y}& = k l\\\\[-.5ex]\n\\square{}_{x}{}_{z}& = k m\\\\[-.5ex]\n\\square{}_{y}{}_{x}& = k l\\\\[-.5ex]\n\\square{}_{y}{}_{y}& = {l}^{2}\\\\[-.5ex]\n\\square{}_{y}{}_{z}& = l m\\\\[-.5ex]\n\\square{}_{z}{}_{x}& = k m\\\\[-.5ex]\n\\square{}_{z}{}_{y}& = l m\\\\[-.5ex]\n\\square{}_{z}{}_{z}& = {m}^{2}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+				},
+				{
+					"cell_id": 15806421466316692092,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17702748017509995526,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "{b_{x x} -> (k)**2, b_{x y} -> k l, b_{x z} -> k m, b_{y x} -> k l, b_{y y} -> (l)**2, b_{y z} -> l m, b_{z x} -> k m, b_{z y} -> l m, b_{z z} -> (m)**2}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left[b_{x x} \\rightarrow {k}^{2},~\\discretionary{}{}{} b_{x y} \\rightarrow k l,~\\discretionary{}{}{} b_{x z} \\rightarrow k m,~\\discretionary{}{}{} b_{y x} \\rightarrow k l,~\\discretionary{}{}{} b_{y y} \\rightarrow {l}^{2},~\\discretionary{}{}{} b_{y z} \\rightarrow l m,~\\discretionary{}{}{} b_{z x} \\rightarrow k m,~\\discretionary{}{}{} b_{z y} \\rightarrow l m,~\\discretionary{}{}{} b_{z z} \\rightarrow {m}^{2}\\right]\\end{dmath*}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "{x, y, z}::Coordinate.\n{i, j}::Indices(values={x, y, z}, position=fixed).\nex := b_{i j} = a_{i}a_{j};\nevaluate(ex, $a_{x} = k, a_{y} = l, a_{z} = m$, rhsonly=True);\n# substitute(ex, $k m -> 0$);\ncomponents_to_subrule(ex);"
+		},
+		{
+			"cell_id": 616193830461043874,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
 }

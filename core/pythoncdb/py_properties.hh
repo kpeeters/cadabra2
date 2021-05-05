@@ -6,6 +6,7 @@
 #include <regex>
 #include <memory>
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include "py_ex.hh"
 #include "py_kernel.hh"
 #include "py_tableau.hh"

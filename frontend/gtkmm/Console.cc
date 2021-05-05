@@ -258,6 +258,9 @@ void Console::process_message_queue()
 		   msg_type == "csl_out") {
 			insert_text(content, output_tag);
 			}
+		else if (msg_type == "csl_warn") {
+			insert_text("Warning: " + content, warning_tag);
+		}
 		else if (msg_type == "csl_clear") {
 			get_buffer()->set_text("");
 			prompt(false);

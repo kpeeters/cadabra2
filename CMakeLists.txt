@@ -95,6 +95,9 @@ include(cmake/packaging.cmake)
 # User options and other notifications
 #---------------------------------------------------------------------------
 
+#
+option(MSVC_TARGET_CONSOLE "Force Release book on MSVC to display a console window" OFF)
+
 # Provide option to build with Python 3 (default) or Python 2.
 option(USE_PYTHON_3 "Use Python 3 if ON, or fall back to Python 2 if OFF" ON)
 

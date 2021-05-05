@@ -247,7 +247,7 @@
 			"cell_id": 5307119722135943631,
 			"cell_origin": "client",
 			"cell_type": "input",
-			"source": "def get_lhs(ex):\n\t\"\"\"Returns the left hand side of an equation, inequality, or expression whose top node contains two arguments\"\"\"\n\tif n_args(ex.top()) != 2:\n\t\traise Exception(\"get_lhs called on expression whose top node contains {} arguments, 2 required\".format(n_args(ex.top())))\n\n\tlhs = nth_arg(ex.top(), 0)\n\treturn $@(lhs)$"
+			"source": "def get_lhs(ex):\n\t\"\"\"Returns the left hand side of an equation, inequality, or expression whose top node contains two arguments\"\"\"\n\tif isinstance(ex, Ex):\n\t\tex = ex.top()\n\tif n_args(ex) != 2:\n\t\traise Exception(\"get_lhs called on expression whose top node contains {} arguments, 2 required\".format(n_args(ex)))\n\treturn nth_arg(ex, 0).ex()"
 		},
 		{
 			"cell_id": 5233847834690152710,
@@ -255,12 +255,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 9232980289343368380,
+					"cell_id": 3168203333233232823,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 7650472233492719121,
+							"cell_id": 8343678120098024622,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "a"
@@ -291,7 +291,7 @@
 			"cell_id": 11895343331560033174,
 			"cell_origin": "client",
 			"cell_type": "input",
-			"source": "def get_rhs(ex):\n\t\"\"\"Returns the left hand side of an equation, inequality, or expression whose top node contains two arguments\"\"\"\n\tif n_args(ex.top()) != 2:\n\t\traise Exception(\"get_lhs called on expression whose top node contains {} arguments, 2 required\".format(n_args(ex.top())))\n\n\trhs = nth_arg(ex.top(), 1)\n\treturn $@(rhs)$"
+			"source": "def get_rhs(ex):\n\t\"\"\"Returns the right hand side of an equation, inequality, or expression whose top node contains two arguments\"\"\"\n\tif isinstance(ex, Ex):\n\t\tex = ex.top()\n\tif n_args(ex) != 2:\n\t\traise Exception(\"get_rhs called on expression whose top node contains {} arguments, 2 required\".format(n_args(ex)))\n\treturn nth_arg(ex, 1).ex()"
 		},
 		{
 			"cell_id": 8733667829887500319,

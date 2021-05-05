@@ -112,9 +112,10 @@ add_definitions(
 #  )
 
 # Server executable
-if(MSVC AND CADABRA_DEBUG_BUILD)
+if ((NOT MSVC) OR (MSVC AND CADABRA_DEBUG_BUILD) OR (MSVC AND MSVC_TARGET_CONSOLE))
    add_executable(cadabra-server ${CADABRA_SERVER_SRC})
 else()
+   message(STATUS "Using the win32 subsystem")
    add_executable(cadabra-server WIN32 ${CADABRA_SERVER_SRC}) 
 endif()
 
