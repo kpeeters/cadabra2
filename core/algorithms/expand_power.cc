@@ -27,7 +27,7 @@ Algorithm::result_t expand_power::apply(iterator& it)
 	++exponent;
 
 	int num=to_long(*exponent->multiplier);
-	if(num<=1)
+	if(num<1)
 		return result_t::l_no_action;
 
 	iterator prodn=tr.insert(argument,str_node("\\prod"));
