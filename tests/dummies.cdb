@@ -1,21 +1,74 @@
 
+# rename_dummies tests
+
 def test01():
    __cdbkernel__=create_scope()
-   {m,n,p,q}::Indices("one");
-   {a,b,c,d}::Indices("two")
-   ex:= A_{m} A^{m} + B_{m} C^{m} + A_{n} A^{n} + Q_{c d} R^{d c};
-   rename_dummies(_, "one", "two")
-   tst:= 2 A_{a} A^{a} + B_{a} C^{a} + Q_{c d} R^{d c} - @(ex);
-   assert(tst==0)
+   {m,n,p,q}::Indices("one").
+   {a,b,c,d}::Indices("two").
+   ex:= A_{m} A^{m} + B_{m} C^{m} + A_{n} A^{n} + Q_{c d} R^{d c}.
+   rename_dummies(ex, "one", "two")
+   tst:= 2 A_{a} A^{a} + B_{a} C^{a} + Q_{c d} R^{d c} - @(ex).
+   assert tst == 0, tst
    print("Test 01 passed")
 
 test01()
 
-__cdbkernel__=create_scope()
-{n,p,q}::Indices("one");
-{m,n,p,q,r,s,t}::Indices("two")
-ex:= A_{r} = A_{m r} A^{m} + A_{n r} A^{n} + A_{s r} A^{s};
-rename_dummies(_, "two", "one")
+def test02():
+   __cdbkernel__=create_scope()
+   {n,p,q}::Indices("one").
+   {m,n,p,q,r,s,t}::Indices("two").
+   ex:= A_{r} = A_{m r} A^{m} + A_{n r} A^{n} + A_{s r} A^{s}.
+   rename_dummies(ex, "two", "one")
+   assert ex == $A_{r} = 3A_{n r} A^{n}$, ex
+   print("Test 02 passed")
+
+test02()
 
 
+# expand_dummies tests
 
+def test03():
+   __cdbkernel__ = create_scope()
+   {t, x}::Coordinate.
+   {\mu, \nu, \rho}::Indices(vector, values={t, x}).
+   ex := A_{\mu} A^{\mu}.
+   expand_dummies(ex)
+   assert ex == $A_{t}A^{t} + A_{x}A^{x}$, ex
+   print("Test 03 passed")
+
+test03()
+
+def test04():
+   __cdbkernel__ = create_scope()
+   {t, x}::Coordinate.
+   {\mu, \nu, \rho}::Indices(vector, values={t, x}).
+   ex := g^{\mu \nu} A_{\nu}.
+   expand_dummies(ex)
+   assert ex == $g^{\mu t} A_{t} + g^{\mu x} A_{x}$, ex
+   print("Test 04 passed")
+
+test04()
+
+def test05():
+   __cdbkernel__ = create_scope()
+   {t, x, y, z}::Coordinate.
+   {\mu, \nu, \rho, \lambda}::Indices(vector, values={t, x, y, z}).
+   mink := g_{t t} = -1, g_{x x} = 1, g_{y y} = 1, g_{z z} = 1.
+   ex := g_{\mu \rho} g_{\mu \lambda} k^{\rho} k^{\lambda}.
+   expand_dummies(ex, mink)
+   assert ex == $k^{t}k^{t} + k^{x}k^{x} + k^{y}k^{y} + k^{z}k^{z}$, ex
+   print("Test 05 passed")
+
+test05()
+
+def test06():
+   __cdbkernel__ = create_scope()
+   {t, x}::Coordinate.
+   {\mu, \nu, \rho, \lambda}::Indices(vector, values={t, x}).
+   components := A_{t t} = a1, A_{x x} = a2, B_{x t} = b.
+   ex := A_{\mu \nu}B_{\mu \nu}.
+   expand_dummies(ex, components, False)
+   assert ex == $a1 B_{t t} + A_{x t} b + A_{t x} B_{t x} + a2 B_{x x}$, ex
+   print("Test 06 passed")
+
+test06()

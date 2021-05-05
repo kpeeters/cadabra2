@@ -13,7 +13,7 @@ def get_classes(module):
 def generate_set(name, items, line_begin = '\t', line_size = 80):
 	print('const std::unordered_set<std::string> {} = {{'.format(name))
 	curline = ''
-	for item in ('"{}", '.format(item) for item in items):
+	for item in ('"{}", '.format(item) for item in sorted(items)):
 		if len(curline) + len(item) > line_size:
 			print(line_begin + curline)
 			curline = ''
@@ -39,17 +39,17 @@ if __name__ == "__main__":
 	import sys
 
 	modules = ["builtins"]
-	outdir = '.'
+	outdir = '../frontend/gtkmm'
 	if len(sys.argv) == 1:
 		print("Usage: {} [module1 [module2 [...]]] [--outdir] [--path]".format(sys.argv[0]))
-		print("\tSpecify the output directory for the Keywords.hh and Keywords.cc files with --outdir")
-		print("\tSpecify additional search paths for modules with --path; search paths should be semicolon separated")
+		print(f"\tSpecify the output directory for the Keywords.hh and Keywords.cc files with --outdir=path/to/outdir (defaults to {outdir})")
+		print("\tSpecify additional search paths for modules with --path=your/import/directory. Specify multiple times for different paths.")
 		exit(-1)
 	for arg in sys.argv[1:]:
 		if arg.startswith("--outdir="):
 			outdir = arg[len("--outdir="):]
 		elif arg.startswith("--path="):
-			sys.path.extend(arg[len("--path="):].split(';'))
+			sys.path.append(os.path.abspath(arg[len("--path="):]))
 		else:
 			modules.append(arg)
 
@@ -58,15 +58,19 @@ if __name__ == "__main__":
 		try:
 			modules[i] = importlib.import_module(modules[i])
 		except ImportError:
-			print("Could not import module {}".format(modules[i]))
+			print("Could not import module {}. Used path:".format(modules[i]))
+			for path in sys.path:
+				print(f"\t{path}")
 			exit(-1)
 
-	functions = []
-	classes = []
+	functions = set()
+	classes = set()
 
 	for module in modules:
-		functions.extend(get_functions(module))
-		classes.extend(get_classes(module))
+		for f in get_functions(module):
+			functions.add(f)
+		for c in get_classes(module):
+			classes.add(c)
 
 	print("Generating in directory '{}'".format(outdir))
 
