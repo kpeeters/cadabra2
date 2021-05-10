@@ -640,7 +640,9 @@ void NotebookWindow::on_connect()
 	{
 	std::lock_guard<std::mutex> guard(status_mutex);
 	kernel_string = "connected";
+	progress_string = "Idle";
 	dispatcher.emit();
+	dispatch_update_status.emit();
 	console.initialize();
 	// prefs.python_path might end in a backslash which will raise an EOF syntax error, so we add a
 	// semicolon to the end of it and then remove the (empty) last element of the resulting list
@@ -1979,6 +1981,14 @@ void NotebookWindow::on_kernel_restart()
 	// FIXME: add warnings
 
 	compute->restart_kernel();
+
+		{
+		std::lock_guard<std::mutex> guard(status_mutex);
+		progress_string = "Idle";
+		progress_frac = 0.0;
+		}
+
+	dispatch_update_status.emit();
 	}
 
 void NotebookWindow::on_help() const
