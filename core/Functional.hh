@@ -74,4 +74,51 @@ namespace cadabra {
 		return it;
 		}
 
+	// Iterate over the children of 'it' if the node is named 'delim', otherwise only
+	// iterate over the single node. Note: this yields iterators, not str_nodes.
+	struct split_it
+	{
+		struct iterator {
+			using value_type = Ex::sibling_iterator;
+			using difference_type = ptrdiff_t;
+			using reference = value_type&;
+			using const_reference = const value_type&;
+			using pointer = value_type*;
+			using const_pointer = const value_type*;
+			using iterator_category = std::input_iterator_tag;
+
+			iterator() {}
+			iterator(Ex::sibling_iterator it) : it(it) {}
+
+			bool operator == (const iterator& other) { return it == other.it; }
+			bool operator != (const iterator& other) { return !(*this == other); }
+			reference operator* () { return it; }
+			pointer operator-> () { return &it; }
+			reference operator ++ () { return ++it; }
+			value_type operator ++ (int) { return it++; }
+
+
+			Ex::sibling_iterator it;
+		};
+
+		split_it(Ex::iterator it, const std::string& delim = "")
+		{
+			if (delim == "" || *it->name == delim) {
+				begin_ = it.begin();
+				end_ = it.end();
+			}
+			else {
+				begin_ = it;
+				end_ = it;
+				++end_;
+			}
+		}
+
+		iterator begin() { return iterator(begin_); }
+		iterator end() { return iterator(end_); }
+
+	private:
+		Ex::sibling_iterator begin_, end_;
+	};
+
 	};

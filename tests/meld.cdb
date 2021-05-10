@@ -1,116 +1,125 @@
 # Testing that some expressions are canonicalised
 # properly using the meld algorithm
 import timeit
+import sys
 
-def test01():
+# Flag to skip the comparison tests
+no_comp = ("--no-comp" in sys.argv)
+    
+
+# *_tableaux tests
+
+# Simple symmetric/antisymmetic tensors
+def tab01():
     __cdbkernel__ = create_scope()
     S_{a b c}::Symmetric;
     ex:= S_{a b c}S_{b a c} + S_{b a c}S_{c a b}:
     meld(ex)
-    assert(ex == $2S_{a b c}S_{b a c}$)
-    print("Test 01 passed")
+    assert ex == $2S_{a b c}S_{b a c}$, ex
+    print("Test tab01 passed")
 
-test01()
+tab01()
 
-def test02():
+def tab02():
     __cdbkernel__ = create_scope()
     A_{a b c}::AntiSymmetric.
     ex = meld($A_{a b c} - A_{b a c}$)
-    assert ex == $2A_{a b c}$
-    print("Test 02 passed")
+    assert ex == $2A_{a b c}$, ex
+    print("Test tab02 passed")
    
-test02()
+tab02()
 
-def test03():
+def tab03():
     __cdbkernel__ = create_scope()
     A_{a b c}::AntiSymmetric.
     ex = meld($A_{a b c} + A_{a c b}$)
-    assert ex == $0$
-    print("Test 03 passed")
+    assert ex == $0$, ex
+    print("Test tab03 passed")
 
-test03()
+tab03()
 
-def test04():
+def tab04():
     __cdbkernel__ = create_scope()
     A_{a b c}::AntiSymmetric.
     ex = meld($A_{c a b}A_{b a c} + A_{b c a}A_{c b a} + 2A_{a b c}A_{a b c}$)
-    assert ex == 0
-    print("Test 04 passed")
+    assert ex == 0, ex
+    print("Test tab04 passed")
 
-test04()
+tab04()
 
-def test05():
+def tab05():
     __cdbkernel__ = create_scope()
     A_{a b}::AntiSymmetric;
     ex = meld($k * A_{a b} + l * A_{b a}$)
-    assert(ex == $(k - l) A_{a b}$)
-    print("Test 05 passed")
+    assert ex == $(k - l) A_{a b}$, ex
+    print("Test tab05 passed")
    
-test05()
+tab05()
 
-def test06():
+# Bianchi identities
+
+def tab06():
+    __cdbkernel__ = create_scope()
+    R_{a b c d}::RiemannTensor.
+    ex = meld($R_{a b c d} + R_{a c d b} + R_{a d b c}$)
+    assert ex == $0$, ex
+    print("Test tab06 passed")
+
+tab06()
+
+def tab07():
     __cdbkernel__ = create_scope()
     R_{a b c d}::RiemannTensor.
     ex = meld($k * R_{a b c d}R_{a b c d} + l * R_{a b c d}R_{a c b d}$)
-    assert ex == $(k + 1/2 l) R_{a b c d} R_{a b c d}$
-    print("Test 06 passed")
+    assert ex == $(k + 1/2 l) R_{a b c d} R_{a b c d}$, ex
+    print("Test tab07 passed")
    
-test06()
+tab07()
 
-def test07():
+def tab08():
     __cdbkernel__ = create_scope()
     R_{a b c d}::RiemannTensor.
     #ex = meld($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d}$)
     ex = meld($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d}$)
-    assert ex == $3/2 R_{a b c d}R_{a b c d}$
-    print("Test 07 passed")
+    assert ex == $3/2 R_{a b c d}R_{a b c d}$, ex
+    print("Test tab08 passed")
    
-test07()
+tab08()
 
-def test08():
-    __cdbkernel__ = create_scope()
-    R_{a b c d}::RiemannTensor.
-    #ex = meld($R_{a b c d} + R_{a c d b} + R_{a d b c}$)
-    ex = meld($R_{a b c d} + R_{a c d b} + R_{a d b c}$)
-    assert ex == $0$
-    print("Test 08 passed")
 
-test08()
-
-def test09():
+def tab09():
     __cdbkernel__ = create_scope()
     R_{a b c d}::RiemannTensor.
     ex := R_{a b c d} + R_{a d b c};
     meld(ex)
-    assert ex == $R_{a b c d} + R_{a d b c}$
-    print("Test 09 passed")
+    assert ex == $R_{a b c d} + R_{a d b c}$, ex
+    print("Test tab09 passed")
    
-test09()
+tab09()
 
-def test10():
+def tab10():
     __cdbkernel__ = create_scope()
     {a, b, c, d, e, f, g, h}::Indices.
     A_{a b}::AntiSymmetric.
     S_{a b}::Symmetric.
     ex = $A_{a b}S_{c d}A_{e f}S_{g h} + A_{b a}S_{c d}A_{e f}S_{h g}$
-    #meld(ex, $A_{a b}S_{c d}A_{e f}S_{g h}$)
     meld(ex)
-    assert ex == $0$
-    print("Test 10 passed")
+    assert ex == $0$, ex
+    print("Test tab10 passed")
    
-test10()
+tab10()
 
-def test11():
+def tab11():
     __cdbkernel__ = create_scope()
     {a, b, c, d, e, f, g, h}::Indices.
     T_{a b c}::Symmetric.
     ex = meld($T_0 + m_1 * T_{a b c}T^{b a c} + m_2 * T_{b c a}T^{c b a}$)
-    assert ex == $T_0 + (m_1 + m_2) T_{a b c}T^{b a c}$
-    print("Test 11 passed")
+    assert ex == $T_0 + (m_1 + m_2) T_{a b c}T^{b a c}$, ex
+    print("Test tab11 passed")
    
-test11()
+tab11()
 
-def test12a():
+def tab12a():
     __cdbkernel__ = create_scope()
     {m,n,p,q,r,s,t,u,v,w,a,b,c,d,e,f}::Indices(vector).
     W_{m n p q}::WeylTensor.
@@ -119,11 +128,15 @@ def test12a():
         - W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a}
         + (1/4) W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c}:
     meld(ex)
-    assert(ex==0)
-   
-print("Test 12a (using meld)         passed in", timeit.timeit(test12a,number=1))
+    assert ex == 0, ex
 
-def test12b():
+if no_comp:
+    tab12a()
+    print("Test tab12 passed")
+else:
+    print("Test tab12a (using meld)         passed in", timeit.timeit(tab12a,number=1))
+
+def tab12b():
     __cdbkernel__ = create_scope()
     {m,n,p,q,r,s,t,u,v,w,a,b,c,d,e,f}::Indices(vector).
     W_{m n p q}::WeylTensor.
@@ -131,105 +144,67 @@ def test12b():
         - W_{p q r s} W_{p q t u} W_{r v t w} W_{s v u w}
         - W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a}
         + (1/4) W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c}:
-    young_project_product(_)
-    rename_dummies(_)
-    assert(ex==0)
-   
-print("Test 12b (using young_*)      passed in", timeit.timeit(test12b,number=1))
+    young_project_product(ex)
+    rename_dummies(ex)
+    assert ex == 0, ex
+  
+if not no_comp:
+    print("Test tab12b (using young_*)      passed in", timeit.timeit(tab12b,number=1))
 
-def test13():
+def tab13():
     __cdbkernel__ = create_scope()
     R_{a b c d}::RiemannTensor.
     A^{a b c}::AntiSymmetric.
-    ex:= R_{a b c d} A^{a b c}:
+    ex:= R_{a b c d} A^{a b c}.
     meld(ex)
-    print("Test 13a passed")
-    ex:=R_{a b c d} A_{a b c};
+    assert(ex == 0)
+    print("Test tab13a passed")
+    ex:=R_{a b c d} A_{a b c}.
     meld(ex)
-    tst:= R_{a b c d} A_{a b c} - @(ex);
-    print("Test 13b passed")
+    assert ex == $R_{a b c d} A_{a b c}$, ex
+    print("Test tab13b passed")
 
-test13()
+tab13()
 
-def test14():
+def tab14():
     __cdbkernel__ = create_scope()
     A_{a b c d e}::AntiSymmetric.
     ex = meld($9A_{b a c e d} - 3A_{e d c b a}$)
-    assert ex == $6A_{b a c e d}$
-    print("Test 14 passed")
+    assert ex == $6A_{b a c e d}$, ex
+    print("Test tab14 passed")
     
-test14()
+tab14()
 
-def test15():
+def tab15():
     __cdbkernel__ = create_scope()
     R_{a b c d}::RiemannTensor.
     ex := k * R_{a b c d} + l * R_{a c d b} + m * R_{a d b c}:
     meld(ex)
-    assert ex == $(k - m) R_{a b c d} + (l - m) R_{a c d b}$
-    print("Test 15 passed")
+    assert ex == $(k - m) R_{a b c d} + (l - m) R_{a c d b}$, ex
+    print("Test tab15 passed")
 
-test15()
+tab15()
 
-def test16():
+def tab16():
     __cdbkernel__ = create_scope()
     S_{a b c}::Symmetric.
     assert meld($a + b + c$) == $a + b + c$
     assert meld($0$) == $0$
-    print("Test 16 passed")
+    print("Test tab16 passed")
 
-test16()
+tab16()
 
-def test17():
-    from cdb.core.trace import combine_traces
-    __cdbkernel__ = create_scope()
-    Tr{#}::Trace.
-    {A, B, C, D}::NonCommuting.
-    ex := Tr{A B C D + C D A B + B C D A} - Tr{D A B C}.
-    combine_traces(_)
-    meld(ex)
-    assert ex == $2 * Tr{A B C D}$
-    print("Test 17 passed")
-
-test17()
-
-def test18():
-    __cdbkernel__ = create_scope()
-    {\mu,\nu,\rho}::Indices(vector).
-    {a^{\mu},b^{\mu},c^{\mu}}::NonCommuting.
-    tr{#}::Trace.
-    ex := tr(a^{\mu} b^{\nu} c^{\rho} a^{\mu} b^{\rho} c^{\nu} + 
-              b^{\mu} c^{\nu} a^{\rho} b^{\nu} c^{\mu} a^{\rho} + 
-              c^{\mu} a^{\nu} b^{\mu} c^{\rho} a^{\nu} b^{\rho}).
-    meld(ex)
-    assert ex == $3 * tr(a^{\mu} b^{\nu} c^{\rho} a^{\mu} b^{\rho} c^{\nu}$
-    print("Test 18 passed")
-
-test18()
-
-def test19():
-    __cdbkernel__ = create_scope()
-    {\mu,\nu}::Indices(vector).
-    u^{\mu}::ImplicitIndex.
-    u^{\mu}::SelfNonCommuting.
-    tr{#}::Trace.
-    ex := tr{u^{\mu} u^{\mu} u^{\nu} u^{\nu}} - 
-        tr{u^{\mu} u^{\nu} u^{\nu} u^{\mu}}.
-    meld(ex)
-    assert ex == $0$
-    print("Test 19 passed")
-
-#test19()
-
-def test20():
+def tab17():
     __cdbkernel__ = create_scope()
     ex := A_{m n} B_{m n} - A_{p q} B_{p q}.
     meld(ex)
-    assert ex == $0$
-    print("Test 20 passed")
+    assert ex == 0, ex
+    print("Test tab17 passed")
 
-test20()
+tab17()
 
-def test21():
+
+def tab18a():
     __cdbkernel__ = create_scope()
     {a,b,c,d}::Indices(group);
     {\mu,\nu,\rho,\sigma}::Indices(spacetime);
@@ -237,14 +212,17 @@ def test21():
     ex1:=F^{a b}_{\mu\sigma} A^{b c}_{\nu} A^{c a}_{\rho} \epsilon^{\mu\sigma\nu\rho}; 
     ex2:=A^{a b}_{\mu} F^{b c}_{\nu\sigma} A^{c a}_{\rho} \epsilon^{\mu\nu\sigma\rho};
     ex:=@(ex1)+@(ex2);
-    sort_product(_)
-    meld(_)
-    assert(ex==0)
+    sort_product(ex)
+    meld(ex)
+    assert ex == 0, ex
 
-#test21(); print("Test 21 passed")
-print("Test 21 (using meld)         passed in", timeit.timeit(test21,number=1000))
+if no_comp:
+    tab18a()
+    print("Test tab18 passed")
+else:
+    print("Test tab18a (using meld)         passed in", timeit.timeit(tab18a,number=1000))
 
-def test22():
+def test18b():
     __cdbkernel__ = create_scope()
     {a,b,c,d}::Indices(group);
     {\mu,\nu,\rho,\sigma}::Indices(spacetime);
@@ -252,32 +230,14 @@ def test22():
     ex1:=F^{a b}_{\mu\sigma} A^{b c}_{\nu} A^{c a}_{\rho} \epsilon^{\mu\sigma\nu\rho}; 
     ex2:=A^{a b}_{\mu} F^{b c}_{\nu\sigma} A^{c a}_{\rho} \epsilon^{\mu\nu\sigma\rho};
     ex:=@(ex1)+@(ex2);
-    sort_product(_)
-    canonicalise(_)
-    assert(ex==0)
+    sort_product(ex)
+    canonicalise(ex)
+    assert ex == 0, ex
 
-#test22(); print("Test 22 passed")
-print("Test 22 (using canonicalise) passed in", timeit.timeit(test22,number=1000))
+if not no_comp:
+    print("Test tab18b (using canonicalise) passed in", timeit.timeit(test18b,number=1000))
 
-# import numpy as np
-# {n#}::Indices;
-# R_{n1 n2 n3 n4}::RiemannTensor;
-# str=""
-# for n in range(4):
-#    p = np.random.permutation(4*4)
-#    for tensor in range(4):
-#        str+="R_{"
-#        for index in range(4):
-#            str+=ilist[p[tensor*4+index]]+' '
-#        str+="} "
-#    if n<3:
-#       str+="+ "
-#         
-# ex=Ex(str)
-# meld(_);
-        
-
-def test23():
+def tab19():
     __cdbkernel__ = create_scope()
     {\mu,\nu,\rho,\sigma}::Indices(spacetime)
     \epsilon^{\mu\nu\rho\sigma}::EpsilonTensor.
@@ -289,49 +249,51 @@ def test23():
     ex2:= A_{\mu} F_{\nu\sigma} A_{\rho} \epsilon^{\mu\nu\sigma\rho}:
     ex:= Tr {@(ex1) + @(ex2)};
 # This crashes here:
-    explicit_indices(_)
-    sort_product(_)
-    meld(_)
-    assert(ex == $0$)
+    explicit_indices(ex)
+    sort_product(ex)
+    meld(ex)
+    assert ex == 0, ex
+    print("Test tab19 passed")
     
-#test23()
-    
-def test24():
+#tab19()
+print("Test tab19 SKIPPED")
+
+def tab20():
     __cdbkernel__ = create_scope()
     {\mu, \nu, \rho}::Indices(vector)
     A_{\mu, \nu}::AntiSymmetric.
     {a^{\mu}, b^{\nu}}::NonCommuting.
     ex := A_{\mu \nu} a^{\mu} b^{\rho} a^{\nu}:
     meld(ex)
-    assert ex == $A_{\mu \nu} a^{\mu} b^{\rho} a^{\nu}$
-    print("Test 24 passed")
+    assert ex == $A_{\mu \nu} a^{\mu} b^{\rho} a^{\nu}$, ex
+    print("Test tab20 passed")
 
-test24()
+tab20()
 
-def test25():
+def tab21():
     __cdbkernel__ = create_scope()
     T_{a b c}::SelfAntiCommuting.
     ex := T_{a b c}T_{b a c} + T_{b a c}T_{a b c}:
     meld(ex)
-    assert(ex == $0$)
-    print("Test 25 passed")
+    assert ex == $0$, ex
+    print("Test tab21 passed")
 
-test25()
+tab21()
 
-def test26():        
+def tab22():        
     __cdbkernel__ = create_scope()
     {m,n,p,q,r,s}::Indices;
     A_{m n}::AntiSymmetric;
     B_{m n}::Symmetric;
     ex:= A_{m n} B_{n p} - A_{n m} B_{n p} + A_{m p} B_{q r} B_{q r} - A_{p m} B_{q s} B_{q s};
     meld(ex, repeat=False)
-    assert(ex==$2A_{m n} B_{n p} + 2A_{m p} B_{q r} B_{q r}$)
-    print("Test 26 passed")
+    assert ex == $2A_{m n} B_{n p} + 2A_{m p} B_{q r} B_{q r}$, ex
+    print("Test tab22 passed")
 
-test26()
+tab22()
         
 # Portugal's example.
-def test27():
+def tab23():
     __cdbkernel__ = create_scope()
     R_{a b c d}::RiemannTensor;
     ex:= 2 R_{a b c d} R_{e f a k} R_{h c k b} R_{d h e f}
@@ -339,25 +301,205 @@ def test27():
         -  R_{a b c d} R_{e f k a} R_{h b f e} R_{c d k h}
         +4 R_{a b c d} R_{h k d f} R_{e f k a} R_{h b c e};
     meld(ex)
-    assert(ex==0)
-    print("Test 27 passed")
+    assert ex == 0, ex
+    print("Test tab23 passed")
 
-test27()
+tab23()
 
 # RiemannRule13 from MathTensor
-def test28():
+def tab24():
     __cdbkernel__ = create_scope()
     R_{a b c d}::RiemannTensor;
     ex:= R_{a b c d} R_{e a g b} R_{c d e g}
        -1/2 R_{p q r s} R_{t u p q} R_{r s t u};
-    meld(_)
-    assert(ex==0)
-    print("Test 28 passed")
+    meld(ex)
+    assert ex == 0, ex
+    print("Test tab24 passed")
 
-test28()
+tab24()
+
+def tab25():
+    import numpy as np
+    {n#}::Indices;
+    R_{n1 n2 n3 n4}::RiemannTensor;
+    str=""
+    for n in range(4):
+       p = np.random.permutation(4*4)
+       for tensor in range(4):
+           str+="R_{"
+           for index in range(4):
+               str+=ilist[p[tensor*4+index]]+' '
+           str+="} "
+       if n<3:
+          str+="+ "
+        
+    ex=Ex(str)
+    meld(ex);
+    print("Test tab25 passed")
+
+#tab25()
+print("Test tab25 SKIPPED")
+
+# Bianchi identity with coordinates and integers
+def tab26():
+    R_{a b c d}::RiemannTensor.
+    {t, x, y, z}::Coordinate.
+    ex = meld($R_{t a b c} + R_{t b c a} + R_{t c a b}$)
+    assert ex == 0, ex
+    print("Test tab26 passed")
+
+tab26()
+
+# Raising and lowering indices
+def tab27():
+    {\mu, \nu, \rho, \lambda}::Indices(setA, position=fixed).
+    {A, B, C, D}::Indices(setB, position=independent)
+    {t, r, \phi, \theta}::Coordinate.
+    # Fixed and free indices combine
+    ex = meld($a_{\mu} b^{\mu} - a^{\mu} b_{\mu}$)
+    assert ex == 0, ex
+    ex = meld($T_{\mu\nu} K^{\mu} - T^{\mu}_{\nu} K_{\mu}$)
+    assert ex == 0, ex
+    ex = meld($a_{i}b^{i} - a^{i}b_{i}$)
+    assert ex == 0, ex
+    # Independent indices and coordinates don't
+    ex = meld($a_{A}b^{A} + a^{A}b_{A}$)
+    assert ex == $a_{A}b^{A} + a^{A}b_{A}$, ex
+    ex = meld($a_{t}b^{t} + a^{t}b_{t}$)
+    assert ex == $a_{t}b^{t} + a^{t}b_{t}$, ex
+    print("Test tab27 passed")
+
+tab27()
+
+# Raising and lowering through a derivative
+def tab28():
+    \partial{#}::PartialDerivative.
+    \nabla{#}::Derivative.
+    {\mu, \nu, \rho, \lambda}::Indices(setA, position=fixed).
+    # Free indices through a derivative do combine
+    ex = meld($a_{i} \partial_{\nu}{b^{i}} + a^{i} \partial_{\nu}{b_{i}}$)
+    assert ex == $2a_{i} \partial_{\nu}{b^{i}}$, ex
+    # Fixed indices through a derivative don't combine
+    ex = meld($a_{\mu} \partial_{\nu}{b^{\mu}} + a^{\mu} \partial_{\nu}{b_{\mu}}$)
+    assert ex == $a_{\mu} \partial_{\nu}{b^{\mu}} + a^{\mu} \partial_{\nu}{b_{\mu}}$, ex
+    ex = meld($a_{\mu} \partial_{t}{b^{\mu}} + a^{\mu} \partial_{t}{b_{\mu}}$)
+    assert ex == $a_{\mu} \partial_{t}{b^{\mu}} + a^{\mu} \partial_{t}{b_{\mu}}$, ex
+    ex = meld($a_{\mu} \nabla_{\nu}{b^{\mu}} - a^{\mu} \partial_{\nu}{b_{\mu}}$)
+    assert ex == $a_{\mu} \nabla_{\nu}{b^{\mu}} - a^{\mu} \partial_{\nu}{b_{\mu}}$, ex
+    print("Test tab28 passed")
+
+tab28()
+    
+# Multiple tableaux as product
+def tab29():
+    T_{a b c d}::TableauSymmetry(shape={1,1}, indices={0,1}, shape={1,1}, indices={2,3}).
+    ex := T_{a b c d} + T_{b a c d} + T_{a b d c} + T_{b a d c}.
+    meld(ex)
+    assert ex == 0, ex
+    # Bianchi shouldn't hold for this
+    ex := T_{a b c d} + T_{a c d b} + T_{a d b c}.
+    meld(ex)
+    assert ex == $T_{a b c d} + T_{a c d b} + T_{a d b c}$, ex
+    print("Test tab29 passed")
+
+tab29()
+
+def tab30():
+    T_{a b c}::TableauSymmetry(shape={2}, indices={0,1}, shape={1,1}, indices={0,1}).
+    ex := T_{a b c}.
+    meld(ex)
+    assert ex == 0, ex
+    print("Test tab30 passed")
+
+tab30()
+
+# Multiple tableaux as sum
+def tab31():
+    T_{a b c}::TableauSymmetry(shape={2,1}, indices={0,2,1}, shape={1,1,1}, indices={0,1,2}).
+    ex := T_{a b c} + T_{b a c}.
+    meld(ex, project_as_sum=True)
+    assert ex == 0, ex
+    print("Test tab31 passed")
+
+tab31()
+
+def tab32():
+    R_{a b c d e}::TableauSymmetry(shape={3,2}, indices={0,2,4,1,3}, shape={2,2,1}, indices={0,2,1,3,4}).
+    ex = meld($R_{a b c d e} + R_{a c d b e} + R_{a d b c e}$, project_as_sum=True)
+    assert ex == 0, ex
+    print("Test tab32 passed")
+
+tab32()
+
+# Automicatically construct tableaux for derivatives of Riemann tensors
+def tab33():
+	D{#}::Derivative.
+	R_{a b c d}::RiemannTensor.
+	ex := D_{e}{D_{a}{R_{a b c d}}} D_{h}{D_{i}{R_{b e f g}}} D_{d}{D_{h}{R_{c f g i}}} - 
+	  1/8 D_{e}{D_{e}{R_{a b c d}}} D_{h}{D_{i}{R_{a b f g}}} D_{i}{D_{h}{R_{c d f g}}}.
+	meld(ex)
+	assert ex == 0, ex
+	print("Test 33 passed")
+	
+tab33()
+
+def tab34():
+	\nabla{#}::Derivative.
+	R_{a b c d}::RiemannTensor.
+	ex := \nabla_{e}{R_{a b c d}} + \nabla_{c}{R_{a b d e}} + \nabla_{d}{R_{a b e c}}.
+	meld(ex)
+	assert ex == 0, ex
+	print("Test 34 passed")
+	
+tab34()
 
 
-def test29():
+
+# *_cycle_traces tests
+
+def cyctrace01():
+    from cdb.core.trace import combine_traces
+    __cdbkernel__ = create_scope()
+    Tr{#}::Trace.
+    {A, B, C, D}::NonCommuting.
+    ex := Tr{A B C D + C D A B + B C D A} - Tr{D A B C}.
+    combine_traces(ex)
+    meld(ex)
+    assert ex == $2 * Tr{A B C D}$, ex
+    print("Test cyctrace01 passed")
+
+cyctrace01()
+
+def cyctrace02():
+    __cdbkernel__ = create_scope()
+    {\mu,\nu,\rho}::Indices(vector).
+    {a^{\mu},b^{\mu},c^{\mu}}::NonCommuting.
+    tr{#}::Trace.
+    ex := tr(a^{\mu} b^{\nu} c^{\rho} a^{\mu} b^{\rho} c^{\nu} + 
+              b^{\mu} c^{\nu} a^{\rho} b^{\nu} c^{\mu} a^{\rho} + 
+              c^{\mu} a^{\nu} b^{\mu} c^{\rho} a^{\nu} b^{\rho}).
+    meld(ex)
+    assert ex == $3 * tr(a^{\mu} b^{\nu} c^{\rho} a^{\mu} b^{\rho} c^{\nu}$, ex
+    print("Test cyctrace02 passed")
+
+cyctrace02()
+
+def cyctrace03():
+    __cdbkernel__ = create_scope()
+    {\mu,\nu}::Indices(vector).
+    u^{\mu}::ImplicitIndex.
+    u^{\mu}::SelfNonCommuting.
+    tr{#}::Trace.
+    ex := tr{u^{\mu} u^{\mu} u^{\nu} u^{\nu}} - 
+        tr{u^{\mu} u^{\nu} u^{\nu} u^{\mu}}.
+    meld(ex)
+    assert ex == $0$, ex
+    print("Test cyctrace03 passed")
+
+# cyctrace03()
+print("Test cyctrace03 SKIPPED")
+
+def cyctrace04():
     __cdbkernel__ = create_scope()
     {\mu,\nu,\rho}::Indices(vector).
     A^{\mu\nu}::AntiSymmetric.
@@ -367,27 +509,27 @@ def test29():
     {A^{\mu\nu},B^{\mu\nu},C^{\mu\nu}}::NonCommuting.
     {A^{\mu\nu},B^{\mu\nu},C^{\mu\nu}}::SelfNonCommuting.
     {A^{\mu\nu},B^{\mu\nu},C^{\mu\nu}}::ImplicitIndex.
-    ex:=a tr{A^{\mu\nu} B^{\mu\rho} B^{\nu\rho}}+b tr{C^{\mu\nu} A^{\mu\rho} B^{\nu\rho}}+c tr{C^{\mu\nu} B^{\mu\rho} A^{\nu\rho}};
-    meld(_)
-    assert(ex == $a tr{A^{\mu\nu} B^{\mu\rho} B^{\nu\rho}}+b tr{C^{\mu\nu} A^{\mu\rho} B^{\nu\rho}}+c tr{C^{\mu\nu} B^{\mu\rho} A^{\nu\rho}}$)
-    print("Test 29 passed")
+    ex := a tr{A^{\mu\nu} B^{\mu\rho} B^{\nu\rho}}+b tr{C^{\mu\nu} A^{\mu\rho} B^{\nu\rho}}+c tr{C^{\mu\nu} B^{\mu\rho} A^{\nu\rho}}.
+    meld(ex)
+    assert ex == $a tr{A^{\mu\nu} B^{\mu\rho} B^{\nu\rho}}+b tr{C^{\mu\nu} A^{\mu\rho} B^{\nu\rho}}+c tr{C^{\mu\nu} B^{\mu\rho} A^{\nu\rho}}$, ex
+    print("Test cyctrace04 passed")
 
-test29()
+cyctrace04()
 
-def test30():
+def cyctrace05():
     __cdbkernel__ = create_scope()
     {\mu,\nu}::Indices(vector).
     tr{#}::Trace.
     u^{\mu}::SelfNonCommuting.
     u^{\mu}::ImplicitIndex.
-    ex:=tr{A u^{\nu} u^{\mu} u^{\mu} u^{\nu} + B u^{\mu} u^{\mu} u^{\nu} u^{\nu}}:
-    meld(_)
-    assert(ex == $tr{ (A+B) u^{\nu} u^{\mu} u^{\mu} u^{\nu} }$)
-    print("Test 30 passed")
+    ex:=tr{A u^{\nu} u^{\mu} u^{\mu} u^{\nu} + B u^{\mu} u^{\mu} u^{\nu} u^{\nu}}.
+    meld(ex)
+    assert ex == $tr{ (A+B) u^{\nu} u^{\mu} u^{\mu} u^{\nu} }$, ex
+    print("Test cyctrace05 passed")
 
-test30()
+cyctrace05()
 
-def test31():
+def cyctrace06():
     __cdbkernel__ = create_scope()
     {\mu,\nu,\rho}::Indices(vector).
     A^{\mu\nu}::AntiSymmetric.
@@ -397,8 +539,54 @@ def test31():
     {A^{\mu\nu},B^{\mu\nu},C^{\mu\nu}}::NonCommuting.
     {A^{\mu\nu},B^{\mu\nu},C^{\mu\nu}}::SelfNonCommuting.
     {A^{\mu\nu},B^{\mu\nu},C^{\mu\nu}}::ImplicitIndex.
-    ex:=tr{a A^{\mu\nu} B^{\mu\rho} B^{\nu\rho} + b C^{\mu\nu} A^{\mu\rho} B^{\nu\rho} +c C^{\mu\nu} B^{\mu\rho} A^{\nu\rho}};
-    meld(_)
-    assert(ex == $tr{a A^{\mu\nu} B^{\mu\rho} B^{\nu\rho} + b C^{\mu\nu} A^{\mu\rho} B^{\nu\rho} +c C^{\mu\nu} B^{\mu\rho} A^{\nu\rho}}$)
 
-test31()
+    ex := tr{
+        a A^{\mu\nu} B^{\mu\rho} B^{\nu\rho} + 
+        b C^{\mu\nu} A^{\mu\rho} B^{\nu\rho} +
+        c C^{\mu\nu} B^{\mu\rho} A^{\nu\rho}
+    };
+    assert meld($@(ex)$) == ex
+    print("Test cyctrace06 passed")
+
+cyctrace06()
+
+
+# *_diagonal tests
+
+def diag01():
+   __cdbkernel__=create_scope()
+   {t,r}::Coordinate;
+   {a,b}::Indices(values={t,r},position=fixed);
+   A_{a b}::Diagonal;
+   ex = $A_{t r}$ + $A_{r r}$ + $A_{r t}$ + $A_{t t}$
+   meld(ex)
+   assert ex == $A_{r r} + A_{t t}$, ex
+   print("Test diag01 passed")
+
+diag01()
+
+def diag02():
+   __cdbkernel__=create_scope()
+   {m,n}::Integer;
+   \delta_{m n}::Diagonal.
+   ex = $-\delta_{1 1}\delta_{2 2}$ + $\delta_{1 2}\delta_{1 2}$ + $\delta_{1 1}\delta_{2 2}$
+   meld(ex)
+   assert ex == $0$, ex
+   print('Test diag02 passed')
+   
+diag02()
+
+
+# *_traceless tests
+
+def traceless01():
+   __cdbkernel__=create_scope()
+   {m,n,p,q,r,s,t,u}::Indices(vector).
+   dR_{m n p q r s}::TableauSymmetry(shape={4,2}, indices={2,3,0,1,4,5}).
+   dR_{m n p q r s}::Traceless.
+   ex := dR_{m n p q r r};
+   meld(_)
+   assert ex == $0$, ex
+   print('Test traceless01 passed')
+   
+traceless01()

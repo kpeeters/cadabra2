@@ -81,44 +81,34 @@ size_t ifactorial(size_t n, size_t den = 1)
 }
 
 namespace cadabra {
-	bool is_index(const Kernel& kernel, Ex::iterator it)
+
+	bool is_coordinate(const Kernel& kernel, Ex::iterator it)
 	{
 		if (it->is_index()) {
-			auto s = kernel.properties.get<Symbol>(it);
-			auto c = kernel.properties.get<Coordinate>(it);
-			return !it->is_integer() && !s && !c;
+			auto coord = kernel.properties.get<Coordinate>(it, true);
+			auto integer = it->is_integer();
+			return coord != nullptr || integer;
 		}
 		return false;
 	}
 
-	bool has_indices(const cadabra::Kernel& kernel, cadabra::Ex::iterator it)
+	bool is_index(const Kernel& kernel, Ex::iterator it, bool include_coordinates)
 	{
-		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg)
-			if (is_index(kernel, beg))
-				return true;
-
-		if (*it->name == "\\prod") {
-			for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg)
-				if (has_indices(kernel, beg))
-					return true;
+		if (it->is_index()) {
+			// Ignore things defined with the symbol property, and rational numbers
+			auto symbol = kernel.properties.get<Symbol>(it, true);
+			auto rational = it->is_rational() && !it->is_integer();
+			return
+				symbol == nullptr &&
+				!rational &&
+				(include_coordinates || !is_coordinate(kernel, it));
 		}
-
 		return false;
 	}
 
 	Adjform::Adjform()
 	{
 
-	}
-
-	Adjform::Adjform(Ex::iterator it, IndexMap& index_map, const Kernel& kernel)
-	{
-		for (Ex::iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
-			if (is_index(kernel, beg)) {
-				beg.skip_children();
-				push_back(index_map.get_free_index(beg));
-			}
-		}
 	}
 
 	Adjform::const_iterator Adjform::begin() const
@@ -129,6 +119,12 @@ namespace cadabra {
 	Adjform::const_iterator Adjform::end() const
 	{
 		return data.cend();
+	}
+
+	Adjform::size_type Adjform::index_of(value_type index, size_type offset) const
+	{
+		auto pos = std::find(begin() + offset, end(), index);
+		return std::distance(begin(), pos);
 	}
 
 	bool Adjform::operator < (const Adjform& other) const
@@ -144,18 +140,6 @@ namespace cadabra {
 	bool Adjform::operator != (const Adjform& other) const
 	{
 		return data != other.data;
-	}
-
-	Adjform& Adjform::operator *= (const Adjform& other)
-	{
-		for (auto index : other)
-			push_back(index);
-		return *this;
-	}
-
-	Adjform operator * (Adjform lhs, const Adjform& rhs)
-	{
-		return lhs *= rhs;
 	}
 
 	Adjform::const_reference Adjform::operator [] (Adjform::size_type idx) const
@@ -178,17 +162,44 @@ namespace cadabra {
 		return data.empty();
 	}
 
+
+	bool Adjform::is_free_index(Adjform::size_type pos) const
+	{
+		return data[pos] < 0;
+	}
+
+	bool Adjform::is_dummy_index(Adjform::size_type pos) const
+	{
+		return data[pos] >= 0;
+	}
+
 	Adjform::size_type Adjform::n_free_indices() const
 	{
-		return std::count_if(data.begin(), data.end(), is_free_index);
+		return std::count_if(data.begin(), data.end(), [](value_type idx) { return idx < 0; });
 	}
 
 	Adjform::size_type Adjform::n_dummy_indices() const
 	{
-		return std::count_if(data.begin(), data.end(), is_dummy_index);
+		return size() - n_free_indices();
 	}
 
-	void Adjform::push_back(value_type value)
+	bool Adjform::resolve_dummy(value_type value)
+	{
+		// Find positions of both indices
+		size_type posA = index_of(value);
+		if (posA == size())
+			return false;
+		size_t posB = index_of(value, posA + 1);
+		if (posB == size())
+			return false;
+
+		// Contract
+		data[posA] = posB;
+		data[posB] = posA;
+		return true;
+	}
+
+	void Adjform::push_index(value_type value)
 	{
 		auto pos = std::find(data.begin(), data.end(), value);
 		if (pos == data.end()) {
@@ -200,6 +211,42 @@ namespace cadabra {
 		}
 	}
 
+	void Adjform::push_indices(const Adjform& other)
+	{
+		size_t start_size = size();
+		for (auto index : other) {
+			if (index > 0)
+				push_coordinate(index + start_size);
+			else
+				push_index(index);
+		}
+	}
+
+	void Adjform::push_coordinate(value_type value)
+	{
+		data.push_back(value);
+	}
+
+	void Adjform::push_coordinates(const Adjform& other)
+	{
+		size_t start_size = size();
+		for (auto index : other) {
+			if (index > 0)
+				push_coordinate(index + start_size);
+			else
+				push_coordinate(index);
+		}
+	}
+
+	void Adjform::push(Ex::iterator it, IndexMap& index_map, const Kernel& kernel)
+	{
+		auto val = index_map.get_free_index(it);
+		if (IndexMap::is_coordinate(kernel, it))
+			push_coordinate(val);
+		else
+			push_index(val);
+	}
+
 	void Adjform::swap(size_type a, size_type b)
 	{
 		// do nothing if they point to each other
@@ -207,9 +254,9 @@ namespace cadabra {
 			return;
 
 		// update pointed-to positions
-		if (is_dummy_index(data[a]))
+		if (is_dummy_index(a))
 			data[data[a]] = b;
-		if (is_dummy_index(data[b]))
+		if (is_dummy_index(b))
 			data[data[b]] = a;
 
 		std::swap(data[a], data[b]);
@@ -225,6 +272,16 @@ namespace cadabra {
 		for (auto& idx : data) {
 			if (idx >= 0)
 				idx = (idx + n) % data.size();
+		}
+	}
+
+	void Adjform::sort()
+	{
+		std::sort(data.begin(), data.end());
+		auto dummy_start = std::find_if(data.begin(), data.end(), [](value_type v) { return v >= 0; });
+		for (size_type pos = std::distance(data.begin(), dummy_start); pos < data.size(); pos += 2) {
+			data[pos] = pos + 1;
+			data[pos + 1] = pos;
 		}
 	}
 
@@ -317,36 +374,10 @@ namespace cadabra {
 		return res;
 	}
 
-	bool Adjform::compare(Ex::iterator a, Ex::iterator b, const Kernel& kernel)
-	{
-		Ex_comparator comp(kernel.properties);
-		auto res = comp.equal_subtree(a, b);
-		if (res == Ex_comparator::match_t::subtree_match) {
-			return true;
-		}
-		else if (res == Ex_comparator::match_t::match_index_greater || res == Ex_comparator::match_t::match_index_less) {
-			IndexMap index_map(kernel);
-			Adjform aa(a, index_map, kernel), bb(b, index_map, kernel);
-			return aa == bb;
-		}
-		else {
-			return false;
-		}
-	}
-
-	bool is_free_index(Adjform::value_type idx)
-	{
-		return idx < 0;
-	}
-
-	bool is_dummy_index(Adjform::value_type idx)
-	{
-		return idx >= 0;
-	}
 
 	IndexMap::IndexMap(const Kernel& kernel)
 		: comp(std::make_unique<Ex_comparator>(kernel.properties))
-		, data(std::make_unique<Ex>("\\comma"))
+		, data(std::make_unique<Ex>("T"))
 	{
 
 	}
@@ -371,6 +402,19 @@ namespace cadabra {
 		return -(Adjform::value_type)data->begin().number_of_children();
 	}
 
+	bool IndexMap::is_coordinate(const Kernel& kernel, Ex::iterator index)
+	{
+		if (index->is_integer())
+			return true;
+		auto symb = kernel.properties.get<Symbol>(index, true);
+		if (symb)
+			return true;
+		auto coord = kernel.properties.get<Coordinate>(index, true);
+		if (coord)
+			return true;
+		return false;
+	}
+
 	AdjformEx::integer_type AdjformEx::zero = 0;
 
 	AdjformEx::AdjformEx()
@@ -378,95 +422,9 @@ namespace cadabra {
 
 	}
 
-	AdjformEx::AdjformEx(const Adjform& adjform, const AdjformEx::integer_type& value, const Ex& prefactor)
-		: prefactor(prefactor)
-	{
-		sizeof(mpq_class);
-		sizeof(int64_t);
-		set(adjform, value);
-	}
-
-	AdjformEx::AdjformEx(const Adjform& adjform, const integer_type& value, Ex::iterator prefactor)
-		: prefactor(prefactor)
+	AdjformEx::AdjformEx(const Adjform& adjform, const AdjformEx::integer_type& value)
 	{
 		set(adjform, value);
-	}
-
-	AdjformEx::AdjformEx(Ex& tr, Ex::iterator it, IndexMap& index_map, const Kernel& kernel)
-		: prefactor(str_node("\\prod"))
-		, tensor(str_node("\\prod"))
-	{
-		set(Adjform(it, index_map, kernel));
-
-		if (*it->name == "\\prod") {
-			Ex_comparator comp(kernel.properties);
-
-			for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
-				if (has_indices(kernel, beg) || !comp.can_move_to_front(tr, it, beg))
-					tensor.append_child(tensor.begin(), (Ex::iterator)beg);
-				else
-					prefactor.append_child(prefactor.begin(), (Ex::iterator)beg);
-			}
-			cadabra::multiply(prefactor.begin()->multiplier, *it->multiplier);
-		}
-		else {
-			if (has_indices(kernel, it)) {
-				tensor.append_child(tensor.begin(), (Ex::iterator)it);
-				cadabra::multiply(prefactor.begin()->multiplier, *it->multiplier);
-			}
-			else {
-				prefactor.append_child(prefactor.begin(), (Ex::iterator)it);
-			}
-		}
-
-		Ex::iterator prefactor_begin = prefactor.begin();
-		cleanup_dispatch(kernel, prefactor, prefactor_begin);
-		Ex::iterator tensor_begin = tensor.begin();
-		cleanup_dispatch(kernel, tensor, tensor_begin);
-		one(tensor_begin->multiplier);
-	}
-
-	AdjformEx& AdjformEx::operator += (const AdjformEx& other)
-	{
-		for (const auto& kv : other.data)
-			add(kv.first, kv.second);
-		return *this;
-	}
-
-	AdjformEx operator + (AdjformEx lhs, const AdjformEx& rhs)
-	{
-		return lhs += rhs;
-	}
-
-	AdjformEx& AdjformEx::operator *= (const AdjformEx& other)
-	{
-		map_t old_data;
-		std::swap(data, old_data);
-		for (const auto& kv1 : old_data) {
-			for (const auto& kv2 : other.data) {
-				add(kv1.first * kv2.first, kv1.second * kv2.second);
-			}
-		}
-		return *this;
-	}
-
-	AdjformEx operator * (AdjformEx lhs, const AdjformEx& rhs)
-	{
-		return lhs *= rhs;
-	}
-
-	AdjformEx& AdjformEx::operator *= (const Adjform& other)
-	{
-		map_t old_data;
-		std::swap(data, old_data);
-		for (const auto& kv1 : old_data)
-			add(kv1.first * other, kv1.second);
-		return *this;
-	}
-
-	AdjformEx operator * (AdjformEx lhs, const Adjform& rhs)
-	{
-		return lhs *= rhs;
 	}
 
 	AdjformEx::integer_type AdjformEx::compare(const AdjformEx& other) const
@@ -495,16 +453,39 @@ namespace cadabra {
 			add(kv.first, kv.second);
 	}
 
-	void AdjformEx::combine(const AdjformEx& other, AdjformEx::integer_type factor)
+	void AdjformEx::combine(const AdjformEx& other, integer_type factor)
 	{
 		for (const auto& kv : other.data)
 			add(kv.first, kv.second * factor);
 	}
 
-	void AdjformEx::multiply(const AdjformEx::integer_type& k)
+	AdjformEx& AdjformEx::operator += (const AdjformEx& other)
+	{
+		combine(other);
+		return *this;
+	}
+
+	AdjformEx operator + (AdjformEx lhs, const AdjformEx& rhs)
+	{
+		return lhs += rhs;
+	}
+
+	void AdjformEx::multiply(const integer_type& k)
 	{
 		for (auto& kv : data)
 			kv.second *= k;
+	}
+
+	AdjformEx& AdjformEx::operator *= (const integer_type& k)
+	{
+		multiply(k);
+		return *this;
+	}
+
+	AdjformEx operator * (AdjformEx lhs, const AdjformEx::integer_type& rhs)
+	{
+		lhs.multiply(rhs);
+		return lhs;
 	}
 
 	AdjformEx::iterator AdjformEx::begin()
@@ -554,26 +535,6 @@ namespace cadabra {
 	bool AdjformEx::empty() const
 	{
 		return data.empty();
-	}
-
-	const Ex& AdjformEx::get_prefactor_ex() const
-	{
-		return prefactor;
-	}
-
-	Ex& AdjformEx::get_prefactor_ex()
-	{
-		return prefactor;
-	}
-
-	const Ex& AdjformEx::get_tensor_ex() const
-	{
-		return tensor;
-	}
-
-	Ex& AdjformEx::get_tensor_ex()
-	{
-		return tensor;
 	}
 
 	const AdjformEx::integer_type& AdjformEx::get(const Adjform& adjform) const

@@ -1,6 +1,7 @@
-
 #pragma once
 
+#include <string>
+#include <sstream>
 #include "Props.hh"
 #include "Storage.hh"
 
@@ -37,5 +38,19 @@ namespace cadabra {
 			const Kernel& kernel;
 
 		};
+
+	template <typename DisplayType> std::string ex_to_string(const Kernel& kernel, const Ex& ex)
+	{
+		std::ostringstream ss;
+		DisplayType dt(kernel, ex);
+		dt.output(ss);
+		return ss.str();
+	}
+
+	template <typename DisplayType> std::string ex_to_string(const Kernel& kernel, Ex::iterator it)
+	{
+		return ex_to_string<DisplayType>(kernel, Ex(it));
+	}
+
 
 	}

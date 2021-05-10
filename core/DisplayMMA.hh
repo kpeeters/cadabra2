@@ -19,7 +19,7 @@ namespace cadabra {
 
 	class DisplayMMA : public DisplayBase {
 		public:
-			DisplayMMA(const Kernel&, const Ex&, bool use_unicode);
+			DisplayMMA(const Kernel&, const Ex&, bool use_unicode = true);
 
 			/// Rewrite the output of mathematica back into a notation used by
 			/// Cadabra. This in particular involves converting 'Sin' and

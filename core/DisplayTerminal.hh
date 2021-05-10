@@ -6,6 +6,7 @@
 #include "DisplayBase.hh"
 #include <ostream>
 #include <map>
+#include <string>
 
 typedef uint32_t kunichar;
 
@@ -24,7 +25,7 @@ namespace cadabra {
 
 	class DisplayTerminal : public DisplayBase {
 		public:
-			DisplayTerminal(const Kernel&, const Ex&, bool use_unicode);
+			DisplayTerminal(const Kernel&, const Ex&, bool use_unicode = true);
 
 		protected:
 			bool use_unicode;
