@@ -25,6 +25,7 @@ set(PACKAGES
   utils/node
   utils/indices
   utils/develop
+  utils/tableau
   sympy/solvers
   gauge_theory/instantons
   relativity/abstract

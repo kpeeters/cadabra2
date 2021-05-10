@@ -1,0 +1,691 @@
+{
+	"cell_id": 17439249385034091662,
+	"cells": [
+		{
+			"cell_id": 8734995938305730404,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "from cdb.utils.node import n_indices, nth_child\nfrom itertools import permutations\nimport copy"
+		},
+		{
+			"cell_id": 10926153879009935420,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 655640036215962657,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{fill_diagram(shape: tuple[int, ...], indices: tuple[int, ...]) -> tuple[tuple[int, ...], ...]}{Create a filled\ntableau from a diagram shape and a list of indices to be entered left-to-right and top-to-bottom}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{fill_diagram(shape: tuple[int, ...], indices: tuple[int, ...]) -> tuple[tuple[int, ...], ...]}{Create a filled\ntableau from a diagram shape and a list of indices to be entered left-to-right and top-to-bottom}"
+		},
+		{
+			"cell_id": 4650101496488726068,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def fill_diagram(shape, indices):\n\tpos = 0\n\tres = []\n\tfor row in shape:\n\t\tres.append(tuple(indices[pos:pos+row]))\n\t\tpos += row\n\treturn tuple(res)"
+		},
+		{
+			"cell_id": 6170261760868707497,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 4972547932551413900,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}((0, 2), (1, 3))\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "fill_diagram((2,2), (0,2,1,3));"
+		},
+		{
+			"cell_id": 17257245543978409381,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 13645643897314952999,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{get_shape(tab: tuple[tuple[int, ...], ...]) -> tuple[int, ...]}{Return the diagram shape of a filled tableau}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{get_shape(tab: tuple[tuple[int, ...], ...]) -> tuple[int, ...]}{Return the diagram shape of a filled tableau}"
+		},
+		{
+			"cell_id": 18426422417848083334,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def get_shape(tab):\n\treturn tuple(len(row) for row in tab)"
+		},
+		{
+			"cell_id": 12763722317612787858,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 4311011915341918303,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}(2, 2)\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "get_shape([(0,2), (1,3)]);"
+		},
+		{
+			"cell_id": 11184177818743178037,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6424924232599460152,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{get_indices(tab: tuple[tuple[int, ...], ...]) -> tuple[int, ...]}{Return the indices of a filled\ntableau}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{get_indices(tab: tuple[tuple[int, ...], ...]) -> tuple[int, ...]}{Return the indices of a filled\ntableau}"
+		},
+		{
+			"cell_id": 12746646020864187123,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def get_indices(tab):\n\treturn tuple(i for row in tab for i in row)"
+		},
+		{
+			"cell_id": 10387655419734127318,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 10039146017229501950,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}(0, 3, 1, 2)\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "get_indices([(0,3), (1,2)]);"
+		},
+		{
+			"cell_id": 17622104385795914714,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 2323026231863958281,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{tableaux_to_ex(tuple[tuple[int, ...], ...], ...) -> Ex}{Convert tuple-representations of filled tableaux into an\n\\texttt{Ex} object which can be passed to the \\texttt{TableauSymmetry} property}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{tableaux_to_ex(tuple[tuple[int, ...], ...], ...) -> Ex}{Convert tuple-representations of filled tableaux into an\n\\texttt{Ex} object which can be passed to the \\texttt{TableauSymmetry} property}"
+		},
+		{
+			"cell_id": 6770064243653586750,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def tableaux_to_ex(*tabs):\n\tparts = []\n\tfor tab in tabs:\n\t\tshape = [str(len(row)) for row in tab]\n\t\tindices = [str(i) for row in tab for i in row]\n\t\tparts.append(\"shape={\" + \",\".join(shape) + \"}, indices={\" + \",\".join(indices) + \"}\")\n\treturn Ex(\",\".join(parts)) "
+		},
+		{
+			"cell_id": 12404871075510297773,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 4232949427795909670,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5266415592967851707,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "{shape = {2, 2}, indices = {0, 2, 1, 3}, shape = 4, indices = {4, 5, 6, 7}, shape = {1, 1}, indices = {8, 9}}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left[shape = \\left[2,~\\discretionary{}{}{} 2\\right],~\\discretionary{}{}{} indices = \\left[0,~\\discretionary{}{}{} 2,~\\discretionary{}{}{} 1,~\\discretionary{}{}{} 3\\right],~\\discretionary{}{}{} shape = 4,~\\discretionary{}{}{} indices = \\left[4,~\\discretionary{}{}{} 5,~\\discretionary{}{}{} 6,~\\discretionary{}{}{} 7\\right],~\\discretionary{}{}{} shape = \\left[1,~\\discretionary{}{}{} 1\\right],~\\discretionary{}{}{} indices = \\left[8,~\\discretionary{}{}{} 9\\right]\\right]\\end{dmath*}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "tableaux_to_ex([(0,2), (1,3)], [(4,5,6,7)], [(8,),(9,)]);"
+		},
+		{
+			"cell_id": 14101893052762071849,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 5593239722411873632,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{ex_to_tableaux(ex: Ex) -> list[tuple[tuple[int, ...], ...]]}{Covert an \\texttt{Ex} object consisting of\n\\texttt{shape} and \\texttt{indices} nodes into tuple-representations of filled tableaux}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{ex_to_tableaux(ex: Ex) -> list[tuple[tuple[int, ...], ...]]}{Covert an \\texttt{Ex} object consisting of\n\\texttt{shape} and \\texttt{indices} nodes into tuple-representations of filled tableaux}"
+		},
+		{
+			"cell_id": 14782967466992548211,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def ex_to_tableaux(ex):\n\ttab = { \"shape\": None, \"indices\": None }\n\ttabs = []\n\tfor node in ex.top().children():\n\t\tl = []\n\t\tfor k in nth_child(node, 1).children():\n\t\t\tl.append(int(k.multiplier))\n\t\ttab[nth_child(node, 0).name] = l\n\t\tif tab[\"shape\"] is not None and tab[\"indices\"] is not None:\n\t\t\ttabs.append(fill_diagram(tab[\"shape\"], tab[\"indices\"]))\n\t\t\ttab[\"shape\"] = None\n\t\t\ttab[\"indices\"] = None\n\treturn tabs"
+		},
+		{
+			"cell_id": 3409592937070762683,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 10461484522336609135,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "{}$\\big[$$\\verb|((0,), (1,))|$,\\discretionary{}{}{} $\\verb|((5, 3, 6), (4, 7))|$$\\big]$"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "ex_to_tableaux($shape={1,1}, indices={0,1}, shape={3,2}, indices={5,3,6,4,7}$);"
+		},
+		{
+			"cell_id": 1216030587752948593,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 18144390320621628896,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{all_diagrams(n: int) -> Generator[tuple[int, ...]]}{Generate all possible tableau diagrams consisting of \\texttt{n} boxes}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{all_diagrams(n: int) -> Generator[tuple[int, ...]]}{Generate all possible tableau diagrams consisting of \\texttt{n} boxes}"
+		},
+		{
+			"cell_id": 17251724056801448288,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def all_diagrams(n):\n\tdef partitions(n, k):\n\t\tyield (n,)\n\t\tfor i in range(k, n//2 + 1):\n\t\t\tfor p in partitions(n-i, i):\n\t\t\t\tyield (i, *p)\n\t# Yield all partitions sorted so that rows always decrease in length\n\tyield from (tuple(sorted(p, reverse=True)) for p in partitions(n, 1))"
+		},
+		{
+			"cell_id": 7533670825558258954,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 759495993201878641,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}(6,)\n(5, 1)\n(4, 1, 1)\n(3, 1, 1, 1)\n(2, 1, 1, 1, 1)\n(1, 1, 1, 1, 1, 1)\n(2, 2, 1, 1)\n(3, 2, 1)\n(4, 2)\n(2, 2, 2)\n(3, 3)\n\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "for tableau in all_diagrams(6):\n\tprint(tableau)"
+		},
+		{
+			"cell_id": 17893376737970562489,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 12349308104187550257,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{littlewood_richardson(a: tuple[int, ...], b: tuple[int, ...]) -> list[tuple[int, ...]]}{Do a Littlewood-Richardson\ndecomposition on diagrams \\texttt{a} and \\texttt{b}}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{littlewood_richardson(a: tuple[int, ...], b: tuple[int, ...]) -> list[tuple[int, ...]]}{Do a Littlewood-Richardson\ndecomposition on diagrams \\texttt{a} and \\texttt{b}}"
+		},
+		{
+			"cell_id": 7784795496465730523,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def _littlewood_validate(tab, max_index):\n\t# No two boxes in the same column are labelled with the same letter\n\tfor j in range(len(tab[0])):\n\t\tcounts = [0] * max_index\n\t\tfor i in range(len(tab)):\n\t\t\tif len(tab[i]) > j and tab[i][j] != 0:\n\t\t\t\tcounts[tab[i][j] - 1] += 1\n\t\tif any(i > 1 for i in counts):\n\t\t\t#print(f\"Discarding {tab} as two indices in same column\")\n\t\t\treturn False\n\t# The result is a legitimate Young diagram\n\tprev = len(tab[0])\n\tfor i in range(1, len(tab)):\n\t\tcur = len(tab[i])\n\t\tif cur > prev:\n\t\t\t#print(f\"Discarding {tab} as it is not a legitimate Young diagram\")\n\t\t\treturn False\n\t\tprev = cur\n\t# If the letters are read right to left, there are never more is than js if i > j\n\tcounts = [0] * max_index\n\tfor row in tab:\n\t\tfor elem in reversed(row):\n\t\t\tif elem != 0:\n\t\t\t\tcounts[elem - 1] += 1\n\t\t\tif not all(i >= j for i, j in zip(counts, counts[1:])):\n\t\t\t\t#print(f\"Discarding {tab} as a smaller index appears less times than a larger index\")\n\t\t\t\treturn False\n\treturn True\n\ndef _littlewood(tab, indices, starting_row):\n\tif len(indices) == 0:\n\t\tyield [len(row) for row in tab]\n\t\treturn\n\tif tab[starting_row][-1] != indices[0]:\n\t\tstarting_row = 0\n\tfor i in range(starting_row, len(tab)):\n\t\tnewtab = copy.deepcopy(tab)\n\t\tnewtab[i].append(indices[0])\n\t\tif _littlewood_validate(newtab, indices[-1]):\n\t\t\tyield from _littlewood(newtab, indices[1:], i)\n\tnewtab = copy.deepcopy(tab)\n\tnewtab.append([indices[0]])\n\tif _littlewood_validate(newtab, indices[-1]):\n\t\tyield from _littlewood(newtab, indices[1:], len(newtab) - 1)\n\ndef littlewood_richardson(a, b):\n\tindices = []\n\tfor i, r in enumerate(b, 1):\n\t\tindices += [i] * r\n\ttab = [ [0]*r for r in a ]\n\treturn list(_littlewood(tab, indices, 0))"
+		},
+		{
+			"cell_id": 16873880143465727054,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13592067450288467895,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}[[4, 4], [4, 3, 1], [4, 2, 2], [3, 3, 1, 1], [3, 2, 2, 1], [2, 2, 2, 2]]\n\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "print(littlewood_richardson((2,2), (2,2)))"
+		},
+		{
+			"cell_id": 2074604220791874733,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 2234274075724592948,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{conjugate(tab: tuple[tuple[int, ...], ...]) -> tuple[tuple[int, ...], ...]}{ Returns the conjugate\nof a filled tableau, i.e. a reflection along the leading diagonal}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{conjugate(tab: tuple[tuple[int, ...], ...]) -> tuple[tuple[int, ...], ...]}{ Returns the conjugate\nof a filled tableau, i.e. a reflection along the leading diagonal}"
+		},
+		{
+			"cell_id": 11281111212979795399,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def conjugate(tab):\n\ttranspose = []\n\tfor i in range(len(tab[0])):\n\t\tcol = []\n\t\tfor j in range(len(tab)):\n\t\t\tif len(tab[j]) > i:\n\t\t\t\tcol.append(tab[j][i])\n\t\ttranspose.append(col)\n\treturn transpose"
+		},
+		{
+			"cell_id": 17638329479369357761,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16397270680577577158,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}[[0, 3, 5], [1, 4], [2]]\n[[1], [2], [3]]\n[[1, 2, 3]]\n[[1]]\n\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "print(conjugate([[0,1,2],[3,4],[5]]))\nprint(conjugate([(1,2,3)]))\nprint(conjugate([(1,),(2,),(3,)]))\nprint(conjugate([(1,)]))"
+		},
+		{
+			"cell_id": 1098671556714192488,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 927467754716580389,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{is_standard(tab: tuple[tuple[int, ...], ...]) -> bool}{Returns \\texttt{True} if a tableau is standard, \ni.e. entries are strictly increasing south and east}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{is_standard(tab: tuple[tuple[int, ...], ...]) -> bool}{Returns \\texttt{True} if a tableau is standard, \ni.e. entries are strictly increasing south and east}"
+		},
+		{
+			"cell_id": 12557937237952354359,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def is_standard(tab):\n\tdef check_rows(ftab):\n\t\tfor row in ftab:\n\t\t\tif any(row[i] > row[i+1] for i in range(len(row)-1)):\n\t\t\t\treturn False\n\t\treturn True\n\treturn check_rows(tab) and check_rows(conjugate(tab))"
+		},
+		{
+			"cell_id": 11862270199667702553,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14062871763396970276,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}True\\end{verbatim}"
+				},
+				{
+					"cell_id": 11953086304433101892,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}True\\end{verbatim}"
+				},
+				{
+					"cell_id": 10966144899066197072,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}False\\end{verbatim}"
+				},
+				{
+					"cell_id": 12211463845903837034,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}True\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "is_standard([(0,2),(1,3)]);\nis_standard([(0,1),(2,3)]);\nis_standard([(1,2),(0,3)]);\nis_standard([(1,2)]);"
+		},
+		{
+			"cell_id": 3049852477480368486,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 10631683949309710340,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{is_distinct(a: tuple[tuple[int, ...], ...], b: tuple[tuple[int, ...], ...]) -> bool}{Returns \\texttt{True} if\n\\texttt{a} and \\texttt{b} are distinct, i.e. \\texttt{a} cannot be tranformed into \\texttt{b} by swapping rows or columns}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{is_distinct(a: tuple[tuple[int, ...], ...], b: tuple[tuple[int, ...], ...]) -> bool}{Returns \\texttt{True} if\n\\texttt{a} and \\texttt{b} are distinct, i.e. \\texttt{a} cannot be tranformed into \\texttt{b} by swapping rows or columns}"
+		},
+		{
+			"cell_id": 3288458276354221368,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def is_distinct(a, b):\n\ta_rows = sorted(sorted(row) for row in a)\n\tb_rows = sorted(sorted(row) for row in b)\n\tif a_rows != b_rows:\n\t\treturn True\n\ta_cols = sorted(sorted(col) for col in conjugate(a))\n\tb_cols = sorted(sorted(col) for col in conjugate(b))\n\tif a_cols != b_cols:\n\t\treturn True\n\treturn False"
+		},
+		{
+			"cell_id": 4246334457930744633,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14524990218026824931,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}False\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "is_distinct([(0,2), (1,3)], [(1,3), (0,2)]);"
+		},
+		{
+			"cell_id": 10379696668519694629,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 2563027422090506117,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{all_distinct_fillings(diagram: tuple[int, ...]) -> Generator[tuple[tuple[int, ...], ...]]}{Generate all\ndistinct fillings of \\texttt{diagram}}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{all_distinct_fillings(diagram: tuple[int, ...]) -> Generator[tuple[tuple[int, ...], ...]]}{Generate all\ndistinct fillings of \\texttt{diagram}}"
+		},
+		{
+			"cell_id": 5692032117368872571,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def all_distinct_fillings(diagram):\n\tn = sum(diagram)\n\ttabs = []\n\tfor indices in permutations(range(n)):\n\t\ttab = fill_diagram(diagram, indices)\n\t\tif all(is_distinct(tab, other) for other in tabs):\n\t\t\tyield tab\n\t\t\ttabs.append(tab)"
+		},
+		{
+			"cell_id": 8693565799664488411,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 6528452269638973499,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}((0, 1), (2,))\n((0, 2), (1,))\n((1, 0), (2,))\n((1, 2), (0,))\n((2, 0), (1,))\n((2, 1), (0,))\n((0, 1),)\n\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "for filling in all_distinct_fillings((2,1)):\n\tprint(filling)\nfor filling in all_distinct_fillings((2,)):\n\tprint(filling)"
+		},
+		{
+			"cell_id": 7578262669365872009,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 5063735555955481709,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{all_distinct_tableaux(n: int) -> Generator[tuple[tuple[int, ...], ...]]}{Generate all distinct tableaux with n boxes}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{all_distinct_tableaux(n: int) -> Generator[tuple[tuple[int, ...], ...]]}{Generate all distinct tableaux with n boxes}"
+		},
+		{
+			"cell_id": 6646151790768196731,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def all_distinct_tableaux(n):\n\tfor shape in all_diagrams(n):\n\t\tyield from all_distinct_fillings(shape)"
+		},
+		{
+			"cell_id": 13638188473925948556,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13434360698814515089,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}((0, 1, 2),)\n((0, 1), (2,))\n((0, 2), (1,))\n((1, 0), (2,))\n((1, 2), (0,))\n((2, 0), (1,))\n((2, 1), (0,))\n((0,), (1,), (2,))\n\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "for tab in all_distinct_tableaux(3):\n\tprint(tab)"
+		},
+		{
+			"cell_id": 7577618092493964110,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 11814110804417664209,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{all_standard_fillings(diagram: tuple[int, ...]) -> Generator[tuple[tuple[int, ...], ...]]}{Generate all\nstandard fillings of \\texttt{diagram}}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{all_standard_fillings(diagram: tuple[int, ...]) -> Generator[tuple[tuple[int, ...], ...]]}{Generate all\nstandard fillings of \\texttt{diagram}}"
+		},
+		{
+			"cell_id": 16549714018272565037,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def all_standard_fillings(diagram):\n\tn = sum(diagram)\n\tfor indices in permutations(range(n)):\n\t\ttab = fill_diagram(diagram, indices)\n\t\tif is_standard(tab):\n\t\t\tyield tab"
+		},
+		{
+			"cell_id": 8034684310448471432,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15883930492899180761,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}((0, 1), (2,))\n((0, 2), (1,))\n\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "for filling in all_standard_fillings((2,1)):\n\tprint(filling)"
+		},
+		{
+			"cell_id": 13138812445050867738,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 3414791383346547988,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{all_standard_tableaux(n: int) -> Generator[tuple[tuple[int, ...], ...]]}{Generate all standard tableaux with\n\\texttt{n} boxes}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{all_standard_tableaux(n: int) -> Generator[tuple[tuple[int, ...], ...]]}{Generate all standard tableaux with\n\\texttt{n} boxes}"
+		},
+		{
+			"cell_id": 15638995218729178626,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def all_standard_tableaux(n):\n\tfor shape in all_diagrams(n):\n\t\tyield from all_standard_fillings(shape)"
+		},
+		{
+			"cell_id": 5615984505213831895,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 2811724997650705139,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}((0, 1, 2, 3),)\n((0, 1, 2), (3,))\n((0, 1, 3), (2,))\n((0, 2, 3), (1,))\n((0, 1), (2,), (3,))\n((0, 2), (1,), (3,))\n((0, 3), (1,), (2,))\n((0,), (1,), (2,), (3,))\n((0, 1), (2, 3))\n((0, 2), (1, 3))\n\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "for tab in all_standard_tableaux(4):\n\tprint(tab)"
+		},
+		{
+			"cell_id": 4767728648789398550,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 13690048393920180737,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{reduce_tableau(tab: tuple[tuple[int, ...], ...]) -> tuple[tuple[int, ...], ...]}{Return the tableau formed by\nremoving the cell with the largest label}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{reduce_tableau(tab: tuple[tuple[int, ...], ...]) -> tuple[tuple[int, ...], ...]}{Return the tableau formed by\nremoving the cell with the largest label}"
+		},
+		{
+			"cell_id": 11319296881680315198,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def reduce_tableau(tab):\n\tgreatest_elem = max(row[-1] for row in tab)\n\tres = []\n\tfor row in tab:\n\t\tif row[-1] == greatest_elem:\n\t\t\tres.append(tuple(row[:-1]))\n\t\telse:\n\t\t\tres.append(tuple(row))\n\treturn tuple(res)"
+		},
+		{
+			"cell_id": 2895358343697510309,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15604320925891249630,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}((0, 1, 2), (3,))\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "reduce_tableau([(0,1,2),(3,4)]);"
+		},
+		{
+			"cell_id": 11724154751810140229,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6932133234427607183,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{augment_tableau(tab: tuple[tuple[int, ...], ...], label: int|None) -> list[tuple[tuple[int, ...], ...]]}{Return a list of all \ntableaux formed by augmenting \\texttt{tab} by one cell containing \\texttt{label}, or if it is \\texttt{None} then the next \nsmallest integer not appearing in \\texttt{tab}}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{augment_tableau(tab: tuple[tuple[int, ...], ...], label: int|None) -> list[tuple[tuple[int, ...], ...]]}{Return a list of all \ntableaux formed by augmenting \\texttt{tab} by one cell containing \\texttt{label}, or if it is \\texttt{None} then the next \nsmallest integer not appearing in \\texttt{tab}}"
+		},
+		{
+			"cell_id": 6350568945503319497,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def augment_tableau(tab, label=None):\n\tif label is None:\n\t\tlabel = max(get_indices(tab)) + 1\n\tres = []\n\tl = len(tab[0]) + 1\n\tfor i, row in enumerate(tab):\n\t\tif len(row) < l:\n\t\t\tt = [list(row) for row in tab]\n\t\t\tt[i].append(label)\n\t\t\tres.append(t)\n\t\t\tl = len(row)\n\tt = [list(row) for row in tab]\n\tt.append([label])\n\tres.append(t)\n\treturn res"
+		},
+		{
+			"cell_id": 3458439947979261072,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16291607045970059826,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}[[[0, 1, 3], [2]], [[0, 1], [2, 3]], [[0, 1], [2], [3]]]\n\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "print(augment_tableau([(0,1), (2,)]))"
+		},
+		{
+			"cell_id": 547223697396526441,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 10349327229214313701,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{create_hermitian_tableau(tab: tuple[tuple[int, ...], ...]) -> list[tuple[tuple[int, ...], ...]]}{Creates a list\nof tableaux such that the projection of the tensor product of these tableaux is a Hermitian operator}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{create_hermitian_tableau(tab: tuple[tuple[int, ...], ...]) -> list[tuple[tuple[int, ...], ...]]}{Creates a list\nof tableaux such that the projection of the tensor product of these tableaux is a Hermitian operator}"
+		},
+		{
+			"cell_id": 5738760520193255271,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def create_hermitian_tableau(tab):\n\tassert is_standard(tab), \"tableau must be standard to create hermitian operator\"\n\tif sum(get_shape(tab)) <= 2:\n\t\treturn [tab]\n\tgreatest_elem = max(get_indices(tab))\n\treduced_tab = []\n\tfor row in tab:\n\t\treduced_row = list(row)\n\t\tif greatest_elem in row:\n\t\t\treduced_row.remove(greatest_elem)\n\t\t\tif len(reduced_row) > 0:\n\t\t\t\treduced_tab.append(tuple(reduced_row))\n\t\telse:\n\t\t\treduced_tab.append(tuple(reduced_row))\n\treduced_herm = create_hermitian_tableau(tuple(reduced_tab))\n\treturn reduced_herm + [tab] + reduced_herm"
+		},
+		{
+			"cell_id": 3458821597999155122,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"ignore_on_import": true,
+			"source": "print(create_hermitian_tableau([(0,1)]))\nprint(create_hermitian_tableau([(0,1), (2,)]))"
+		},
+		{
+			"cell_id": 9747535794170023450,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 2245474417180971535,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{construct_tableaux(ident: Ex, syms: Ex, standard_only: bool) -> Generator[Ex]}{Generate all distinct (or standard)\ntableaux which when associated with \\texttt{ident} satisfy the symmetries given in \\texttt{syms} (a comma separated list \nof expressions which equal 0)}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{construct_tableaux(ident: Ex, syms: Ex, standard_only: bool) -> Generator[Ex]}{Generate all distinct (or standard)\ntableaux which when associated with \\texttt{ident} satisfy the symmetries given in \\texttt{syms} (a comma separated list \nof expressions which equal 0)}"
+		},
+		{
+			"cell_id": 439892239497663920,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def construct_tableaux(ident, syms, standard_only=False):\n\t__cdbkernel__ = create_scope()\n\tn = n_indices(ident.top())\n\ttableaux = all_standard_tableaux(n) if standard_only else all_distinct_tableaux(n)\n\tfor tab in tableaux:\n\t\tTableauSymmetry(ident, tableaux_to_ex(tab))\n\t\tbroken = False\n\t\tif syms.top().name == r\"\\comma\":\n\t\t\tfor symm in syms.top().children():\n\t\t\t\tif meld($@(symm)$) != 0:\n\t\t\t\t\tbroken = True\n\t\t\t\t\tbreak\n\t\telse:\n\t\t\tif meld($@(syms)$) != 0:\n\t\t\t\tbroken = True\n\t\tif not broken: \n\t\t\tyield tab"
+		},
+		{
+			"cell_id": 9509740741945359566,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3634572458389941807,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}Pairwise antisymmetry:\n((0,), (1,), (2,), (3,))\n((0, 2), (1, 3))\n((0, 3), (1, 2))\nRiemann tensor symmetry:\n((0, 2), (1, 3))\n((0, 3), (1, 2))\nRiemann tensor without Bianchi constraint:\n((0,), (1,), (2,), (3,))\n((0, 2), (1, 3))\n((0, 3), (1, 2))\nBianchi symmetries:\n((1, 0, 2), (3,))\n((1, 0, 3), (2,))\n((2, 0, 1), (3,))\n((2, 0, 3), (1,))\n((3, 0, 1), (2,))\n((3, 0, 2), (1,))\n((0, 1), (2, 3))\n((0, 1), (3, 2))\n((0, 2), (1, 3))\n((0, 2), (3, 1))\n((0, 3), (1, 2))\n((0, 3), (2, 1))\n\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "pairwise_antisym := \n\tT_{a b c d} + T_{b a c d},\n\tT_{a b c d} + T_{a b d c}.\nprint(\"Pairwise antisymmetry:\")\nfor tableau in construct_tableaux($T_{a b c d}$, pairwise_antisym):\n\tprint(tableau)\n\nriemann := \n\tT_{a b c d} + T_{b a c d}, \n\tT_{a b c d} + T_{a b d c}, \n\tT_{a b c d} - T_{c d a b}, \n\tT_{a b c d} + T_{a c d b} + T_{a d b c}.\nprint(\"Riemann tensor symmetry:\")\nfor tableau in construct_tableaux($T_{a b c d}$, riemann):\n\tprint(tableau)\n\nriemann_no_bianchi :=\n\tT_{a b c d} + T_{b a c d},\n\tT_{a b c d} + T_{a b d c},\n\tT_{a b c d} - T_{c d a b}.\nprint(\"Riemann tensor without Bianchi constraint:\")\nfor tableau in construct_tableaux($T_{a b c d}$, riemann_no_bianchi):\n\tprint(tableau)\n\nbianchi := \n\tT_{a b c d} + T_{a c d b} + T_{a d b c}.\nprint(\"Bianchi symmetries:\")\nfor tableau in construct_tableaux($T_{a b c d}$, bianchi):\n\tprint(tableau)"
+		},
+		{
+			"cell_id": 2634122740391551161,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "R_{a b c d}::TableauSymmetry(shape={2,2}, indices={0,3,1,2})."
+		},
+		{
+			"cell_id": 16983882067327749729,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}
