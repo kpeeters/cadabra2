@@ -1,0 +1,138 @@
+{
+	"cell_id": 2562151665405295138,
+	"cells": [
+		{
+			"cell_id": 12143407317319097504,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 16138737595395674485,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{expand_dummies}{Expand contracted dummy index pairs}\n\nExpand contracted dummy index as a sum over coordinate values optionally taking a list of component values to be\napplied. The behaviour is similar to \\verb|evaluate| but free indices are not split into components.\n\nThe minimal information needed for this to work is a declaration of the indices used, and a declaration\nof the values that those indices use:"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{expand_dummies}{Expand contracted dummy index pairs}\n\nExpand contracted dummy index as a sum over coordinate values optionally taking a list of component values to be\napplied. The behaviour is similar to \\verb|evaluate| but free indices are not split into components.\n\nThe minimal information needed for this to work is a declaration of the indices used, and a declaration\nof the values that those indices use:"
+		},
+		{
+			"cell_id": 2017365017951042585,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 1505606892611914647,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17475896370694076262,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "x_{\\mu} g_{\\rho \\lambda} k^{\\rho} k^{\\lambda}"
+						}
+					],
+					"source": "\\begin{dmath*}{}x_{\\mu} g_{\\rho \\lambda} k^{\\rho} k^{\\lambda}\\end{dmath*}"
+				}
+			],
+			"source": "{r,t}::Coordinate.\n{\\mu, \\rho, \\lambda}::Indices(values={t,r}).\nex:= x_{\\mu} g_{\\rho \\lambda} k^{\\rho} k^{\\lambda};"
+		},
+		{
+			"cell_id": 17703473076253312356,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 14504720855055869363,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The list of component values should be given just like the list of rules for the \\algo{substitute} algorithm,\nthat is, as equalities. If values are defined for some components of an object, then any missing components are assumed\nto be 0."
+				}
+			],
+			"hidden": true,
+			"source": "The list of component values should be given just like the list of rules for the \\algo{substitute} algorithm,\nthat is, as equalities. If values are defined for some components of an object, then any missing components are assumed\nto be 0."
+		},
+		{
+			"cell_id": 8925692542070146850,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9153063957121711585,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1067579206710593719,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "{g_{t t} = -1, g_{r r} = 1, k^{t} = t, k^{r} = 1}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left[g_{t t} = -1,~\\discretionary{}{}{} g_{r r} = 1,~\\discretionary{}{}{} k^{t} = t,~\\discretionary{}{}{} k^{r} = 1\\right]\\end{dmath*}"
+				},
+				{
+					"cell_id": 18071988885446484485,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10822680472589489966,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "-x_{\\mu} t t + x_{\\mu}"
+						}
+					],
+					"source": "\\begin{dmath*}{}-x_{\\mu} t t+x_{\\mu}\\end{dmath*}"
+				}
+			],
+			"source": "rl:= [ g_{t t} = -1, g_{r r} = 1, k^{t} = t, k^{r} = 1];\nexpand_dummies(ex, rl);"
+		},
+		{
+			"cell_id": 3025834967703068036,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 13099037626349655268,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If no components are given it returns the full expanded sum over coordinates:"
+				}
+			],
+			"hidden": true,
+			"source": "If no components are given it returns the full expanded sum over coordinates:"
+		},
+		{
+			"cell_id": 17352955123336242996,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 881369153435038127,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9663947892634825925,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "r_{\\mu} g_{t t} k^{t} k^{t} + r_{\\mu} g_{t r} k^{t} k^{r} + r_{\\mu} g_{r t} k^{r} k^{t} + r_{\\mu} g_{r r} k^{r} k^{r}"
+						}
+					],
+					"source": "\\begin{dmath*}{}r_{\\mu} g_{t t} k^{t} k^{t}+r_{\\mu} g_{t r} k^{t} k^{r}+r_{\\mu} g_{r t} k^{r} k^{t}+r_{\\mu} g_{r r} k^{r} k^{r}\\end{dmath*}"
+				}
+			],
+			"source": "ex:= r_{\\mu} g_{\\rho \\lambda} k^{\\rho} k^{\\lambda}.\nexpand_dummies(ex);"
+		},
+		{
+			"cell_id": 5160058283724869326,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

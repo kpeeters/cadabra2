@@ -3,6 +3,7 @@
 #include "algorithms/expand_dummies.hh"
 #include "Cleanup.hh"
 #include "Compare.hh"
+#include "IndexClassifier.hh"
 #include "IndexIterator.hh"
 #include "Functional.hh"
 #include "substitute.hh"
@@ -82,33 +83,29 @@ Algorithm::result_t expand_dummies::apply(iterator& it)
 	// Create a new expression which we will modify and a sum node which will
 	// replace it
 	Ex pat(it), sum("\\sum");
-	std::vector<Ex::iterator> candidates;
-	std::vector<std::pair<Ex::iterator, Ex::iterator>> dummy_pairs;
+	std::vector<std::vector<iterator>> dummies;
 	std::vector<const std::vector<Ex>*> values;
 
-	// Obtain iterators to the dummies and hold a parallel vector with a pointer
-	// to the the associated 'values' vectors
-	auto beg = index_iterator::begin(kernel.properties, pat.begin());
-	auto end = index_iterator::end(kernel.properties, pat.begin());
-	while (beg != end) {
-		auto prop = kernel.properties.get<Indices>(beg);
-		if (prop && !prop->values.empty()) {
-			bool matched = false;
-			for (auto c1 = candidates.begin(), c2 = candidates.end(); c1 != c2; ++c1) {
-				comp.clear();
-				auto res = comp.equal_subtree(*c1, beg, Ex_comparator::useprops_t::always, true);
-				if (res == Ex_comparator::match_t::subtree_match) {
-					dummy_pairs.emplace_back(*c1, beg);
-					values.push_back(&(prop->values));
-					candidates.erase(c1);
-					break;
-					}
-				}
-			if (!matched)
-				candidates.push_back(beg);
+	index_map_t full_ind_free, full_ind_dummy;
+	classify_indices(pat.begin(), full_ind_free, full_ind_dummy);
+	for (const auto& kv : full_ind_dummy) {
+		auto pos = std::find_if(dummies.begin(), dummies.end(),
+			[this, kv](const std::vector<iterator>& lhs) {
+			comp.clear();
+			auto res = comp.equal_subtree(lhs[0], kv.second, Ex_comparator::useprops_t::always, true);
+			return res == Ex_comparator::match_t::subtree_match;
+		});
+		if (pos == dummies.end()) {
+			auto prop = kernel.properties.get<Indices>(kv.first.begin(), true);
+			if (prop && !prop->values.empty()) {
+				dummies.emplace_back(1, kv.second);
+				values.push_back(&(prop->values));
 			}
-		++beg;
 		}
+		else {
+			pos->push_back(kv.second);
+		}
+	}
 	 
 	// Set up 'positions' to hold iterators into the corresponding elements of the
 	// 'values' vector, we will loop through all possible combinations
@@ -119,10 +116,10 @@ Algorithm::result_t expand_dummies::apply(iterator& it)
 	do {
 		// Rewrite each dummy pair with the coordinate pointed to by the
 		// positions vector and append to the sum
-		for (size_t i = 0; i < dummy_pairs.size(); ++i) {
-			dummy_pairs[i].first = pat.replace_index(dummy_pairs[i].first, positions[i]->begin(), true);
-			dummy_pairs[i].second = pat.replace_index(dummy_pairs[i].second, positions[i]->begin(), true);
-			}
+		for (size_t i = 0; i < dummies.size(); ++i) {
+			for (iterator& dummy : dummies[i])
+				dummy = pat.replace_index(dummy, positions[i]->begin(), true);
+		}
 
 		auto term = sum.append_child(sum.begin(), pat.begin());
 		fill_components(term);
