@@ -167,6 +167,7 @@ endif()
 
 # Visual Studio
 if(MSVC)
+	set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 	# Disable specific warnings
 	set(MSVC_FLAGS
 		"/wd4250"						# inherits via dominance (rampant in the GTKMM codebase)
@@ -332,7 +333,6 @@ endif()
 # Core/packages
 add_subdirectory(client_server)
 add_subdirectory(core)
-add_subdirectory(core/packages)
 
 # Frontend
 if(ENABLE_FRONTEND)

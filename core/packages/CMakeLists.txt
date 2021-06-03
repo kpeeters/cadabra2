@@ -32,6 +32,8 @@ set(PACKAGES
   relativity/schwarzschild
   )
 
+set(COMPILED_PACKAGES
+  core/_component.cc)
 
 #---------------------------------------------------------------------------
 # Install packages
@@ -45,6 +47,15 @@ foreach(PACKAGE ${PACKAGES})
     DESTINATION 
       ${PYTHON_CDB_PACKAGE_PATH}/${PINSTALL}
   )
+endforeach()
+
+foreach(PACKAGE ${COMPILED_PACKAGES})
+  get_filename_component(PINSTALL ${PACKAGE} DIRECTORY)
+  get_filename_component(PNAME ${PACKAGE} NAME_WE)
+  pybind11_add_module(${PNAME} SHARED ${SOURCE_PACKAGEDIR}/${PACKAGE})
+  target_link_libraries(${PNAME} PUBLIC cadabra2 ${GMPXX_LIBRARIES})
+  target_include_directories(${PNAME} PUBLIC ${CADABRA_CORE_DIR})
+  install(TARGETS ${PNAME} DESTINATION ${PYTHON_CDB_PACKAGE_PATH}/${PINSTALL})
 endforeach()
 
 install(

@@ -265,11 +265,14 @@ include_directories(
 #---------------------------------------------------------------------------
 
 # Cadabra2 python module
-pybind11_add_module(cadabra2 SHARED 
+pybind11_add_module(cadabra2 SHARED
    ${LOCAL_SRC_FILES}
    ${MODULE_SRC_FILES}
 )
-set_target_properties(cadabra2 PROPERTIES SUFFIX ".${PYTHON_MOD_SUFFIX}")
+set_target_properties(cadabra2 PROPERTIES 
+   SUFFIX ".${PYTHON_MOD_SUFFIX}" 
+   CXX_VISIBILITY_PRESET default)
+
 target_link_libraries(cadabra2 PRIVATE
    ${GMPXX_LIBRARIES}
    ${GMP_LIBRARIES}   
@@ -368,6 +371,13 @@ if(MATHEMATICA_FOUND)
 else()
    message(STATUS "Building without Mathematica support")
 endif()
+
+
+#---------------------------------------------------------------------------
+# Packages.
+#---------------------------------------------------------------------------
+
+add_subdirectory(packages)
 
 
 #---------------------------------------------------------------------------
