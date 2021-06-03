@@ -87,7 +87,7 @@ bool meld::can_apply_diagonals(iterator it)
 bool meld::apply_diagonals(iterator it)
 {
 	
-	const Diagonal* dgl = kernel.properties.get<Diagonal>(it);
+	assert(kernel.properties.get<Diagonal>(it) != nullptr);
 	index_iterator indit = begin_index(it);
 	if (indit->is_rational()) {
 		index_iterator indit2 = indit;
@@ -515,8 +515,9 @@ meld::ProjectedTerm::ProjectedTerm(const Kernel& kernel, IndexMap& index_map, Ex
 		multiply(term->multiplier, *it->multiplier);
 	}
 
+	Ex::iterator tensor_head = tensor.begin();
 	cleanup_dispatch(kernel, scalar, scalar_head);
-	cleanup_dispatch(kernel, tensor, tensor.begin());
+	cleanup_dispatch(kernel, tensor, tensor_head);
 
 	auto ibeg = index_iterator::begin(kernel.properties, tensor.begin());
 	auto iend = index_iterator::end(kernel.properties, tensor.begin());
@@ -986,7 +987,7 @@ void meld::symmetrize_as_product(ProjectedTerm& projterm, const std::vector<symm
 				indices.push_coordinate(seed[index]); // push_coordinate is more efficient if we know there are no dummy indices
 			std::vector<Adjform::value_type> sorted_indices(indices.begin(), indices.end());
 			std::sort(sorted_indices.begin(), sorted_indices.end());
-			for (size_t j = 0; j < indices.size(); ++j) {
+			for (size_t j = 0; j < (size_t)indices.size(); ++j) {
 				auto idx1 = indices[j];
 				auto idx2 = sorted_indices[j];
 				if (idx1 != idx2) {
@@ -1015,7 +1016,7 @@ void meld::symmetrize_as_product(ProjectedTerm& projterm, const std::vector<symm
 		: std::find(first_not_applied + 1, applied.end(), false);
 
 	if (second_not_applied != applied.end()) {
-		auto remove_dummies = [seed](size_t idx) { return (seed[idx] < idx && seed[idx] >= 0) ? (size_t)seed[idx] : idx; };
+		auto remove_dummies = [seed](Adjform::value_type idx) { return (seed[idx] < idx && seed[idx] >= 0) ? (size_t)seed[idx] : idx; };
 
 		// Remove dummies from first term
 		size_t first_idx = std::distance(applied.begin(), first_not_applied);

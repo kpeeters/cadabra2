@@ -62,8 +62,8 @@ namespace cadabra {
 		};
 
 		iter_indices(const Properties& properties, Ex::iterator it)
-			: properties(properties)
-			, it(it) { }
+			: it(it)
+			, properties(properties) { }
 
 		iterator begin() { return index_iterator::begin(properties, it); }
 		iterator begin(int offset) { return index_iterator::begin(properties, it, offset); }

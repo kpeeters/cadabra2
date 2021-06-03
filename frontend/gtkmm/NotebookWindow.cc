@@ -39,6 +39,9 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	, console(sigc::mem_fun(this, &NotebookWindow::interactive_execute))
 	, current_canvas(0)
 	, kernel_spinner_status(false)
+	, progress_frac(0)
+	, status_line(-1)
+	, status_col(-1)
 	, title_prefix("Cadabra: ")
 	, modified(false)
 	, read_only(ro)
@@ -46,9 +49,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	, follow_cell(doc.end())
 	, last_find_location(doc.end(), std::string::npos)
 	, is_configured(false)
-	, status_line(-1)
-	, status_col(-1)
-	, progress_frac(0)
+
 	{
 	// Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));

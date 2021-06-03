@@ -335,7 +335,7 @@ void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, yo
 			//			if(getenv("SMART"))
 			ypinitial.asym_ranges=asym_ranges;
 			iterator tmp=term;
-			auto res=ypinitial.can_apply(tmp);
+			[[maybe_unused]] auto res=ypinitial.can_apply(tmp);
 			assert(res);
 			ypinitial.apply(tmp);
 		}

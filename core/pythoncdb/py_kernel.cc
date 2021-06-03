@@ -72,7 +72,7 @@ namespace cadabra {
 						auto value = item.second.cast<Kernel::warn_t>();
 						kernel.warning_level = value;
 						}
-					catch (pybind11::cast_error) {
+					catch (pybind11::cast_error&) {
 						throw std::invalid_argument("named argument 'level' expected an integer");
 						}
 					}
@@ -86,7 +86,7 @@ namespace cadabra {
 							kernel.warning_callback = value;
 							}
 						}
-					catch (pybind11::cast_error) {
+					catch (pybind11::cast_error&) {
 						throw std::invalid_argument("named argument 'callback' expected None or function with signature void(const std::string&)");
 						}
 					}
