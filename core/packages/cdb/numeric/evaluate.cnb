@@ -1,0 +1,175 @@
+{
+	"cell_id": 4999409792745105779,
+	"cells": [
+		{
+			"cell_id": 7373466807312405365,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 10413878374203257041,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\package{cdb.numeric.evaluate}{Numeric evaluation of Cadabra expressions}\nFunctions for evaluating Cadabra expressions given floating point values for variables "
+				}
+			],
+			"hidden": true,
+			"source": "\\package{cdb.numeric.evaluate}{Numeric evaluation of Cadabra expressions}\nFunctions for evaluating Cadabra expressions given floating point values for variables "
+		},
+		{
+			"cell_id": 11376245561910922914,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 16105197977829845906,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{evalf(ex: Ex, values: Ex|dict) -> float}{Evaluate an expression to a floating point number}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{evalf(ex: Ex, values: Ex|dict) -> float}{Evaluate an expression to a floating point number}"
+		},
+		{
+			"cell_id": 13823390372129062478,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def evalf(ex, values):\n\ts = SympyBridge(ex).to_sympy()\n\tsubs = _create_sublist(values)\n\treturn s.evalf(subs=subs)"
+		},
+		{
+			"cell_id": 13489163334655936980,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 17250236824289587380,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}9.0\\end{dmath*}"
+				},
+				{
+					"cell_id": 12232332659023869728,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}1.28\\end{dmath*}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "evalf($x**2$, { \"x\": 3.0 });\nevalf($a + b + c$, $a->1, b->0.5, c->-0.22$);"
+		},
+		{
+			"cell_id": 307928729963218244,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 14397007498469288962,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{lambdify(ex: Ex, parameters: Ex|Iterable[Ex], constants: Ex|dict) -> Function}{Create a Python function which evaluates\nan expression with the given parameters}\nIf provided, any substitution rules in \\verb|constants| are applied before the function is `lambdified'."
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{lambdify(ex: Ex, parameters: Ex|Iterable[Ex], constants: Ex|dict) -> Function}{Create a Python function which evaluates\nan expression with the given parameters}\nIf provided, any substitution rules in \\verb|constants| are applied before the function is `lambdified'."
+		},
+		{
+			"cell_id": 7689315691730539427,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def lambdify(ex, parameters, constants=None):\n\tex = ex.top().ex()\n\tsb = SympyBridge(ex)\n\tif constants is not None:\n\t\tsubs = _create_sublist(constants)\n\t\tsubbed = sb.to_sympy().subs(subs)\n\t\tsb.from_sympy(str(subbed))\n\tif isinstance(parameters, Ex):\n\t\tparams = _create_symbol(parameters)\n\telse:\n\t\tparams = [_create_symbol(param) for param in parameters]\n\treturn sympy.lambdify(params, sb.to_sympy())"
+		},
+		{
+			"cell_id": 3590404544007582222,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16265883368783821044,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}5.0\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "l = lambdify($\\sqrt(x**2 + y**2)$, $x, y$)\nl(3, 4);"
+		},
+		{
+			"cell_id": 12041517788363212463,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9416580652087427055,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}0.0\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "k = lambdify($A x**2 + B x + C$, $x$, $A -> 1, B-> 0, C -> -4$)\nk(2);"
+		},
+		{
+			"cell_id": 12041068264923901971,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		},
+		{
+			"cell_id": 3298245029619223396,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def _create_symbol(symbol):\n\tif isinstance(symbol, str):\n\t\treturn sympy.symbols(symbol)\n\telif isinstance(symbol, Ex):\n\t\tif symbol.head() == r\"\\comma\":\n\t\t\treturn [sympy.symbols(s.ex().sympy_form()) for s in symbol.top().children()]\n\t\telse:\n\t\t\treturn sympy.symbols(symbol.sympy_form())\n\telse:\n\t\traise ValueError(\"_create_symbol: expected symbol to be str or Ex\")"
+		},
+		{
+			"cell_id": 9467217440484724795,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 8626601393501616912,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}Raux\\end{dmath*}"
+				},
+				{
+					"cell_id": 9843579008991660363,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "{}$\\big[$$r$,\\discretionary{}{}{} $R$,\\discretionary{}{}{} $Raux$$\\big]$"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "_create_symbol($Raux$);\n_create_symbol($r, R, Raux$);"
+		},
+		{
+			"cell_id": 5592064898772723427,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def _create_sublist(values):\n\tsubs = {}\n\tif isinstance(values, dict):\n\t\tfor key, value in values.items():\n\t\t\tsubs[_create_symbol(key)] = value\n\telif isinstance(values, Ex):\n\t\tif values.head() == r\"\\comma\":\n\t\t\tfor keyval in values.top().children():\n\t\t\t\ttmp = keyval.ex()\n\t\t\t\tsubs[sympy.symbols(tmp[0].sympy_form())] = SympyBridge(tmp[1]).to_sympy().evalf()\n\t\telse:\n\t\t\tsubs[sympy.symbols(values[0].sympy_form())] = SympyBridge(values[1]).to_sympy().evalf()\n\telse:\n\t\traise ValueError(\"_create_sublist: expected values to be of type Ex or dict\")\n\treturn subs"
+		},
+		{
+			"cell_id": 13578069033175043843,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13766539726338208847,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}{x: 2.00000000000000, y: 4.00000000000000}\\end{verbatim}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "_create_sublist($x=2, y=4$);"
+		},
+		{
+			"cell_id": 10532033700422622820,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

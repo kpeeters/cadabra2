@@ -22,6 +22,8 @@ set(PACKAGES
   core/manip
   core/solve
   core/trace
+  numeric/integrate
+  numeric/evaluate
   utils/node
   utils/indices
   utils/develop
