@@ -59,6 +59,9 @@ std::vector<Ex> get_free_indices(const Kernel& kernel, Ex::iterator it)
 Ex_ptr get_component(Ex_ptr ex, Ex_ptr components)
 {
 	Kernel& kernel = *get_kernel_from_scope();
+	Ex_comparator comp(kernel.properties);
+
+	Ex_ptr res = std::make_shared<Ex>(*ex);
 
 	// Ensure components is a comma node
 	if (*components->begin()->name != "\\comma") {
@@ -67,33 +70,10 @@ Ex_ptr get_component(Ex_ptr ex, Ex_ptr components)
 		components = new_components;
 	}
 
-	// Resolve component nodes
-	for (Ex::iterator beg = ex->begin(), end = ex->end(); beg != end; ++beg) {
-		if (*beg->name == "\\components") {
-			Ex::sibling_iterator comma = beg.begin();
-			++comma;
-			bool found = false;
-			for (Ex::sibling_iterator compbeg = comma.begin(), compend = comma.end(); compbeg != compend; ++compbeg) {
-				Ex::sibling_iterator side = compbeg.begin();
-				if (subtree_equal(&kernel.properties, side, components->begin())) {
-					++side;
-					Ex tmp(side);
-					beg = ex->replace(beg, tmp.begin());
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
-				beg = ex->replace(beg, str_node("1"));
-				multiply(beg->multiplier, 0);
-			}
-		}
-	}
-
 	// Resolve free indices
-	auto free_indices = get_free_indices(kernel, ex->begin());
+	auto free_indices = get_free_indices(kernel, res->begin());
 	if (free_indices.empty())
-		return ex;
+		return res;
 
 	// Match free indices to coordinates
 	Ex::sibling_iterator curcomp = components->begin().begin(), endcomp = components->begin().end();
@@ -105,26 +85,59 @@ Ex_ptr get_component(Ex_ptr ex, Ex_ptr components)
 		++curcomp;
 	}
 
-	// Iterate through indices replacing free indices with coordinates
-	Ex_comparator comp(kernel.properties);
-	auto beg = index_iterator::begin(kernel.properties, ex->begin());
-	auto end = index_iterator::end(kernel.properties, ex->begin());
-	while (beg != end) {
-		auto next = beg;
-		++next;
-
-		for (const auto& elem : idx_to_coord) {
-			comp.clear();
-			auto compres = comp.equal_subtree(beg, elem.first.begin(), Ex_comparator::useprops_t::always, true);
-			if (compres == Ex_comparator::match_t::subtree_match) {
-				ex->replace_index(beg, elem.second, true);
-				break;
+	// Resolve component nodes
+	for (Ex::iterator beg = res->begin(), end = res->end(); beg != end; ++beg) {
+		if (*beg->name == "\\components") {
+			Ex::sibling_iterator comma = beg.begin();
+			Ex comp("\\comma");
+			while (*comma->name != "\\comma") {
+				for (const auto& elem : idx_to_coord) {
+					if (subtree_equal(&kernel.properties, comma, elem.first.begin(), -1)) {
+						comp.append_child(comp.begin(), elem.second);
+						break;
+					}
+				}
+				++comma;
+			}
+			bool found = false;
+			for (Ex::sibling_iterator compbeg = comma.begin(), compend = comma.end(); compbeg != compend; ++compbeg) {
+				Ex::sibling_iterator side = compbeg.begin();
+				if (subtree_equal(&kernel.properties, side, comp.begin(), -1)) {
+					++side;
+					Ex tmp(side);
+					beg = res->replace(beg, tmp.begin());
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				beg = res->replace(beg, str_node("1"));
+				multiply(beg->multiplier, 0);
 			}
 		}
-		beg = next;
 	}
 
-	return ex;
+	Ex::post_order_iterator walk = res->begin(), last = res->begin();
+	walk.descend_all();
+	++last;
+
+	do {
+		auto next = walk;
+		++next;
+
+		if (walk->is_index()) {
+			for (const auto& elem : idx_to_coord) {
+				if (subtree_equal(&kernel.properties, walk, elem.first.begin(), -1)) {
+					res->replace_index(walk, elem.second, true);
+					break;
+				}
+			}
+		}
+
+		walk = next;
+	} while (walk != last);
+
+	return res;
 }
 
 
