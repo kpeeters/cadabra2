@@ -177,6 +177,8 @@ set(PACKAGES
   cdb/sympy/solvers
   cdb/relativity/abstract
   cdb/relativity/schwarzschild
+  cdb/numeric/evaluate
+  cdb/numeric/integrate  
   )
 
 # Table of contents
