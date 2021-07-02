@@ -35,7 +35,9 @@ set(PACKAGES
   )
 
 set(COMPILED_PACKAGES
-  core/_component.cc)
+  core/_component.cc
+  utils/_algorithm.cc
+  )
 
 #---------------------------------------------------------------------------
 # Install packages
