@@ -12,7 +12,8 @@
 # fi
 
 cd ${HOME}/cadabra2
-sudo ls 
+sudo ls
+rm -f config/install_script.iss config/pre_install.rtf
 git pull origin
 git checkout ${CDB_TAG}
 sudo rm -Rf build/*
