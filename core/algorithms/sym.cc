@@ -6,8 +6,11 @@ using namespace cadabra;
 // #define DEBUG 1
 
 sym::sym(const Kernel& k, Ex& tr, const std::vector<unsigned int>& slots, bool s)
-	: Algorithm(k, tr), sign(s), argloc_2_treeloc(slots)
+	: Algorithm(k, tr), sign(s), slotloc(slots)
 	{
+#ifdef DEBUG
+	std::cerr << "sym::sym: initialised with slot positions." << std::endl;
+#endif
 	}
 
 sym::sym(const Kernel& k, Ex& tr, Ex& objs, bool s)
@@ -26,24 +29,54 @@ bool sym::can_apply(iterator it)
 	prod_wrap_single_term(it);
 	bool located=false;
 	if(objects.size()>0) {
+#ifdef DEBUG
+		std::cerr << "sym::can_apply: finding objects" << std::endl;
+#endif
 		argloc_2_treeloc.clear();
 		located=locate_object_set(objects, tr.begin(it), tr.end(it), argloc_2_treeloc);
 		}
 	else {
+#ifdef DEBUG
+		std::cerr << "sym::can_apply: collecting objects" << std::endl;
+#endif
 		objects.set_head(str_node("\\comma"));
-		for(size_t i=0; i<argloc_2_treeloc.size(); ++i) {
+		argloc_2_treeloc.clear();
+		argloc_2_treeloc.resize(slotloc.size(), 0);
+		for(size_t i=0; i<slotloc.size(); ++i) {
 			auto ind=begin_index(it);
-			ind+=argloc_2_treeloc[i];
-			// FIXME: verify that indices are not out-of-range.
-			objects.append_child(Ex::iterator(ind));
+			ind+=slotloc[i];
+			if(tr.is_valid(ind)==false) {
+				throw ArgumentException("Expression does not have at least "+std::to_string(slotloc[i]+1)+" indices.");
+				}
+#ifdef DEBUG
+			std::cerr << "sym::can_apply: adding " << ind << std::endl;
+#endif
+			objects.append_child(objects.begin(), Ex::iterator(ind));
+
+			// Convert the index-index to iterator-index (the former says how many times
+			// an IndexIterator should be incremented, the latter says how many times a
+			// generic Iterator should be incremented).
+			iterator steps=tr.begin(it);
+			while(steps!=iterator(ind)) {
+				++steps;
+				++argloc_2_treeloc[i];
+				}
 			}
+		located=true;
 		}
 	prod_unwrap_single_term(it);
+#ifdef DEBUG
+	std::cerr << "sym::can_apply: ready to go: " << located << std::endl;
+#endif
 	return located;
 	}
 
 Algorithm::result_t sym::apply(iterator& it)
 	{
+#ifdef DEBUG
+	std::cerr << "sym::apply: running" << std::endl;
+#endif
+
 	prod_wrap_single_term(it);
 	result_t res=doit(it,sign);
 	//	if(res==result_t::l_applied)
@@ -58,6 +91,10 @@ Algorithm::result_t sym::doit(iterator& it, bool sign)
 	{
 	assert(*it->name=="\\prod");
 
+#ifdef DEBUG
+	std::cerr << "sym::doit: " << objects << std::endl;
+#endif
+	
 	// Setup combinations class. First construct original and block length.
 	sibling_iterator fst=objects.begin(objects.begin());
 	sibling_iterator fnd=objects.end(objects.begin());
@@ -67,6 +104,9 @@ Algorithm::result_t sym::doit(iterator& it, bool sign)
 	for(unsigned int i=0; i<argloc_2_treeloc.size(); ++i)
 		raw_ints.original.push_back(i);
 	while(fst!=fnd) {
+#ifdef DEBUG
+		std::cerr << "sym::doit: object " << *fst->name	<< std::endl;
+#endif
 		if(*(fst->name)=="\\comma") {
 			if(raw_ints.block_length==0) raw_ints.block_length=tr.number_of_children(fst);
 			else                         assert(raw_ints.block_length==tr.number_of_children(fst));

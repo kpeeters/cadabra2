@@ -87,3 +87,13 @@ def test08():
     print('Test 08 passed')
 		
 test08()	 
+
+def test09():
+    __cdbkernel__=create_scope()
+    ex:= 1/2 A_{a b} B_{c d};
+    slot_asym(ex, [1,2], deep=False)
+    tst:= 1/4 A_{a b} B_{c d} - 1/4 A_{a c} B_{b d} - @(ex);
+    assert(tst==0)
+    print("Test 09 passed")
+
+test09()

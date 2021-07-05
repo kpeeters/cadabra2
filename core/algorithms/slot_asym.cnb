@@ -1,0 +1,123 @@
+{
+	"cell_id": 15939251759909380531,
+	"cells": [
+		{
+			"cell_id": 9909884154184314133,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 11121169234497922857,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{slot_asym}{Anti-symmetrise or symmetrise an expression in indicated index slots}\n\nAnti-symmetrise or symmetrise (depending on the \\verb|antisymmetric| flag) a product or tensor in the indicated indices,\nwhere the indices are given as slot positions. This complements the \\algo{asym} algorithm, which instead takes the\nindex names over which to (anti-)symmetrise."
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{slot_asym}{Anti-symmetrise or symmetrise an expression in indicated index slots}\n\nAnti-symmetrise or symmetrise (depending on the \\verb|antisymmetric| flag) a product or tensor in the indicated indices,\nwhere the indices are given as slot positions. This complements the \\algo{asym} algorithm, which instead takes the\nindex names over which to (anti-)symmetrise."
+		},
+		{
+			"cell_id": 1631820596417225138,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 7595867900720961056,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13265193798604235312,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m n} B_{p q}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m n} B_{p q}\\end{dmath*}"
+				}
+			],
+			"source": "ex:=A_{m n} B_{p q};"
+		},
+		{
+			"cell_id": 15329301797986921853,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 6618699822479866787,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4925730957034195862,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/2 A_{m n} B_{p q} -  1/2 A_{m p} B_{n q}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{2}A_{m n} B_{p q} - \\frac{1}{2}A_{m p} B_{n q}\\end{dmath*}"
+				}
+			],
+			"source": "slot_asym(_, [1,2]);"
+		},
+		{
+			"cell_id": 2136548790978716924,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 9595072634954805885,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If you want to \\emph{symmetrise} in the indicated objects instead, use the \\verb|antisymmetric=False| flag:"
+				}
+			],
+			"hidden": true,
+			"source": "If you want to \\emph{symmetrise} in the indicated objects instead, use the \\verb|antisymmetric=False| flag:"
+		},
+		{
+			"cell_id": 341154554226938963,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 10010981841376155594,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1454030977596719820,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m n} B_{p q}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m n} B_{p q}\\end{dmath*}"
+				},
+				{
+					"cell_id": 13362812056189562810,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6588625381382353233,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/2 A_{m n} B_{p q} +  1/2 A_{m p} B_{n q}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{2}A_{m n} B_{p q}+\\frac{1}{2}A_{m p} B_{n q}\\end{dmath*}"
+				}
+			],
+			"source": "ex:=A_{m n} B_{p q};\nslot_asym(_, [1,2], antisymmetric=False);"
+		},
+		{
+			"cell_id": 5279739485549689433,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

@@ -18,6 +18,7 @@ namespace cadabra {
 			Ex objects;
 			bool    sign;
 
+			std::vector<unsigned int>  slotloc;
 			std::vector<unsigned int>  argloc_2_treeloc;
 			combin::combinations<unsigned int> raw_ints;
 
