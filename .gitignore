@@ -13,3 +13,4 @@ __pycache__
 .vscode
 .vs
 CMakeSettings.json
+config/pre_install.rtf
