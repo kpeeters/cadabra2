@@ -120,6 +120,7 @@ namespace cadabra {
 			.def_readonly_static("version", &Kernel::version)
 			.def_readonly_static("build", &Kernel::build)
 			.def_readonly("scalar_backend", &Kernel::scalar_backend)
+			.def_readwrite("display_fractions", &Kernel::display_fractions)
 			.def("warn", &Kernel::warn, pybind11::arg("msg"), pybind11::arg("level") = 0)
 			.def("configure_warnings", kernel_configure_warnings);
 

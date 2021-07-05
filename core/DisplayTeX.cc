@@ -565,6 +565,64 @@ void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std
 	if(needs_brackets(it))
 		str << "\\left(";
 
+	if (kernel.display_fractions) {
+		// If one (or more) of the factors is a negative power, split into top and
+		// bottom parts and print as a fraction
+		Ex pos("\\prod"), neg("\\prod");
+		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
+			bool is_negexp = false;
+			if (*beg->name == "\\pow") {
+				Ex::sibling_iterator exponent = beg.begin();
+				++exponent;
+				if (*exponent->name == "1" && *exponent->multiplier < 0) {
+					is_negexp = true;
+					if (*exponent->multiplier == -1) {
+						neg.append_child(neg.begin(), (Ex::iterator)beg.begin());
+					}
+					else {
+						auto pos = neg.append_child(neg.begin(), (Ex::iterator)beg);
+						exponent = pos.begin();
+						++exponent;
+						multiply(exponent->multiplier, -1);
+					}
+				}
+			}
+			if (!is_negexp) {
+				pos.append_child(pos.begin(), (Ex::iterator)beg);
+			}
+		}
+
+		if (neg.begin().begin() != neg.begin().end()) {
+			auto mult = *it->multiplier;
+			if (mult < 0) {
+				str << "-";
+				mult *= -1;
+			}
+			if (mult.get_den() == 1) {
+				multiply(pos.begin()->multiplier, mult);
+			}
+			else {
+				multiply(pos.begin()->multiplier, mult.get_num());
+				multiply(neg.begin()->multiplier, mult.get_den());
+			}
+			str << "\\frac{";
+			if (pos.begin().begin() == pos.begin().end()) {
+				pos.begin()->name = name_set.insert("1").first;
+				print_other(str, pos.begin());
+			}
+			else {
+				print_productlike(str, pos.begin(), inbetween);
+			}
+			str << "}{";
+			print_productlike(str, neg.begin(), inbetween);
+			str << "}";
+
+			if (needs_brackets(it))
+				str << "\\right)";
+			return;
+		}
+	}
+
 	// The multiplier needs to be inside the brackets, otherwise things like
 	// \pow{ 2/3 \prod{a}{b} }{c} do not print correctly.
 
@@ -687,6 +745,38 @@ void DisplayTeX::print_powlike(std::ostream& str, Ex::iterator it)
 	auto exp=arg;
 	++exp;
 	assert(exp!=tree.end(it));
+
+	if (kernel.display_fractions && exp->is_rational() && *exp->multiplier < 0) {
+		auto mult = *it->multiplier;
+		bool mult_is_int = mult.get_den() == 1;
+		if (mult < 0) {
+			str << "-";
+			mult *= -1;
+		}
+		str << "\\frac{";
+		if (mult_is_int)
+			str << mult;
+		else
+			str << mult.get_num();
+		str << "}{";
+		if (*exp->multiplier == -1) {
+			Ex copy(arg);
+			if (!mult_is_int)
+				multiply(copy.begin()->multiplier, mult.get_den());
+			dispatch(str, copy.begin());
+		}
+		else {
+			Ex copy(it);
+			exp = copy.begin().begin();
+			++exp;
+			multiply(exp->multiplier, -1);
+			if (!mult_is_int)
+				copy.begin()->multiplier = rat_set.insert(mult.get_den()).first;
+			print_powlike(str, copy.begin());
+		}
+		str << "}";
+		return;
+	}
 
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);

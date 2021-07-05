@@ -30,6 +30,7 @@ namespace cadabra {
 			/// Settings.
 			enum class scalar_backend_t { sympy, mathematica } scalar_backend;
 			bool                                               call_embedded_python_functions;
+			bool                                               display_fractions;
 
 
 			const static std::string version;

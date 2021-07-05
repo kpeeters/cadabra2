@@ -28,6 +28,7 @@ Kernel::Kernel(bool inject_defaults)
 	, call_embedded_python_functions(false)
 	, warning_level(warn_t::warning)
 	, warning_callback(nullptr)
+	, display_fractions(false)
 	{
 	if (inject_defaults) {
 		inject_property(new Distributable(),          ex_from_string("\\prod{#}"), 0);
