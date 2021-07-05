@@ -72,6 +72,7 @@ set(CONTRIBS
 
 set(ALGOS
   asym
+  slot_asym
   canonicalise
   collect_factors
   collect_terms
