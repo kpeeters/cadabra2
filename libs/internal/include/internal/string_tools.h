@@ -49,3 +49,13 @@ inline std::string nth_line(const std::string& s, size_t n)
 	}
 	return s.substr(pos, s.find('\n', pos) - pos);
 }
+
+inline std::string escape_backslashes(std::string s)
+{
+	size_t start = 0;
+	while ((start = s.find('\\', start)) != std::string::npos) {
+		s.replace(start, 1, "\\\\");
+		start += 2;
+	}
+	return s;
+}
