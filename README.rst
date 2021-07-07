@@ -231,18 +231,17 @@ notebook interface ``cadabra2-gtk``.
 Linux (Arch/Manjaro)
 ~~~~~~~~~~~~~~~~~~~~
 
-The development package for Arch Linux is cadabra2-git
-https://aur.archlinux.org/packages/cadabra2-git/.  Building and
+The package for Arch Linux is cadabra2
+https://aur.archlinux.org/packages/cadabra2/  Building and
 installing (including dependencies) can be accomplished with::
 
-    yaourt -Sy cadabra2-git
+    yay -S cadabra2
 
 Alternatively use ``makepkg``::
 
-    curl -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/cadabra2-git.tar.gz
-    tar -xvf cadabra2-git.tar.gz
-    cd cadabra2-git
-    makepkg -sri
+    git clone https://aur.archlinux.org/cadabra2.git
+    cd cadabra2
+    makepkg -si
 
 Please consult the Arch Wiki
 https://wiki.archlinux.org/index.php/Arch_User_Repository#Installing_packages
