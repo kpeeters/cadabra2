@@ -165,36 +165,49 @@ Algorithm::result_t join_gamma::apply(iterator& st)
 	sibling_iterator top=rep.set_head(str_node("\\sum"));
 
 	// Figure out the dimension of the gamma matrix.
+	bool bad_index=false;
 	long number_of_dimensions=-1; // i.e. not known.
 	index_iterator firstind=begin_index(gam1);
+	std::vector<str_node> seen_indices;
 	while(firstind!=end_index(gam1)) {  // select the maximum value; FIXME: be more refined...
 		const Integer *ipr=kernel.properties.get<Integer>(firstind, true);
-		if(ipr) {
+		if(std::find(seen_indices.begin(), seen_indices.end(), *firstind)!=seen_indices.end()) {
+			zero(st->multiplier);
+			cleanup_dispatch(kernel, tr, st);
+			return result_t::l_applied;
+			}
+		seen_indices.push_back(*firstind);
+		if(ipr && !bad_index) {
 			if(ipr->difference.begin()->is_integer()) {
 				number_of_dimensions=std::max(number_of_dimensions, to_long(*ipr->difference.begin()->multiplier));
 				}
 			}
 		else {
 			number_of_dimensions=-1;
-			break;
+			bad_index=true;
 			}
 		++firstind;
 		}
-	if(number_of_dimensions!=-1) {
-		firstind=begin_index(gam2);
-		while(firstind!=end_index(gam2)) {  // select the maximum value; FIXME: be more refined...
-			const Integer *ipr=kernel.properties.get<Integer>(firstind, true);
-			if(ipr) {
-				if(ipr->difference.begin()->is_integer()) {
-					number_of_dimensions=std::max(number_of_dimensions, to_long(*ipr->difference.begin()->multiplier));
-					}
-				}
-			else {
-				number_of_dimensions=-1;
-				break;
-				}
-			++firstind;
+	firstind=begin_index(gam2);
+	seen_indices.clear();
+	while(firstind!=end_index(gam2)) {  // select the maximum value; FIXME: be more refined...
+		const Integer *ipr=kernel.properties.get<Integer>(firstind, true);
+		if(std::find(seen_indices.begin(), seen_indices.end(), *firstind)!=seen_indices.end()) {
+			zero(st->multiplier);
+			cleanup_dispatch(kernel, tr, st);
+			return result_t::l_applied;
 			}
+		seen_indices.push_back(*firstind);
+		if(ipr && !bad_index) {
+			if(ipr->difference.begin()->is_integer()) {
+				number_of_dimensions=std::max(number_of_dimensions, to_long(*ipr->difference.begin()->multiplier));
+				}
+			}
+		else {
+			number_of_dimensions=-1;
+			bad_index=true;
+			}
+		++firstind;
 		}
 
 	// iterators over the two index ranges
