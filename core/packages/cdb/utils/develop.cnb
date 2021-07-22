@@ -47,7 +47,7 @@
 			"cell_id": 13334862458884777602,
 			"cell_origin": "client",
 			"cell_type": "input",
-			"source": "from cdb.utils._algorithm import apply_algo_base as _apply_algo_base\n\ndef _cast_algo(apply, can_apply = lambda node: True):\n\tif len(inspect.getfullargspec(apply).args) != 1:\n\t\traise TypeError(\"Failed to convert function to algorithm: function must only take one 'node' parameter\")\n\tif len(inspect.getfullargspec(can_apply).args) != 1:\n\t\traise TypeError(\"Failed to convert function to algorithm: predicate must only take one 'node' parameter\")\n\treturn type(apply.__name__, (Algorithm, ), { \n\t\t\"can_apply\": lambda self, node: can_apply(node), \n\t\t\"apply\": lambda self, node: apply(node)\n\t})\n\ndef _create_algo(cls, pre_order):\n\tif Algorithm not in cls.__bases__:\n\t\traise TypeError(\"Algorithm must derive from Algorithm type\")\n\tdef wrapper(ex, *args, deep=True, repeat=False, depth=0, **kwargs):\n\t\tx = cls(ex, *args, **kwargs)\n\t\treturn _apply_algo_base(x, ex, deep, repeat, depth, pre_order)\n\treturn wrapper"
+			"source": "from cdb.utils._algorithm import apply_algo_base as _apply_algo_base\n\ndef _cast_algo(apply, can_apply = lambda node: True):\n\tif len(inspect.getfullargspec(apply).args) != 1:\n\t\traise TypeError(\"Failed to convert function to algorithm: function must only take one 'node' parameter\")\n\tif len(inspect.getfullargspec(can_apply).args) != 1:\n\t\traise TypeError(\"Failed to convert function to algorithm: predicate must only take one 'node' parameter\")\n\treturn type(apply.__name__, (Algorithm, ), { \n\t\t\"can_apply\": lambda self, node: can_apply(node), \n\t\t\"apply\": lambda self, node: apply(node),\n\t\t\"__doc__\": apply.__doc__\n\t})\n\ndef _create_algo(cls, pre_order):\n\tif Algorithm not in cls.__bases__:\n\t\traise TypeError(\"Algorithm must derive from Algorithm type\")\n\tdef wrapper(ex, *args, deep=True, repeat=False, depth=0, **kwargs):\n\t\tx = cls(ex, *args, **kwargs)\n\t\treturn _apply_algo_base(x, ex, deep, repeat, depth, pre_order)\n\n\t# Generate correct meta-information\n\twrapper.__name__ = cls.__name__\n\twrapper.__doc__ = cls.__doc__\n\t# Get argument list of Algorithm constructor\n\ttry:\n\t\tparameters = list(inspect.signature(cls\t.__init__).parameters.values())[1:]\n\texcept:\n\t\tparameters = [ inspect.Parameter(\"ex\", inspect.Parameter.POSITIONAL_OR_KEYWORD) ]\n\t# Parameters of apply_algo_base\n\talgo_parameters = [\n\t\tinspect.Parameter(\"deep\", inspect.Parameter.KEYWORD_ONLY, default=True),\n\t\tinspect.Parameter(\"repeat\", inspect.Parameter.KEYWORD_ONLY, default=False),\n\t\tinspect.Parameter(\"depth\", inspect.Parameter.KEYWORD_ONLY, default=0) ]\n\t# If parameters has a **kwargs at the end, algo_parameters must be inserted before this\n\tif parameters[-1].kind == inspect.Parameter.VAR_KEYWORD:\n\t\twrapper.__signature__ = inspect.Signature(parameters[:-1] + algo_parameters + parameters[-1:])\n\telse:\n\t\twrapper.__signature__ = inspect.Signature(parameters + algo_parameters)\n\treturn wrapper"
 		},
 		{
 			"cell_id": 2421359616022599147,
@@ -76,22 +76,28 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 4043273741898506206,
+					"cell_id": 15761994739137138802,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 11767503884852531506,
+							"cell_id": 17415156100168742565,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "A^{\\mu} + B^{\\mu}"
 						}
 					],
 					"source": "\\begin{dmath*}{}A^{\\mu}+B^{\\mu}\\end{dmath*}"
+				},
+				{
+					"cell_id": 15144194947899395553,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}Help on function switch_indices in module __main__:\n\nswitch_indices(ex, *, deep=True, repeat=False, depth=0)\n    Switch positions on all indices\n\n\\end{verbatim}"
 				}
 			],
 			"ignore_on_import": true,
-			"source": "@algo\ndef switch_indices(node):\n\tif node.parent_rel == parent_rel_t.sub:\n\t\tnode.parent_rel = parent_rel_t.super\n\t\treturn result_t.changed\n\tif node.parent_rel == parent_rel_t.super:\n\t\tnode.parent_rel = parent_rel_t.sub\n\t\treturn result_t.changed\n\treturn result_t.unchanged\n\n# also takes optional 'deep', 'repeat' and 'depth' arguments\nswitch_indices($A_{\\mu} + B_{\\mu}$);"
+			"source": "@algo\ndef switch_indices(node):\n\t\"Switch positions on all indices\"\n\tif node.parent_rel == parent_rel_t.sub:\n\t\tnode.parent_rel = parent_rel_t.super\n\t\treturn result_t.changed\n\tif node.parent_rel == parent_rel_t.super:\n\t\tnode.parent_rel = parent_rel_t.sub\n\t\treturn result_t.changed\n\treturn result_t.unchanged\n\n# also takes optional 'deep', 'repeat' and 'depth' arguments\nswitch_indices($A_{\\mu} + B_{\\mu}$);\nhelp(switch_indices)"
 		},
 		{
 			"cell_id": 9340011096170931285,
@@ -99,22 +105,28 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 14835945528453774882,
+					"cell_id": 5850074756591759657,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 15750930497414250141,
+							"cell_id": 9620504524171758578,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "2y"
 						}
 					],
 					"source": "\\begin{dmath*}{}2y\\end{dmath*}"
+				},
+				{
+					"cell_id": 17850582158135921593,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}Help on function x_to_y in module __main__:\n\nx_to_y(ex, *, deep=True, repeat=False, depth=0)\n\n\\end{verbatim}"
 				}
 			],
 			"ignore_on_import": true,
-			"source": "@algo(pre_order=True, pred=lambda node: node.name == 'x')\ndef x_to_y(node):\n\tnode.name = 'y'\n\treturn result_t.changed\n\nx_to_y($x + y$);"
+			"source": "@algo(pre_order=True, pred=lambda node: node.name == 'x')\ndef x_to_y(node):\n\tnode.name = 'y'\n\treturn result_t.changed\n\nx_to_y($x + y$);\nhelp(x_to_y)"
 		},
 		{
 			"cell_id": 15634397355979861807,
@@ -122,22 +134,28 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 960346398456001684,
+					"cell_id": 14537821031780487327,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 1313190532695810937,
+							"cell_id": 3417601803473011010,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "2t_{\\mu}"
 						}
 					],
 					"source": "\\begin{dmath*}{}2t_{\\mu}\\end{dmath*}"
+				},
+				{
+					"cell_id": 17754394564063656935,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}Help on function a_to_b in module __main__:\n\na_to_b(ex, a, b, *args, deep=True, repeat=False, depth=0, **kwargs)\n\n\\end{verbatim}"
 				}
 			],
 			"ignore_on_import": true,
-			"source": "@algo\nclass a_to_b(Algorithm):\n\tdef __init__(self, ex, a, b):\n\t\tAlgorithm.__init__(self, ex)\n\t\tself.a, self.b = a, b\n\t\n\tdef can_apply(self, node):\n\t\treturn node.name == self.a.head()\n\n\tdef apply(self, node):\n\t\tnode.name = self.b.head()\n\t\treturn result_t.changed\n\na_to_b($s_{\\mu} + t_{\\mu}$, $s_{\\mu}$, $t_{\\mu}$);"
+			"source": "@algo\nclass a_to_b(Algorithm):\n\tdef __init__(self, ex, a, b, *args, **kwargs):\n\t\tAlgorithm.__init__(self, ex)\n\t\tself.a, self.b = a, b\n\t\n\tdef can_apply(self, node):\n\t\treturn node.name == self.a.head()\n\n\tdef apply(self, node):\n\t\tnode.name = self.b.head()\n\t\treturn result_t.changed\n\na_to_b($s_{\\mu} + t_{\\mu}$, $s_{\\mu}$, $t_{\\mu}$);\nhelp(a_to_b)"
 		},
 		{
 			"cell_id": 10135200674124616797,
@@ -173,10 +191,10 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 16504503887878721184,
+					"cell_id": 6295148871247203489,
 					"cell_origin": "server",
 					"cell_type": "verbatim",
-					"source": "\\begin{verbatim}0:00:00.008331\\end{verbatim}"
+					"source": "\\begin{verbatim}0:00:00.000875\\end{verbatim}"
 				}
 			],
 			"ignore_on_import": true,
@@ -188,10 +206,10 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 17622425082194156367,
+					"cell_id": 13532413926824958590,
 					"cell_origin": "server",
 					"cell_type": "verbatim",
-					"source": "\\begin{verbatim}0:00:00.003194\\end{verbatim}"
+					"source": "\\begin{verbatim}0:00:00.000493\\end{verbatim}"
 				}
 			],
 			"ignore_on_import": true,
@@ -245,14 +263,14 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 17109594158398788775,
+					"cell_id": 4855635716783607432,
 					"cell_origin": "server",
 					"cell_type": "output",
-					"source": "\\begin{verbatim}sort_sum_test01 passed\nsort_sum_test02 FAILED\n  Expected: a + b\n  Produced: a + c\nsort_sum_test03 FAILED\n  Expected: a + b\n  Produced: a + c\n\\end{verbatim}"
+					"source": "\\begin{verbatim}sort_sum_test01 passed\nsort_sum_test02 FAILED\n  Expected: a + b\n  Produced: a + c\nsort_sum_test03 FAILED\n  Expected: a + b\n  Produced: a + c\nRaised CadabraTestError\n\\end{verbatim}"
 				}
 			],
 			"ignore_on_import": true,
-			"source": "@test_algo($a + b + c$)\ndef sort_sum_test01():\n\tex := b + a + c.\n\treturn sort_sum(ex)\nsort_sum_test01()\n\n@test_algo($a + b$)\ndef sort_sum_test02():\n\tex := c + a.\n\treturn sort_sum(ex)\nsort_sum_test02()\n\n@test_algo($a + b$, throw_on_fail=True)\ndef sort_sum_test03():\n\tex := c + a.\n\treturn sort_sum(ex)\n\ntry:\n\tsort_sum_test03()\n\traise AssertionError(\"CadabraTestError not raised!\")\nexcept CadabraTestError:\n\tpass"
+			"source": "@test_algo($a + b + c$)\ndef sort_sum_test01():\n\tex := b + a + c.\n\treturn sort_sum(ex)\nsort_sum_test01()\n\n@test_algo($a + b$)\ndef sort_sum_test02():\n\tex := c + a.\n\treturn sort_sum(ex)\nsort_sum_test02()\n\n@test_algo($a + b$, throw_on_fail=True)\ndef sort_sum_test03():\n\tex := c + a.\n\treturn sort_sum(ex)\n\ntry:\n\tsort_sum_test03()\n\traise AssertionError(\"CadabraTestError not raised!\")\nexcept CadabraTestError:\n\tprint(\"Raised CadabraTestError\")"
 		},
 		{
 			"cell_id": 17571440201905887785,
