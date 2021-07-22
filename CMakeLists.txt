@@ -2,7 +2,12 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 set(CADABRA_CMAKE_VERSION 3.1)
 
 cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
-set(CMAKE_CXX_STANDARD 14)
+if (${CMAKE_VERSION} VERSION_LESS "3.8.0")
+	set(CMAKE_CXX_STANDARD 14)
+	message(STATUS "Using C++14 as you are using CMake < 3.8; consider upgrading as future versions of Cadabra may use C++17 features")
+else()
+	set(CMAKE_CXX_STANDARD 17)
+endif()
 project(Cadabra)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -145,6 +150,8 @@ endif()
 # - Set the C++ standard to C++14
 # - Turn optimizations on
 # - Turn off warnings we don't need
+
+
 
 # GCC
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)

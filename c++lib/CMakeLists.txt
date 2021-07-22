@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
-set(CMAKE_CXX_STANDARD 14)
+
+if(${CMAKE_VERSION} VERSION_LESS "3.8.0")
+	set(CMAKE_CXX_STANDARD 14)
+	message(STATUS "Using C++14 as you are using CMkake < 3.8, consider upgrading as future versions of Cadabra may make use of C++17 features")
+else()
+	set(CMAKE_CXX_STANDARD 17)
+endif()
+
 project(Cadabra)
 
 #---------------------------------------------------------------------------
@@ -42,11 +49,11 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 endif()
 
 if(MSVC)

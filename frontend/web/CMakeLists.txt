@@ -5,7 +5,12 @@ cmake_minimum_required(VERSION 3.5)
 
 project(CadabraWeb)
 
-set(CMAKE_CXX_STANDARD 14)
+if(${CMAKE_VERSION} VERSION_LESS "3.8.0")
+	message(STATUS "Using C++14 as you are using CMake < 3.8, consider upgrading as future versions of Cadabra may use C++17 features)
+	set(CMAKE_CXX_STANDARD 14)
+else()
+	set(CMAKE_CXX_STANDARD 17)
+endif()
 
 if(NOT "${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
   message(FATAL_ERROR
