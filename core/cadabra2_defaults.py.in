@@ -180,6 +180,8 @@ def save_history(history_path):
 
 try:
     import readline
+    if not hasattr(readline, 'redisplay'):
+      readline.redisplay = lambda: None
     history_path = os.path.join(user_data_dir(), "cadabra_history")
     if os.path.exists(history_path):
         readline.read_history_file(history_path)
