@@ -41,6 +41,9 @@ find_package(GLIBMM  REQUIRED)
 # GMPXX
 find_package(GMPXX REQUIRED)
 
+# Dependency of TinyProcessLib
+find_package(Threads)
+
 #---------------------------------------------------------------------------
 # Enumerate input files and directories.
 #---------------------------------------------------------------------------
@@ -310,6 +313,19 @@ target_compile_definitions(cadabra2-cli PRIVATE CDBPYTHON_NO_NOTEBOOK)
 target_include_directories(cadabra2-cli PRIVATE ${PYTHON_INCLUDE_DIRS})
 target_link_libraries(cadabra2-cli PRIVATE ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES})
 
+# Notebook diff tool
+add_executable(cdb-nbtool
+  cdb-nbtool.cc
+  ${CADABRA_LIBS_DIR}/tiny-process-library/process.cpp
+)
+if (MSVC)
+  target_sources(cdb-nbtool PRIVATE ${CADABRA_LIBS_DIR}/tiny-process-library/process_win.cpp)
+else()
+  target_sources(cdb-nbtool PRIVATE ${CADABRA_LIBS_DIR}/tiny-process-library/process_unix.cpp)
+  target_link_libraries(cdb-nbtool PRIVATE Threads::Threads)
+endif()
+target_include_directories(cdb-nbtool PRIVATE ${CADABRA_LIBS_DIR}/tiny-process-library)
+
 # Test preprocessor executable
 add_executable(test_preprocessor 
    test_preprocessor.cc 
@@ -416,6 +432,7 @@ else()
 endif()
 
 install(TARGETS cadabra2-cli DESTINATION bin)
+install(TARGETS cdb-nbtool DESTINATION bin)
 
 install(
    FILES 
