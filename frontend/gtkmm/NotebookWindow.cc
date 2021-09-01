@@ -591,6 +591,13 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	return ret;
 	}
 
+bool NotebookWindow::on_unhandled_error(const std::exception& err)
+{
+	Gtk::MessageDialog md(*this, err.what(), false, Gtk::MessageType::MESSAGE_ERROR, Gtk::ButtonsType::BUTTONS_OK, true);
+	md.run();
+	return true;
+}
+
 void NotebookWindow::set_title_prefix(const std::string& pf)
 	{
 	title_prefix=pf;

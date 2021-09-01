@@ -151,6 +151,7 @@ namespace cadabra {
 			/// while this is running. So a running action can add more actions.
 
 			void                                             process_action_queue();
+			virtual bool on_unhandled_error(const std::exception& err);
 
 
 

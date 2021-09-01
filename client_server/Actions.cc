@@ -5,6 +5,7 @@
 #include "DocumentThread.hh"
 #include "GUIBase.hh"
 
+#include <boost/core/demangle.hpp>
 #include <iostream>
 
 using namespace cadabra;
@@ -29,7 +30,8 @@ void ActionBase::execute(DocumentThread& cl, GUIBase& )
 			}
 		++it;
 		}
-	throw std::logic_error("ActionAddCell: cannot find cell with id "+std::to_string(ref_id.id));
+	std::string class_name = boost::core::demangle(typeid(*this).name());
+	throw std::logic_error(class_name + ": cannot find cell with id "+std::to_string(ref_id.id));
 	}
 
 ActionAddCell::ActionAddCell(DataCell cell, DataCell::id_t ref_id, Position pos_)

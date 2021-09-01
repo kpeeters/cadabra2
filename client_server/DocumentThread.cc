@@ -187,7 +187,12 @@ void DocumentThread::process_action_queue()
 		// Execute the action; this will run synchronously, so after
 		// this returns the doc and visual representation have both been
 		// updated.
-		ab->execute(*this, *gui);
+		try {
+			ab->execute(*this, *gui);
+		}
+		catch (const std::exception& err) {
+			on_unhandled_error(err);
+		}
 		// Lock the queue to remove the action just executed, and
 		// add it to the undo stack.
 		stack_mutex.lock();
@@ -198,6 +203,10 @@ void DocumentThread::process_action_queue()
 	stack_mutex.unlock();
 	}
 
+bool DocumentThread::on_unhandled_error(const std::exception& err)
+	{
+	return true;
+	}
 
 DocumentThread::Prefs::Prefs(bool use_defaults)
 	{

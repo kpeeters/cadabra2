@@ -115,6 +115,7 @@ namespace cadabra {
 			virtual bool on_key_press_event(GdkEventKey*) override;
 			virtual bool on_delete_event(GdkEventAny*) override;
 			virtual bool on_configure_event(GdkEventConfigure *cfg) override;
+			virtual bool on_unhandled_error(const std::exception& err) override;
 
 			DTree::iterator current_cell;
 
