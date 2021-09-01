@@ -1,5 +1,6 @@
 #include <internal/difflib.h>
 #include <internal/string_tools.h>
+#include <internal/uuid.h>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -293,7 +294,10 @@ void help()
 		<< "         |  [merge \"cadabranotebook\"]\n"
 		<< "         |    command = cdb-nbtool gitmerge\n"
 		<< "       and add the following line to your .gitattributes file:\n"
-		<< "         |  *.cnb merge=cadabranotebook\n";
+		<< "         |  *.cnb merge=cadabranotebook\n"
+		<< "  -- cdb-nbtool clean <file>\n"
+		<< "       Ensures that all input cells are visible and deletes all output cells. This can fix\n"
+		<< "       problems with corrupt notebooks. The original notebook is saved as <file>~\n";
 }
 
 void view(const char* fname)
@@ -447,6 +451,56 @@ void gitdiff(const char* a, const char* b, const char* relpath)
 	cnb_diff(af, bf);
 }
 
+void clean(const char* a)
+{
+	std::ifstream ifs(a);
+	if (!ifs.is_open()) {
+		std::cerr << "Could not open file " << a << "\n";
+		exit(1);
+	}
+
+	// Copy the file to a~
+	{
+		std::ofstream ofs(std::string(a) + "~");
+		if (!ofs.is_open()) {
+			std::cerr << "Could not create backup at " << a << "~\n";
+			exit(1);
+		}
+		ofs << ifs.rdbuf();
+	}
+
+	// Return to beginning of file and read as JSON
+	ifs.clear();
+	ifs.seekg(0);
+	nlohmann::json nb;
+	ifs >> nb;
+
+	// Clean cells
+	auto& cell_list = nb["cells"];
+	for (auto it = cell_list.begin(), end = cell_list.end(); it != end; ++it) {
+		if (it->contains("cells"))
+			it->erase("cells");
+		if (it->value("cell_type", "") == "latex") {
+			(*it)["hidden"] = false;
+			std::map<std::string, nlohmann::json> output_cell;
+			output_cell["cell_id"] = cadabra::generate_uuid<uint64_t>();
+			output_cell["cell_origin"] = "client";
+			output_cell["cell_type"] = "latex_view";
+			output_cell["source"] = "~";
+			(*it)["cells"] = std::vector<nlohmann::json>(1, output_cell);
+		}
+	}
+
+	// Write file
+	ifs.close();
+	std::ofstream ofs(a);
+	if (!ofs.is_open()) {
+		std::cerr << "Could not open " << a << " for writing\n";
+		exit(1);
+	}
+	ofs << std::setw(4) << nb << '\n';
+}
+
 int run(int argc, char** argv)
 {
 #if _MSC_VER
@@ -490,6 +544,13 @@ int run(int argc, char** argv)
 	}
 	else if (strcmp(argv[1], "gitmerge") == 0) {
 		std::cerr << "Sorry, not yet implemented!\n";
+	}
+	else if (strcmp(argv[1], "clean") == 0) {
+		if (argc != 3) {
+			std::cerr << "Wrong number of arguments passed to clean, expected 1 filename\n";
+			exit(1);
+		}
+		clean(argv[2]);
 	}
 	else {
 		std::cerr << "Unrecognised option " << argv[1] << '\n';
