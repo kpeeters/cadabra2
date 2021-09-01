@@ -310,7 +310,7 @@ add_executable(cadabra2-cli
    ${CADABRA_LIBS_DIR}/whereami/whereami.c
 )
 target_compile_definitions(cadabra2-cli PRIVATE CDBPYTHON_NO_NOTEBOOK)
-target_include_directories(cadabra2-cli PRIVATE ${PYTHON_INCLUDE_DIRS})
+target_include_directories(cadabra2-cli PRIVATE ${PYTHON_INCLUDE_DIRS} ${CADABRA_LIBS_DIR}/pybind11/include)
 target_link_libraries(cadabra2-cli PRIVATE ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES})
 
 # Notebook diff tool

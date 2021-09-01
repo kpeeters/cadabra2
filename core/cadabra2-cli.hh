@@ -7,11 +7,12 @@
 #undef _DEBUG
 #endif
 #include <Python.h>
+#include <pybind11/pybind11.h>
+#include <pybind11/embed.h>
 #ifdef CADABRA_CLI_DEBUG_MARKER
 #define _DEBUG
 #undef CADABRA_CLI_DEBUG_MARKER
 #endif
-
 
 class Shell
 {
@@ -30,37 +31,36 @@ public:
 
 	void restart();
 	void interact();
+	pybind11::object evaluate(const std::string& code, const std::string& filename = "<stdin>");
+	void execute(const std::string& code, const std::string& filename = "<stdin>");
+	void execute_file(const std::string& filename, bool preprocess = true);
 	void interact_file(const std::string& filename, bool preprocess = true);
-	bool execute_file(const std::string& filename, bool preprocess = true);
-	bool execute(const std::string& code, const std::string& filename = "<stdin>");
-	PyObject* evaluate(const std::string& code, const std::string& filename = "<stdin>");
-	std::string evaluate_to_string(const std::string& code, const std::string& err_val = "<error>");
 
-	void write(const std::string& text, const char* end = "\n", const char* stream = "stdout", bool flush = false);
-	void write(PyObject* obj, const char* end = "\n", const char* stream = "stdout", bool flush = false);
+	void write_stdout(const std::string& text, const std::string& end = "\n", bool flush = false);
+	void write_stderr(const std::string& text, const std::string& end = "\n", bool flush = false);
 
 private:
 	void set_histfile();
 	std::string histfile;
 	std::string site_path;
 
-	std::string to_string(PyObject* obj);
+	std::string str(const pybind11::handle& obj);
+	std::string repr(const pybind11::handle& obj);
 	std::string sanitize(std::string s);
 
-	bool process_ps1(const std::string& line);
-	bool process_ps2(const std::string& line);
+	void process_ps1(const std::string& line);
+	void process_ps2(const std::string& line);
 	void set_completion_callback(const char* buffer, std::vector<std::string>& completions);
 
 	std::string get_ps1();
 	std::string get_ps2();
 
-	bool is_syntax_error();
-	bool is_eof_error();
 	void handle_error();
-	void clear_error();
+	void handle_error(pybind11::error_already_set& err);
 
-	PyObject* globals;
-	PyObject* sys;
+	pybind11::dict globals;
+	pybind11::object sys;
+	pybind11::object py_stdout, py_stderr;
 	std::string collect;
 
 	const char* colour_error;
