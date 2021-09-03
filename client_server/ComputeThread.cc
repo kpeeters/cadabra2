@@ -311,11 +311,11 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	else
 		cell_id.created_by_client=false;
 	// std::cerr << "received cell with id " << cell_id.id << std::endl;
-	if (parent_id.id == interactive_cell) {
+	if (interactive_cells.find(parent_id.id) != interactive_cells.end()) {
+		interactive_cells.insert(cell_id.id);
 		docthread->on_interactive_output(root);
-		console_child_ids.push_back(cell_id.id);
-		}
-	else if (cell_id.id == interactive_cell || std::find(console_child_ids.begin(), console_child_ids.end(), parent_id.id) != console_child_ids.end()) {
+	}
+	else if (interactive_cells.find(cell_id.id) != interactive_cells.end()) {
 		docthread->on_interactive_output(root);
 		}
 	else if (msg_type.find("csl_") == 0) {
@@ -446,11 +446,11 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	gui->process_data();
 	}
 
-void ComputeThread::execute_interactive(const std::string& code)
+void ComputeThread::execute_interactive(uint64_t id, const std::string& code)
 	{
 	assert(gui_thread_id == std::this_thread::get_id());
 
-	if (!connection_is_open || interactive_cell == 0)
+	if (!connection_is_open)
 		return;
 
 	if (code.substr(0, 7) == "reset()")
@@ -459,7 +459,7 @@ void ComputeThread::execute_interactive(const std::string& code)
 	nlohmann::json req, header, content;
 
 	header["msg_type"]    = "execute_request";
-	header["cell_id"]     = interactive_cell;
+	header["cell_id"]     = id;
 	header["interactive"] = true;
 	content["code"]       = code.c_str();
 
@@ -470,11 +470,7 @@ void ComputeThread::execute_interactive(const std::string& code)
 	std::ostringstream oss;
 	oss << req << std::endl;
 	wsclient.send(our_connection_hdl, oss.str(), websocketpp::frame::opcode::text);
-	}
-
-void ComputeThread::register_interactive_cell(uint64_t id)
-	{
-	interactive_cell = id;
+	interactive_cells.insert(id);
 	}
 
 void ComputeThread::execute_cell(DTree::iterator it)

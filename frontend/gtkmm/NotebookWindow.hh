@@ -142,6 +142,7 @@ namespace cadabra {
 
 			Gtk::VBox                      topbox;
 			Gtk::HBox                      supermainbox;
+			Gtk::Paned                     dragbox;
 			Gtk::VBox                      mainbox;
 			//			Gtk::HBox                      buttonbox;
 			Gtk::SearchBar                 searchbar;
@@ -153,7 +154,7 @@ namespace cadabra {
 
 			Console console;
 			Gtk::Dialog console_win;
-
+			
 			std::unique_ptr<DiffViewer> diffviewer;
 
 			// All canvasses which are stored in the ...
@@ -222,7 +223,7 @@ namespace cadabra {
 			void on_run_runtocursor();
 			void on_run_stop();
 
-			void on_prefs_set_cv(int vis);
+			void on_prefs_set_cv(Console::Position vis);
 			void on_prefs_font_size(int num);
 			void on_prefs_highlight_syntax(bool on);
 			void on_prefs_choose_colours();

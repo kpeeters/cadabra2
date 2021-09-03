@@ -159,17 +159,25 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	actiongroup->add(Gtk::Action::create("MenuConsoleVisibility", "Console"));
 
 	auto cv_action_hide = Gtk::RadioAction::create(group_cv, "ConsoleHide", "Hide");
-	cv_action_hide->property_value() = 0;
-	actiongroup->add(cv_action_hide, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_set_cv), 0));
+	cv_action_hide->property_value() = (int)Console::Position::Hidden;
+	actiongroup->add(cv_action_hide, sigc::bind(sigc::mem_fun(*this,
+		&NotebookWindow::on_prefs_set_cv), Console::Position::Hidden));
 	cv_action_hide->set_active();
 
-	auto cv_action_show = Gtk::RadioAction::create(group_cv, "ConsoleDock", "Dock");
-	cv_action_show->property_value() = 1;
-	actiongroup->add(cv_action_show, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_set_cv), 1));
+	auto cv_action_dockh = Gtk::RadioAction::create(group_cv, "ConsoleDockH", "Dock (Horizontal)");
+	cv_action_dockh->property_value() = (int)Console::Position::DockedH;
+	actiongroup->add(cv_action_dockh, sigc::bind(sigc::mem_fun(*this,
+		&NotebookWindow::on_prefs_set_cv), Console::Position::DockedH));
+
+	auto cv_action_dockv = Gtk::RadioAction::create(group_cv, "ConsoleDockV", "Dock (Vertical)");
+	cv_action_dockv->property_value() = (int)Console::Position::DockedV;
+	actiongroup->add(cv_action_dockv, sigc::bind(sigc::mem_fun(*this,
+		&NotebookWindow::on_prefs_set_cv), Console::Position::DockedV));
 
 	auto cv_action_float = Gtk::RadioAction::create(group_cv, "ConsoleFloat", "Float");
-	cv_action_float->property_value() = 2;
-	actiongroup->add(cv_action_float, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_set_cv), 2));
+	cv_action_float->property_value() = (int)Console::Position::Floating;
+	actiongroup->add(cv_action_float, sigc::bind(sigc::mem_fun(*this,
+		&NotebookWindow::on_prefs_set_cv), Console::Position::Floating));
 
 
 	Gtk::RadioAction::Group group_font_size;
@@ -315,7 +323,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		   "      </menu>"
 		   "      <menu action='MenuConsoleVisibility'>"
 		   "        <menuitem action='ConsoleHide'/>"
-		   "        <menuitem action='ConsoleDock'/>"
+		   "        <menuitem action='ConsoleDockH'/>"
+			"        <menuitem action='ConsoleDockV'/>"
 		   "        <menuitem action='ConsoleFloat'/>"
 		   "      </menu>"
 		   "      <menuitem action='ViewUseDefaultSettings'/>"
@@ -383,7 +392,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	topbox.pack_start(*toolbar, Gtk::PACK_SHRINK);
 	topbox.pack_start(supermainbox, true, true);
 	topbox.pack_start(statusbarbox, false, false);
-	supermainbox.pack_start(mainbox, true, true);
+	supermainbox.pack_start(dragbox, true, true);
+	dragbox.add1(mainbox);
 	mainbox.pack_start(searchbar, false, false);
 	searchbar.add(search_hbox);
 //	searchbar.set_halign(Gtk::ALIGN_START);
@@ -468,7 +478,7 @@ void NotebookWindow::load_css()
 	data += "textview.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
 	data += "#ImageView { transition-property: padding, background-color; transition-duration: 1s; }\n";
 	data += "#CodeInput { font-family: monospace; }\n";
-	data += "#Console   { padding: 5px; }\n";
+	data += "#Console   { padding: 2px; }\n";
 
 	// Some of the css properties defined in gtk-cadabra.css are overridden, and so are included
 	// here to force them to be used
@@ -530,38 +540,41 @@ bool NotebookWindow::on_delete_event(GdkEventAny* event)
 		return true;
 	}
 
-void NotebookWindow::on_prefs_set_cv(int vis)
+void NotebookWindow::on_prefs_set_cv(Console::Position pos)
 	{
 	// Unparent from whatever we're currently a child of
-	if (console.get_parent() == nullptr) {
-		// Hidden, do nothing
+	console.hide();
+	if (console.get_parent() == &dragbox) {
+		dragbox.remove(console);
 		}
-	else if (console.get_parent() == &mainbox) {
-		// Docked
-		mainbox.remove(console);
-		}
-	else {
-		// Floating
-		console_win.get_vbox()->remove(console);
+	else if (console.get_parent() == console_win.get_content_area()) {
+		console_win.get_content_area()->remove(console);
 		console_win.hide();
 		}
 
-	// Add to the required container
-	if (vis == 1) {
-		console.set_height(200);
-		mainbox.pack_end(console, false, 5);
+	// Reparent onto something new
+	if (pos == Console::Position::DockedH) {
+		dragbox.set_orientation(Gtk::Orientation::ORIENTATION_HORIZONTAL);
+		dragbox.set_position(dragbox.get_allocation().get_width() / 2);
+		dragbox.add2(console);
 		console.show();
 		}
-	else if (vis == 2) {
+	else if (pos == Console::Position::DockedV) {
+		dragbox.set_orientation(Gtk::Orientation::ORIENTATION_VERTICAL);
+		dragbox.set_position(dragbox.get_allocation().get_height() / 2);
+		dragbox.add2(console);
+		console.set_size_request(-1, 200);
+		console.show();
+		}
+	else if (pos == Console::Position::Floating) {
 		console_win.set_transient_for(*this);
-		console_win.set_resizable(false);
-		console_win.set_size_request(900, 300);
+		console_win.set_resizable(true);
+		console_win.set_default_size(900, 300);
 		console_win.set_title("Interactive Console");
-		console_win.get_vbox()->add(console);
+		console_win.get_content_area()->add(console);
 		console_win.signal_response().connect([this](int) {
 			actiongroup->get_action("ConsoleHide")->activate();
 			});
-		console.set_height(300);
 		console_win.show_all();
 		}
 	}
@@ -1359,7 +1372,9 @@ bool NotebookWindow::cell_got_focus(DTree::iterator it, int canvas_number)
 
 void NotebookWindow::interactive_execute()
 	{
-	compute->execute_interactive(console.grab_input());
+	uint64_t id = 0;
+	std::string input = console.grab_input(id);
+	compute->execute_interactive(id, input);
 	}
 
 bool NotebookWindow::cell_complete_request(DTree::iterator it, int pos, int canvas_number)
@@ -2034,7 +2049,6 @@ void NotebookWindow::on_help() const
 void NotebookWindow::set_compute_thread(ComputeThread* cthread)
 	{
 	DocumentThread::set_compute_thread(cthread);
-	compute->register_interactive_cell(console.get_id());
 	}
 
 void NotebookWindow::on_help_about()
