@@ -57,6 +57,16 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 	repmap_t    repmap;
 	index_map_t added_dummies;
 
+	// If a target set is provided, move any dummies from this set in ind_dummy
+	// to added_dummies to prevent them from being reused
+	if (dset2 != "") {
+		for (const auto& idx : ind_dummy) {
+			const Indices* idxset = kernel.properties.get<Indices>(idx.second, true);
+			if (idxset->set_name == dset2)
+				added_dummies.insert(idx);
+			}
+		}
+
 	// Store all indices in a map sorted by the name of the parent.
 	// FIXME: this is not sufficient, you really need to determine which
 	// are common factors in all terms in a sum, and then collect those

@@ -13,17 +13,30 @@ def test01():
 
 test01()
 
-def test02():
+def test02a():
    __cdbkernel__=create_scope()
    {n,p,q}::Indices("one").
    {m,n,p,q,r,s,t}::Indices("two").
    ex:= A_{r} = A_{m r} A^{m} + A_{n r} A^{n} + A_{s r} A^{s}.
    rename_dummies(ex, "two", "one")
    assert ex == $A_{r} = 3A_{n r} A^{n}$, ex
-   print("Test 02 passed")
+   print("Test 02a passed")
 
-test02()
+test02a()
 
+def test02b():
+   __cdbkernel__ = create_scope()
+   {a, b, c, d, e, f}::Indices("one").
+   {\alpha, \beta, \gamma, \delta}::Indices("two")
+   ex1 := A_{a a \alpha \alpha};
+   rename_dummies(ex1, "two", "one")
+   assert ex1 == $A_{a a b b}$
+   ex2 := A_{a a \alpha \alpha};
+   rename_dummies(ex2, "one", "two")
+   assert ex2 == $A_{\beta \beta \alpha \alpha}$
+   print("Test 02b passed")
+
+test02b()
 
 # expand_dummies tests
 
