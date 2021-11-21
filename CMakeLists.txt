@@ -1,6 +1,12 @@
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 set(CADABRA_CMAKE_VERSION 3.1)
 
+# Policy settings for CMake to resolve ambiguities.
+
+cmake_policy(SET CMP0042 NEW)
+cmake_policy(SET CMP0054 NEW)
+cmake_policy(SET CMP0127 NEW)
+
 cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
 if (${CMAKE_VERSION} VERSION_LESS "3.8.0")
 	set(CMAKE_CXX_STANDARD 14)
