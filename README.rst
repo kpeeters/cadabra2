@@ -327,12 +327,7 @@ macOS
 
 Cadabra builds with the standard Apple compiler, but in order to build
 on macOS you need a number of packages from Homebrew (see
-https://brew.sh). Quite a few Homebrew installations have broken
-permissions; best to first do::
-
-    sudo chown -R ${USER}:admin /usr/local/
-
-to clean that up. Then install the required dependencies with::
+https://brew.sh). Install the required dependencies with::
 
     brew install cmake boost pcre gmp python3 
     brew install pkgconfig 
@@ -344,13 +339,17 @@ that.
 
 You also need a TeX installation such as MacTeX,
 https://tug.org/mactex/ .  *Any* TeX will do, as long as 'latex' and
-'dvipng' are available. Make sure to *install TeX* before attempting
-to build Cadabra, otherwise the Cadabra style files will not be
-installed in the appropriate place. Make sure 'latex' works from the
-terminal in which you will build Cadabra.
+'dvipng' are available, so you simply do::
+
+    brew install mactex
+
+Make sure to *install TeX* before attempting to build Cadabra,
+otherwise the Cadabra style files will not be installed in the
+appropriate place. Make sure 'latex' works from the terminal in which
+you will build Cadabra.
 
 You can build against an Anaconda Python installation (in case you
-prefer Anaconda over the Homebrew Python); cmake will automaticaly
+prefer Anaconda over the Homebrew Python); cmake will automatically
 pick this up if available.
 
 You need to clone the cadabra2 git repository (if you download the

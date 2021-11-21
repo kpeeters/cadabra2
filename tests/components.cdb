@@ -757,6 +757,7 @@ def test37():
     complete(ss, $gt$)
     ex:= g;
     substitute(ex, ss)
+    simplify(ex)
     tst:= -r**4 \sin(\theta)**2 - @(ex);
     assert(tst==0)
     print("Test 37 passed")
