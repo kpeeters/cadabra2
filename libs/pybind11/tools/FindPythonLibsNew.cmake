@@ -57,6 +57,8 @@ endif()
 
 if(PythonLibsNew_FIND_QUIETLY)
   set(_pythonlibs_quiet QUIET)
+else()
+  set(_pythonlibs_quiet "")
 endif()
 
 if(PythonLibsNew_FIND_REQUIRED)
@@ -115,7 +117,7 @@ print('.'.join(str(v) for v in sys.version_info));
 print(sys.prefix);
 print(s.get_python_inc(plat_specific=True));
 print(s.get_python_lib(plat_specific=True));
-print(s.get_config_var('EXT_SUFFIX'));
+print(s.get_config_var('EXT_SUFFIX') or s.get_config_var('SO'));
 print(hasattr(sys, 'gettotalrefcount')+0);
 print(struct.calcsize('@P'));
 print(s.get_config_var('LDVERSION') or s.get_config_var('VERSION'));
@@ -125,6 +127,7 @@ print(s.get_config_var('MULTIARCH') or '');
   RESULT_VARIABLE _PYTHON_SUCCESS
   OUTPUT_VARIABLE _PYTHON_VALUES
   ERROR_VARIABLE _PYTHON_ERROR_VALUE)
+
 if(NOT _PYTHON_SUCCESS MATCHES 0)
   if(PythonLibsNew_FIND_REQUIRED)
     message(FATAL_ERROR "Python config failure:\n${_PYTHON_ERROR_VALUE}")

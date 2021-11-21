@@ -15,7 +15,7 @@ ProgressMonitor::~ProgressMonitor()
 	}
 
 ProgressMonitor::Block::Block(const std::string& name, int level)
-	: step(0), total_steps(0), name(name), level(level)
+	: name(name), step(0), total_steps(0), level(level)
 	{
 	started=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
 	}

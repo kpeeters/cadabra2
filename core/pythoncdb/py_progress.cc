@@ -24,7 +24,7 @@ namespace cadabra {
 				pm = globals["__cdb_progress_monitor__"].cast<ProgressMonitor*>();
 				}
 			else {
-				if (scope_has(globals, "server") && globals["server"].attr("send_progress_update")) {
+				if (scope_has(globals, "server") && py::hasattr(globals["server"], "send_progress_update")) {
 					pm = new ProgressMonitor(globals["server"].attr("send_progress_update"));
 				}
 				else

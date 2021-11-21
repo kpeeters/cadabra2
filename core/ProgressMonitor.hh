@@ -88,7 +88,7 @@ class ProgressMonitor {
 				std::chrono::milliseconds started;
 				int                       step, total_steps;
 				std::vector<std::string>  messages;
-				int level;
+				int                       level;
 			};
 
 		std::stack<Block>            call_stack;

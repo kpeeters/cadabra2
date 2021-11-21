@@ -26,9 +26,9 @@ const std::string Kernel::build   = CADABRA_VERSION_BUILD;
 Kernel::Kernel(bool inject_defaults)
 	: scalar_backend(scalar_backend_t::sympy)
 	, call_embedded_python_functions(false)
+	, display_fractions(false)
 	, warning_level(warn_t::warning)
 	, warning_callback(nullptr)
-	, display_fractions(false)
 	{
 	if (inject_defaults) {
 		inject_property(new Distributable(),          ex_from_string("\\prod{#}"), 0);

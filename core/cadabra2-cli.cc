@@ -67,8 +67,8 @@ namespace py = pybind11;
 
 Shell::Shell(Flags flags)
 	: site_path(cadabra::install_prefix() + "/lib/python" + std::to_string(PY_MAJOR_VERSION) + "." + std::to_string(PY_MINOR_VERSION) + "/" + std::string(PYTHON_SITE_DIST))
-	, flags(flags)
 	, globals(py::handle(nullptr), false) // yuck, but prevents pybind from trying to create a new dict object before the interpreter is initialized
+	, flags(flags)
 {
 	bool no_colour = flags & Flags::NoColour;
 	colour_error   = no_colour ? "" : "\033[31m";
@@ -303,9 +303,9 @@ void Shell::interact_file(const std::string& filename, bool preprocess)
 void Shell::write_stdout(const std::string& text, const std::string& end, bool flush)
 {
 	try {
-		py_stdout.attr("write").call(text + end);
+		py_stdout.attr("write")(text + end);
 		if (flush)
-			py_stdout.attr("flush").call();
+			py_stdout.attr("flush")();
 	}
 	catch (py::error_already_set& err) {
 		std::cerr << err.what() << '\n';
@@ -315,9 +315,9 @@ void Shell::write_stdout(const std::string& text, const std::string& end, bool f
 void Shell::write_stderr(const std::string& text, const std::string& end, bool flush)
 {
 	try {
-		py_stderr.attr("write").call(text + end);
+		py_stderr.attr("write")(text + end);
 		if (flush)
-			py_stderr.attr("flush").call();
+			py_stderr.attr("flush")();
 	}
 	catch (py::error_already_set& err) {
 		std::cerr << err.what() << '\n';
@@ -360,9 +360,9 @@ void Shell::set_histfile()
 }
 
 std::string Shell::str(const py::handle& obj)
-{
-	return obj.str().cast<std::string>();
-}
+	{
+	return py::str(obj); //.str().cast<std::string>();
+	}
 
 std::string Shell::repr(const py::handle& obj)
 {
@@ -473,20 +473,20 @@ void Shell::set_completion_callback(const char* buffer, std::vector<std::string>
 }
 
 std::string Shell::get_ps1()
-{
-	auto ps1 = sys.attr("ps1");
-	if (!ps1)
+	{
+	if(py::hasattr(sys, "ps1")==false)
 		sys.attr("ps1") = "> ";
+	auto ps1 = sys.attr("ps1");
 	return str(ps1);
-}
+	}
 
 std::string Shell::get_ps2()
-{
-	auto ps2 = sys.attr("ps2");
-	if (!ps2)
+	{
+	if(pybind11::hasattr(sys, "ps2")==false)
 		sys.attr("ps2") = ". ";
+	auto ps2 = sys.attr("ps2");
 	return str(ps2);
-}
+	}
 
 void Shell::handle_error()
 {
