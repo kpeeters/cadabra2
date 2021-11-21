@@ -3,9 +3,15 @@ set(CADABRA_CMAKE_VERSION 3.1)
 
 # Policy settings for CMake to resolve ambiguities.
 
-cmake_policy(SET CMP0042 NEW)
-cmake_policy(SET CMP0054 NEW)
-cmake_policy(SET CMP0127 NEW)
+if(POLICY CMP0042)
+  cmake_policy(SET CMP0042 NEW)
+endif()
+if(POLICY CMP0054)
+  cmake_policy(SET CMP0054 NEW)
+endif()
+if(POLICY CMP0127)
+  cmake_policy(SET CMP0127 NEW)
+endif()
 
 cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
 if (${CMAKE_VERSION} VERSION_LESS "3.8.0")
