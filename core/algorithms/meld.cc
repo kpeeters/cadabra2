@@ -1,3 +1,4 @@
+
 #include <vector>
 #include <set>
 #include <numeric>
@@ -296,8 +297,8 @@ bool meld::apply_tableaux(iterator it)
 					// was 0. If we find a mismatch we set has_solution to false, otherwise we continue doing
 					// this until all the iterators have expired
 
-					std::vector<AdjformEx::const_iterator> lhs_its;
-					AdjformEx::const_iterator rhs_it = term.projection.begin();
+					std::vector<ProjectedAdjform::const_iterator> lhs_its;
+					ProjectedAdjform::const_iterator rhs_it = term.projection.begin();
 					Adjform cur_term = rhs_it->first;
 
 					// Populate the lhs_its vector and find the first (i.e. smallest) term
@@ -437,9 +438,13 @@ meld::ProjectedTerm::ProjectedTerm(const Kernel& kernel, IndexMap& index_map, Ex
 	, it(it)
 	, changed(false)
 {
-	// Split the term up into a scalar part and a tensor part
+	// Split the term up into a scalar part and a tensor part. The scalar part always starts
+	// with a \\sum node, as contributions will be added to it during the melding process,
+	// so we start by adding a \\prod node which will collect the scalar factors.
 	auto scalar_head = scalar.append_child(scalar.begin(), str_node("\\prod"));
 
+	// If the object is not a product, then it either a single scalar object or a single
+	// tensor object; detect which it is and move onto the appropriate part.
 	if (*it->name != "\\prod") {
 		iter_indices term_indices(kernel.properties, it);
 		if (term_indices.size() == 0) {
@@ -455,54 +460,49 @@ meld::ProjectedTerm::ProjectedTerm(const Kernel& kernel, IndexMap& index_map, Ex
 		}
 	}
 	else {
+		// Object is a product of multiple terms.
 		// Loop through all terms in the product. If they have indices, then see if they
 		// can commute through the tensor bits in front of it to join other scalar terms
 		// out the front. Otherwise it will have to stay in the the tensor part of the
 		// expression
 		Ex_comparator comp(kernel.properties);
+		// Position of the last scalar value in the expression. Start this off with a
+		// sentinel "null iterator" so that we know we haven't met any scalar terms yet
 		Ex::iterator last_scalar(0);
 		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
-			// Determine if it is scalar or tensor. We decide this by checking for indices;
-			// if it has more than one index it is a tensor; if it has only one index then it
-			// is a tensor as long as this index isn't an integer, coordinate or symbol
-			bool is_scalar;
+			// Determine if it is scalar or tensor. We decide this by assuming it is a
+			// scalar, and then iterating through its indices checking for one which isn't
+			// a coordinate, symbol or integer. If we find a 'real' index, we know that it
+			// is a tensor and can stop checking the indices.
+			bool is_scalar = true;
 			iter_indices term_indices(kernel.properties, beg);
 			size_t n_indices = term_indices.size();
-			if (n_indices > 1) {
-				is_scalar = false;
-			}
-			else if (n_indices == 1) {
+			for (const auto& idx : term_indices) {
 				Ex::iterator idx = *term_indices.begin();
 				auto symb = kernel.properties.get<Symbol>(idx, true);
 				auto coord = kernel.properties.get<Coordinate>(idx, true);
-				is_scalar = (symb || coord || idx->is_integer());
+				bool is_index = !(symb || coord || idx->is_integer());
+				if (is_index) {
+					is_scalar = false;
+					break;
+				}
 			}
-			else {
-				is_scalar = true;
-			}
+			// If it is a scalar term, then attempt to commute it through the expression
+			// to join the rest of the scalar terms. If it can't commute through, then
+			// mark it as a tensor --- this ensures that it won't get moved anywhere.
 			if (is_scalar) {
-				// Scalar term, see if we can move it through the tensor parts
-				if (last_scalar == Ex::iterator(0)) {
-					// No scalar terms found yet, try and move to front
-					if (comp.can_move_to_front(ex, it, beg)) {
-						auto term = scalar.append_child(scalar_head, (Ex::iterator)beg);
-						multiply(term->multiplier, *it->multiplier);
-						last_scalar = beg;
-					}
-					else {
-						tensor.append_child(beg);
-					}
-				}
-				else {
-					if (comp.can_move_adjacent(it, last_scalar, beg)) {
-						auto term = scalar.append_child(scalar_head, (Ex::iterator)beg);
-						multiply(term->multiplier, *it->multiplier);
-						last_scalar = beg;
-					}
-					else {
-						tensor.append_child(tensor.begin(), (Ex::iterator)beg);
-					}
-				}
+				if (last_scalar == Ex::iterator(0))
+					is_scalar = comp.can_move_to_front(ex, it, beg);
+				else
+					is_scalar = comp.can_move_adjacent(it, last_scalar, beg);
+			}
+
+			// Move scalar terms onto the scalar node, and tensor (including non-
+			// commuting tensors) onto the tensor node
+			if (is_scalar) {
+				auto term = scalar.append_child(scalar_head, (Ex::iterator)beg);
+				multiply(term->multiplier, *it->multiplier);
+				last_scalar = beg;
 			}
 			else {
 				tensor.append_child(tensor.begin(), (Ex::iterator)beg);
@@ -510,15 +510,19 @@ meld::ProjectedTerm::ProjectedTerm(const Kernel& kernel, IndexMap& index_map, Ex
 		}
 	}
 
+	// If we had no scalar components, then create a numeric constant to
+	// hold the overall factor
 	if (scalar_head.number_of_children() == 0) {
 		auto term = scalar.append_child(scalar_head, str_node("1"));
 		multiply(term->multiplier, *it->multiplier);
 	}
 
+	// Flatten/cleanup the expressions
 	Ex::iterator tensor_head = tensor.begin();
 	cleanup_dispatch(kernel, scalar, scalar_head);
 	cleanup_dispatch(kernel, tensor, tensor_head);
 
+	// Calculate the index structure of the tensor part.
 	auto ibeg = index_iterator::begin(kernel.properties, tensor.begin());
 	auto iend = index_iterator::end(kernel.properties, tensor.begin());
 	ident = Adjform(ibeg, iend, index_map, kernel);
@@ -1070,11 +1074,11 @@ void meld::symmetrize_as_product(ProjectedTerm& projterm, const std::vector<symm
 
 void meld::symmetrize_as_sum(ProjectedTerm& projterm, const std::vector<symmetrizer_t>& symmetrizers)
 {
-	AdjformEx cur;
+	ProjectedAdjform cur;
 	Adjform seed = projterm.ident;
 
 	// Get the product of all normalizations
-	AdjformEx::integer_type overall_norm = 1;
+	ProjectedAdjform::integer_type overall_norm = 1;
 	for (size_t i = 0; i < symmetrizers.size(); ++i) {
 		if (symmetrizers[i].independent)
 			overall_norm *= symmetrizers[i].indices[0];

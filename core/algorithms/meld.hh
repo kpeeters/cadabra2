@@ -26,7 +26,7 @@ namespace cadabra {
 				bool compare(const Kernel& kernel, const ProjectedTerm& other);
 
 				Ex scalar, tensor;
-				AdjformEx projection;
+				ProjectedAdjform projection;
 				Adjform ident;
 				Ex::iterator it;
 				bool changed;
