@@ -325,8 +325,8 @@ development platform.
 macOS
 ~~~~~
 
-Cadabra builds with the standard Apple compiler, but in order to build
-on macOS you need a number of packages from Homebrew (see
+Cadabra builds with the standard Apple compiler, on both Intel and
+Apple silicon, but you do need a number of packages from Homebrew (see
 https://brew.sh). Install the required dependencies with::
 
     brew install cmake boost pcre gmp python3 
