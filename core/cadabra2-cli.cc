@@ -504,7 +504,7 @@ void Shell::handle_error(py::error_already_set& err)
 		if (PyExceptionInstance_Check(value.ptr())) {
 			_Py_Identifier PyId_code;
 			PyId_code.string = "code";
-#if PY_VERSION_HEX < 0x03100000
+#if PY_VERSION_HEX < 0x030a0000
 			PyId_code.object = 0;
 			PyId_code.next = 0;
 #endif
