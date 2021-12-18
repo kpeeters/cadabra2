@@ -20,6 +20,7 @@ sudo rm -Rf build/*
 mkdir build
 cd build
 if [ -f /etc/redhat-release ]; then
+	 sudo dnf -y install rpm-build
     centos="`cat /etc/redhat-release | grep CentOS`"
     scilin="`cat /etc/redhat-release | grep Scientific`"
     if [ -n "${centos}" -o -n "${scilin}" ]; then
