@@ -113,7 +113,7 @@ namespace cadabra {
 			std::unique_ptr<Ex> data;
 		};
 
-	class AdjformEx
+	class ProjectedAdjform
 		{
 		public:
 			using integer_type = int32_t;
@@ -121,23 +121,19 @@ namespace cadabra {
 			using iterator = map_t::iterator;
 			using const_iterator = map_t::const_iterator;
 
-			AdjformEx();
-			AdjformEx(const Adjform& adjform, const integer_type& value = 1);
-
-			// Check if 'other' is a linear multiple of 'this' and return
-			// the numeric factor if so, otherwise returns 0
-			integer_type compare(const AdjformEx& other) const;
+			ProjectedAdjform();
+			ProjectedAdjform(const Adjform& adjform, const integer_type& value = 1);
 
 			// Add all contributions from 'other' into 'this'
-			void combine(const AdjformEx& other); 
-			void combine(const AdjformEx& other, integer_type factor);
-			AdjformEx& operator += (const AdjformEx& other);
-			friend AdjformEx operator + (AdjformEx lhs, const AdjformEx& rhs);
+			void combine(const ProjectedAdjform& other); 
+			void combine(const ProjectedAdjform& other, integer_type factor);
+			ProjectedAdjform& operator += (const ProjectedAdjform& other);
+			friend ProjectedAdjform operator + (ProjectedAdjform lhs, const ProjectedAdjform& rhs);
 
 			// Multiply all terms by a scalar factor
 			void multiply(const integer_type& k);
-			AdjformEx& operator *= (const integer_type& k);
-			friend AdjformEx operator * (AdjformEx lhs, const integer_type& rhs);
+			ProjectedAdjform& operator *= (const integer_type& k);
+			friend ProjectedAdjform operator * (ProjectedAdjform lhs, const integer_type& rhs);
 
 			iterator begin();
 			const_iterator begin() const;
@@ -207,4 +203,4 @@ namespace cadabra {
 
 
 std::ostream& operator << (std::ostream& os, const cadabra::Adjform& adjform);
-std::ostream& operator << (std::ostream& os, const cadabra::AdjformEx& adjex);
+std::ostream& operator << (std::ostream& os, const cadabra::ProjectedAdjform& adjex);

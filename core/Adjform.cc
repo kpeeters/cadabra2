@@ -415,141 +415,121 @@ namespace cadabra {
 		return false;
 	}
 
-	AdjformEx::integer_type AdjformEx::zero = 0;
+	ProjectedAdjform::integer_type ProjectedAdjform::zero = 0;
 
-	AdjformEx::AdjformEx()
+	ProjectedAdjform::ProjectedAdjform()
 	{
 
 	}
 
-	AdjformEx::AdjformEx(const Adjform& adjform, const AdjformEx::integer_type& value)
+	ProjectedAdjform::ProjectedAdjform(const Adjform& adjform, const ProjectedAdjform::integer_type& value)
 	{
 		set(adjform, value);
 	}
 
-	AdjformEx::integer_type AdjformEx::compare(const AdjformEx& other) const
-	{
-		// Early failure checks
-		if (data.empty() || data.size() != other.data.size())
-			return 0;
-
-		// Find the numeric factor between the first two terms, then loop over all
-		// other terms checking that the factor is the same. If not, return 0
-		auto a_it = data.begin(), b_it = other.data.begin(), a_end = data.end();
-		integer_type factor = a_it->second / b_it->second;
-		while (a_it != a_end) {
-			if (a_it->first != b_it->first)
-				return 0;
-			if (a_it->second / b_it->second != factor)
-				return 0;
-			++a_it, ++b_it;
-		}
-		return factor;
-	}
-
-	void AdjformEx::combine(const AdjformEx& other)
+	void ProjectedAdjform::combine(const ProjectedAdjform& other)
 	{
 		for (const auto& kv : other.data)
 			add(kv.first, kv.second);
 	}
 
-	void AdjformEx::combine(const AdjformEx& other, integer_type factor)
+	void ProjectedAdjform::combine(const ProjectedAdjform& other, integer_type factor)
 	{
 		for (const auto& kv : other.data)
 			add(kv.first, kv.second * factor);
 	}
 
-	AdjformEx& AdjformEx::operator += (const AdjformEx& other)
+	ProjectedAdjform& ProjectedAdjform::operator += (const ProjectedAdjform& other)
 	{
 		combine(other);
 		return *this;
 	}
 
-	AdjformEx operator + (AdjformEx lhs, const AdjformEx& rhs)
+	ProjectedAdjform operator + (ProjectedAdjform lhs, const ProjectedAdjform& rhs)
 	{
 		return lhs += rhs;
 	}
 
-	void AdjformEx::multiply(const integer_type& k)
+	void ProjectedAdjform::multiply(const integer_type& k)
 	{
 		for (auto& kv : data)
 			kv.second *= k;
 	}
 
-	AdjformEx& AdjformEx::operator *= (const integer_type& k)
+	ProjectedAdjform& ProjectedAdjform::operator *= (const integer_type& k)
 	{
 		multiply(k);
 		return *this;
 	}
 
-	AdjformEx operator * (AdjformEx lhs, const AdjformEx::integer_type& rhs)
+	ProjectedAdjform operator * (ProjectedAdjform lhs, const ProjectedAdjform::integer_type& rhs)
 	{
 		lhs.multiply(rhs);
 		return lhs;
 	}
 
-	AdjformEx::iterator AdjformEx::begin()
+	ProjectedAdjform::iterator ProjectedAdjform::begin()
 	{
 		return data.begin();
 	}
 
-	AdjformEx::const_iterator AdjformEx::begin() const
+	ProjectedAdjform::const_iterator ProjectedAdjform::begin() const
 	{
 		return data.begin();
 	}
 
-	AdjformEx::iterator AdjformEx::end()
+	ProjectedAdjform::iterator ProjectedAdjform::end()
 	{
 		return data.end();
 	}
 
-	AdjformEx::const_iterator AdjformEx::end() const
+	ProjectedAdjform::const_iterator ProjectedAdjform::end() const
 	{
 		return data.end();
 	}
 
-	void AdjformEx::clear()
+	void ProjectedAdjform::clear()
 	{
 		data.clear();
 	}
 
-	size_t AdjformEx::size() const
+	size_t ProjectedAdjform::size() const
 	{
 		return data.size();
 	}
 
-	size_t AdjformEx::max_size() const
+	size_t ProjectedAdjform::max_size() const
 	{
 		if (empty())
 			return 0;
 		return begin()->first.max_lehmer_code();
 	}
 
-	size_t AdjformEx::n_indices() const
+	size_t ProjectedAdjform::n_indices() const
 	{
 		if (empty())
 			return 0;
 		return begin()->first.size();
 	}
 
-	bool AdjformEx::empty() const
+	bool ProjectedAdjform::empty() const
 	{
 		return data.empty();
 	}
 
-	const AdjformEx::integer_type& AdjformEx::get(const Adjform& adjform) const
+	const ProjectedAdjform::integer_type& ProjectedAdjform::get(const Adjform& adjform) const
 	{
 		auto pos = data.find(adjform);
 		return (pos == data.end()) ? zero : pos->second;
 	}
 
-	void AdjformEx::set(const Adjform& term, const AdjformEx::integer_type& value)
+	void ProjectedAdjform::set(const Adjform& term, const ProjectedAdjform::integer_type& value)
 	{
 		if (!term.empty())
 			set_(term, value);
 	}
 
-	void AdjformEx::set_(const Adjform& term, const AdjformEx::integer_type& value)
+	void ProjectedAdjform::set_(const Adjform& term, const ProjectedAdjform::integer_type& value)
 	{
 		if (value != 0)
 			data[term] = value;
@@ -557,13 +537,13 @@ namespace cadabra {
 			data.erase(term);
 	}
 
-	void AdjformEx::add(const Adjform& term, const AdjformEx::integer_type& value)
+	void ProjectedAdjform::add(const Adjform& term, const ProjectedAdjform::integer_type& value)
 	{
 		if (!term.empty())
 			add_(term, value);
 	}
 
-	void AdjformEx::add_(const Adjform& term, const AdjformEx::integer_type& value)
+	void ProjectedAdjform::add_(const Adjform& term, const ProjectedAdjform::integer_type& value)
 	{
 		auto elem = data.find(term);
 		if (elem == data.end() && value != 0) {
@@ -576,7 +556,7 @@ namespace cadabra {
 		}
 	}
 
-	void AdjformEx::apply_young_symmetry(const std::vector<size_t>& indices, bool antisymmetric)
+	void ProjectedAdjform::apply_young_symmetry(const std::vector<size_t>& indices, bool antisymmetric)
 	{
 		map_t old_data = data;
 
@@ -616,12 +596,12 @@ namespace cadabra {
 		}
 	}
 
-	void AdjformEx::apply_ident_symmetry(const std::vector<size_t>& positions, size_t n_indices)
+	void ProjectedAdjform::apply_ident_symmetry(const std::vector<size_t>& positions, size_t n_indices)
 	{
 		apply_ident_symmetry(positions, n_indices, std::vector<std::vector<int>>(positions.size(), std::vector<int>(positions.size(), 1)));
 	}
 
-	void AdjformEx::apply_ident_symmetry(const std::vector<size_t>& positions, size_t n_indices, const std::vector<std::vector<int>>& commutation_matrix)
+	void ProjectedAdjform::apply_ident_symmetry(const std::vector<size_t>& positions, size_t n_indices, const std::vector<std::vector<int>>& commutation_matrix)
 	{
 		for (size_t i = 0; i < positions.size() - 1; ++i) {
 			auto old_data = data;
@@ -639,7 +619,7 @@ namespace cadabra {
 		}
 	}
 
-	void AdjformEx::apply_cyclic_symmetry()
+	void ProjectedAdjform::apply_cyclic_symmetry()
 	{
 		if (data.empty())
 			return;
@@ -666,7 +646,7 @@ std::ostream& operator << (std::ostream& os, const cadabra::Adjform& adjform)
 	return os;
 }
 
-std::ostream& operator << (std::ostream& os, const cadabra::AdjformEx& adjex)
+std::ostream& operator << (std::ostream& os, const cadabra::ProjectedAdjform& adjex)
 {
 	size_t i = 0;
 	size_t max = std::min(std::size_t(200), adjex.size());
