@@ -478,7 +478,7 @@ meld::ProjectedTerm::ProjectedTerm(const Kernel& kernel, IndexMap& index_map, Ex
 			iter_indices term_indices(kernel.properties, beg);
 			size_t n_indices = term_indices.size();
 			for (const auto& idx : term_indices) {
-				Ex::iterator idx = *term_indices.begin();
+//				Ex::iterator idx = *term_indices.begin();
 				auto symb = kernel.properties.get<Symbol>(idx, true);
 				auto coord = kernel.properties.get<Coordinate>(idx, true);
 				bool is_index = !(symb || coord || idx->is_integer());
