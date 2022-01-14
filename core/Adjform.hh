@@ -13,6 +13,19 @@ namespace cadabra {
 
 	class IndexMap;
 
+	/// Representation of the index structure of a tensor monomial,
+	/// using a storage format which resembles an adjacency matrix. The
+	/// structure is stored as a vector of integers.  Negative integers
+	/// denote free indices. Positive indices denote a contraction with
+	/// an index at the indicated position.
+	///
+	/// Example:
+	///
+	///    A_{m n} B_{p n}   ->   -1 3 -2 1
+	///       0 1     2 3
+	///
+	/// The tensor names themselves ('A' and 'B' above) are not stored.
+	
 	class Adjform
 		{
 		public:
@@ -95,10 +108,11 @@ namespace cadabra {
 			array_type data;
 		};
 
-	// To ensure consistency when creating adjforms out of two
-	// different Ex objects an IndexMap object is required which
-	// keeps track of which numeric index represents which index
-	// name 
+	/// To ensure consistency when creating adjforms out of two
+	/// different Ex objects an IndexMap object is required which
+	/// keeps track of which numeric index represents which index
+	/// name.
+	
 	class IndexMap
 		{
 		public:
@@ -113,6 +127,11 @@ namespace cadabra {
 			std::unique_ptr<Ex> data;
 		};
 
+	/// Representation of a sum of tensor monomials, each having the
+	/// same tensor names, but with different index positions. As with
+	/// AdjForm, the names of the tensors are not stored, only the
+	/// index structure and the coefficient of each term.
+	
 	class ProjectedAdjform
 		{
 		public:
@@ -153,7 +172,7 @@ namespace cadabra {
 			// Adds value to the given term, creating/removing the term if required
 			void add(const Adjform& adjform, const integer_type& value = 1);
 
-			// Symmetrize in the given indices
+			// Symmetrise or anti-symmetrise in the given indices
 			// e.g. if the only term is abcd then
 			//        apply_young_symmetry({0, 1, 2}, false) -> abcd + acbd + bacd + bcad + cabd + cbad
 			//        apply_young_symmetry({2, 3, 4}, true) -> abcd - abdc - acbd + acdb - adcb + adbc
