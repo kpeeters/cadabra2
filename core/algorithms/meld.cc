@@ -501,7 +501,6 @@ meld::ProjectedTerm::ProjectedTerm(const Kernel& kernel, IndexMap& index_map, Ex
 			// commuting tensors) onto the tensor node
 			if (is_scalar) {
 				auto term = scalar.append_child(scalar_head, (Ex::iterator)beg);
-				multiply(term->multiplier, *it->multiplier);
 				last_scalar = beg;
 			}
 			else {
