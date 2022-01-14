@@ -453,6 +453,13 @@ def tab34():
 	
 tab34()
 
+def tab35():
+	{j,k}::Indices;
+	ex := A = - x x n_{k} n_{k} - x x n_{j} n_{j};
+	meld(_);
+	assert ex == $-2 x x n_{k} n_{k}$, ex
+	print("Test 35 passed")
+
 
 
 # *_cycle_traces tests

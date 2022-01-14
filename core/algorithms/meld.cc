@@ -432,6 +432,23 @@ bool meld::apply_tableaux(iterator it)
 	return applied;
 }
 
+bool it_is_scalar(const Kernel& kernel, Ex::iterator it)
+{
+	bool is_scalar = true;
+	iter_indices term_indices(kernel.properties, it);
+	size_t n_indices = term_indices.size();
+	for (const auto& idx : term_indices) {
+		auto symb = kernel.properties.get<Symbol>(idx, true);
+		auto coord = kernel.properties.get<Coordinate>(idx, true);
+		bool is_index = !(symb || coord || idx->is_integer());
+		if (is_index) {
+			is_scalar = false;
+			break;
+		}
+	}
+	return is_scalar;
+}
+
 meld::ProjectedTerm::ProjectedTerm(const Kernel& kernel, IndexMap& index_map, Ex& ex, Ex::iterator it)
 	: scalar("\\sum")
 	, tensor("\\prod")
@@ -446,13 +463,8 @@ meld::ProjectedTerm::ProjectedTerm(const Kernel& kernel, IndexMap& index_map, Ex
 	// If the object is not a product, then it either a single scalar object or a single
 	// tensor object; detect which it is and move onto the appropriate part.
 	if (*it->name != "\\prod") {
-		iter_indices term_indices(kernel.properties, it);
-		if (term_indices.size() == 0) {
-			scalar.append_child(scalar_head, it);
-		}
-		else {
-			// Put the tensor on the tensor node, but move the multiplier over to
-			// the scalar part
+		bool is_scalar = it_is_scalar(kernel, it);
+		if (!is_scalar) {
 			auto term = tensor.append_child(tensor.begin(), it);
 			auto factor = scalar.append_child(scalar_head, str_node("1"));
 			multiply(factor->multiplier, *it->multiplier);
@@ -474,19 +486,7 @@ meld::ProjectedTerm::ProjectedTerm(const Kernel& kernel, IndexMap& index_map, Ex
 			// scalar, and then iterating through its indices checking for one which isn't
 			// a coordinate, symbol or integer. If we find a 'real' index, we know that it
 			// is a tensor and can stop checking the indices.
-			bool is_scalar = true;
-			iter_indices term_indices(kernel.properties, beg);
-			size_t n_indices = term_indices.size();
-			for (const auto& idx : term_indices) {
-//				Ex::iterator idx = *term_indices.begin();
-				auto symb = kernel.properties.get<Symbol>(idx, true);
-				auto coord = kernel.properties.get<Coordinate>(idx, true);
-				bool is_index = !(symb || coord || idx->is_integer());
-				if (is_index) {
-					is_scalar = false;
-					break;
-				}
-			}
+			bool is_scalar = it_is_scalar(kernel, beg);
 			// If it is a scalar term, then attempt to commute it through the expression
 			// to join the rest of the scalar terms. If it can't commute through, then
 			// mark it as a tensor --- this ensures that it won't get moved anywhere.
@@ -508,13 +508,13 @@ meld::ProjectedTerm::ProjectedTerm(const Kernel& kernel, IndexMap& index_map, Ex
 				tensor.append_child(tensor.begin(), (Ex::iterator)beg);
 			}
 		}
-	}
 
-	// If we had no scalar components, then create a numeric constant to
-	// hold the overall factor
-	if (scalar_head.number_of_children() == 0) {
-		auto term = scalar.append_child(scalar_head, str_node("1"));
-		multiply(term->multiplier, *it->multiplier);
+		// If we had no scalar components, then create a numeric constant to
+		// hold the overall factor
+		if (scalar_head.number_of_children() == 0)
+			auto term = scalar.append_child(scalar_head, str_node("1"));
+		// Copy the overall numeric factor onto the scalar component
+		multiply(scalar_head->multiplier, *it->multiplier);
 	}
 
 	// Flatten/cleanup the expressions
