@@ -279,23 +279,11 @@ message(STATUS "Python version is ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR
 set(OLD_PYTHON_SITE_PATH ${CMAKE_INSTALL_FULL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
 
 # The PYTHON_SITE_PATH variable is used throughout for installation purposes.
-if (NOT DEFINED PYTHON_SITE_PATH)
-  if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
-     # Debian packages install all their Python things in 'dist-packages', not 'site-packages'.
-     set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/dist-packages)
-  else()
-     # For everyone else there is 'site-packages'
-     set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
-  endif()
-endif()
 if (NOT DEFINED PYTHON_SITE_DIST)
-  if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
-     # Debian packages install all their Python things in 'dist-packages', not 'site-packages'.
-     set(PYTHON_SITE_DIST "dist-packages")
-  else()
-     # For everyone else there is 'site-packages'
-     set(PYTHON_SITE_DIST "site-packages")
-  endif()
+  set(PYTHON_SITE_DIST "site-packages")
+endif()
+if (NOT DEFINED PYTHON_SITE_PATH)
+  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/${PYTHON_SITE_DIST})
 endif()
 
 message(STATUS "Installing Python module in ${PYTHON_SITE_PATH}")
