@@ -46,8 +46,11 @@ bool reduce_delta::one_step_(sibling_iterator dl)
 		dn=tr.begin(dl);
 		++dn;
 		while(dn!=tr.end(dl)) {
-			if(up->name==dn->name)
-				goto found;
+			if(up->name==dn->name) {
+				if(!up->is_rational()) {
+					goto found;
+					}
+				}
 			++dn;
 			++dn;
 			flip=-flip;
@@ -72,7 +75,7 @@ found:
 		else
 			throw ConsistencyException("Summation range for index is not an integer.");
 		}
-	else throw ConsistencyException("No dimension known for summation index.");
+	else throw ConsistencyException("No dimension known for summation index "+*up->name+".");
 
 	int mult=flip*(dim-tr.number_of_children(dl)/2+1);
 	multiply(dl->multiplier, (multiplier_t)(mult));
