@@ -68,6 +68,7 @@ Algorithm::result_t epsilon_to_delta::apply(iterator& st)
 		++eps1;
 		++eps2;
 		}
+//	std::cerr << "result: " << rep.begin() << std::endl;
 	multiply(st->multiplier, *epsilons[0]->multiplier);
 	multiply(st->multiplier, *epsilons[1]->multiplier);
 	tr.erase(epsilons[0]);

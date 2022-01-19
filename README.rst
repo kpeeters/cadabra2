@@ -72,7 +72,7 @@ Linux (Debian/Ubuntu/Mint)
 
 On Debian/Ubuntu you can install all that is needed with::
 
-    sudo apt install git cmake python3-dev g++ libgmp3-dev \
+    sudo apt install git cmake libpython3-dev python3-dev g++ libgmp3-dev \
           libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev  \
           texlive texlive-latex-extra texlive-science dvipng \
           python3-matplotlib python3-mpmath python3-sympy python3-gmpy2

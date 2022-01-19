@@ -85,6 +85,7 @@ found:
 	++up2;
 	while(up2!=tr.end(dl)) {
 		up->name=up2->name;
+		up->multiplier=up2->multiplier;
 		++up;
 		++up;
 		++up2;
@@ -95,6 +96,7 @@ found:
 	++dn2;
 	while(dn2!=tr.end(dl)) {
 		dn->name=dn2->name;
+		dn->multiplier=dn2->multiplier;
 		++dn;
 		++dn;
 		++dn2;
