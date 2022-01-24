@@ -841,3 +841,15 @@ def test56():
    print("Test 56 passed")
 
 test56()
+
+def test57():
+   __cdbkernel__=create_scope()
+   # as above, but without the coordinate property
+   A{#}::Diagonal;
+   ex:=A_{t r};
+   assert(ex != 0)
+   assert(str(ex)=='A_{t r}')
+   print("Test 57 passed")
+
+test57()
+       
