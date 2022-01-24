@@ -202,7 +202,14 @@ def test13():
     epsilon_to_delta(_)
     tst:= 2 d_{j k 3 3} n_{j} n_{k} - @(ex);
     assert(tst==0)
-    print("Test 13 passed")
-
+    print("Test 13a passed")
+    expand_delta(ex)
+    distribute(ex)
+    eliminate_kronecker(ex)
+    tst:= n_{k} n_{k} - n_{3} n_{3} - @(ex);
+    assert(tst==0)
+    print("Test 13b passed")
+    
 test13()
+
         

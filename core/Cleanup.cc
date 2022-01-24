@@ -783,7 +783,7 @@ namespace cadabra {
 		return ret;
 		}
 
-	bool cleanup_diagonal(const Kernel&, Ex& tr, Ex::iterator& it)
+	bool cleanup_diagonal(const Kernel& k, Ex& tr, Ex::iterator& it)
 		{
 		bool ret=false;
 
@@ -793,15 +793,21 @@ namespace cadabra {
 		auto c2(c1);
 		++c2;
 
+		// Two different numerical indices will lead to zero.
 		if(c1->is_rational() && c2->is_rational())
 			if(c1->multiplier != c2->multiplier) {
 				ret=true;
 				zero(it->multiplier);
 				}
-		if(!(c1->is_rational() && c2->is_rational())) {
-			if(subtree_compare(0, c1, c2)!=0) {
-				ret=true;
-				zero(it->multiplier);
+		// Two different Coordinate indices will lead to zero.
+ 		if(!(c1->is_rational() && c2->is_rational())) {
+			auto *c1coord = k.properties.get<Coordinate>(c1, true);
+			auto *c2coord = k.properties.get<Coordinate>(c2, true);
+			if(c1coord!=0 && c2coord!=0) {
+				if(subtree_compare(0, c1, c2)!=0) {
+					ret=true;
+					zero(it->multiplier);
+					}
 				}
 			}
 

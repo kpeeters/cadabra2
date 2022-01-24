@@ -42,18 +42,28 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 				// std::cerr << "self-contracted delta with " << Ex(ii1) << " = " << Ex(ii2) << std::endl;
 				const Integer *itg1=kernel.properties.get<Integer>(ii1, true);
 				const Integer *itg2=kernel.properties.get<Integer>(ii2, true);
-				if(itg1 && itg2 && ii1->is_rational()==false && ii2->is_rational()==false) {
-					if(itg1->from.begin()!=itg1->from.end() && itg2->from.begin()!=itg2->from.end()) {
-						if(itg1->difference.begin()->name==onept) {
-							multiply(st->multiplier, *itg1->difference.begin()->multiplier);
+				if(itg1 && itg2) {
+					if(ii1->is_rational()==false && ii2->is_rational()==false) {
+						if(itg1->from.begin()!=itg1->from.end() && itg2->from.begin()!=itg2->from.end()) {
+							if(itg1->difference.begin()->name==onept) {
+								multiply(st->multiplier, *itg1->difference.begin()->multiplier);
+								it=tr.erase(it);
+								}
+							else {
+								it=tr.replace(it, itg1->difference.begin());
+								}
+							ret=result_t::l_applied;
+							}
+						else ++it;
+						}
+					else if(ii1->is_rational() && ii2->is_rational()) {
+						if(ii1->multiplier==ii2->multiplier) {
 							it=tr.erase(it);
 							}
 						else {
-							it=tr.replace(it, itg1->difference.begin());
+							zero(it->multiplier);
 							}
-						ret=result_t::l_applied;
 						}
-					else ++it;
 					}
 				else ++it;
 				}
