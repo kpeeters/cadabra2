@@ -32,7 +32,7 @@ namespace cadabra {
 			// The expression will get evaluated for a range of values for
 			// each unknown sub-expression (variable). These are set in
 			// the map below.
-			std::map<Ex, std::vector<double> > expression_values;
+			std::map<Ex, double > expression_values;
 
 			void   find_common_subexpressions(std::vector<Ex *>);
 			void   set_variable(const Ex&, double val);
