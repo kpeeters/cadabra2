@@ -63,7 +63,7 @@ namespace cadabra {
 			str_node(void);
 			str_node(nset_t::iterator name, bracket_t btype=b_none, parent_rel_t ptype=p_none);
 			str_node(const std::string& name, bracket_t btype=b_none, parent_rel_t ptype=p_none);
-			str_node(const std::u32string& name, bracket_t btype=b_none, parent_rel_t ptype=p_none);			
+			str_node(const std::u32string& name, bracket_t btype=b_none, parent_rel_t ptype=p_none);
 
 			bool operator==(const str_node&) const;
 			bool operator<(const str_node&) const;
@@ -255,6 +255,10 @@ namespace cadabra {
 			/// things that require property information.
 
 			bool operator==(const Ex& other) const;
+
+			/// Less-than function for Ex objects; works by calling the
+			/// `iterator_base_less` function on the top level nodes.
+			bool operator<(const Ex& other) const;
 
 			/// Push a copy of the current state of the expression onto the
 			/// history stack.  Also pushes a set of paths to terms which

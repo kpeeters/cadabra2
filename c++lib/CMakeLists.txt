@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 if(${CMAKE_VERSION} VERSION_LESS "3.8.0")
 	set(CMAKE_CXX_STANDARD 14)
@@ -113,6 +113,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplaySympy.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayTerminal.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/TerminalStream.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Evaluator.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Exceptions.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Exchange.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Functional.cc
@@ -240,6 +241,7 @@ set(MAIN_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Compare.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayBase.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayTerminal.hh
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Evaluator.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Exceptions.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexClassifier.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexIterator.hh
@@ -318,6 +320,11 @@ target_link_libraries(cadabra2++        ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB
 add_library(cadabra2++_static  STATIC $<TARGET_OBJECTS:cadabra2++objects>)
 target_link_libraries(cadabra2++_static ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB})
 
+# Trivial example
+add_executable(trivial trivial.cc)
+target_include_directories(trivial PUBLIC "${CMAKE_BINARY_DIR}/include" "${CMAKE_BINARY_DIR}/include/cadabra2++")
+target_link_libraries(trivial cadabra2++)
+ 
 # Sample executable
 add_executable(simple simple.cc)
 target_include_directories(simple PUBLIC "${CMAKE_BINARY_DIR}/include" "${CMAKE_BINARY_DIR}/include/cadabra2++")
@@ -327,6 +334,11 @@ target_link_libraries(simple cadabra2++)
 add_executable(adjform adjform.cc)
 target_include_directories(adjform PUBLIC "${CMAKE_BINARY_DIR}/include" "${CMAKE_BINARY_DIR}/include/cadabra2++")
 target_link_libraries(adjform cadabra2++)
+ 
+# Test for numerical evaluation
+add_executable(nevaluate nevaluate.cc)
+target_include_directories(nevaluate PUBLIC "${CMAKE_BINARY_DIR}/include" "${CMAKE_BINARY_DIR}/include/cadabra2++")
+target_link_libraries(nevaluate cadabra2++)
  
 
 #---------------------------------------------------------------------------

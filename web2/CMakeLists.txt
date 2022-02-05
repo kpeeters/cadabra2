@@ -43,6 +43,7 @@ set(TUTORIALS
   ref_import
   ref_implicit_versus_explicit
   ref_selecting
+  ref_c++_library
   )
 
 # The Book
@@ -58,6 +59,7 @@ set(BOOK_PARTS
    ref_import
    ref_implicit_versus_explicit
    ref_selecting
+	ref_c++_library
 )   
 
 # 3rd party contributions
