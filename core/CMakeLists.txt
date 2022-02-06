@@ -193,7 +193,8 @@ set(MODULE_SRC_FILES
 )
 
 set(LOCAL_SRC_FILES
-	Evaluator.cc
+	NEvaluator.cc
+	NTensor.cc
     InstallPrefix.cc
     DataCell.cc
    CdbPython.cc

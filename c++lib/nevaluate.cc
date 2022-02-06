@@ -4,8 +4,6 @@
 using namespace cadabra;
 using namespace cadabra::cpplib;
 
-#include "cadabra2++/Evaluator.hh"
-
 int main(int, char **)
 	{
 	Kernel k(true);
@@ -23,7 +21,19 @@ int main(int, char **)
 	auto ex = R"( A + B \cos( C ) )"_ex(k);
 	std::cout << pprint(k, ex) << '\n';
 
-	Evaluator ev;
+	NTensor nt1({2,4});
+	nt1.at({1,2}) = 3.1415;
+	for(auto& v: nt1.values)
+		std::cout << v << ", ";
+	std::cout << "\n\n";
+	std::cout << nt1 << std::endl;
+
+	NTensor nt({2,4,3});
+	nt.at({1,2,0}) = 6.2830;
+	nt.at({0,3,2}) = -6.2830;
+	std::cout << nt << std::endl;
+
+	NEvaluator ev;
 	ev.set_variable(Ex("C"), { 3.0 });
 	ev.set_variable(Ex("B"), { 2.3 });
 	ev.set_variable(Ex("A"), { 1.2 });

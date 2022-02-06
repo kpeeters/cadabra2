@@ -113,7 +113,8 @@ set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplaySympy.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayTerminal.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/TerminalStream.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Evaluator.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/NEvaluator.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/NTensor.cc  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Exceptions.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Exchange.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Functional.cc
@@ -241,12 +242,13 @@ set(MAIN_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Compare.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayBase.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayTerminal.hh
-  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Evaluator.hh
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/NEvaluator.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Exceptions.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexClassifier.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexIterator.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Kernel.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Hash.hh
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/NTensor.hh  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Parser.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/ProgressMonitor.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Props.hh

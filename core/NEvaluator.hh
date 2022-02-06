@@ -17,7 +17,7 @@ namespace cadabra {
 	/// `subtree_values` map; may be extended later to cover values
 	/// of non-elementary subtrees.
 
-	class Evaluator {
+	class NEvaluator {
 		public:
 			// If we know the value of a subtree explicitly as a number,
 			// it is stored in this map. These are computed nodes.

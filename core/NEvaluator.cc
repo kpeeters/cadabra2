@@ -1,17 +1,17 @@
 
-#include "Evaluator.hh"
 #include "Compare.hh"
+#include "NEvaluator.hh"
 #include <cmath>
 
 using namespace cadabra;
 
-void Evaluator::find_common_subexpressions(std::vector<Ex *>)
+void NEvaluator::find_common_subexpressions(std::vector<Ex *>)
 	{
 	// Compute the hash value of every subtree, and collect matches.
 	// Then compare subtrees with equal hash to find common subtrees.
 	}
 
-double Evaluator::evaluate(const Ex& ex)
+double NEvaluator::evaluate(const Ex& ex)
 	{
 	const auto n_sin  = name_set.find("\\sin");
 	const auto n_cos  = name_set.find("\\cos");
@@ -90,7 +90,7 @@ double Evaluator::evaluate(const Ex& ex)
 	return lastval;
 	}
 
-void Evaluator::set_variable(const Ex& var, double val)
+void NEvaluator::set_variable(const Ex& var, double val)
 	{
 	expression_values.insert(std::make_pair(var, val));
 	}
