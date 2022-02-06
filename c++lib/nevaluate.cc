@@ -21,12 +21,20 @@ int main(int, char **)
 	// Multiplying two scalar variables which each take
 	// an array of values leads to an outer product.
 
-	auto ex1 = "A*B"_ex(k);
+	auto ex1b = "B*A + A"_ex(k);
+	NEvaluator ev1b;
+	ev1b.set_variable(Ex("A"), NTensor({1.0, 2.0, 3.0}));
+	ev1b.set_variable(Ex("B"), NTensor({0.5, 1.0, 5.0, 10.0}));
+	// This should give a {3, 4} tensor.
+	auto res1b = ev1b.evaluate(*ex1b);
+	std::cout << res1b << "\n\n";
+
+	auto ex1 = "B*A + C"_ex(k);
 	NEvaluator ev1;
 	ev1.set_variable(Ex("A"), NTensor({1.0, 2.0, 3.0}));
-	std::cout << NTensor({1.0, 2.0, 3.0}) << std::endl;
 	ev1.set_variable(Ex("B"), NTensor({0.5, 1.0, 5.0, 10.0}));
-	std::cout << NTensor({0.5, 1.0, 5.0, 10.0}) << std::endl;
+	ev1.set_variable(Ex("C"), NTensor({1.0, -1.0}));
+	// This should give a {3, 4, 2} tensor.
 	auto res1 = ev1.evaluate(*ex1);
 	std::cout << res1 << "\n\n";
 
