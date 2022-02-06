@@ -18,26 +18,50 @@ int main(int, char **)
 //	inject_property<SelfNonCommuting>(k, "{A,B,C,D }");
 //	inject_property<Trace>(k, "tr{#}");
 
-	auto ex = R"( A + B \cos( C ) )"_ex(k);
-	std::cout << pprint(k, ex) << '\n';
+	// Multiplying two scalar variables which each take
+	// an array of values leads to an outer product.
 
-	NTensor nt1({2,4});
-	nt1.at({1,2}) = 3.1415;
-	for(auto& v: nt1.values)
+	auto ex1 = "A*B"_ex(k);
+	NEvaluator ev1;
+	ev1.set_variable(Ex("A"), NTensor({1.0, 2.0, 3.0}));
+	std::cout << NTensor({1.0, 2.0, 3.0}) << std::endl;
+	ev1.set_variable(Ex("B"), NTensor({0.5, 1.0, 5.0, 10.0}));
+	std::cout << NTensor({0.5, 1.0, 5.0, 10.0}) << std::endl;
+	auto res1 = ev1.evaluate(*ex1);
+	std::cout << res1 << "\n\n";
+
+	// Trigonometric functions.
+
+	auto ex2 = R"( A + B \cos( C ) )"_ex(k);
+	std::cout << pprint(k, ex2) << '\n';
+	NTensor nt2({2,4}, 0.0);
+	nt2.at({1,2}) = 3.1415;
+	for(auto& v: nt2.values)
 		std::cout << v << ", ";
 	std::cout << "\n\n";
-	std::cout << nt1 << std::endl;
-
-	NTensor nt({2,4,3});
-	nt.at({1,2,0}) = 6.2830;
-	nt.at({0,3,2}) = -6.2830;
-	std::cout << nt << std::endl;
+	std::cout << nt2 << std::endl;
 
 	NEvaluator ev;
 	ev.set_variable(Ex("C"), { 3.0 });
 	ev.set_variable(Ex("B"), { 2.3 });
 	ev.set_variable(Ex("A"), { 1.2 });
-	double res = ev.evaluate(*ex);
+	auto res2 = ev.evaluate(*ex2);
+	std::cout << res2 << std::endl;
 
-	std::cout << res << std::endl;
+	// Double trig.
+	auto ex3 = R"( \cos(x) \sin(y) )"_ex(k);
+	NEvaluator ev3;
+	ev3.set_variable(Ex("x"), NTensor::linspace(0.0, 3.14, 20));
+	ev3.set_variable(Ex("y"), NTensor::linspace(0.0, 3.14, 20));
+	auto res3 = ev3.evaluate(*ex3);
+	std::cout << res3 << std::endl;
+
+	// Array indexing.
+
+	NTensor nt({2,4,3}, 0.0);
+	nt.at({1,2,0}) = 6.2830;
+	nt.at({0,3,2}) = -6.2830;
+	std::cout << nt << std::endl;
+
+
 	}

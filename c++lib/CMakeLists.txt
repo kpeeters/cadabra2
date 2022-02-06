@@ -26,6 +26,9 @@ if (POLICY CMP0054)
   cmake_policy(SET CMP0054 NEW)
 endif()
 
+# Ensure that we can build the library and install it without having to
+# build the samples.
+set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY TRUE)
 
 #---------------------------------------------------------------------------
 # User options.

@@ -5,13 +5,13 @@
 
 using namespace cadabra;
 
-void NEvaluator::find_common_subexpressions(std::vector<Ex *>)
-	{
-	// Compute the hash value of every subtree, and collect matches.
-	// Then compare subtrees with equal hash to find common subtrees.
-	}
+// void NEvaluator::find_common_subexpressions(std::vector<Ex *>)
+// 	{
+// 	// Compute the hash value of every subtree, and collect matches.
+// 	// Then compare subtrees with equal hash to find common subtrees.
+// 	}
 
-double NEvaluator::evaluate(const Ex& ex)
+NTensor NEvaluator::evaluate(const Ex& ex)
 	{
 	const auto n_sin  = name_set.find("\\sin");
 	const auto n_cos  = name_set.find("\\cos");
@@ -19,7 +19,7 @@ double NEvaluator::evaluate(const Ex& ex)
 	const auto n_prod = name_set.find("\\prod");
 	const auto n_sum  = name_set.find("\\sum");
 
-	double lastval=0;
+	NTensor lastval(0);
 
 	auto it = ex.begin_post();
 	while(it != ex.end_post()) {
@@ -36,29 +36,33 @@ double NEvaluator::evaluate(const Ex& ex)
 			if(it->name==n_sin) {
 				auto arg    = ex.begin(it);
 				auto argval = subtree_values.find(arg)->second;
-				lastval = std::sin( argval );
+				lastval = argval.apply(std::sin);
 				}
 			else if(it->name==n_cos) {
 				auto arg    = ex.begin(it);
 				auto argval = subtree_values.find(arg)->second;
-				lastval = std::cos( argval );
+				lastval = argval.apply(std::cos);
 				}
 			else if(it->name==n_prod) {
-				lastval = 1.0;
 				for(auto cit = ex.begin(it); cit!=ex.end(it); ++cit) {
 					auto cfnd = subtree_values.find(Ex::iterator(cit));
 					if(cfnd==subtree_values.end())
 						throw std::logic_error("Inconsistent value tree.");
-					lastval *= cfnd->second;
+					if(cit==ex.begin(it))
+						lastval = cfnd->second;
+					else
+						lastval = NTensor::outer_product(lastval, cfnd->second);
 					}
 				}
 			else if(it->name==n_sum) {
-				lastval = 0.0;
 				for(auto cit = ex.begin(it); cit!=ex.end(it); ++cit) {
 					auto cfnd = subtree_values.find(Ex::iterator(cit));
 					if(cfnd==subtree_values.end())
 						throw std::logic_error("Inconsistent value tree.");
-					lastval += cfnd->second;
+					if(cit==ex.begin(it))
+						lastval = cfnd->second;
+					else
+						lastval += cfnd->second;
 					}
 				}
 			else if(it->name==n_pow) {
@@ -90,7 +94,7 @@ double NEvaluator::evaluate(const Ex& ex)
 	return lastval;
 	}
 
-void NEvaluator::set_variable(const Ex& var, double val)
+void NEvaluator::set_variable(const Ex& var, const NTensor& val)
 	{
 	expression_values.insert(std::make_pair(var, val));
 	}

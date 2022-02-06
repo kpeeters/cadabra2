@@ -2,6 +2,7 @@
 #pragma once
 
 #include "Storage.hh"
+#include "NTensor.hh"
 
 namespace cadabra {
 
@@ -19,24 +20,29 @@ namespace cadabra {
 
 	class NEvaluator {
 		public:
-			// If we know the value of a subtree explicitly as a number,
-			// it is stored in this map. These are computed nodes.
-			std::map<Ex::iterator, double, Ex::iterator_base_less> subtree_values;
+			/// If we know the value of a subtree explicitly as a number,
+			/// it is stored in this map. These are computed nodes.
+			std::map<Ex::iterator, NTensor, Ex::iterator_base_less> subtree_values;
 
-			// If we know the value of a subtree is equal to another subtree
-			// (either in the same expression or another one), it is stored
-			// in the map below. This then still needs a lookup in the
-			// `subtree_values` map.
+			/// If we know the value of a subtree is equal to another subtree
+			/// (either in the same expression or another one), it is stored
+			/// in the map below. This then still needs a lookup in the
+			/// `subtree_values` map.
 			std::map<Ex::iterator, Ex::iterator, Ex::iterator_base_less> subtree_equalities;
 
-			// The expression will get evaluated for a range of values for
-			// each unknown sub-expression (variable). These are set in
-			// the map below.
-			std::map<Ex, double > expression_values;
+			/// The expression will get evaluated for a range of values for
+			/// each unknown sub-expression (variable). These are set in
+			/// the map below.
+			std::map<Ex, NTensor> expression_values;
 
-			void   find_common_subexpressions(std::vector<Ex *>);
-			void   set_variable(const Ex&, double val);
-			double evaluate(const Ex&);
+			/// Set the range of values which we want to insert into the
+			/// indicated variable.
+			void    set_variable(const Ex&, const NTensor& val);
+
+			/// Evaluate the expression, using the variable values set in
+			/// `set_variable`.
+			NTensor evaluate(const Ex&);
+
 	};
 
 };
