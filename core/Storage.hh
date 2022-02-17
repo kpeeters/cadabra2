@@ -256,10 +256,6 @@ namespace cadabra {
 
 			bool operator==(const Ex& other) const;
 
-			/// Less-than function for Ex objects; works by calling the
-			/// `iterator_base_less` function on the top level nodes.
-			bool operator<(const Ex& other) const;
-
 			/// Push a copy of the current state of the expression onto the
 			/// history stack.  Also pushes a set of paths to terms which
 			/// will be kept in the next history step.

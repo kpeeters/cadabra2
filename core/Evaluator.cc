@@ -1,5 +1,6 @@
 
 #include "Evaluator.hh"
+#include "Compare.hh"
 #include <cmath>
 
 using namespace cadabra;
