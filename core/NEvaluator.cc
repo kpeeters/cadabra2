@@ -11,7 +11,12 @@ using namespace cadabra;
 // 	// Then compare subtrees with equal hash to find common subtrees.
 // 	}
 
-NTensor NEvaluator::evaluate(const Ex& ex)
+NEvaluator::NEvaluator(const Ex &ex_)
+	: ex(ex_)
+	{
+	}
+
+NTensor NEvaluator::evaluate()
 	{
 	const auto n_sin  = name_set.find("\\sin");
 	const auto n_cos  = name_set.find("\\cos");
@@ -72,11 +77,11 @@ NTensor NEvaluator::evaluate(const Ex& ex)
 			else {
 				// Try variable substitution rules.
 				bool found=false;
-				for(const auto& var: expression_values) {
+				for(const auto& var: variable_values) {
 					// std::cerr << "Comparing " << var.first << " with " << *it << std::endl;
-					if(var.first == *it) {
-						subtree_values.insert(std::make_pair(it, var.second));
-						lastval = var.second;
+					if(var.variable == *it) {
+						subtree_values.insert(std::make_pair(it, var.values));
+						lastval = var.values;
 						// std::cerr << "We know the value of " << *it << std::endl;
 						found=true;
 						break;
@@ -96,5 +101,16 @@ NTensor NEvaluator::evaluate(const Ex& ex)
 
 void NEvaluator::set_variable(const Ex& var, const NTensor& val)
 	{
-	expression_values.insert(std::make_pair(var, val));
+	variable_values.push_back( VariableValues({var, val}) );
+	}
+
+void NEvaluator::find_variable_locations()
+	{
+	for(auto& var: variable_values) {
+		auto it = ex.begin_post();
+		while(it != ex.end_post()) {
+
+			++it;
+			}
+		}
 	}

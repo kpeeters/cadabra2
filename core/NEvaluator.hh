@@ -20,6 +20,8 @@ namespace cadabra {
 
 	class NEvaluator {
 		public:
+			NEvaluator(const Ex&);
+
 			/// If we know the value of a subtree explicitly as a number,
 			/// it is stored in this map. These are computed nodes.
 			std::map<Ex::iterator, NTensor, Ex::iterator_base_less> subtree_values;
@@ -33,16 +35,28 @@ namespace cadabra {
 			/// The expression will get evaluated for a range of values for
 			/// each unknown sub-expression (variable). These are set in
 			/// the map below.
-			std::map<Ex, NTensor> expression_values;
+			class VariableValues {
+				public:
+					Ex                        variable;
+					NTensor                   values;
+					std::vector<Ex::iterator> locations;
+			};
+			std::vector<VariableValues> variable_values;
 
 			/// Set the range of values which we want to insert into the
-			/// indicated variable.
+			/// indicated variable. Fills the map above.
 			void    set_variable(const Ex&, const NTensor& val);
 
 			/// Evaluate the expression, using the variable values set in
 			/// `set_variable`.
-			NTensor evaluate(const Ex&);
+			NTensor evaluate();
 
+			/// PRIVATE:
+
+			void find_variable_locations();
+
+		private:
+			const Ex& ex;
 	};
 
 };
