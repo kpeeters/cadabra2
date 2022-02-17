@@ -692,11 +692,11 @@ found:
 		return equal_subtree(begin(), other.begin());
 		}
 
-	bool Ex::operator<(const Ex& other) const
-		{
-		Ex::iterator_base_less less;
-		return less(begin(), other.begin());
-		}
+//	bool Ex::operator<(const Ex& other) const
+//		{
+//		Ex::iterator_base_less less;
+//		return less(begin(), other.begin());
+//		}
 
 	void Ex::push_history(const std::vector<Ex::path_t>& paths)
 		{
