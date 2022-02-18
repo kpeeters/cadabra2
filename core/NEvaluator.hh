@@ -17,6 +17,8 @@ namespace cadabra {
 	/// Currently needs the leaf nodes to have an entry in the
 	/// `subtree_values` map; may be extended later to cover values
 	/// of non-elementary subtrees.
+	///
+	/// If the input variables are 'a' NTensors, then at any stage...
 
 	class NEvaluator {
 		public:

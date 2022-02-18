@@ -18,6 +18,8 @@ NEvaluator::NEvaluator(const Ex &ex_)
 
 NTensor NEvaluator::evaluate()
 	{
+	find_variable_locations();
+
 	const auto n_sin  = name_set.find("\\sin");
 	const auto n_cos  = name_set.find("\\cos");
 	const auto n_pow  = name_set.find("\\pow");
@@ -106,11 +108,20 @@ void NEvaluator::set_variable(const Ex& var, const NTensor& val)
 
 void NEvaluator::find_variable_locations()
 	{
+	// FIXME: we don't really need this anymore, as we do everything
+	// with broadcasting.
 	for(auto& var: variable_values) {
 		auto it = ex.begin_post();
 		while(it != ex.end_post()) {
-
+			if(var.variable == *it)
+				var.locations.push_back(it);
 			++it;
 			}
+		std::cerr << "Variable " << var.variable << " at " << var.locations.size() << " places" << std::endl;
 		}
+
+	// Now insert subtree values which are such that for every
+	// variable node we have an NTensor which is broadcast to the
+	// shape of the full variable set NTensor.
+
 	}

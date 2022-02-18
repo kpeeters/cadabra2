@@ -18,6 +18,12 @@ int main(int, char **)
 //	inject_property<SelfNonCommuting>(k, "{A,B,C,D }");
 //	inject_property<Trace>(k, "tr{#}");
 
+	// NTensor broadcast
+	NTensor t3( { 1.0, 2.0, 3.0 } );
+	NTensor t432=t3.broadcast( {4,3,2}, 1 );
+	std::cerr << t432 << std::endl;
+
+
 	// Multiplying two scalar variables which each take
 	// an array of values leads to an outer product.
 
