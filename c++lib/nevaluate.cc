@@ -33,7 +33,7 @@ int main(int, char **)
 	ev1b.set_variable(Ex("B"), NTensor({0.5, 1.0, 5.0, 10.0}));
 	// This should give a {3, 4} tensor.
 	auto res1b = ev1b.evaluate();
-	std::cout << res1b << "\n\n";
+	std::cout << "B*A + A = " << res1b << "\n\n";
 
 	auto ex1 = "B*A + C"_ex(k);
 	NEvaluator ev1(*ex1);
@@ -42,7 +42,7 @@ int main(int, char **)
 	ev1.set_variable(Ex("C"), NTensor({1.0, -1.0}));
 	// This should give a {3, 4, 2} tensor.
 	auto res1 = ev1.evaluate();
-	std::cout << res1 << "\n\n";
+	std::cout << "B*A + C = " << res1 << "\n\n";
 
 	// Trigonometric functions.
 
@@ -60,15 +60,18 @@ int main(int, char **)
 	ev.set_variable(Ex("B"), { 2.3 });
 	ev.set_variable(Ex("A"), { 1.2 });
 	auto res2 = ev.evaluate();
-	std::cout << res2 << std::endl;
+	std::cout << "A + B cos(C) = " << res2 << "\n\n";
 
 	// Double trig.
+	Stopwatch sw;
 	auto ex3 = R"( \cos(x) \sin(y) )"_ex(k);
 	NEvaluator ev3(*ex3);
-	ev3.set_variable(Ex("x"), NTensor::linspace(0.0, 3.14, 20));
-	ev3.set_variable(Ex("y"), NTensor::linspace(0.0, 3.14, 20));
+	ev3.set_variable(Ex("x"), NTensor::linspace(0.0, 3.14, 1000));
+	ev3.set_variable(Ex("y"), NTensor::linspace(0.0, 3.14, 1000));
+	sw.start();
 	auto res3 = ev3.evaluate();
-	std::cout << res3 << std::endl;
+	sw.stop();
+	std::cout << "cos(x) sin(y) over a 1000x1000 grid took " << sw << "\n\n";
 
 	// Array indexing.
 
@@ -76,6 +79,4 @@ int main(int, char **)
 	nt.at({1,2,0}) = 6.2830;
 	nt.at({0,3,2}) = -6.2830;
 	std::cout << nt << std::endl;
-
-
 	}

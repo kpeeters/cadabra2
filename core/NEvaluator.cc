@@ -37,7 +37,7 @@ NTensor NEvaluator::evaluate()
 
 		auto fnd = subtree_values.find(Ex::iterator(it));
 		if(fnd!=subtree_values.end()) {
-			std::cerr << it << " has value " << fnd->second << std::endl;
+			//std::cerr << it << " has value " << fnd->second << std::endl;
 			}
 		else {
 			if(it->name==n_sin) {
@@ -58,7 +58,7 @@ NTensor NEvaluator::evaluate()
 					if(cit==ex.begin(it))
 						lastval = cfnd->second;
 					else
-						lastval = NTensor::outer_product(lastval, cfnd->second);
+						lastval *= cfnd->second;
 					}
 				}
 			else if(it->name==n_sum) {
@@ -73,7 +73,7 @@ NTensor NEvaluator::evaluate()
 					}
 				}
 			else if(it->name==n_pow) {
-				std::cerr << "cannot find " << *it << std::endl;
+				//std::cerr << "cannot find " << *it << std::endl;
 				throw std::logic_error("Value unknown for subtree special function.");
 				}
 			else {
@@ -117,11 +117,28 @@ void NEvaluator::find_variable_locations()
 				var.locations.push_back(it);
 			++it;
 			}
-		std::cerr << "Variable " << var.variable << " at " << var.locations.size() << " places" << std::endl;
+		// std::cerr << "Variable " << var.variable << " at " << var.locations.size() << " places" << std::endl;
 		}
 
 	// Now insert subtree values which are such that for every
 	// variable node we have an NTensor which is broadcast to the
 	// shape of the full variable set NTensor.
 
+	// std::cerr << "full shape = ";
+	std::vector<size_t> fullshape;
+	for(const auto& var: variable_values) {
+		assert(var.values.shape.size()==1);
+		fullshape.push_back(var.values.shape[0]);
+		std::cerr << var.values.shape[0] << ", ";
+		}
+	// std::cerr << std::endl;
+
+	for(size_t v=0; v<variable_values.size(); ++v) {
+		const auto& var = variable_values[v];
+		for(const auto& it: var.locations) {
+			subtree_values.insert(std::make_pair(it, var.values.broadcast( fullshape, v ) ) );
+			}
+		}
+
+	// std::cerr << "ready" << std::endl;
 	}
