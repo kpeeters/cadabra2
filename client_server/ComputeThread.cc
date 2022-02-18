@@ -274,11 +274,11 @@ void ComputeThread::cell_finished_running(DataCell::id_t id)
 void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	{
 	client::connection_ptr con = wsclient.get_con_from_hdl(hdl);
-	// std::cerr << msg->get_payload() << std::endl;
+	// std::cerr << "payload: " << msg->get_payload() << std::endl;
 
 	// Parse the JSON message.
 	nlohmann::json root;
-	
+
 	try {
 		root=nlohmann::json::parse(msg->get_payload());
 		}
@@ -624,18 +624,18 @@ bool ComputeThread::complete(DTree::iterator it, int pos, int alternative)
 	size_t lst=todo.find_last_of("\n(){}[]:\t ");
 	if(lst!=std::string::npos)
 		todo=todo.substr(lst+1);
-	// std::cerr << "to complete strip: " << todo << std::endl;	
+	// std::cerr << "to complete strip: " << todo << std::endl;
 
 	if(todo.size()==0)
 		return false;
-	
+
 	req["string"]=todo;
 	req["position"]=pos;
 	req["alternative"]=alternative;
-	
+
 	std::ostringstream str;
 	str << req << std::endl;
-	
+
 	// std::cerr << str.str() << std::endl;
 
 	server_pid=0;

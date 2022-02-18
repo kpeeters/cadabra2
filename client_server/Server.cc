@@ -13,7 +13,6 @@
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 #include <boost/algorithm/string/replace.hpp>
 
-#include "nlohmann/json.hpp"
 #include <internal/uuid.h>
 #include <internal/string_tools.h>
 
@@ -111,7 +110,7 @@ std::string parse_error(const std::string& error, const std::string& input)
 			size_t col_no = stoi(sm[3]);
 			return
 				"SyntaxError: " + error_type + "\n" +
-				"Line " + std::to_string(line_no) + ", column " + std::to_string(col_no) + "\n" + 
+				"Line " + std::to_string(line_no) + ", column " + std::to_string(col_no) + "\n" +
 				nth_line(input, line_no - 1) + "\n" +
 				std::string(col_no > 1 ? col_no - 2 : 0, ' ') + "^";
 		}
@@ -370,9 +369,13 @@ void Server::stop_block()
 	PyGILState_Release(state);
 	}
 
-Server::Block::Block(websocketpp::connection_hdl h, const std::string& str, uint64_t id_)
-	: hdl(h), input(str), cell_id(id_)
+Server::Block::Block(websocketpp::connection_hdl h, const std::string& str, uint64_t id_, const std::string& msg_type_)
+	: hdl(h), msg_type(msg_type_), input(str), cell_id(id_)
 	{
+	nlohmann::json content, header;
+	response["header"]=header;
+	response["content"]=content;
+	response["msg_type"]=msg_type;
 	}
 
 void Server::on_message(websocketpp::connection_hdl hdl, WebsocketServer::message_ptr msg)
@@ -424,7 +427,10 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 		// std::cerr << code << std::endl;
 		uint64_t id = header.value("cell_id", uint64_t(0));
 		std::unique_lock<std::mutex> lock(block_available_mutex);
-		block_queue.push(Block(hdl, code, id));
+		Block block(hdl, code, id, msg_type);
+		block.response["header"]["parent_origin"]="client";
+		block.response["header"]["parent_id"]=id;
+		block_queue.push(block);
 		block_available.notify_one();
 		}
 	else if(msg_type=="execute_interrupt") {
@@ -441,31 +447,57 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 		stop_block();
 		std::queue<Block> empty;
 		std::swap(block_queue, empty);
-
 		}
 	else if(msg_type=="complete") {
+		// Schedule a block which runs code to complete the given string.
 		std::string str=root["string"].get<std::string>();
 		int alternative=root["alternative"].get<int>();
 		std::string todo="print(__cdbkernel__.completer.complete(\""+str+"\", "+std::to_string(alternative)+"))";
-		// std::cerr << todo << std::endl;
-		std::string res=run_string(todo, true);
-		// FIXME: need a better way to get the result out of python, so we can spot None
-		// while keeping the possibility to complete 'No' -> 'None'.
-		if(res.size()>0 && res[res.size()-1]=='\n')
-			res=res.substr(0, res.size()-1);
-		if(res=="None")
-			res="";
-		//std::cerr << res << "|" << std::endl;
-		on_complete_finished(hdl, header["cell_id"].get<uint64_t>(), root["position"].get<int>(), alternative, str, res);
+
+		uint64_t id = header.value("cell_id", uint64_t(0));
+		Block blk(hdl, todo, id, "completed");
+		blk.response["header"]["cell_id"]=id;
+		blk.response["content"]["original"]=str;
+		blk.response["content"]["position"]=root["position"].get<int>();
+		blk.response["content"]["alternative"]=alternative;
+
+		std::unique_lock<std::mutex> lock(block_available_mutex);
+		block_queue.push(blk);
+		block_available.notify_one();
 		}
 	else if(msg_type=="exit") {
 		exit(-1);
 		}
 	}
 
-void Server::on_block_finished(Block blk)
+void Server::on_block_finished(Block block)
 	{
-	send(blk.output, "output", 0, true); // last in sequence
+	auto& header  = block.response["header"];
+	auto& content = block.response["content"];
+
+	if(block.msg_type=="completed") {
+		// FIXME: need a better way to get the result out of python, so we can spot None
+		// while keeping the possibility to complete 'No' -> 'None'.
+		std::string res=block.output;
+		if(res.size()>0 && res[res.size()-1]=='\n')
+			res=res.substr(0, res.size()-1);
+		if(res=="None")
+			res="";
+		block.response["content"]["completed"]=res;
+		}
+	else {
+		header["cell_origin"]="server";
+		header["cell_id"]=cadabra::generate_uuid<uint64_t>();
+		header["time_total_microseconds"]=std::to_string(server_stopwatch.seconds()*1e6L + server_stopwatch.useconds());
+		header["time_sympy_microseconds"]=std::to_string(sympy_stopwatch.seconds()*1e6L  + sympy_stopwatch.useconds());
+		header["last_in_sequence"]=true;
+		content["output"]=block.output;
+		block.response["msg_type"]="output";
+		}
+
+	std::ostringstream str;
+	str << block.response << std::endl;
+	send_json(str.str());
 	}
 
 bool Server::handles(const std::string& otype) const
@@ -476,10 +508,11 @@ bool Server::handles(const std::string& otype) const
 
 uint64_t Server::send(const std::string& output, const std::string& msg_type, uint64_t parent_id, bool last)
 	{
-	//	if(msg_type=="output")
-	//		std::cerr << "Cell " << msg_type << " timing: " << server_stopwatch << " (in python: " << sympy_stopwatch << ")" << std::endl;
-	// Make a JSON message.
-	nlohmann::json json, content, header;
+	// This is the function exposed to the Python side; not used
+	// directly in the server to send block output back to the client
+	// (that's all handled by on_block_finished above).
+
+	nlohmann::json json, header, content;
 
 	auto return_cell_id=cadabra::generate_uuid<uint64_t>();
 	if(parent_id==0)
@@ -493,6 +526,7 @@ uint64_t Server::send(const std::string& output, const std::string& msg_type, ui
 	header["time_total_microseconds"]=std::to_string(server_stopwatch.seconds()*1e6L + server_stopwatch.useconds());
 	header["time_sympy_microseconds"]=std::to_string(sympy_stopwatch.seconds()*1e6L  + sympy_stopwatch.useconds());
 	header["last_in_sequence"]=last;
+
 	content["output"]=output;
 
 	json["header"]=header;
@@ -508,7 +542,7 @@ uint64_t Server::send(const std::string& output, const std::string& msg_type, ui
 	}
 
 void Server::send_progress_update(const std::string& msg, int n, int total)
-{
+	{
 	nlohmann::json json, content, header;
 
 	header["parent_id"] = 0;
@@ -528,7 +562,7 @@ void Server::send_progress_update(const std::string& msg, int n, int total)
 	str << json << std::endl;
 
 	send_json(str.str());
-}
+	}
 
 void Server::send_json(const std::string& msg)
 	{
@@ -561,29 +595,6 @@ void Server::on_block_error(Block blk)
 	// std::cerr << "cadabra-server: sending error, " << str.str() << std::endl;
 
 	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
-	}
-
-void Server::on_complete_finished(websocketpp::connection_hdl hdl, uint64_t id, int pos, int alternative, std::string original, std::string completed)
-	{
-//	std::lock_guard<std::mutex> lock(ws_mutex); // Called from the receiving thread!
-
-	// Make a JSON message.
-	nlohmann::json json, content, header;
-
-	header["cell_id"]=id;
-	json["msg_type"]="completed";
-	content["original"]=original;
-	content["completed"]=completed;
-	content["position"]=pos;
-	content["alternative"]=alternative;
-	json["header"]=header;
-	json["content"]=content;
-
-	std::ostringstream str;
-	str << json << std::endl;
-	// std::cerr << "cadabra-server: sending completion, " << str.str() << std::endl;
-
-	wserver.send(hdl, str.str(), websocketpp::frame::opcode::text);
 	}
 
 void Server::on_kernel_fault(Block blk)
@@ -650,4 +661,3 @@ void Server::run(int port, bool eod)
 		std::cerr << "cadabra-server: websocket exception " << ex.code() << " " << ex.what() << std::endl;
 		}
 	}
-
