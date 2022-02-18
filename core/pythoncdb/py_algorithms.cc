@@ -41,6 +41,7 @@
 #endif
 #include "../algorithms/map_sympy.hh"
 #include "../algorithms/meld.hh"
+#include "../algorithms/nevaluate.hh"
 #include "../algorithms/order.hh"
 #include "../algorithms/product_rule.hh"
 #include "../algorithms/reduce_delta.hh"
@@ -106,7 +107,7 @@ namespace cadabra {
 		def_algo<decompose, Ex>(m, "decompose", false, false, 0, py::arg("basis"));
 		def_algo<drop_weight, Ex>(m, "drop_weight", false, false, 0, py::arg("condition") = Ex{});
 		def_algo<eliminate_metric, Ex,bool>(m, "eliminate_metric", true, false, 0, py::arg("preferred") = Ex{}, py::arg("redundant") = false);
-		def_algo<eliminate_vielbein, Ex,bool>(m, "eliminate_vielbein", true, false, 0, py::arg("preferred") = Ex{},py::arg("redundant")= false);		
+		def_algo<eliminate_vielbein, Ex,bool>(m, "eliminate_vielbein", true, false, 0, py::arg("preferred") = Ex{},py::arg("redundant")= false);
 		def_algo<keep_weight, Ex>(m, "keep_weight", false, false, 0, py::arg("condition"));
 		def_algo<lower_free_indices, bool>(m, "lower_free_indices", true, false, 0, py::arg("lower") = true);
 		def_algo<lower_free_indices, bool>(m, "raise_free_indices", true, false, 0, py::arg("lower") = false);
@@ -142,5 +143,7 @@ namespace cadabra {
 //		def_algo_preorder<young_reduce, const Ex*>(m, "young_reduce", true, false, 0, py::arg("pattern") = nullptr);
 //		def_algo_preorder<young_reduce_trace>(m, "young_reduce_trace", true, false, 0);
 		def_algo_preorder<meld, bool>(m, "meld", true, false, 0, py::arg("project_as_sum") = false);
+
+		def_algo<nevaluate>(m, "nevaluate", true, false, 0);
 		}
 	}
