@@ -50,6 +50,9 @@ namespace cadabra {
 			// Set the width and font size for all images to be generated.
 			void set_geometry(int horizontal_pixels);
 
+			// Get the width.
+			int get_geometry() const;
+
 			// Set the scale factor for generating bitmaps. The total scale is
 			// the product of HiDPI scale and any text-scaling factor on top of
 			// that, so that it represents the total scale at which text renders.

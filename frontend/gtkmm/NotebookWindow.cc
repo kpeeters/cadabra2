@@ -46,13 +46,16 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	, modified(false)
 	, read_only(ro)
 	, crash_window_hidden(true)
+	, last_configure_width(0)
 	, follow_cell(doc.end())
+	, tex_running(false), tex_need_width(0)
 	, last_find_location(doc.end(), std::string::npos)
 	, is_configured(false)
 
 	{
 	// Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
+	dispatch_refresh.connect(sigc::mem_fun(*this, &NotebookWindow::refresh_after_tex_engine_run));
 	dispatch_update_status.connect(sigc::mem_fun(*this, &NotebookWindow::update_status));
 
 	// Set the window icon.
@@ -277,7 +280,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	   "      <separator/>"
 	   "      <menuitem action='Save'/>"
 	   "      <menuitem action='SaveAs'/>"
-	   "      <menuitem action='ExportAsJupyter'/>"		
+	   "      <menuitem action='ExportAsJupyter'/>"
 	   "      <menuitem action='ExportHtml'/>"
 	   "      <menuitem action='ExportHtmlSegment'/>"
 	   "      <menuitem action='ExportLaTeX'/>"
@@ -300,11 +303,11 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		   "      <menuitem action='EditSplit' />"
 		   "      <separator/>"
 		   "      <menuitem action='EditFind' />"
-		   "      <menuitem action='EditFindNext' />"			
+		   "      <menuitem action='EditFindNext' />"
 		   "      <separator/>"
 		   "      <menuitem action='EditMakeCellTeX' />"
 		   "      <menuitem action='EditMakeCellPython' />"
-		   "      <menuitem action='EditIgnoreCellOnImport' />"			
+		   "      <menuitem action='EditIgnoreCellOnImport' />"
 		   "    </menu>"
 		   "    <menu action='MenuView'>"
 		   "      <menuitem action='ViewSplit' />"
@@ -409,10 +412,12 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	status_label.set_size_request(200,-1);
 	status_label.set_justify(Gtk::JUSTIFY_LEFT);
 	kernel_label.set_justify(Gtk::JUSTIFY_LEFT);
-	kernel_label.set_text("server: not connected");
+	kernel_label.set_text("Server: not connected");
 	statusbarbox.pack_start(status_label);
 	statusbarbox.pack_start(kernel_label);
 	statusbarbox.pack_start(kernel_spinner);
+//	auto context = kernel_spinner.get_style_context();
+//	context->add_class("spinner");
 	statusbarbox.pack_start(progressbar);
 	statusbarbox.set_name("statusbar");
 	progressbar.set_size_request(200,-1);
@@ -479,6 +484,8 @@ void NotebookWindow::load_css()
 	data += "#ImageView { transition-property: padding, background-color; transition-duration: 1s; }\n";
 	data += "#CodeInput { font-family: monospace; }\n";
 	data += "#Console   { padding: 2px; }\n";
+	data += "spinner { background: none; opacity: 1; -gtk-icon-source: -gtk-icontheme(\"process-working-symbolic\"); }\n";
+	data += "spinner:checked { opacity: 1; animation: spin 1s linear infinite; }\n";
 
 	// Some of the css properties defined in gtk-cadabra.css are overridden, and so are included
 	// here to force them to be used
@@ -581,27 +588,34 @@ void NotebookWindow::on_prefs_set_cv(Console::Position pos)
 
 bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	{
-	//	std::cerr << "cadabra-client: on_configure_event " << cfg->width << " x " << cfg->height << std::endl;
+	// std::cerr << "cadabra-client: on_configure_event " << cfg->width << " x " << cfg->height << std::endl;
 	is_configured=true;
-	if(cfg->width != last_configure_width)
-		engine.set_geometry(cfg->width-2*30);
 
 	bool ret=Gtk::Window::on_configure_event(cfg);
 
 	if(cfg->width != last_configure_width) {
+		std::cerr << "Need to rerun TeX" << std::endl;
+		if(tex_running) {
+			std::cerr << "Already running" << std::endl;
+			tex_need_width = cfg->width;
+			}
+		else {
+			// FIXME: need to append this to a vector, for which
+			// the tex process picks the last appended.
+			tex_need_width = cfg->width;
+			tex_run_async();
+			}
 		last_configure_width = cfg->width;
-		try {
-			engine.invalidate_all();
-			engine.convert_all();
-			for(unsigned int i=0; i<canvasses.size(); ++i)
-				canvasses[i]->refresh_all();
-			}
-		catch(TeXEngine::TeXException& ex) {
-			on_tex_error(ex.what(), doc.end());
-			}
 		}
 
 	return ret;
+	}
+
+void NotebookWindow::refresh_after_tex_engine_run()
+	{
+	std::cerr << "Refreshing canvas" << std::endl;
+	for(unsigned int i=0; i<canvasses.size(); ++i)
+		canvasses[i]->refresh_all();
 	}
 
 bool NotebookWindow::on_unhandled_error(const std::exception& err)
@@ -695,6 +709,45 @@ void NotebookWindow::on_kernel_runstatus(bool running)
 	dispatcher.emit();
 	}
 
+void NotebookWindow::tex_run_async()
+	{
+	if(!tex_running) {
+		tex_running=true;
+
+		// Run TeX on a separate thread; it'll take a while and
+		// we don't want to block the UI thread.
+		// FIXME: join properly when exiting the program, otherwise
+		// we get a 'terminate called without active exception' message.
+		auto tex_code = [this]() {
+							 try {
+								 std::cerr << "Running TeX" << std::endl;
+								 do {
+									 engine.invalidate_all();
+									 engine.set_geometry(tex_need_width-2*30);
+									 engine.convert_all();
+									 std::cerr << "Dispatching refresh" << std::endl;
+									 dispatch_refresh.emit();
+									 } while(tex_need_width-2*30 != engine.get_geometry());
+								 tex_running=false;
+								 }
+							 catch(TeXEngine::TeXException& ex) {
+								 std::cerr << "TeXError: " << ex.what() << std::endl;
+								 // FIXME: this needs to be called on the main thread.
+								 on_tex_error(ex.what(), doc.end());
+								 }
+							 };
+
+		// Join any thread which may still exist.
+		if(tex_thread)
+			tex_thread->join();
+
+		tex_thread = std::make_unique<std::thread>( tex_code );
+		}
+	else {
+		std::cerr << "Cannot run TeX, already running" << std::endl;
+		}
+	}
+
 void NotebookWindow::process_todo_queue()
 	{
 	static bool running=false;
@@ -706,7 +759,7 @@ void NotebookWindow::process_todo_queue()
 	// Update the status/kernel messages into the corresponding widgets.
 		{
 		std::lock_guard<std::mutex> guard(status_mutex);
-		kernel_label.set_text("server: " + kernel_string);
+		kernel_label.set_text("Server: " + kernel_string);
 
 		if(kernel_spinner_status) {
 			kernel_spinner.show();
@@ -1036,7 +1089,7 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 		last_find_location.first=doc.end();
 		last_find_location.second=std::string::npos;
 		}
-	
+
 	DTree::iterator parent = DTree::parent(it);
 	assert(doc.is_valid(parent));
 
@@ -1066,7 +1119,7 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 		// that it may actually be an inbox or outbox.
 		// std::cerr << "Removing " << actual.imagebox << std::endl;
 		parentbox->remove(*actual.imagebox);
-		
+
 		// The above does not delete the Gtk widget, despite having been
 		// wrapped in manage at construction. So we have to delete it
 		// ourselves. Fortunately the container does not try to delete
@@ -1110,7 +1163,7 @@ void NotebookWindow::update_cell(const DTree&, DTree::iterator it)
 	{
 	// We just do a redraw for now, but this may require more work later.
 	disable_stacks=true;
-	
+
 	for(unsigned int i=0; i<canvasses.size(); ++i) {
 		VisualCell& vc = canvasses[i]->visualcells[&(*it)];
 		if(it->cell_type==DataCell::CellType::python || it->cell_type==DataCell::CellType::latex) {
@@ -1153,7 +1206,7 @@ void NotebookWindow::select_range(const DTree&, DTree::iterator it, int start, i
 		std::cerr << "Warning: select_range called on cell which is not python or latex." << std::endl;
 		return;
 		}
-	
+
 	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end()) {
 		std::cerr << "cadabra-client: Cannot find cell to select range." << std::endl;
 		return;
@@ -1192,7 +1245,7 @@ void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 	{
 //	std::cerr << "-----" << std::endl;
 //	std::cerr << "cell content to show: " << cell->textbuf << std::endl;
-	
+
 	if(current_canvas>=(int)canvasses.size()) return;
 
 	if(canvasses[current_canvas]->visualcells.find(&(*cell))==canvasses[current_canvas]->visualcells.end()) return;
@@ -1213,13 +1266,13 @@ void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 		al=focusbox.imagebox->get_allocation();
 	else
 		return;
-	
+
 	Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
 
 	double upper_visible=va->get_value();
 	double page_size    =va->get_page_size();
 	double lower_visible=va->get_value()+page_size;
-	
+
 
 	// When we get called, the busybox has its allocation done and size set. However,
 	// the edit box below still has its old position (but its correct height). So we
@@ -1613,7 +1666,7 @@ void NotebookWindow::on_file_save_as_jupyter()
 			auto ipynb = cnb2ipynb(json);
 			std::ofstream file(ipynb_name);
 			file << ipynb.dump(3) << std::endl;
-			
+
 //			if(res.size()>0) {
 //				Gtk::MessageDialog md("Error saving Jupyter notebook "+name);
 //				md.set_transient_for(*this);
@@ -1875,7 +1928,7 @@ void NotebookWindow::on_search_text_changed()
 		}
 	else {
 		}
-	
+
 	auto res = find_string(start.first, start.second, text, search_case_insensitive.get_active());
 	last_find_location=res;
 	last_find_string=text;
@@ -2073,7 +2126,7 @@ void NotebookWindow::on_help_about()
 	std::vector<Glib::ustring> special;
 	special.push_back("José M. Martín-García (for the xPerm canonicalisation code)");
 	special.push_back("Dominic Price (for the conversion to pybind and most of the Windows port)");
-	special.push_back("Connor Behan (for various improvements related to index-free algorithms)");	
+	special.push_back("Connor Behan (for various improvements related to index-free algorithms)");
 	special.push_back("James Allen (for writing much of the factoring code)");
 	special.push_back("Software Sustainability Institute");
 	special.push_back("Institute of Advanced Study (for a Christopherson/Knott fellowship)");
@@ -2161,7 +2214,7 @@ void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 		std::cout << "cadabra-client: total scaling-factor = " << scale << std::endl;
 		engine.set_scale(scale, screen->get_monitor_scale_factor(0));
 		engine.invalidate_all();
-		engine.convert_all();
+		tex_run_async();
 
 		auto it=canvasses.begin();
 		while(it!=canvasses.end()) {
@@ -2390,7 +2443,7 @@ void NotebookWindow::on_prefs_font_size(int num)
 		// on_configure_event signal; that will come after us and then we will
 		// have to run all again.
 		engine.invalidate_all();
-		engine.convert_all();
+		tex_run_async();
 
 		for(auto& canvas: canvasses) {
 			for(auto& visualcell: canvas->visualcells) {
@@ -2571,7 +2624,7 @@ void NotebookWindow::on_tools_clear_cache()
 		? "Cache cleared!"
 		: "Failed to remove cached library files. You can manually remove them by deleting the cadabra_packages folder in your config directory"
 	);
-	
+
 	prog.run();
 }
 

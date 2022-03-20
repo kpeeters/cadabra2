@@ -88,7 +88,7 @@ namespace cadabra {
 
 			// Ensure that the indicated cell is visible.
 			void scroll_cell_into_view(DTree::iterator cell);
-				
+
 			void set_name(const std::string&);
 			void set_title_prefix(const std::string&);
 
@@ -154,7 +154,7 @@ namespace cadabra {
 
 			Console console;
 			Gtk::Dialog console_win;
-			
+
 			std::unique_ptr<DiffViewer> diffviewer;
 
 			// All canvasses which are stored in the ...
@@ -179,8 +179,12 @@ namespace cadabra {
 			std::string                    status_string, kernel_string, progress_string;
 			double                         progress_frac;
 			int                            status_line, status_col;
-			Glib::Dispatcher               dispatch_update_status;
+			Glib::Dispatcher               dispatch_update_status, dispatch_refresh;
 			void                           update_status();
+
+			// Run the TeX engine on a separate thread, then call
+			// `dispatch_refresh` to update the display.
+			void tex_run_async();
 
 			// Name and modification data.
 			void             update_title();
@@ -253,6 +257,12 @@ namespace cadabra {
 			/// thing is that it is run on the GUI thread.
 			void process_todo_queue();
 
+			/// Refresh the display after a TeX engine run has completed. The TeX
+			/// engine is run on a different thread so as to not block the UI, and
+			/// on completion triggers `dispatcher_refresh`, which calls this function
+			/// on the main thread.
+			void refresh_after_tex_engine_run();
+
 			void on_crash_window_closed(int);
 			bool crash_window_hidden;
 
@@ -285,6 +295,9 @@ namespace cadabra {
 
 			int             last_configure_width;
 			DTree::iterator follow_cell;
+			std::unique_ptr<std::thread> tex_thread;
+			bool                         tex_running;
+			int                          tex_need_width;
 
 			std::pair<DTree::iterator, size_t> last_find_location;
 			std::string                        last_find_string;

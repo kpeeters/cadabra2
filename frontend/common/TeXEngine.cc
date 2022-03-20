@@ -208,6 +208,11 @@ void TeXEngine::set_geometry(int horpix)
 	horizontal_pixels_=horpix;
 	}
 
+int TeXEngine::get_geometry() const
+	{
+	return horizontal_pixels_;
+	}
+
 void TeXEngine::set_font_size(int fontsize)
 	{
 	if(font_size_!=fontsize) {
@@ -572,4 +577,3 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	if(chdir(olddir)==-1)
 		throw TeXException("Failed to chdir back to " +std::string(olddir)+".");
 	}
-
