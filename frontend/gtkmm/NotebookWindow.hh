@@ -179,7 +179,7 @@ namespace cadabra {
 			std::string                    status_string, kernel_string, progress_string;
 			double                         progress_frac;
 			int                            status_line, status_col;
-			Glib::Dispatcher               dispatch_update_status, dispatch_refresh;
+			Glib::Dispatcher               dispatch_update_status, dispatch_refresh, dispatch_tex_error;
 			void                           update_status();
 
 			// Run the TeX engine on a separate thread, then call
@@ -263,6 +263,10 @@ namespace cadabra {
 			/// on the main thread.
 			void refresh_after_tex_engine_run();
 
+			/// Handle a TeX error which occurred on a threaded TeX run (activated by
+			/// `tex_run_async`) and is stored in `tex_error_string`.
+			void handle_thread_tex_error();
+
 			void on_crash_window_closed(int);
 			bool crash_window_hidden;
 
@@ -295,9 +299,13 @@ namespace cadabra {
 
 			int             last_configure_width;
 			DTree::iterator follow_cell;
+
+			// Mutex to protect the variables below.
+			std::recursive_mutex         tex_need_width_mutex;
 			std::unique_ptr<std::thread> tex_thread;
 			bool                         tex_running;
 			int                          tex_need_width;
+			std::string                  tex_error_string;
 
 			std::pair<DTree::iterator, size_t> last_find_location;
 			std::string                        last_find_string;

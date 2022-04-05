@@ -56,6 +56,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 	dispatch_refresh.connect(sigc::mem_fun(*this, &NotebookWindow::refresh_after_tex_engine_run));
+	dispatch_tex_error.connect(sigc::mem_fun(*this, &NotebookWindow::handle_thread_tex_error));
 	dispatch_update_status.connect(sigc::mem_fun(*this, &NotebookWindow::update_status));
 
 	// Set the window icon.
@@ -594,16 +595,15 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	bool ret=Gtk::Window::on_configure_event(cfg);
 
 	if(cfg->width != last_configure_width) {
-		std::cerr << "Need to rerun TeX" << std::endl;
+		std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
 		if(tex_running) {
-			std::cerr << "Already running" << std::endl;
 			tex_need_width = cfg->width;
 			}
 		else {
-			// FIXME: need to append this to a vector, for which
-			// the tex process picks the last appended.
 			tex_need_width = cfg->width;
+			// std::cerr << "Attempting to run" << std::endl;
 			tex_run_async();
+			// std::cerr << "OK, running" << std::endl;
 			}
 		last_configure_width = cfg->width;
 		}
@@ -613,9 +613,15 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 
 void NotebookWindow::refresh_after_tex_engine_run()
 	{
-	std::cerr << "Refreshing canvas" << std::endl;
 	for(unsigned int i=0; i<canvasses.size(); ++i)
 		canvasses[i]->refresh_all();
+	}
+
+void NotebookWindow::handle_thread_tex_error()
+	{
+	on_tex_error(tex_error_string, doc.end());
+	std::cerr << "clicked away" << std::endl;
+	tex_error_string="";
 	}
 
 bool NotebookWindow::on_unhandled_error(const std::exception& err)
@@ -711,41 +717,49 @@ void NotebookWindow::on_kernel_runstatus(bool running)
 
 void NotebookWindow::tex_run_async()
 	{
-	if(!tex_running) {
-		tex_running=true;
+	if(tex_error_string!="")
+		return;
 
-		// Run TeX on a separate thread; it'll take a while and
-		// we don't want to block the UI thread.
-		// FIXME: join properly when exiting the program, otherwise
-		// we get a 'terminate called without active exception' message.
-		auto tex_code = [this]() {
+	// Run TeX on a separate thread; it'll take a while and
+	// we don't want to block the UI thread.
+	// FIXME: join properly when exiting the program, otherwise
+	// we get a 'terminate called without active exception' message.
+	auto tex_code = [this]() {
 							 try {
-								 std::cerr << "Running TeX" << std::endl;
-								 do {
-									 engine.invalidate_all();
-									 engine.set_geometry(tex_need_width-2*30);
+								 for(;;) {
+									 {  std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
+										 engine.invalidate_all();
+										 engine.set_geometry(tex_need_width-2*30);
+										 }
+
 									 engine.convert_all();
-									 std::cerr << "Dispatching refresh" << std::endl;
 									 dispatch_refresh.emit();
-									 } while(tex_need_width-2*30 != engine.get_geometry());
-								 tex_running=false;
+
+									 {  std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
+										 if(tex_need_width-2*30 == engine.get_geometry()) {
+											 tex_running=false;
+											 break;
+											 }
+										 }
+									 }
 								 }
 							 catch(TeXEngine::TeXException& ex) {
-								 std::cerr << "TeXError: " << ex.what() << std::endl;
-								 // FIXME: this needs to be called on the main thread.
-								 on_tex_error(ex.what(), doc.end());
+								 // Display the error in the main thread.
+								 std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
+								 tex_error_string=ex.what();
+								 tex_running=false;
+								 dispatch_tex_error.emit();
 								 }
-							 };
+						 };
 
-		// Join any thread which may still exist.
-		if(tex_thread)
-			tex_thread->join();
+	std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
+	tex_running=true;
 
-		tex_thread = std::make_unique<std::thread>( tex_code );
-		}
-	else {
-		std::cerr << "Cannot run TeX, already running" << std::endl;
-		}
+	// Join any thread which may still exist.
+	if(tex_thread)
+		tex_thread->join();
+
+	tex_thread = std::make_unique<std::thread>( tex_code );
 	}
 
 void NotebookWindow::process_todo_queue()
