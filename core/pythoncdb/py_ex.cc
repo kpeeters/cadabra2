@@ -416,7 +416,7 @@ namespace cadabra {
 		{
 		return ex->to_integer(); // this will throw an exception if the object is not integer
 		}
-	
+
 	std::string Ex_head(Ex_ptr ex)
 		{
 		if (ex->begin() == ex->end())
@@ -589,24 +589,25 @@ namespace cadabra {
 		.def("__setitem__", &Ex_setitem)
 		.def("__setitem__", &Ex_setitem_iterator)
 		.def("__len__", &Ex_len)
-		.def("__int__", &Ex_int_cast)			
+		.def("__int__", &Ex_int_cast)
 		.def("head", &Ex_head)
 		.def("mult", &Ex_get_mult)
 		.def("__iter__", &Ex_iter)
 		.def("top", &Ex_top)
 		.def("matches", &Ex_matches)
-		.def("matches", &Ex_matches_Ex)			
+		.def("matches", &Ex_matches_Ex)
 		.def("state", &Ex::state)
 		.def("reset", &Ex::reset_state)
 		.def("copy", [](const Ex& ex) { return std::make_shared<Ex>(ex); })
 		.def("changed", &Ex::changed_state)
 		.def("cleanup", &Ex_cleanup)
+		.def("__hash__", [](const Ex& ex) { return ex.calc_hash(ex.begin()); })
 		.def("__add__", static_cast<Ex_ptr(*)(const Ex_ptr, const ExNode)>(&Ex_add), py::is_operator{})
 		.def("__add__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_add), py::is_operator{})
 		.def("__sub__", static_cast<Ex_ptr(*)(const Ex_ptr, const ExNode)>(&Ex_sub), py::is_operator{})
 		.def("__sub__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_sub), py::is_operator{})
 		.def("__mul__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_mul), py::is_operator{})
-		.def(py::pickle(
+			.def(py::pickle(
 			[](const Ex_ptr& ex) { return py::make_tuple(Ex_as_input(ex)); },
 			[](py::tuple t) { return Ex_from_string(t[0].cast<std::string>(), true, get_kernel_from_scope()); }
 		));
@@ -642,7 +643,7 @@ namespace cadabra {
 			.def("__add__", [](ExNode a, Ex_ptr b) {
 								 return a.add_ex(b);
 								 }, pybind11::is_operator{});
-		
+
 		pybind11::class_<sympy::SympyBridge, std::shared_ptr<sympy::SympyBridge> >(m, "SympyBridge")
 		.def(py::init(&SympyBridge_init))
 		.def("to_sympy", &sympy::SympyBridge::export_ex)

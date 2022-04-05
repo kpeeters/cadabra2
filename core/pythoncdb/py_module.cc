@@ -9,6 +9,7 @@
 #include "py_properties.hh"
 #include "py_stopwatch.hh"
 #include "py_tableau.hh"
+#include "py_ntensor.hh"
 
 #include "Kernel.hh"
 
@@ -33,6 +34,7 @@ namespace cadabra {
 		init_packages(m);
 		init_kernel(m);
 		init_progress_monitor(m);
+		init_ntensor(m);
 		init_stopwatch(m);
 		init_ex(m);
 		init_tableau(m);

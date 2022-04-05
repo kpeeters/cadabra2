@@ -180,6 +180,7 @@ set(PROPERTY_SRC_FILES
 #   )
 
 set(MODULE_SRC_FILES
+	pythoncdb/py_ntensor.cc
    pythoncdb/py_algorithms.cc
    pythoncdb/py_ex.cc
    pythoncdb/py_globals.cc

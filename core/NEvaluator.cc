@@ -74,6 +74,7 @@ NTensor NEvaluator::evaluate()
 				}
 			else if(it->name==n_pow) {
 				//std::cerr << "cannot find " << *it << std::endl;
+
 				throw std::logic_error("Value unknown for subtree special function.");
 				}
 			else {

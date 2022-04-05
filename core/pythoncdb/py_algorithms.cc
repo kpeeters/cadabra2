@@ -3,6 +3,7 @@
 #include <pybind11/stl.h>
 
 #include "../Algorithm.hh"
+#include "../NEvaluator.hh"
 
 #include "../algorithms/canonicalise.hh"
 #include "../algorithms/collect_components.hh"
@@ -144,6 +145,22 @@ namespace cadabra {
 //		def_algo_preorder<young_reduce_trace>(m, "young_reduce_trace", true, false, 0);
 		def_algo_preorder<meld, bool>(m, "meld", true, false, 0, py::arg("project_as_sum") = false);
 
-		def_algo<nevaluate>(m, "nevaluate", true, false, 0);
+//		def_algo<nevaluate>(m, "nevaluate", true, false, 0);
+		m.def("nevaluate",
+				[](Ex_ptr ex, py::dict d) {
+				std::vector<std::pair<Ex, NTensor>> values;
+				NEvaluator ev(*ex);
+				for(const auto& dv: d) {
+					std::cerr << dv.first << std::endl;
+//					values.push_back(std::make_pair(py::cast<Ex>(dv.first), py::cast<std::vector<double>>(dv.second)));
+					ev.set_variable(py::cast<Ex>(dv.first), py::cast<std::vector<double>>(dv.second));
+					}
+				auto res = ev.evaluate();
+				return res;
+//				nevaluate algo(*get_kernel_from_scope(), *ex, values);
+//				algo.apply
+
+				}
+				);
 		}
 	}

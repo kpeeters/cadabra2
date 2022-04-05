@@ -1,18 +1,27 @@
 #include "nevaluate.hh"
+#include "NEvaluator.hh"
 
 using namespace cadabra;
 
-nevaluate::nevaluate(const Kernel& k, Ex& tr)
-	: Algorithm(k, tr)
+nevaluate::nevaluate(const Kernel& k, Ex& tr, const std::vector<std::pair<Ex, NTensor>>& values_)
+	: Algorithm(k, tr), values(values_)
 	{
 	}
 
 bool nevaluate::can_apply(iterator it)
 	{
-	return false;
+	return true;
 	}
 
 Algorithm::result_t nevaluate::apply(iterator& it)
 	{
-	return result_t::l_no_action;
+	result_t res = result_t::l_no_action;
+
+	NEvaluator evaluator(*it);
+
+	for(const auto& var: values) {
+		evaluator.set_variable(var.first, var.second);
+		}
+
+	return res;
 	}
