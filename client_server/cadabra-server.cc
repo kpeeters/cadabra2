@@ -13,7 +13,7 @@
 std::string getRegKey(const std::string& location, const std::string& name, bool system)
 	{
 	HKEY key;
-	TCHAR value[1024]; 
+	TCHAR value[1024];
 	DWORD bufLen = 1024*sizeof(TCHAR);
 	long ret;
 	ret = RegOpenKeyExA(system?HKEY_LOCAL_MACHINE:HKEY_CURRENT_USER, location.c_str(), 0, KEY_QUERY_VALUE, &key);
@@ -30,7 +30,7 @@ std::string getRegKey(const std::string& location, const std::string& name, bool
 	while( i > 0 && stringValue[i-1] == '\0' ){
 		--i;
 		}
-	return stringValue.substr(0,i); 
+	return stringValue.substr(0,i);
 	}
 
 #endif
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 #endif
 
 #ifdef _WIN32
-	snoop::log("platform") << "windows" << snoop::flush; 
+	snoop::log("platform") << "windows" << snoop::flush;
 
 	// The Anaconda people _really_ do not understand packaging...
 	// We are going to find out the installation path for Anaconda/Miniconda
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 		s = getRegKey(std::string("SOFTWARE\\Python\\PythonCore\\")+PYTHON_VERSION_MAJOR+"."+PYTHON_VERSION_MINOR, "", true);
 		snoop::log("key2") << s << snoop::flush;
 		}
-	
+
 //	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + Glib::get_home_dir()+"/Anaconda3");
 //	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + Glib::get_home_dir()+"/Anaconda3");
 	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + s);
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 #else
 	snoop::log("platform") << "linux/macos" << snoop::flush;
 #endif
-	
+
 	int port=0;
 	bool eod=true;
 	if(argc>1)

@@ -136,7 +136,7 @@ int ci_find_substr( const T& str1, const T& str2, int start_pos )
 	typename T::const_iterator it = std::search( start, str1.end(),
 																str2.begin(), str2.end(), ci_equal<typename T::value_type>() );
 	if ( it != str1.end() ) return it - str1.begin();
-	else return -1; 
+	else return -1;
 	}
 
 std::pair<DTree::iterator, size_t> DocumentThread::find_string(DTree::iterator start_it, size_t start_pos, const std::string& f, bool case_ins) const
@@ -148,7 +148,7 @@ std::pair<DTree::iterator, size_t> DocumentThread::find_string(DTree::iterator s
 		// FIXME: re-enable searching in output cells.
 		if(doc_it->hidden==false && (doc_it->cell_type==DataCell::CellType::python || doc_it->cell_type==DataCell::CellType::latex)) {
 			size_t pos;
-			if(case_ins) 
+			if(case_ins)
 				pos = ci_find_substr(doc_it->textbuf, f, start_pos);
 			else
 				pos = doc_it->textbuf.find(f, start_pos);
@@ -222,12 +222,12 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 					}
 				catch(nlohmann::json::exception& ex) {
 					std::cerr << "Config file " << config_path << " is not JSON; ignoring." << std::endl;
-					data = nlohmann::json::object();					
+					data = nlohmann::json::object();
 					}
 				}
 			else {
 				data = nlohmann::json::object();
-				
+
 				// Backwards compatibility, check to see if cadabra.conf exists
 				// and if so take the is_registered variable from there
 				std::ifstream old_f(std::string(Glib::get_user_config_dir()) + "/cadabra.conf");
@@ -247,7 +247,7 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	catch(std::exception& ex) {
 		data = nlohmann::json::object();
 		}
-	
+
 	font_step          = data.value("font_step", 0);
 	highlight          = data.value("highlight", false);
 	is_registered      = data.value("is_registered", false);
@@ -261,11 +261,11 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 		git_path="/usr/bin/git";
 
 	// Get the colours for syntax highlighting.
-	if(data.count("colours")==0) 
+	if(data.count("colours")==0)
 		data["colours"]={ {"python", nlohmann::json::object() }, {"latex", nlohmann::json::object() } };
 
 	const auto& python_colours = data["colours"]["python"];
-	
+
 	colours["python"]["keyword"]   = python_colours.value("keyword", "RoyalBlue");
 	colours["python"]["operator"]  = python_colours.value("operator", "SlateGray");
 	colours["python"]["brace"]     = python_colours.value("brace", "SlateGray");
