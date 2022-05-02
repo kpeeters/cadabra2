@@ -580,7 +580,15 @@ div#main div.faq_item input[name="collapse"]:checked ~ h3 {
     margin-bottom: 5px !important;
     transition: max-height 0.5s;
 }
-
+div.github-link {
+	 width: 32px;
+	 height: 32px;
+	 margin-left: 10px;
+	 margin-top: 10px;
+}
+div.github-link a img {
+	 width: 100%;
+}
 
 /* Small screens */
 
