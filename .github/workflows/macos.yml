@@ -16,7 +16,7 @@ jobs:
           python-version: 3.7
 
     - name: get dependencies
-      run:  brew install cmake boost pcre gmp python3 pkgconfig gtkmm3 adwaita-icon-theme && /usr/local/bin/python3 -m pip install sympy gmpy2
+      run:  brew install cmake boost pcre gmp python3 pkgconfig gtkmm3 adwaita-icon-theme && /usr/local/bin/python3 -m pip install sympy gmpy2 numpy
 
     - name: configure
       run:  mkdir build && cd build && cmake -DENABLE_MATHEMATICA=OFF ..
