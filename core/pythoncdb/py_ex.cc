@@ -62,26 +62,28 @@ namespace cadabra {
 		if (ex1->size() == 0) return ex2;
 		if (ex2->size() == 0) return ex1;
 
-		bool comma1 = (*ex1->begin()->name == "\\comma");
-		bool comma2 = (*ex2->begin()->name == "\\comma");
+		// Using '+' for list addition is very illogical; it should add
+		// componentwise.
+//		bool comma1 = (*ex1->begin()->name == "\\comma");
+//		bool comma2 = (*ex2->begin()->name == "\\comma");
 
-		if (comma1 || comma2) {
-			if (comma1) {
-				auto ret = std::make_shared<Ex>(*ex1);
-				auto loc = ret->append_child(ret->begin(), top2);
-				if (comma2)
-					ret->flatten_and_erase(loc);
-				return ret;
-				}
-			else {
-				auto ret = std::make_shared<Ex>(top2);
-				auto loc = ret->prepend_child(ret->begin(), ex1->begin());
-				if (comma1)
-					ret->flatten_and_erase(loc);
-				return ret;
-				}
-			}
-		else {
+//		if (comma1 || comma2) {
+//			if (comma1) {
+//				auto ret = std::make_shared<Ex>(*ex1);
+//				auto loc = ret->append_child(ret->begin(), top2);
+//				if (comma2)
+//					ret->flatten_and_erase(loc);
+//				return ret;
+//				}
+//			else {
+//				auto ret = std::make_shared<Ex>(top2);
+//				auto loc = ret->prepend_child(ret->begin(), ex1->begin());
+//				if (comma1)
+//					ret->flatten_and_erase(loc);
+//				return ret;
+//				}
+//			}
+//		else {
 			auto ret = std::make_shared<Ex>(*ex1);
 			if (*ret->begin()->name != "\\sum")
 				ret->wrap(ret->begin(), str_node("\\sum"));
@@ -90,7 +92,7 @@ namespace cadabra {
 			auto it = ret->begin();
 			cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
 			return ret;
-			}
+//			}
 		}
 
 	Ex_ptr Ex_mul(const Ex_ptr ex1, const Ex_ptr ex2)

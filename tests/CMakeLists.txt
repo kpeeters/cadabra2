@@ -56,6 +56,7 @@ endforeach()
 # The main test suite.
 #
 set(RTESTS
+  nevaluate
   index_positions
   forms
   packages

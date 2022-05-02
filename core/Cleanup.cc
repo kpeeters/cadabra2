@@ -46,6 +46,8 @@ namespace cadabra {
 			changed = changed || res;
 			if(*it->name=="\\sum")                           res = cleanup_sumlike(kernel, tr, it);
 			changed = changed || res;
+			if(*it->name=="\\comma")                         res = cleanup_comma(kernel, tr, it);
+			changed = changed || res;
 			if(*it->name=="\\components")                    res = cleanup_components(kernel, tr, it);
 			changed = changed || res;
 
@@ -124,7 +126,7 @@ namespace cadabra {
 			tr.append_child(rhsfrac, div);
 
 			it=tr.flatten_and_erase(it);
-			
+
 			return true;
 			}
 
@@ -413,7 +415,7 @@ namespace cadabra {
 		while(sib!=tr.end(it)) {
 			if(*sib->name=="\\equals") ++equalities;
 			else                       ++nonequalities;
-			if(equalities!=0 && nonequalities!=0) 
+			if(equalities!=0 && nonequalities!=0)
 				throw ConsistencyException("Encountered an equality and a normal term in the same sum; not allowed.");
 			++sib;
 			}
@@ -448,9 +450,9 @@ namespace cadabra {
 #endif
 			Ex::iterator tmp1=lhs, tmp2=rhs;
 			cleanup_sumlike(k, tr, tmp1);
-			cleanup_sumlike(k, tr, tmp2);			
+			cleanup_sumlike(k, tr, tmp2);
 			}
-		
+
 		// Flatten sums which are supposed to be flat.
 		long num=tr.number_of_children(it);
 		if(num==0) {
@@ -855,6 +857,19 @@ namespace cadabra {
 		return false;
 		}
 
+	bool cleanup_comma(const Kernel& k, Ex& tr, Ex::iterator& it)
+		{
+		if(*it->multiplier!=1) {
+			Ex::sibling_iterator sib = tr.begin(it);
+			while(sib!=tr.end(it)) {
+				multiply(sib->multiplier, *it->multiplier);
+				++sib;
+				}
+			one(it->multiplier);
+			return true;
+			}
+		else return false;
+		}
 
 	void cleanup_dispatch_deep(const Kernel& k, Ex& tr, dispatcher_t dispatch)
 		{

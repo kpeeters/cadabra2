@@ -660,3 +660,16 @@ test33()
 # B::Depends(d{#}).
 # ex:= d_{B}{A B C};
 # unwrap(ex)
+
+# {A,B,C,D,E,F}::NonCommuting;
+# ex:= A * (B + C) * D * (E + F);
+# distribute(_);
+
+def test34():        
+    __cdbkernel__=create_scope()  
+    ex:= [1,2,3,4];
+    tst:= -3/2 @(ex);
+    assert(tst==$[-3/2, -3, -9/2, -6]$)
+    print("Test 34 passed")
+
+test34()

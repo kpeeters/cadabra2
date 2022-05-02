@@ -10,7 +10,7 @@
 /// does not involve the property system.
 ///
 /// - All numerical multipliers in a product on the product node, no
-///   multiplier on a sum node.
+///   multiplier on a sum node or on the comma node.
 ///
 /// - Any '\\frac' nodes with a purely numerical denominator should be
 ///   rewritten as a rational multiplier for the numerator node.

@@ -38,27 +38,27 @@ def test01():
 
 test01()
 
-def test02():
-    __cdbkernel__=create_scope()
-    a:= A,B,C;
-    b:= D,E,F;
-    c:= Q;
-    d:= R+S;
-    ex1=a+b
-    ex2=a+c
-    ex3=c+a
-    ex4=a+d
-    tst1:= {A,B,C,D,E,F} - @(ex1);
-    tst2:= {A,B,C,Q} - @(ex2);
-    tst3:= {Q,A,B,C} - @(ex3);
-    tst4:= {A,B,C,R+S} - @(ex4);
-    assert(tst1==0)
-    assert(tst2==0)
-    assert(tst3==0)
-    assert(tst4==0)
-    print("Test 02 passed")
-
-test02()
+# def test02():
+#     __cdbkernel__=create_scope()
+# a:= A,B,C;
+# b:= D,E,F;
+# c:= Q;
+# d:= R+S;
+# ex1=a+b
+# ex2=a+c
+# ex3=c+a
+# ex4=a+d
+# tst1:= {A,B,C,D,E,F};
+# tst2:= {A,B,C,Q};
+# tst3:= {Q,A,B,C};
+# tst4:= {A,B,C,R+S};
+# assert(tst1==ex1)
+# assert(tst2==ex2)
+# assert(tst3==ex3)
+# assert(tst4==ex4)
+#     print("Test 02 passed")
+# 
+# test02()
 
 def test03():
     # zoom should also work to select terms in an integral
