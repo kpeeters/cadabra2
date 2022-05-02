@@ -279,18 +279,13 @@ message(STATUS "Python version is ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR
 set(OLD_PYTHON_SITE_PATH ${CMAKE_INSTALL_FULL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
 
 # The PYTHON_SITE_PATH variable is used throughout for installation purposes.
-# Note that some of the code (e.g. cadabra2-cli.cc) looks up this path based on the
-# location of the binary; make sure to change the search logic there too to keep it
-# compatible with what is done here.
-if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
-   # Debian packages install all their Python things in 'dist-packages', not 'site-packages'.
-   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/dist-packages)
-   set(PYTHON_SITE_DIST "dist-packages")
-else()
-   # For everyone else there is 'site-packages'
-   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
-   set(PYTHON_SITE_DIST "site-packages")   
+if (NOT DEFINED PYTHON_SITE_DIST)
+  set(PYTHON_SITE_DIST "site-packages")
 endif()
+if (NOT DEFINED PYTHON_SITE_PATH)
+  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/${PYTHON_SITE_DIST})
+endif()
+
 message(STATUS "Installing Python module in ${PYTHON_SITE_PATH}")
 # We need to give our Python module an abi-name extension
 # so that it can be installed in a folder which does not
