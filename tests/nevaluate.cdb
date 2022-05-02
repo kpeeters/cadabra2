@@ -1,0 +1,25 @@
+
+# ex:=A + B \cos(x);
+# nevaluate(ex, {$A$: 1, $B$: 3, $x$: np.linspace(0, 10, 10)});
+
+import time
+import matplotlib.pyplot as plt
+import numpy as np
+
+def test01():
+   start = time.time()
+   ex:= \cos(x) \sin(y);
+   xv = np.linspace(0, 3.14, 100);
+   yv = np.linspace(0, 3.14, 100);
+   z = np.array( nevaluate(ex, {$x$: xv, $y$: yv} ) )
+   end = time.time()
+   print("that took", end-start, "seconds")
+   print("Test 01 passed")
+   # XV, YV=np.meshgrid(xv, yv)
+   # plt.figure(figsize=(20, 10))
+   # ax = plt.axes(projection='3d')
+   # ax.plot_surface(XV, YV, z, rstride=1, cstride=1, cmap='terrain', edgecolor=None)                   
+
+test01()
+
+
