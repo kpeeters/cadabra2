@@ -164,7 +164,7 @@ namespace cadabra {
 
 	template <typename PropT, typename... ParentTs>
 	std::shared_ptr<BoundProperty<PropT, ParentTs...>> BoundProperty<PropT, ParentTs...>::get_from_kernel(Ex::iterator it, const std::string& label, bool ignore_parent_rel)
-		
+
 	{
 		int tmp;
 		auto res = get_kernel_from_scope()->properties.get_with_pattern<PropT>(
@@ -204,19 +204,19 @@ namespace cadabra {
 		{
 		return BoundPropertyBase::str_();
 		}
-	
+
 	template <typename PropT, typename... ParentTs>
 	std::string BoundProperty<PropT, ParentTs...>::latex_() const
 		{
 		return BoundPropertyBase::latex_();
 		}
-	
+
 	template <typename PropT, typename... ParentTs>
 	std::string BoundProperty<PropT, ParentTs...>::repr_() const
 		{
 		return BoundPropertyBase::str_();
 		}
-	
+
 	template <typename BoundPropT>
 	typename BoundPropT::py_type def_abstract_prop(pybind11::module& m, const std::string& name)
 	{
@@ -304,9 +304,30 @@ namespace cadabra {
 		return ret;
 		}
 
+	std::vector<Ex> indices_get_all(const Indices* indices, bool include_wildcards)
+	{
+		auto kernel = get_kernel_from_scope();
+		auto its = kernel->properties.pats.equal_range(indices);
+
+		std::vector<Ex> res;
+		for (auto it = its.first; it != its.second; ++it) {
+			if (it->second->obj.begin()->is_autodeclare_wildcard() && !include_wildcards)
+				continue;
+			res.push_back(it->second->obj);
+		}
+
+		return res;
+	}
+
+	Ex indices_get_dummy(const Indices* indices, const Ex_ptr& ex)
+	{
+		IndexClassifier ic(*get_kernel_from_scope());
+		return ic.get_dummy(indices, ex->begin());
+	}
+
 	void init_properties(py::module& m)
 		{
-		
+
 		m.def("properties", &list_properties);
 
 		py::class_<BoundPropertyBase, std::shared_ptr<BoundPropertyBase>>(m, "Property")
@@ -381,6 +402,9 @@ namespace cadabra {
 			.def_property_readonly("explicit_form", [](const Py_ImplicitIndex & p) { return p.get_prop()->explicit_form; });
 		def_prop<Py_ImaginaryI>(m);
 		auto py_indices = def_prop<Py_Indices>(m)
+			.def("get_indices", [](const Py_Indices& p, bool wc) { return indices_get_all(p.get_prop(), wc); },
+				  py::arg("include_wildcards") = false)
+			.def("get_dummy", [](const Py_Indices& p, const Ex_ptr& ex) { return indices_get_dummy(p.get_prop(), ex);})
 			.def_property_readonly("set_name", [](const Py_Indices & p) { return p.get_prop()->set_name; })
 			.def_property_readonly("parent_name", [](const Py_Indices & p) { return p.get_prop()->parent_name; })
 			.def_property_readonly("values", [](const Py_Indices & p) { return p.get_prop()->values; });
