@@ -17,9 +17,14 @@
 #include "properties/Integer.hh"
 #include "properties/SortOrder.hh"
 
-// In order to enable/disable debug output, also flip the swith in 'report' below.
-// #define DEBUG(ln) ln
-#define DEBUG(ln)
+//#define DEBUG 1
+
+
+#ifdef DEBUG
+  #define DEBUGLN(ln) ln
+#else
+  #define DEBUGLN(ln)
+#endif
 
 namespace cadabra {
 
@@ -60,7 +65,7 @@ namespace cadabra {
 				else return -mult;
 				}
 
-			DEBUG( std::cerr << "auto? " << one->is_autodeclare_wildcard() << ", " << two->is_numbered_symbol() << std::endl; );
+			DEBUGLN( std::cerr << "auto? " << one->is_autodeclare_wildcard() << ", " << two->is_numbered_symbol() << std::endl; );
 			if( (one->is_autodeclare_wildcard() && two->is_numbered_symbol()) ||
 			      (two->is_autodeclare_wildcard() && one->is_numbered_symbol()) ) {
 				if( one->name_only() != two->name_only() ) {
@@ -73,7 +78,7 @@ namespace cadabra {
 				else return -mult;
 				}
 
-			DEBUG( std::cerr << "match despite difference: " << *one->name << " and " << *two->name << std::endl; );			
+			DEBUGLN( std::cerr << "match despite difference: " << *one->name << " and " << *two->name << std::endl; );			
 			}
 
 		// Compare parent relations.
@@ -299,7 +304,7 @@ namespace cadabra {
 	Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterator i2,
 	      useprops_t use_props, bool ignore_parent_rel)
 		{
-		DEBUG( std::cerr << "equal_subtree with use_props = " << use_props << std::endl; );
+		DEBUGLN( std::cerr << tab() << "equal_subtree with use_props = " << use_props << std::endl; );
 		++offset;
 
 		Ex::sibling_iterator i1end(i1);
@@ -330,7 +335,7 @@ namespace cadabra {
 				}
 			bool    ip = ignore_parent_rel && (dist==0);
 			match_t mm=compare(i1, i2, first_call, up, ip);
-			//		DEBUG( std::cerr << "COMPARE " << *i1->name << ", " << *i2->name << " = " << static_cast<int>(mm) << std::endl; )
+			//		DEBUGLN( std::cerr << "COMPARE " << *i1->name << ", " << *i2->name << " = " << static_cast<int>(mm) << std::endl; )
 			first_call=false;
 			switch(mm) {
 				case match_t::no_match_indexpos_less:
@@ -402,11 +407,11 @@ namespace cadabra {
 					break;
 				}
 			// Continue walking the tree downwards.
-			DEBUG( std::cerr << "one down" << std::endl; );
+			DEBUGLN( std::cerr << tab() << "one down" << std::endl; );
 			++i1;
 			++i2;
 			}
-		DEBUG( std::cerr << "equal_subtree done" << std::endl; );
+		DEBUGLN( std::cerr << tab() << "equal_subtree done" << std::endl; );
 		
 		return report(worst_mismatch);
 		}
@@ -431,7 +436,9 @@ namespace cadabra {
 
 	Ex_comparator::match_t Ex_comparator::report(Ex_comparator::match_t r) const
 		{
+#ifndef DEBUG		
 		return r;
+#endif
 
 		std::cerr << tab() << "result = ";
 		switch(r) {
@@ -475,7 +482,7 @@ namespace cadabra {
 		// nobrackets also implies 'no multiplier', i.e. 'toplevel'.
 		// 'one' is the substitute pattern, 'two' the expression under consideration.
 
-		DEBUG( std::cerr << tab() << "matching " << Ex(one) << tab() << "to " << Ex(two) << tab() << "using props = " << use_props << ", ignore_parent_rel = " << ignore_parent_rel << std::endl; );
+		DEBUGLN( std::cerr << tab() << "matching " << Ex(one) << tab() << "to " << Ex(two) << tab() << "using props = " << use_props << ", ignore_parent_rel = " << ignore_parent_rel << std::endl; );
 
 		if(nobrackets==false && one->fl.bracket != two->fl.bracket)
 			return report( (one->fl.bracket < two->fl.bracket)?match_t::no_match_less:match_t::no_match_greater );
@@ -501,9 +508,9 @@ namespace cadabra {
 			// Things in _{..} or ^{..} are either indices (implicit patterns) or coordinates.
 			const Coordinate *cdn1=0;
 			if(use_props==useprops_t::always) {
-				DEBUG( std::cerr << tab() << "is " << *one->name << " a coordinate?" << std::endl; );
+				DEBUGLN( std::cerr << tab() << "is " << *one->name << " a coordinate?" << std::endl; );
 				cdn1=properties.get<Coordinate>(one, true);
-				DEBUG( std::cerr << tab() << cdn1 << std::endl; );
+				DEBUGLN( std::cerr << tab() << cdn1 << std::endl; );
 				}
 
 			if(cdn1==0)
@@ -532,9 +539,9 @@ namespace cadabra {
 				//std::cerr << "**** can one take value two " << use_props  << std::endl;
 				const Integer *ip = 0;
 				if(use_props==useprops_t::always) {
-					DEBUG( std::cerr << tab() << "is " << *one->name << " an integer?" << std::endl; );
+					DEBUGLN( std::cerr << tab() << "is " << *one->name << " an integer?" << std::endl; );
 					ip = properties.get<Integer>(one, true); // 'true' to ignore parent rel.
-					DEBUG( std::cerr << tab() << ip << std::endl; );
+					DEBUGLN( std::cerr << tab() << ip << std::endl; );
 					}
 
 				if(ip==0) return report(match_t::no_match_less);
@@ -575,7 +582,7 @@ namespace cadabra {
 			// this node is an Accent, because then the child nodes are
 			// very relevant).
 			if(loc == replacement_map.end() && Ex::number_of_children(one)!=0) {
-				DEBUG( std::cerr << tab() << "**** not found, trying without child nodes" << std::endl; );
+				DEBUGLN( std::cerr << tab() << "**** not found, trying without child nodes" << std::endl; );
 				if(properties.get<Accent>(one)==0 ) {
 					Ex tmp1(one);
 					tmp1.erase_children(tmp1.begin());
@@ -599,7 +606,7 @@ namespace cadabra {
 					tmp2.erase_children(tmp2.begin());
 					cmp=subtree_compare(&properties, (*loc).second.begin(), tmp2.begin(), -2);
 					}
-				DEBUG(std::cerr << " pattern " << two
+				DEBUGLN(std::cerr << " pattern " << two
 						<< " should be " << (*loc).second.begin()
 						<< " because that's what " << one
 						<< " was set to previously; result " << cmp << std::endl;  );
@@ -618,18 +625,18 @@ namespace cadabra {
 					return report(match_t::no_match_indexpos_greater);
 				
 				if(one->is_index()) {
-					DEBUG( std::cerr << tab() << "object one is index" << std::endl; );
+					DEBUGLN( std::cerr << tab() << "object one is index" << std::endl; );
 
 					const Indices *t1=0;
 					const Indices *t2=0;
 					if(use_props==useprops_t::always) {
-						DEBUG( std::cerr << tab() << "is " << one << " an index?" << std::endl; );
+						DEBUGLN( std::cerr << tab() << "is " << one << " an index?" << std::endl; );
 						t1=properties.get<Indices>(one, false);
-						DEBUG( std::cerr << tab() << "found for one: " << t1 << std::endl; );
+						DEBUGLN( std::cerr << tab() << "found for one: " << t1 << std::endl; );
 						if(two->is_rational()==false) {
-							DEBUG( std::cerr << tab() << "is " << two << " an index?" << std::endl; );
+							DEBUGLN( std::cerr << tab() << "is " << two << " an index?" << std::endl; );
 							t2=properties.get<Indices>(two, false);
-							DEBUG( std::cerr << tab() << t2 << std::endl; );
+							DEBUGLN( std::cerr << tab() << t2 << std::endl; );
 							// It is still possible that t2 is a Coordinate and
 							// t1 an Index which can take the value of the
 							// coordinate. This happens when 'm' is an index
@@ -652,7 +659,7 @@ namespace cadabra {
 							}
 							else {
 								t2=t1; // We already know 'one' can take the value 'two', so in a sense t2 is in the same set as t1.
-								DEBUG( std::cerr << tab() << two << " is rational" << std::endl; );
+								DEBUGLN( std::cerr << tab() << two << " is rational" << std::endl; );
 								}
 						}
 
@@ -666,7 +673,7 @@ namespace cadabra {
 					if(!ignore_parent_rel)
 						if(t1==0 || t2==0 || (t1->position_type!=Indices::free && t2->position_type!=Indices::free))
 							if(one->fl.parent_rel != two->fl.parent_rel) {
-								DEBUG( std::cerr << tab() << "parent_rels not the same" << std::endl;);
+								DEBUGLN( std::cerr << tab() << "parent_rels not the same" << std::endl;);
 								return report( (one->fl.parent_rel < two->fl.parent_rel)
 								               ?match_t::no_match_indexpos_less:match_t::no_match_indexpos_greater );
 								}
@@ -701,7 +708,7 @@ namespace cadabra {
 				// if we want that a found _{z} also leads to a replacement for ^{z},
 				// this needs to be added to the replacement map explicitly.
 
-					DEBUG( std::cerr << "adding " << one << " -> " << two << " to replacement map " << std::endl; );
+					DEBUGLN( std::cerr << "adding " << one << " -> " << two << " to replacement map " << std::endl; );
 				replacement_map[one]=two;
 
 				// if this is an index, also store the pattern with the parent_rel flipped
@@ -739,7 +746,7 @@ namespace cadabra {
 					replacement_map[tmp1]=tmp2;
 					}
 
-				DEBUG( std::cerr << "Replacement map is now:" << std::endl; 
+				DEBUGLN( std::cerr << "Replacement map is now:" << std::endl; 
 						 for(auto& rule: replacement_map)
 							 std::cerr << "* " << rule.first << " -> " << rule.second << std::endl;
 						 );
@@ -775,9 +782,9 @@ namespace cadabra {
 		else if(is_coordinate || is_number) {   // Check if the coordinate can come from an index.
 			const Indices *t2=0;
 			if(use_props==useprops_t::always) {
-				DEBUG( std::cerr << tab() << "is " << *two->name << " an index?" << std::endl; );
+				DEBUGLN( std::cerr << tab() << "is " << *two->name << " an index?" << std::endl; );
 				t2=properties.get<Indices>(two, true);
-				DEBUG( std::cerr << tab() << t2 << std::endl; );
+				DEBUGLN( std::cerr << tab() << t2 << std::endl; );
 				}
 
 			if(value_matches_index && t2) {
@@ -788,7 +795,7 @@ namespace cadabra {
 				if(!ignore_parent_rel)
 					if(t2->position_type==Indices::fixed || t2->position_type==Indices::independent) {
 						if( one->fl.parent_rel != two->fl.parent_rel ) {
-							DEBUG( std::cerr << tab() << "parent_rels not the same" << std::endl;);
+							DEBUGLN( std::cerr << tab() << "parent_rels not the same" << std::endl;);
 							return report( (one->fl.parent_rel < two->fl.parent_rel)
 							               ?match_t::no_match_indexpos_less:match_t::no_match_indexpos_greater );
 							}
@@ -927,7 +934,7 @@ namespace cadabra {
 
 					int sign=1;
 					if(factor_locations.size()>0) {
-						DEBUG(std::cerr << "--- can move?     ---" << std::endl; );
+						DEBUGLN(std::cerr << "--- can move?     ---" << std::endl; );
 						// Determining the sign is non-trivial to do step-by step.
 						// Consider an expression
 						//   A B C D E
@@ -938,7 +945,7 @@ namespace cadabra {
 						// no sign.
 						Ex_comparator comparator(properties);
 						sign=comparator.can_move_adjacent(st, factor_locations, start);
-						DEBUG(std::cerr << "--- done can move ---" << sign << std::endl; );
+						DEBUGLN(std::cerr << "--- done can move ---" << sign << std::endl; );
 						}
 					if(sign==0) { // object found, but we cannot move it in the right order
 						replacement_map=backup_replacements;
@@ -1278,13 +1285,21 @@ namespace cadabra {
 		const SortOrder *so2=properties.get<SortOrder>(two,num2);
 
 		if(so1==0 || so2==0 || so1!=so2) {
-			// std::cerr << "No sort order between " << Ex(one) << " and " << Ex(two);
+			DEBUGLN( std::cerr << "No sort order between " << Ex(one) << " and " << Ex(two); );
 			report(subtree_comparison);
-			// std::cerr <<  std::endl;
-			// No explicit sort order known; use alpha sort.
-			if(subtree_comparison==match_t::subtree_match)    return false;
-			if(subtree_comparison==match_t::no_match_less)    return false;
-			if(subtree_comparison==match_t::no_match_greater) return true;
+			// No explicit sort order known; use whatever we know from the comparison.
+			switch(subtree_comparison) {
+				case match_t::node_match:
+				case match_t::subtree_match:
+				case match_t::no_match_less:
+				case match_t::no_match_indexpos_less:
+				case match_t::match_index_less:
+					return false;
+				case match_t::no_match_greater:
+				case match_t::no_match_indexpos_greater:
+				case match_t::match_index_greater:					
+					return true;
+				}
 			return false;
 			}
 

@@ -852,4 +852,14 @@ def test57():
    print("Test 57 passed")
 
 test57()
-       
+
+def test58():
+   # https://cadabra.science/qa/2291/sort_product-with-position-independent-identical-variables      
+   {a,b,c,d,e,f,g}::Indices(vector,position=independent).
+   ex := x_{a} x^{b} - x^{b} x_{a};
+   sort_product(_);
+   assert(ex==0)
+   print("Test 58 passed")
+      
+test58()
+      
