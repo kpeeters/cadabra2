@@ -7,6 +7,14 @@ directory. This web site is built using 'Clay', available from
 
    http://lucuma.github.io/Clay/
 
+and installable with
+
+   pip install clay
+
+You also need
+
+   sudo apt install doxygen
+
 Clay builds the static site from the template files in
 cadabra2/source. To do this, 
 

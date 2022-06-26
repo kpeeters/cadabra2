@@ -1,0 +1,34 @@
+---
+# Shell-style patterns files/folders that must not be copied.
+# Use quotes.
+exclude:
+  - ".DS_Store"
+  - "build/*"
+  - "webassets-cache/*"
+  - ".webassets-cache"
+  - "layout.html"
+  - "*.nb.html"
+  - "README.txt"
+  - "static/*"
+  - "notebooks/README*"
+  - "notebooks/.gitignore"
+  - "notebooks/*~"
+  - "notebooks/*.cnb"
+  - "notebooks/*segment.html"
+  - "*~"
+
+# Shell-style patterns files/folders that *must be* copied, even if
+# they are in the exclude list.
+# Use quotes.
+#include:
+#  - "robots.txt"
+#    - "humans.txt"
+
+# Jinja extensions to use
+jinja_extensions:
+
+# Shell-style patterns of files outside `static/` that must be copied
+# as-is instead of trying to interpret them as Jinja templates.
+# Use quotes.
+#binaries:
+#  - "favicon.ico"
