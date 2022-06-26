@@ -1,0 +1,64 @@
+{
+	"cell_id": 1142308909871904320,
+	"cells": [
+		{
+			"cell_id": 17497369068236213474,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 2932484825110357390,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Using Cadabra directly from C++}\n\nIt is possible to use the functionality of Cadabra directly from C++ code,\nwithout dealing with the Python layer on top of it, and without using the\nnotebook interface. The library is called \\verb|cadabra2++| and building \nand installation instructions are provided in the project's \\verb|README|.\nHere we describe how to use this library."
+				}
+			],
+			"hidden": true,
+			"source": "\\section*{Using Cadabra directly from C++}\n\nIt is possible to use the functionality of Cadabra directly from C++ code,\nwithout dealing with the Python layer on top of it, and without using the\nnotebook interface. The library is called \\verb|cadabra2++| and building \nand installation instructions are provided in the project's \\verb|README|.\nHere we describe how to use this library."
+		},
+		{
+			"cell_id": 1136201673028859752,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 1610651877957794132,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Simple example}\n\nBasic use of the Cadabra C++ library consists of five parts: creating a kernel,\ninserting object properties into the kernel, defining expressions, acting with\nalgorithms on those expressions, and displaying the result. A minimal example \nis as follows:"
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{Simple example}\n\nBasic use of the Cadabra C++ library consists of five parts: creating a kernel,\ninserting object properties into the kernel, defining expressions, acting with\nalgorithms on those expressions, and displaying the result. A minimal example \nis as follows:"
+		},
+		{
+			"cell_id": 13937482186812407628,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "#include \"cadabra2++.hh\"\n#include <iostream>\n\nusing namespace cadabra;\nusing namespace cadabra::cpplib;\n\nint main() {\n   Kernel k(true);\n   inject_property<AntiCommuting>(k, \"{A,B}\");\n   auto ex = \"A B - B A\"_ex(k);\n   sort_product sp(k, *ex);\n   sp.apply_generic();\n   collect_terms(k, *ex);\n   sp.apply_generic();\n   std::cout << pprint(k, ex) << std::endl;   \n}"
+		},
+		{
+			"cell_id": 2190494406404461834,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 5966978324235453015,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The output of this program is \\verb|2 A B|.\n\nMost of the above should be fairly easy to understand for anyone who has worked with the\nPython interface to Cadabra before. Note how properties are attached to objects using\nthe \\verb|inject_property| function call. This takes the kernel as argument, as well\nas a textual expression of what you would use in the Python interface.\n\nAlgorithms are C++ objects, which you need to instantiate, and then run explicitly\nby calling the \\verb|apply_generic| function. As in the Python version, algorithms act \nin-place (mostly), and the \\verb|ex| expression above thus changes as the code\nprogresses. \n\nFinally, the expression is printed by using the `pprint` function. This is necessary\nbecause printing requires information stored in the Cadabra kernel."
+				}
+			],
+			"hidden": true,
+			"source": "The output of this program is \\verb|2 A B|.\n\nMost of the above should be fairly easy to understand for anyone who has worked with the\nPython interface to Cadabra before. Note how properties are attached to objects using\nthe \\verb|inject_property| function call. This takes the kernel as argument, as well\nas a textual expression of what you would use in the Python interface.\n\nAlgorithms are C++ objects, which you need to instantiate, and then run explicitly\nby calling the \\verb|apply_generic| function. As in the Python version, algorithms act \nin-place (mostly), and the \\verb|ex| expression above thus changes as the code\nprogresses. \n\nFinally, the expression is printed by using the `pprint` function. This is necessary\nbecause printing requires information stored in the Cadabra kernel."
+		},
+		{
+			"cell_id": 4292845191419390817,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}
