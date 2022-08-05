@@ -283,3 +283,11 @@ def test13():
     print("Test 13 passed")
 
 test13()
+
+def test14():
+    __cdbkernel__ = create_scope()
+    ex:={A,B} ~ {C,D};
+    assert(ex==${A,B,C,D}$)
+    print("Test 14 passed")
+
+test14()

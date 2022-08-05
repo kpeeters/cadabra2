@@ -48,6 +48,8 @@ namespace cadabra {
 			changed = changed || res;
 			if(*it->name=="\\comma")                         res = cleanup_comma(kernel, tr, it);
 			changed = changed || res;
+			if(*it->name=="\\tie")                           res = cleanup_tie(kernel, tr, it);
+			changed = changed || res;
 			if(*it->name=="\\components")                    res = cleanup_components(kernel, tr, it);
 			changed = changed || res;
 
@@ -869,6 +871,29 @@ namespace cadabra {
 			return true;
 			}
 		else return false;
+		}
+
+	bool cleanup_tie(const Kernel& k, Ex& tr, Ex::iterator& it)
+		{
+		// Are all siblings lists?
+		Ex::sibling_iterator sib = tr.begin(it);
+		while(sib!=tr.end(it)) {
+			if(*sib->name!="\\comma")
+				return false;
+			++sib;
+			}
+		
+		// All siblings are lists. Join them together into one
+		// long list.
+		it->name = name_set.insert("\\comma").first;
+		sib=tr.begin(it);
+		while(sib!=tr.end(it)) {
+			auto nxt = sib;
+			++nxt;
+			tr.flatten_and_erase(sib);
+			sib=nxt;
+			}
+		return true;
 		}
 
 	void cleanup_dispatch_deep(const Kernel& k, Ex& tr, dispatcher_t dispatch)
