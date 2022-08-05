@@ -288,6 +288,28 @@ def test14():
     __cdbkernel__ = create_scope()
     ex:={A,B} ~ {C,D};
     assert(ex==${A,B,C,D}$)
-    print("Test 14 passed")
+    print("Test 14a passed")
+    ex1:= {A,B};
+    ex2:= {C,D};
+    ex3 = join(ex1, ex2)
+    assert(ex3==${A,B,C,D}$)
+    print("Test 14b passed")
+    ex1:= A;
+    ex2:= {C,D};
+    ex3 = join(ex1, ex2)
+    assert(ex3==${A,C,D}$)
+    print("Test 14c passed")
+    ex1:= {A,B};
+    ex2:= C;
+    ex3 = join(ex1, ex2)
+    assert(ex3==${A,B,C}$)
+    print("Test 14d passed")
+    ex1:= A;
+    ex2:= C;
+    ex3 = join(ex1, ex2)
+    assert(ex3==${A,C}$)
+    print("Test 14e passed")
 
 test14()
+
+     
