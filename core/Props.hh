@@ -33,6 +33,7 @@ namespace cadabra {
 	class Properties;
 	class Kernel;
 	class Accent;
+	class LaTeXForm;
 	class Ex_comparator;
 	
 	class pattern {
@@ -375,7 +376,8 @@ namespace cadabra {
 		// tree, because it would lead to an endless recursion (and it would
 		// not make sense anyway). At the moment, this is only for Accent.
 		bool ignore_properties=false;
-		if(std::is_same<T, Accent>::value) ignore_properties=true;
+		if(std::is_same<T, Accent>::value)
+			ignore_properties=true;
 		
 		for(;;) {
 			property_map_t::const_iterator walk=pit.first;
@@ -410,6 +412,11 @@ namespace cadabra {
 			else break;
 			}
 
+		// Do not walk down the tree if the property cannot be passed up the tree.
+		// FIXME: see issue/259.
+		if(std::is_same<T, LaTeXForm>::value)
+			inherits=false;
+		
 		// If no property was found, figure out whether a property is inherited from a child node.
 		if(!ret.first && inherits) {
 			//		std::cout << "no match but perhaps inheritance?" << std::endl;

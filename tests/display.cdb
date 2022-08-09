@@ -1,5 +1,6 @@
 
 def test01():
+    __cdbkernel__ = create_scope()
     ex:= 3 A_{m n} B^{m n} + q(x) r s;
     tst=Ex(repr(ex))
     assert(tst==ex)
@@ -7,4 +8,14 @@ def test01():
 
 test01()
 
+def test02():
+    __cdbkernel__ = create_scope()
+    \psia::LaTeXForm("\psi_{a}").
+    \bar{#}::DiracBar.
+    ex:= \bar{\psia};
+    print(ex._latex_())
+    assert(ex._latex_()==r"\bar{\psi_{a}}")
+    print("Test 02 passed")
 
+test02()
+        
