@@ -169,10 +169,22 @@ def test14():
     \delta{#}::Accent.
     \Vt{#}::LaTeXForm("{\tilde{V}}").
     ex:=\int{\Vt_{\mu}\Vt^{\mu}}{x};
-    vary(_,$\Vt_{\mu}->\delta{\Vt_{\mu}}$);
+    vary(_,$\Vt_{\mu}->\delta{\Vt_{\mu}}$)
     tst:= \int{\delta{\Vt_{\mu}} \Vt^{\mu} + \Vt_{\mu} \delta{\Vt^{\mu}}}{x} - @(ex);
-    display(tst)
     assert(tst==0)
     print("Test 14 passed")
 
 test14()
+
+def test15():        
+    __cdbkernel__=create_scope()
+    ex:=A;
+    vary(_, $A -> a$)
+    assert(ex==$a$)
+    print("Test 15a passed")        
+    ex:=0;        
+    vary(_, $A -> a$)
+    assert(ex==0)
+    print("Test 15b passed")
+
+test15()

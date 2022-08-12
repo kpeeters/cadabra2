@@ -18,6 +18,8 @@ vary::vary(const Kernel& k, Ex& tr, Ex& args_)
 
 bool vary::can_apply(iterator it)
 	{
+	if(it->is_zero()) return false;
+	
 	if(*it->name=="\\prod") return true;
 	if(*it->name=="\\commutator") return true;
 	if(*it->name=="\\anticommutator") return true;
