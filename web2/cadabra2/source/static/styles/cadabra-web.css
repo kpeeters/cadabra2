@@ -193,7 +193,16 @@ div#main h1 span.date {
 	 font-weight: normal;
 }
 
+#cloud {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+#cloud div {
+    margin-left: 20px;
+}
 .running_image {
+    margin-left: 40px;
 	 height: 40px;
 	 width: 40px;
 }
