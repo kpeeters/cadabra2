@@ -453,9 +453,8 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 
 #ifdef __CYGWIN__
 	// MikTeX does not see /tmp, it needs \cygwin\tmp
-	// FIXME: change this to use stdc++ regex, not pcrecpp.
 	nf="\\cygwin"+nf;
-	pcrecpp::RE("/").GlobalReplace("\\\\", &nf);
+	nf.replace(nf.begin(), nf.end(), '/', '\\');
 #endif
 
 	// Run LaTeX on the .tex file.

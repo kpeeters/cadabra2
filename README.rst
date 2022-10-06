@@ -119,7 +119,7 @@ any issues. You can use either g++ or the clang++ compiler.
 Install the dependencies with::
 
     sudo dnf install git python3-devel make cmake gcc-c++ \
-         pcre-devel gmp-devel libuuid-devel sqlite-devel \
+         gmp-devel libuuid-devel sqlite-devel \
          gtkmm30-devel boost-devel \
          texlive python3-matplotlib \
          python3-pip
@@ -205,7 +205,7 @@ changes for 'Tumbleweed') you first need to install the dependencies
 with::
 
     sudo zypper install --no-recommends git cmake python3-devel gcc-c++ \
-                  pcre-devel gmp-devel libuuid-devel sqlite-devel \
+                  gmp-devel libuuid-devel sqlite-devel \
                   gtkmm3-devel  \
                   texlive python3-matplotlib \
                   python3-sympy \
@@ -334,7 +334,7 @@ Cadabra builds with the standard Apple compiler, on both Intel and
 Apple silicon, but you do need a number of packages from Homebrew (see
 https://brew.sh). Install the required dependencies with::
 
-    brew install cmake boost pcre gmp python3 
+    brew install cmake boost gmp python3 
     brew install pkgconfig 
     brew install gtkmm3 adwaita-icon-theme
     pip3 install sympy gmpy2

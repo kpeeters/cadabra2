@@ -1,5 +1,5 @@
 if(WIN32)
-  windows_find_library(GLIBMM3_LIBRARIES REQUIRED glibmm sigc glib pcre gobject)
+  windows_find_library(GLIBMM3_LIBRARIES REQUIRED glibmm sigc glib gobject)
   if (GLIBMM3_LIBRARIES)
     set(GLIBMM3_FOUND TRUE)
   endif()

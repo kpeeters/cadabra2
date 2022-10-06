@@ -46,7 +46,6 @@ requirements:
     - boost-cpp
     - libuuid
     - sqlite
-    - pcre
     - gtkmm-3.0
     - glibmm
     - cairomm-1.0

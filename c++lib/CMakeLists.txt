@@ -97,9 +97,6 @@ else()
   message(STATUS "Found gmpxx ${GMPXX_LIB}")
 endif()
 
-# Locate pcre
-find_package(PCRE REQUIRED)
-
 
 #---------------------------------------------------------------------------
 # Enumerate source files.
@@ -320,10 +317,10 @@ target_include_directories(cadabra2++objects PUBLIC "${LIB_INCLUDE_DIRS}")
 add_library(cadabra2++         SHARED $<TARGET_OBJECTS:cadabra2++objects>)
 set_target_properties(cadabra2++        PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
 
-target_link_libraries(cadabra2++        ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB})
+target_link_libraries(cadabra2++        ${GMPXX_LIB} ${GMP_LIB})
 
 add_library(cadabra2++_static  STATIC $<TARGET_OBJECTS:cadabra2++objects>)
-target_link_libraries(cadabra2++_static ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB})
+target_link_libraries(cadabra2++_static ${GMPXX_LIB} ${GMP_LIB})
 
 # Trivial example
 add_executable(trivial trivial.cc)

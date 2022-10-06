@@ -25,7 +25,6 @@ You should have received a copy of the GNU General Public License
 #include <sstream>
 #include <locale>
 #include <codecvt>
-#include <pcrecpp.h>
 
 #include <boost/functional/hash.hpp>
 
