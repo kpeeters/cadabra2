@@ -122,6 +122,24 @@ void Indices::validate(const Kernel& k, const Ex& ex) const
 
 void Indices::collect_index_values(Ex::iterator ind_values)
 	{
+	if(*ind_values->name=="\\sequence") {
+		// We have been given a sequence, not a list.
+		// FIXME: guard against errors or large ranges.
+		auto ch = Ex::begin(ind_values);
+		size_t start = to_long(*ch->multiplier);
+		++ch;
+		size_t end   = to_long(*ch->multiplier);
+		if(end<start)
+			throw ArgumentException("Index range must be increasing.");
+		if(end-start > 100)
+			throw ArgumentException("Number of index values larger than 100, probably a typo.");
+			
+		for(size_t i=start; i<=end; ++i) {
+			values.push_back(Ex(i));
+			}
+		return;
+		}
+	
 	Ex tmp;
 	cadabra::do_list(tmp, ind_values, [&](Ex::iterator ind) {
 		values.push_back(Ex(ind));

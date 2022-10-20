@@ -792,6 +792,20 @@ def test38():
         
 test38()
 
+def test39():
+    __cdbkernel__=create_scope()
+    {i,j,k,l}::Indices(vector,fourD,values={0..3},position=fixed);
+    {i,j,k,l}::Integer(0..3);
+    \partial{#}::Derivative;
+    {\kappa,\lambda,\mu,\nu}::Indices(vector, threeD,parent=fourD,values={1..3},position=fixed);
+    {\kappa,\lambda,\mu,\nu}::Integer(1..3);
+    \epsilon^{\lambda \mu \nu }::EpsilonTensor;
+    ex:=\epsilon^{\lambda \mu \nu };
+    evaluate(ex, $$);        
+    assert( ex[3][1][1] == -1 )
+    print("Test 39 passed")
 
+test39()
+        
 print(list(map(lambda x: str(x), server.totals())))
         
