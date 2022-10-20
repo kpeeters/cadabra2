@@ -6,6 +6,8 @@
 
 namespace cadabra {
 
+	/// \ingroup numerical
+	///
 	/// Functionality to numerically evaluate a scalar expression,
 	/// give the values of its building blocks.
 	///

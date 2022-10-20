@@ -3,6 +3,8 @@
 #include "Stopwatch.hh"
 #include <cassert>
 
+using namespace cadabra;
+
 NTensor::NTensor(const std::vector<size_t>& shape_, double val)
 	: shape(shape_)
 	{

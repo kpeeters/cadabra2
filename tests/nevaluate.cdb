@@ -14,6 +14,7 @@ def test01():
    z = np.array( nevaluate(ex, {$x$: xv, $y$: yv} ) )
    end = time.time()
    print("that took", end-start, "seconds")
+   assert( abs( z[10, 20] - 0.563 ) < 0.001)
    print("Test 01 passed")
    # XV, YV=np.meshgrid(xv, yv)
    # plt.figure(figsize=(20, 10))
