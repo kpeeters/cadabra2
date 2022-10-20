@@ -1,173 +1,231 @@
 {
-	"cells" : 
-	[
+	"cell_id": 9222280984339109129,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 137989926080771703,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\property{Indices}{Declare names to be used as indices.}\n\nDeclare index names to be usable for dummy index\npurposes. Typical usage is of the form"
+					"cell_id": 15768001409649294644,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\property{Indices}{Declare names to be used as indices.}\n\nDeclare index names to be usable for dummy index\npurposes. Typical usage is of the form"
 				}
 			],
-			"hidden" : true,
-			"source" : "\\property{Indices}{Declare names to be used as indices.}\n\nDeclare index names to be usable for dummy index\npurposes. Typical usage is of the form"
+			"hidden": true,
+			"source": "\\property{Indices}{Declare names to be used as indices.}\n\nDeclare index names to be usable for dummy index\npurposes. Typical usage is of the form"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 4367690953385802217,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(r, s, t).\\end{dmath*}"
+					"cell_id": 5742890051355659833,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(r, s, t).\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(a, b, c, d).\\end{dmath*}"
+					"cell_id": 12592366620725701587,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(a, b, c, d).\\end{dmath*}"
 				}
 			],
-			"source" : "{r,s,t}::Indices(vector);\n{a,b,c,d}::Indices(spinor);"
+			"source": "{r,s,t}::Indices(vector);\n{a,b,c,d}::Indices(spinor);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 1274492612593201931,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "This indicates the name of the index set (``vector'' resp.~``spinor''\nin the example above). "
+					"cell_id": 16171049713142155210,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "This indicates the name of the index set (``vector'' resp.~``spinor''\nin the example above). "
 				}
 			],
-			"hidden" : true,
-			"source" : "This indicates the name of the index set (``vector'' resp.~``spinor''\nin the example above). "
+			"hidden": true,
+			"source": "This indicates the name of the index set (``vector'' resp.~``spinor''\nin the example above). "
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 4963803958092805750,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Indices can occur as subscripts or superscripts, and you may use this\nto indicate e.g.~covariant and contravariant transformation\nbehaviour. In this case, use the additional\nargument \\verb|position=fixed| to indicate that the position carries\nmeaning. If you do not want cadabra to automatically raise or lower\nindices when canonicalising expressions, or if upper and lower indices\nare not related at all, use \\verb|position=independent|. The default is\n\\verb|position=free|, which means that indices in a pair can be positioned anywhere and\ntheir position carries no meaning. Be aware that this is not what you want if there\nis a metric involved!"
+					"cell_id": 17459461686941818730,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Indices can occur as subscripts or superscripts, and you may use this\nto indicate e.g.~covariant and contravariant transformation\nbehaviour. In this case, use the additional\nargument \\verb|position=fixed| to indicate that the position carries\nmeaning. If you do not want cadabra to automatically raise or lower\nindices when canonicalising expressions, or if upper and lower indices\nare not related at all, use \\verb|position=independent|. The default is\n\\verb|position=free|, which means that indices in a pair can be positioned anywhere and\ntheir position carries no meaning. Be aware that this is not what you want if there\nis a metric involved!"
 				}
 			],
-			"hidden" : true,
-			"source" : "Indices can occur as subscripts or superscripts, and you may use this\nto indicate e.g.~covariant and contravariant transformation\nbehaviour. In this case, use the additional\nargument \\verb|position=fixed| to indicate that the position carries\nmeaning. If you do not want cadabra to automatically raise or lower\nindices when canonicalising expressions, or if upper and lower indices\nare not related at all, use \\verb|position=independent|. The default is\n\\verb|position=free|, which means that indices in a pair can be positioned anywhere and\ntheir position carries no meaning. Be aware that this is not what you want if there\nis a metric involved!"
+			"hidden": true,
+			"source": "Indices can occur as subscripts or superscripts, and you may use this\nto indicate e.g.~covariant and contravariant transformation\nbehaviour. In this case, use the additional\nargument \\verb|position=fixed| to indicate that the position carries\nmeaning. If you do not want cadabra to automatically raise or lower\nindices when canonicalising expressions, or if upper and lower indices\nare not related at all, use \\verb|position=independent|. The default is\n\\verb|position=free|, which means that indices in a pair can be positioned anywhere and\ntheir position carries no meaning. Be aware that this is not what you want if there\nis a metric involved!"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 6027867998309018678,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "When you work with vector spaces which are subspaces of larger spaces,\nit is possible to indicate that a given set of indices take values in\na subset of values of a larger set. An example makes this more\nclear. Suppose we have one set of indices~$A,B,C$ which take values in\na four-dimensional space, and another set of indices~$a,b,c$ which\ntake values in a three-dimensional subspace. This is declared as\n"
+					"cell_id": 16184606127486662925,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "When you work with vector spaces which are subspaces of larger spaces,\nit is possible to indicate that a given set of indices take values in\na subset of values of a larger set. An example makes this more\nclear. Suppose we have one set of indices~$A,B,C$ which take values in\na four-dimensional space, and another set of indices~$a,b,c$ which\ntake values in a three-dimensional subspace. This is declared as\n"
 				}
 			],
-			"hidden" : true,
-			"source" : "When you work with vector spaces which are subspaces of larger spaces,\nit is possible to indicate that a given set of indices take values in\na subset of values of a larger set. An example makes this more\nclear. Suppose we have one set of indices~$A,B,C$ which take values in\na four-dimensional space, and another set of indices~$a,b,c$ which\ntake values in a three-dimensional subspace. This is declared as\n"
+			"hidden": true,
+			"source": "When you work with vector spaces which are subspaces of larger spaces,\nit is possible to indicate that a given set of indices take values in\na subset of values of a larger set. An example makes this more\nclear. Suppose we have one set of indices~$A,B,C$ which take values in\na four-dimensional space, and another set of indices~$a,b,c$ which\ntake values in a three-dimensional subspace. This is declared as\n"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 5043963982261613752,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(A, B, C).\\end{dmath*}"
+					"cell_id": 602473294331448679,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(A, B, C).\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(a, b, c).\\end{dmath*}"
+					"cell_id": 11107199374583441782,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(a, b, c).\\end{dmath*}"
 				}
 			],
-			"source" : "{A,B,C}::Indices(fourD);\n{a,b,c}::Indices(threeD, parent=fourD);"
+			"source": "{A,B,C}::Indices(fourD);\n{a,b,c}::Indices(threeD, parent=fourD);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 13826672473882943998,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "This will allow Cadabra to canonicalise expressions which contain mixed\nindex types, as in"
+					"cell_id": 1910581516288308829,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "This will allow Cadabra to canonicalise expressions which contain mixed\nindex types, as in"
 				}
 			],
-			"hidden" : true,
-			"source" : "This will allow Cadabra to canonicalise expressions which contain mixed\nindex types, as in"
+			"hidden": true,
+			"source": "This will allow Cadabra to canonicalise expressions which contain mixed\nindex types, as in"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 4648209960997019518,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(A, B, C).\\end{dmath*}"
+					"cell_id": 5192862143240553869,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(A, B, C).\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(a, b, c).\\end{dmath*}"
+					"cell_id": 9437564931888262343,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(a, b, c).\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property AntiSymmetric to~}{M}_(q?r?).\\end{dmath*}"
+					"cell_id": 18391389818505151790,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property AntiSymmetric to~}{M}_(q?r?).\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}M_{a A}+M_{A a}\\end{dmath*}"
+					"cell_id": 4413997982094884520,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}M_{a A}+M_{A a}\\end{dmath*}"
 				}
 			],
-			"source" : "{A,B,C}::Indices(fourD);\n{a,b,c}::Indices(name=threeD, parent=fourD);\nM_{q? r?}::AntiSymmetric;\nex:=M_{a A} + M_{A a};"
+			"source": "{A,B,C}::Indices(fourD);\n{a,b,c}::Indices(name=threeD, parent=fourD);\nM_{q? r?}::AntiSymmetric;\nex:=M_{a A} + M_{A a};"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 13109355959044140599,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+					"cell_id": 3752435050457653649,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}0\\end{dmath*}"
 				}
 			],
-			"source" : "canonicalise(_);"
+			"source": "canonicalise(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 1688052651963641722,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Note the way in which the symmetry of the~$M$ tensor was declared here."
+					"cell_id": 2442249317402902113,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Note the way in which the symmetry of the~$M$ tensor was declared here."
 				}
 			],
-			"hidden" : true,
-			"source" : "Note the way in which the symmetry of the~$M$ tensor was declared here."
+			"hidden": true,
+			"source": "Note the way in which the symmetry of the~$M$ tensor was declared here."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 4807718974397691090,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 4718875350833364286,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Index values}\n\nFor various algorithms (e.g. \\algo{evaluate}) it is necessary to specify the values that a particular\nindex can take. The value of an index needs to be either a \\prop{Coordinate} or a \\prop{Symbol}, or \nit can be an integer. The following are all valid:"
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{Index values}\n\nFor various algorithms (e.g. \\algo{evaluate}) it is necessary to specify the values that a particular\nindex can take. The value of an index needs to be either a \\prop{Coordinate} or a \\prop{Symbol}, or \nit can be an integer. The following are all valid:"
+		},
+		{
+			"cell_id": 9717721989471119742,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "{x,y,z}::Coordinate.\n{a,b,c}::Indices(values={x,y,z}).\n{m,n,p}::Indices(values={0,1,2}).\n{q,r,s}::Indices(values={0..3})."
+		},
+		{
+			"cell_id": 5245275082540183677,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 16921403430064941369,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "When the values specified here are integers, an automatic \\prop{Integer} property will\nbe generated that reflects these values. So e.g. the third line above leads to an \nautomatic attachment"
+				}
+			],
+			"hidden": true,
+			"source": "When the values specified here are integers, an automatic \\prop{Integer} property will\nbe generated that reflects these values. So e.g. the fourth line above leads to an \nautomatic attachment"
+		},
+		{
+			"cell_id": 16647378988601399263,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "{m,n,p}::Integer(0..3)."
+		},
+		{
+			"cell_id": 1814948565060202401,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
 }

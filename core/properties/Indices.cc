@@ -75,6 +75,9 @@ bool Indices::parse(Kernel& kernel, std::shared_ptr<Ex> ex, keyval_t& keyvals)
 					is_number=false;
 					break;
 					}
+			// FIXME: the above assumes no gap in the integer range, which is
+			// not always guaranteed, and will then break the Integer property
+			// assignment as the latter can only deal with continuous ranges.
 			if(is_number) {
 				Ex from(values[0]), to(values[values.size()-1]);
 //				std::cerr << "Injecting Integer property" << std::endl;
