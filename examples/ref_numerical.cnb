@@ -210,6 +210,21 @@
 		{
 			"cell_id": 730370848732475554,
 			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 2572738521568116665,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Supported elementary functions}\n\nAt present the \\verb|nevaluate| function supports expressions with the following building blocks:\nmultiplication/division, addition/subtraction, trigonometric functions, hyperbolic trigonometric functions,\nlogarithms, exponential, square root."
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{Supported elementary functions}\n\nAt present the \\verb|nevaluate| function supports expressions with the following building blocks:\nmultiplication/division, addition/subtraction, trigonometric functions, hyperbolic trigonometric functions,\nlogarithms, exponential, square root."
+		},
+		{
+			"cell_id": 11584173555601999890,
+			"cell_origin": "client",
 			"cell_type": "input",
 			"source": ""
 		}

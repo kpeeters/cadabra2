@@ -13,7 +13,7 @@ def test01():
    yv = np.linspace(0, 3.14, 100);
    z = np.array( nevaluate(ex, {$x$: xv, $y$: yv} ) )
    end = time.time()
-   print("that took", end-start, "seconds")
+   # print("that took", end-start, "seconds")
    assert( abs( z[10, 20] - 0.563 ) < 0.001)
    print("Test 01 passed")
    # XV, YV=np.meshgrid(xv, yv)
@@ -24,3 +24,17 @@ def test01():
 test01()
 
 
+
+def test02():
+   res = np.array(nevaluate( $3\cos(x)$, {$x$: [0]}))
+   assert(abs(res[0] - 3.0) < 0.001)
+   print("Test 02a passed")
+   res = np.array(nevaluate( $3\cos(3 x + \pi/4)$, {$x$: [0]}))
+   assert(abs(res[0] - 2.1213) < 0.001)
+   print("Test 02b passed")
+
+test02()
+
+
+
+   

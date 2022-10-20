@@ -41,6 +41,9 @@ namespace cadabra {
 			/// Element-wise multiplication operator. This requires the shapes to match.
 			NTensor& operator*=(const NTensor&);
 
+			/// Element-wise pow operator (self**b, or pow(self,b)). Requires the shapes to match.
+			NTensor& pow(const NTensor&);
+			
 			/// Get the value of the tensor at the indicated component.
 			double  at(const std::vector<size_t>& indices) const;
 

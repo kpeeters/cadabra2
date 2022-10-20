@@ -40,6 +40,11 @@ namespace cadabra {
 		return mul.get_num().get_si();
 		}
 
+	double to_double(multiplier_t mul)
+		{
+		return mul.get_d();
+		}
+
 	std::string to_string(long num)
 		{
 		std::ostringstream str;

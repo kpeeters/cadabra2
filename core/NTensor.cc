@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include "Stopwatch.hh"
 #include <cassert>
+#include <cmath>
 
 using namespace cadabra;
 
@@ -139,25 +140,70 @@ NTensor& NTensor::apply(double (*fun)(double))
 
 NTensor& NTensor::operator+=(const NTensor& other)
 	{
-	for(size_t p=0; p<shape.size(); ++p)
-		if(shape[p]!=other.shape[p])
-			throw std::range_error("NTensor::operator+=: shapes do not match.");
-
-	for(size_t i=0; i<values.size(); ++i)
-		values[i] += other.values[i];
-
+	if(other.shape.size()==1 && other.shape[0]==1) {
+		// Arbitrary size base to the power of a scalar.
+		for(size_t i=0; i<values.size(); ++i)
+			values[i] += other.values[0];
+		}
+	else {
+		if(shape.size() != other.shape.size())
+			throw std::range_error("NTensor::pow: shape lengths do not match.");
+		
+		for(size_t p=0; p<shape.size(); ++p)
+			if(shape[p]!=other.shape[p])
+				throw std::range_error("NTensor::operator+=: shapes do not match.");
+		
+		for(size_t i=0; i<values.size(); ++i)
+			values[i] += other.values[i];
+		}
+	
 	return *this;
 	}
 
 NTensor& NTensor::operator*=(const NTensor& other)
 	{
-	for(size_t p=0; p<shape.size(); ++p)
-		if(shape[p]!=other.shape[p])
-			throw std::range_error("NTensor::operator+=: shapes do not match.");
+	if(other.shape.size()==1 && other.shape[0]==1) {
+		// Arbitrary size base to the power of a scalar.
+		for(size_t i=0; i<values.size(); ++i)
+			values[i] *= other.values[0];
+		}
+	else {
+		if(shape.size() != other.shape.size())
+			throw std::range_error("NTensor::pow: shape lengths do not match.");
+		
+		for(size_t p=0; p<shape.size(); ++p)
+			if(shape[p]!=other.shape[p])
+				throw std::range_error("NTensor::operator+=: shapes do not match.");
+		
+		for(size_t i=0; i<values.size(); ++i)
+			values[i] *= other.values[i];
+		}
 
-	for(size_t i=0; i<values.size(); ++i)
-		values[i] *= other.values[i];
+	return *this;
+	}
 
+NTensor& NTensor::pow(const NTensor& other)
+	{
+	if(other.shape.size()==1 && other.shape[0]==1) {
+		// Arbitrary size base to the power of a scalar.
+		for(size_t i=0; i<values.size(); ++i)
+			values[i] = std::pow(values[i], other.values[0]);
+		}
+	else {
+		if(shape.size() != other.shape.size())
+			throw std::range_error("NTensor::pow: shape lengths do not match.");
+
+		for(size_t p=0; p<shape.size(); ++p)
+			if(shape[p]!=other.shape[p])
+				throw std::range_error("NTensor::pow: shapes do not match; direction "
+											  +std::to_string(p)+": "
+											  +std::to_string(shape[p])+" vs. "
+											  +std::to_string(other.shape[p])+".");
+		
+		for(size_t i=0; i<values.size(); ++i)
+			values[i] = std::pow(values[i], other.values[i]);
+		}
+	
 	return *this;
 	}
 

@@ -41,6 +41,7 @@ namespace cadabra {
 	typedef uintptr_t               hashval_t;
 
 	long        to_long(multiplier_t);
+	double      to_double(multiplier_t);
 	std::string to_string(long);
 
 	extern nset_t name_set;
