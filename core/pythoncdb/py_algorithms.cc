@@ -151,7 +151,7 @@ namespace cadabra {
 				std::vector<std::pair<Ex, NTensor>> values;
 				NEvaluator ev(*ex);
 				for(const auto& dv: d) {
-					std::cerr << dv.first << std::endl;
+					// std::cerr << dv.first << std::endl;
 //					values.push_back(std::make_pair(py::cast<Ex>(dv.first), py::cast<std::vector<double>>(dv.second)));
 					ev.set_variable(py::cast<Ex>(dv.first), py::cast<std::vector<double>>(dv.second));
 					}

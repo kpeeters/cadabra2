@@ -4,6 +4,8 @@
 #include <vector>
 #include <iostream>
 
+/// \ingroup numerical
+///
 /// Class to hold numerical values structured in tensor form, that is,
 /// a multi-dimensional array.
 

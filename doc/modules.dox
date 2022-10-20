@@ -2,38 +2,42 @@
 /// All computer algebra functionality in the form of C++ classes.
 ///
 /// \defgroup cleanup Cleanup
-/// \ingroup core
 /// Functionality to clean up expressions so that they satisfy the requirements
 /// of a consistent expression tree.
+/// \ingroup core
 ///
 /// \defgroup display Expression display
-/// \ingroup core
-/// Classes to handle printing of expressions in various formats. There
-/// are several different requirements for printing, depending on whether
+/// Classes to handle printing of expressions in various formats.
+///
+/// There are several different requirements for printing, depending on whether
 /// output is to the console, the graphical notebook, or to a different
 /// computer algebra system. In the latter case, one typically also needs
 /// to be able to convert the output of that external system back into
 /// Cadabra-parsable format, which is what e.g. the DisplayMMA::import
 /// and DisplaySympy::import member functions do. 
+/// \ingroup core
 ///
 ///
 /// \defgroup compare Expression comparison
-/// \ingroup core
 /// Functions to compare and match expressions stored in Ex objects. 
+///
 /// These can involve wildcards and dummy indices, and matching may depend on 
 /// the properties attached to symbols.
 /// This is an important bit of functionality used widely throughout the Cadabra core.
 /// All substitution and component evaluation logic depends on this module.
+/// \ingroup core
 ///
 /// \defgroup files Notebooks and packages
-/// \ingroup core
+/// Graphical notebook interface and Cadabra packages.
 ///
 /// Functionality to store and manipulate Cadabra notebooks and use them as
 /// packages inside other notebooks or scripts. 
-///
-/// \defgroup pythoncore Python Core
 /// \ingroup core
-/// Python wrapper around the C++ core module, making the entire 
+
+/// \defgroup pythoncore Python Core
+/// Python wrapper around the C++ core module.
+///
+/// This wrapper makes the entire 
 /// functionality of Cadabra accessible from Python. This consists of two
 /// parts. One is core/cadabra2_defaults.py, which is a pure-python file.
 /// It contains the display function to show Cadabra objects to the user
@@ -45,22 +49,33 @@
 /// The Python module has functionality to import Cadabra notebooks using
 /// standard Python import syntax. This functionality is part of the
 /// \ref files module and described there.
-///
-/// \defgroup scalar Scalar algebra
 /// \ingroup core
+
+/// \defgroup scalar Scalar algebra
 /// Functionality to make Cadabra interface with scalar computer
-/// algebra systems such as Sympy or Mathematica. It converts scalar
+/// algebra systems such as Sympy or Mathematica.
+///
+/// It converts scalar
 /// parts of Cadabra expressions ('things without indices') to one of
 /// these systems, runs them through, and then converts back to Cadabra
 /// notation. Currently available are SymPy and Mathematica backends.
-///
-/// \defgroup algorithms Algorithms
 /// \ingroup core
+
+/// \defgroup numerical Numerical evaluation
+/// Functionality to evaluate mathematical expressions numerically.
+/// 
+/// Cadabra's symbolic expressions can be evaluated numerically,
+/// e.g. when you want to plot a function. Cadabra contains its own
+/// fast numerical evaluator and its own numerical tensor types.
+/// \ingroup core
+
+/// \defgroup algorithms Algorithms
 /// Containing all algorithms acting on symbolic expression trees.
+/// \ingroup core
 ///
 /// \defgroup properties Properties
-/// \ingroup core
 /// Containing all properties that can be attached to symbolic expressions.
+/// \ingroup core
 ///
 /// \defgroup clientserver Client-Server 
 ///

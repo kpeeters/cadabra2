@@ -130,7 +130,7 @@ void NEvaluator::find_variable_locations()
 	for(const auto& var: variable_values) {
 		assert(var.values.shape.size()==1);
 		fullshape.push_back(var.values.shape[0]);
-		std::cerr << var.values.shape[0] << ", ";
+		// std::cerr << var.values.shape[0] << ", ";
 		}
 	// std::cerr << std::endl;
 

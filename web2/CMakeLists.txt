@@ -35,6 +35,7 @@ set(TUTORIALS
   input_format
   ref_printing
   ref_patterns
+  ref_numerical
   ref_properties
   ref_indices
   ref_derivatives
@@ -51,6 +52,7 @@ set(BOOK_PARTS
    input_format
    ref_printing
    ref_patterns
+   ref_numerical
    ref_properties
    ref_indices
    ref_derivatives

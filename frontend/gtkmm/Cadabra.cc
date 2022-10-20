@@ -138,6 +138,8 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 	char* contents = nullptr;
 	gsize length = 0;
 	std::string text;
+	bool file_exists=false;
+	
 	try {
 		if(files[0]->load_contents(contents, length)) {
 			if(contents && length) {
@@ -145,10 +147,13 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 				}
 			g_free(contents);
 			}
+		file_exists=true;
 		}
 	catch (const Glib::Error& ex) {
-		std::cerr << ex.what() << std::endl;
-		return;
+		// std::cerr << "Open error: " << ex.what() << std::endl;
+		// File cannot be opened, assume the user wants to create a
+		// new file with this name.
+		file_exists=false;
 		}
 
 	// Tell the window to open the notebook stored in the string.
@@ -156,8 +161,10 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 	auto nw = static_cast<cadabra::NotebookWindow *>(wins[0]);
 	nw->set_name(files[0]->get_path());
 	snoop::log("open") << "command-line" << snoop::flush;
-	nw->load_file(text);
-	Gtk::Application::on_open(files, hint);
+	if(file_exists) {
+		nw->load_file(text);
+		Gtk::Application::on_open(files, hint);
+		}
 	}
 
 bool Cadabra::open_help(const std::string& nm, const std::string& title)
