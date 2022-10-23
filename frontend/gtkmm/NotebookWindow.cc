@@ -824,14 +824,16 @@ bool NotebookWindow::on_key_press_event(GdkEventKey* event)
 	bool is_pagedown   = event->keyval==GDK_KEY_Page_Down;
 	bool is_pageup     = event->keyval==GDK_KEY_Page_Up;
 
-	if(is_ctrl_up) {
+	bool have_current_cell = current_cell != doc.end();
+
+	if(is_ctrl_up && have_current_cell) {
 		std::shared_ptr<ActionBase> actionpos =
 		   std::make_shared<ActionPositionCursor>(current_cell->id(), ActionPositionCursor::Position::previous);
 		queue_action(actionpos);
 		process_todo_queue();
 		return true;
 		}
-	else if(is_ctrl_down) {
+	else if(is_ctrl_down && have_current_cell) {
 		std::shared_ptr<ActionBase> actionpos =
 		   std::make_shared<ActionPositionCursor>(current_cell->id(), ActionPositionCursor::Position::next);
 		queue_action(actionpos);
@@ -912,6 +914,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			case DataCell::CellType::output:
 			case DataCell::CellType::error:
 			case DataCell::CellType::verbatim:
+				// std::cerr << "creating verbatim cell for " << it->textbuf << std::endl;
 			case DataCell::CellType::latex_view: {
 				// FIXME: would be good to share the input and output of TeXView too.
 				// Right now nothing is shared...
