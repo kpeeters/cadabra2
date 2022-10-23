@@ -673,3 +673,17 @@ def test34():
     print("Test 34 passed")
 
 test34()
+
+def test35():
+    __cdbkernel__=create_scope()  
+    ex:= 3 a**b;
+    substitute(ex, $b -> 1$)
+    assert( ex == $3 a$ )
+    print("Test 35a passed")
+    ex:= 3 2**b;
+    substitute(ex, $b -> 1$)
+    assert( ex == $6$ )
+    print("Test 35b passed")
+        
+
+test35()
