@@ -28,12 +28,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 4375163275523079820,
+					"cell_id": 8577196663565344778,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 4752434145921833613,
+							"cell_id": 9543274790289095588,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\cos(x)"
@@ -42,10 +42,10 @@
 					"source": "\\begin{dmath*}{}\\cos{x}\\end{dmath*}"
 				},
 				{
-					"cell_id": 533694469444321412,
+					"cell_id": 8321147478701128360,
 					"cell_origin": "server",
 					"cell_type": "verbatim",
-					"source": "\\begin{verbatim}<cadabra2.NTensor object at 0xffff70c7c2f0>\\end{verbatim}"
+					"source": "\\begin{verbatim}<cadabra2.NTensor object at 0xffffaf7f11b0>\\end{verbatim}"
 				}
 			],
 			"source": "ex := \\cos(x);\nxv  = np.linspace(0, np.pi*2, 100)\nexv = nevaluate(ex, {$x$: xv} );"
