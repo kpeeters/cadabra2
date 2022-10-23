@@ -183,7 +183,8 @@ set(PACKAGES
   cdb/relativity/abstract
   cdb/relativity/schwarzschild
   cdb/numeric/evaluate
-  cdb/numeric/integrate  
+  cdb/numeric/integrate
+  cdb/graphics/plot
   )
 
 # Table of contents

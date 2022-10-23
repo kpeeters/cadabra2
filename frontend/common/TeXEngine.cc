@@ -11,6 +11,7 @@
 #include <sstream>
 #include <internal/unistd.h>
 #include <map>
+#include <regex>
 #include <glibmm/spawn.h>
 #include "process.hpp"
 
@@ -292,17 +293,35 @@ std::shared_ptr<TeXEngine::TeXRequest> TeXEngine::modify(std::shared_ptr<TeXRequ
 
 void TeXEngine::convert_all()
 	{
-	size_t need_generating=0;
-	auto it=requests.begin();
-	while(it!=requests.end()) {
-		if((*it)->needs_generating)
-			++need_generating;
-		++it;
-		}
+	size_t needs_generating=0;
+	for(const auto& req: requests)
+		if(req->needs_generating)
+			++needs_generating;
 
-	if(need_generating!=0 && horizontal_pixels_!=0) {
-		//std::cerr << "cadabra-client: running TeX on " << need_generating << " requests" << std::endl;
-		convert_set(requests);
+	if(needs_generating!=0 && horizontal_pixels_!=0) {
+		std::string error_string="";
+		do {
+			try {
+				// std::cerr << "TeXEngine::convert_all: running TeX on " << needs_generating << " requests" << std::endl;
+				convert_set(requests);
+				needs_generating=0;
+				}
+			catch(TeXException& e) {
+				// std::cerr << "TeXEngine::convert_all: error happened." << std::endl;
+				error_string += e.what();
+				needs_generating=0;
+				for(const auto& req: requests)
+					if(req->needs_generating)
+						++needs_generating;
+				// Run again; the erroneous cell has had its `needs_generating` flag set
+				// to false and its `has_error` set to true, so we can safely feed this
+				// through again.
+				}
+			}
+		while(needs_generating>0);
+
+		if(error_string!="")
+			throw TeXException(error_string);
 		}
 	}
 
@@ -477,10 +496,10 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	std::string latex_stdout, latex_stderr;
 	tpl::Process latex_proc("pdflatex --halt-on-error -interaction=nonstopmode --output-format=dvi "+nf, "",
 	[&](const char *bytes, size_t n) {
-		latex_stdout=std::string(bytes,n);
+		latex_stdout+=std::string(bytes,n);
 		},
 	[&](const char *bytes, size_t n) {
-		latex_stderr=std::string(bytes,n);
+		latex_stderr+=std::string(bytes,n);
 		}
 	                       );
 	auto latex_exit_status=latex_proc.get_exit_status();
@@ -489,9 +508,33 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	setenv("TEXINPUTS", oldtexinputs.c_str(), 1);
 
 	if(err.size()>0) {
+		// std::cerr << "ERROR: " << latex_stderr << std::endl;
+		// std::cerr << "OUTPUT: " << latex_stdout << std::endl;
+		// std::cerr << "FILE: " << nf << std::endl;
+		std::regex  pat(R"(\[([0-9]*)\])");
+		std::smatch sm;
+		int last_error_free_page=0;
+		while(std::regex_search( latex_stdout, sm, pat)) {
+			// std::cerr << "PAGE: " << sm.str() << std::endl;
+			last_error_free_page = std::stoi( sm[1].str() );
+			latex_stdout = sm.suffix();
+			}
+		// std::cerr << "PAGE WITH ERROR: " << last_error_free_page+1 << std::endl;
+		// Label the error request so it can be ignored next time.
 		reqit=reqs.begin();
-		while(reqit!=reqs.end())
-			(*reqit++)->needs_generating=false;
+		int current_page=1;
+		while(reqit!=reqs.end()) {
+			if((*reqit)->needs_generating) {
+				if(current_page == last_error_free_page+1) {
+					// std::cerr << "CONTAINS ERROR: " << (*reqit)->latex_string << std::endl;
+					(*reqit)->has_error=true;
+					(*reqit)->needs_generating=false;
+					}
+				++current_page;
+				(*reqit)->image_.clear();
+				}
+			++reqit;
+			}
 		erase_file(tmppath+".dvi");
 		if(chdir(olddir)==-1)
 			throw TeXException(err+" (and cannot chdir back to original "+olddir+").");
@@ -535,7 +578,6 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 				pngname << tmppath << pagenum << ".png";
 				erase_file(pngname.str());
 				(*reqit)->image_.clear();
-				(*reqit)->needs_generating=true;
 				++pagenum;
 				}
 			++reqit;

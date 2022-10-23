@@ -24,6 +24,7 @@ set(PACKAGES
   core/trace
   numeric/integrate
   numeric/evaluate
+  graphics/plot
   utils/node
   utils/indices
   utils/develop

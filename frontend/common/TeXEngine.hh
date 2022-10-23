@@ -40,6 +40,7 @@ namespace cadabra {
 					std::string                latex_string;
 					std::string                start_wrap, end_wrap;
 					bool                       needs_generating;
+					bool                       has_error; // currently set, but never re-set, and unused.
 					std::vector<unsigned char> image_;
 					unsigned                   width_, height_;
 				};

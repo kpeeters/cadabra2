@@ -748,6 +748,7 @@ void NotebookWindow::tex_run_async()
 								 std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
 								 tex_error_string=ex.what();
 								 tex_running=false;
+								 dispatch_refresh.emit();
 								 dispatch_tex_error.emit();
 								 }
 						 };
