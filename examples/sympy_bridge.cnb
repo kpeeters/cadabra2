@@ -1,0 +1,55 @@
+{
+	"cell_id": 17451107616265182499,
+	"cells": [
+		{
+			"cell_id": 13606667274613717328,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "from cdb.sympy.calculus import diff as D"
+		},
+		{
+			"cell_id": 8968997047017838072,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3283560223550061435,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11846820707357212391,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{a}(r) r"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{a}\\left(r\\right) r\\end{dmath*}"
+				},
+				{
+					"cell_id": 11895472410413471989,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9645811331927675225,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "r \\partial_{r}(A_{a}(r)) + A_{a}(r)"
+						}
+					],
+					"source": "\\begin{dmath*}{}r \\partial_{r}\\left(A_{a}\\left(r\\right)\\right)+A_{a}\\left(r\\right)\\end{dmath*}"
+				}
+			],
+			"source": "ex := A_{a}(r) r;\nD( ex, $r$ );"
+		},
+		{
+			"cell_id": 15489099887050608433,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}
