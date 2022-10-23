@@ -620,7 +620,7 @@ void NotebookWindow::refresh_after_tex_engine_run()
 void NotebookWindow::handle_thread_tex_error()
 	{
 	on_tex_error(tex_error_string, doc.end());
-	std::cerr << "clicked away" << std::endl;
+	// std::cerr << "clicked away" << std::endl;
 	tex_error_string="";
 	}
 
