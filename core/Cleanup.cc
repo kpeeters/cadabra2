@@ -142,6 +142,13 @@ namespace cadabra {
 		++exp;
 		if(exp==tr.end(it)) return false;
 
+		// (anything)^1 = anything
+		if(exp->is_integer() && *exp->multiplier==1) {
+			tr.erase(exp);
+			it = tr.flatten_and_erase(it);
+			return true;
+			}
+		
 		if(*arg->name=="1") {
 			if(*arg->multiplier==0) { // 0**anything = 0
 				zero(it->multiplier);
