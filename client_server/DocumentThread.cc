@@ -110,7 +110,7 @@ void DocumentThread::build_visual_representation()
 
 	DTree::iterator doc_it=doc.begin();
 	while(doc_it!=doc.end()) {
-		//		std::cout << doc_it->textbuf << std::endl;
+		// std::cout << "ADDING:" << doc_it->textbuf << std::endl;
 		gui->add_cell(doc, doc_it, false);
 		++doc_it;
 		}

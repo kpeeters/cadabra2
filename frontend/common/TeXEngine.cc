@@ -294,9 +294,10 @@ std::shared_ptr<TeXEngine::TeXRequest> TeXEngine::modify(std::shared_ptr<TeXRequ
 void TeXEngine::convert_all()
 	{
 	size_t needs_generating=0;
-	for(const auto& req: requests)
+	for(const auto& req: requests) {
 		if(req->needs_generating)
 			++needs_generating;
+		}
 
 	if(needs_generating!=0 && horizontal_pixels_!=0) {
 		std::string error_string="";
