@@ -30,6 +30,7 @@ set(PACKAGES
   utils/develop
   utils/tableau
   sympy/solvers
+  sympy/calculus
   gauge_theory/instantons
   relativity/abstract
   relativity/schwarzschild

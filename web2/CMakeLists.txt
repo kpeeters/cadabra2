@@ -180,6 +180,7 @@ set(PACKAGES
   cdb/utils/node  
   cdb/utils/types    
   cdb/sympy/solvers
+  cdb/sympy/calculus
   cdb/relativity/abstract
   cdb/relativity/schwarzschild
   cdb/numeric/evaluate

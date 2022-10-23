@@ -1,0 +1,71 @@
+{
+	"cell_id": 6806321452497212969,
+	"cells": [
+		{
+			"cell_id": 1025456808033925757,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 5114489047998022221,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\package{cdb.sympy.calculus}{Glue to use SymPy calculus functionality on Cadabra expressions.}\n\nA lot of functionality in SymPy can be used on Cadabra expressions, but in order to correctly\nconvert from and to the SymPy expression form, we need a bridge. This package contains such\nbridging fuctions, which will ensure that e.g. tensor indices are handled correctly when\nfed through SymPy's scalar algebra algorithms.\n\n\\algorithm{diff}{Differentiate an expression with respect to a variable.}"
+				}
+			],
+			"hidden": true,
+			"source": "\\package{cdb.sympy.calculus}{Glue to use SymPy calculus functionality on Cadabra expressions.}\n\nA lot of functionality in SymPy can be used on Cadabra expressions, but in order to correctly\nconvert from and to the SymPy expression form, we need a bridge. This package contains such\nbridging fuctions, which will ensure that e.g. tensor indices are handled correctly when\nfed through SymPy's scalar algebra algorithms.\n\n\\algorithm{diff}{Differentiate an expression with respect to a variable.}"
+		},
+		{
+			"cell_id": 3804610120254550473,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def diff(ex1, ex2):\n   ret = $@(ex1)$\n   sb = SympyBridge(ret)\n   sb.from_sympy( str(sympy.diff( sb.to_sympy(), ex2 ) ) )\n   return ret"
+		},
+		{
+			"cell_id": 1389897799554975903,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 12523925591190418952,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1379197150120835065,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\sin(x) A_{\\mu}(x)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\sin{x} A_{\\mu}\\left(x\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 7634624450130909684,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1252059972554683227,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{\\mu}(x) \\cos(x) + \\sin(x) \\partial_{x}(A_{\\mu}(x))"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{\\mu}\\left(x\\right) \\cos{x}+\\sin{x} \\partial_{x}\\left(A_{\\mu}\\left(x\\right)\\right)\\end{dmath*}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "ex:=\\sin(x) A_{\\mu}(x);\ndiff(ex, $x$);"
+		},
+		{
+			"cell_id": 15467993639628642890,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}
