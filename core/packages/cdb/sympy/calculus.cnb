@@ -7,20 +7,35 @@
 			"cell_type": "latex",
 			"cells": [
 				{
-					"cell_id": 5114489047998022221,
+					"cell_id": 7825517350706958358,
 					"cell_origin": "client",
 					"cell_type": "latex_view",
-					"source": "\\package{cdb.sympy.calculus}{Glue to use SymPy calculus functionality on Cadabra expressions.}\n\nA lot of functionality in SymPy can be used on Cadabra expressions, but in order to correctly\nconvert from and to the SymPy expression form, we need a bridge. This package contains such\nbridging fuctions, which will ensure that e.g. tensor indices are handled correctly when\nfed through SymPy's scalar algebra algorithms.\n\n\\algorithm{diff}{Differentiate an expression with respect to a variable.}"
+					"source": "\\package{cdb.sympy.calculus}{Use SymPy calculus functionality on Cadabra expressions.}\n\nA lot of functionality in SymPy can be used on Cadabra expressions, but in order to correctly\nconvert from and to the SymPy expression form, we need a bridge. This package contains such\nbridging fuctions, which will ensure that e.g. tensor indices are handled correctly when\nfed through SymPy's scalar algebra algorithms.\n\n\\algorithm{diff}{Differentiate an expression with respect to a variable.}"
 				}
 			],
 			"hidden": true,
-			"source": "\\package{cdb.sympy.calculus}{Glue to use SymPy calculus functionality on Cadabra expressions.}\n\nA lot of functionality in SymPy can be used on Cadabra expressions, but in order to correctly\nconvert from and to the SymPy expression form, we need a bridge. This package contains such\nbridging fuctions, which will ensure that e.g. tensor indices are handled correctly when\nfed through SymPy's scalar algebra algorithms.\n\n\\algorithm{diff}{Differentiate an expression with respect to a variable.}"
+			"source": "\\package{cdb.sympy.calculus}{Use SymPy calculus functionality on Cadabra expressions.}\n\nA lot of functionality in SymPy can be used on Cadabra expressions, but in order to correctly\nconvert from and to the SymPy expression form, we need a bridge. This package contains such\nbridging fuctions, which will ensure that e.g. tensor indices are handled correctly when\nfed through SymPy's scalar algebra algorithms.\n\n\\algorithm{diff}{Differentiate an expression with respect to a variable.}"
 		},
 		{
 			"cell_id": 3804610120254550473,
 			"cell_origin": "client",
 			"cell_type": "input",
 			"source": "def diff(ex1, ex2):\n   ret = $@(ex1)$\n   sb = SympyBridge(ret)\n   sb.from_sympy( str(sympy.diff( sb.to_sympy(), ex2 ) ) )\n   return ret"
+		},
+		{
+			"cell_id": 12308609622224851480,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 13996360633394007671,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "A typical example, differentiating with respect to a single variable:"
+				}
+			],
+			"hidden": true,
+			"source": "A typical example, differentiating with respect to a single variable:"
 		},
 		{
 			"cell_id": 1389897799554975903,
@@ -60,7 +75,140 @@
 			"source": "ex:=\\sin(x) A_{\\mu}(x);\ndiff(ex, $x$);"
 		},
 		{
+			"cell_id": 6234003092100779795,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 10150353556520051186,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{integrate}{Integrate a definite or indefinite integral.}\n\nThis function mimics the SymPy \\verb|integrate| function, except that all\nmathematical expressions need to be Cadabra expressions. Indefinite integration\nis done by passing an argument which is just an expression, while definite\nintegration is done by passing a tuple consisting of the integration variable,\nthe starting point and the end point."
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{integrate}{Integrate a definite or indefinite integral.}\n\nThis function mimics the SymPy \\verb|integrate| function, except that all\nmathematical expressions need to be Cadabra expressions. Indefinite integration\nis done by passing an argument which is just an expression, while definite\nintegration is done by passing a tuple consisting of the integration variable,\nthe starting point and the end point."
+		},
+		{
 			"cell_id": 15467993639628642890,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def integrate(ex1, *args):\n   ret = $@(ex1)$\n   sb = SympyBridge(ret)\n   iranges = []\n   for arg in args:\n      if isinstance(arg, tuple):\n          # print(arg)\n          sbtmp = SympyBridge(arg[0])\n          tpl = (sbtmp.to_sympy(), arg[1], arg[2])\n          iranges.append(tpl)\n          # print(iranges)\n          sb.from_sympy( str(sympy.integrate( sb.to_sympy(), *iranges) ) )\n      else:\n         sbtmp = SympyBridge(arg)\n         sb.from_sympy( str(sympy.integrate( sb.to_sympy(), sbtmp.to_sympy() ) ))\n   return ret"
+		},
+		{
+			"cell_id": 3801120048138997797,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 13060402605556641930,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The following is an example of a definite integration:"
+				}
+			],
+			"hidden": true,
+			"source": "The following is an example of a definite integration:"
+		},
+		{
+			"cell_id": 14525293143474443676,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 12012117006062441490,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 316157390348515815,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 27/2 "
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{27}{2}\\end{dmath*}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "integrate($x**2 y$, ($x$, 0, 3), ($y$, 0, 1) );"
+		},
+		{
+			"cell_id": 2354178610469859185,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 17727729829154494875,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Here is an indefinite integration:"
+				}
+			],
+			"hidden": true,
+			"source": "Here is an indefinite integration:"
+		},
+		{
+			"cell_id": 2273072162227922772,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15728598564050855914,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13682162971051715272,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/3 (x)**3 y"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{3}{x}^{3} y\\end{dmath*}"
+				}
+			],
+			"source": "integrate($x**2$, $x$, $y$);"
+		},
+		{
+			"cell_id": 14437617558705092816,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 9935958107203452733,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Mixed versions are also possible:"
+				}
+			],
+			"hidden": true,
+			"source": "Mixed versions are also possible:"
+		},
+		{
+			"cell_id": 6556436360376410122,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 4095815210246821736,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13733098240311066994,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/4 (y)**2"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{4}{y}^{2}\\end{dmath*}"
+				}
+			],
+			"source": "integrate($x y$, ($x$, 0, 1), $y$);"
+		},
+		{
+			"cell_id": 14261374590043911759,
 			"cell_origin": "client",
 			"cell_type": "input",
 			"source": ""
