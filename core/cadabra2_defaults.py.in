@@ -103,12 +103,12 @@ except:
     sympy = Sympy()
 
 if sympy.__version__ != "unavailable":
-    from sympy import factor
-    from sympy import integrate
-    from sympy import diff
+#    from sympy import factor
+#    from sympy import integrate
+#    from sympy import diff
     from sympy import symbols
     from sympy import latex
-    from sympy import sin, cos, tan, sqrt, trigsimp
+#    from sympy import sin, cos, tan, sqrt, trigsimp
     from sympy import Matrix as sMatrix
 
 # Whether running in command-line mode or as client-server, there always
