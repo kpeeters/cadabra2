@@ -40,9 +40,9 @@ def scan_file(prevcat, dir, filename, ext):
         is_multi = (package_name!="")
 
         if is_multi:
-            print('<h3>'+package_name+'</h3>')
-            print('<p>'+package_desc+'</p>')
-            print('<table>')
+            print('<tbody class="folding">')
+            print('<tr class="package-name"><td colspan=4">'+package_name+'</td></tr>')
+            print('<tr class="package-desc"><td colspan=4>'+package_desc+'</td></tr>')
         
         for cell in data["cells"]:
             if not "cells" in cell:
@@ -80,7 +80,7 @@ def scan_file(prevcat, dir, filename, ext):
                 print('<td>'+desc+'</td></tr>')
 
         if is_multi:
-            print('</table>')
+            print('<tr><td colspan=4>&nbsp;</td></tr></tbody>')
 
     return prevcat
 

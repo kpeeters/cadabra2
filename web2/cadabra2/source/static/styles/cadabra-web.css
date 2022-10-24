@@ -182,6 +182,39 @@ div#main h3 {
 	 color: green;
 	 font-size: 16px;
 }
+table.package-toc-table {
+    border-spacing: 0px;
+}
+.package-toc-table .package-name {
+    height: 2em;
+    vertical-align: bottom;
+	 font-family: "Bree Serif";
+	 font-weight: normal;
+	 color: green;
+	 font-size: 16px;
+	 cursor: pointer;
+}
+.package-toc-table tr td:first-child {
+    min-width: 30px;
+}
+.package-toc-table .package-desc {
+    height: 2em;
+    vertical-align: top;
+}
+.package-toc-table tr:not(:nth-child(1)):not(:nth-child(2)) {
+    transform: scale(1, 0);
+    line-height: 0px;
+    transition: transform .5s, line-height .5s;
+    visibility: none;
+}
+.package-toc-table tr:not(:nth-child(1)):not(:nth-child(2)) {
+    padding: 0px;
+}
+.package-toc-table tbody.uncovered tr:not(:nth-child(1)):not(:nth-child(2)) {
+    transform: scale(1, 1);
+    line-height: 1.5em;
+}
+
 .latex_view h3 {
 	 margin-left: 0px !important;
 }
