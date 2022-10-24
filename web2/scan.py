@@ -41,7 +41,7 @@ def scan_file(prevcat, dir, filename, ext):
 
         if is_multi:
             print('<tbody class="folding">')
-            print('<tr class="package-name"><td colspan=4">'+package_name+'</td></tr>')
+            print('<tr class="package-name"><td colspan=4>'+package_name+'</td></tr>')
             print('<tr class="package-desc"><td colspan=4>'+package_desc+'</td></tr>')
         
         for cell in data["cells"]:

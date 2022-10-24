@@ -201,6 +201,10 @@ table.package-toc-table {
     height: 2em;
     vertical-align: top;
 }
+.package-toc-table td {
+    padding-top: 0;
+    padding-bottom: 0;
+}
 .package-toc-table tr:not(:nth-child(1)):not(:nth-child(2)) {
     transform: scale(1, 0);
     line-height: 0px;
