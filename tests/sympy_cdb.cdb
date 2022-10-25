@@ -55,4 +55,15 @@ def test04():
    print("Test 04 passed")
 
 test04()
+
+from cdb.sympy.calculus import integrate
+      
+def test05():
+   __cdbkernel__=create_scope() 
+   ex:= \exp(-x);
+   tst = integrate(ex, ($x$, 0, $\infty$))
+   assert(tst==1)
+   print("Test 05 passed")
+
+test05()
       

@@ -41,7 +41,7 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 			{"\\sqrt", "sqrt" },
 			{"\\equals", "Eq" },
 
-			{"\\infty", "sympy.oo"},
+			{"\\infty", "oo"},
 			{"\\hbar",   "hbar"},
 
 			{"\\alpha",   "alpha" },
