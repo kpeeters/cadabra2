@@ -108,6 +108,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex tilde("~");
 	std::regex less("<");
 	std::regex greater(">");
+	std::regex bigO(R"(\\bigO)");
 	std::regex latex(R"(\\LaTeX\{\})");
 	std::regex tex(R"(\\TeX\{\})");
 	std::regex algorithm(R"(\\algorithm\{([^\}]*)\}\{([^\}]*)\})");
@@ -133,7 +134,8 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = std::regex_replace(res, end_dmath, R"(\))");
 		res = std::regex_replace(res, tilde, " ");
 		res = std::regex_replace(res, less, "&lt;");
-		res = std::regex_replace(res, tilde, "&gt;");
+		res = std::regex_replace(res, greater, "&gt;");
+		res = std::regex_replace(res, bigO, "{\\cal O}");		
 		res = std::regex_replace(res, begin_verbatim, "<pre class='output'>");
 		res = std::regex_replace(res, end_verbatim, "</pre>");
 		res = std::regex_replace(res, section, "<h1>$1</h1>");
