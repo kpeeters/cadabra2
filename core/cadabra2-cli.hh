@@ -6,7 +6,7 @@
 #define CADABRA_CLI_DEBUG_MARKER
 #undef _DEBUG
 #endif
-#include <Python.h>
+//#include <Python.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
 #ifdef CADABRA_CLI_DEBUG_MARKER
