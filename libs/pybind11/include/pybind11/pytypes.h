@@ -33,6 +33,8 @@
 
 PYBIND11_NAMESPACE_BEGIN(PYBIND11_NAMESPACE)
 
+PYBIND11_WARNING_DISABLE_MSVC(4127)
+
 /* A few forward declarations */
 class handle;
 class object;
@@ -501,11 +503,29 @@ struct error_fetch_and_normalize {
         std::string message_error_string;
         if (m_value) {
             auto value_str = reinterpret_steal<object>(PyObject_Str(m_value.ptr()));
+            constexpr const char *message_unavailable_exc
+                = "<MESSAGE UNAVAILABLE DUE TO ANOTHER EXCEPTION>";
             if (!value_str) {
                 message_error_string = detail::error_string();
-                result = "<MESSAGE UNAVAILABLE DUE TO ANOTHER EXCEPTION>";
+                result = message_unavailable_exc;
             } else {
-                result = value_str.cast<std::string>();
+                // Not using `value_str.cast<std::string>()`, to not potentially throw a secondary
+                // error_already_set that will then result in process termination (#4288).
+                auto value_bytes = reinterpret_steal<object>(
+                    PyUnicode_AsEncodedString(value_str.ptr(), "utf-8", "backslashreplace"));
+                if (!value_bytes) {
+                    message_error_string = detail::error_string();
+                    result = message_unavailable_exc;
+                } else {
+                    char *buffer = nullptr;
+                    Py_ssize_t length = 0;
+                    if (PyBytes_AsStringAndSize(value_bytes.ptr(), &buffer, &length) == -1) {
+                        message_error_string = detail::error_string();
+                        result = message_unavailable_exc;
+                    } else {
+                        result = std::string(buffer, static_cast<std::size_t>(length));
+                    }
+                }
             }
         } else {
             result = "<MESSAGE UNAVAILABLE>";
@@ -605,12 +625,6 @@ inline std::string error_string() {
 
 PYBIND11_NAMESPACE_END(detail)
 
-#if defined(_MSC_VER)
-#    pragma warning(push)
-#    pragma warning(disable : 4275 4251)
-//     warning C4275: An exported class was derived from a class that wasn't exported.
-//     Can be ignored when derived from a STL class.
-#endif
 /// Fetch and hold an error which was already set in Python.  An instance of this is typically
 /// thrown to propagate python-side errors back through C++ which can either be caught manually or
 /// else falls back to the function dispatcher (which then raises the captured error back to
@@ -670,9 +684,6 @@ private:
     ///          crashes (undefined behavior) if the Python interpreter is finalizing.
     static void m_fetched_error_deleter(detail::error_fetch_and_normalize *raw_ptr);
 };
-#if defined(_MSC_VER)
-#    pragma warning(pop)
-#endif
 
 /// Replaces the current Python error indicator with the chosen error, performing a
 /// 'raise from' to indicate that the chosen error was caused by the original error.
@@ -875,10 +886,8 @@ object object_or_cast(T &&o);
 // Match a PyObject*, which we want to convert directly to handle via its converting constructor
 inline handle object_or_cast(PyObject *ptr) { return ptr; }
 
-#if defined(_MSC_VER) && _MSC_VER < 1920
-#    pragma warning(push)
-#    pragma warning(disable : 4522) // warning C4522: multiple assignment operators specified
-#endif
+PYBIND11_WARNING_PUSH
+PYBIND11_WARNING_DISABLE_MSVC(4522) // warning C4522: multiple assignment operators specified
 template <typename Policy>
 class accessor : public object_api<accessor<Policy>> {
     using key_type = typename Policy::key_type;
@@ -942,9 +951,7 @@ private:
     key_type key;
     mutable object cache;
 };
-#if defined(_MSC_VER) && _MSC_VER < 1920
-#    pragma warning(pop)
-#endif
+PYBIND11_WARNING_POP
 
 PYBIND11_NAMESPACE_BEGIN(accessor_policies)
 struct obj_attr {
@@ -1432,6 +1439,9 @@ public:
     str(const char *c, const SzType &n)
         : object(PyUnicode_FromStringAndSize(c, ssize_t_cast(n)), stolen_t{}) {
         if (!m_ptr) {
+            if (PyErr_Occurred()) {
+                throw error_already_set();
+            }
             pybind11_fail("Could not allocate string object!");
         }
     }
@@ -1441,6 +1451,9 @@ public:
     // NOLINTNEXTLINE(google-explicit-constructor)
     str(const char *c = "") : object(PyUnicode_FromString(c), stolen_t{}) {
         if (!m_ptr) {
+            if (PyErr_Occurred()) {
+                throw error_already_set();
+            }
             pybind11_fail("Could not allocate string object!");
         }
     }
@@ -1598,6 +1611,9 @@ inline str::str(const bytes &b) {
     }
     auto obj = reinterpret_steal<object>(PyUnicode_FromStringAndSize(buffer, length));
     if (!obj) {
+        if (PyErr_Occurred()) {
+            throw error_already_set();
+        }
         pybind11_fail("Could not allocate string object!");
     }
     m_ptr = obj.release().ptr();
@@ -1675,7 +1691,7 @@ PYBIND11_NAMESPACE_BEGIN(detail)
 // unsigned type: (A)-1 != (B)-1 when A and B are unsigned types of different sizes).
 template <typename Unsigned>
 Unsigned as_unsigned(PyObject *o) {
-    if (PYBIND11_SILENCE_MSVC_C4127(sizeof(Unsigned) <= sizeof(unsigned long))) {
+    if (sizeof(Unsigned) <= sizeof(unsigned long)) {
         unsigned long v = PyLong_AsUnsignedLong(o);
         return v == (unsigned long) -1 && PyErr_Occurred() ? (Unsigned) -1 : (Unsigned) v;
     }
@@ -1692,7 +1708,7 @@ public:
     template <typename T, detail::enable_if_t<std::is_integral<T>::value, int> = 0>
     // NOLINTNEXTLINE(google-explicit-constructor)
     int_(T value) {
-        if (PYBIND11_SILENCE_MSVC_C4127(sizeof(T) <= sizeof(long))) {
+        if (sizeof(T) <= sizeof(long)) {
             if (std::is_signed<T>::value) {
                 m_ptr = PyLong_FromLong((long) value);
             } else {

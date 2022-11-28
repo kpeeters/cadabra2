@@ -115,7 +115,11 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
         )
 
     def _send_image(self, img):
-        raise NotImplementedError
+        self.send_response(
+            self.iopub_socket,
+            "display_data",
+            {"data": {"image/png": "{}".format(res_str)}, "metadata": {}},
+        )
 
     def _send_code(self, res_str):
         self.send_response(
