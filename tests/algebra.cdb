@@ -687,3 +687,36 @@ def test35():
         
 
 test35()
+
+
+def test36():
+    __cdbkernel__=create_scope()  
+    ex:= (2 a 3 b c)**(-1);
+    expand_power(ex)
+    tst:= 1/6 a**(-1) b**(-1) c**(-1)  - @(ex);
+    assert(tst==0)
+    print("Test 36a passed")
+    ex:= (2 a 3 b c)**(-2);
+    expand_power(ex)
+    tst:= 1/36 a**(-1) b**(-1) c**(-1)  a**(-1) b**(-1) c**(-1) - @(ex);
+    assert(tst==0)
+    print("Test 36b passed")
+    ex:= a**(-1);
+    expand_power(_)
+    tst:= a**(-1) - @(ex);
+    assert(tst==0)        
+    print("Test 36c passed")
+    ex:= a**(-2);
+    expand_power(_)
+    tst:= a**(-1) a**(-1) - @(ex);
+    assert(tst==0)        
+    print("Test 36d passed")
+    ex:= a b c (a b c)**(-1);
+    expand_power(_)
+    collect_factors(_)
+    assert(ex==1)
+    print("Test 36e passed")
+
+test36()
+        
+        
