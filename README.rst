@@ -7,9 +7,6 @@ Cadabra
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.2500762.svg
    :target: https://doi.org/10.5281/zenodo.2500762
 
-.. image:: https://anaconda.org/conda-forge/cadabra2-jupyter-kernel/badges/installer/conda.svg
-   :target: https://cadabra.science/jupyter.html
-
 .. image:: https://github.com/kpeeters/cadabra2/workflows/Linux/badge.svg
    :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3ALinux
 
@@ -21,6 +18,9 @@ Cadabra
 
 .. image:: https://github.com/kpeeters/cadabra2/workflows/macOS-monterey/badge.svg
    :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3AmacOS-monterey
+
+.. image:: https://anaconda.org/conda-forge/cadabra2-jupyter-kernel/badges/version.svg
+   :target: https://anaconda.org/conda-forge/cadabra2-jupyter-kernel	    
 
 *A field-theory motivated approach to computer algebra.*
 
