@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Cadabra2"
-#define MyAppVersion "2.4.2"
+#define MyAppVersion "2.4.3"
 #define MyAppPublisher "Kasper Peeters"
 #define MyAppURL "https://www.cadabra.science/"
 #define MyAppExeName "cadabra2-gtk.exe"

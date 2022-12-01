@@ -30,8 +30,13 @@ Algorithm::result_t expand_power::apply(iterator& it)
 //	if(num<1)
 //		return result_t::l_no_action;
 
-	if(num==-1 && *it->name!="\\prod")
+	if(num==-1 && *argument->name!="\\prod")
 		return result_t::l_no_action;
+
+	if(num==0) {
+		node_one(it);
+		return result_t::l_applied;
+		}
 	
 	iterator prodn=tr.insert(argument,str_node("\\prod"));
 

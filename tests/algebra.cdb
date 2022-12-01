@@ -716,6 +716,10 @@ def test36():
     collect_factors(_)
     assert(ex==1)
     print("Test 36e passed")
+    ex:= a**0;
+    expand_power(_)
+    assert(ex==1)
+    print("Test 36f passed")
 
 test36()
         
