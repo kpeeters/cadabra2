@@ -10,9 +10,6 @@ Cadabra
 .. image:: https://github.com/kpeeters/cadabra2/workflows/Linux/badge.svg
    :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3ALinux
 
-.. image:: https://github.com/kpeeters/cadabra2/workflows/macOS-catalina/badge.svg
-   :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3AmacOS-catalina
-
 .. image:: https://github.com/kpeeters/cadabra2/workflows/macOS-bigsur/badge.svg
    :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3AmacOS-bigsur
 

@@ -13,7 +13,7 @@ jobs:
     - name: setup python
       uses: actions/setup-python@v2
       with:
-          python-version: 3.7
+          python-version: 3.10
 
     - name: get dependencies
       run:  brew install cmake boost pcre gmp python3 pkgconfig gtkmm3 adwaita-icon-theme && /usr/local/bin/python3 -m pip install sympy gmpy2 numpy
