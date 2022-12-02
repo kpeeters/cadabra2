@@ -189,7 +189,7 @@ namespace cadabra {
 		size_type posA = index_of(value);
 		if (posA == size())
 			return false;
-		size_t posB = index_of(value, posA + 1);
+		size_type posB = index_of(value, posA + 1);
 		if (posB == size())
 			return false;
 
@@ -279,7 +279,7 @@ namespace cadabra {
 	{
 		std::sort(data.begin(), data.end());
 		auto dummy_start = std::find_if(data.begin(), data.end(), [](value_type v) { return v >= 0; });
-		for (size_type pos = std::distance(data.begin(), dummy_start); pos < data.size(); pos += 2) {
+		for (size_t pos = std::distance(data.begin(), dummy_start); pos < data.size(); pos += 2) {
 			data[pos] = pos + 1;
 			data[pos + 1] = pos;
 		}
@@ -296,7 +296,8 @@ namespace cadabra {
 		for (value_type i = 0; i < size(); ++i) {
 			if (data[i] < 0) {
 				perm[i] = -data[i];
-				if (counts.size() <= perm[i])
+				assert(counts.size() < std::numeric_limits<size_type>::max());
+				if((size_type)counts.size() <= perm[i])
 					counts.resize(perm[i] + 1, 0);
 				++counts[perm[i]];
 			}
@@ -321,7 +322,8 @@ namespace cadabra {
 		for (size_t i = 0; i < counts.size(); ++i) {
 			if (counts[i] == 0) {
 				for (auto& elem : perm) {
-					if (elem > i)
+					assert(elem > 0);
+					if((size_t)elem > i)
 						--elem;
 				}
 				counts.erase(counts.begin() + i);
@@ -332,7 +334,7 @@ namespace cadabra {
 		size_t perm_idx = 0;
 		for (size_t i = 0; i < perm.size() - 1; ++i) {
 			size_t num = ifactorial(perm.size() - i - 1);
-			for (size_t j = 0; j < perm[i]; ++j) {
+			for (size_type j = 0; j < perm[i]; ++j) {
 				if (counts[j] == 0)
 					continue;
 				--counts[j];
@@ -363,7 +365,7 @@ namespace cadabra {
 			if (data[i] < 0) {
 				res[i] = 'a' - data[i] - 1;
 			}
-			else if (data[i] > i) {
+			else if ((size_t)(data[i]) > i) {
 				res[i] = 'a' + next_free_index;
 				++next_free_index;
 			}
@@ -571,7 +573,7 @@ namespace cadabra {
 			while (true) {
 				int r = 0;
 				for (int rk = values.size(); rk > 0; --rk) {
-					int loc = positions[rk] + directions[rk];
+					size_t loc = positions[rk] + directions[rk];
 					if (loc >= 0 && loc < values.size() && values[loc] < rk) {
 						r = rk;
 						break;
@@ -590,7 +592,7 @@ namespace cadabra {
 				std::swap(values[l_loc], values[r_loc]);
 				std::swap(positions[l], positions[r]);
 				sign *= -1;
-				for (int i = r + 1; i < directions.size(); ++i)
+				for (size_t i = r + 1; i < directions.size(); ++i)
 					directions[i] = -directions[i];
 			}
 		}

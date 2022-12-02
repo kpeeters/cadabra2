@@ -436,7 +436,7 @@ bool it_is_scalar(const Kernel& kernel, Ex::iterator it)
 {
 	bool is_scalar = true;
 	iter_indices term_indices(kernel.properties, it);
-	size_t n_indices = term_indices.size();
+	// size_t n_indices = term_indices.size();
 	for (const auto& idx : term_indices) {
 		auto symb = kernel.properties.get<Symbol>(idx, true);
 		auto coord = kernel.properties.get<Coordinate>(idx, true);
