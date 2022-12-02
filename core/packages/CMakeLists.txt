@@ -61,13 +61,12 @@ foreach(PACKAGE ${COMPILED_PACKAGES})
   SET(CMAKE_INSTALL_RPATH "${PYTHON_SITE_PATH}")
   get_filename_component(PINSTALL ${PACKAGE} DIRECTORY)
   get_filename_component(PNAME ${PACKAGE} NAME_WE)
-  pybind11_add_module(${PNAME} SHARED
-    ${SOURCE_PACKAGEDIR}/${PACKAGE}
-    SUFFIX ".${PYTHON_MOD_SUFFIX}"
-    )
+  pybind11_add_module(${PNAME} SHARED ${SOURCE_PACKAGEDIR}/${PACKAGE})
   message(STATUS "Storing algorithm C++ module as ${PINSTALL}")
   set_target_properties(${PNAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/cdb/${PINSTALL}")
   set_target_properties(${PNAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/cdb/${PINSTALL}")
+  set_target_properties(${PNAME} PROPERTIES SUFFIX ".${PYTHON_MOD_SUFFIX}")
+
   target_link_libraries(${PNAME} PUBLIC cadabra2 ${GMPXX_LIBRARIES})
   target_include_directories(${PNAME} PUBLIC ${CADABRA_CORE_DIR})
   install(TARGETS ${PNAME} DESTINATION ${PYTHON_CDB_PACKAGE_PATH}/${PINSTALL})
