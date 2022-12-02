@@ -29,6 +29,8 @@ namespace cadabra {
 	class Adjform
 		{
 		public:
+			/// The maximal number of index slots is set by `value_type`: for a
+			/// short, the maximal number of slots is 127.
 			using value_type = short;
 			using size_type = value_type;
 			using difference_type = value_type;
@@ -105,6 +107,8 @@ namespace cadabra {
 			std::string to_string() const;
 
 		private:
+			// Storage of an index configuration; has a maximal size
+			// equal to size_type (not size_t).
 			array_type data;
 		};
 

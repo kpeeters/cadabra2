@@ -326,7 +326,8 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		std::string msg = content.value<std::string>("msg", "Idle");
 		int n = content.value<int>("n", 0);
 		int total = content.value<int>("total", 0);
-		int pulse = content.value<bool>("pulse", false);
+		// FIXME: do something with 'pulse':
+		// int pulse = content.value<bool>("pulse", false);
 		docthread->set_progress(msg, n, total);
 	}
 	else if(msg_type=="completed") {
