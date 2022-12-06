@@ -85,4 +85,15 @@ def test05():
 test05()
 
 
+def test06():
+    __cdbkernel__=create_scope()
+    {t}::Coordinate;
+    ex := Q / (f**2 - Q**2);
+    substitute(ex, $ f = (Q**2 - \alpha )**(1/2) $)
+    tst:= - Q / \alpha - @(ex);
+    assert(tst==0)
+    print("Test 06 passed")
 
+test06()
+
+        

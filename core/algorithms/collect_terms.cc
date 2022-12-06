@@ -59,10 +59,12 @@ Algorithm::result_t collect_terms::apply(iterator& st)
 
 	// If there is only one term left, flatten the tree.
 	if(tr.number_of_children(st)==1) {
+		// tr.print_recursive_treeform(std::cerr, st);
 		tr.begin(st)->fl.bracket=st->fl.bracket;
 		tr.begin(st)->fl.parent_rel=st->fl.parent_rel;
 		tr.flatten(st);
 		st=tr.erase(st);
+		// tr.print_recursive_treeform(std::cerr, st);
 		// We may have to propagate the multiplier up the tree to make it consistent.
 		pushup_multiplier(st);
 		}

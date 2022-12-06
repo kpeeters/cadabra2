@@ -171,24 +171,29 @@ namespace cadabra {
 		// Turn \pow{mA A}{B} with mA the multiplier for A into mA^B \pow{A}{B}
 		if(exp->is_integer() && *arg->multiplier!=1 && *arg->name!="1") {
 			mpz_class nw_n, nw_d;
-//			std::cerr << "also doing " << arg << ", " << *arg->multiplier << "**" << *exp->multiplier << std::endl;
+			// std::cerr << "also doing " << arg << ", " << *arg->multiplier << "**" << *exp->multiplier << "***" << std::endl;
 			long Cexp=to_long(*exp->multiplier);
 			mpz_pow_ui(nw_n.get_mpz_t(), arg->multiplier->get_num().get_mpz_t(), std::abs(Cexp));
 			mpz_pow_ui(nw_d.get_mpz_t(), arg->multiplier->get_den().get_mpz_t(), std::abs(Cexp));
+			// std::cerr << nw_n << ", " << nw_d << std::endl;
 			if(Cexp<0)
 				std::swap(nw_n, nw_d);
 			multiplier_t newmult=multiplier_t(nw_n, nw_d);
+			newmult.canonicalize();
+			// std::cerr << newmult << std::endl;
 			it->multiplier=rat_set.insert(newmult).first;
 			one(arg->multiplier);
 			return true;
 			}
 
-		// Turn \pow{mult \pow{A}{B}}{C} into \pow{A}{B*C} if C is an integer.
+		// Turn \pow{mult \pow{A}{B}}{C} into \pow{mult}{C} \pow{A}{B*C} if C is an integer.
 		// A bit tricky with the multiplier of \pow{A}{B}, as that becomes mult^C
 		// and can then either be absorbed into the overall multiplier, or needs
 		// a second factor.
 		auto ipow=tr.begin(it);
 		if(*ipow->name=="\\pow") {
+			// std::cerr << "*POW" << std::endl;
+			// tr.print_recursive_treeform(std::cerr, it);
 			auto iA=tr.begin(ipow);
 			auto iB=iA;
 			++iB;
@@ -205,6 +210,7 @@ namespace cadabra {
 					if(Cexp<0)
 						std::swap(nw_n, nw_d);
 					multiplier_t newmult=multiplier_t(nw_n, nw_d);
+					newmult.canonicalize();
 					// std::cerr << "new multiplier " << newmult << std::endl;
 					ipow->multiplier=rat_set.insert(newmult).first;
 					}
@@ -763,10 +769,12 @@ namespace cadabra {
 		{
 		bool ret=false;
 
+		//tr.print_recursive_treeform(std::cerr, it);
 		// Collect all multipliers and remove resulting '1' nodes.
 		auto facs=tr.begin(it);
 		multiplier_t factor=1;
 		while(facs!=tr.end(it)) {
+			// std::cerr << "at " << *facs << std::endl;
 			if(facs->is_index()==false) { // Do not collect the number in e.g. \partial_{4}{A}.
 				factor*=*facs->multiplier;
 				if(facs->is_rational()) {
