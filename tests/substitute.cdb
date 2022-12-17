@@ -501,7 +501,7 @@ test124()
 def test125():
     __cdbkernel__=create_scope()
     ex:=T_{A};
-    substitute(ex, $T{A?} = Q$);
+    substitute(ex, $T{A?} = Q$)
     try:
         tst:= T_{A} - @(ex);
         assert(tst==0)
@@ -510,7 +510,7 @@ def test125():
         assert(False)
     
     ex:=T{A};
-    substitute(ex, $T_{A?} = Q$);
+    substitute(ex, $T_{A?} = Q$)
     try:
         tst:= T{A} - @(ex);
         assert(tst==0)
@@ -520,12 +520,26 @@ def test125():
 
 test125()
 
-\del{#}::LaTeXForm("\partial").
-ex:=\del_{m}{A};
-res=ex._latex_()
-    
-ex:=A_{m}(x);
-substitute(ex, $A{#}->Q$);
-        
+# \del{#}::LaTeXForm("\partial").
+# ex:=\del_{m}{A};
+# res=ex._latex_()
+#     
+# ex:=A_{m}(x);
+# substitute(ex, $A{#}->Q$);
+#         
 # \hat{R}_{a b c d}
 # R(x,y)
+
+def test126():
+    # Inside powers, dummies can be repeated.
+    __cdbkernel__=create_scope()
+    {n,m,p,q}::Indices;
+    ex:= A^{n} / (A^{m} A^{m});
+    rename_dummies(ex)
+    tst:= A^{n} / (A^{n} A^{n}) - @(ex);
+    assert(tst==0)
+    print("Test 126 passed")
+
+test126()
+        
+    

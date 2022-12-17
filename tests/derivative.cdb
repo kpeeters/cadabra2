@@ -577,7 +577,7 @@ def test34():
     assert(tst==0)
     print("Test 34 passed")        
 
-#test34()
+test34()
         
 def test35():
     __cdbkernel__=create_scope()        
@@ -586,7 +586,7 @@ def test35():
     ex:= \partial_{\mu}{ (\partial_{\nu}{\phi} \partial^{\nu}{\phi})**3 };
     product_rule(ex)
     tst:= 3 (\partial_{\nu}{\phi} \partial^{\nu}{\phi})**2
-        \partial_{\mu}{\partial_{\rho}{\phi} \partial^{\rho}{\phi} } - @(ex);
+        \partial_{\mu}{\partial_{\nu}{\phi} \partial^{\nu}{\phi} } - @(ex);
     assert(tst==0)
     print("Test 35 passed")
 
