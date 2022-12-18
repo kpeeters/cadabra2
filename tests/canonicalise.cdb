@@ -857,9 +857,27 @@ def test58():
    # https://cadabra.science/qa/2291/sort_product-with-position-independent-identical-variables      
    {a,b,c,d,e,f,g}::Indices(vector,position=independent).
    ex := x_{a} x^{b} - x^{b} x_{a};
-   sort_product(_);
+   sort_product(_)
    assert(ex==0)
    print("Test 58 passed")
       
 test58()
       
+def test59():
+   # Inside powers, dummies from outside can repeat.
+   __cdbkernel__=create_scope()
+   {n,k,m,p,q}::Indices;
+   ex:= 1/(A^{n} A^{k} A^{k} A^{n} );
+   canonicalise(ex)
+   tst:= 1/(A^{k} A^{k} A^{n} A^{n} ) - @(ex);
+   assert(tst==0)
+   print("Test 59a passed")      
+   # Inside powers, dummies can take names of free
+   # indices used outside.
+   ex:= A^{n} / (A^{k} A^{n} A^{k} A^{n});
+   canonicalise(ex)
+   tst:= A^{n}/(A^{k} A^{k} A^{n} A^{n} ) - @(ex);
+   assert(tst==0)
+   print("Test 59b passed")
+
+test59()

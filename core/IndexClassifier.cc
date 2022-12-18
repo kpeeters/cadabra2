@@ -428,8 +428,8 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 				//				ind_free_here.clear();
 				}
 			// FIXME: add test for overlap
-			ind_free.insert(ind_free_here.begin(), ind_free_here.end());
-			ind_dummy.insert(ind_dummy_here.begin(), ind_dummy_here.end());
+//			ind_free.insert(ind_free_here.begin(), ind_free_here.end());
+//			ind_dummy.insert(ind_dummy_here.begin(), ind_dummy_here.end());
 			++sib;
 			}
 		}
