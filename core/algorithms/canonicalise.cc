@@ -23,8 +23,10 @@ canonicalise::canonicalise(const Kernel& k, Ex& tr)
 bool canonicalise::can_apply(iterator it)
 	{
 	if(*(it->name)!="\\prod")
-		if(is_single_term(it)==false)
+		if(*(it->name)=="\\pow" || is_single_term(it)==false)
 			return false;
+
+	//if(! (tr.is_head(it)==false && *tr.parent(it)->name=="\\pow" && tr.index(it)==0) )
 
 	// Canonicalise requires strict monomial structure: no products which contain
 	// sums as factors. Products as factors are ok, they do not lead to multiple
@@ -41,6 +43,9 @@ bool canonicalise::can_apply(iterator it)
 		return false;
 		}
 
+#ifdef DEBUG
+	std::cerr << "canonicalise::can_apply: at " << it << std::endl;
+#endif
 	return true;
 	}
 
