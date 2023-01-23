@@ -19,7 +19,7 @@ claybuild:
 webup: webbuild claybuild
 	doxygen config/Doxyfile
 	rsync -avz --chmod=+rx doxygen/ cadabra_web:/var/www/cadabra2/doxygen/
-	cd web2/cadabra2/source; rsync -avz --chmod=+rx build/ cadabra_web:/var/www/cadabra2/;  rsync -avz --chmod=+rx static/styles/ cadabra_web:/var/www/cadabra2/static/styles; rsync -avz --chmod=+rx static/fonts/ cadabra_web:/var/www/cadabra2/static/fonts; rsync -avz --chmod=+rx static/images/ cadabra_web:/var/www/cadabra2/static/images/; rsync -avz --chmod=+rx static/icons/ cadabra_web:/var/www/cadabra2/static/icons/; rsync -avz --chmod=+rx static/pdf/ cadabra_web:/var/www/cadabra2/static/pdf/; rsync -avz --chmod=+rx static/js/ cadabra_web:/var/www/cadabra2/static/js/; rsync -avz --chmod=+r static/robots.txt cadabra_web:/var/www/cadabra2
+	cd web2/cadabra2/source; rsync -avz --chmod=+rx build/ cadabra_web:/var/www/cadabra2/;  rsync -avz --chmod=+rx static/styles/ cadabra_web:/var/www/cadabra2/static/styles;   scp static/cadabra_in* cadabra_web:/var/www/cadabra2/static/; rsync -avz --chmod=+rx static/fonts/ cadabra_web:/var/www/cadabra2/static/fonts; rsync -avz --chmod=+rx static/images/ cadabra_web:/var/www/cadabra2/static/images/; rsync -avz --chmod=+rx static/icons/ cadabra_web:/var/www/cadabra2/static/icons/; rsync -avz --chmod=+rx static/pdf/ cadabra_web:/var/www/cadabra2/static/pdf/; rsync -avz --chmod=+rx static/js/ cadabra_web:/var/www/cadabra2/static/js/; rsync -avz --chmod=+r static/robots.txt cadabra_web:/var/www/cadabra2
 
 format:
 	astyle --style=k/r --indent=tab=3 --recursive --attach-classes --attach-namespaces --indent-classes --indent-namespaces --indent-switches --break-closing-braces '*.hh'

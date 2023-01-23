@@ -16,17 +16,27 @@
   development, even numbered ones are released in packaged form.
 </p>
 <a name="master"></a>
-<h3>github master (2.4.1)</h3>
+<h3>github master (2.4.3)</h3>
+<ul>
+  <li>Fix canonicalisation of rationals.</li>
+  <li>Make <tt>expand_power</tt> work on zero and negative
+    powers.</li>
+  <li>Prevent dummy indices from leaking out of <tt>\pow</tt> nodes.</li>
+</ul>
+
+<h3>github master (2.4.2)</h3>
 <ul>
   <li>Add missing trig functions for display and passthrough to sympy (Oscar).</li>
   <li>Allow for index values to be specified as an integer range.</li>
+  <li>Expanded <tt>nevaluate</tt> to numerically evaluate more expressions.</li>
   <li>New
   package <a href="/manual/cdb/sympy/calculus.html"><tt>cdb.sympy.calculus</tt></a>
   to make it easy to apply SymPy calculus functions on Cadabra
     expressions.</li>
   <li>New
   package <a href="/manual/cdb/graphics/plot.html"><tt>cdb.graphics.plot</tt></a>
-  for easy plotting of functions of one or two variables.</li>
+    for easy plotting of functions of one or two variables.</li>
+  <li>Fix compatibility issues with Python-3.11.</li>
 </ul>
 
 <h3>2.4.0 (released 25-Aug-2022)</h3>
