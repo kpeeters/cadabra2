@@ -141,9 +141,17 @@ NTensor& NTensor::apply(double (*fun)(double))
 NTensor& NTensor::operator+=(const NTensor& other)
 	{
 	if(other.shape.size()==1 && other.shape[0]==1) {
-		// Arbitrary size base to the power of a scalar.
+		// Arbitrary size base plus a scalar; add it to all.
 		for(size_t i=0; i<values.size(); ++i)
 			values[i] += other.values[0];
+		}
+	else if(shape.size()==1 && shape[0]==1) {
+		// Scalar plus arbitrary size other.
+		auto add = values[0];
+		values = other.values;
+		for(size_t i=0; i<values.size(); ++i)
+			values[i] += add;
+		shape=other.shape;
 		}
 	else {
 		if(shape.size() != other.shape.size())
@@ -163,9 +171,17 @@ NTensor& NTensor::operator+=(const NTensor& other)
 NTensor& NTensor::operator*=(const NTensor& other)
 	{
 	if(other.shape.size()==1 && other.shape[0]==1) {
-		// Arbitrary size base to the power of a scalar.
+		// Arbitrary size base times a scalar.
 		for(size_t i=0; i<values.size(); ++i)
 			values[i] *= other.values[0];
+		}
+	else if(shape.size()==1 && shape[0]==1) {
+		// Scalar times arbitrary size other.
+		auto mult = values[0];
+		values = other.values;
+		for(size_t i=0; i<values.size(); ++i)
+			values[i] *= mult;
+		shape=other.shape;
 		}
 	else {
 		if(shape.size() != other.shape.size())
@@ -173,7 +189,7 @@ NTensor& NTensor::operator*=(const NTensor& other)
 		
 		for(size_t p=0; p<shape.size(); ++p)
 			if(shape[p]!=other.shape[p])
-				throw std::range_error("NTensor::operator+=: shapes do not match.");
+				throw std::range_error("NTensor::operator*=: shapes do not match.");
 		
 		for(size_t i=0; i<values.size(); ++i)
 			values[i] *= other.values[i];

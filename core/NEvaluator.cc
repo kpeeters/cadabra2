@@ -5,6 +5,8 @@
 
 using namespace cadabra;
 
+//#define DEBUG 1
+
 // void NEvaluator::find_common_subexpressions(std::vector<Ex *>)
 // 	{
 // 	// Compute the hash value of every subtree, and collect matches.
@@ -132,6 +134,9 @@ NTensor NEvaluator::evaluate()
 					// throw std::logic_error("Value unknown for subtree special function.");
 					}
 				else if(it->name==n_pi) {
+#ifdef DEBUG
+					std::cerr << "found \\pi" << std::endl;
+#endif
 					lastval  = 3.141592653589793238463;
 					lastval *= to_double(*it->multiplier);
 					}
@@ -144,6 +149,9 @@ NTensor NEvaluator::evaluate()
 						auto mult = *it->multiplier;
 						one( no_multiplier.begin()->multiplier );
 						if(var.variable == no_multiplier) {
+#ifdef DEBUG
+							std::cerr << "found " << *(no_multiplier.begin()->name) << std::endl;
+#endif
 							subtree_values.insert(std::make_pair(it, var.values));
 							lastval = var.values;
 							lastval *= to_double(mult);

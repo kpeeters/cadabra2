@@ -35,6 +35,23 @@ def test02():
 
 test02()
 
+def test03():
+   res = np.array(nevaluate( $\pi x$, {$x$: [0,1,2]}))
+   assert(np.max(res - np.array([0, 3.14, 6.28])) < 0.01)
+   print("Test 03a passed")
+   res = np.array(nevaluate( $x \pi$, {$x$: [0,1,2]}))
+   assert(np.max(res - np.array([0, 3.14, 6.28])) < 0.01)
+   print("Test 03b passed")
+   res = np.array(nevaluate( $\pi + x$, {$x$: [0,1,2]}))
+   assert(np.max(res - np.array([3.14, 4.14, 5.14])) < 0.01)
+   print("Test 03c passed")
+   res = np.array(nevaluate( $x + \pi$, {$x$: [0,1,2]}))
+   assert(np.max(res - np.array([3.14, 4.14, 5.14])) < 0.01)
+   print("Test 03d passed")
+
+test03()
+
+
 
 
    
