@@ -22,3 +22,18 @@ try:
 except:
     print("Test 03 passed")
 
+
+\m::LaTeXForm("\mu").
+D{#}::Derivative;
+{\m,\n}::Indices(s,position=fixed);
+
+{x_\m}::Coordinate;
+
+ex:= D_{x_\m}{A^\m};
+
+print(tree(ex))
+    
+for i in ex.top().free_indices(): 
+   display(i);
+   
+    
