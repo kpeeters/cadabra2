@@ -1,0 +1,28 @@
+{
+	"cell_id": 17594032342224758361,
+	"cells": [
+		{
+			"cell_id": 2589219658710476359,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 10124450553688137587,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\property{Weight}{Attach a labelled weight to an object}\n\nAttach a labelled weight to an object, which can subsequently be used\nin the algorithms \\algo{keep_weight} and \\algo{drop_weight} to select\nparticular terms. See the documentation of those two algorithms\nfor examples."
+				}
+			],
+			"hidden": true,
+			"source": "\\property{Weight}{Attach a labelled weight to an object}\n\nAttach a labelled weight to an object, which can subsequently be used\nin the algorithms \\algo{keep_weight} and \\algo{drop_weight} to select\nparticular terms. See the documentation of those two algorithms\nfor examples."
+		},
+		{
+			"cell_id": 442998546462730087,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

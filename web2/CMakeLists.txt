@@ -166,6 +166,7 @@ set(PROPS
   Symmetric
   Tableau
   TableauSymmetry
+  Weight
   WeightInherit
 )
 
