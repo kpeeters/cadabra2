@@ -8,6 +8,8 @@ from cadabra2_jupyter.server import Server
 from cadabra2_jupyter.completer import CodeCompleter
 from cadabra2_jupyter import __version__
 
+# This is a simple 'Python wrapper kernel' along the lines of
+# https://jupyter-protocol.readthedocs.io/en/latest/wrapperkernels.html
 
 class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
     implementation = "cadabra_kernel"
@@ -22,7 +24,7 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
 
     @property
     def banner(self):
-        return "Cadabra (C) 2001-2020 Kasper Peeters\nJupyter kernel by Fergus Baker\nMore info at https://cadabra.science/\nAvailable under the terms of the GNU General Public License v3"
+        return "Cadabra (C) 2001-2023 Kasper Peeters\nJupyter kernel by Fergus Baker and Kasper Peeters\nMore info at https://cadabra.science/\nAvailable under the terms of the GNU General Public License v3"
 
     def __init__(self, **kwargs):
         ipykernel.kernelbase.Kernel.__init__(self, **kwargs)
@@ -118,7 +120,7 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
         self.send_response(
             self.iopub_socket,
             "display_data",
-            {"data": {"image/png": "{}".format(res_str)}, "metadata": {}},
+            {"data": {"image/png": "{}".format(img.decode("utf-8"))}, "metadata": {}},
         )
 
     def _send_code(self, res_str):

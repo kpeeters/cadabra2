@@ -16,7 +16,6 @@ class Server:
             data = _latex_post_parser(data)
             self._kernel._send_result(data)
         elif typestr == "image_png":
-            # todo
             self._kernel._send_image(data)
         elif typestr == "verbatim":
             self._kernel._send_code(data)

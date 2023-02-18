@@ -282,7 +282,8 @@ def display(obj, delay_send=False):
             server.send(unicode(obj), "plain", 0, False)
             
     elif type(obj)==list:
-        out="{}$\\big[$"
+        atleast_one_unstolen=False
+        out="$\\big[$"
         first=True
         for elm in obj:
             if first==False:
@@ -292,8 +293,10 @@ def display(obj, delay_send=False):
             nxt = display(elm, True)
             if nxt != None:
                out+= "$"+display(elm, True)+"$"
+               atleast_one_unstolen=True
         out+="$\\big]$";
-        server.send(out, "latex_view", 0, False)
+        if atleast_one_unstolen:
+           server.send(out, "latex_view", 0, False)
         # FIXME: send input_form version.
         
     elif hasattr(obj, "__module__") and hasattr(obj.__module__, "find") and obj.__module__.find("sympy")!=-1:
