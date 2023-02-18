@@ -287,8 +287,14 @@ if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
    set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/dist-packages)
    set(PYTHON_SITE_DIST "dist-packages")
 else()
-   # For everyone else there is 'site-packages'
-   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
+   # For everyone else there is 'site-packages'. We get it from calling python, as otherwise
+   # we may be going wrong on e.g. Anaconda.
+   execute_process(
+     COMMAND ${PYTHON_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
+     OUTPUT_VARIABLE PYTHON_SITE_PATH
+     OUTPUT_STRIP_TRAILING_WHITESPACE
+     )
+#   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
    set(PYTHON_SITE_DIST "site-packages")   
 endif()
 message(STATUS "Installing Python module in ${PYTHON_SITE_PATH}")

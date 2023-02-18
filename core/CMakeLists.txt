@@ -39,7 +39,15 @@ find_package(Boost 1.53 COMPONENTS system)
 find_package(GLIBMM  REQUIRED)
 
 # GMPXX
-find_package(GMPXX REQUIRED)
+# In order to distribute as a PyPl wheel, we need to link
+# statically; the line below picks up the right library,
+# but then things fail because gmp/gmpxx are not built
+# with -fPIC. Postponed for now.
+# set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+find_package(GMPXX REQUIRED STATIC)
+
+message(STATUS "Linking to GMP   library ${GMP_LIBRARIES}")
+message(STATUS "Linking to GMPXX library ${GMPXX_LIBRARIES}")
 
 # Dependency of TinyProcessLib
 find_package(Threads)

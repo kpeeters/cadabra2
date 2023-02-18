@@ -66,7 +66,8 @@ namespace py = pybind11;
 		}
 
 Shell::Shell(Flags flags)
-	: site_path(cadabra::install_prefix() + "/lib/python" + std::to_string(PY_MAJOR_VERSION) + "." + std::to_string(PY_MINOR_VERSION) + "/" + std::string(PYTHON_SITE_DIST))
+	: site_path(std::string(PYTHON_SITE_PATH))
+//	: site_path(cadabra::install_prefix() + "/lib/python" + std::to_string(PY_MAJOR_VERSION) + "." + std::to_string(PY_MINOR_VERSION) + "/" + std::string(PYTHON_SITE_DIST))
 //	, globals(py::handle(nullptr), false) // yuck, but prevents pybind from trying to create a new dict object before the interpreter is initialized
 	, globals(py::reinterpret_steal<py::dict>(nullptr))
 	, flags(flags)
