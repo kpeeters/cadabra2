@@ -25,7 +25,7 @@ fi
 if [ "$OSTYPE" = "cygwin" ]
 then
 	# make sure that executable has the right format under Cygwin
-	export TEST_EXECUTABLE="`/usr/bin/cygpath --unix \"$TEST_EXECUTABLE\"`"
+	export TEST_EXECUTABLE="$(/usr/bin/cygpath --unix "$TEST_EXECUTABLE")"
 fi
 
 if [ "$TEST_INPUT_OPTION" = "input" ]
