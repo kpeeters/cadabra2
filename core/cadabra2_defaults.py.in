@@ -269,6 +269,19 @@ def display(obj, delay_send=False):
         else:
             server.send(unicode(obj), "plain", 0, False)
 
+    elif isinstance(obj, ExNode):
+        if server.handles('latex_view'):
+            if delay_send:
+                return obj._latex_()
+            else:
+                ret = mopen+obj._latex_()+mclose
+                id=server.send(ret, "latex_view", 0, False)
+                # print(id)
+                # Make a child cell of the above with input form content.
+                server.send(obj.input_form(), "input_form", id, False)                
+        else:
+            server.send(unicode(obj), "plain", 0, False)
+
     elif isinstance(obj, Property):
         if server.handles('latex_view'):
             ret = mopen+obj._latex_()+mclose

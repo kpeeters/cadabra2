@@ -11,6 +11,7 @@
 #include "DisplayTeX.hh"
 #include "DisplaySympy.hh"
 #include "DisplayTerminal.hh"
+#include "pythoncdb/py_ex.hh"
 #include <sstream>
 
 //#define DEBUG 1
@@ -50,6 +51,17 @@ ExNode ExNode::copy() const
 
 	return ret;
 	}
+
+std::string ExNode::input_form() const
+   {
+		// FIXME: this is a duplicate of Ex_as_string; unify the logic.
+		std::ostringstream str;
+
+		DisplayTerminal dt(*get_kernel_from_scope(), get_ex(), false);
+		dt.output(str);
+
+		return str.str();
+   }
 
 ExNode ExNode::getitem_string(std::string tag)
 	{

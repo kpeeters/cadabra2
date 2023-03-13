@@ -653,6 +653,7 @@ namespace cadabra {
 		pybind11::class_<ExNode>(m, "ExNode", "Iterator over elements of an Ex mathematical expression.")
 			.def("__iter__", &ExNode::iter)
 			.def("__next__", &ExNode::next, pybind11::return_value_policy::reference_internal)
+			.def("input_form",  &ExNode::input_form)
 			.def("__getitem__", &ExNode::getitem_string)
 			.def("__getitem__", &ExNode::getitem_iterator)
 			.def("__setitem__", &ExNode::setitem_string)
