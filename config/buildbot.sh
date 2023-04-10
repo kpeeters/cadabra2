@@ -73,6 +73,7 @@ function runbuild {
 
 # Parameters: VM name, package type, local ssh port, folder name on web server.
 
+runbuild "Mint_21"             ".deb" 7035 mint21
 runbuild "Mint_20"             ".deb" 7026 mint20
 runbuild "Ubuntu_22.04"        ".deb" 7033 ubuntu2204
 runbuild "Ubuntu_20.04"        ".deb" 7030 ubuntu2004
