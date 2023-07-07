@@ -354,6 +354,49 @@
 		{
 			"cell_id": 16349293761953373413,
 			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 10700541688820127695,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{factor}{Factorise an expression}\n\nThis function mimics the SymPy \\verb|factor| function, except that the argument has to be a Cadabra expression."
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{factor}{Factorise an expression}\n\nThis function mimics the SymPy \\verb|factor| function, except that the argument has to be a Cadabra expression."
+		},
+		{
+			"cell_id": 17538488045608728761,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def factor(ex):\n   ret = $@(ex)$\n   sbex  = SympyBridge(ret)\n   tmp = str(sympy.factor( sbex.to_sympy() ))\n   sbex.from_sympy( tmp )\n   return ret"
+		},
+		{
+			"cell_id": 7561547917241467470,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 12368485212485632098,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1953276237970412465,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "x (x + 1)"
+						}
+					],
+					"source": "\\begin{dmath*}{}x \\left(x+1\\right)\\end{dmath*}"
+				}
+			],
+			"source": "ex = factor($ x**2 + x $);"
+		},
+		{
+			"cell_id": 16786632068897082656,
+			"cell_origin": "client",
 			"cell_type": "input",
 			"source": ""
 		}
