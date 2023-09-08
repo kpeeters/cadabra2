@@ -1,5 +1,5 @@
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
-set(CADABRA_CMAKE_VERSION 3.1)
+set(CADABRA_CMAKE_VERSION 3.5)
 
 # Policy settings for CMake to resolve ambiguities.
 
@@ -331,6 +331,8 @@ else()
 	set(PYTHON_MOD_EXT    "so")   
 	set(PYTHON_MOD_SUFFIX "${PYTHON_SOABI}.so")
 endif()
+
+message(STATUS "Python module extension ${PYTHON_MOD_SUFFIX}")
 
 
 #---------------------------------------------------------------------------

@@ -203,11 +203,11 @@ void ComputeThread::try_spawn_server()
 
 		char buffer[100];
 		FILE *f = fdopen(server_stdout, "r");
-		if(fscanf(f, "%100s", buffer)!=1) {
+		if(fscanf(f, "%99s", buffer)!=1) {
 			throw std::logic_error("Failed to read port from server.");
 			}
 		port = atoi(buffer);
-		if(fscanf(f, "%100s", buffer)!=1) {
+		if(fscanf(f, "%99s", buffer)!=1) {
 			throw std::logic_error("Failed to read authentication token from server.");
 			}
 		authentication_token=std::string(buffer);
