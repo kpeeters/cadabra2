@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1) 
+cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION}) 
 project(Cadabra)
 
 

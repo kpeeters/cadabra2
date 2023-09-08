@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1) # Required for various macros
+cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION}) # Required for various macros
 project(Cadabra)
 
 
