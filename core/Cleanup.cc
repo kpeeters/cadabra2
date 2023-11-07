@@ -181,7 +181,7 @@ namespace cadabra {
 			multiplier_t newmult=multiplier_t(nw_n, nw_d);
 			newmult.canonicalize();
 			// std::cerr << newmult << std::endl;
-			it->multiplier=rat_set.insert(newmult).first;
+			multiply(it->multiplier, *rat_set.insert(newmult).first);
 			one(arg->multiplier);
 			return true;
 			}
