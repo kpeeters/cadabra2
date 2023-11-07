@@ -1,5 +1,5 @@
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
-set(CADABRA_CMAKE_VERSION 3.5)
+set(CADABRA_CMAKE_VERSION 3.9)
 
 # Policy settings for CMake to resolve ambiguities.
 
@@ -162,6 +162,14 @@ endif()
 # - Set the C++ standard to C++14
 # - Turn optimizations on
 # - Turn off warnings we don't need
+
+include(CheckIPOSupported)
+check_ipo_supported(RESULT IPO_SUPPORTED OUTPUT error)
+if( IPO_SUPPORTED )
+    message(STATUS "IPO / LTO enabled")
+else()
+    message(STATUS "IPO / LTO not supported: <${error}>")
+endif()
 
 
 
