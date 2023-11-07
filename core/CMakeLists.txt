@@ -296,6 +296,11 @@ target_link_libraries(cadabra2 PRIVATE
 #  ${GLIBMM3_LIBRARIES}    
    )
 
+if(IPO_SUPPORTED)
+  set_property(TARGET cadabra2 PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+endif()
+
+   
 # On Unix, don't link the extension module to libpython*.so
 # because some python executables are link to python static library for performance
 # and if an extension is linked to python shared library, symbol clashes occur.
