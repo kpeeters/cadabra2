@@ -364,4 +364,14 @@ def test40():
     print("Test 40 passed")
 
 test40()
-        
+
+def test41():
+    __cdbkernel__=create_scope()
+    ex:= -a**2;
+    substitute(ex, $a -> -b$)
+    tst:= -b**2 - @(ex);
+    assert(tst==0)
+    print("Test 41 passed")
+
+test41()
+
