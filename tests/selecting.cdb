@@ -160,10 +160,24 @@ def test08():
     print("Test 08c passed")
 
 test08()        
-            
-        
-#def test08():
 
+def test09():
+   def doit(ex):
+      for nabla in ex[r'\nabla']:
+         nabla.name = r'\partial'
+      return ex
+   
+   ex:= \nabla{A} + \nabla{B};
+   zoom(ex, $\nabla{A}$)
+   doit(_)
+   unzoom(ex)
+   tst:= \partial{A} + \nabla{B} - @(ex);
+   assert(tst==0)
+   print("Test 09 passed")
+
+test09()
+
+#def test08():
 # 
 # \epsilon::Weight(label=field, value=1);
 # Exp:=\epsilon**4+\epsilon*(\epsilon**3+5);

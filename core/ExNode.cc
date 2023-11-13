@@ -412,8 +412,13 @@ void ExNode::update(bool first)
 #ifdef DEBUG
 			std::cerr << "update at " << nxtit << std::endl;
 #endif
-			if(tag=="" || *nxtit->name==tag)
-				return;
+			if(*nxtit->name=="\\ldots") {
+				nxtit.skip_children();
+				}
+			else {
+				if(tag=="" || *nxtit->name==tag)
+					return;
+				}
 			++nxtit;
 			}
 		}
