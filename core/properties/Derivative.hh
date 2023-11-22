@@ -9,6 +9,7 @@
 #include "properties/DependsInherit.hh"
 #include "properties/IndexInherit.hh"
 #include "properties/SortOrder.hh"
+#include "properties/SelfCommutingBehaviour.hh"
 
 namespace cadabra {
 
@@ -17,6 +18,7 @@ namespace cadabra {
 		public TableauInherit,
 		public DependsInherit,
 		public Inherit<SortOrder>,
+		public Inherit<SelfCommutingBehaviour>,
 		public CommutingAsProduct,
 		public NumericalFlat,
 		public WeightBase,

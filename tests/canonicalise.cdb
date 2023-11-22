@@ -881,3 +881,28 @@ def test59():
    print("Test 59b passed")
 
 test59()
+
+def test60():
+   # Anti-commuting objects in canonicalise did not
+   # pass their info through derivatives.
+   # Issue #113.
+   __cdbkernel__=create_scope()
+
+   {a, b, c}::Indices(Vector, position=independent);
+   X_{a}::SelfAntiCommuting ;
+   \partial{#}::Derivative;
+   X_{a}::Depends(\partial{#});
+   
+   foo1 := \partial{X_{b}} \partial{X_{a}} + X_{b} X_{a};
+   canonicalise(foo1)
+   tst := -\partial{X_{a}} \partial{X_{b}} - X_{a} X_{b} - @(foo1);
+   assert(tst==0)
+   print("Test 60a passed")
+   
+   foo2 := \partial{X_{b}} \partial{X_{a}} + X_{b} X_{a};
+   sort_product(foo2)
+   tst := -\partial{X_{a}} \partial{X_{b}} - X_{a} X_{b} - @(foo2);
+   assert(tst==0)
+   print("Test 60b passed")
+
+test60()
