@@ -304,6 +304,18 @@ namespace cadabra {
 	Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterator i2,
 	      useprops_t use_props, bool ignore_parent_rel)
 		{
+		// FIXME: Ex_comparator should really know about the tree,
+		// so that we can do safety checks like the ones below.
+		// 
+		// if(!i1.is_valid() && i2.is_valid())
+		// 	return match_t::no_match_less;
+		// 
+		// if(i1.is_valid() && !i2.is_valid())
+		// 	return match_t::no_match_greater;
+		// 
+		// if(!i1.is_valid() && !i2.is_valid())
+		// 	return match_t::subtree_match;
+		
 		DEBUGLN( std::cerr << tab() << "equal_subtree with use_props = " << use_props << std::endl; );
 		++offset;
 

@@ -312,4 +312,13 @@ def test14():
 
 test14()
 
-     
+def test15():
+    assert(Ex('X').matches(Ex(' '))==False)
+    print("Test 15a passed")
+    assert(Ex(' ').matches(Ex(' '))==True)
+    print("Test 15b passed")
+    assert(Ex(' ').matches(Ex('X'))==False)
+    print("Test 15c passed")
+
+test15()
+
