@@ -1,11 +1,11 @@
-name: macOS-bigsur
+name: macOS
 
 on: [push]
 
 jobs:
   build:
 
-    runs-on: macos-11
+    runs-on: macos-latest
     
     steps:
     - uses: actions/checkout@v3
