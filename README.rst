@@ -10,11 +10,8 @@ Cadabra
 .. image:: https://github.com/kpeeters/cadabra2/workflows/Linux/badge.svg
    :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3ALinux
 
-.. image:: https://github.com/kpeeters/cadabra2/workflows/macOS-bigsur/badge.svg
-   :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3AmacOS-bigsur
-
-.. image:: https://github.com/kpeeters/cadabra2/workflows/macOS-monterey/badge.svg
-   :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3AmacOS-monterey
+.. image:: https://github.com/kpeeters/cadabra2/workflows/macOS/badge.svg
+   :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3AmacOS
 
 .. image:: https://anaconda.org/conda-forge/cadabra2-jupyter-kernel/badges/version.svg
    :target: https://anaconda.org/conda-forge/cadabra2-jupyter-kernel	    
