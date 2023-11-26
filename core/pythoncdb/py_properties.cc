@@ -436,7 +436,7 @@ namespace cadabra {
 		using Py_AntiSymmetric = BoundProperty<AntiSymmetric, Py_TableauBase, Py_Traceless>;
 		using Py_DAntiSymmetric = BoundProperty<DAntiSymmetric, Py_TableauBase>;
 		using Py_Depends = BoundProperty<Depends, Py_DependsBase>;
-		using Py_Derivative = BoundProperty<Derivative, Py_IndexInherit, Py_CommutingAsProduct, Py_NumericalFlat, Py_TableauBase, Py_Distributable, Py_WeightBase>;
+		using Py_Derivative = BoundProperty<Derivative, Py_IndexInherit, Py_CommutingAsProduct, Py_SelfCommutingBehaviour, Py_NumericalFlat, Py_TableauBase, Py_Distributable, Py_WeightBase>;
 		using Py_Symmetric = BoundProperty<Symmetric, Py_TableauBase>;
 		using Py_DifferentialForm = BoundProperty<DifferentialForm, Py_IndexInherit, Py_DifferentialFormBase>;
 		using Py_DiracBar = BoundProperty<DiracBar, Py_Accent, Py_Distributable>;
