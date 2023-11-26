@@ -499,8 +499,8 @@ bool Ex_matches(std::shared_ptr<Ex> ex, ExNode& other)
 	{
 	Ex_comparator comp(get_kernel_from_scope()->properties);
 	auto ret=comp.equal_subtree(ex->begin(), other.it);
-	if(ret==Ex_comparator::match_t::no_match_less || ret==Ex_comparator::match_t::no_match_greater) return false;
-	return true;
+	if(ret==Ex_comparator::match_t::node_match || ret==Ex_comparator::match_t::subtree_match) return true;
+	return false;
 	}
 
 bool Ex_matches_Ex(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> other)
@@ -510,8 +510,8 @@ bool Ex_matches_Ex(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> other)
 	if(ex->begin()==ex->end() || other->begin()==other->end()) return false;
 
 	auto ret=comp.equal_subtree(ex->begin(), other->begin());
-	if(ret==Ex_comparator::match_t::no_match_less || ret==Ex_comparator::match_t::no_match_greater) return false;
-	return true;
+	if(ret==Ex_comparator::match_t::node_match || ret==Ex_comparator::match_t::subtree_match) return true;
+	return false;
 	}
 
 bool ExNode_less(ExNode& one, ExNode& two)

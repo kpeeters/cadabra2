@@ -542,4 +542,19 @@ def test126():
 
 test126()
         
+def test127():
+    # Expect an exception when substituting with empty rule.
+    __cdbkernel__=create_scope()
+    ex:= A + B;
+    try:
+        substitute(ex, $ $);
+        assert(False)
+    except Exception:
+        print("Test 127a passed")
+    try:
+        substitute(ex, ${ }$)
+        assert(1==0)
+    except Exception:
+        print("Test 127b passed")
     
+test127()

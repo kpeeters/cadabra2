@@ -17,13 +17,14 @@
 #include "properties/Integer.hh"
 #include "properties/SortOrder.hh"
 
-//#define DEBUG 1
+// #define DEBUG 1
 
+static bool debug_stop = false;
 
 #ifdef DEBUG
-  #define DEBUGLN(ln) ln
+#define DEBUGLN(ln) if(!debug_stop) { ln; }
 #else
-  #define DEBUGLN(ln)
+#define DEBUGLN(ln)
 #endif
 
 namespace cadabra {
@@ -452,7 +453,7 @@ namespace cadabra {
 		return r;
 #endif
 
-		std::cerr << tab() << "result = ";
+		DEBUGLN( std::cerr << tab() << "result = "; );
 		switch(r) {
 			case match_t::node_match:
 				std::cerr << "node_match";
@@ -507,6 +508,7 @@ namespace cadabra {
 		bool is_sibling_pattern=false;
 		bool is_coordinate=false;
 		bool is_number=false;
+		bool two_is_value=false;
 
 		if(one->fl.bracket==str_node::b_none && one->is_index() )
 			is_index=true;
@@ -517,7 +519,8 @@ namespace cadabra {
 		else if(one->is_siblings_wildcard())
 			is_sibling_pattern=true;
 		else if(is_index && one->is_integer()==false) {
-			// Things in _{..} or ^{..} are either indices (implicit patterns) or coordinates.
+			// Things in _{..} or ^{..} are either indices (implicit patterns), or coordinates (as
+			// numbers are treated in the last branch below).
 			const Coordinate *cdn1=0;
 			if(use_props==useprops_t::always) {
 				DEBUGLN( std::cerr << tab() << "is " << *one->name << " a coordinate?" << std::endl; );
@@ -548,7 +551,7 @@ namespace cadabra {
 
 			if(two->is_rational() && implicit_pattern) {
 				// Determine whether 'one' can take the value 'two'.
-				//std::cerr << "**** can one take value two " << use_props  << std::endl;
+				DEBUGLN( std::cerr << tab() << "can one take value two (use props = " << use_props  << ")" << std::endl; );
 				const Integer *ip = 0;
 				if(use_props==useprops_t::always) {
 					DEBUGLN( std::cerr << tab() << "is " << *one->name << " an integer?" << std::endl; );
@@ -557,6 +560,8 @@ namespace cadabra {
 					}
 
 				if(ip==0) return report(match_t::no_match_less);
+				
+				DEBUGLN( std::cerr << tab() << "yes, potentially, check the range" << std::endl; );
 
 				bool lower_bdy=true, upper_bdy=true;
 				multiplier_t from, to;
@@ -573,7 +578,7 @@ namespace cadabra {
 				if((lower_bdy && *two->multiplier < from) || (upper_bdy && *two->multiplier > to))
 					return report(match_t::no_match_less);
 
-				// std::cerr << tab() << Ex(one) << tab() << "can take value " << *two->multiplier << std::endl;
+				DEBUGLN( std::cerr << tab() << Ex(one) << tab() << "can take value " << *two->multiplier << std::endl );
 				}
 
 			// We want to search the replacement map for replacement rules which we have
@@ -642,11 +647,13 @@ namespace cadabra {
 					const Indices *t1=0;
 					const Indices *t2=0;
 					if(use_props==useprops_t::always) {
-						DEBUGLN( std::cerr << tab() << "is " << one << " an index?" << std::endl; );
+						DEBUGLN( std::cerr << tab() << "is " << *one->name << " an index?" << std::endl; );
+						debug_stop=true;
 						t1=properties.get<Indices>(one, false);
+						debug_stop=false;						
 						DEBUGLN( std::cerr << tab() << "found for one: " << t1 << std::endl; );
 						if(two->is_rational()==false) {
-							DEBUGLN( std::cerr << tab() << "is " << two << " an index?" << std::endl; );
+							DEBUGLN( std::cerr << tab() << "is " << *two->name << " an index?" << std::endl; );
 							t2=properties.get<Indices>(two, false);
 							DEBUGLN( std::cerr << tab() << t2 << std::endl; );
 							// It is still possible that t2 is a Coordinate and
@@ -665,8 +672,10 @@ namespace cadabra {
 									if(subtree_compare(&properties, a.begin(), two, 0)==0) return true;
 									else return false;
 								});
-								if(ivals!=t1->values.end())
+								if(ivals!=t1->values.end()) {
 									t2=t1;
+									two_is_value=true;
+									}
 								}
 							}
 							else {
@@ -769,10 +778,18 @@ namespace cadabra {
 			// they matched because they are from the same set but do not have the same
 			// name, we still need to let the caller know about this.
 			if(is_index) {
-				int xc = subtree_compare(0, one, two, ignore_parent_rel?(-1):(-2));
-				if(xc==0) return report(match_t::subtree_match);
-				if(xc>0)  return report(match_t::match_index_less);
-				return report(match_t::match_index_greater);
+				if(two->is_rational() || two_is_value) {
+					// We matched an index in 'one' to a value in 'two', report as matching.
+					DEBUGLN( std::cerr << "Matched index to numerical value." << std::endl; );
+					return report(match_t::subtree_match);
+					}
+				else {
+					DEBUGLN( std::cerr << "Index type matches, report whether names match too." << std::endl; );
+					int xc = subtree_compare(0, one, two, ignore_parent_rel?(-1):(-2));
+					if(xc==0) return report(match_t::subtree_match);
+					if(xc>0)  return report(match_t::match_index_less);
+					return report(match_t::match_index_greater);
+					}
 				}
 			else return report(match_t::node_match);
 			}
