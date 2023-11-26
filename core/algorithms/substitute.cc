@@ -16,10 +16,13 @@ using namespace cadabra;
 substitute::substitute(const Kernel& k, Ex& tr, Ex& args_, bool partial)
 	: Algorithm(k, tr), comparator(k.properties), args(args_), sort_product_(k, tr), partial(partial)
 	{
+	if(args.is_empty()) 
+		throw ArgumentException("substitute: Replacement rule is an empty expression.");
+	
 	cadabra::do_list(args, args.begin(), [&](Ex::iterator arrow) {
 		//args.print_recursive_treeform(std::cerr, arrow);
 		if(*arrow->name!="\\arrow" && *arrow->name!="\\equals")
-			throw ArgumentException("substitute: Argument is neither a replacement rule nor an equality");
+			throw ArgumentException("substitute: Argument is neither a replacement rule nor an equality.");
 
 		sibling_iterator lhs=args.begin(arrow);
 		sibling_iterator rhs=lhs;

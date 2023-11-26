@@ -151,6 +151,11 @@ namespace cadabra {
 		return to_long(*(begin()->multiplier));
 		}
 
+	bool Ex::is_empty() const
+		{
+		return begin()==end();
+		}
+
 	std::ostream& Ex::print_python(std::ostream& str, Ex::iterator it)
 		{
 		std::string name(*(*it).name);

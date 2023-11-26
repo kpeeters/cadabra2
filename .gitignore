@@ -14,3 +14,4 @@ __pycache__
 .vs
 CMakeSettings.json
 config/pre_install.rtf
+.ccls-cache

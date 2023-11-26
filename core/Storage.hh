@@ -175,6 +175,9 @@ namespace cadabra {
 			bool          is_integer() const;
 			long          to_integer() const;
 
+			/// Test if the expression is empty (no content at all).
+			bool          is_empty() const;
+
 			/// Display expression in Python/Cadabra input form. This is
 			/// fairly straightforward so not handled with a separate
 			/// DisplayBase derived class.
