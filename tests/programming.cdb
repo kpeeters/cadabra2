@@ -271,17 +271,28 @@ test12()
      
 def test13():
     __cdbkernel__ = create_scope()
-    {m,n}::Indices(values={a,b});
-    {\mu,\nu}::Integer.
-    {\mu,\nu}::Indices(values={0,1,2,3});
+    {m,n,k,l}::Indices(flat, values={a,b});
+    {\mu,\nu,\rho,\sigma}::Indices(curved, values={0,1,2,3});
     assert( $A_{m n}$.matches($A_{a b}$) == True )
+    print("Test 13a passed")
     assert( $A_{m n}$.matches($A_{a a}$) == True )
+    print("Test 13b passed")
     assert( $A_{m n}$.matches($A_{a c}$) == False )
+    print("Test 13c passed")
     assert( $A_{m n}$.matches($A_{0 1}$) == False )
+    print("Test 13d passed")
     assert( $A_{\mu\nu}$.matches($A_{0 1}$) == True )
+    print("Test 13e passed")
     assert( $A_{\mu\nu}$.matches($A^{0 1}$) == True )     
-    assert( $A_{\mu\nu}$.matches($A_{0 4}$) == False )                    
-    print("Test 13 passed")
+    print("Test 13f passed")
+    assert( $A_{\mu\nu}$.matches($A_{0 4}$) == False )
+    print("Test 13g passed")
+    assert( $A_{m n}$.matches($A_{k l}$) == True )
+    print("Test 13h passed")
+    assert( $A_{m n}$.matches($A_{m n}$) == True )    
+    print("Test 13i passed")
+    assert( $A_{m n}$.matches($A_{\mu \nu}$) == False )
+    print("Test 13j passed")
 
 test13()
 

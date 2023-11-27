@@ -454,33 +454,36 @@ namespace cadabra {
 #endif
 
 		DEBUGLN( std::cerr << tab() << "result = "; );
-		switch(r) {
-			case match_t::node_match:
-				std::cerr << "node_match";
-				break;
-			case match_t::subtree_match:
-				std::cerr << "subtree_match";
-				break;
-			case match_t::match_index_less:
-				std::cerr << "match_index_less";
-				break;
-			case match_t::match_index_greater:
-				std::cerr << "match_index_greater";
-				break;
-			case match_t::no_match_indexpos_less:
-				std::cerr << "no_match_indexpos_less";
-				break;
-			case match_t::no_match_indexpos_greater:
-				std::cerr << "no_match_indexpos_greater";
-				break;
-			case match_t::no_match_less:
-				std::cerr << "no_match_less";
-				break;
-			case match_t::no_match_greater:
-				std::cerr << "no_match_greater";
-				break;
+		if(!debug_stop) {
+			switch(r) {
+				case match_t::node_match:
+					std::cerr << "node_match";
+					break;
+				case match_t::subtree_match:
+					std::cerr << "subtree_match";
+					break;
+				case match_t::match_index_less:
+					std::cerr << "match_index_less";
+					break;
+				case match_t::match_index_greater:
+					std::cerr << "match_index_greater";
+					break;
+				case match_t::no_match_indexpos_less:
+					std::cerr << "no_match_indexpos_less";
+					break;
+				case match_t::no_match_indexpos_greater:
+					std::cerr << "no_match_indexpos_greater";
+					break;
+				case match_t::no_match_less:
+					std::cerr << "no_match_less";
+					break;
+				case match_t::no_match_greater:
+					std::cerr << "no_match_greater";
+					break;
+				}
+			std::cerr << std::endl;
 			}
-		std::cerr << std::endl;
+		
 		--offset;
 		return r;
 		}
@@ -651,11 +654,13 @@ namespace cadabra {
 						debug_stop=true;
 						t1=properties.get<Indices>(one, false);
 						debug_stop=false;						
-						DEBUGLN( std::cerr << tab() << "found for one: " << t1 << std::endl; );
+						DEBUGLN( std::cerr << tab() << "found index property for one: " << t1 << std::endl; );
 						if(two->is_rational()==false) {
 							DEBUGLN( std::cerr << tab() << "is " << *two->name << " an index?" << std::endl; );
+							debug_stop=true;
 							t2=properties.get<Indices>(two, false);
-							DEBUGLN( std::cerr << tab() << t2 << std::endl; );
+							debug_stop=false;
+							DEBUGLN( std::cerr << tab() << "found index property for two: " << t2 << std::endl; );
 							// It is still possible that t2 is a Coordinate and
 							// t1 an Index which can take the value of the
 							// coordinate. This happens when 'm' is an index
