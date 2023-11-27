@@ -107,6 +107,7 @@ set(ALGOS
   lr_tensor
   map_sympy
   meld
+  nevaluate
   product_rule
   raise_free_indices
   reduce_delta

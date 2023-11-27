@@ -1,0 +1,127 @@
+{
+	"cell_id": 7056241270934378170,
+	"cells": [
+		{
+			"cell_id": 6442002833303548429,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 14156260080777624593,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{nevaluate}{Numerically evaluate an expression.}\n\nGiven a scalar expression of one or more variables, evaluate it for a range of values \nof those variables. This algorithm accepts a Cadabra expression and one or more numpy arrays\ncontaining the values of the variables, in the form of a dictionary. A simple example with \nan expression of one variable:"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{nevaluate}{Numerically evaluate an expression.}\n\nGiven a scalar expression of one or more variables, evaluate it for a range of values \nof those variables. This algorithm accepts a Cadabra expression and one or more numpy arrays\ncontaining the values of the variables, in the form of a dictionary. A simple example with \nan expression of one variable:"
+		},
+		{
+			"cell_id": 7717361411841115229,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16317621934812508465,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3643042606220920068,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\cos(x) \\exp( -  1/4 (x)**2)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\cos{x} \\exp\\left( - \\frac{1}{4}{x}^{2}\\right)\\end{dmath*}"
+				}
+			],
+			"source": "ex:= \\cos(x) \\exp(-x**2/4);\n\nimport numpy as np\n\nxv = np.linspace(0, 3, 100)\nz = np.array( nevaluate(ex, {$x$: xv} ) )"
+		},
+		{
+			"cell_id": 9285492536561123852,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9668872934801381964,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}[1.         0.99931146 0.99724785 0.99381515 0.98902334 0.98288631\n 0.97542182 0.96665142 0.95660038 0.94529757]\\end{verbatim}"
+				}
+			],
+			"source": "z[0:10];"
+		},
+		{
+			"cell_id": 5511376990109163867,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 3830134294778153283,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The \\algo{nevaluate} function thus takes as its second argument a Python\ndictionary which maps each variable in the expression to a list of values.\n\nFor expressions of multiple variables, the logic is the same: just list all \nthe variables in the dictionary, as in the example below."
+				}
+			],
+			"hidden": true,
+			"source": "The \\algo{nevaluate} function thus takes as its second argument a Python\ndictionary which maps each variable in the expression to a list of values.\n\nFor expressions of multiple variables, the logic is the same: just list all \nthe variables in the dictionary, as in the example below."
+		},
+		{
+			"cell_id": 2992782121045095320,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3251060037967502714,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6149534026651365282,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\cos(x) \\sin(y)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\cos{x} \\sin{y}\\end{dmath*}"
+				}
+			],
+			"source": "ex:= \\cos(x) \\sin(y);"
+		},
+		{
+			"cell_id": 13003303353493457346,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "xv = np.linspace(0,   np.pi, 100)\nyv = np.linspace(0, np.pi, 100)"
+		},
+		{
+			"cell_id": 14177849469379369091,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "z = np.array( nevaluate(ex, {$x$: xv, $y$: yv}) )"
+		},
+		{
+			"cell_id": 10078872525967387623,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 26823108033460839,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}0.3106205340965772\\end{verbatim}"
+				}
+			],
+			"source": "z[3,10];"
+		},
+		{
+			"cell_id": 10368637782920619472,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

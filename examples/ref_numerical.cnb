@@ -56,14 +56,14 @@
 			"cell_type": "latex",
 			"cells": [
 				{
-					"cell_id": 17518277435515688271,
+					"cell_id": 18054204918676316375,
 					"cell_origin": "client",
 					"cell_type": "latex_view",
-					"source": "The \\verb|nevaluate| function returns an \\verb|NTensor|, which is Cadabra's\nobject to store numerical values of tensors. It can be converted to a numpy\narray, after which you can plot it:"
+					"source": "The \\algo{nevaluate} function returns an \\verb|NTensor|, which is Cadabra's\nobject to store numerical values of tensors. It can be converted to a numpy\narray by wrapping it in `np.array`, after which you can plot it:"
 				}
 			],
 			"hidden": true,
-			"source": "The \\verb|nevaluate| function returns an \\verb|NTensor|, which is Cadabra's\nobject to store numerical values of tensors. It can be converted to a numpy\narray, after which you can plot it:"
+			"source": "The \\algo{nevaluate} function returns an \\verb|NTensor|, which is Cadabra's\nobject to store numerical values of tensors. It can be converted to a numpy\narray by wrapping it in `np.array`, after which you can plot it:"
 		},
 		{
 			"cell_id": 5634273073315875314,
