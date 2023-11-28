@@ -316,4 +316,19 @@ add_custom_command(
    COMMENT  "Creating the_cadabra_book.pdf")
 add_custom_target(book ALL echo -n DEPENDS ${BOOKOUTDIR}/the_cadabra_book.pdf)
 
-
+add_custom_command(
+   OUTPUT   ${BOOKOUTDIR}/writing_algorithms.pdf
+   DEPENDS  ${CMAKE_SOURCE_DIR}/doc/writing_algorithms.tex
+   COMMAND  cp
+   ARGS     ${CMAKE_SOURCE_DIR}/doc/writing_algorithms.tex
+            ${CMAKE_SOURCE_DIR}/doc/autogobble.sty
+            ${BOOKOUTDIR}/
+   COMMAND  pdflatex
+   ARGS     writing_algorithms.tex
+   COMMAND  pdflatex
+   ARGS     writing_algorithms.tex
+   COMMAND  cp
+   ARGS     writing_algorithms.pdf ${CMAKE_SOURCE_DIR}/web2/cadabra2/source
+   WORKING_DIRECTORY ${BOOKOUTDIR}
+   COMMENT  "Creating writing_algorithms.pdf")
+add_custom_target(writing ALL echo -n DEPENDS ${BOOKOUTDIR}/writing_algorithms.pdf)

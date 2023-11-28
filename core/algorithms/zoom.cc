@@ -1,6 +1,7 @@
 
 #include "algorithms/zoom.hh"
 #include "algorithms/substitute.hh"
+#include "Functional.hh"
 #include "Cleanup.hh"
 
 using namespace cadabra;
@@ -8,10 +9,23 @@ using namespace cadabra;
 zoom::zoom(const Kernel& k, Ex& e, Ex& rules_)
 	: Algorithm(k, e), rules(rules_)
 	{
+	// Convert rules into a list (if it isn't already)
+	rules = cadabra::make_list(rules);
+
+	// Create a proper substitution rule out of the patterns (otherwise
+	// substitute will not swallow them).
+	cadabra::do_list(rules, rules.begin(), [&](Ex::iterator it) {
+		if(*it->name!="\\arrow") {
+			auto wrap = rules.wrap(it, str_node("\\arrow"));
+			rules.append_child(wrap, str_node("dummy"));
+			}
+		return true;
+		});
+
 	// Create a proper substitution rule out of the pattern (otherwise
 	// substitute will not swallow it).
-	auto wrap = rules.wrap(rules.begin(), str_node("\\arrow"));
-	rules.append_child(wrap, str_node("dummy"));
+	// auto wrap = rules.wrap(rules.begin(), str_node("\\arrow"));
+	// rules.append_child(wrap, str_node("dummy"));
 	}
 
 bool zoom::can_apply(iterator it)
@@ -49,7 +63,7 @@ Algorithm::result_t zoom::apply(iterator& it)
 		return res;
 		}
 	
-	// Wrap all things which we want to remove from view in an
+   // Wrap all things which we want to remove from view in an
 	// \ldots node.
 
 	substitute subs(kernel, tr, rules);
