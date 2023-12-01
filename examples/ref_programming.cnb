@@ -669,6 +669,41 @@
 			"source": "p2 = Symmetric.get($A_{m n}$)\np2;"
 		},
 		{
+			"cell_id": 867371738363577328,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 11028315898171412377,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Some properties, like `Weight` have an associated value. You can access these with the appropriate member function,\nso for this particular example you would do"
+				}
+			],
+			"hidden": true,
+			"source": "Some properties, like `Weight` have an associated value. You can access these with the appropriate member function,\nso for this particular example you would do"
+		},
+		{
+			"cell_id": 8211547310713253802,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 815228937313619719,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Weight attached to~}x.\\end{dmath*}"
+				},
+				{
+					"cell_id": 9075103878800686191,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}42\\end{verbatim}"
+				}
+			],
+			"source": "x::Weight(value=42, label=field);\nWeight.get($x$, label=\"field\").value(\"field\");"
+		},
+		{
 			"cell_id": 15480924078324966867,
 			"cell_origin": "client",
 			"cell_type": "latex",
