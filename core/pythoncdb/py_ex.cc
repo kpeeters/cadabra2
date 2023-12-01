@@ -132,7 +132,7 @@ namespace cadabra {
 			}
 		}
 
-   Ex_ptr Ex_join(std::vector<Ex_ptr> exs)
+   Ex_ptr Ex_join(const std::vector<Ex_ptr>& exs)
 		{
 		auto ret = std::make_shared<Ex>("\\comma");
 
