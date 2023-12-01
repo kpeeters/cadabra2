@@ -129,7 +129,8 @@ namespace cadabra {
 	void     one(rset_t::iterator&);
 	void     flip_sign(rset_t::iterator&);
 	void     half(rset_t::iterator&);
-
+	void     set(rset_t::iterator&, multiplier_t);
+	
 	/// \ingroup core
 	///
 	/// Basic storage class for symbolic mathemematical expressions. The

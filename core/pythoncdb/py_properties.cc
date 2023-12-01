@@ -360,7 +360,14 @@ namespace cadabra {
 		def_abstract_prop<Py_DependsBase>(m, "DependsBase")
 			.def("dependencies", [](const Py_DependsBase & p) { return p.get_prop()->dependencies(p.get_kernel(), p.get_it()); });
 		def_abstract_prop<Py_WeightBase>(m, "WeightBase")
-			.def("value", [](const Py_WeightBase & p, const std::string& forcedLabel) { return p.get_prop()->value(p.get_kernel(), p.get_it(), forcedLabel); });
+			.def("value", [](const Py_WeightBase & p, const std::string& forcedLabel) {
+				// This is mpq_class, convert to the Python equivalent.
+				pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
+				auto m = p.get_prop()->value(p.get_kernel(), p.get_it(), forcedLabel);
+				pybind11::object mult = mpq(m.get_num().get_si(), m.get_den().get_si());
+				return mult;
+				});
+
 		def_abstract_prop<Py_DifferentialFormBase>(m, "DifferentialFormBase")
 			.def("degree", [](const Py_DifferentialFormBase & p) { return p.get_prop()->degree(p.get_props(), p.get_it()); });
 

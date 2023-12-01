@@ -341,5 +341,20 @@ def test16():
     {i,j,k}::Indices(isospin, position=independent).
     assert($\Lambda_{a}$.matches($\Lambda_{i}$)==False)
     assert($\Lambda_{a}$.matches($\Lambda^{i}$)==False)
+    print("Test 16 passed")
     
 test16()
+
+def test17():
+    x::Weight(value=42, label=field);
+    tst1 = Weight.get($x$, label="field").value("field")
+    assert(tst1==42)
+    print("Test 17a passed")
+    ex:= 3 a;
+    ex.top().multiplier = tst1
+    tst2:= 42 a - @(ex);
+    assert(tst2==0)
+    print("Test 17b passed")
+
+test17()
+

@@ -1014,6 +1014,12 @@ found:
 		num=rat_set.insert(fac).first;
 		}
 
+	void set(rset_t::iterator& num, multiplier_t fac)
+		{
+		fac.canonicalize();
+		num=rat_set.insert(fac).first;
+		}
+
 	void add(rset_t::iterator& num, multiplier_t fac)
 		{
 		fac+=*num;

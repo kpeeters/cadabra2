@@ -325,8 +325,8 @@ void ExNode::set_multiplier(pybind11::object mult)
 	if(!ex->is_valid(it))
 		throw ConsistencyException("Cannot set the multiplier of an iterator before the first 'next'.");
 
-	pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
-	multiply(it->multiplier, pybind11::cast<int>(mult));
+	set(it->multiplier, multiplier_t(mult.attr("numerator").cast<long>(),
+												mult.attr("denominator").cast<long>()) );
 	}
 
 

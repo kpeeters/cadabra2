@@ -18,7 +18,9 @@ substitute::substitute(const Kernel& k, Ex& tr, Ex& args_, bool partial)
 	{
 	if(args.is_empty()) 
 		throw ArgumentException("substitute: Replacement rule is an empty expression.");
-	
+
+	Stopwatch sw;
+	sw.start();
 	cadabra::do_list(args, args.begin(), [&](Ex::iterator arrow) {
 		//args.print_recursive_treeform(std::cerr, arrow);
 		if(*arrow->name!="\\arrow" && *arrow->name!="\\equals")
@@ -81,6 +83,8 @@ substitute::substitute(const Kernel& k, Ex& tr, Ex& args_, bool partial)
 			}
 		return true;
 		});
+	sw.stop();
+	std::cerr << "preparation took " << sw << std::endl;
 	}
 
 bool substitute::can_apply(iterator st)
