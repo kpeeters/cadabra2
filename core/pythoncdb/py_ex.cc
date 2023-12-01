@@ -97,6 +97,7 @@ namespace cadabra {
 
    Ex_ptr Ex_join(const Ex_ptr ex1, const Ex_ptr ex2)
 		{
+		// DEPRECATED: no longer in use, can be removed
 		if (ex1->size() == 0) return ex2;
 		if (ex2->size() == 0) return ex1;
 
@@ -129,6 +130,18 @@ namespace cadabra {
 			cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
 			return ret;
 			}
+		}
+
+   Ex_ptr Ex_join(std::vector<Ex_ptr> exs)
+		{
+		auto ret = std::make_shared<Ex>("\\comma");
+
+		for(const Ex_ptr& ex: exs) {
+			auto loc = ret->append_child(ret->begin(), ex->begin());
+			if(*ex->begin()->name=="\\comma") 
+				ret->flatten_and_erase(loc);
+			}
+		return ret;
 		}
 	
 	Ex_ptr Ex_mul(const Ex_ptr ex1, const Ex_ptr ex2)
@@ -689,7 +702,14 @@ namespace cadabra {
 		.def("from_sympy", &sympy::SympyBridge::import_ex)
 		;
 
-		m.def("join", &Ex_join);
+		m.def("join", [](const Ex_ptr ex1, const Ex_ptr ex2, py::args args) {
+			std::vector<Ex_ptr> ex = {ex1, ex2};
+        	for (const auto& arg : args) {
+				ex.push_back(arg.cast<Ex_ptr>());
+				}
+        	return Ex_join(ex);
+    		});
+
 		m.def("tree", &print_tree);
 
 		m.def("map_sympy", &map_sympy_wrapper,
