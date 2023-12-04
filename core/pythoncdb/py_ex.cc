@@ -383,7 +383,9 @@ namespace cadabra {
 		Ex result;
 
 		pybind11::size_t start, stop, step, length;
-		slice.compute(ex->size(), &start, &stop, &step, &length);
+		// std::cerr << "SLICE object has " << ex->number_of_children(ex->begin()) << " elements" << std::endl;
+		slice.compute(ex->number_of_children(ex->begin()), &start, &stop, &step, &length);
+		// std::cerr << "SLICE: " << start << ", " << stop << ", " << step << ", " << length << std::endl;
 		if (length == 0)
 			return result;
 
@@ -391,14 +393,11 @@ namespace cadabra {
 		auto it = result.set_head(*ex->begin());
 
 		// Iterate over fully-closed range.
-		for (; start != stop; start += step) {
-			Ex::iterator toadd(ex->begin());
+		for (; start < stop; start += step) {
+			Ex::sibling_iterator toadd=ex->begin(ex->begin());
 			std::advance(toadd, start);
-			result.append_child(it, toadd);
+			result.append_child(it, Ex::iterator(toadd));
 			}
-		Ex::iterator toadd(ex->begin());
-		std::advance(toadd, start);
-		result.append_child(it, toadd);
 		return result;
 		}
 

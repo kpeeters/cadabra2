@@ -370,3 +370,40 @@ def test17():
 
 test17()
 
+
+#  {i,j,k,l}::Indices(cartesian, values={x,y,z}).
+#  {\mu,\nu,\rho,\sigma}::Indices(polar, values={r,\theta,\phi}).
+#  ex:= x^{i} x^{i} + p_{\mu} p^{\mu};
+#  for node in ex:
+#       prop = Indices.get(node)
+#       if prop is not None:
+#           print(node)
+#           print(node.name, prop.values)
+#  
+#  ind = Indices.get($i$);
+
+def test18():
+    ex:= A + B + C + D + E;
+    s1 = ex[0:2]
+    tst:= A + B - @(s1);
+    assert(tst==0)
+    print("Test 18a passed")
+    s2 = ex[0:-2:2]
+    tst:= A + C - @(s2);
+    assert(tst==0)
+    print("Test 18b passed")
+    ex:= A + B + C + D + E + F;     
+    s3 = ex[0:-2:2]
+    tst:= A + C - @(s3);
+    print("Test 18c passed")
+    ex:= A + B + C + D + E + F;     
+    s4 = ex[1:-2:2]
+    tst:= B + D - @(s4);
+    print("Test 18d passed")
+    ex:= A + B + C + D + E;
+    s5 = ex[2:3]
+    tst:= C - @(s5);
+    assert(tst==0)
+    print("Test 18e passed")
+
+test18()
