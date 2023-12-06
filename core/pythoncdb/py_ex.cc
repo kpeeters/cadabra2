@@ -137,10 +137,14 @@ namespace cadabra {
 		auto ret = std::make_shared<Ex>("\\comma");
 
 		for(const Ex_ptr& ex: exs) {
-			auto loc = ret->append_child(ret->begin(), ex->begin());
-			if(*ex->begin()->name=="\\comma") 
-				ret->flatten_and_erase(loc);
+			// skip ex if empty
+			if (ex->size() > 0) {
+				auto loc = ret->append_child(ret->begin(), ex->begin());
+				if(*ex->begin()->name=="\\comma") 
+					ret->flatten_and_erase(loc);
+				}
 			}
+		// Note: ret could still \comma{} or \comma{x}
 		return ret;
 		}
 	
