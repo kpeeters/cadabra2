@@ -333,6 +333,15 @@ def test14():
     ex4= join(ex1, ex2, ex3)
     assert(ex4==${A,C,D,E}$)
     print("Test 14g passed")
+    ex1:= A;
+    ex4 = join(ex1, Ex(""))
+    assert(ex4==$A$)
+    print("Test 14h passed")
+    ex1:= A;
+    ex2:= \comma{};
+    ex4= join(ex1, ex2)
+    assert(ex4==$A$)
+    print("Test 14i passed")
 
 test14()
 
