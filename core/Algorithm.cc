@@ -337,7 +337,12 @@ void Algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnod
 		// Removing happens in the next step.
 		}
 	else if(*walk->name=="\\pow") {
-		if(tr.index(it)==0) { // the argument
+		if(tr.index(it)==0) { // the argument is zero
+			sibling_iterator arg=it;
+			++arg;
+			if(*arg->multiplier<0) 
+				throw RuntimeException("Division by zero encountered.");
+			
 			walk->multiplier=rat_set.insert(0).first;
 			it=walk;
 			propagate_zeroes(it, topnode);

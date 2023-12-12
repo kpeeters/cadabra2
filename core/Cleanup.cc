@@ -149,11 +149,14 @@ namespace cadabra {
 			return true;
 			}
 		
+		if(*arg->multiplier==0) { // 0**positive = 0, 0**negative=undefined
+			if(*exp->multiplier<0)
+				throw RuntimeException("Division by zero encountered.");
+			zero(it->multiplier);
+			return true;
+			}
+		
 		if(*arg->name=="1") {
-			if(*arg->multiplier==0) { // 0**anything = 0
-				zero(it->multiplier);
-				return true;
-				}
 			if(*arg->multiplier==1) { // 1**anything = 1
 				one(it->multiplier);
 				tr.erase_children(it);

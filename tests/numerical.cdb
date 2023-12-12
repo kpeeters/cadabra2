@@ -96,4 +96,23 @@ def test06():
 
 test06()
 
-        
+def test07():
+    try:
+       ex:=1/0;
+       assert(1==0)
+    except RuntimeError as err:
+       print("Test 07a passed")
+    try:
+       ex:=1/a;
+       substitute(ex, $a->0$)
+       assert(1==0)
+    except RuntimeError as err:
+       print("Test 07b passed")
+    try:
+       ex:=1/(a-b);
+       substitute(ex, $a->b$)
+       assert(1==0)
+    except RuntimeError as err:
+       print("Test 07c passed")
+
+test07()
