@@ -908,14 +908,27 @@ def test60():
 test60()
 
 def test61():
+   __cdbkernel__=create_scope()
    {a,b,c,d#}::Indices(position=independent).
    \bar{#}::Accent.
    \bar{A}_{a b}::Symmetric.
    \bar{A}^{a b}::Symmetric.
    ex := \bar{A}_{a b} \bar{A}^{b a};
-   canonicalise (ex);
+   canonicalise (ex)
    tst:= \bar{A}_{a b} \bar{A}^{a b} - @(ex);
    assert(tst==0)
    print("Test 61 passed")
 
 test61()
+
+def test62():
+   __cdbkernel__=create_scope()
+   {\bar{\epsilon}_{\mu \nu \rho}, \bar{\epsilon}^{\mu \nu \rho}}::AntiSymmetric;
+   ex := \bar{\gamma}^{\sigma \kappa} \bar{\epsilon}_{\mu \kappa \nu} - \bar{\gamma}^{\sigma \kappa} \bar{\epsilon}_{\mu \nu \kappa};
+   canonicalise(ex)
+   tst:= -2\bar{\gamma}^{\sigma\kappa} \bar{\epsilon}_{\mu\nu\kappa} - @(ex);
+   assert(tst==0)
+   print("Test 62 passed")
+
+test62()
+
