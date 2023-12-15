@@ -27,7 +27,7 @@ TableauBase::tab_t AntiSymmetric::get_tab(const Properties& pr, Ex& tr, Ex::iter
 		}
 
 	tab_t tab;
-	for(unsigned int i=0; i<Ex::number_of_children(it); ++i)
+	for(unsigned int i=0; i<Algorithm::number_of_indices(pr, it); ++i)
 		tab.add_box(i,i);
 	return tab;
 	}

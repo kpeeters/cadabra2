@@ -1,4 +1,5 @@
 
+#include "Algorithm.hh"
 #include "properties/Symmetric.hh"
 
 using namespace cadabra;
@@ -26,7 +27,7 @@ TableauBase::tab_t Symmetric::get_tab(const Properties& pr, Ex& tr, Ex::iterator
 		}
 
 	tab_t tab;
-	for(unsigned int i=0; i<tr.number_of_children(it); ++i)
+	for(unsigned int i=0; i<Algorithm::number_of_indices(pr, it); ++i)
 		tab.add_box(0,i);
 	return tab;
 	}

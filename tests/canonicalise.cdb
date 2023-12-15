@@ -906,3 +906,16 @@ def test60():
    print("Test 60b passed")
 
 test60()
+
+def test61():
+   {a,b,c,d#}::Indices(position=independent).
+   \bar{#}::Accent.
+   \bar{A}_{a b}::Symmetric.
+   \bar{A}^{a b}::Symmetric.
+   ex := \bar{A}_{a b} \bar{A}^{b a};
+   canonicalise (ex);
+   tst:= \bar{A}_{a b} \bar{A}^{a b} - @(ex);
+   assert(tst==0)
+   print("Test 61 passed")
+
+test61()

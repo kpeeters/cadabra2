@@ -395,6 +395,9 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 			// std::cerr << Ex(facit) << " has tableaubase " << tba << std::endl;
 			if(tba) {
 				unsigned int num_ind=number_of_indices(facit);
+#ifdef XPERM_DEBUG
+				std::cerr << "factor " << *facit->name << " has " << num_ind << " indices" << std::endl;
+#endif
 
 				// Add indices to the base. We used to add everything except the last one, but that
 				// seems to be the wrong thing to do after the XPERM -> XPERM_EXT upgrade (see Jose's email).
