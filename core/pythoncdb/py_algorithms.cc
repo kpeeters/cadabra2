@@ -100,7 +100,7 @@ namespace cadabra {
 		def_algo<reduce_delta>(m, "reduce_delta", true, false, 0);
 		def_algo<sort_product>(m, "sort_product", true, false, 0);
 		def_algo<sort_spinors>(m, "sort_spinors", true, false, 0);
-		def_algo<sort_sum, int>(m, "sort_sum", true, false, 0, py::arg("algochoice") = 0);
+		def_algo<sort_sum, unsigned int>(m, "sort_sum", true, false, 0, py::arg("runsize") = 32);
 		def_algo<tabdimension>(m, "tab_dimension", true, false, 0);
 		def_algo<young_project_product>(m, "young_project_product", true, false, 0);
 		def_algo<combine, Ex>(m, "combine", true, false, 0, py::arg("trace_op") = Ex{});
