@@ -188,18 +188,19 @@ set(PROPERTY_SRC_FILES
 #   )
 
 set(MODULE_SRC_FILES
-	pythoncdb/py_ntensor.cc
-   pythoncdb/py_algorithms.cc
-   pythoncdb/py_ex.cc
-   pythoncdb/py_globals.cc
-   pythoncdb/py_helpers.cc
-   pythoncdb/py_kernel.cc
-   pythoncdb/py_module.cc
-   pythoncdb/py_packages.cc
-   pythoncdb/py_progress.cc
-   pythoncdb/py_properties.cc
-   pythoncdb/py_stopwatch.cc
-   pythoncdb/py_tableau.cc
+  pythoncdb/py_media.cc
+  pythoncdb/py_ntensor.cc
+  pythoncdb/py_algorithms.cc
+  pythoncdb/py_ex.cc
+  pythoncdb/py_globals.cc
+  pythoncdb/py_helpers.cc
+  pythoncdb/py_kernel.cc
+  pythoncdb/py_module.cc
+  pythoncdb/py_packages.cc
+  pythoncdb/py_progress.cc
+  pythoncdb/py_properties.cc
+  pythoncdb/py_stopwatch.cc
+  pythoncdb/py_tableau.cc
 )
 
 set(LOCAL_SRC_FILES
@@ -230,6 +231,7 @@ set(LOCAL_SRC_FILES
    IndexClassifier.cc
    Kernel.cc
    Linear.cc
+   Media.cc
    Parser.cc
    PreClean.cc
    PreProcessor.cc
