@@ -416,3 +416,14 @@ def test18():
     print("Test 18e passed")
 
 test18()
+
+# 
+# import numpy as np
+# a = np.array([[1,2],[3,4]])
+# a[0,1]=3
+# print(a)
+# 
+# ex:=[[1,2],[3,4]];
+# ex[0][1]=3
+# ex;
+# 

@@ -99,6 +99,7 @@ include_directories(
 add_definitions(
    -D_WEBSOCKETPP_CPP11_STL_
    -DBOOST_ASIO_HAS_STD_CHRONO
+   -DBOOST_BIND_GLOBAL_PLACEHOLDERS
   )
 
 #---------------------------------------------------------------------------

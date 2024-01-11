@@ -558,3 +558,32 @@ def test127():
         print("Test 127b passed")
     
 test127()
+
+def test128():
+    # FIXME: adding create_scope here makes things fail, why?
+    # __cdbkernel__=create_scope()
+    a::Symbol;
+    b::Symbol;
+    
+    {a**m?, b**n?, a, b}::NonCommuting;
+    
+    r1 := {
+    a b**m?  -> (1+b a) b**{m?-1},
+    a b -> 1 + b a,
+    };
+    
+    def act(ex):
+        converge(ex):
+            substitute(ex,r1)
+            distribute(ex)
+            collect_factors(ex)
+            print(ex)
+        return ex
+    
+    ex:=a b**5;
+    act(ex);
+    tst:= 5 b**4 + b**5 a - @(ex);
+    assert(tst==0)
+    print("Test 128 passed")
+
+test128()

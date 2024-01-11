@@ -932,3 +932,28 @@ def test62():
 
 test62()
 
+def test63():
+   __cdbkernel__=create_scope()
+   {a, b}::Indices(position=independent).
+   \psi^a::SelfAntiCommuting.
+   {\psi^a, \rho, \chi}::Spinor(dimension=10).
+   {\psi^a, \rho, \chi}::AntiCommuting.
+   \bar{#}::DiracBar.
+   A{#}::AntiSymmetric.
+   ex := A_{a b} \psi^b\bar{\psi^a};
+   canonicalise(_)
+   tst:= - A_{a b} \psi^a\bar{\psi^b} - @(ex);
+   assert(tst==0)
+   print("Test 63a passed")
+   ex := A_{a b} \bar{\rho} \psi^b\bar{\psi^a} \chi.
+   canonicalise(_)
+   tst:= -A_{a b} \bar{\rho} \psi^a\bar{\psi^b} \chi - @(ex).
+   assert(tst==0)
+   print("Test 63b passed")
+   ex := A_{a b}  \bar{\psi^b} \rho \bar{\psi^a} \chi.
+   canonicalise(_)
+   tst:=-A_{a b}  \bar{\psi^a} \rho \bar{\psi^b} \chi - @(ex).
+   assert(tst==0)
+   print("Test 63c passed")
+   
+test63()

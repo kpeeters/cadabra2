@@ -77,17 +77,17 @@ runbuild "Mint_21"             ".deb" 7035 mint21
 runbuild "Mint_20"             ".deb" 7026 mint20
 runbuild "Ubuntu_22.04"        ".deb" 7033 ubuntu2204
 runbuild "Ubuntu_20.04"        ".deb" 7030 ubuntu2004
-runbuild "Ubuntu_18.04"        ".deb" 7017 ubuntu1804
-runbuild "Fedora_28"           ".rpm" 7020 fedora28
-runbuild "Fedora_29"           ".rpm" 7025 fedora29               
-runbuild "Fedora_32"           ".rpm" 7027 fedora32
-runbuild "Fedora_33"           ".rpm" 7031 fedora33
+#runbuild "Ubuntu_18.04"        ".deb" 7017 ubuntu1804
+#runbuild "Fedora_28"           ".rpm" 7020 fedora28
+#runbuild "Fedora_29"           ".rpm" 7025 fedora29               
+#runbuild "Fedora_32"           ".rpm" 7027 fedora32
+#runbuild "Fedora_33"           ".rpm" 7031 fedora33
 runbuild "Fedora_35"           ".rpm" 7032 fedora35
-runbuild "Mint_19"             ".deb" 7022 mint19
-runbuild "OpenSUSE_15"         ".rpm" 7024 opensuse150
+#runbuild "Mint_19"             ".deb" 7022 mint19
+#runbuild "OpenSUSE_15"         ".rpm" 7024 opensuse150
 runbuild "OpenSUSE_Tumbleweed" ".rpm" 7023 opensusetw
-runbuild "Debian_921"          ".deb" 7014 debian9
-runbuild "Debian_Buster"       ".deb" 7021 debian10
+#runbuild "Debian_921"          ".deb" 7014 debian9
+#runbuild "Debian_Buster"       ".deb" 7021 debian10
 # runbuild "CentOS_7"            ".rpm" 7004 centos7      cmake/packaging clash
 # runbuild "Scientific_Linux_74" ".rpm" 7013 scientific7x
 

@@ -18,6 +18,8 @@ You should have received a copy of the GNU General Public License
 
 */
 
+// #define XPERM_DEBUG 1
+
 #include <map>
 
 #include "Exchange.hh"
@@ -79,9 +81,19 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 						++tmpit;
 						gmnxt=properties.get<GammaMatrix>(tmpit);
 						spnxt=properties.get<Spinor>(tmpit);
-						}
-					while(gmnxt==0 && spnxt==0);
+						} while(gmnxt==0 && spnxt==0);
+					
 					if(tmpit==sib) {
+						// Found a pair of adjacent spinors with the same name.
+						// Now make sure that it is *not* of the type \psi^a\bar{\psi^b},
+						// because that's not a contracted spinor line!
+						// Note: db2 is the DiracBar property of the *previously*
+						// found spinor, so of the first one, not the second.
+						// std::cerr << "DiracBar: " << db2 << ", " << db << std::endl;
+						if(! ((db2!=0 && db==0) || (db2==0 && db==0)) ) {
+							i=idts.size();
+							break;
+							}
 						//						txtout << "using fermi exchange" << std::endl;
 						idts[i].extra_sign++;
 						break;
@@ -94,10 +106,16 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 							++tmpit;
 							gmnxt=properties.get<GammaMatrix>(tmpit);
 							spnxt=properties.get<Spinor>(tmpit);
-							}
-						while(gmnxt==0 && spnxt==0);
+							} while(gmnxt==0 && spnxt==0);
+						
 						if(tmpit==sib) { // yes, it's a proper Majorana spinor pair.
-							//							txtout << "using fermi exchange with gamma " << numind << std::endl;
+							// Again, it has to be \bar{...}\gamma{...}, the bar
+							// should *not* sit on the 2nd object.
+							if(! ((db2!=0 && db==0) || (db2==0 && db==0)) ) {
+								i=idts.size();
+								break;
+								}
+							//	txtout << "using fermi exchange with gamma " << numind << std::endl;
 							if( ((numind*(numind+1))/2)%2 == 0 )
 								idts[i].extra_sign++;
 							break;
@@ -139,6 +157,10 @@ bool exchange::get_node_gs(const Properties& properties, Ex& tr, Ex::iterator it
 	{
 	std::vector<identical_tensors_t> idts;
 	int total_number_of_indices=collect_identical_tensors(properties, tr, it, idts);
+#ifdef XPERM_DEBUG
+	std::cerr << "exchange::get_node_gs: indices returned by collect_identical_tensors = "
+				 << total_number_of_indices << std::endl;
+#endif
 	if(idts.size()==0) return true; // no indices, so nothing to permute
 
 	// Make a strong generating set for the permutation of identical tensors.
