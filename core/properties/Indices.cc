@@ -67,12 +67,22 @@ bool Indices::parse(Kernel& kernel, std::shared_ptr<Ex> ex, keyval_t& keyvals)
 			//std::cerr << "got values keyword " << *(ki->second->name) << std::endl;
 			if(*ki->second->name=="\\sequence") {
 				auto args = std::make_shared<cadabra::Ex>(ki->second);
-				kernel.inject_property(new Integer(), ex, args);
+				auto prop = new Integer();
+				kernel.inject_property(prop, ex, args);
+
+				if (prop->from.is_integer() && prop->to.is_integer()) {
+					if (prop->difference.to_integer() < 100) {
+						for (int i=prop->from.to_integer(); i<=prop->to.to_integer(); ++i) {
+							values.push_back(Ex(i));
+							}
+						}
+					}
+
 				++ki;
 				continue;
 				}
-			collect_index_values(ki->second);
 
+			collect_index_values(ki->second);
 			// If all values are indices, add an `Integer' property for the object,
 			// listing these integers.
 			bool is_number=true;
