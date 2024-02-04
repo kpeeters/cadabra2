@@ -730,6 +730,8 @@ void CodeInput::set_font_size(int num)
 	size*=1.5;
 #endif
 	fstr << "monospace " << size;
-	edit.override_font(Pango::FontDescription(fstr.str()));
+
+	// FIXME: gtkmm4
+	//edit.override_font(Pango::FontDescription(fstr.str()));
 	edit.queue_resize();
 	}

@@ -38,7 +38,9 @@ void SelectFileDialog::choose_dialog()
 	{
 	Gtk::FileChooserDialog fc("Select a file...");
 	fc.set_transient_for(*this);
-	fc.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+	// FIXME: gtkmm4
+//	fc.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+	fc.add_button("Cancel", Gtk::RESPONSE_CANCEL);
 	fc.add_button("Select", Gtk::RESPONSE_OK);
 
 	if (fc.run() == Gtk::RESPONSE_OK)

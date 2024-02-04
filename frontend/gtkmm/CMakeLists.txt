@@ -90,6 +90,7 @@ endif()
 add_definitions(
 	"-D_WEBSOCKETPP_CPP11_STL_"
 	"-DBOOST_LOG_DYN_LINK"
+	"-DGTKMM_DISABLE_DEPRECATED"
 )
 
 #---------------------------------------------------------------------------

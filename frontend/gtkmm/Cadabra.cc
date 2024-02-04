@@ -104,6 +104,12 @@ int Cadabra::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& opti
 	return -1;
 	}
 
+void Cadabra::on_startup()
+	{
+	std::cout << "Cadabra: starting up" << std::endl;
+	Gtk::Application::on_startup();
+	}
+
 void Cadabra::on_activate()
 	{
 	compute = new cadabra::ComputeThread(server_port, server_token, server_ip_address);

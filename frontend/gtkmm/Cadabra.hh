@@ -18,6 +18,7 @@ class Cadabra : public Gtk::Application {
 		Cadabra(int, char**);
 		virtual ~Cadabra();
 
+		virtual void on_startup() override;
 		virtual void on_activate() override;
 		virtual void on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint) override;
 

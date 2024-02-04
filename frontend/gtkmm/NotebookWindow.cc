@@ -14,6 +14,7 @@
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/radioaction.h>
 #include <gtkmm/scrollbar.h>
+#include <giomm/actiongroup.h>
 #include <fstream>
 #include <glib/gstdio.h>
 
@@ -32,7 +33,8 @@ using namespace cadabra;
 // #define DEBUG 1
 
 NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
-	: DocumentThread(this)
+	: Gtk::ApplicationWindow()
+	, DocumentThread(this)
 	, current_cell(doc.end())
 	, cdbapp(c)
 	, search_case_insensitive("Case insensitive", true)
@@ -100,300 +102,313 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	Gtk::StyleContext::add_provider_for_screen(screen, css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
 	// Setup menu.
-	actiongroup = Gtk::ActionGroup::create();
-	actiongroup->add( Gtk::Action::create("MenuFile", "_File") );
-	actiongroup->add( Gtk::Action::create("New", Gtk::Stock::NEW), Gtk::AccelKey("<control>N"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_file_new) );
-	actiongroup->add( Gtk::Action::create("Open", Gtk::Stock::OPEN), Gtk::AccelKey("<control>O"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_file_open) );
-	actiongroup->add( Gtk::Action::create("Close", Gtk::Stock::CLOSE), Gtk::AccelKey("<control>W"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_file_close) );
-	actiongroup->add( Gtk::Action::create("Save", Gtk::Stock::SAVE), Gtk::AccelKey("<control>S"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_file_save) );
-	actiongroup->add( Gtk::Action::create("SaveAs", Gtk::Stock::SAVE_AS), Gtk::AccelKey("<control><shift>S"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_file_save_as) );
-	actiongroup->add( Gtk::Action::create("ExportAsJupyter", "Export as Jupyter notebook"),
-							sigc::mem_fun(*this, &NotebookWindow::on_file_save_as_jupyter));
-	actiongroup->add( Gtk::Action::create("ExportHtml", "Export to standalone HTML"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_file_export_html) );
-	actiongroup->add( Gtk::Action::create("ExportHtmlSegment", "Export to HTML segment"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_file_export_html_segment) );
-	actiongroup->add( Gtk::Action::create("ExportLaTeX", "Export to standalone LaTeX"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_file_export_latex) );
-	actiongroup->add( Gtk::Action::create("ExportPython", "Export to Python/Cadabra source"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_file_export_python) );
-	actiongroup->add( Gtk::Action::create("Quit", Gtk::Stock::QUIT),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_file_quit) );
+	actiongroup = Gio::SimpleActionGroup::create();
 
-	actiongroup->add( Gtk::Action::create("MenuEdit", "_Edit") );
-	actiongroup->add( Gtk::Action::create("EditUndo", Gtk::Stock::UNDO), Gtk::AccelKey("<control>Z"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
-	action_copy = Gtk::Action::create("EditCopy", Gtk::Stock::COPY);
-	actiongroup->add( action_copy, Gtk::AccelKey("<control>C"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_copy) );
-	action_copy->set_sensitive(false);
-	actiongroup->add( Gtk::Action::create("EditPaste", Gtk::Stock::PASTE), Gtk::AccelKey("<control>V"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_paste) );
-	actiongroup->add( Gtk::Action::create("EditInsertAbove", "Insert cell above"), Gtk::AccelKey("<alt>Up"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
-	actiongroup->add( Gtk::Action::create("EditInsertBelow", "Insert cell below"), Gtk::AccelKey("<alt>Down"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_below) );
-	actiongroup->add( Gtk::Action::create("EditDelete", "Delete cell"), Gtk::AccelKey("<ctrl>Delete"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_delete) );
-	actiongroup->add( Gtk::Action::create("EditSplit", "Split cell"), Gtk::AccelKey("<control>Return"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_split) );
-	actiongroup->add( Gtk::Action::create("EditFind", Gtk::Stock::FIND), Gtk::AccelKey("<control>F"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_find) );
-	actiongroup->add( Gtk::Action::create("EditFindNext", "Find next"), Gtk::AccelKey("<control>G"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_search_text_changed) );
-	actiongroup->add( Gtk::Action::create("EditMakeCellTeX", "Cell is LaTeX"), Gtk::AccelKey("<control><shift>L"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
-	actiongroup->add( Gtk::Action::create("EditMakeCellPython", "Cell is Cadabra/Python"), Gtk::AccelKey("<control><shift>P"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_python) );
-	actiongroup->add( Gtk::Action::create("EditIgnoreCellOnImport", "Ignore cell on import"), Gtk::AccelKey("<control><shift>I"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_ignore_cell_on_import) );
+	// File menu actions.
+	actiongroup->add_action( "New",              sigc::mem_fun(*this, &NotebookWindow::on_file_new) );
+	actiongroup->add_action( "Open",             sigc::mem_fun(*this, &NotebookWindow::on_file_open) );
+	actiongroup->add_action( "Close",            sigc::mem_fun(*this, &NotebookWindow::on_file_close) );
+	actiongroup->add_action( "Save",             sigc::mem_fun(*this, &NotebookWindow::on_file_save) );
+	actiongroup->add_action( "SaveAs",           sigc::mem_fun(*this, &NotebookWindow::on_file_save_as) );
+	actiongroup->add_action( "ExportAsJupyter",  sigc::mem_fun(*this, &NotebookWindow::on_file_save_as_jupyter) );
+	actiongroup->add_action( "ExportHtml",       sigc::mem_fun(*this, &NotebookWindow::on_file_export_html) );
+	actiongroup->add_action( "ExportHtmlSegment",sigc::mem_fun(*this, &NotebookWindow::on_file_export_html_segment) );
+	actiongroup->add_action( "ExportLaTeX",      sigc::mem_fun(*this, &NotebookWindow::on_file_export_latex) );
+	actiongroup->add_action( "ExportPython",     sigc::mem_fun(*this, &NotebookWindow::on_file_export_python) );
+	actiongroup->add_action( "Quit",             sigc::mem_fun(*this, &NotebookWindow::on_file_quit) );
 
-	actiongroup->add( Gtk::Action::create("MenuView", "_View") );
-	actiongroup->add( Gtk::Action::create("ViewSplit", "Split view"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_view_split) );
-	actiongroup->add( Gtk::Action::create("ViewClose", "Close view"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_view_close) );
+	// Edit menu actions.
+	actiongroup->add_action( "EditUndo",         sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
+	actiongroup->add_action( "EditCopy",         sigc::mem_fun(*this, &NotebookWindow::on_edit_copy) );
+	actiongroup->add_action( "EditPaste",        sigc::mem_fun(*this, &NotebookWindow::on_edit_paste) );
+	actiongroup->add_action( "EditInsertAbove",  sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
+	actiongroup->add_action( "EditInsertBelow",  sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_below) );
+	actiongroup->add_action( "EditDelete",       sigc::mem_fun(*this, &NotebookWindow::on_edit_delete) );
+	
+	
+	// Set shortcuts for menu items/actions, and add to the app.
+	// FIXME: gtkmm4
+//	cdbapp->set_accel_for_action("New", "<control>n");
+//	cdbapp->set_action_group(actiongroup);
+	
+//	actiongroup->add( Gtk::Action::create("MenuEdit", "_Edit") );
+//	actiongroup->add( Gtk::Action::create("EditUndo", Gtk::Stock::UNDO), Gtk::AccelKey("<control>Z"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
+//	action_copy = Gtk::Action::create("EditCopy", Gtk::Stock::COPY);
+//	actiongroup->add( action_copy, Gtk::AccelKey("<control>C"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_copy) );
+//	action_copy->set_sensitive(false);
+//	actiongroup->add( Gtk::Action::create("EditPaste", Gtk::Stock::PASTE), Gtk::AccelKey("<control>V"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_paste) );
+//	actiongroup->add( Gtk::Action::create("EditInsertAbove", "Insert cell above"), Gtk::AccelKey("<alt>Up"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
+//	actiongroup->add( Gtk::Action::create("EditInsertBelow", "Insert cell below"), Gtk::AccelKey("<alt>Down"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_below) );
+//	actiongroup->add( Gtk::Action::create("EditDelete", "Delete cell"), Gtk::AccelKey("<ctrl>Delete"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_delete) );
+//	actiongroup->add( Gtk::Action::create("EditSplit", "Split cell"), Gtk::AccelKey("<control>Return"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_split) );
+//	actiongroup->add( Gtk::Action::create("EditFind", Gtk::Stock::FIND), Gtk::AccelKey("<control>F"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_find) );
+//	actiongroup->add( Gtk::Action::create("EditFindNext", "Find next"), Gtk::AccelKey("<control>G"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_search_text_changed) );
+//	actiongroup->add( Gtk::Action::create("EditMakeCellTeX", "Cell is LaTeX"), Gtk::AccelKey("<control><shift>L"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
+//	actiongroup->add( Gtk::Action::create("EditMakeCellPython", "Cell is Cadabra/Python"), Gtk::AccelKey("<control><shift>P"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_python) );
+//	actiongroup->add( Gtk::Action::create("EditIgnoreCellOnImport", "Ignore cell on import"), Gtk::AccelKey("<control><shift>I"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_ignore_cell_on_import) );
+//
+//	actiongroup->add( Gtk::Action::create("MenuView", "_View") );
+//	actiongroup->add( Gtk::Action::create("ViewSplit", "Split view"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_view_split) );
+//	actiongroup->add( Gtk::Action::create("ViewClose", "Close view"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_view_close) );
 
-	Gtk::RadioAction::Group group_cv;
-	actiongroup->add(Gtk::Action::create("MenuConsoleVisibility", "Console"));
+//	Gtk::RadioAction::Group group_cv;
+//	actiongroup->add(Gtk::Action::create("MenuConsoleVisibility", "Console"));
+//
+//	auto cv_action_hide = Gtk::RadioAction::create(group_cv, "ConsoleHide", "Hide");
+//	cv_action_hide->property_value() = (int)Console::Position::Hidden;
+//	actiongroup->add(cv_action_hide, sigc::bind(sigc::mem_fun(*this,
+//		&NotebookWindow::on_prefs_set_cv), Console::Position::Hidden));
+//	cv_action_hide->set_active();
+//
+//	auto cv_action_dockh = Gtk::RadioAction::create(group_cv, "ConsoleDockH", "Dock (Horizontal)");
+//	cv_action_dockh->property_value() = (int)Console::Position::DockedH;
+//	actiongroup->add(cv_action_dockh, sigc::bind(sigc::mem_fun(*this,
+//		&NotebookWindow::on_prefs_set_cv), Console::Position::DockedH));
+//
+//	auto cv_action_dockv = Gtk::RadioAction::create(group_cv, "ConsoleDockV", "Dock (Vertical)");
+//	cv_action_dockv->property_value() = (int)Console::Position::DockedV;
+//	actiongroup->add(cv_action_dockv, sigc::bind(sigc::mem_fun(*this,
+//		&NotebookWindow::on_prefs_set_cv), Console::Position::DockedV));
+//
+//	auto cv_action_float = Gtk::RadioAction::create(group_cv, "ConsoleFloat", "Float");
+//	cv_action_float->property_value() = (int)Console::Position::Floating;
+//	actiongroup->add(cv_action_float, sigc::bind(sigc::mem_fun(*this,
+//		&NotebookWindow::on_prefs_set_cv), Console::Position::Floating));
 
-	auto cv_action_hide = Gtk::RadioAction::create(group_cv, "ConsoleHide", "Hide");
-	cv_action_hide->property_value() = (int)Console::Position::Hidden;
-	actiongroup->add(cv_action_hide, sigc::bind(sigc::mem_fun(*this,
-		&NotebookWindow::on_prefs_set_cv), Console::Position::Hidden));
-	cv_action_hide->set_active();
 
-	auto cv_action_dockh = Gtk::RadioAction::create(group_cv, "ConsoleDockH", "Dock (Horizontal)");
-	cv_action_dockh->property_value() = (int)Console::Position::DockedH;
-	actiongroup->add(cv_action_dockh, sigc::bind(sigc::mem_fun(*this,
-		&NotebookWindow::on_prefs_set_cv), Console::Position::DockedH));
+//	Gtk::RadioAction::Group group_font_size;
+//
+//	actiongroup->add( Gtk::Action::create("MenuFontSize", "Font size") );
+//	auto font_action0=Gtk::RadioAction::create(group_font_size, "FontSmall", "Small");
+//	font_action0->property_value()=-1;
+//	actiongroup->add( font_action0, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size),-1 ));
+//	if(prefs.font_step==-1) font_action0->set_active();
+//
+//	auto font_action1=Gtk::RadioAction::create(group_font_size, "FontMedium", "Medium (default)");
+//	font_action1->property_value()= 0;
+//	actiongroup->add( font_action1, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 0));
+//	if(prefs.font_step==0) font_action1->set_active();
+//	default_actions.push_back(font_action1);
+//
+//	auto font_action2=Gtk::RadioAction::create(group_font_size, "FontLarge", "Large");
+//	font_action2->property_value()= 2;
+//	actiongroup->add( font_action2, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 2));
+//	if(prefs.font_step==2) font_action2->set_active();
+//
+//	auto font_action3=Gtk::RadioAction::create(group_font_size, "FontExtraLarge", "Extra large");
+//	font_action3->property_value()= 4;
+//	actiongroup->add( font_action3, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 4));
+//	if(prefs.font_step==4) font_action3->set_active();
 
-	auto cv_action_dockv = Gtk::RadioAction::create(group_cv, "ConsoleDockV", "Dock (Vertical)");
-	cv_action_dockv->property_value() = (int)Console::Position::DockedV;
-	actiongroup->add(cv_action_dockv, sigc::bind(sigc::mem_fun(*this,
-		&NotebookWindow::on_prefs_set_cv), Console::Position::DockedV));
+// 	Gtk::RadioAction::Group group_highlight_syntax;
+// 	actiongroup->add(Gtk::Action::create("MenuHighlightSyntax", "Highlight Syntax"));
+// 
+// 	auto highlight_syntax_action0 = Gtk::RadioAction::create(group_highlight_syntax, "HighlightSyntaxOff", "Off (default)");
+// 	highlight_syntax_action0->property_value() = 0;
+// 	actiongroup->add(highlight_syntax_action0, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax), false));
+// 	if (prefs.highlight == false) highlight_syntax_action0->set_active();
+// 	default_actions.push_back(highlight_syntax_action0);
+// 
+// 	auto highlight_syntax_action1 = Gtk::RadioAction::create(group_highlight_syntax, "HighlightSyntaxOn", "On");
+// 	highlight_syntax_action1->property_value() = 1;
+// 	actiongroup->add(highlight_syntax_action1, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax), true));
+// 	if (prefs.highlight == true) highlight_syntax_action1->set_active();
 
-	auto cv_action_float = Gtk::RadioAction::create(group_cv, "ConsoleFloat", "Float");
-	cv_action_float->property_value() = (int)Console::Position::Floating;
-	actiongroup->add(cv_action_float, sigc::bind(sigc::mem_fun(*this,
-		&NotebookWindow::on_prefs_set_cv), Console::Position::Floating));
+//	actiongroup->add(Gtk::Action::create("HighlightSyntaxChoose", "Choose Colours..."), sigc::mem_fun(*this, &NotebookWindow::on_prefs_choose_colours));
+//
+//	actiongroup->add(Gtk::Action::create("ViewUseDefaultSettings", "Use Default Settings"), sigc::mem_fun(*this, &NotebookWindow::on_prefs_use_defaults));
+//
+//	actiongroup->add( Gtk::Action::create("MenuEvaluate", "_Evaluate") );
+//	actiongroup->add( Gtk::Action::create("EvaluateCell", "Evaluate cell"), Gtk::AccelKey("<shift>Return"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_run_cell) );
+//	actiongroup->add( Gtk::Action::create("EvaluateAll", Gtk::Stock::GO_FORWARD, "Evaluate all"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_run_runall) );
+//	actiongroup->add( Gtk::Action::create("EvaluateToCursor", Gtk::Stock::GOTO_LAST, "Evaluate to cursor"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_run_runtocursor) );
+//	actiongroup->add( Gtk::Action::create("EvaluateStop", Gtk::Stock::STOP, "Stop"), Gtk::AccelKey('.', Gdk::MOD1_MASK),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_run_stop) );
+//	actiongroup->add( Gtk::Action::create("MenuKernel", "_Kernel") );
+//	actiongroup->add( Gtk::Action::create("KernelRestart", Gtk::Stock::REFRESH, "Restart"), Gtk::AccelKey("<control><alt>R"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart) );
+//
+//	actiongroup->add(Gtk::Action::create("MenuTools", "Tools"));
+//	actiongroup->add(Gtk::Action::create("ToolsCompare", "Compare"));
+//	actiongroup->add(Gtk::Action::create("CompareFile", "Compare to file"),
+//	                 sigc::mem_fun(*this, &NotebookWindow::compare_to_file));
+//	actiongroup->add(Gtk::Action::create("CompareGit", "Compare with Git"));
+//	actiongroup->add(Gtk::Action::create("CompareGitLatest", "Latest commit"),
+//	                 sigc::mem_fun(*this, &NotebookWindow::compare_git_latest));
+//	actiongroup->add(Gtk::Action::create("CompareGitChoose", "Select commit from list"),
+//	                 sigc::mem_fun(*this, &NotebookWindow::compare_git_choose));
+//	actiongroup->add(Gtk::Action::create("CompareGitSpecific", "Manually enter commit hash"),
+//	                 sigc::mem_fun(*this, &NotebookWindow::compare_git_specific));
+//	actiongroup->add(Gtk::Action::create("CompareSelectGit", "Select Git Executable"),
+//	                 sigc::mem_fun(*this, &NotebookWindow::select_git_path));
+//	actiongroup->add(Gtk::Action::create("ToolsOptions", "Options"),
+//		sigc::mem_fun(*this, &NotebookWindow::on_tools_options));
+//	actiongroup->add(Gtk::Action::create("ToolsClearCache", "Clear Cache"),
+//		sigc::mem_fun(*this, &NotebookWindow::on_tools_clear_cache));
+//
+//	actiongroup->add( Gtk::Action::create("MenuHelp", "_Help") );
+//	//	actiongroup->add( Gtk::Action::create("HelpNotebook", Gtk::Stock::HELP, "How to use the notebook"),
+//	//							sigc::mem_fun(*this, &NotebookWindow::on_help_notebook) );
+//	actiongroup->add( Gtk::Action::create("HelpAbout", Gtk::Stock::ABOUT, "About Cadabra"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_help_about) );
+//	actiongroup->add( Gtk::Action::create("HelpContext", Gtk::Stock::HELP, "Contextual help"),
+//	                  sigc::mem_fun(*this, &NotebookWindow::on_help) );
+//	menu_help_register = Gtk::Action::create("HelpRegister", "Register");
+//	actiongroup->add(menu_help_register, sigc::mem_fun(*this, &NotebookWindow::on_help_register));
+//	menu_help_register->set_sensitive(!prefs.is_registered);
 
-
-	Gtk::RadioAction::Group group_font_size;
-
-	actiongroup->add( Gtk::Action::create("MenuFontSize", "Font size") );
-	auto font_action0=Gtk::RadioAction::create(group_font_size, "FontSmall", "Small");
-	font_action0->property_value()=-1;
-	actiongroup->add( font_action0, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size),-1 ));
-	if(prefs.font_step==-1) font_action0->set_active();
-
-	auto font_action1=Gtk::RadioAction::create(group_font_size, "FontMedium", "Medium (default)");
-	font_action1->property_value()= 0;
-	actiongroup->add( font_action1, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 0));
-	if(prefs.font_step==0) font_action1->set_active();
-	default_actions.push_back(font_action1);
-
-	auto font_action2=Gtk::RadioAction::create(group_font_size, "FontLarge", "Large");
-	font_action2->property_value()= 2;
-	actiongroup->add( font_action2, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 2));
-	if(prefs.font_step==2) font_action2->set_active();
-
-	auto font_action3=Gtk::RadioAction::create(group_font_size, "FontExtraLarge", "Extra large");
-	font_action3->property_value()= 4;
-	actiongroup->add( font_action3, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 4));
-	if(prefs.font_step==4) font_action3->set_active();
-
-	Gtk::RadioAction::Group group_highlight_syntax;
-	actiongroup->add(Gtk::Action::create("MenuHighlightSyntax", "Highlight Syntax"));
-
-	auto highlight_syntax_action0 = Gtk::RadioAction::create(group_highlight_syntax, "HighlightSyntaxOff", "Off (default)");
-	highlight_syntax_action0->property_value() = 0;
-	actiongroup->add(highlight_syntax_action0, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax), false));
-	if (prefs.highlight == false) highlight_syntax_action0->set_active();
-	default_actions.push_back(highlight_syntax_action0);
-
-	auto highlight_syntax_action1 = Gtk::RadioAction::create(group_highlight_syntax, "HighlightSyntaxOn", "On");
-	highlight_syntax_action1->property_value() = 1;
-	actiongroup->add(highlight_syntax_action1, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax), true));
-	if (prefs.highlight == true) highlight_syntax_action1->set_active();
-
-	actiongroup->add(Gtk::Action::create("HighlightSyntaxChoose", "Choose Colours..."), sigc::mem_fun(*this, &NotebookWindow::on_prefs_choose_colours));
-
-	actiongroup->add(Gtk::Action::create("ViewUseDefaultSettings", "Use Default Settings"), sigc::mem_fun(*this, &NotebookWindow::on_prefs_use_defaults));
-
-	actiongroup->add( Gtk::Action::create("MenuEvaluate", "_Evaluate") );
-	actiongroup->add( Gtk::Action::create("EvaluateCell", "Evaluate cell"), Gtk::AccelKey("<shift>Return"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_run_cell) );
-	actiongroup->add( Gtk::Action::create("EvaluateAll", Gtk::Stock::GO_FORWARD, "Evaluate all"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_run_runall) );
-	actiongroup->add( Gtk::Action::create("EvaluateToCursor", Gtk::Stock::GOTO_LAST, "Evaluate to cursor"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_run_runtocursor) );
-	actiongroup->add( Gtk::Action::create("EvaluateStop", Gtk::Stock::STOP, "Stop"), Gtk::AccelKey('.', Gdk::MOD1_MASK),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_run_stop) );
-	actiongroup->add( Gtk::Action::create("MenuKernel", "_Kernel") );
-	actiongroup->add( Gtk::Action::create("KernelRestart", Gtk::Stock::REFRESH, "Restart"), Gtk::AccelKey("<control><alt>R"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart) );
-
-	actiongroup->add(Gtk::Action::create("MenuTools", "Tools"));
-	actiongroup->add(Gtk::Action::create("ToolsCompare", "Compare"));
-	actiongroup->add(Gtk::Action::create("CompareFile", "Compare to file"),
-	                 sigc::mem_fun(*this, &NotebookWindow::compare_to_file));
-	actiongroup->add(Gtk::Action::create("CompareGit", "Compare with Git"));
-	actiongroup->add(Gtk::Action::create("CompareGitLatest", "Latest commit"),
-	                 sigc::mem_fun(*this, &NotebookWindow::compare_git_latest));
-	actiongroup->add(Gtk::Action::create("CompareGitChoose", "Select commit from list"),
-	                 sigc::mem_fun(*this, &NotebookWindow::compare_git_choose));
-	actiongroup->add(Gtk::Action::create("CompareGitSpecific", "Manually enter commit hash"),
-	                 sigc::mem_fun(*this, &NotebookWindow::compare_git_specific));
-	actiongroup->add(Gtk::Action::create("CompareSelectGit", "Select Git Executable"),
-	                 sigc::mem_fun(*this, &NotebookWindow::select_git_path));
-	actiongroup->add(Gtk::Action::create("ToolsOptions", "Options"),
-		sigc::mem_fun(*this, &NotebookWindow::on_tools_options));
-	actiongroup->add(Gtk::Action::create("ToolsClearCache", "Clear Cache"),
-		sigc::mem_fun(*this, &NotebookWindow::on_tools_clear_cache));
-
-	actiongroup->add( Gtk::Action::create("MenuHelp", "_Help") );
-	//	actiongroup->add( Gtk::Action::create("HelpNotebook", Gtk::Stock::HELP, "How to use the notebook"),
-	//							sigc::mem_fun(*this, &NotebookWindow::on_help_notebook) );
-	actiongroup->add( Gtk::Action::create("HelpAbout", Gtk::Stock::ABOUT, "About Cadabra"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_help_about) );
-	actiongroup->add( Gtk::Action::create("HelpContext", Gtk::Stock::HELP, "Contextual help"),
-	                  sigc::mem_fun(*this, &NotebookWindow::on_help) );
-	menu_help_register = Gtk::Action::create("HelpRegister", "Register");
-	actiongroup->add(menu_help_register, sigc::mem_fun(*this, &NotebookWindow::on_help_register));
-	menu_help_register->set_sensitive(!prefs.is_registered);
-
-	uimanager = Gtk::UIManager::create();
-	uimanager->insert_action_group(actiongroup);
-	add_accel_group(uimanager->get_accel_group());
+	uimanager = Gtk::Builder::create();
 	Glib::ustring ui_info =
-	   "<ui>"
-	   "  <menubar name='MenuBar'>"
-	   "    <menu action='MenuFile'>"
-	   "      <menuitem action='New'/>"
-	   "      <menuitem action='Open'/>"
-	   "      <menuitem action='Close'/>"
-	   "      <separator/>"
-	   "      <menuitem action='Save'/>"
-	   "      <menuitem action='SaveAs'/>"
-	   "      <menuitem action='ExportAsJupyter'/>"
-	   "      <menuitem action='ExportHtml'/>"
-	   "      <menuitem action='ExportHtmlSegment'/>"
-	   "      <menuitem action='ExportLaTeX'/>"
-	   "      <menuitem action='ExportPython'/>"
-	   "      <separator/>"
-	   "      <menuitem action='Quit'/>"
-	   "    </menu>";
-	if(!read_only)
-		ui_info+=
-		   "    <menu action='MenuEdit'>"
-		   "      <menuitem action='EditUndo' />"
-		   "      <separator/>"
-		   "      <menuitem action='EditCopy' />"
-		   //		"      <menuitem action='EditPaste' />"
-		   "      <separator/>"
-		   "      <menuitem action='EditInsertAbove' />"
-		   "      <menuitem action='EditInsertBelow' />"
-		   "      <menuitem action='EditDelete' />"
-		   "      <separator/>"
-		   "      <menuitem action='EditSplit' />"
-		   "      <separator/>"
-		   "      <menuitem action='EditFind' />"
-		   "      <menuitem action='EditFindNext' />"
-		   "      <separator/>"
-		   "      <menuitem action='EditMakeCellTeX' />"
-		   "      <menuitem action='EditMakeCellPython' />"
-		   "      <menuitem action='EditIgnoreCellOnImport' />"
-		   "    </menu>"
-		   "    <menu action='MenuView'>"
-		   "      <menuitem action='ViewSplit' />"
-		   "      <menuitem action='ViewClose' />"
-		   "      <menu action='MenuFontSize'>"
-		   "         <menuitem action='FontSmall'/>"
-		   "         <menuitem action='FontMedium'/>"
-		   "         <menuitem action='FontLarge'/>"
-		   "         <menuitem action='FontExtraLarge'/>"
-		   "      </menu>"
-		   "      <separator/>"
-		   "      <menu action='MenuHighlightSyntax'>"
-		   "        <menuitem action='HighlightSyntaxOff'/>"
-		   "        <menuitem action='HighlightSyntaxOn'/>"
-		   "        <menuitem action='HighlightSyntaxChoose'/>"
-		   "      </menu>"
-		   "      <menu action='MenuConsoleVisibility'>"
-		   "        <menuitem action='ConsoleHide'/>"
-		   "        <menuitem action='ConsoleDockH'/>"
-			"        <menuitem action='ConsoleDockV'/>"
-		   "        <menuitem action='ConsoleFloat'/>"
-		   "      </menu>"
-		   "      <menuitem action='ViewUseDefaultSettings'/>"
-		   "    </menu>"
-		   "    <menu action='MenuEvaluate'>"
-		   "      <menuitem action='EvaluateCell' />"
-		   "      <menuitem action='EvaluateAll' />"
-		   "      <menuitem action='EvaluateToCursor' />"
-		   "      <separator/>"
-		   "      <menuitem action='EvaluateStop' />"
-		   "    </menu>"
-		   "    <menu action='MenuKernel'>"
-		   "      <menuitem action='KernelRestart' />"
-		   "    </menu>";
-	ui_info+=
-		"    <menu action='MenuTools'>"
-		"      <menu action='ToolsCompare'>"
-	   "        <menuitem action='CompareFile'/>"
-	   "        <menu action='CompareGit'>"
-	   "          <menuitem action='CompareGitLatest'/>"
-	   "          <menuitem action='CompareGitChoose'/>"
-	   "          <menuitem action='CompareGitSpecific'/>"
-	   "          <separator/>"
-	   "          <menuitem action='CompareSelectGit'/>"
-	   "        </menu>"
-	   "      </menu>"
-		"      <menuitem action='ToolsOptions'/>"
-		"      <menuitem action='ToolsClearCache'/>"
-		"    </menu>"
-	   "    <menu action='MenuHelp'>"
-	   //		"      <menuitem action='HelpNotebook' />"
-	   "      <menuitem action='HelpAbout' />"
-	   "      <menuitem action='HelpContext' />"
-	   "      <menuitem action='HelpRegister' />"
-	   "    </menu>"
-	   "  </menubar>"
-	   "  <toolbar name='ToolBar'>"
-		"    <toolitem name='New' action='New'/>"
-		"    <toolitem name='Open' action='Open' />"
-		"    <toolitem name='Save' action='Save' />"
-		"    <toolitem name='SaveAs' action='SaveAs' />"
-		"    <separator />"
-		"    <toolitem name='Undo' action='EditUndo' />"
-		"    <separator />"
-		"    <toolitem name='RunAll' action='EvaluateAll' />"
-		"    <toolitem name='EvaluateStop' action='EvaluateStop' />"
-	   "  </toolbar>"
-	   "</ui>";
+	   "<interface>"
+	   "  <menu id='MenuBar'>"
+		"    <submenu>"
+	   "      <attribute name='label'>_File</attribute>"
+		"      <section>"
+	   "        <item>"
+		"          <attribute name='label'>_New</attribute>"
+		"          <attribute name='action'>file.new</attribute>"
+		"          <attribute name='accel'>&lt;Primary&gt;n</attribute>"
+		"        </item>"
+		"      </section>"
+		"    </submenu>"
+		"  </menu>"
+//	   "      <separator/>"
+//	   "      <menuitem action='Save'/>"
+//	   "      <menuitem action='SaveAs'/>"
+//	   "      <menuitem action='ExportAsJupyter'/>"
+//	   "      <menuitem action='ExportHtml'/>"
+//	   "      <menuitem action='ExportHtmlSegment'/>"
+//	   "      <menuitem action='ExportLaTeX'/>"
+//	   "      <menuitem action='ExportPython'/>"
+//	   "      <separator/>"
+//	   "      <menuitem action='Quit'/>"
+//	   "    </menu>";
+//	if(!read_only)
+//		ui_info+=
+//		   "    <menu action='MenuEdit'>"
+//		   "      <menuitem action='EditUndo' />"
+//		   "      <separator/>"
+//		   "      <menuitem action='EditCopy' />"
+//		   //		"      <menuitem action='EditPaste' />"
+//		   "      <separator/>"
+//		   "      <menuitem action='EditInsertAbove' />"
+//		   "      <menuitem action='EditInsertBelow' />"
+//		   "      <menuitem action='EditDelete' />"
+//		   "      <separator/>"
+//		   "      <menuitem action='EditSplit' />"
+//		   "      <separator/>"
+//		   "      <menuitem action='EditFind' />"
+//		   "      <menuitem action='EditFindNext' />"
+//		   "      <separator/>"
+//		   "      <menuitem action='EditMakeCellTeX' />"
+//		   "      <menuitem action='EditMakeCellPython' />"
+//		   "      <menuitem action='EditIgnoreCellOnImport' />"
+//		   "    </menu>"
+//		   "    <menu action='MenuView'>"
+//		   "      <menuitem action='ViewSplit' />"
+//		   "      <menuitem action='ViewClose' />"
+//		   "      <menu action='MenuFontSize'>"
+//		   "         <menuitem action='FontSmall'/>"
+//		   "         <menuitem action='FontMedium'/>"
+//		   "         <menuitem action='FontLarge'/>"
+//		   "         <menuitem action='FontExtraLarge'/>"
+//		   "      </menu>"
+//		   "      <separator/>"
+//		   "      <menu action='MenuHighlightSyntax'>"
+//		   "        <menuitem action='HighlightSyntaxOff'/>"
+//		   "        <menuitem action='HighlightSyntaxOn'/>"
+//		   "        <menuitem action='HighlightSyntaxChoose'/>"
+//		   "      </menu>"
+//		   "      <menu action='MenuConsoleVisibility'>"
+//		   "        <menuitem action='ConsoleHide'/>"
+//		   "        <menuitem action='ConsoleDockH'/>"
+//			"        <menuitem action='ConsoleDockV'/>"
+//		   "        <menuitem action='ConsoleFloat'/>"
+//		   "      </menu>"
+//		   "      <menuitem action='ViewUseDefaultSettings'/>"
+//		   "    </menu>"
+//		   "    <menu action='MenuEvaluate'>"
+//		   "      <menuitem action='EvaluateCell' />"
+//		   "      <menuitem action='EvaluateAll' />"
+//		   "      <menuitem action='EvaluateToCursor' />"
+//		   "      <separator/>"
+//		   "      <menuitem action='EvaluateStop' />"
+//		   "    </menu>"
+//		   "    <menu action='MenuKernel'>"
+//		   "      <menuitem action='KernelRestart' />"
+//		   "    </menu>";
+//	ui_info+=
+//		"    <menu action='MenuTools'>"
+//		"      <menu action='ToolsCompare'>"
+//	   "        <menuitem action='CompareFile'/>"
+//	   "        <menu action='CompareGit'>"
+//	   "          <menuitem action='CompareGitLatest'/>"
+//	   "          <menuitem action='CompareGitChoose'/>"
+//	   "          <menuitem action='CompareGitSpecific'/>"
+//	   "          <separator/>"
+//	   "          <menuitem action='CompareSelectGit'/>"
+//	   "        </menu>"
+//	   "      </menu>"
+//		"      <menuitem action='ToolsOptions'/>"
+//		"      <menuitem action='ToolsClearCache'/>"
+//		"    </menu>"
+//	   "    <menu action='MenuHelp'>"
+//	   //		"      <menuitem action='HelpNotebook' />"
+//	   "      <menuitem action='HelpAbout' />"
+//	   "      <menuitem action='HelpContext' />"
+//	   "      <menuitem action='HelpRegister' />"
+//	   "    </menu>"
+//	   "  </menubar>"
+//	   "  <toolbar name='ToolBar'>"
+//		"    <toolitem name='New' action='New'/>"
+//		"    <toolitem name='Open' action='Open' />"
+//		"    <toolitem name='Save' action='Save' />"
+//		"    <toolitem name='SaveAs' action='SaveAs' />"
+//		"    <separator />"
+//		"    <toolitem name='Undo' action='EditUndo' />"
+//		"    <separator />"
+//		"    <toolitem name='RunAll' action='EvaluateAll' />"
+//		"    <toolitem name='EvaluateStop' action='EvaluateStop' />"
+//	   "  </toolbar>"
+	   "</interface>";
 
-	uimanager->add_ui_from_string(ui_info);
+	uimanager->add_from_string(ui_info);
 
-	uimanager->get_widget("/ToolBar/New")->set_tooltip_text("New notebook");
-	uimanager->get_widget("/ToolBar/Open")->set_tooltip_text("Open existing notebook");
-	uimanager->get_widget("/ToolBar/Save")->set_tooltip_text("Save changes");
-	uimanager->get_widget("/ToolBar/SaveAs")->set_tooltip_text("Save as new notebook");
-	uimanager->get_widget("/ToolBar/Undo")->set_tooltip_text("Undo");
-	uimanager->get_widget("/ToolBar/RunAll")->set_tooltip_text("Run all cells");
-	uimanager->get_widget("/ToolBar/EvaluateStop")->set_tooltip_text("Stop evaluation");
+//	uimanager->get_widget("/ToolBar/New")->set_tooltip_text("New notebook");
+//	uimanager->get_widget("/ToolBar/Open")->set_tooltip_text("Open existing notebook");
+//	uimanager->get_widget("/ToolBar/Save")->set_tooltip_text("Save changes");
+//	uimanager->get_widget("/ToolBar/SaveAs")->set_tooltip_text("Save as new notebook");
+//	uimanager->get_widget("/ToolBar/Undo")->set_tooltip_text("Undo");
+//	uimanager->get_widget("/ToolBar/RunAll")->set_tooltip_text("Run all cells");
+//	uimanager->get_widget("/ToolBar/EvaluateStop")->set_tooltip_text("Stop evaluation");
 
 	// Main box structure dividing the window.
 	add(topbox);
-	Gtk::Widget *menubar = uimanager->get_widget("/MenuBar");
-	topbox.pack_start(*menubar, Gtk::PACK_SHRINK);
-	Gtk::Widget *toolbar = uimanager->get_widget("/ToolBar");
-	topbox.pack_start(*toolbar, Gtk::PACK_SHRINK);
+	Glib::RefPtr<Glib::Object> menubar_obj = uimanager->get_object("MenuBar");
+	Glib::RefPtr<Gio::Menu> gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(menubar_obj);
+	Gtk::MenuBar* pMenuBar = Gtk::make_managed<Gtk::MenuBar>(gmenu);
+	topbox.pack_start(*pMenuBar, Gtk::PACK_SHRINK);
+//	
+//	Gtk::Widget *toolbar=0;
+//	uimanager->get_widget("/ToolBar", toolbar);
+//	topbox.pack_start(*toolbar, Gtk::PACK_SHRINK);
 	topbox.pack_start(supermainbox, true, true);
 	topbox.pack_start(statusbarbox, false, false);
 	supermainbox.pack_start(dragbox, true, true);
@@ -408,8 +423,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	search_case_insensitive.set_active(true);
 
 	// Status bar
-	status_label.set_alignment( 0.0, 0.5 );
-	kernel_label.set_alignment( 0.0, 0.5 );
+//	status_label.set_alignment( 0.0, 0.5 );
+//	kernel_label.set_alignment( 0.0, 0.5 );
 	status_label.set_size_request(200,-1);
 	status_label.set_justify(Gtk::JUSTIFY_LEFT);
 	kernel_label.set_justify(Gtk::JUSTIFY_LEFT);
@@ -459,7 +474,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	if(read_only) {
 		statusbarbox.hide();
 		progressbar.hide();
-		toolbar->hide();
+//		toolbar->hide();
 		}
 	else {
 		// Buttons
@@ -580,9 +595,10 @@ void NotebookWindow::on_prefs_set_cv(Console::Position pos)
 		console_win.set_default_size(900, 300);
 		console_win.set_title("Interactive Console");
 		console_win.get_content_area()->add(console);
-		console_win.signal_response().connect([this](int) {
-			actiongroup->get_action("ConsoleHide")->activate();
-			});
+		// FIXME: gtkmm4
+//		console_win.signal_response().connect([this](int) {
+//			actiongroup->get_action("ConsoleHide")->activate();
+//			});
 		console_win.show_all();
 		}
 	}
@@ -665,10 +681,12 @@ void NotebookWindow::set_statusbar_message(const std::string& message, int line,
 
 void NotebookWindow::set_stop_sensitive(bool s)
 	{
-	Gtk::Widget *stop = uimanager->get_widget("/ToolBar/EvaluateStop");
-	stop->set_sensitive(s);
-	stop = uimanager->get_widget("/MenuBar/MenuEvaluate/EvaluateStop");
-	stop->set_sensitive(s);
+	// FIXME: gtkmm4
+//	Gtk::Widget *stop=0;
+//	uimanager->get_widget("/ToolBar/EvaluateStop", stop);
+//	stop->set_sensitive(s);
+//	uimanager->get_widget("/MenuBar/MenuEvaluate/EvaluateStop", stop);
+//	stop->set_sensitive(s);
 	}
 
 void NotebookWindow::process_data()
@@ -2162,33 +2180,33 @@ void NotebookWindow::on_help_register()
 	txt.set_markup("<span font_size=\"large\" font_weight=\"bold\">Welcome to Cadabra!</span>\n\nWriting this software takes an incredible amount of spare time,\nand it is extremely difficult to get funding for its development.\n\nPlease show your support by registering your email address,\nso I can convince the bean-counters that this software is of interest.\n\nI will only use this address to count users and to email you,\nroughly once every half a year, with a bit of news about Cadabra.\n\nMany thanks for your support!\n\nKasper Peeters, <a href=\"mailto:info@cadabra.science\">info@cadabra.science</a>");
 	txt.set_line_wrap();
 	txt.set_margin_top(10);
-	txt.set_margin_left(10);
-	txt.set_margin_right(10);
+	txt.set_margin_start(10);
+	txt.set_margin_end(10);
 	txt.set_margin_bottom(10);
 	box->pack_start(txt, Gtk::PACK_EXPAND_WIDGET);
 
 	Gtk::Grid grid;
 	grid.set_column_homogeneous(false);
 	grid.set_hexpand(true);
-	grid.set_margin_left(10);
-	grid.set_margin_right(10);
+	grid.set_margin_start(10);
+	grid.set_margin_end(10);
 	box->pack_start(grid, Gtk::PACK_EXPAND_WIDGET);
 
 	Gtk::Label name_label("Name:");
 	Gtk::Entry name;
-	name_label.set_alignment(0, 0.5);
+//	name_label.set_alignment(0, 0.5);
 	name.set_hexpand(true);
 	grid.attach(name_label, 0, 0, 1, 1);
 	grid.attach(name, 1, 0, 1, 1);
 	Gtk::Label email_label("Email address:");
-	email_label.set_alignment(0, 0.5);
+//	email_label.set_alignment(0, 0.5);
 	Gtk::Entry email;
 	email.set_hexpand(true);
 	grid.attach(email_label, 0, 1, 1, 1);
 	grid.attach(email, 1, 1, 1, 1);
 	Gtk::Label affiliation_label("Affiliation:");
 	Gtk::Entry affiliation;
-	affiliation_label.set_alignment(0, 0.5);
+//	affiliation_label.set_alignment(0, 0.5);
 	affiliation.set_hexpand(true);
 	grid.attach(affiliation_label, 0, 2, 1, 1);
 	grid.attach(affiliation, 1, 2, 1, 1);
@@ -2217,7 +2235,7 @@ void NotebookWindow::on_help_register()
 		});
 	box->show_all();
 	md.run();
-	menu_help_register->set_sensitive(!prefs.is_registered);
+	menu_help_register->set_enabled(!prefs.is_registered);
 	}
 
 void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
@@ -2535,7 +2553,7 @@ void NotebookWindow::on_prefs_use_defaults()
 		for (auto& action : default_actions)
 			action->activate();
 		refresh_highlighting();
-		menu_help_register->set_sensitive(!prefs.is_registered);
+		menu_help_register->set_enabled(!prefs.is_registered);
 		prefs.save();
 		}
 	}
@@ -2672,11 +2690,11 @@ void NotebookWindow::unselect_output_cell()
 	for(unsigned int i=0; i<canvasses.size(); ++i) {
 		if(canvasses[i]->visualcells.find(&(*selected_cell))!=canvasses[i]->visualcells.end()) {
 			auto& outbox = canvasses[i]->visualcells[&(*selected_cell)].outbox;
-			outbox->image.set_state(Gtk::STATE_NORMAL);
+			outbox->image.set_state_flags(Gtk::STATE_FLAG_NORMAL);
 			}
 		}
 	selected_cell=doc.end();
-	action_copy->set_sensitive(false);
+	action_copy->set_enabled(false);
 	}
 
 bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
@@ -2688,7 +2706,7 @@ bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
 	for(int i=0; i<(int)canvasses.size(); ++i) {
 		if(canvasses[i]->visualcells.find(&(*it))!=canvasses[i]->visualcells.end()) {
 			auto& outbox = canvasses[i]->visualcells[&(*it)].outbox;
-			outbox->image.set_state(Gtk::STATE_SELECTED);
+			outbox->image.set_state_flags(Gtk::STATE_FLAG_SELECTED);
 //			std::cerr << "selecting" << std::endl;
 //			if(i==current_canvas)
 //				outbox->grab_focus();
@@ -2696,7 +2714,7 @@ bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
 			}
 		}
 	selected_cell=it;
-	action_copy->set_sensitive(true);
+	action_copy->set_enabled(true);
 
 	Glib::RefPtr<Gtk::Clipboard> clipboard = Gtk::Clipboard::get(GDK_SELECTION_PRIMARY);
 	on_outbox_copy(clipboard, selected_cell);

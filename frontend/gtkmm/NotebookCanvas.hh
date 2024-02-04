@@ -25,7 +25,7 @@ namespace cadabra {
 
 	class NotebookWindow;
 
-	class NotebookCanvas : public Gtk::VPaned {
+	class NotebookCanvas : public Gtk::Paned {
 		public:
 			NotebookCanvas();
 			~NotebookCanvas();
@@ -36,7 +36,7 @@ namespace cadabra {
 			//			Gtk::VBox                 ebox;
 			Gtk::EventBox             ebox;
 			Gtk::ScrolledWindow       scroll;
-			Gtk::HSeparator           bottomline;
+			Gtk::Separator            bottomline;
 
 			void refresh_all();
 

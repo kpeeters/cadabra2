@@ -26,8 +26,8 @@ CellDiff::CellDiff(const std::string& a, const std::string& b)
 	set_border_width(5);
 	set_margin_top(5);
 	set_margin_bottom(5);
-	set_margin_left(5);
-	set_margin_right(5);
+	set_margin_start(5);
+	set_margin_end(5);
 
 	grid.set_hexpand(true);
 	grid.attach(sw_lhs, 1, 0, 1, 1);
@@ -40,8 +40,9 @@ CellDiff::CellDiff(const std::string& a, const std::string& b)
 	sw_lhs.add(tv_lhs);
 	sw_rhs.add(tv_rhs);
 
-	tv_lhs.override_background_color(color_offwhite);
-	tv_rhs.override_background_color(color_white);
+			// FIXME: reinstate using css
+//	tv_lhs.override_background_color(color_offwhite);
+//	tv_rhs.override_background_color(color_white);
 
 	compare(a, b);
 
@@ -59,14 +60,16 @@ void CellDiff::compare(const std::string& a_, const std::string& b_)
 	if (a_.empty() && !b_.empty()) {
 		// Insert only
 		for (size_t i = 0; i < b.size(); ++i) {
-			tv_rhs.override_background_color(color_insert);
+			// FIXME: reinstate using css
+//			tv_rhs.override_background_color(color_insert);
 			buf_rhs->insert(buf_rhs->end(), b[i]);
 			}
 		}
 	else if (b_.empty() && !a_.empty()) {
 		// Delete only
 		for (size_t i = 0; i < a.size(); ++i) {
-			tv_lhs.override_background_color(color_delete);
+			// FIXME: reinstate using css
+//			tv_lhs.override_background_color(color_delete);
 			buf_lhs->insert(buf_lhs->end(), a[i]);
 			}
 		}

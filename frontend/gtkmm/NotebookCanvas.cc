@@ -7,6 +7,7 @@
 using namespace cadabra;
 
 NotebookCanvas::NotebookCanvas()
+	: Gtk::Paned(Gtk::Orientation::ORIENTATION_VERTICAL)
 	{
 	// Pack the scroll widget with all document cells into the top pane.
 	pack1(ebox, true, true);
@@ -21,7 +22,9 @@ NotebookCanvas::NotebookCanvas()
 	// covered with white (except when totally at the top or
 	// bottom of the content).
 	// scroll.override_background_color(Gdk::RGBA("white"));
-	(*this).override_background_color(Gdk::RGBA("white"));
+
+	// FIXME: gtkmm4
+	//(*this).override_background_color(Gdk::RGBA("white"));
 
 	ebox.set_events(Gdk::SCROLL_MASK | Gdk::SMOOTH_SCROLL_MASK | Gdk::BUTTON_PRESS_MASK);
 	//	scroll.set_overlay_scrolling(false);
