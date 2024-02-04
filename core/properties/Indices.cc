@@ -8,6 +8,8 @@
 
 using namespace cadabra;
 
+#define MAX_INTEGER_RANGE 100
+
 Indices::Indices()
 	: position_type(free)
 	{
@@ -66,24 +68,30 @@ bool Indices::parse(Kernel& kernel, std::shared_ptr<Ex> ex, keyval_t& keyvals)
 		else if(ki->first=="values") {
 			//std::cerr << "got values keyword " << *(ki->second->name) << std::endl;
 			if(*ki->second->name=="\\sequence") {
+				// Only accept a sequence if both start and end are explicit integers.
+				Ex::sibling_iterator sqit1 = Ex::begin(ki->second);
+				Ex::sibling_iterator sqit2 = sqit1;
+				++sqit2;
+				if(!sqit1->is_integer() || !sqit2->is_integer()) 
+					throw ConsistencyException("Value sequence for Indices property not explicit integers.");
+
 				auto args = std::make_shared<cadabra::Ex>(ki->second);
 				auto prop = new Integer();
 				kernel.inject_property(prop, ex, args);
 
-				if (prop->from.is_integer() && prop->to.is_integer()) {
-					if (prop->difference.to_integer() < 100) {
-						for (int i=prop->from.to_integer(); i<=prop->to.to_integer(); ++i) {
-							values.push_back(Ex(i));
-							}
-						}
-					}
+				if(prop->difference.to_integer() > MAX_INTEGER_RANGE)
+					throw ConsistencyException("Value sequence for Indices property spans too many elements.");
 
+				for (int i=prop->from.to_integer(); i<=prop->to.to_integer(); ++i) {
+					values.push_back(Ex(i));
+					}
+				
 				++ki;
 				continue;
 				}
 
 			collect_index_values(ki->second);
-			// If all values are indices, add an `Integer' property for the object,
+			// If all values are integers, add an `Integer' property for the object,
 			// listing these integers.
 			bool is_number=true;
 			bool is_continuous=false;
@@ -98,7 +106,7 @@ bool Indices::parse(Kernel& kernel, std::shared_ptr<Ex> ex, keyval_t& keyvals)
 					});
 				is_continuous = (int)values.size() == (values[values.size() - 1].to_integer() - values[0].to_integer() + 1);
 				}
-			// FIXME: do not apply Integer to a list of integers with gaps as
+			// Do not apply Integer to a list of integers with gaps as
 			// the former can only deal with continuous ranges.
 			if(is_continuous) {
 //				std::cerr << "Injecting Integer property" << std::endl;

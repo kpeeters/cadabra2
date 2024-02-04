@@ -90,15 +90,26 @@ test06()
 
 def test07():
    __cdbkernel__ = create_scope()
+   try:
+      {r, s}::Indices(values={-1..a}).
+      sys.exit(-1)
+   except:
+      print("Test 07a passed")      
+   try:
+      {r, s}::Indices(values={-1..999}).
+      sys.exit(-1)
+   except:
+      print("Test 07b passed")      
    {a, b}::Indices(values={-1..2}).
    {c, d}::Indices(values={-1,1,2}).
    \delta{#}::KroneckerDelta.
    ex1 := \delta_{a b} \delta_{a b}.
    eliminate_kronecker(ex1)
    assert ex1 == 4
+   print("Test 07c passed")
    ex2 := \delta_{c d} \delta_{c d}.
    eliminate_kronecker(ex2)
    assert ex2 == $\delta_{d d}$
-   print("Test 07 passed")
+   print("Test 07d passed")
 
 test07()
