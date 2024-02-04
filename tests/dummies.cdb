@@ -85,3 +85,20 @@ def test06():
    print("Test 06 passed")
 
 test06()
+
+# values tests
+
+def test07():
+   __cdbkernel__ = create_scope()
+   {a, b}::Indices(values={-1..2}).
+   {c, d}::Indices(values={-1,1,2}).
+   \delta{#}::KroneckerDelta.
+   ex1 := \delta_{a b} \delta_{a b}.
+   eliminate_kronecker(ex1)
+   assert ex1 == 4
+   ex2 := \delta_{c d} \delta_{c d}.
+   eliminate_kronecker(ex2)
+   assert ex2 == $\delta_{d d}$
+   print("Test 07 passed")
+
+test07()
