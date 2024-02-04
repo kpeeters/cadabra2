@@ -76,19 +76,22 @@ bool Indices::parse(Kernel& kernel, std::shared_ptr<Ex> ex, keyval_t& keyvals)
 			// If all values are indices, add an `Integer' property for the object,
 			// listing these integers.
 			bool is_number=true;
+			bool is_continuous=false;
 			for(auto& val: values)
 				if(!val.begin()->is_integer()) {
 					is_number=false;
 					break;
 					}
-			// FIXME: the above assumes no gap in the integer range, which is
-			// not always guaranteed, and will then break the Integer property
-			// assignment as the latter can only deal with continuous ranges.
 			if(is_number) {
-				Ex from(values[0]), to(values[values.size()-1]);
+				std::sort(values.begin(), values.end(), [](Ex a, Ex b) {
+					return a.to_integer() < b.to_integer();
+					});
+				is_continuous = (int)values.size() == (values[values.size() - 1].to_integer() - values[0].to_integer() + 1);
+				}
+			// FIXME: do not apply Integer to a list of integers with gaps as
+			// the former can only deal with continuous ranges.
+			if(is_continuous) {
 //				std::cerr << "Injecting Integer property" << std::endl;
-				// FIXME: this assumes that the values are in a continuous range (as Integer cannot
-				// represent anything else at this stage).
 				kernel.inject_property(new Integer(), ex,
 											  kernel.ex_from_string(std::to_string(values[0].to_integer())+".."
 																			+std::to_string(values[values.size()-1].to_integer())
