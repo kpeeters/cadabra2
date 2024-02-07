@@ -20,6 +20,7 @@ You should have received a copy of the GNU General Public License
 
 #include "Parser.hh"
 #include "PreProcessor.hh"
+#include "Symbols.hh"
 
 #include <sstream>
 #include <internal/uniconv.h>
@@ -178,6 +179,17 @@ bool Parser::string2tree(const std::string& inp)
 	ss2 << pp;
 	std::string str8="  "+ss2.str()+"  "; // for lookahead
 
+#ifdef DEBUG
+	std::cout << "converting Greek unicode to TeX" << std::endl;
+#endif
+	for (auto const& c : cadabra::symbols::greekmap) {
+		size_t pos1 = 0;
+		size_t pos2;
+		while ((pos2 = str8.find(c.second, pos1)) != std::string::npos) {
+			str8.replace(pos2, c.second.length(), c.first);
+			pos1 = pos2 + c.first.length();
+			}
+		}
 #ifdef DEBUG
 	std::cout << "converting to utf32" << std::endl;
 #endif

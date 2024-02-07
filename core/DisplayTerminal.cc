@@ -1,6 +1,7 @@
 
 #include "Algorithm.hh"
 #include "DisplayTerminal.hh"
+#include "Symbols.hh"
 #include "properties/Accent.hh"
 
 using namespace cadabra;
@@ -17,59 +18,6 @@ DisplayTerminal::DisplayTerminal(const Kernel& k, const Ex& e, bool uuc)
 			{"\\tanh", "tanh"},
 			{"\\int", "∫" },
 			{"\\sum", "∑" }
-		};
-
-	greekmap = {
-			{"\\alpha",   "α" },
-			{"\\beta",    "β" },  // beta seems to be reserved
-			{"\\gamma",   "γ" }, // gamma seems to be reserved
-			{"\\delta",   "δ" },
-			{"\\epsilon", "ε" },
-			{"\\zeta",    "ζ" },
-			{"\\eta",     "η" },
-			{"\\theta",   "θ" },
-			{"\\iota",    "ι" },
-			{"\\kappa",   "κ" },
-			{"\\lambda",  "λ" }, // lambda is reserved
-			{"\\mu",      "μ" },
-			{"\\nu",      "ν" },
-			{"\\xi",      "ξ" },
-			{"\\omicron", "ο" },
-			{"\\pi",      "π" },
-			{"\\rho",     "ρ" },
-			{"\\sigma",   "σ" },
-			{"\\tau",     "τ" },
-			{"\\upsilon", "υ" },
-			{"\\phi",     "φ" },
-			{"\\chi",     "χ" },
-			{"\\psi",     "ψ" },
-			{"\\omega",   "ω" },
-
-			{"\\Alpha",   "Α" },
-			{"\\Beta",    "Β" },
-			{"\\Gamma",   "Γ" },
-			{"\\Delta",   "Δ" },
-			{"\\Epsilon", "Ε" },
-			{"\\Zeta",    "Ζ" },
-			{"\\Eta",     "Η" },
-			{"\\Theta",   "ϴ" },
-			{"\\Iota",    "Ι" },
-			{"\\Kappa",   "Κ" },
-			{"\\Lambda",  "Λ" },
-			{"\\Mu",      "Μ" },
-			{"\\Nu",      "Ν" },
-			{"\\Xi",      "Ξ" },
-			{"\\Omicron", "Ο" },
-			{"\\Pi",      "Π" },
-			{"\\Rho",     "Ρ" },
-			{"\\Sigma",   "Σ" },
-			{"\\Tau",     "Τ" },
-			{"\\Upsilon", "Υ" },
-			{"\\Phi",     "Φ" },
-			{"\\Chi",     "Χ" },
-			{"\\Psi",     "Ψ" },
-			{"\\Omega",   "Ω" },
-
 		};
 	}
 
@@ -665,8 +613,8 @@ void DisplayTerminal::print_other(std::ostream& str, Ex::iterator it)
 		auto rn1 = symmap.find(sbit);
 		if(rn1!=symmap.end())
 			sbit = rn1->second;
-		auto rn = greekmap.find(sbit);
-		if(rn!=greekmap.end())
+		auto rn = cadabra::symbols::greekmap.find(sbit);
+		if(rn!=cadabra::symbols::greekmap.end())
 			sbit = rn->second;
 		}
 	str << sbit;
