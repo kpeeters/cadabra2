@@ -611,6 +611,15 @@ def traceless01():
    
 traceless01()
 
+
+{a,b,c,d}::Indices;
+X_{a b c}::TableauSymmetry(shape=(2,1), indices=(0,2,1)).
+ex:=X_{a d d};
+meld(ex);
+tst:= X_{a b c} - @(ex);
+assert(tst==0)
+print("tab33 passed")
+
 #  {a,b,c,i,j,k}::Indices;
 #  {a,b,c,i,j,k}::Integer(1..3);
 #  {ct, st}::Symbol;
