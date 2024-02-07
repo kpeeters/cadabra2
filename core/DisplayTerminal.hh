@@ -66,7 +66,7 @@ namespace cadabra {
 
 			bool children_have_brackets(Ex::iterator ch) const;
 
-			std::map<std::string, std::string> symmap, greekmap;
+			std::map<std::string, std::string> symmap;
 		};
 
 	const char *unichar(kunichar c);
