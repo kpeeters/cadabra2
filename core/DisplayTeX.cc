@@ -101,13 +101,13 @@ bool DisplayTeX::reads_as_operator(Ex::iterator obj, Ex::iterator arg) const
 		// FIXME: this needs fine-tuning; there are more cases where
 		// no brackets are needed.
 		const LaTeXForm *lf = kernel.properties.get<LaTeXForm>(arg);
-		if((*arg->name).size()==1 || lf || cadabra::symbols::greek.find(*arg->name)!=cadabra::symbols::greek.end()) return true;
+		if((*arg->name).size()==1 || lf || cadabra::symbols::greekmap.find(*arg->name)!=cadabra::symbols::greekmap.end()) return true;
 		}
 
 	if(*obj->name=="\\cos" || *obj->name=="\\sin" || *obj->name=="\\tan" || *obj->name=="\\exp") {
 		const LaTeXForm *lf = kernel.properties.get<LaTeXForm>(arg);
 		if(*arg->multiplier==1)
-			if((*arg->name).size()==1 || lf || cadabra::symbols::greek.find(*arg->name)!=cadabra::symbols::greek.end()) return true;
+			if((*arg->name).size()==1 || lf || cadabra::symbols::greekmap.find(*arg->name)!=cadabra::symbols::greekmap.end()) return true;
 		}
 
 	auto it=curly_bracket_operators.find(*obj->name);
