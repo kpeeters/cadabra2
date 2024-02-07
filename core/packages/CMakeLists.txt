@@ -69,6 +69,14 @@ foreach(PACKAGE ${COMPILED_PACKAGES})
 
   target_link_libraries(${PNAME} PUBLIC cadabra2 ${GMPXX_LIBRARIES})
   target_include_directories(${PNAME} PUBLIC ${CADABRA_CORE_DIR})
+
+  if(IPO_SUPPORTED)
+    message(STATUS "IPO / LTO for ${PNAME} enabled")     
+    set_property(TARGET ${PNAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+    set_target_properties(${PNAME} PROPERTIES COMPILE_FLAGS "-flto=auto")
+    set_target_properties(${PNAME} PROPERTIES LINK_FLAGS "-flto=auto")  
+  endif()
+  
   install(TARGETS ${PNAME} DESTINATION ${PYTHON_CDB_PACKAGE_PATH}/${PINSTALL})
 endforeach()
 

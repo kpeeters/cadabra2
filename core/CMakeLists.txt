@@ -299,7 +299,10 @@ target_link_libraries(cadabra2 PRIVATE
    )
 
 if(IPO_SUPPORTED)
+  message(STATUS "IPO / LTO for cadabra2 enabled")     
   set_property(TARGET cadabra2 PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+  set_target_properties(cadabra2 PROPERTIES COMPILE_FLAGS "-flto=auto")
+  set_target_properties(cadabra2 PROPERTIES LINK_FLAGS "-flto=auto")  
 endif()
 
    
