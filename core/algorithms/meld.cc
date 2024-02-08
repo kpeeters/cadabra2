@@ -23,70 +23,85 @@
 #include "properties/SelfNonCommuting.hh"
 #include "properties/NonCommuting.hh"
 
+// #define DEBUG 1
+
 using namespace cadabra;
 
 meld::meld(const Kernel& kernel, Ex& ex, bool project_as_sum)
 	: Algorithm(kernel, ex)
 	, index_map(kernel)
 	, project_as_sum(project_as_sum)
-{
-
-}
+	{
+	}
 
 meld::~meld()
-{
-
-}
+	{
+	}
 
 bool meld::can_apply(iterator it)
-{
+	{
 	return
 		can_apply_diagonals(it) ||
 		can_apply_traceless(it) ||
 		can_apply_cycle_traces(it) ||
 		can_apply_tableaux(it);
-}
+	}
 
 meld::result_t meld::apply(iterator& it)
-{
+	{
 	result_t res = result_t::l_no_action;
 
 	if (can_apply_diagonals(it) && apply_diagonals(it)) {
 		res = result_t::l_applied;
 		cleanup_dispatch(kernel, tr, it);
-	}
+#ifdef DEBUG
+		std::cerr << "meld::can_apply: diagonals," << it << std::endl;
+#endif
+		}
 	if (can_apply_traceless(it) && apply_traceless(it)) {
 		res = result_t::l_applied;
 		cleanup_dispatch(kernel, tr, it);
-	}
+#ifdef DEBUG
+		std::cerr << "meld::can_apply: traceless," << it << std::endl;
+#endif
+		}
 	if (can_apply_cycle_traces(it) && apply_cycle_traces(it)) {
 		res = result_t::l_applied;
 		cleanup_dispatch(kernel, tr, it);
-	}
+#ifdef DEBUG
+		std::cerr << "meld::can_apply: cycle," << it << std::endl;
+#endif
+		}
 	//if (can_apply_side_relations(it) && apply_side_relations(it)) {
 	//	res = result_t::l_applied;
 	//	cleanup_dispatch(kernel, tr, it);
 	//}
 	if (can_apply_tableaux(it) && apply_tableaux(it)) {
 		res = result_t::l_applied;
+#ifdef DEBUG
+		std::cerr << "meld::can_apply: tableaux before cleanup," << it << std::endl;
+#endif
 		cleanup_dispatch(kernel, tr, it);
-	}
+#ifdef DEBUG
+		std::cerr << "meld::can_apply: tableaux," << it << std::endl;
+#endif
+		}
 
 	return res;
-}
+	}
 
 
 // *_diagonals
 // Remove Diagonal objects with numerical indices which are not all the same.
 
 bool meld::can_apply_diagonals(iterator it)
-{
+	{
 	auto diagonal = kernel.properties.get<Diagonal>(it);
 	return diagonal != nullptr;
-}
+	}
 
 bool meld::apply_diagonals(iterator it)
-{
+	{
 	
 	assert(kernel.properties.get<Diagonal>(it) != nullptr);
 	index_iterator indit = begin_index(it);
@@ -99,26 +114,25 @@ bool meld::apply_diagonals(iterator it)
 			if (indit2->multiplier != indit->multiplier) {
 				zero(it->multiplier);
 				return true;
-			}
+				}
 			++indit2;
+			}
 		}
-	}
 	return false;
-}
+	}
 
 
 // *_traceless
 // // Remove any traces of traceless tensors.
 
 bool meld::can_apply_traceless(iterator it)
-{
+	{
 	auto traceless = kernel.properties.get<Traceless>(it);
 	return traceless != nullptr;
-}
+	}
 
 bool meld::apply_traceless(iterator it)
-{
-	
+	{
 	const Traceless* trl = kernel.properties.get<Traceless>(it);
 	unsigned int ihits = 0;
 	tree_exact_less_mod_prel_obj comp(&kernel.properties);
@@ -133,19 +147,19 @@ bool meld::apply_traceless(iterator it)
 			if (trl->index_set_names.find(ind->set_name) != trl->index_set_names.end() || trl->index_set_names.size() == 0) {
 				incremented_now = true;
 				++ihits;
+				}
 			}
-		}
 		else incremented_now = true;
 		// Having no name is treated as having the right name
 		if (countmap.find(Ex(indit)) == countmap.end()) {
 			countmap.insert(Ex(indit));
-		}
+			}
 		else if (incremented_now) {
 			zero(it->multiplier);
 			return true;
-		}
+			}
 		++indit;
-	}
+		}
 	iterator parent = it;
 	if (tr.number_of_children(it) == 1 && !tr.is_head(it)) parent = tr.parent(it);
 	const Trace* trace = kernel.properties.get<Trace>(parent);
@@ -163,19 +177,19 @@ bool meld::apply_traceless(iterator it)
 				if (ehits - ihits > 1) {
 					zero(it->multiplier);
 					return true;
-				}
+					}
 				++indit;
+				}
 			}
 		}
-	}
 	return false;
-}
+	}
 
 
 // *_tableaux
 
 bool meld::can_apply_tableaux(iterator it)
-{
+	{
 	// This node can be a sum, but the rest of the tree must be strictly monomial. Also
 	// helps if there is an index lying around somewhere
 	bool found_index = false;
@@ -185,14 +199,14 @@ bool meld::can_apply_tableaux(iterator it)
 		if (beg->is_index()) {
 			found_index = true;
 			beg.skip_children();
+			}
 		}
-	}
 
 	return found_index;
-}
+	}
 
 bool meld::apply_tableaux(iterator it)
-{
+	{
 	if (*it->name == "\\equals") {
 		bool res = false;
 		Ex::sibling_iterator side = it.begin();
@@ -200,7 +214,7 @@ bool meld::apply_tableaux(iterator it)
 		++side;
 		res |= apply_tableaux(side);
 		return res;
-	}
+		}
 
 	using namespace boost::numeric::ublas;
 	using matrix_type = matrix<mpq_class>;
@@ -212,6 +226,12 @@ bool meld::apply_tableaux(iterator it)
 	std::vector<std::vector<ProjectedTerm>> patterns;
 	for (const auto& term : split_it(it, "\\sum")) {
 		ProjectedTerm projected_term(kernel, index_map, tr, term);
+#ifdef DEBUG
+		std::cout << "meld::apply_tableaux: projected = \n";
+		for(const auto& m: projected_term.ident)
+			std::cout << m << " ";
+		std::cout << std::endl;
+#endif
 		if (projected_term.ident.size() == 0)
 			continue;
 		bool found = false;
@@ -220,24 +240,24 @@ bool meld::apply_tableaux(iterator it)
 				found = true;
 				pattern.push_back(projected_term);
 				break;
+				}
 			}
-		}
 		if (!found)
 			patterns.emplace_back(1, std::move(projected_term));
-	}
+		}
 
 	// Apply to each pattern group in turn
 	for (auto& terms : patterns) {
 		ScopedProgressGroup group(pm,
-			"Melding terms of form " + ex_to_string<DisplayTerminal>(kernel, terms[0].tensor),
-			terms.size());
+										  "Melding terms of form " + ex_to_string<DisplayTerminal>(kernel, terms[0].tensor),
+										  terms.size());
 
 		// Initialize the linear solver; 'coeffs' is a square matrix of YP coefficients which grows
 		// every time we encounter a linearly-independent term. 'mapping' is a map between matrix
 		// rows and YP terms. 'adjforms' is a list of the complete decompositions (one for each column
 		// in 'coeffs') which we need to keep to ensure the solution we get by solving for 'coeffs', which
 		// does not contain the coefficients for every term in the YP, is an actual solution 
-		linear::Solver<mpq_class> solver;
+																		  linear::Solver<mpq_class> solver;
 		matrix_type coeffs;
 		std::vector<Adjform> mapping;
 
@@ -248,14 +268,17 @@ bool meld::apply_tableaux(iterator it)
 		bool is_zero = collect_symmetries(tabs, symmetrizers);
 
 		if (is_zero) {
+#ifdef DEBUG
+			std::cout << "term is identically zero" << std::endl;
+#endif
 			// The term is identically zero due to its tableaux, delete all and move
 			// onto next pattern
 			for (auto& term : terms) {
 				node_zero(term.it);
 				applied = true;
-			}
+				}
 			continue;
-		}
+			}
 
 		// Go through all terms in this pattern group one at a time
 		for (size_t term_idx = 0; term_idx < terms.size(); ++term_idx) {
@@ -264,12 +287,15 @@ bool meld::apply_tableaux(iterator it)
 			symmetrize(term, symmetrizers);
 
 			if (term.projection.empty()) {
+#ifdef DEBUG
+				std::cout << "term is identically zero after projection" << std::endl;
+#endif
 				// Empty adjform means that the term is identically equal to 0
 				node_zero(term.it);
 				terms.erase(terms.begin() + term_idx);
 				--term_idx;
 				applied = true;
-			}
+				}
 			else {
 				// We need to try and express the current YP as a linear combination of previous YPs
 				// by solving "coeffs * x = y"
@@ -307,7 +333,7 @@ bool meld::apply_tableaux(iterator it)
 						if (it->first < cur_term)
 							cur_term = it->first;
 						lhs_its.push_back(it);
-					}
+						}
 
 					// Keep on iterating while there are unexpired iterators
 					size_t n_finished = 0;
@@ -325,38 +351,38 @@ bool meld::apply_tableaux(iterator it)
 								++lhs_its[i];
 								if (lhs_its[i] == terms[i].projection.end())
 									++n_finished;
-							}
+								}
 							if (lhs_its[i] != terms[i].projection.end() && lhs_its[i]->first < next_term)
 								next_term = lhs_its[i]->first;
-						}
+							}
 
 						// Calculate the sum on the right hand side 
-						mpq_class rhs_sum;
+								mpq_class rhs_sum;
 						if (rhs_it == term.projection.end() || rhs_it->first != cur_term) {
 							rhs_sum = 0;
-						}
+							}
 						else {
 							rhs_sum = rhs_it->second;
 							++rhs_it;
-						}
+							}
 
 						// Early return if there is a mismatch
 						if (sum != rhs_sum) {
 							has_solution = false;
 							break;
-						}
+							}
 
 						// See if next smallest term is from the YP we just calculated
 						if (rhs_it != term.projection.end() && rhs_it->first < next_term)
 							next_term = rhs_it->first;
 						cur_term = next_term;
-					}
+						}
 
 					// If all the LHS iterators have expired, but there are still non-zero terms
 					// on the RHS (i.e. the iterator isn't expired) then this is a mismatch
 					if (rhs_it != term.projection.end())
 						has_solution = false;
-				}
+					}
 
 				if (has_solution) {
 					// If there is a solution, we add contributions from the current term to the
@@ -371,14 +397,14 @@ bool meld::apply_tableaux(iterator it)
 							for (Ex::sibling_iterator beg = scalar_head.begin(), end = scalar_head.end(); beg != end; ++beg) {
 								auto new_term = terms[i].scalar.append_child(terms[i].scalar.begin(), (Ex::iterator)beg);
 								multiply(new_term->multiplier, x(i) * (*scalar_head->multiplier));
+								}
 							}
 						}
-					}
 					applied = true;
 					node_zero(term.it);
 					terms.erase(terms.begin() + term_idx);
 					--term_idx;
-				}
+					}
 				else {
 					// Expand the dimensions of the matrix by 1
 					coeffs.resize(coeffs.size1() + 1, coeffs.size2() + 1);
@@ -404,17 +430,17 @@ bool meld::apply_tableaux(iterator it)
 								mapping.push_back(kv.first);
 								found = true;
 								break;
+								}
 							}
 						}
-					}
 
 					// Shouldn't ever happen...if this error does get thrown then probably need a new way
 					// to calculate the representative terms
 					if (!found)
 						throw std::runtime_error("Could not find a suitable element to add to the matrix");
-				} // if (has_solution) {} else {}
-			} // if (term.projection.empty()) {} else {}
-		} //for (size_t term_idx = 0; term_idx < terms.size(); ++term_idx)
+					} // if (has_solution) {} else {}
+				} // if (term.projection.empty()) {} else {}
+			} //for (size_t term_idx = 0; term_idx < terms.size(); ++term_idx)
 
 		// Replace any nodes which have the 'changed' flag
 		for (auto& term : terms) {
@@ -425,15 +451,15 @@ bool meld::apply_tableaux(iterator it)
 				tr.append_child(term.it, term.scalar.begin());
 				tr.append_child(term.it, term.tensor.begin());
 				cleanup_dispatch(kernel, tr, term.it);
+				}
 			}
-		}
-	} // for (auto& terms : patterns)
+		} // for (auto& terms : patterns)
 
 	return applied;
-}
+	}
 
 bool it_is_scalar(const Kernel& kernel, Ex::iterator it)
-{
+	{
 	bool is_scalar = true;
 	iter_indices term_indices(kernel.properties, it);
 	// size_t n_indices = term_indices.size();
@@ -444,17 +470,17 @@ bool it_is_scalar(const Kernel& kernel, Ex::iterator it)
 		if (is_index) {
 			is_scalar = false;
 			break;
+			}
 		}
-	}
 	return is_scalar;
-}
+	}
 
 meld::ProjectedTerm::ProjectedTerm(const Kernel& kernel, IndexMap& index_map, Ex& ex, Ex::iterator it)
 	: scalar("\\sum")
 	, tensor("\\prod")
 	, it(it)
 	, changed(false)
-{
+	{
 	// Split the term up into a scalar part and a tensor part. The scalar part always starts
 	// with a \\sum node, as contributions will be added to it during the melding process,
 	// so we start by adding a \\prod node which will collect the scalar factors.
@@ -469,8 +495,8 @@ meld::ProjectedTerm::ProjectedTerm(const Kernel& kernel, IndexMap& index_map, Ex
 			auto factor = scalar.append_child(scalar_head, str_node("1"));
 			multiply(factor->multiplier, *it->multiplier);
 			one(term->multiplier);
+			}
 		}
-	}
 	else {
 		// Object is a product of multiple terms.
 		// Loop through all terms in the product. If they have indices, then see if they
@@ -495,18 +521,18 @@ meld::ProjectedTerm::ProjectedTerm(const Kernel& kernel, IndexMap& index_map, Ex
 					is_scalar = comp.can_move_to_front(ex, it, beg);
 				else
 					is_scalar = comp.can_move_adjacent(it, last_scalar, beg);
-			}
+				}
 
 			// Move scalar terms onto the scalar node, and tensor (including non-
 			// commuting tensors) onto the tensor node
 			if (is_scalar) {
 				auto term = scalar.append_child(scalar_head, (Ex::iterator)beg);
 				last_scalar = beg;
-			}
+				}
 			else {
 				tensor.append_child(tensor.begin(), (Ex::iterator)beg);
+				}
 			}
-		}
 
 		// If we had no scalar components, then create a numeric constant to
 		// hold the overall factor
@@ -514,7 +540,7 @@ meld::ProjectedTerm::ProjectedTerm(const Kernel& kernel, IndexMap& index_map, Ex
 			auto term = scalar.append_child(scalar_head, str_node("1"));
 		// Copy the overall numeric factor onto the scalar component
 		multiply(scalar_head->multiplier, *it->multiplier);
-	}
+		}
 
 	// Flatten/cleanup the expressions
 	Ex::iterator tensor_head = tensor.begin();
@@ -525,11 +551,11 @@ meld::ProjectedTerm::ProjectedTerm(const Kernel& kernel, IndexMap& index_map, Ex
 	auto ibeg = index_iterator::begin(kernel.properties, tensor.begin());
 	auto iend = index_iterator::end(kernel.properties, tensor.begin());
 	ident = Adjform(ibeg, iend, index_map, kernel);
-}
+	}
 
 // Return 'true' if the tensor parts are identical up to index structure.
 bool meld::ProjectedTerm::compare(const Kernel& kernel, const ProjectedTerm& other)
-{
+	{
 	auto head1 = tensor.begin(), head2 = other.tensor.begin();
 	if (head1->name != head2->name)
 		return false;
@@ -548,9 +574,9 @@ bool meld::ProjectedTerm::compare(const Kernel& kernel, const ProjectedTerm& oth
 				a = ex.parent(a);
 			if (b != lca)
 				b = ex.parent(b);
-		}
+			}
 		return false;
-	};
+		};
 
 	std::set<Ex::iterator> dummies1, dummies2;
 	Ex_comparator comp(kernel.properties);
@@ -564,11 +590,11 @@ bool meld::ProjectedTerm::compare(const Kernel& kernel, const ProjectedTerm& oth
 			beg1.skip_children();
 			beg2.skip_children();
 			continue;
-		}
+			}
 		if (beg1->name == beg2->name && beg1->fl.parent_rel == beg2->fl.parent_rel) {
 			// Nodes are the same, continue but don't skip children
 			continue;
-		}
+			}
 
 		// No match is ok if the index structure is the same. Let's check that they
 		// are both indices
@@ -629,11 +655,11 @@ bool meld::ProjectedTerm::compare(const Kernel& kernel, const ProjectedTerm& oth
 			if (dummies1.find(beg1) != dummies1.end()) {
 				beg1isdummy = true;
 				dummies1.erase(dummies1.find(beg1));
-			}
+				}
 			if (dummies2.find(beg2) != dummies2.end()) {
 				beg2isdummy = true;
 				dummies2.erase(dummies2.find(beg2));
-			}
+				}
 			// Secondly we iterate through the rest of the tree to check for a match
 			if (!beg1isdummy) {
 				Ex::iterator search = beg1;
@@ -647,13 +673,13 @@ bool meld::ProjectedTerm::compare(const Kernel& kernel, const ProjectedTerm& oth
 							// Valid dummy, add this iterator to dummies so we can find it later
 							dummies1.insert(search);
 							beg1isdummy = true;
+							}
 						}
-					}
 					if (search->is_index())
 						search.skip_children();
 					++search;
+					}
 				}
-			}
 			if (!beg2isdummy) {
 				Ex::iterator search = beg2;
 				search.skip_children();
@@ -666,27 +692,27 @@ bool meld::ProjectedTerm::compare(const Kernel& kernel, const ProjectedTerm& oth
 							// Valid dummy, add this iterator to dummies so we can find it later
 							dummies2.insert(search);
 							beg2isdummy = true;
+							}
 						}
-					}
 					if (search->is_index())
 						search.skip_children();
 					++search;
+					}
 				}
-			}
 			// In case we've forgotten what we were meant to be doing here; the two indices have different
 			// heights but this is ok if they are both in valid dummy pairs; so we return false if that
 			// is not the case
 			if (!beg1isdummy || !beg2isdummy)
 				return false;
+			}
 		}
-	}
 
 	// One of the iterators has expired, check that both have
 	return beg1 == end1 && beg2 == end2;
-}
+	}
 
 std::vector<meld::tab_t> meld::collect_tableaux(Ex& ex) const
-{
+	{
 	std::vector<tab_t> tabs;
 	size_t total_indices = 0;
 	for (const auto& term : split_it(ex.begin(), "\\prod")) {
@@ -701,7 +727,7 @@ std::vector<meld::tab_t> meld::collect_tableaux(Ex& ex) const
 				for (auto& cell : tab)
 					cell += total_indices;
 				tabs.push_back(std::move(tab));
-			}
+				}
 
 			// Are we a derivative of a Riemann tensor?
 			if (n_tabs == 1) {
@@ -711,32 +737,32 @@ std::vector<meld::tab_t> meld::collect_tableaux(Ex& ex) const
 					child = child.begin();
 					++child;
 					++depth;
-				}
+					}
 				if (kernel.properties.get<RiemannTensor>(child)) {
 					// Append indices to top row of Riemann tableau
 					for (size_t k = 0; k < depth; ++k) {
 						tabs.back().add_box(0, total_indices + k);
+						}
 					}
 				}
 			}
-		}
 		iter_indices indices(kernel.properties, term);
 		total_indices += indices.size();
-	}
+		}
 
 	return tabs;
-}
+	}
 
 bool meld::collect_symmetries(const std::vector<tab_t>& tabs, std::vector<symmetrizer_t>& symmetrizers) const
-{
+	{
 	if (project_as_sum)
 		return collect_symmetries_as_sum(tabs, symmetrizers);
 	else
 		return collect_symmetries_as_product(tabs, symmetrizers);
-}
+	}
 
 bool meld::collect_symmetries_as_product(const std::vector<tab_t>& tabs, std::vector<symmetrizer_t>& symmetrizers) const
-{
+	{
 	// We collect all the symmetrizers and antisymmerizers into a list
 	// to end up with e.g.
 	//   S(01) A(02) S(34) A(57) A(68) S(56) S(78)
@@ -751,17 +777,17 @@ bool meld::collect_symmetries_as_product(const std::vector<tab_t>& tabs, std::ve
 				sym.indices.assign(tab.begin_column(col), tab.end_column(col));
 				std::sort(sym.indices.begin(), sym.indices.end());
 				symmetrizers.push_back(std::move(sym));
+				}
 			}
-		}
 		for (size_t row = 0; row < tab.number_of_rows(); ++row) {
 			if (tab.row_size(row) > 1) {
 				symmetrizer_t sym(false, true);
 				sym.indices.assign(tab.begin_row(row), tab.end_row(row));
 				std::sort(sym.indices.begin(), sym.indices.end());
 				symmetrizers.push_back(std::move(sym));
+				}
 			}
 		}
-	}
 
 	// For each symmetrizer i, try and commute it though the symmetrizers to the right and left
 	// of it to try and find simplifications
@@ -782,22 +808,22 @@ bool meld::collect_symmetries_as_product(const std::vector<tab_t>& tabs, std::ve
 					lhs = uni;
 					symmetrizers.erase(symmetrizers.begin() + j);
 					--j;
+					}
 				}
-			}
 			else {
 				// One is symmetric and the other antisymmetric: if they overlap by more than one index
 				// then the whole projection is identically zero
 				if (inter.size() > 1) {
 					return true;
+					}
 				}
-			}
 
 			// If these two terms do not commute then move lhs on
 			if (!can_commute) {
 				symmetrizers[i].independent = false;
 				break;
+				}
 			}
-		}
 
 		// Commute left
 		for (size_t j = i - 1; j != (size_t)-1; --j) {
@@ -815,30 +841,30 @@ bool meld::collect_symmetries_as_product(const std::vector<tab_t>& tabs, std::ve
 					symmetrizers.erase(symmetrizers.begin() + j);
 					++j;
 					--i;
+					}
 				}
-			}
 			else {
 				// One is symmetric and the other antisymmetric: if they overlap by more than one index
 				// then the whole projection is identically zero
 				if (inter.size() > 1) {
 					return true;
+					}
 				}
-			}
 
 			// If these two terms do not commute then move lhs on
 			if (!can_commute) {
 				symmetrizers[i].independent = false;
 				break;
+				}
 			}
 		}
-	}
 
 	return false;
-}
+	}
 
 
 bool meld::collect_symmetries_as_sum(const std::vector<tab_t>& tabs, std::vector<symmetrizer_t>& symmetrizers) const
-{
+	{
 	auto reduce_tab = [](tab_t tab) {
 		// Get the row with the biggest element
 		size_t n_cells = 0;
@@ -850,16 +876,16 @@ bool meld::collect_symmetries_as_sum(const std::vector<tab_t>& tabs, std::vector
 			if (back > greatest_elem) {
 				greatest_elem = back;
 				greatest_row = row;
+				}
 			}
-		}
 
 		tab.remove_box(greatest_row);
 		return tab;
-	};
+		};
 
 	auto is_trivial = [](const tab_t& tab) {
 		return std::distance(tab.begin(), tab.end()) <= 2;
-	};
+		};
 
 	std::vector<mpz_class> norms;
 	for (const auto& tab : tabs) {
@@ -871,8 +897,8 @@ bool meld::collect_symmetries_as_sum(const std::vector<tab_t>& tabs, std::vector
 				if (next < prev)
 					throw ConsistencyException("Trying to symmetrize non-standard tableau as sum");
 				prev = next;
+				}
 			}
-		}
 		// Check tableau is column-standard
 		for (size_t col = 0; col < tab.row_size(0); ++col) {
 			int prev = -1;
@@ -881,8 +907,8 @@ bool meld::collect_symmetries_as_sum(const std::vector<tab_t>& tabs, std::vector
 				if (next < prev)
 					throw ConsistencyException("Trying to symmetrize non-standard tableau as sum");
 				prev = next;
+				}
 			}
-		}
 
 		// Create the hermitian product as described in Theorem 6 of arXiv:1307.6147
 		// We start by creating a list 'hermprod' containing the original tableau
@@ -902,8 +928,8 @@ bool meld::collect_symmetries_as_sum(const std::vector<tab_t>& tabs, std::vector
 				hermprod.insert(hermprod.begin() + i, reduced);
 				is_decomposed.insert(is_decomposed.begin() + i, triv);
 				--i;
+				}
 			}
-		}
 
 		// Collect the symmetrizers. We begin with an object which has
 		// independent=true and indices contains one element, which is the normalisation
@@ -919,20 +945,20 @@ bool meld::collect_symmetries_as_sum(const std::vector<tab_t>& tabs, std::vector
 					sym.indices.assign(herm.begin_column(col), herm.end_column(col));
 					std::sort(sym.indices.begin(), sym.indices.end());
 					symmetrizers.push_back(std::move(sym));
+					}
 				}
-			}
 			for (size_t row = 0; row < herm.number_of_rows(); ++row) {
 				if (herm.row_size(row) > 1) {
 					symmetrizer_t sym(false, false);
 					sym.indices.assign(herm.begin_row(row), herm.end_row(row));
 					std::sort(sym.indices.begin(), sym.indices.end());
 					symmetrizers.push_back(std::move(sym));
+					}
 				}
 			}
-		}
 		norms.push_back(norm);
 
-	}
+		}
 
 	// Get the GCD of the norms
 	mpz_class gcd = 1;
@@ -940,7 +966,7 @@ bool meld::collect_symmetries_as_sum(const std::vector<tab_t>& tabs, std::vector
 		mpz_gcd(gcd.get_mpz_t(), norms[0].get_mpz_t(), norms[1].get_mpz_t());
 		for (size_t i = 2; i < norms.size(); ++i)
 			mpz_gcd(gcd.get_mpz_t(), gcd.get_mpz_t(), norms[i].get_mpz_t());
-	}
+		}
 
 	size_t pos = 0;
 	for (auto& symmetrizer : symmetrizers) {
@@ -948,22 +974,22 @@ bool meld::collect_symmetries_as_sum(const std::vector<tab_t>& tabs, std::vector
 			mpz_class norm = norms[pos] / gcd;
 			symmetrizer.indices.push_back(norm.get_si());
 			++pos;
+			}
 		}
-	}
 
 	return false;
-}
+	}
 
 void meld::symmetrize(ProjectedTerm& projterm, const std::vector<symmetrizer_t>& symmetrizers)
-{
+	{
 	if (project_as_sum)
 		return symmetrize_as_sum(projterm, symmetrizers);
 	else
 		return symmetrize_as_product(projterm, symmetrizers);
-}
+	}
 
 void meld::symmetrize_as_product(ProjectedTerm& projterm, const std::vector<symmetrizer_t>& symmetrizers)
-{
+	{
 	Adjform seed = projterm.ident;
 	int seed_value = 1;
 
@@ -983,7 +1009,10 @@ void meld::symmetrize_as_product(ProjectedTerm& projterm, const std::vector<symm
 		bool independent =
 			symmetrizers[i].independent &&
 			std::all_of(symmetrizers[i].indices.begin(), symmetrizers[i].indices.end(),
-				[seed](size_t i) { return seed[i] < 0; });
+							[seed](size_t i) { return seed[i] < 0; });
+#ifdef DEBUG
+		std::cerr << "meld::symmetrize_as_product: symmetriser " << i << " independent " << independent << std::endl;
+#endif
 		if (independent) {
 			Adjform indices;
 			for (const auto& index : symmetrizers[i].indices)
@@ -1000,15 +1029,15 @@ void meld::symmetrize_as_product(ProjectedTerm& projterm, const std::vector<symm
 					auto pos2 = seed.index_of(idx2);
 					seed.swap(pos1, pos2);
 					indices.swap(j, indices.index_of(idx2));
+					}
 				}
-			}
 			applied[i] = true;
+			}
 		}
-	}
 
 	// Shared-dummy optimization: see if the symmetrizer at the front has cancellations (a la
 	// logic in symmetrize_as_product) taking into account dummy positions. We can only do this
-	// with the front of the symmetriers as after this the dummies will be mixed up. We rewrite
+	// with the front of the symmetrisers as after this the dummies will be mixed up. We rewrite
 	// the symmetrizers replacing index positions with their dummy equivalents if this points to
 	// a lower slot and then look for cancellations.
 
@@ -1046,16 +1075,22 @@ void meld::symmetrize_as_product(ProjectedTerm& projterm, const std::vector<symm
 					*first_not_applied = true;
 				else
 					*second_not_applied = true;
+				}
 			}
-		}
 		else {
 			// One is symmetric and the other antisymmetric: if they overlap by more than one index
 			// then the whole projection is identically zero
 			if (inter.size() > 1) {
-				return;
+#ifdef DEBUG
+				for(const auto& aa: inter)
+					std::cerr << aa << std::endl;
+				std::cerr << "meld::symmetrize_as_product: overlapping symmetric/anti-symmetric symmetriser" << std::endl;
+#endif
+				// FIXME: the logic here is incorrect.
+//				return;
+				}
 			}
 		}
-	}
 
 	// Seed the symmetrized expression
 	projterm.projection.add(seed, seed_value);
@@ -1064,15 +1099,15 @@ void meld::symmetrize_as_product(ProjectedTerm& projterm, const std::vector<symm
 	for (size_t i = 0; i < symmetrizers.size(); ++i) {
 		if (!applied[i]) {
 			projterm.projection.apply_young_symmetry(symmetrizers[i].indices, symmetrizers[i].antisymmetric);
+			}
 		}
-	}
 
 	// Symmetrize in identical tensors and we're done!
 	symmetrize_idents(projterm);
-}
+	}
 
 void meld::symmetrize_as_sum(ProjectedTerm& projterm, const std::vector<symmetrizer_t>& symmetrizers)
-{
+	{
 	ProjectedAdjform cur;
 	Adjform seed = projterm.ident;
 
@@ -1081,7 +1116,7 @@ void meld::symmetrize_as_sum(ProjectedTerm& projterm, const std::vector<symmetri
 	for (size_t i = 0; i < symmetrizers.size(); ++i) {
 		if (symmetrizers[i].independent)
 			overall_norm *= symmetrizers[i].indices[0];
-	}
+		}
 
 	for (size_t i = 0; i < symmetrizers.size(); ++i) {
 		if (symmetrizers[i].independent) {
@@ -1091,40 +1126,40 @@ void meld::symmetrize_as_sum(ProjectedTerm& projterm, const std::vector<symmetri
 			projterm.projection += cur;
 			cur.clear();
 			cur.set(seed, overall_norm / symmetrizers[i].indices[0]);
-		}
+			}
 		else {
 			cur.apply_young_symmetry(symmetrizers[i].indices, symmetrizers[i].antisymmetric);
+			}
 		}
-	}
 	projterm.projection += cur;
 
 	symmetrize_idents(projterm);
-}
+	}
 
 // Store information about how to symmetrize in identical tensors
 struct Ident {
-	Ident() : n_indices(0) {}
-	size_t n_indices;
-	std::vector<Ex::iterator> its;
-	std::vector<size_t> positions;
+		Ident() : n_indices(0) {}
+		size_t n_indices;
+		std::vector<Ex::iterator> its;
+		std::vector<size_t> positions;
 
-	std::vector<std::vector<int>> generate_commutation_matrix(const Kernel& kernel) const
-	{
-		Ex_comparator comp(kernel.properties);
-		std::vector<std::vector<int>> cm(its.size(), std::vector<int>(its.size()));
-		for (size_t i = 0; i < its.size(); ++i) {
-			for (size_t j = 0; j < its.size(); ++j) {
-				if (i == j)
-					continue;
-				cm[i][j] = comp.can_move_adjacent(Ex::parent(its[i]), its[i], its[j]) * comp.can_swap(its[i], its[j], Ex_comparator::match_t::subtree_match);
+		std::vector<std::vector<int>> generate_commutation_matrix(const Kernel& kernel) const
+			{
+			Ex_comparator comp(kernel.properties);
+			std::vector<std::vector<int>> cm(its.size(), std::vector<int>(its.size()));
+			for (size_t i = 0; i < its.size(); ++i) {
+				for (size_t j = 0; j < its.size(); ++j) {
+					if (i == j)
+						continue;
+					cm[i][j] = comp.can_move_adjacent(Ex::parent(its[i]), its[i], its[j]) * comp.can_swap(its[i], its[j], Ex_comparator::match_t::subtree_match);
+					}
+				}
+			return cm;
 			}
-		}
-		return cm;
-	}
 };
 
 void meld::symmetrize_idents(ProjectedTerm& projterm)
-{
+	{
 	// Symmetrize in identical tensors
 	auto prod = projterm.tensor.begin();
 	if (*prod->name != "\\prod")
@@ -1140,113 +1175,113 @@ void meld::symmetrize_idents(ProjectedTerm& projterm)
 			// Insertion took place, count indices
 			iter_indices indices(kernel.properties, beg);
 			ident.n_indices = indices.size();
-		}
+			}
 		ident.its.push_back(beg);
 		ident.positions.push_back(pos);
 		pos += ident.n_indices;
-	}
+		}
 	for (const auto& ident : idents) {
 		if (ident.second.positions.size() != 1) {
 			projterm.projection.apply_ident_symmetry(
 				ident.second.positions, ident.second.n_indices,
 				ident.second.generate_commutation_matrix(kernel));
+			}
 		}
 	}
-}
 
 
 // Trace routines
 
 bool meld::can_apply_cycle_traces(iterator it)
-{
+	{
 	auto trace = kernel.properties.get<Trace>(it);
 	return trace && *it.begin()->name == "\\sum";
-}
+	}
 
 struct CycledTerm
 {
-	CycledTerm(Ex::iterator it, IndexMap& index_map, const Kernel& kernel)
-		: commuting("\\sum")
-		, noncommuting("\\prod")
-		, it(it)
-		, n_terms(0)
-		, changed(false)
-	{
+		CycledTerm(Ex::iterator it, IndexMap& index_map, const Kernel& kernel)
+			: commuting("\\sum")
+			, noncommuting("\\prod")
+			, it(it)
+			, n_terms(0)
+			, changed(false)
+			{
 
-		if (*it->name != "\\prod") {
-			// A single term has nothing to commute with, so commutes by default
-			auto term = commuting.append_child(commuting.begin(), it);
-		}
-		else {
-			// The 'commuting' ex is a sum node, the first child of which is a product node representing
-			// the commuting terms of 'it' (including the numeric prefactor of it).
-			// If we compare against other CycledTerms and find a match, then
-			// we merge the two sum nodes of the commuting term together and set the changed flag to true.
-			auto commuting_head = commuting.append_child(commuting.begin(), str_node("\\prod"));
-			multiply(commuting_head->multiplier, *it->multiplier);
-
-			// Iterate through all terms in the product to see the they are commuting or noncommuting
-			for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
-				auto nc = kernel.properties.get<NonCommuting>(beg);
-				auto snc = kernel.properties.get<SelfNonCommuting>(beg);
-				if (nc || snc) {
-					// Non-commuting term: append it to the noncommuting Ex, increment the total number of
-					// terms counter and then loop through its indices appending them to the Adjform we hold
-					// We also count the number of indices each term has and add this information to the
-					// 'index_groups' member so that cycle() knows how many times to cycle the Adjform
-					auto term = noncommuting.append_child(noncommuting.begin(), (Ex::iterator)beg);
-					++n_terms;
-					size_t n_indices = 0;
-					for (auto& index : iter_indices(kernel.properties, term)) {
-						indices.push(index, index_map, kernel);
-						++n_indices;
-					}
-					index_groups.push_back(n_indices);
+			if (*it->name != "\\prod") {
+				// A single term has nothing to commute with, so commutes by default
+				auto term = commuting.append_child(commuting.begin(), it);
 				}
-				else {
-					auto term = commuting.append_child(commuting_head, (Ex::iterator)beg);
+			else {
+				// The 'commuting' ex is a sum node, the first child of which is a product node representing
+				// the commuting terms of 'it' (including the numeric prefactor of it).
+				// If we compare against other CycledTerms and find a match, then
+				// we merge the two sum nodes of the commuting term together and set the changed flag to true.
+				auto commuting_head = commuting.append_child(commuting.begin(), str_node("\\prod"));
+				multiply(commuting_head->multiplier, *it->multiplier);
+
+				// Iterate through all terms in the product to see the they are commuting or noncommuting
+				for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
+					auto nc = kernel.properties.get<NonCommuting>(beg);
+					auto snc = kernel.properties.get<SelfNonCommuting>(beg);
+					if (nc || snc) {
+						// Non-commuting term: append it to the noncommuting Ex, increment the total number of
+						// terms counter and then loop through its indices appending them to the Adjform we hold
+						// We also count the number of indices each term has and add this information to the
+						// 'index_groups' member so that cycle() knows how many times to cycle the Adjform
+						auto term = noncommuting.append_child(noncommuting.begin(), (Ex::iterator)beg);
+						++n_terms;
+						size_t n_indices = 0;
+						for (auto& index : iter_indices(kernel.properties, term)) {
+							indices.push(index, index_map, kernel);
+							++n_indices;
+							}
+						index_groups.push_back(n_indices);
+						}
+					else {
+						auto term = commuting.append_child(commuting_head, (Ex::iterator)beg);
+						}
+					}
+				cleanup_dispatch(kernel, commuting, commuting_head);
 				}
 			}
-			cleanup_dispatch(kernel, commuting, commuting_head);
-		}
-	}
 
-	void cycle(const Kernel& kernel)
-	{
-		// Rotate noncommuting
-		Ex::iterator head = noncommuting.begin();
-		Ex::sibling_iterator first = head.begin(), last = head.end();
-		--last;
-		noncommuting.move_before(first, last);
-		// Rotate indices
-		if (index_groups.size() > 1) {
-			indices.rotate(index_groups.back());
-			std::rotate(index_groups.begin(), index_groups.end() - 1, index_groups.end());
-		}
-	}
+		void cycle(const Kernel& kernel)
+			{
+			// Rotate noncommuting
+			Ex::iterator head = noncommuting.begin();
+			Ex::sibling_iterator first = head.begin(), last = head.end();
+			--last;
+			noncommuting.move_before(first, last);
+			// Rotate indices
+			if (index_groups.size() > 1) {
+				indices.rotate(index_groups.back());
+				std::rotate(index_groups.begin(), index_groups.end() - 1, index_groups.end());
+				}
+			}
 
-	bool compare(const Kernel& kernel, const CycledTerm& other)
-	{
-		if (indices != other.indices)
-			return false;
+		bool compare(const Kernel& kernel, const CycledTerm& other)
+			{
+			if (indices != other.indices)
+				return false;
 
-		Ex_comparator comp(kernel.properties);
-		auto res = comp.equal_subtree(noncommuting.begin(), other.noncommuting.begin());
-		return res == Ex_comparator::match_t::subtree_match ||
-				 res == Ex_comparator::match_t::match_index_less ||
-				 res == Ex_comparator::match_t::match_index_greater;
-	}
+			Ex_comparator comp(kernel.properties);
+			auto res = comp.equal_subtree(noncommuting.begin(), other.noncommuting.begin());
+			return res == Ex_comparator::match_t::subtree_match ||
+				res == Ex_comparator::match_t::match_index_less ||
+				res == Ex_comparator::match_t::match_index_greater;
+			}
 
-	Ex commuting, noncommuting; // Commuting and non-commuting parts of the expression
-	Adjform indices; // Index structure of the groups
-	std::vector<size_t> index_groups; // Number of indices in each 'noncommuting' term
-	Ex::iterator it; // The iterator this object is constructed from
-	size_t n_terms; // Number of non-commuting terms
-	bool changed; // Flag to be set if the commuting part of this object is modified but 'it' is not updated
+		Ex commuting, noncommuting; // Commuting and non-commuting parts of the expression
+		Adjform indices; // Index structure of the groups
+		std::vector<size_t> index_groups; // Number of indices in each 'noncommuting' term
+		Ex::iterator it; // The iterator this object is constructed from
+		size_t n_terms; // Number of non-commuting terms
+		bool changed; // Flag to be set if the commuting part of this object is modified but 'it' is not updated
 };
 
 bool meld::apply_cycle_traces(iterator it)
-{
+	{
 	assert(*it.begin()->name == "\\sum");
 	bool applied = false;
 	std::vector<CycledTerm> terms;
@@ -1267,11 +1302,11 @@ bool meld::apply_cycle_traces(iterator it)
 					terms.erase(terms.begin() + j);
 					--j;
 					break;
-				}
+					}
 				terms[j].cycle(kernel);
+				}
 			}
 		}
-	}
 	for (const auto& term : terms) {
 		if (term.changed) {
 			tr.erase_children(term.it);
@@ -1279,10 +1314,10 @@ bool meld::apply_cycle_traces(iterator it)
 			tr.append_child(it, term.commuting.begin());
 			tr.append_child(it, term.noncommuting.begin());
 			cleanup_dispatch(kernel, tr, it);
+			}
 		}
-	}
 	return applied;
-}
+	}
 
 //bool meld::can_apply_side_relations(iterator it)
 //{

@@ -607,9 +607,22 @@ def traceless01():
    ex := dR_{m n p q r r};
    meld(_)
    assert ex == $0$, ex
-   print('Test traceless01 passed')
+   print("Test traceless01 passed")
    
 traceless01()
+
+def tab33():
+   __cdbkernel__=create_scope()
+   {a,b,c,d}::Indices;
+   X_{a b c}::TableauSymmetry(shape=(2,1), indices=(0,2,1)).
+   ex:=X_{a d d};
+   meld(ex)
+   tst:= X_{a d d} - @(ex);
+   assert(tst==0)
+   print("Test tab33 passed")
+
+tab33()
+
 
 #  {a,b,c,i,j,k}::Indices;
 #  {a,b,c,i,j,k}::Integer(1..3);
