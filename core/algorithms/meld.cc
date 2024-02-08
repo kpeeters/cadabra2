@@ -23,7 +23,7 @@
 #include "properties/SelfNonCommuting.hh"
 #include "properties/NonCommuting.hh"
 
-#define DEBUG 1
+// #define DEBUG 1
 
 using namespace cadabra;
 
@@ -1010,6 +1010,9 @@ void meld::symmetrize_as_product(ProjectedTerm& projterm, const std::vector<symm
 			symmetrizers[i].independent &&
 			std::all_of(symmetrizers[i].indices.begin(), symmetrizers[i].indices.end(),
 							[seed](size_t i) { return seed[i] < 0; });
+#ifdef DEBUG
+		std::cerr << "meld::symmetrize_as_product: symmetriser " << i << " independent " << independent << std::endl;
+#endif
 		if (independent) {
 			Adjform indices;
 			for (const auto& index : symmetrizers[i].indices)
@@ -1034,7 +1037,7 @@ void meld::symmetrize_as_product(ProjectedTerm& projterm, const std::vector<symm
 
 	// Shared-dummy optimization: see if the symmetrizer at the front has cancellations (a la
 	// logic in symmetrize_as_product) taking into account dummy positions. We can only do this
-	// with the front of the symmetriers as after this the dummies will be mixed up. We rewrite
+	// with the front of the symmetrisers as after this the dummies will be mixed up. We rewrite
 	// the symmetrizers replacing index positions with their dummy equivalents if this points to
 	// a lower slot and then look for cancellations.
 
@@ -1078,7 +1081,13 @@ void meld::symmetrize_as_product(ProjectedTerm& projterm, const std::vector<symm
 			// One is symmetric and the other antisymmetric: if they overlap by more than one index
 			// then the whole projection is identically zero
 			if (inter.size() > 1) {
-				return;
+#ifdef DEBUG
+				for(const auto& aa: inter)
+					std::cerr << aa << std::endl;
+				std::cerr << "meld::symmetrize_as_product: overlapping symmetric/anti-symmetric symmetriser" << std::endl;
+#endif
+				// FIXME: the logic here is incorrect.
+//				return;
 				}
 			}
 		}
