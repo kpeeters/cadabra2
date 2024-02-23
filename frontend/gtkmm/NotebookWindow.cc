@@ -118,8 +118,10 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	actiongroup->add_action( "Quit",             sigc::mem_fun(*this, &NotebookWindow::on_file_quit) );
 
 	// Edit menu actions.
-	actiongroup->add_action( "EditUndo",         sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
-	actiongroup->add_action( "EditCopy",         sigc::mem_fun(*this, &NotebookWindow::on_edit_copy) );
+	actiongroup->add_action( "EditUndo" ,         sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
+	action_copy = Gio::SimpleAction::create("EditCopy");
+	action_copy->signal_activate().connect( sigc::mem_fun(*this, &NotebookWindow::on_edit_copy) );
+	actiongroup->add_action( action_copy );
 	actiongroup->add_action( "EditPaste",        sigc::mem_fun(*this, &NotebookWindow::on_edit_paste) );
 	actiongroup->add_action( "EditInsertAbove",  sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
 	actiongroup->add_action( "EditInsertBelow",  sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_below) );
@@ -1877,7 +1879,7 @@ void NotebookWindow::on_edit_undo()
 	undo();
 	}
 
-void NotebookWindow::on_edit_copy()
+void NotebookWindow::on_edit_copy(const Glib::VariantBase&)
 	{
 	if(selected_cell!=doc.end()) {
 		Glib::RefPtr<Gtk::Clipboard> clipboard = Gtk::Clipboard::get(GDK_SELECTION_CLIPBOARD);

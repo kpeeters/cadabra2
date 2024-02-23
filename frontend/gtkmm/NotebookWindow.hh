@@ -208,7 +208,7 @@ namespace cadabra {
 			bool quit_safeguard(bool quit);
 
 			void on_edit_undo();
-			void on_edit_copy();
+			void on_edit_copy(const Glib::VariantBase&);
 			Glib::RefPtr<Gio::SimpleAction> action_copy, action_paste;
 			void on_edit_paste();
 			void on_edit_insert_above();
