@@ -105,60 +105,49 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	actiongroup = Gio::SimpleActionGroup::create();
 
 	// File menu actions.
-	actiongroup->add_action( "New",              sigc::mem_fun(*this, &NotebookWindow::on_file_new) );
-	actiongroup->add_action( "Open",             sigc::mem_fun(*this, &NotebookWindow::on_file_open) );
-	actiongroup->add_action( "Close",            sigc::mem_fun(*this, &NotebookWindow::on_file_close) );
-	actiongroup->add_action( "Save",             sigc::mem_fun(*this, &NotebookWindow::on_file_save) );
-	actiongroup->add_action( "SaveAs",           sigc::mem_fun(*this, &NotebookWindow::on_file_save_as) );
-	actiongroup->add_action( "ExportAsJupyter",  sigc::mem_fun(*this, &NotebookWindow::on_file_save_as_jupyter) );
-	actiongroup->add_action( "ExportHtml",       sigc::mem_fun(*this, &NotebookWindow::on_file_export_html) );
-	actiongroup->add_action( "ExportHtmlSegment",sigc::mem_fun(*this, &NotebookWindow::on_file_export_html_segment) );
-	actiongroup->add_action( "ExportLaTeX",      sigc::mem_fun(*this, &NotebookWindow::on_file_export_latex) );
-	actiongroup->add_action( "ExportPython",     sigc::mem_fun(*this, &NotebookWindow::on_file_export_python) );
-	actiongroup->add_action( "Quit",             sigc::mem_fun(*this, &NotebookWindow::on_file_quit) );
+	actiongroup->add_action( "New",                   sigc::mem_fun(*this, &NotebookWindow::on_file_new) );
+	actiongroup->add_action( "Open",                  sigc::mem_fun(*this, &NotebookWindow::on_file_open) );
+	actiongroup->add_action( "Close",                 sigc::mem_fun(*this, &NotebookWindow::on_file_close) );
+	actiongroup->add_action( "Save",                  sigc::mem_fun(*this, &NotebookWindow::on_file_save) );
+	actiongroup->add_action( "SaveAs",                sigc::mem_fun(*this, &NotebookWindow::on_file_save_as) );
+	actiongroup->add_action( "ExportAsJupyter",       sigc::mem_fun(*this, &NotebookWindow::on_file_save_as_jupyter) );
+	actiongroup->add_action( "ExportHtml",            sigc::mem_fun(*this, &NotebookWindow::on_file_export_html) );
+	actiongroup->add_action( "ExportHtmlSegment",     sigc::mem_fun(*this, &NotebookWindow::on_file_export_html_segment) );
+	actiongroup->add_action( "ExportLaTeX",           sigc::mem_fun(*this, &NotebookWindow::on_file_export_latex) );
+	actiongroup->add_action( "ExportPython",          sigc::mem_fun(*this, &NotebookWindow::on_file_export_python) );
+	actiongroup->add_action( "Quit",                  sigc::mem_fun(*this, &NotebookWindow::on_file_quit) );
 
 	// Edit menu actions.
-	actiongroup->add_action( "EditUndo" ,         sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
+	actiongroup->add_action( "EditUndo" ,             sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
 	action_copy = Gio::SimpleAction::create("EditCopy");
 	action_copy->signal_activate().connect( sigc::mem_fun(*this, &NotebookWindow::on_edit_copy) );
 	actiongroup->add_action( action_copy );
-	actiongroup->add_action( "EditPaste",        sigc::mem_fun(*this, &NotebookWindow::on_edit_paste) );
-	actiongroup->add_action( "EditInsertAbove",  sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
-	actiongroup->add_action( "EditInsertBelow",  sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_below) );
-	actiongroup->add_action( "EditDelete",       sigc::mem_fun(*this, &NotebookWindow::on_edit_delete) );
-	actiongroup->add_action( "EditMakeCellTeX",  sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
-	actiongroup->add_action( "EditMakeCellPython",sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_python) );	
-	actiongroup->add_action( "EditIgnoreCellOnPython",sigc::mem_fun(*this, &NotebookWindow::on_ignore_cell_on_import) );	
+	actiongroup->add_action( "EditPaste",             sigc::mem_fun(*this, &NotebookWindow::on_edit_paste) );
+	actiongroup->add_action( "EditInsertAbove",       sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
+	actiongroup->add_action( "EditInsertBelow",       sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_below) );
+	actiongroup->add_action( "EditDelete",            sigc::mem_fun(*this, &NotebookWindow::on_edit_delete) );
+	actiongroup->add_action( "EditSplit",             sigc::mem_fun(*this, &NotebookWindow::on_edit_split) );
+	actiongroup->add_action( "EditFind",              sigc::mem_fun(*this, &NotebookWindow::on_edit_find) );
+	actiongroup->add_action( "EditFindNext",          sigc::mem_fun(*this, &NotebookWindow::on_search_text_changed) );
+	actiongroup->add_action( "EditMakeCellTeX",       sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
+	actiongroup->add_action( "EditMakeCellPython",    sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_python) );	
+	actiongroup->add_action( "EditIgnoreCellOnImport",sigc::mem_fun(*this, &NotebookWindow::on_ignore_cell_on_import) );	
 
 	// View menu actions.
-	actiongroup->add_action( "FontSmall",        sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size),-1) );
+	actiongroup->add_action( "ViewSplit",             sigc::mem_fun(*this, &NotebookWindow::on_view_split) );
+	actiongroup->add_action( "ViewClose",             sigc::mem_fun(*this, &NotebookWindow::on_view_close) );		
+	action_fontsize = actiongroup->add_action_radio_integer( "FontSize",  sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 0 );	
 	
    // Help menu actions.
-	actiongroup->add_action( "HelpAbout",        sigc::mem_fun(*this, &NotebookWindow::on_help_about) );
-	actiongroup->add_action( "HelpContext",      sigc::mem_fun(*this, &NotebookWindow::on_help) );
-	actiongroup->add_action( "HelpRegister",     sigc::mem_fun(*this, &NotebookWindow::on_help_register) );
+	actiongroup->add_action( "HelpAbout",             sigc::mem_fun(*this, &NotebookWindow::on_help_about) );
+	actiongroup->add_action( "HelpContext",           sigc::mem_fun(*this, &NotebookWindow::on_help) );
+	actiongroup->add_action( "HelpRegister",          sigc::mem_fun(*this, &NotebookWindow::on_help_register) );
 
 //	menu_help_register->set_sensitive(!prefs.is_registered);
 	
 	
-//	cdbapp->set_action_group(actiongroup);
-	
-//	actiongroup->add( Gtk::Action::create("MenuEdit", "_Edit") );
-//	actiongroup->add( Gtk::Action::create("EditUndo", Gtk::Stock::UNDO), Gtk::AccelKey("<control>Z"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
-//	action_copy = Gtk::Action::create("EditCopy", Gtk::Stock::COPY);
-//	actiongroup->add( action_copy, Gtk::AccelKey("<control>C"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_copy) );
 //	action_copy->set_sensitive(false);
-//	actiongroup->add( Gtk::Action::create("EditSplit", "Split cell"), Gtk::AccelKey("<control>Return"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_split) );
 //
-//	actiongroup->add( Gtk::Action::create("MenuView", "_View") );
-//	actiongroup->add( Gtk::Action::create("ViewSplit", "Split view"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_view_split) );
-//	actiongroup->add( Gtk::Action::create("ViewClose", "Close view"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_view_close) );
-
 //	Gtk::RadioAction::Group group_cv;
 //	actiongroup->add(Gtk::Action::create("MenuConsoleVisibility", "Console"));
 //
@@ -184,29 +173,6 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 //		&NotebookWindow::on_prefs_set_cv), Console::Position::Floating));
 
 
-//	Gtk::RadioAction::Group group_font_size;
-//
-//	actiongroup->add( Gtk::Action::create("MenuFontSize", "Font size") );
-//	auto font_action0=Gtk::RadioAction::create(group_font_size, "FontSmall", "Small");
-//	font_action0->property_value()=-1;
-//	actiongroup->add( font_action0, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size),-1 ));
-//	if(prefs.font_step==-1) font_action0->set_active();
-//
-//	auto font_action1=Gtk::RadioAction::create(group_font_size, "FontMedium", "Medium (default)");
-//	font_action1->property_value()= 0;
-//	actiongroup->add( font_action1, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 0));
-//	if(prefs.font_step==0) font_action1->set_active();
-//	default_actions.push_back(font_action1);
-//
-//	auto font_action2=Gtk::RadioAction::create(group_font_size, "FontLarge", "Large");
-//	font_action2->property_value()= 2;
-//	actiongroup->add( font_action2, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 2));
-//	if(prefs.font_step==2) font_action2->set_active();
-//
-//	auto font_action3=Gtk::RadioAction::create(group_font_size, "FontExtraLarge", "Extra large");
-//	font_action3->property_value()= 4;
-//	actiongroup->add( font_action3, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 4));
-//	if(prefs.font_step==4) font_action3->set_active();
 
 // 	Gtk::RadioAction::Group group_highlight_syntax;
 // 	actiongroup->add(Gtk::Action::create("MenuHighlightSyntax", "Highlight Syntax"));
@@ -226,13 +192,6 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 //
 //	actiongroup->add(Gtk::Action::create("ViewUseDefaultSettings", "Use Default Settings"), sigc::mem_fun(*this, &NotebookWindow::on_prefs_use_defaults));
 //
-//	actiongroup->add( Gtk::Action::create("MenuEvaluate", "_Evaluate") );
-//	actiongroup->add( Gtk::Action::create("EvaluateCell", "Evaluate cell"), Gtk::AccelKey("<shift>Return"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_run_cell) );
-//	actiongroup->add( Gtk::Action::create("EvaluateAll", Gtk::Stock::GO_FORWARD, "Evaluate all"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_run_runall) );
-//	actiongroup->add( Gtk::Action::create("EvaluateToCursor", Gtk::Stock::GOTO_LAST, "Evaluate to cursor"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_run_runtocursor) );
 //	actiongroup->add( Gtk::Action::create("EvaluateStop", Gtk::Stock::STOP, "Stop"), Gtk::AccelKey('.', Gdk::MOD1_MASK),
 //	                  sigc::mem_fun(*this, &NotebookWindow::on_run_stop) );
 //	actiongroup->add( Gtk::Action::create("MenuKernel", "_Kernel") );
@@ -244,35 +203,31 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 //	actiongroup->add(Gtk::Action::create("CompareFile", "Compare to file"),
 //	                 sigc::mem_fun(*this, &NotebookWindow::compare_to_file));
 //	actiongroup->add(Gtk::Action::create("CompareGit", "Compare with Git"));
-//	actiongroup->add(Gtk::Action::create("CompareGitLatest", "Latest commit"),
-//	                 sigc::mem_fun(*this, &NotebookWindow::compare_git_latest));
-//	actiongroup->add(Gtk::Action::create("CompareGitChoose", "Select commit from list"),
-//	                 sigc::mem_fun(*this, &NotebookWindow::compare_git_choose));
-//	actiongroup->add(Gtk::Action::create("CompareGitSpecific", "Manually enter commit hash"),
-//	                 sigc::mem_fun(*this, &NotebookWindow::compare_git_specific));
-//	actiongroup->add(Gtk::Action::create("CompareSelectGit", "Select Git Executable"),
-//	                 sigc::mem_fun(*this, &NotebookWindow::select_git_path));
 //	actiongroup->add(Gtk::Action::create("ToolsOptions", "Options"),
 //		sigc::mem_fun(*this, &NotebookWindow::on_tools_options));
 //	actiongroup->add(Gtk::Action::create("ToolsClearCache", "Clear Cache"),
 //		sigc::mem_fun(*this, &NotebookWindow::on_tools_clear_cache));
 //
 
-	insert_action_group("cdb", actiongroup);
+	insert_action_group("cdb",  actiongroup);
 
 	// Set shortcuts for actions.
-	cdbapp->set_accel_for_action("cdb.New",                    "<control>n");
-	cdbapp->set_accel_for_action("cdb.Quit",                   "<control>q");
+	cdbapp->set_accel_for_action("cdb.New",                    "<control>N");
+	cdbapp->set_accel_for_action("cdb.Quit",                   "<control>Q");
 	cdbapp->set_accel_for_action("cdb.EditUndo",               "<control>Z");
+	cdbapp->set_accel_for_action("cdb.EditCopy",               "<control>C");
 	cdbapp->set_accel_for_action("cdb.EditPaste",              "<control>V");
 	cdbapp->set_accel_for_action("cdb.EditInsertAbove",        "<alt>Up");
 	cdbapp->set_accel_for_action("cdb.EditInsertBelow",        "<alt>Down");
 	cdbapp->set_accel_for_action("cdb.EditDelete",             "<ctrl>Delete");
-	cdbapp->set_accel_for_action("cdb.Find",                   "<control>F");
-	cdbapp->set_accel_for_action("cdb.FindNext",               "<control>G");
+	cdbapp->set_accel_for_action("cdb.EditFind",               "<control>F");
+	cdbapp->set_accel_for_action("cdb.EditFindNext",           "<control>G");
 	cdbapp->set_accel_for_action("cdb.EditMakeCellTeX",        "<control><shift>L");
 	cdbapp->set_accel_for_action("cdb.EditMakeCellPython",     "<control><shift>P");
 	cdbapp->set_accel_for_action("cdb.EditIgnoreCellOnImport", "<control><shift>I");
+	cdbapp->set_accel_for_action("cdb.EditSplit",              "<control>Return");
+	cdbapp->set_accel_for_action("cdb.EvaluateCell",           "<shift>Return");
+	cdbapp->set_accel_for_action("cdb.HelpContext",            "F1");
 		
 	uimanager = Gtk::Builder::create();
 	Glib::ustring ui_info =
@@ -406,20 +361,24 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		"        <attribute name='label'>Font size</attribute>"
 		"        <section>"
 	   "           <item>"
-		"              <attribute name='label'>Small font</attribute>"
-		"              <attribute name='action'>cdb.FontSmall</attribute>"
+		"              <attribute name='label'>Small</attribute>"
+		"              <attribute name='action'>cdb.FontSize</attribute>"
+		"              <attribute name='target' type='i'>-1</attribute>"
 		"           </item>"
 	   "           <item>"
-		"              <attribute name='label'>Medium font</attribute>"
-		"              <attribute name='action'>cdb.FontMedium</attribute>"
+		"              <attribute name='label'>Medium (default)</attribute>"
+		"              <attribute name='action'>cdb.FontSize</attribute>"
+		"              <attribute name='target' type='i'>0</attribute>"
 		"           </item>"
 	   "           <item>"
-		"              <attribute name='label'>Large font</attribute>"
-		"              <attribute name='action'>cdb.FontLarge</attribute>"
+		"              <attribute name='label'>Large</attribute>"
+		"              <attribute name='action'>cdb.FontSize</attribute>"
+		"              <attribute name='target' type='i'>2</attribute>"
 		"           </item>"
 	   "           <item>"
-		"              <attribute name='label'>Extra large font</attribute>"
-		"              <attribute name='action'>cdb.FontExtraLarge</attribute>"
+		"              <attribute name='label'>Extra large</attribute>"
+		"              <attribute name='action'>cdb.FontSize</attribute>"
+		"              <attribute name='target' type='i'>4</attribute>"
 		"           </item>"
 		"        </section>"
 		"      </submenu>"
@@ -2639,7 +2598,8 @@ void NotebookWindow::on_prefs_font_size(int num)
 	if(prefs.font_step==num) return;
 
 	prefs.font_step=num;
-
+	action_fontsize->set_state(Glib::Variant<int>::create(num));
+	
 	//	std::string res=save_config();
 	//	if(res.size()>0) {
 	//		 Gtk::MessageDialog md("Error");
