@@ -23,9 +23,6 @@ NotebookCanvas::NotebookCanvas()
 	// bottom of the content).
 	// scroll.override_background_color(Gdk::RGBA("white"));
 
-	// FIXME: gtkmm4
-	//(*this).override_background_color(Gdk::RGBA("white"));
-
 	ebox.set_events(Gdk::SCROLL_MASK | Gdk::SMOOTH_SCROLL_MASK | Gdk::BUTTON_PRESS_MASK);
 	//	scroll.set_overlay_scrolling(false);
 	}

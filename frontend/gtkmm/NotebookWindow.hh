@@ -209,7 +209,7 @@ namespace cadabra {
 
 			void on_edit_undo();
 			void on_edit_copy(const Glib::VariantBase&);
-			Glib::RefPtr<Gio::SimpleAction> action_copy, action_paste, action_fontsize;
+			Glib::RefPtr<Gio::SimpleAction> action_copy, action_paste, action_fontsize, action_stop;
 			void on_edit_paste();
 			void on_edit_insert_above();
 			void on_edit_insert_below();

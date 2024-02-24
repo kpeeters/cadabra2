@@ -27,8 +27,6 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, int hmargin)
 	vbox.pack_start(hbox, Gtk::PACK_SHRINK, 0);
 	hbox.pack_start(image, Gtk::PACK_SHRINK, hmargin);
 	//	 add(image);
-	// FIXME: gtkmm4
-//	override_background_color(Gdk::RGBA("white"));
 	add_events( Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK );
 	}
 

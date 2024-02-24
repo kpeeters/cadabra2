@@ -79,7 +79,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 #endif
 
 	engine.set_scale(scale, display_scale);
-
+	engine.set_font_size(12+(prefs.font_step*2));
+	
 #ifndef __APPLE__
 	if(ds) {
 		settings->signal_changed().connect(
@@ -136,7 +137,14 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// View menu actions.
 	actiongroup->add_action( "ViewSplit",             sigc::mem_fun(*this, &NotebookWindow::on_view_split) );
 	actiongroup->add_action( "ViewClose",             sigc::mem_fun(*this, &NotebookWindow::on_view_close) );		
-	action_fontsize = actiongroup->add_action_radio_integer( "FontSize",  sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 0 );	
+	action_fontsize = actiongroup->add_action_radio_integer( "FontSize",  sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size),
+																				prefs.font_step );	
+
+	// Evaluate menu actions.
+	actiongroup->add_action( "EvaluateCell",          sigc::mem_fun(*this, &NotebookWindow::on_run_cell) );
+	actiongroup->add_action( "EvaluateAll",           sigc::mem_fun(*this, &NotebookWindow::on_run_runall) );		
+	actiongroup->add_action( "EvaluateToCursor",      sigc::mem_fun(*this, &NotebookWindow::on_run_runtocursor) );		
+	action_stop = actiongroup->add_action( "EvaluateStop",  sigc::mem_fun(*this, &NotebookWindow::on_run_stop) );
 	
    // Help menu actions.
 	actiongroup->add_action( "HelpAbout",             sigc::mem_fun(*this, &NotebookWindow::on_help_about) );
@@ -192,8 +200,6 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 //
 //	actiongroup->add(Gtk::Action::create("ViewUseDefaultSettings", "Use Default Settings"), sigc::mem_fun(*this, &NotebookWindow::on_prefs_use_defaults));
 //
-//	actiongroup->add( Gtk::Action::create("EvaluateStop", Gtk::Stock::STOP, "Stop"), Gtk::AccelKey('.', Gdk::MOD1_MASK),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_run_stop) );
 //	actiongroup->add( Gtk::Action::create("MenuKernel", "_Kernel") );
 //	actiongroup->add( Gtk::Action::create("KernelRestart", Gtk::Stock::REFRESH, "Restart"), Gtk::AccelKey("<control><alt>R"),
 //	                  sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart) );
@@ -213,6 +219,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 	// Set shortcuts for actions.
 	cdbapp->set_accel_for_action("cdb.New",                    "<control>N");
+	cdbapp->set_accel_for_action("cdb.Open",                   "<control>O");
+	cdbapp->set_accel_for_action("cdb.Save",                   "<control>S");
 	cdbapp->set_accel_for_action("cdb.Quit",                   "<control>Q");
 	cdbapp->set_accel_for_action("cdb.EditUndo",               "<control>Z");
 	cdbapp->set_accel_for_action("cdb.EditCopy",               "<control>C");
@@ -425,7 +433,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		"         <attribute name='action'>cdb.ViewUseDefaultSettings</attribute>"
 		"      </item>"
 		"    </submenu>"
-		"    <submenu>"
+		"    <submenu id='MenuEvaluate'>"
 	   "      <attribute name='label'>Evaluate</attribute>"
 		"      <section>"
 	   "        <item>"
@@ -627,15 +635,16 @@ NotebookWindow::~NotebookWindow()
 
 void NotebookWindow::load_css()
 	{
+	// std::cerr << "(re)loading css" << std::endl;
 	std::string text_colour = prefs.highlight ? "black" : "blue";
 	Glib::ustring data = "";
+	data += "scrolledwindow { background-color: white; }\n";
 	data += "textview text { color: "+text_colour+"; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
-	data += "GtkTextView { color: "+text_colour+"; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
 	data += "textview *:focus { background-color: #eee; }\n";
 	data += ".view text selection { color: #fff; background-color: #888; }\n";
 	data += "textview.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
 	data += "#ImageView { transition-property: padding, background-color; transition-duration: 1s; }\n";
-	data += "#CodeInput { font-family: monospace; }\n";
+	data += "#CodeInput { font-family: monospace; font-size: "+std::to_string((100.0+(prefs.font_step*10.0)))+"%; }\n";
 	data += "#Console   { padding: 2px; }\n";
 	data += "spinner { background: none; opacity: 1; -gtk-icon-source: -gtk-icontheme(\"process-working-symbolic\"); }\n";
 	data += "spinner:checked { opacity: 1; animation: spin 1s linear infinite; }\n";
@@ -818,12 +827,10 @@ void NotebookWindow::set_statusbar_message(const std::string& message, int line,
 
 void NotebookWindow::set_stop_sensitive(bool s)
 	{
-	// FIXME: gtkmm4
-//	Gtk::Widget *stop=0;
-//	uimanager->get_widget("/ToolBar/EvaluateStop", stop);
-//	stop->set_sensitive(s);
-//	uimanager->get_widget("/MenuBar/MenuEvaluate/EvaluateStop", stop);
-//	stop->set_sensitive(s);
+	// Disable menu items and toolbar items by simply disabling
+	// the action.
+	
+	action_stop->set_enabled(s);
 	}
 
 void NotebookWindow::process_data()
@@ -2599,17 +2606,10 @@ void NotebookWindow::on_prefs_font_size(int num)
 
 	prefs.font_step=num;
 	action_fontsize->set_state(Glib::Variant<int>::create(num));
+	prefs.save();
 	
-	//	std::string res=save_config();
-	//	if(res.size()>0) {
-	//		 Gtk::MessageDialog md("Error");
-	//		 md.set_secondary_text(res);
-	//		 md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
-	//		 md.run();
-	//		 }
-
-	// std::cerr << "cadabra-client: prefs_font_size = " << num << std::endl;
 	engine.set_font_size(12+(num*2));
+	load_css();
 
 	if(is_configured) {
 		// std::cerr << "cadabra-client: re-running TeX to change font size" << std::endl;
@@ -2619,27 +2619,18 @@ void NotebookWindow::on_prefs_font_size(int num)
 		engine.invalidate_all();
 		tex_run_async();
 
-		for(auto& canvas: canvasses) {
-			for(auto& visualcell: canvas->visualcells) {
-				if(visualcell.first->cell_type==DataCell::CellType::python ||
-				      visualcell.first->cell_type==DataCell::CellType::latex) {
-					visualcell.second.inbox->set_font_size(num);
-					}
-				}
-			}
+		//for(auto& canvas: canvasses) {
+		//	for(auto& visualcell: canvas->visualcells) {
+		//		if(visualcell.first->cell_type==DataCell::CellType::python ||
+		//		      visualcell.first->cell_type==DataCell::CellType::latex) {
+		//			visualcell.second.inbox->set_font_size(num);
+		//			}
+		//		}
+		//	}
 
 		for(unsigned int i=0; i<canvasses.size(); ++i)
 			canvasses[i]->refresh_all();
 		}
-
-
-	//	// Hack.
-	//	auto screen = Gdk::Screen::get_default();
-	//	if(get_window()!=0) {
-	//		std::cerr << "invalidating" << std::endl;
-	//		get_window()->invalidate_rect(Gdk::Rectangle(0, 0, screen->get_width()/2, screen->get_height()*0.8),true);
-	//		queue_draw();
-	//		}
 	}
 
 void NotebookWindow::on_prefs_highlight_syntax(bool on)

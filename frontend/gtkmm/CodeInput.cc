@@ -55,7 +55,6 @@ void CodeInput::init(const Prefs& prefs)
 	//	scroll_.set_size_request(-1,200);
 	//	scroll_.set_border_width(1);
 	//	scroll_.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
-	set_font_size(prefs.font_step);
 	edit.set_wrap_mode(Gtk::WRAP_NONE);
 
 	//	edit.override_background_color(Gdk::RGBA("white"), Gtk::STATE_FLAG_ACTIVE);
@@ -722,16 +721,3 @@ void CodeInput::slice_cell(std::string& before, std::string& after)
 	after =textbuf->get_slice(it, textbuf->end());
 	}
 
-void CodeInput::set_font_size(int num)
-	{
-	std::ostringstream fstr;
-	float size=9+(num*2);
-#ifdef __APPLE__
-	size*=1.5;
-#endif
-	fstr << "monospace " << size;
-
-	// FIXME: gtkmm4
-	//edit.override_font(Pango::FontDescription(fstr.str()));
-	edit.queue_resize();
-	}
