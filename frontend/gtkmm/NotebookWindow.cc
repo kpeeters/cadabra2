@@ -126,11 +126,21 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	actiongroup->add_action( "EditInsertAbove",  sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
 	actiongroup->add_action( "EditInsertBelow",  sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_below) );
 	actiongroup->add_action( "EditDelete",       sigc::mem_fun(*this, &NotebookWindow::on_edit_delete) );
+	actiongroup->add_action( "EditMakeCellTeX",  sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
+	actiongroup->add_action( "EditMakeCellPython",sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_python) );	
+	actiongroup->add_action( "EditIgnoreCellOnPython",sigc::mem_fun(*this, &NotebookWindow::on_ignore_cell_on_import) );	
+
+	// View menu actions.
+	actiongroup->add_action( "FontSmall",        sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size),-1) );
+	
+   // Help menu actions.
+	actiongroup->add_action( "HelpAbout",        sigc::mem_fun(*this, &NotebookWindow::on_help_about) );
+	actiongroup->add_action( "HelpContext",      sigc::mem_fun(*this, &NotebookWindow::on_help) );
+	actiongroup->add_action( "HelpRegister",     sigc::mem_fun(*this, &NotebookWindow::on_help_register) );
+
+//	menu_help_register->set_sensitive(!prefs.is_registered);
 	
 	
-	// Set shortcuts for menu items/actions, and add to the app.
-	// FIXME: gtkmm4
-//	cdbapp->set_accel_for_action("New", "<control>n");
 //	cdbapp->set_action_group(actiongroup);
 	
 //	actiongroup->add( Gtk::Action::create("MenuEdit", "_Edit") );
@@ -140,26 +150,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 //	actiongroup->add( action_copy, Gtk::AccelKey("<control>C"),
 //	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_copy) );
 //	action_copy->set_sensitive(false);
-//	actiongroup->add( Gtk::Action::create("EditPaste", Gtk::Stock::PASTE), Gtk::AccelKey("<control>V"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_paste) );
-//	actiongroup->add( Gtk::Action::create("EditInsertAbove", "Insert cell above"), Gtk::AccelKey("<alt>Up"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
-//	actiongroup->add( Gtk::Action::create("EditInsertBelow", "Insert cell below"), Gtk::AccelKey("<alt>Down"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_below) );
-//	actiongroup->add( Gtk::Action::create("EditDelete", "Delete cell"), Gtk::AccelKey("<ctrl>Delete"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_delete) );
 //	actiongroup->add( Gtk::Action::create("EditSplit", "Split cell"), Gtk::AccelKey("<control>Return"),
 //	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_split) );
-//	actiongroup->add( Gtk::Action::create("EditFind", Gtk::Stock::FIND), Gtk::AccelKey("<control>F"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_find) );
-//	actiongroup->add( Gtk::Action::create("EditFindNext", "Find next"), Gtk::AccelKey("<control>G"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_search_text_changed) );
-//	actiongroup->add( Gtk::Action::create("EditMakeCellTeX", "Cell is LaTeX"), Gtk::AccelKey("<control><shift>L"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
-//	actiongroup->add( Gtk::Action::create("EditMakeCellPython", "Cell is Cadabra/Python"), Gtk::AccelKey("<control><shift>P"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_python) );
-//	actiongroup->add( Gtk::Action::create("EditIgnoreCellOnImport", "Ignore cell on import"), Gtk::AccelKey("<control><shift>I"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_ignore_cell_on_import) );
 //
 //	actiongroup->add( Gtk::Action::create("MenuView", "_View") );
 //	actiongroup->add( Gtk::Action::create("ViewSplit", "Split view"),
@@ -265,67 +257,71 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 //	actiongroup->add(Gtk::Action::create("ToolsClearCache", "Clear Cache"),
 //		sigc::mem_fun(*this, &NotebookWindow::on_tools_clear_cache));
 //
-//	actiongroup->add( Gtk::Action::create("MenuHelp", "_Help") );
-//	//	actiongroup->add( Gtk::Action::create("HelpNotebook", Gtk::Stock::HELP, "How to use the notebook"),
-//	//							sigc::mem_fun(*this, &NotebookWindow::on_help_notebook) );
-//	actiongroup->add( Gtk::Action::create("HelpAbout", Gtk::Stock::ABOUT, "About Cadabra"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_help_about) );
-//	actiongroup->add( Gtk::Action::create("HelpContext", Gtk::Stock::HELP, "Contextual help"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_help) );
-//	menu_help_register = Gtk::Action::create("HelpRegister", "Register");
-//	actiongroup->add(menu_help_register, sigc::mem_fun(*this, &NotebookWindow::on_help_register));
-//	menu_help_register->set_sensitive(!prefs.is_registered);
 
-		insert_action_group("cdb", actiongroup);
+	insert_action_group("cdb", actiongroup);
+
+	// Set shortcuts for actions.
+	cdbapp->set_accel_for_action("cdb.New",                    "<control>n");
+	cdbapp->set_accel_for_action("cdb.Quit",                   "<control>q");
+	cdbapp->set_accel_for_action("cdb.EditUndo",               "<control>Z");
+	cdbapp->set_accel_for_action("cdb.EditPaste",              "<control>V");
+	cdbapp->set_accel_for_action("cdb.EditInsertAbove",        "<alt>Up");
+	cdbapp->set_accel_for_action("cdb.EditInsertBelow",        "<alt>Down");
+	cdbapp->set_accel_for_action("cdb.EditDelete",             "<ctrl>Delete");
+	cdbapp->set_accel_for_action("cdb.Find",                   "<control>F");
+	cdbapp->set_accel_for_action("cdb.FindNext",               "<control>G");
+	cdbapp->set_accel_for_action("cdb.EditMakeCellTeX",        "<control><shift>L");
+	cdbapp->set_accel_for_action("cdb.EditMakeCellPython",     "<control><shift>P");
+	cdbapp->set_accel_for_action("cdb.EditIgnoreCellOnImport", "<control><shift>I");
 		
 	uimanager = Gtk::Builder::create();
 	Glib::ustring ui_info =
 	   "<interface>"
 	   "  <menu id='MenuBar'>"
 		"    <submenu>"
-	   "      <attribute name='label'>_File</attribute>"
+	   "      <attribute name='label'>File</attribute>"
 		"      <section>"
 	   "        <item>"
 		"          <attribute name='label'>New</attribute>"
 		"          <attribute name='action'>cdb.New</attribute>"
 		"        </item>"
 	   "        <item>"
-		"          <attribute name='label'>_Open</attribute>"
-		"          <attribute name='action'>Open</attribute>"
+		"          <attribute name='label'>Open</attribute>"
+		"          <attribute name='action'>cdb.Open</attribute>"
 		"        </item>"
 	   "        <item>"
 		"          <attribute name='label'>Close</attribute>"
-		"          <attribute name='action'>Close</attribute>"
+		"          <attribute name='action'>cdb.Close</attribute>"
 		"        </item>"
 		"      </section>"
 		"      <section>"
 	   "        <item>"
 		"          <attribute name='label'>Save</attribute>"
-		"          <attribute name='action'>Save</attribute>"
+		"          <attribute name='action'>cdb.Save</attribute>"
 		"        </item>"
 	   "        <item>"
-		"          <attribute name='label'>Save</attribute>"
-		"          <attribute name='action'>Save</attribute>"
+		"          <attribute name='label'>Save as...</attribute>"
+		"          <attribute name='action'>cdb.SaveAs</attribute>"
 		"        </item>"
 	   "        <item>"
 		"          <attribute name='label'>Export as Jupyter notebook</attribute>"
-		"          <attribute name='action'>ExportAsJupyter</attribute>"
+		"          <attribute name='action'>cdb.ExportAsJupyter</attribute>"
 		"        </item>"
 	   "        <item>"
 		"          <attribute name='label'>Export as HTML</attribute>"
-		"          <attribute name='action'>ExportHtml</attribute>"
+		"          <attribute name='action'>cdb.ExportHtml</attribute>"
 		"        </item>"
 	   "        <item>"
 		"          <attribute name='label'>Export as HTML segment</attribute>"
-		"          <attribute name='action'>ExportHtmlSegment</attribute>"
+		"          <attribute name='action'>cdb.ExportHtmlSegment</attribute>"
 		"        </item>"
 	   "        <item>"
 		"          <attribute name='label'>Export as LaTex</attribute>"
-		"          <attribute name='action'>ExportLaTeX</attribute>"
+		"          <attribute name='action'>cdb.ExportLaTeX</attribute>"
 		"        </item>"
 	   "        <item>"
 		"          <attribute name='label'>Export as Python</attribute>"
-		"          <attribute name='action'>ExportPython</attribute>"
+		"          <attribute name='action'>cdb.ExportPython</attribute>"
 		"        </item>"
 		"      </section>"
 		"      <section>"
@@ -335,94 +331,229 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		"        </item>"
 		"      </section>"
 		"    </submenu>"
+		"    <submenu>"
+	   "      <attribute name='label'>Edit</attribute>"
+		"      <section>"
+	   "        <item>"
+		"          <attribute name='label'>Undo</attribute>"
+		"          <attribute name='action'>cdb.EditUndo</attribute>"
+		"        </item>"
+		"      </section>"
+		"      <section>"
+	   "        <item>"
+		"          <attribute name='label'>Copy</attribute>"
+		"          <attribute name='action'>cdb.EditCopy</attribute>"
+		"        </item>"
+		"      </section>"
+		"      <section>"
+	   "        <item>"
+		"          <attribute name='label'>Insert above</attribute>"
+		"          <attribute name='action'>cdb.EditInsertAbove</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Insert below</attribute>"
+		"          <attribute name='action'>cdb.EditInsertBelow</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Delete cell</attribute>"
+		"          <attribute name='action'>cdb.EditDelete</attribute>"
+		"        </item>"
+		"      </section>"
+		"      <section>"
+	   "        <item>"
+		"          <attribute name='label'>Split cell</attribute>"
+		"          <attribute name='action'>cdb.EditSplit</attribute>"
+		"        </item>"
+		"      </section>"
+		"      <section>"
+	   "        <item>"
+		"          <attribute name='label'>Find</attribute>"
+		"          <attribute name='action'>cdb.EditFind</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Find next</attribute>"
+		"          <attribute name='action'>cdb.EditFindNext</attribute>"
+		"        </item>"
+		"      </section>"
+		"      <section>"
+	   "        <item>"
+		"          <attribute name='label'>Make cell LaTeX</attribute>"
+		"          <attribute name='action'>cdb.EditMakeCellTeX</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Make cell Python</attribute>"
+		"          <attribute name='action'>cdb.EditMakeCellPython</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Ignore cell on import</attribute>"
+		"          <attribute name='action'>cdb.EditIgnoreCellOnImport</attribute>"
+		"        </item>"
+		"      </section>"
+		"    </submenu>"
+		"    <submenu>"
+	   "      <attribute name='label'>View</attribute>"
+		"      <section>"
+	   "        <item>"
+		"          <attribute name='label'>Split view</attribute>"
+		"          <attribute name='action'>cdb.ViewSplit</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Close view</attribute>"
+		"          <attribute name='action'>cdb.ViewClose</attribute>"
+		"        </item>"
+		"      </section>"
+		"      <submenu>"
+		"        <attribute name='label'>Font size</attribute>"
+		"        <section>"
+	   "           <item>"
+		"              <attribute name='label'>Small font</attribute>"
+		"              <attribute name='action'>cdb.FontSmall</attribute>"
+		"           </item>"
+	   "           <item>"
+		"              <attribute name='label'>Medium font</attribute>"
+		"              <attribute name='action'>cdb.FontMedium</attribute>"
+		"           </item>"
+	   "           <item>"
+		"              <attribute name='label'>Large font</attribute>"
+		"              <attribute name='action'>cdb.FontLarge</attribute>"
+		"           </item>"
+	   "           <item>"
+		"              <attribute name='label'>Extra large font</attribute>"
+		"              <attribute name='action'>cdb.FontExtraLarge</attribute>"
+		"           </item>"
+		"        </section>"
+		"      </submenu>"
+		"      <submenu>"
+		"        <attribute name='label'>Highlighting</attribute>"
+		"        <section>"
+	   "           <item>"
+		"              <attribute name='label'>Highlighting off</attribute>"
+		"              <attribute name='action'>cdb.HighlightSyntaxOff</attribute>"
+		"           </item>"
+	   "           <item>"
+		"              <attribute name='label'>Highlighting on</attribute>"
+		"              <attribute name='action'>cdb.HighlightSyntaxOn</attribute>"
+		"           </item>"
+	   "           <item>"
+		"              <attribute name='label'>Choose colours</attribute>"
+		"              <attribute name='action'>cdb.HighlightSyntaxChoose</attribute>"
+		"           </item>"
+		"        </section>"
+		"      </submenu>"
+		"      <submenu>"
+		"        <attribute name='label'>Console</attribute>"
+		"        <section>"
+	   "           <item>"
+		"              <attribute name='label'>Hidden</attribute>"
+		"              <attribute name='action'>cdb.ConsoleHide</attribute>"
+		"           </item>"
+	   "           <item>"
+		"              <attribute name='label'>Dock horizontally</attribute>"
+		"              <attribute name='action'>cdb.ConsoleDockH</attribute>"
+		"           </item>"
+	   "           <item>"
+		"              <attribute name='label'>Dock vertically</attribute>"
+		"              <attribute name='action'>cdb.ConsoleDockV</attribute>"
+		"           </item>"
+	   "           <item>"
+		"              <attribute name='label'>Floating console</attribute>"
+		"              <attribute name='action'>cdb.ConsoleFloat</attribute>"
+		"           </item>"
+		"        </section>"
+		"      </submenu>"
+	   "      <item>"
+		"         <attribute name='label'>Use default settings</attribute>"
+		"         <attribute name='action'>cdb.ViewUseDefaultSettings</attribute>"
+		"      </item>"
+		"    </submenu>"
+		"    <submenu>"
+	   "      <attribute name='label'>Evaluate</attribute>"
+		"      <section>"
+	   "        <item>"
+		"          <attribute name='label'>Evaluate cell</attribute>"
+		"          <attribute name='action'>cdb.EvaluateCell</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Evaluate all</attribute>"
+		"          <attribute name='action'>cdb.EvaluateAll</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Evaluate to cursor</attribute>"
+		"          <attribute name='action'>cdb.EvaluateToCursor</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Stop evaluation</attribute>"
+		"          <attribute name='action'>cdb.EvaluateStop</attribute>"
+		"        </item>"
+		"      </section>"
+		"    </submenu>"
+		"    <submenu>"
+	   "      <attribute name='label'>Kernel</attribute>"
+		"      <section>"
+	   "        <item>"
+		"          <attribute name='label'>Restart kernel</attribute>"
+		"          <attribute name='action'>cdb.KernelRestart</attribute>"
+		"        </item>"
+		"      </section>"
+		"    </submenu>"
+		"    <submenu>"
+	   "      <attribute name='label'>Compare</attribute>"
+		"      <section>"
+	   "        <item>"
+		"          <attribute name='label'>Compare with other file</attribute>"
+		"          <attribute name='action'>cdb.CompareFile</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Last commit</attribute>"
+		"          <attribute name='action'>cdb.CompareGitLatest</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Select commit from list</attribute>"
+		"          <attribute name='action'>cdb.CompareGitChoose</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Manually enter commit hash</attribute>"
+		"          <attribute name='action'>cdb.CompareGitSpecific</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Select GIT binary</attribute>"
+		"          <attribute name='action'>cdb.CompareSelectGit</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Options</attribute>"
+		"          <attribute name='action'>cdb.ToolsOptions</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Clear package cache</attribute>"
+		"          <attribute name='action'>cdb.ToolsClearCache</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Select GIT binary</attribute>"
+		"          <attribute name='action'>cdb.CompareSelectGit</attribute>"
+		"        </item>"
+		"      </section>"
+		"    </submenu>"
+		"    <submenu>"
+	   "      <attribute name='label'>Help</attribute>"
+		"      <section>"
+	   "        <item>"
+		"          <attribute name='label'>About Cadabra</attribute>"
+		"          <attribute name='action'>cdb.HelpAbout</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Contextual help</attribute>"
+		"          <attribute name='action'>cdb.HelpContext</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Register</attribute>"
+		"          <attribute name='action'>cdb.HelpRegister</attribute>"
+		"        </item>"
+		"      </section>"
+		"    </submenu>"
 		"  </menu>"
-//	   "      <separator/>"
-//	   "      <menuitem action='Save'/>"
-//	   "      <menuitem action='SaveAs'/>"
-//	   "      <menuitem action='ExportAsJupyter'/>"
-//	   "      <menuitem action='ExportHtml'/>"
-//	   "      <menuitem action='ExportHtmlSegment'/>"
-//	   "      <menuitem action='ExportLaTeX'/>"
-//	   "      <menuitem action='ExportPython'/>"
-//	   "      <separator/>"
-//	   "      <menuitem action='Quit'/>"
-//	   "    </menu>";
 //	if(!read_only)
 //		ui_info+=
-//		   "    <menu action='MenuEdit'>"
-//		   "      <menuitem action='EditUndo' />"
-//		   "      <separator/>"
-//		   "      <menuitem action='EditCopy' />"
-//		   //		"      <menuitem action='EditPaste' />"
-//		   "      <separator/>"
-//		   "      <menuitem action='EditInsertAbove' />"
-//		   "      <menuitem action='EditInsertBelow' />"
-//		   "      <menuitem action='EditDelete' />"
-//		   "      <separator/>"
-//		   "      <menuitem action='EditSplit' />"
-//		   "      <separator/>"
-//		   "      <menuitem action='EditFind' />"
-//		   "      <menuitem action='EditFindNext' />"
-//		   "      <separator/>"
-//		   "      <menuitem action='EditMakeCellTeX' />"
-//		   "      <menuitem action='EditMakeCellPython' />"
-//		   "      <menuitem action='EditIgnoreCellOnImport' />"
-//		   "    </menu>"
-//		   "    <menu action='MenuView'>"
-//		   "      <menuitem action='ViewSplit' />"
-//		   "      <menuitem action='ViewClose' />"
-//		   "      <menu action='MenuFontSize'>"
-//		   "         <menuitem action='FontSmall'/>"
-//		   "         <menuitem action='FontMedium'/>"
-//		   "         <menuitem action='FontLarge'/>"
-//		   "         <menuitem action='FontExtraLarge'/>"
-//		   "      </menu>"
-//		   "      <separator/>"
-//		   "      <menu action='MenuHighlightSyntax'>"
-//		   "        <menuitem action='HighlightSyntaxOff'/>"
-//		   "        <menuitem action='HighlightSyntaxOn'/>"
-//		   "        <menuitem action='HighlightSyntaxChoose'/>"
-//		   "      </menu>"
-//		   "      <menu action='MenuConsoleVisibility'>"
-//		   "        <menuitem action='ConsoleHide'/>"
-//		   "        <menuitem action='ConsoleDockH'/>"
-//			"        <menuitem action='ConsoleDockV'/>"
-//		   "        <menuitem action='ConsoleFloat'/>"
-//		   "      </menu>"
-//		   "      <menuitem action='ViewUseDefaultSettings'/>"
-//		   "    </menu>"
-//		   "    <menu action='MenuEvaluate'>"
-//		   "      <menuitem action='EvaluateCell' />"
-//		   "      <menuitem action='EvaluateAll' />"
-//		   "      <menuitem action='EvaluateToCursor' />"
-//		   "      <separator/>"
-//		   "      <menuitem action='EvaluateStop' />"
-//		   "    </menu>"
-//		   "    <menu action='MenuKernel'>"
-//		   "      <menuitem action='KernelRestart' />"
-//		   "    </menu>";
 //	ui_info+=
-//		"    <menu action='MenuTools'>"
-//		"      <menu action='ToolsCompare'>"
-//	   "        <menuitem action='CompareFile'/>"
-//	   "        <menu action='CompareGit'>"
-//	   "          <menuitem action='CompareGitLatest'/>"
-//	   "          <menuitem action='CompareGitChoose'/>"
-//	   "          <menuitem action='CompareGitSpecific'/>"
-//	   "          <separator/>"
-//	   "          <menuitem action='CompareSelectGit'/>"
-//	   "        </menu>"
-//	   "      </menu>"
-//		"      <menuitem action='ToolsOptions'/>"
-//		"      <menuitem action='ToolsClearCache'/>"
-//		"    </menu>"
-//	   "    <menu action='MenuHelp'>"
-//	   //		"      <menuitem action='HelpNotebook' />"
-//	   "      <menuitem action='HelpAbout' />"
-//	   "      <menuitem action='HelpContext' />"
-//	   "      <menuitem action='HelpRegister' />"
-//	   "    </menu>"
-//	   "  </menubar>"
 //	   "  <toolbar name='ToolBar'>"
 //		"    <toolitem name='New' action='New'/>"
 //		"    <toolitem name='Open' action='Open' />"
