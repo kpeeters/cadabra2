@@ -15,10 +15,10 @@ namespace cadabra {
 	class Console : public Gtk::Box {
 		public:
 			enum class Position : int {
-				Hidden,
-				DockedH,
-				DockedV,
-				Floating
+				Hidden=0,
+				DockedH=1,
+				DockedV=2,
+				Floating=3
 			};
 
 			// run_slot is the callback which should be run when the console sends input to

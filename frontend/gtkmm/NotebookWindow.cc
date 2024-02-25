@@ -122,6 +122,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	actiongroup->add_action( "EditUndo" ,             sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
 	action_copy = Gio::SimpleAction::create("EditCopy");
 	action_copy->signal_activate().connect( sigc::mem_fun(*this, &NotebookWindow::on_edit_copy) );
+	action_copy->set_enabled(false);
 	actiongroup->add_action( action_copy );
 	actiongroup->add_action( "EditPaste",             sigc::mem_fun(*this, &NotebookWindow::on_edit_paste) );
 	actiongroup->add_action( "EditInsertAbove",       sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
@@ -137,83 +138,39 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// View menu actions.
 	actiongroup->add_action( "ViewSplit",             sigc::mem_fun(*this, &NotebookWindow::on_view_split) );
 	actiongroup->add_action( "ViewClose",             sigc::mem_fun(*this, &NotebookWindow::on_view_close) );		
-	action_fontsize = actiongroup->add_action_radio_integer( "FontSize",  sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size),
-																				prefs.font_step );	
+	action_fontsize  = actiongroup->add_action_radio_integer( "FontSize",
+																				 sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size),
+																				 prefs.font_step );	
+	action_highlight = actiongroup->add_action_radio_integer( "HighlightSyntax",
+																				 sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax),
+																				 prefs.highlight );	
+	actiongroup->add_action( "HighlightChoose",       sigc::mem_fun(*this, &NotebookWindow::on_prefs_choose_colours) );		
+	actiongroup->add_action( "ViewUseDefaultSettings",sigc::mem_fun(*this, &NotebookWindow::on_prefs_use_defaults) );		
 
 	// Evaluate menu actions.
 	actiongroup->add_action( "EvaluateCell",          sigc::mem_fun(*this, &NotebookWindow::on_run_cell) );
 	actiongroup->add_action( "EvaluateAll",           sigc::mem_fun(*this, &NotebookWindow::on_run_runall) );		
 	actiongroup->add_action( "EvaluateToCursor",      sigc::mem_fun(*this, &NotebookWindow::on_run_runtocursor) );		
 	action_stop = actiongroup->add_action( "EvaluateStop",  sigc::mem_fun(*this, &NotebookWindow::on_run_stop) );
+
+	// Kernel menu actions.
+	actiongroup->add_action( "KernelRestart",         sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart) );			
+	
+	// Tools menu actions.
+	actiongroup->add_action( "CompareFile",           sigc::mem_fun(*this, &NotebookWindow::compare_to_file) );
+	actiongroup->add_action( "CompareGitLatest",      sigc::mem_fun(*this, &NotebookWindow::compare_git_latest) );
+	actiongroup->add_action( "CompareGitChoose",      sigc::mem_fun(*this, &NotebookWindow::compare_git_choose) );
+	actiongroup->add_action( "CompareGitSpecific",    sigc::mem_fun(*this, &NotebookWindow::compare_git_specific) );
+	actiongroup->add_action( "CompareGitSelect",      sigc::mem_fun(*this, &NotebookWindow::select_git_path) );
+	action_console = actiongroup->add_action_radio_integer( "Console", sigc::mem_fun(*this, &NotebookWindow::on_prefs_set_cv), 0 );
+	actiongroup->add_action( "ToolsOptions",          sigc::mem_fun(*this, &NotebookWindow::on_tools_options) );
+	actiongroup->add_action( "ToolsClearCache",       sigc::mem_fun(*this, &NotebookWindow::on_tools_clear_cache) );	
 	
    // Help menu actions.
 	actiongroup->add_action( "HelpAbout",             sigc::mem_fun(*this, &NotebookWindow::on_help_about) );
 	actiongroup->add_action( "HelpContext",           sigc::mem_fun(*this, &NotebookWindow::on_help) );
-	actiongroup->add_action( "HelpRegister",          sigc::mem_fun(*this, &NotebookWindow::on_help_register) );
-
-//	menu_help_register->set_sensitive(!prefs.is_registered);
-	
-	
-//	action_copy->set_sensitive(false);
-//
-//	Gtk::RadioAction::Group group_cv;
-//	actiongroup->add(Gtk::Action::create("MenuConsoleVisibility", "Console"));
-//
-//	auto cv_action_hide = Gtk::RadioAction::create(group_cv, "ConsoleHide", "Hide");
-//	cv_action_hide->property_value() = (int)Console::Position::Hidden;
-//	actiongroup->add(cv_action_hide, sigc::bind(sigc::mem_fun(*this,
-//		&NotebookWindow::on_prefs_set_cv), Console::Position::Hidden));
-//	cv_action_hide->set_active();
-//
-//	auto cv_action_dockh = Gtk::RadioAction::create(group_cv, "ConsoleDockH", "Dock (Horizontal)");
-//	cv_action_dockh->property_value() = (int)Console::Position::DockedH;
-//	actiongroup->add(cv_action_dockh, sigc::bind(sigc::mem_fun(*this,
-//		&NotebookWindow::on_prefs_set_cv), Console::Position::DockedH));
-//
-//	auto cv_action_dockv = Gtk::RadioAction::create(group_cv, "ConsoleDockV", "Dock (Vertical)");
-//	cv_action_dockv->property_value() = (int)Console::Position::DockedV;
-//	actiongroup->add(cv_action_dockv, sigc::bind(sigc::mem_fun(*this,
-//		&NotebookWindow::on_prefs_set_cv), Console::Position::DockedV));
-//
-//	auto cv_action_float = Gtk::RadioAction::create(group_cv, "ConsoleFloat", "Float");
-//	cv_action_float->property_value() = (int)Console::Position::Floating;
-//	actiongroup->add(cv_action_float, sigc::bind(sigc::mem_fun(*this,
-//		&NotebookWindow::on_prefs_set_cv), Console::Position::Floating));
-
-
-
-// 	Gtk::RadioAction::Group group_highlight_syntax;
-// 	actiongroup->add(Gtk::Action::create("MenuHighlightSyntax", "Highlight Syntax"));
-// 
-// 	auto highlight_syntax_action0 = Gtk::RadioAction::create(group_highlight_syntax, "HighlightSyntaxOff", "Off (default)");
-// 	highlight_syntax_action0->property_value() = 0;
-// 	actiongroup->add(highlight_syntax_action0, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax), false));
-// 	if (prefs.highlight == false) highlight_syntax_action0->set_active();
-// 	default_actions.push_back(highlight_syntax_action0);
-// 
-// 	auto highlight_syntax_action1 = Gtk::RadioAction::create(group_highlight_syntax, "HighlightSyntaxOn", "On");
-// 	highlight_syntax_action1->property_value() = 1;
-// 	actiongroup->add(highlight_syntax_action1, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax), true));
-// 	if (prefs.highlight == true) highlight_syntax_action1->set_active();
-
-//	actiongroup->add(Gtk::Action::create("HighlightSyntaxChoose", "Choose Colours..."), sigc::mem_fun(*this, &NotebookWindow::on_prefs_choose_colours));
-//
-//	actiongroup->add(Gtk::Action::create("ViewUseDefaultSettings", "Use Default Settings"), sigc::mem_fun(*this, &NotebookWindow::on_prefs_use_defaults));
-//
-//	actiongroup->add( Gtk::Action::create("MenuKernel", "_Kernel") );
-//	actiongroup->add( Gtk::Action::create("KernelRestart", Gtk::Stock::REFRESH, "Restart"), Gtk::AccelKey("<control><alt>R"),
-//	                  sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart) );
-//
-//	actiongroup->add(Gtk::Action::create("MenuTools", "Tools"));
-//	actiongroup->add(Gtk::Action::create("ToolsCompare", "Compare"));
-//	actiongroup->add(Gtk::Action::create("CompareFile", "Compare to file"),
-//	                 sigc::mem_fun(*this, &NotebookWindow::compare_to_file));
-//	actiongroup->add(Gtk::Action::create("CompareGit", "Compare with Git"));
-//	actiongroup->add(Gtk::Action::create("ToolsOptions", "Options"),
-//		sigc::mem_fun(*this, &NotebookWindow::on_tools_options));
-//	actiongroup->add(Gtk::Action::create("ToolsClearCache", "Clear Cache"),
-//		sigc::mem_fun(*this, &NotebookWindow::on_tools_clear_cache));
-//
+	action_register = actiongroup->add_action( "HelpRegister",  sigc::mem_fun(*this, &NotebookWindow::on_help_register) );
+	action_register->set_enabled(!prefs.is_registered);
 
 	insert_action_group("cdb",  actiongroup);
 
@@ -235,10 +192,15 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	cdbapp->set_accel_for_action("cdb.EditIgnoreCellOnImport", "<control><shift>I");
 	cdbapp->set_accel_for_action("cdb.EditSplit",              "<control>Return");
 	cdbapp->set_accel_for_action("cdb.EvaluateCell",           "<shift>Return");
+	cdbapp->set_accel_for_action("cdb.KernelRestart",          "<control><alt>R");
 	cdbapp->set_accel_for_action("cdb.HelpContext",            "F1");
-		
+
+	// Menu and toolbar layout.
 	uimanager = Gtk::Builder::create();
-	Glib::ustring ui_info =
+	Glib::ustring ui_info="<interface></interface>";
+
+	if(!read_only) {
+		ui_info =
 	   "<interface>"
 	   "  <menu id='MenuBar'>"
 		"    <submenu>"
@@ -395,36 +357,17 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		"        <section>"
 	   "           <item>"
 		"              <attribute name='label'>Highlighting off</attribute>"
-		"              <attribute name='action'>cdb.HighlightSyntaxOff</attribute>"
+		"              <attribute name='action'>cdb.HighlightSyntax</attribute>"
+		"              <attribute name='target' type='i'>0</attribute>"
 		"           </item>"
 	   "           <item>"
 		"              <attribute name='label'>Highlighting on</attribute>"
-		"              <attribute name='action'>cdb.HighlightSyntaxOn</attribute>"
+		"              <attribute name='action'>cdb.HighlightSyntax</attribute>"
+		"              <attribute name='target' type='i'>1</attribute>"
 		"           </item>"
 	   "           <item>"
 		"              <attribute name='label'>Choose colours</attribute>"
-		"              <attribute name='action'>cdb.HighlightSyntaxChoose</attribute>"
-		"           </item>"
-		"        </section>"
-		"      </submenu>"
-		"      <submenu>"
-		"        <attribute name='label'>Console</attribute>"
-		"        <section>"
-	   "           <item>"
-		"              <attribute name='label'>Hidden</attribute>"
-		"              <attribute name='action'>cdb.ConsoleHide</attribute>"
-		"           </item>"
-	   "           <item>"
-		"              <attribute name='label'>Dock horizontally</attribute>"
-		"              <attribute name='action'>cdb.ConsoleDockH</attribute>"
-		"           </item>"
-	   "           <item>"
-		"              <attribute name='label'>Dock vertically</attribute>"
-		"              <attribute name='action'>cdb.ConsoleDockV</attribute>"
-		"           </item>"
-	   "           <item>"
-		"              <attribute name='label'>Floating console</attribute>"
-		"              <attribute name='action'>cdb.ConsoleFloat</attribute>"
+		"              <attribute name='action'>cdb.HighlightChoose</attribute>"
 		"           </item>"
 		"        </section>"
 		"      </submenu>"
@@ -464,28 +407,58 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		"      </section>"
 		"    </submenu>"
 		"    <submenu>"
-	   "      <attribute name='label'>Compare</attribute>"
+	   "      <attribute name='label'>Tools</attribute>"
+		"      <submenu>"
+		"        <attribute name='label'>Compare</attribute>"
+		"        <section>"
+	   "           <item>"
+		"             <attribute name='label'>With other file</attribute>"
+		"             <attribute name='action'>cdb.CompareFile</attribute>"
+		"           </item>"
+	   "           <item>"
+		"             <attribute name='label'>Last commit</attribute>"
+		"             <attribute name='action'>cdb.CompareGitLatest</attribute>"
+		"           </item>"
+	   "           <item>"
+		"             <attribute name='label'>Select commit from list</attribute>"
+		"             <attribute name='action'>cdb.CompareGitChoose</attribute>"
+		"           </item>"
+	   "           <item>"
+		"             <attribute name='label'>Manually enter commit hash</attribute>"
+		"             <attribute name='action'>cdb.CompareGitSpecific</attribute>"
+		"           </item>"
+	   "           <item>"
+		"             <attribute name='label'>Select GIT binary</attribute>"
+		"             <attribute name='action'>cdb.CompareGitSelect</attribute>"
+		"           </item>"
+		"        </section>"
+		"      </submenu>"
+		"      <submenu>"
+		"        <attribute name='label'>Console</attribute>"
+		"        <section>"
+	   "           <item>"
+		"              <attribute name='label'>Hide</attribute>"
+		"              <attribute name='action'>cdb.Console</attribute>"
+		"              <attribute name='target' type='i'>0</attribute>"
+		"           </item>"
+	   "           <item>"
+		"              <attribute name='label'>Dock (horizontal)</attribute>"
+		"              <attribute name='action'>cdb.Console</attribute>"
+		"              <attribute name='target' type='i'>1</attribute>"
+		"           </item>"
+	   "           <item>"
+		"              <attribute name='label'>Dock (vertical)</attribute>"
+		"              <attribute name='action'>cdb.Console</attribute>"
+		"              <attribute name='target' type='i'>2</attribute>"
+		"           </item>"
+	   "           <item>"
+		"              <attribute name='label'>Floating</attribute>"
+		"              <attribute name='action'>cdb.Console</attribute>"
+		"              <attribute name='target' type='i'>3</attribute>"
+		"           </item>"
+		"        </section>"
+		"      </submenu>"
 		"      <section>"
-	   "        <item>"
-		"          <attribute name='label'>Compare with other file</attribute>"
-		"          <attribute name='action'>cdb.CompareFile</attribute>"
-		"        </item>"
-	   "        <item>"
-		"          <attribute name='label'>Last commit</attribute>"
-		"          <attribute name='action'>cdb.CompareGitLatest</attribute>"
-		"        </item>"
-	   "        <item>"
-		"          <attribute name='label'>Select commit from list</attribute>"
-		"          <attribute name='action'>cdb.CompareGitChoose</attribute>"
-		"        </item>"
-	   "        <item>"
-		"          <attribute name='label'>Manually enter commit hash</attribute>"
-		"          <attribute name='action'>cdb.CompareGitSpecific</attribute>"
-		"        </item>"
-	   "        <item>"
-		"          <attribute name='label'>Select GIT binary</attribute>"
-		"          <attribute name='action'>cdb.CompareSelectGit</attribute>"
-		"        </item>"
 	   "        <item>"
 		"          <attribute name='label'>Options</attribute>"
 		"          <attribute name='action'>cdb.ToolsOptions</attribute>"
@@ -493,10 +466,6 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	   "        <item>"
 		"          <attribute name='label'>Clear package cache</attribute>"
 		"          <attribute name='action'>cdb.ToolsClearCache</attribute>"
-		"        </item>"
-	   "        <item>"
-		"          <attribute name='label'>Select GIT binary</attribute>"
-		"          <attribute name='action'>cdb.CompareSelectGit</attribute>"
 		"        </item>"
 		"      </section>"
 		"    </submenu>"
@@ -518,6 +487,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		"      </section>"
 		"    </submenu>"
 		"  </menu>"
+	   "</interface>";
+		};
 //	if(!read_only)
 //		ui_info+=
 //	ui_info+=
@@ -532,7 +503,6 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 //		"    <toolitem name='RunAll' action='EvaluateAll' />"
 //		"    <toolitem name='EvaluateStop' action='EvaluateStop' />"
 //	   "  </toolbar>"
-	   "</interface>";
 
 	uimanager->add_from_string(ui_info);
 
@@ -709,8 +679,10 @@ bool NotebookWindow::on_delete_event(GdkEventAny* event)
 		return true;
 	}
 
-void NotebookWindow::on_prefs_set_cv(Console::Position pos)
+void NotebookWindow::on_prefs_set_cv(int npos)
 	{
+	action_console->set_state(Glib::Variant<int>::create(npos));
+	Console::Position pos=static_cast<Console::Position>(npos);
 	// Unparent from whatever we're currently a child of
 	console.hide();
 	if (console.get_parent() == &dragbox) {
@@ -741,10 +713,11 @@ void NotebookWindow::on_prefs_set_cv(Console::Position pos)
 		console_win.set_default_size(900, 300);
 		console_win.set_title("Interactive Console");
 		console_win.get_content_area()->add(console);
-		// FIXME: gtkmm4
-//		console_win.signal_response().connect([this](int) {
-//			actiongroup->get_action("ConsoleHide")->activate();
-//			});
+		// Reflect hidden state in menu when the floating
+		// console is closed.
+		console_win.signal_response().connect( [this](int) {
+			this->on_prefs_set_cv(0);
+			});
 		console_win.show_all();
 		}
 	}
@@ -2379,7 +2352,7 @@ void NotebookWindow::on_help_register()
 		});
 	box->show_all();
 	md.run();
-	menu_help_register->set_enabled(!prefs.is_registered);
+	action_register->set_enabled(!prefs.is_registered);
 	}
 
 void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
@@ -2638,7 +2611,8 @@ void NotebookWindow::on_prefs_highlight_syntax(bool on)
 	if (prefs.highlight == on) return;
 	prefs.highlight = on;
 	prefs.save();
-
+	action_highlight->set_state(Glib::Variant<int>::create(on));
+	
 	for (auto& canvas : canvasses) {
 		for (auto& visualcell : canvas->visualcells) {
 			// Need to be careful to only try and do this on latex or
@@ -2682,7 +2656,7 @@ void NotebookWindow::on_prefs_use_defaults()
 		for (auto& action : default_actions)
 			action->activate();
 		refresh_highlighting();
-		menu_help_register->set_enabled(!prefs.is_registered);
+		action_register->set_enabled(!prefs.is_registered);
 		prefs.save();
 		}
 	}

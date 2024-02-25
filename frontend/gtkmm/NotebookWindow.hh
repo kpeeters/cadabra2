@@ -209,7 +209,6 @@ namespace cadabra {
 
 			void on_edit_undo();
 			void on_edit_copy(const Glib::VariantBase&);
-			Glib::RefPtr<Gio::SimpleAction> action_copy, action_paste, action_fontsize, action_stop;
 			void on_edit_paste();
 			void on_edit_insert_above();
 			void on_edit_insert_below();
@@ -228,7 +227,7 @@ namespace cadabra {
 			void on_run_runtocursor();
 			void on_run_stop();
 
-			void on_prefs_set_cv(Console::Position vis);
+			void on_prefs_set_cv(int vis);
 			void on_prefs_font_size(int num);
 			void on_prefs_highlight_syntax(bool on);
 			void on_prefs_choose_colours();
@@ -313,7 +312,10 @@ namespace cadabra {
 
 			bool  is_configured;
 
-			Glib::RefPtr<Gio::SimpleAction> menu_help_register;
+			// We keep references to a few menu actions so we can
+			// enable/disable them at runtime.
+			Glib::RefPtr<Gio::SimpleAction> action_copy, action_paste, action_fontsize, action_highlight,
+				action_stop, action_register, action_console;
 
 			// Transition animations.
 #if GTKMM_MINOR_VERSION>=10
