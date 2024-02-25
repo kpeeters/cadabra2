@@ -103,6 +103,11 @@ else()
 	add_executable(cadabra2-gtk WIN32 ${cadabra_gtk_src})
 endif()
 
+include_directories(
+  "${HOME}/Development/git.others/MicroTeX/src"
+)
+add_executable(microtest microtest.cc)
+
 target_link_libraries(cadabra2-gtk 
 	cadabra_client 
 	${Boost_LIBRARIES} 
@@ -111,6 +116,12 @@ target_link_libraries(cadabra2-gtk
 	${SQLITE3_LIBRARIES} 
 	Threads::Threads
 #        dl
+)
+
+target_link_libraries(microtest 
+	${GLIBMM_LIBRARIES} 
+	${GTKMM3_LIBRARIES} 
+	Threads::Threads
 )
 
 
