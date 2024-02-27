@@ -115,6 +115,11 @@ unsigned TeXEngine::TeXRequest::height() const
 	return height_;
 	}
 
+std::string TeXEngine::TeXRequest::latex() const
+	{
+	return latex_string;
+	}
+
 const std::vector<unsigned char>& TeXEngine::TeXRequest::image() const
 	{
 	return image_;

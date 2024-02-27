@@ -28,6 +28,11 @@
 #include "process.hpp"
 #include <internal/string_tools.h>
 
+#ifdef USE_MICROTEX
+  #include "latex.h"
+  #include <pangomm/init.h>
+#endif
+
 using namespace cadabra;
 
 // #define DEBUG 1
@@ -80,6 +85,11 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 	engine.set_scale(scale, display_scale);
 	engine.set_font_size(12+(prefs.font_step*2));
+
+#ifdef USE_MICROTEX
+  Pango::init();
+  tex::LaTeX::init(install_prefix()+"/share/cadabra2/microtex/");
+#endif
 	
 #ifndef __APPLE__
 	if(ds) {

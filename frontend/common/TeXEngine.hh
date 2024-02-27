@@ -36,6 +36,9 @@ namespace cadabra {
 					unsigned  height() const;
 					const std::vector<unsigned char>& image() const;
 
+					/// Get the original LaTeX string.
+					std::string latex() const;
+					
 				private:
 					std::string                latex_string;
 					std::string                start_wrap, end_wrap;

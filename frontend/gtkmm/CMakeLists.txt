@@ -12,7 +12,7 @@ set(INSTALL_SHARE_DIR share/cadabra2 CACHE PATH "Installation directory for shar
 set(INSTALL_IMAGES_DIR share/cadabra2/images CACHE PATH "Installation directory for image files.")
 set(INSTALL_DESKTOP_DIR share/applications CACHE PATH "Installation directory for .desktop files.")
 set(INSTALL_ICONS_DIR share/icons CACHE PATH "Installation directory for icons.")
-
+set(INSTALL_MICROTEX_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2/microtex")
 
 #---------------------------------------------------------------------------
 # Locate libraries.
@@ -91,6 +91,9 @@ add_definitions(
 	"-D_WEBSOCKETPP_CPP11_STL_"
 	"-DBOOST_LOG_DYN_LINK"
 	"-DGTKMM_DISABLE_DEPRECATED"
+	"-DUSE_MICROTEX"
+	"-DBUILD_GTK"
+	"-Wno-reorder"
 )
 
 #---------------------------------------------------------------------------
@@ -104,9 +107,16 @@ else()
 endif()
 
 include_directories(
-  "${HOME}/Development/git.others/MicroTeX/src"
+  ${GSVMM_INCLUDES}
+  ${PROJECT_SOURCE_DIR}/../../libs/microtex/src
+  ${PROJECT_SOURCE_DIR}/../../libs/microtex/src/samples 
 )
-add_executable(microtest microtest.cc)
+find_package(Fontconfig REQUIRED)
+pkg_check_modules(GTKMM REQUIRED IMPORTED_TARGET gtkmm-3.0)
+pkg_check_modules(GSVMM REQUIRED IMPORTED_TARGET gtksourceviewmm-3.0)
+pkg_check_modules(CairoMM REQUIRED IMPORTED_TARGET cairomm-1.0)
+pkg_check_modules(tinyxml2 REQUIRED IMPORTED_TARGET tinyxml2)
+#add_executable(microtest microtest.cc)
 
 target_link_libraries(cadabra2-gtk 
 	cadabra_client 
@@ -114,15 +124,25 @@ target_link_libraries(cadabra2-gtk
 	${GLIBMM_LIBRARIES} 
 	${GTKMM3_LIBRARIES} 
 	${SQLITE3_LIBRARIES} 
+        ${PROJECT_SOURCE_DIR}/../../libs/microtex/build/libLaTeX.a
+        PkgConfig::CairoMM      # for MicroTeX
+        Fontconfig::Fontconfig  # for MicroTeX
+ 	tinyxml2                # for MicroTeX
 	Threads::Threads
-#        dl
 )
 
-target_link_libraries(microtest 
-	${GLIBMM_LIBRARIES} 
-	${GTKMM3_LIBRARIES} 
-	Threads::Threads
-)
+# target_link_libraries(microtest 
+# 	${PROJECT_SOURCE_DIR}/../../libs/microtex/build/libLaTeX.a
+# 	${GLIBMM_LIBRARIES} 
+# 	${GTKMM3_LIBRARIES} 
+# 	Threads::Threads
+# 	PkgConfig::GTKMM
+#         PkgConfig::CairoMM
+# 	PkgConfig::GSVMM
+#         Fontconfig::Fontconfig
+# 	tinyxml2
+# 	Threads::Threads
+# )
 
 
 #---------------------------------------------------------------------------
@@ -203,3 +223,7 @@ if(NOT MSVC)
 	 share/man/man1
 	 )
 endif()
+
+# microtex resources
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/../../libs/microtex/res/ DESTINATION ${INSTALL_MICROTEX_DIR})
+

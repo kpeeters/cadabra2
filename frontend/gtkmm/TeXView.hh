@@ -11,6 +11,11 @@
 #include "DataCell.hh"
 #include "../common/TeXEngine.hh"
 
+#ifdef USE_MICROTEX
+#include "latex.h"
+#include "utils/utf.h"
+#endif
+
 namespace cadabra {
 
 	/// \ingroup frontend
@@ -35,6 +40,9 @@ namespace cadabra {
 
 			class TeXArea : public Gtk::DrawingArea {
 				public:
+					TeXArea();
+					~TeXArea();
+					
 					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
 
 					/// Update the visible image from the pixbuf. Call this in order to propagate
@@ -49,6 +57,24 @@ namespace cadabra {
 
 					Glib::RefPtr<Gdk::Pixbuf> pixbuf;
 					double                    scale_;
+
+#ifdef USE_MICROTEX
+					void set_latex(const std::string& latex);
+#endif
+
+				protected:
+					virtual bool on_configure_event(GdkEventConfigure *) override;
+					
+				private:
+					int             rendering_width;
+					
+#ifdef USE_MICROTEX
+					void check_invalidate();
+					
+					tex::TeXRender* _render;
+					float           _text_size;
+					int             _padding;
+#endif
 				};
 
 			TeXArea                   image;
@@ -66,7 +92,6 @@ namespace cadabra {
 		protected:
 			virtual bool on_button_release_event(GdkEventButton *) override;
 			virtual void on_show() override;
-			//			virtual bool on_configure_event(GdkEventConfigure *) override;
 
 			void convert();
 

@@ -5,14 +5,21 @@
 #include <cairomm/context.h>
 #include <giomm/resource.h>
 #include <gdkmm/general.h> // set_source_pixbuf()
+#include <regex>
+
+#ifdef USE_MICROTEX
+  #include "platform/cairo/graphic_cairo.h"
+#endif
 
 using namespace cadabra;
 
 TeXView::TeXView(TeXEngine& eng, DTree::iterator it, int hmargin)
 	: content(0), datacell(it), vbox(false, 10), hbox(false, hmargin), engine(eng)
 	{
+	// Still need to checkin even when using MicroTeX, otherwise
+	// all requests will be empty.
 	content = engine.checkin(datacell->textbuf, "", "");
-
+	
 #if GTKMM_MINOR_VERSION>=10
 	add(rbox);
 	rbox.add(vbox);
@@ -24,8 +31,8 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, int hmargin)
 #endif
 	vbox.set_margin_top(10);
 	vbox.set_margin_bottom(0);
-	vbox.pack_start(hbox, Gtk::PACK_SHRINK, 0);
-	hbox.pack_start(image, Gtk::PACK_SHRINK, hmargin);
+	vbox.pack_start(hbox, true, 0);
+	hbox.pack_start(image, true, hmargin);
 	//	 add(image);
 	add_events( Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK );
 	}
@@ -41,16 +48,21 @@ void TeXView::on_show()
 	Gtk::EventBox::on_show();
 	}
 
-//bool TeXView::on_configure_event(GdkEventConfigure *ev)
-//	 {
-//	 bool ret = Gtk::EventBox::on_configure_event(ev);
-//	 convert();
-//
-//	 return ret;
-//	 }
+bool TeXView::TeXArea::on_configure_event(GdkEventConfigure *cfg)
+	 {
+	 bool ret = Gtk::DrawingArea::on_configure_event(cfg);
+
+	 rendering_width = cfg->width;
+
+	 std::cerr << "**** configure width " << cfg->width << std::endl;
+
+	 return ret;
+	 }
 
 void TeXView::convert()
 	{
+	std::cerr << "*** convert called" << std::endl;
+#ifdef USE_MICROTEX
 	try {
 		// Ensure that all TeX cells have been rendered by TeX. This will do nothing
 		// if no TeX cells need (re-)rendering. When adding many cells in one go, do so
@@ -66,6 +78,9 @@ void TeXView::convert()
 	catch(TeXEngine::TeXException& ex) {
 		tex_error.emit(ex.what());
 		}
+#else
+	image.update_image(content, engine.get_scale());
+#endif
 	}
 
 
@@ -88,6 +103,10 @@ void TeXView::update_image()
 
 void TeXView::TeXArea::update_image(std::shared_ptr<TeXEngine::TeXRequest> content, double scale)
 	{
+#ifdef USE_MICROTEX
+	if(content) 
+		set_latex(content->latex());
+#else
 	if(content->image().size()==0)
 		return;
 	
@@ -109,11 +128,25 @@ void TeXView::TeXArea::update_image(std::shared_ptr<TeXEngine::TeXRequest> conte
 	scale_=scale;
 	// HERE
 	//	image.set(pixbuf);
+#endif
 	}
 
 
 bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	{
+#ifdef USE_MICROTEX
+
+	std::cerr << "*** rendering at size " << get_width() << " x " << get_height() << std::endl;
+	cr->set_source_rgb(1, 1, 1);
+	cr->rectangle(0, 0, get_width(), get_height());
+	cr->fill();
+	if (_render == nullptr) return true;
+	tex::Graphics2D_cairo g2(cr);
+	_render->draw(g2, _padding, _padding);
+	return true;
+
+#else
+
 	if(!pixbuf) return false;
 
 	//	Gtk::Allocation allocation = get_allocation();
@@ -133,4 +166,110 @@ bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	cr->scale(1.0, 1.0);
 
 	return true;
+#endif
 	}
+
+#ifdef USE_MICROTEX
+void TeXView::TeXArea::check_invalidate()
+	{
+	if (_render == nullptr) return;
+	
+	int parent_width = get_parent()->get_width();
+	int parent_height = get_parent()->get_height();
+	int target_width = parent_width;
+	int target_height = parent_height;
+	
+	int extra = (int) (_padding * 2);
+	if (parent_width < _render->getWidth() + extra) {
+      target_width = _render->getWidth() + extra;
+		}
+	if (parent_height < _render->getHeight() + extra) {
+      target_height = _render->getHeight() + extra;
+		}
+
+	std::cerr << "*** adjust size request " << target_width << " x " << target_height <<
+		" in parent " << parent_width << " x " << parent_height << std::endl;
+	set_size_request(target_width, target_height);
+	
+	auto win = get_window();
+	if (win) {
+      auto al = get_allocation();
+      Gdk::Rectangle r(0, 0, al.get_width(), al.get_height());
+      win->invalidate_rect(r, false);
+		}
+	}
+
+void TeXView::TeXArea::set_latex(const std::string& latex)
+	{
+	if(_render)
+		delete _render;
+
+	std::cout << "rendering " << latex << std::endl;
+
+	std::string fixed;
+	if(latex.find(R"(\begin{dmath*})")==0) {
+		// math mode
+		std::regex begin_dmath(R"(\\begin\{dmath\*\})");
+		std::regex end_dmath(R"(\\end\{dmath\*\})");
+		fixed = std::regex_replace(latex, begin_dmath, "");
+		fixed = std::regex_replace(fixed, end_dmath, "");
+		}
+	else {
+		// text mode
+		fixed = "\\text{"+latex+"}";
+		}
+
+	std::cout << "*** rendering fixed " << fixed << " at width " << rendering_width << std::endl;
+	
+	_render = tex::LaTeX::parse(
+      tex::utf82wide(fixed),
+		rendering_width,
+//      get_allocated_width() - _padding * 2,
+      _text_size,
+      _text_size / 3.f,
+      0xff424242
+								  );
+	
+	check_invalidate();
+	}
+
+// bool TeXView::TeXArea::isRenderDisplayed()
+// 	{
+// 	return _render != nullptr;
+// 	}
+
+// int TeXView::TeXArea::getRenderWidth()
+// 	{
+// 	return _render == nullptr ? 0 : _render->getWidth() + _padding * 2;
+// 	}
+// 
+// int TeXView::TeXArea::getRenderHeight()
+// 	{
+// 	return _render == nullptr ? 0 : _render->getHeight() + _padding * 2;
+// 	}
+
+// void TeXView::TeXArea::drawInContext(const Cairo::RefPtr<Cairo::Context>& cr)
+// 	{
+// 	if (_render == nullptr) return;
+// 	Graphics2D_cairo g2(cr);
+// 	_render->draw(g2, _padding, _padding);
+// 	}
+
+#endif
+
+TeXView::TeXArea::TeXArea()
+	: rendering_width(1)
+#ifdef USE_MICROTEX
+	, _render(nullptr), _text_size(30.f), _padding(10)
+#endif
+	{
+	}
+
+TeXView::TeXArea::~TeXArea()
+	{
+#ifdef USE_MICROTEX
+	if(_render)
+		delete _render;
+#endif
+	}
+
