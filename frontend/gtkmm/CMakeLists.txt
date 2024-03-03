@@ -116,7 +116,7 @@ pkg_check_modules(GTKMM REQUIRED IMPORTED_TARGET gtkmm-3.0)
 pkg_check_modules(GSVMM REQUIRED IMPORTED_TARGET gtksourceviewmm-3.0)
 pkg_check_modules(CairoMM REQUIRED IMPORTED_TARGET cairomm-1.0)
 pkg_check_modules(tinyxml2 REQUIRED IMPORTED_TARGET tinyxml2)
-#add_executable(microtest microtest.cc)
+add_executable(microtest microtest.cc)
 
 target_link_libraries(cadabra2-gtk 
 	cadabra_client 
@@ -131,18 +131,18 @@ target_link_libraries(cadabra2-gtk
 	Threads::Threads
 )
 
-# target_link_libraries(microtest 
-# 	${PROJECT_SOURCE_DIR}/../../libs/microtex/build/libLaTeX.a
-# 	${GLIBMM_LIBRARIES} 
-# 	${GTKMM3_LIBRARIES} 
-# 	Threads::Threads
-# 	PkgConfig::GTKMM
-#         PkgConfig::CairoMM
-# 	PkgConfig::GSVMM
-#         Fontconfig::Fontconfig
-# 	tinyxml2
-# 	Threads::Threads
-# )
+target_link_libraries(microtest 
+	${PROJECT_SOURCE_DIR}/../../libs/microtex/build/libLaTeX.a
+	${GLIBMM_LIBRARIES} 
+	${GTKMM3_LIBRARIES} 
+	Threads::Threads
+	PkgConfig::GTKMM
+        PkgConfig::CairoMM
+	PkgConfig::GSVMM
+        Fontconfig::Fontconfig
+	tinyxml2
+	Threads::Threads
+)
 
 
 #---------------------------------------------------------------------------
