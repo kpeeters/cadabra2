@@ -21,6 +21,9 @@ namespace cadabra {
 	/// \ingroup frontend
 	/// TeXView is a widget which knows how to turn a string into
 	/// a LaTeX-rendered image and display that.
+	//
+	/// See gtkmm custom widget documentation at:
+	/// https://developer-old.gnome.org/gtkmm-tutorial/3.24/sec-custom-widgets.html.en
 
 	class TeXView : public Gtk::EventBox {
 		public:
@@ -63,17 +66,29 @@ namespace cadabra {
 #endif
 
 				protected:
-					virtual bool on_configure_event(GdkEventConfigure *) override;
+					Gtk::SizeRequestMode get_request_mode_vfunc() const override;
+					void get_preferred_height_for_width_vfunc(int width, int& minimum_height,
+																			int& natural_height) const  override;
+					void on_size_allocate(Gtk::Allocation& allocation) override;
+					// void on_map() override;
+					// void on_unmap() override;
+					// void on_realize() override;
+					// void on_unrealize() override;
+					// virtual bool on_configure_event(GdkEventConfigure *) override;
 					
 				private:
-					int             rendering_width;
+					mutable int     rendering_width;
 					
 #ifdef USE_MICROTEX
 					void check_invalidate();
+
+					// Just run the LaTeX layout algorithms, do not draw.
+					void layout_latex() const;
 					
-					tex::TeXRender* _render;
+					mutable tex::TeXRender* _render;
 					float           _text_size;
 					int             _padding;
+					std::string     fixed;
 #endif
 				};
 

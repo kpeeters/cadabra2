@@ -24,7 +24,7 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, int hmargin)
 	add(rbox);
 	rbox.add(vbox);
 	rbox.set_reveal_child(false);
-	rbox.set_transition_duration(1000);
+	rbox.set_transition_duration(1); // 000);
 	rbox.set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_CROSSFADE); //SLIDE_DOWN);
 #else
 	add(vbox);
@@ -44,24 +44,62 @@ TeXView::~TeXView()
 
 void TeXView::on_show()
 	{
+	// std::cerr << "**** show called" << std::endl;
 	convert();
 	Gtk::EventBox::on_show();
 	}
 
-bool TeXView::TeXArea::on_configure_event(GdkEventConfigure *cfg)
-	 {
-	 bool ret = Gtk::DrawingArea::on_configure_event(cfg);
+Gtk::SizeRequestMode TeXView::TeXArea::get_request_mode_vfunc() const
+	{
+	return Gtk::SizeRequestMode::SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+	}
 
-	 rendering_width = cfg->width;
+void TeXView::TeXArea::get_preferred_height_for_width_vfunc(int width,
+																				int& minimum_height, int& natural_height) const
+	{
+	if(width==1) {
+		minimum_height=1;
+		natural_height=1;
+		// std::cerr << "**** skipped bogus width" << std::endl;
+		}
+	else {
+		rendering_width = width;
+		layout_latex();
+		int extra = (int) (_padding * 2);
+		minimum_height = _render->getHeight() + extra;
+		natural_height = _render->getHeight() + extra;
+		// std::cerr << "**** computed for width " << width << " height as " << natural_height << std::endl;
+		}
+	}
 
-	 std::cerr << "**** configure width " << cfg->width << std::endl;
+void TeXView::TeXArea::on_size_allocate(Gtk::Allocation& allocation)
+	{
+	set_allocation(allocation);
+//	std::cerr << "**** offered allocation " << allocation.get_width()
+//				 << " x " << allocation.get_height() << std::endl;
+	}
 
-	 return ret;
-	 }
+// bool TeXView::TeXArea::on_configure_event(GdkEventConfigure *cfg)
+// 	 {
+// 	 bool ret = Gtk::DrawingArea::on_configure_event(cfg);
+// 
+// 	 std::cerr << "**** configure size " << cfg->width << " x " << cfg->height << std::endl;
+// 
+// 	 if(rendering_width != cfg->width && fixed!="") {
+// 		 rendering_width = cfg->width;
+// 		 layout_latex();
+// 		 check_invalidate();
+// 		 }
+// 	 else {
+// 		 rendering_width = cfg->width;
+// 		 }
+// 
+// 	 return ret;
+// 	 }
 
 void TeXView::convert()
 	{
-	std::cerr << "*** convert called" << std::endl;
+//	std::cerr << "*** convert called" << std::endl;
 #ifdef USE_MICROTEX
 	try {
 		// Ensure that all TeX cells have been rendered by TeX. This will do nothing
@@ -131,12 +169,28 @@ void TeXView::TeXArea::update_image(std::shared_ptr<TeXEngine::TeXRequest> conte
 #endif
 	}
 
+void TeXView::TeXArea::layout_latex() const
+	{
+	if(_render)
+		delete _render;
+
+	_render = tex::LaTeX::parse(
+      tex::utf82wide(fixed),
+		rendering_width,
+		//  get_allocated_width() - _padding * 2,
+      _text_size,
+      _text_size / 3.f,
+      0xff424242);
+	}
 
 bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	{
 #ifdef USE_MICROTEX
 
-	std::cerr << "*** rendering at size " << get_width() << " x " << get_height() << std::endl;
+	// FIXME: this gets called *many* times, not clear why.
+	
+//	std::cerr << "*** blitting at size " << get_width() << " x " << get_height() << std::endl;
+
 	cr->set_source_rgb(1, 1, 1);
 	cr->rectangle(0, 0, get_width(), get_height());
 	cr->fill();
@@ -172,6 +226,8 @@ bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 #ifdef USE_MICROTEX
 void TeXView::TeXArea::check_invalidate()
 	{
+	std::cerr << "**** check invalidate" << std::endl;
+
 	if (_render == nullptr) return;
 	
 	int parent_width = get_parent()->get_width();
@@ -187,73 +243,56 @@ void TeXView::TeXArea::check_invalidate()
       target_height = _render->getHeight() + extra;
 		}
 
-	std::cerr << "*** adjust size request " << target_width << " x " << target_height <<
-		" in parent " << parent_width << " x " << parent_height << std::endl;
-	set_size_request(target_width, target_height);
+//	std::cerr << "**** adjust size request " << target_width << " x " << target_height <<
+//		" in parent " << parent_width << " x " << parent_height << std::endl;
+//	set_size_request(target_width, target_height);
+	queue_resize();
 	
-	auto win = get_window();
-	if (win) {
-      auto al = get_allocation();
-      Gdk::Rectangle r(0, 0, al.get_width(), al.get_height());
-      win->invalidate_rect(r, false);
-		}
+//	auto win = get_window();
+//	if (win) {
+//		std::cerr << "**** invalidating rect" << std::endl;
+//      auto al = get_allocation();
+//      Gdk::Rectangle r(0, 0, al.get_width(), al.get_height());
+//      win->invalidate_rect(r, false);
+//		queue_draw();
+//		}
 	}
 
 void TeXView::TeXArea::set_latex(const std::string& latex)
 	{
-	if(_render)
-		delete _render;
+	// std::cout << "**** fixing latex " << latex << std::endl;
 
-	std::cout << "rendering " << latex << std::endl;
-
-	std::string fixed;
 	if(latex.find(R"(\begin{dmath*})")==0) {
 		// math mode
 		std::regex begin_dmath(R"(\\begin\{dmath\*\})");
 		std::regex end_dmath(R"(\\end\{dmath\*\})");
+		std::regex discretionary(R"(\\discretionary)");
+		std::regex spacenewline(R"(\\\\\[.*\])");
 		fixed = std::regex_replace(latex, begin_dmath, "");
 		fixed = std::regex_replace(fixed, end_dmath, "");
+		fixed = std::regex_replace(fixed, discretionary, "");
+		fixed = std::regex_replace(fixed, spacenewline, "\\\\");
 		}
 	else {
 		// text mode
-		fixed = "\\text{"+latex+"}";
+
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\n)"),
+											" ");
+		fixed = std::regex_replace(latex,
+											std::regex(R"(\\section\*\{(.*)\})"),
+											"{\\Large\\bf{}$1}\\\\\n");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\algo\{(.*)\})"),
+											"{\\tt{}$1}");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\prop\{(.*)\})"),
+											"{\\tt{}$1}");
+		fixed = "\\text{"+fixed+"}";
 		}
 
-	std::cout << "*** rendering fixed " << fixed << " at width " << rendering_width << std::endl;
-	
-	_render = tex::LaTeX::parse(
-      tex::utf82wide(fixed),
-		rendering_width,
-//      get_allocated_width() - _padding * 2,
-      _text_size,
-      _text_size / 3.f,
-      0xff424242
-								  );
-	
-	check_invalidate();
+	// std::cout << "**** fixed to " << fixed << std::endl;
 	}
-
-// bool TeXView::TeXArea::isRenderDisplayed()
-// 	{
-// 	return _render != nullptr;
-// 	}
-
-// int TeXView::TeXArea::getRenderWidth()
-// 	{
-// 	return _render == nullptr ? 0 : _render->getWidth() + _padding * 2;
-// 	}
-// 
-// int TeXView::TeXArea::getRenderHeight()
-// 	{
-// 	return _render == nullptr ? 0 : _render->getHeight() + _padding * 2;
-// 	}
-
-// void TeXView::TeXArea::drawInContext(const Cairo::RefPtr<Cairo::Context>& cr)
-// 	{
-// 	if (_render == nullptr) return;
-// 	Graphics2D_cairo g2(cr);
-// 	_render->draw(g2, _padding, _padding);
-// 	}
 
 #endif
 
