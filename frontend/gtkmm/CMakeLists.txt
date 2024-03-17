@@ -6,7 +6,12 @@ project(CadabraGtkmm)
 # Preamble.
 #---------------------------------------------------------------------------
 
-message(STATUS "Using GTKMM frontend")
+message(STATUS "Using gtkmm frontend")
+if(USE_MICROTEX)
+  message(STATUS "Using MicroTeX for typesetting (disabling LaTeX)")
+else()
+  message(STATUS "Using LaTeX for typesetting (disabling MicroTeX)")
+endif()
 
 set(INSTALL_SHARE_DIR share/cadabra2 CACHE PATH "Installation directory for shared files.")
 set(INSTALL_IMAGES_DIR share/cadabra2/images CACHE PATH "Installation directory for image files.")
@@ -91,7 +96,6 @@ add_definitions(
 	"-D_WEBSOCKETPP_CPP11_STL_"
 	"-DBOOST_LOG_DYN_LINK"
 	"-DGTKMM_DISABLE_DEPRECATED"
-	"-DUSE_MICROTEX"
 	"-DBUILD_GTK"
 	"-Wno-reorder"
 )
@@ -106,43 +110,51 @@ else()
 	add_executable(cadabra2-gtk WIN32 ${cadabra_gtk_src})
 endif()
 
-include_directories(
-  ${GSVMM_INCLUDES}
-  ${PROJECT_SOURCE_DIR}/../../libs/microtex/src
-  ${PROJECT_SOURCE_DIR}/../../libs/microtex/src/samples 
-)
-find_package(Fontconfig REQUIRED)
+if(USE_MICROTEX)
+  include_directories(
+    #  ${GSVMM_INCLUDES}
+    ${PROJECT_SOURCE_DIR}/../../libs/microtex/src
+    ${PROJECT_SOURCE_DIR}/../../libs/microtex/src/samples 
+  )
+  find_package(Fontconfig REQUIRED)
+  pkg_check_modules(tinyxml2 REQUIRED IMPORTED_TARGET tinyxml2)
+endif()
 pkg_check_modules(GTKMM REQUIRED IMPORTED_TARGET gtkmm-3.0)
-pkg_check_modules(GSVMM REQUIRED IMPORTED_TARGET gtksourceviewmm-3.0)
+# pkg_check_modules(GSVMM REQUIRED IMPORTED_TARGET gtksourceviewmm-3.0)
 pkg_check_modules(CairoMM REQUIRED IMPORTED_TARGET cairomm-1.0)
-pkg_check_modules(tinyxml2 REQUIRED IMPORTED_TARGET tinyxml2)
-add_executable(microtest microtest.cc)
+# add_executable(microtest microtest.cc)
 
-target_link_libraries(cadabra2-gtk 
-	cadabra_client 
-	${Boost_LIBRARIES} 
-	${GLIBMM_LIBRARIES} 
-	${GTKMM3_LIBRARIES} 
-	${SQLITE3_LIBRARIES} 
-        ${PROJECT_SOURCE_DIR}/../../libs/microtex/build/libLaTeX.a
-        PkgConfig::CairoMM      # for MicroTeX
-        Fontconfig::Fontconfig  # for MicroTeX
- 	tinyxml2                # for MicroTeX
-	Threads::Threads
+target_link_libraries(
+  cadabra2-gtk 
+  cadabra_client 
+  ${Boost_LIBRARIES} 
+  ${GLIBMM_LIBRARIES} 
+  ${GTKMM3_LIBRARIES} 
+  ${SQLITE3_LIBRARIES} 
+  Threads::Threads
 )
 
-target_link_libraries(microtest 
-	${PROJECT_SOURCE_DIR}/../../libs/microtex/build/libLaTeX.a
-	${GLIBMM_LIBRARIES} 
-	${GTKMM3_LIBRARIES} 
-	Threads::Threads
-	PkgConfig::GTKMM
-        PkgConfig::CairoMM
-	PkgConfig::GSVMM
-        Fontconfig::Fontconfig
-	tinyxml2
-	Threads::Threads
-)
+if(USE_MICROTEX)
+  target_link_libraries(cadabra2-gtk 
+    ${PROJECT_SOURCE_DIR}/../../libs/microtex/build/libLaTeX.a
+    PkgConfig::CairoMM      # for MicroTeX
+    Fontconfig::Fontconfig  # for MicroTeX
+    tinyxml2                # for MicroTeX
+  )
+endif()
+
+# target_link_libraries(microtest 
+# 	${PROJECT_SOURCE_DIR}/../../libs/microtex/build/libLaTeX.a
+# 	${GLIBMM_LIBRARIES} 
+# 	${GTKMM3_LIBRARIES} 
+# 	Threads::Threads
+# 	PkgConfig::GTKMM
+#         PkgConfig::CairoMM
+# 	PkgConfig::GSVMM
+#         Fontconfig::Fontconfig
+# 	tinyxml2
+# 	Threads::Threads
+# )
 
 
 #---------------------------------------------------------------------------
@@ -225,5 +237,7 @@ if(NOT MSVC)
 endif()
 
 # microtex resources
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/../../libs/microtex/res/ DESTINATION ${INSTALL_MICROTEX_DIR})
+if(USE_MICROTEX)
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/../../libs/microtex/res/ DESTINATION ${INSTALL_MICROTEX_DIR})
+endif()
 

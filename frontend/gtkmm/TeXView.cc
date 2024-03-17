@@ -57,50 +57,72 @@ Gtk::SizeRequestMode TeXView::TeXArea::get_request_mode_vfunc() const
 void TeXView::TeXArea::get_preferred_height_for_width_vfunc(int width,
 																				int& minimum_height, int& natural_height) const
 	{
+#ifdef USE_MICROTEX
+//	Gtk::Widget::get_preferred_height_for_width_vfunc(width, minimum_height, natural_height);
+//	return;
+	
 	if(width==1) {
-		minimum_height=1;
-		natural_height=1;
+		minimum_height=9999;
+		natural_height=9999;
 		// std::cerr << "**** skipped bogus width" << std::endl;
 		}
 	else {
+		int remember = rendering_width;
 		rendering_width = width;
 		layout_latex();
 		int extra = (int) (_padding * 2);
 		minimum_height = _render->getHeight() + extra;
 		natural_height = _render->getHeight() + extra;
-		// std::cerr << "**** computed for width " << width << " height as " << natural_height << std::endl;
+		std::cerr << "**** computed for width " << width << " height as " << natural_height << std::endl;
+		if(rendering_width==9999)
+			rendering_width = remember;
 		}
+	std::cerr << "**** asked height for width " << width << ", replied " << minimum_height << std::endl;
+#else
+	Gtk::Widget::get_preferred_height_for_width_vfunc(width, minimum_height, natural_height);
+#endif
+	}
+
+void TeXView::TeXArea::get_preferred_width_for_height_vfunc(int height,
+																				int& minimum_width, int& natural_width) const
+	{
+	Gtk::Widget::get_preferred_width_for_height_vfunc(height, minimum_width, natural_width);
+	return;
+	
+	if(height==0) {
+		minimum_width = 99999;
+		natural_width = 99999;
+		}
+	else {
+		minimum_width = rendering_width;
+		natural_width = rendering_width;
+		}
+	std::cerr << "**** asked width for height " << height << ", replied " << minimum_width << std::endl;
 	}
 
 void TeXView::TeXArea::on_size_allocate(Gtk::Allocation& allocation)
 	{
 	set_allocation(allocation);
-//	std::cerr << "**** offered allocation " << allocation.get_width()
-//				 << " x " << allocation.get_height() << std::endl;
+	std::cerr << "**** offered allocation " << allocation.get_width()
+				 << " x " << allocation.get_height() << std::endl;
+	if(allocation.get_width() != rendering_width) {
+		std::cerr << "**** need to rerender" << std::endl;
+		rendering_width = allocation.get_width();
+		layout_latex();
+		}
+	int extra = (int) (_padding * 2);
+	int my_height = _render->getHeight() + extra;
+	if(allocation.get_height() != my_height) {
+		std::cerr << "*** need new height " << my_height << std::endl;
+//		set_size_request(rendering_width, my_height);
+//		queue_resize();
+//		queue_draw();
+		}
 	}
-
-// bool TeXView::TeXArea::on_configure_event(GdkEventConfigure *cfg)
-// 	 {
-// 	 bool ret = Gtk::DrawingArea::on_configure_event(cfg);
-// 
-// 	 std::cerr << "**** configure size " << cfg->width << " x " << cfg->height << std::endl;
-// 
-// 	 if(rendering_width != cfg->width && fixed!="") {
-// 		 rendering_width = cfg->width;
-// 		 layout_latex();
-// 		 check_invalidate();
-// 		 }
-// 	 else {
-// 		 rendering_width = cfg->width;
-// 		 }
-// 
-// 	 return ret;
-// 	 }
 
 void TeXView::convert()
 	{
 //	std::cerr << "*** convert called" << std::endl;
-#ifdef USE_MICROTEX
 	try {
 		// Ensure that all TeX cells have been rendered by TeX. This will do nothing
 		// if no TeX cells need (re-)rendering. When adding many cells in one go, do so
@@ -116,7 +138,8 @@ void TeXView::convert()
 	catch(TeXEngine::TeXException& ex) {
 		tex_error.emit(ex.what());
 		}
-#else
+
+#ifndef USE_MICROTEX
 	image.update_image(content, engine.get_scale());
 #endif
 	}
@@ -142,8 +165,10 @@ void TeXView::update_image()
 void TeXView::TeXArea::update_image(std::shared_ptr<TeXEngine::TeXRequest> content, double scale)
 	{
 #ifdef USE_MICROTEX
-	if(content) 
-		set_latex(content->latex());
+	if(content) {
+		if(content->latex()!=unfixed)
+			set_latex(content->latex());
+		}
 #else
 	if(content->image().size()==0)
 		return;
@@ -169,6 +194,7 @@ void TeXView::TeXArea::update_image(std::shared_ptr<TeXEngine::TeXRequest> conte
 #endif
 	}
 
+#ifdef USE_MICROTEX
 void TeXView::TeXArea::layout_latex() const
 	{
 	if(_render)
@@ -182,6 +208,7 @@ void TeXView::TeXArea::layout_latex() const
       _text_size / 3.f,
       0xff424242);
 	}
+#endif
 
 bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	{
@@ -262,6 +289,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 	{
 	// std::cout << "**** fixing latex " << latex << std::endl;
 
+	unfixed = latex;
 	if(latex.find(R"(\begin{dmath*})")==0) {
 		// math mode
 		std::regex begin_dmath(R"(\\begin\{dmath\*\})");
@@ -272,26 +300,41 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		fixed = std::regex_replace(fixed, end_dmath, "");
 		fixed = std::regex_replace(fixed, discretionary, "");
 		fixed = std::regex_replace(fixed, spacenewline, "\\\\");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\+)"),
+											" + ");
 		}
 	else {
 		// text mode
 
-		fixed = std::regex_replace(fixed,
-											std::regex(R"(\n)"),
-											" ");
 		fixed = std::regex_replace(latex,
-											std::regex(R"(\\section\*\{(.*)\})"),
-											"{\\Large\\bf{}$1}\\\\\n");
+											std::regex("\n"),
+											" ");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\section\*\{([^\}]*)\}\s*)"),
+											"\\text{\\Large\\bf{}$1}\\\\\n\\vspace{1.5ex}");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\subsection\*\{([^\}]*)\}\s*)"),
+											"\\text{\\large\\bf{}$1}\\\\\n\\vspace{1ex}");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\algo\{(.*)\})"),
 											"{\\tt{}$1}");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\prop\{(.*)\})"),
 											"{\\tt{}$1}");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\verb\|([^\|]*)\|)"),
+											"{\\tt{}$1}");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\begin\{verbatim\})"),
+											"{\\tt{}");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\end\{verbatim\})"),
+											"}");
 		fixed = "\\text{"+fixed+"}";
 		}
 
-	// std::cout << "**** fixed to " << fixed << std::endl;
+	std::cout << "**** fixed to " << fixed << std::endl;
 	}
 
 #endif
@@ -302,6 +345,7 @@ TeXView::TeXArea::TeXArea()
 	, _render(nullptr), _text_size(30.f), _padding(10)
 #endif
 	{
+	set_hexpand(true);
 	}
 
 TeXView::TeXArea::~TeXArea()

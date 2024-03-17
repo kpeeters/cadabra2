@@ -372,6 +372,11 @@ add_subdirectory(core)
 
 # Frontend
 if(ENABLE_FRONTEND)
+  option(ENABLE_MICROTEX "Enable MicroTeX support" ON)
+  if(ENABLE_MICROTEX)
+    set(USE_MICROTEX TRUE)
+    message("MicroTeX enabled")
+  endif()
   add_subdirectory(frontend)
 endif()
 

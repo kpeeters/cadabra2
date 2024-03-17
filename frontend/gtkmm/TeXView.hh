@@ -8,6 +8,7 @@
 #include <gtkmm/revealer.h>
 #endif
 
+#include "Config.hh"
 #include "DataCell.hh"
 #include "../common/TeXEngine.hh"
 
@@ -69,6 +70,8 @@ namespace cadabra {
 					Gtk::SizeRequestMode get_request_mode_vfunc() const override;
 					void get_preferred_height_for_width_vfunc(int width, int& minimum_height,
 																			int& natural_height) const  override;
+					void get_preferred_width_for_height_vfunc(int height, int& minimum_width,
+																			int& natural_width) const  override;
 					void on_size_allocate(Gtk::Allocation& allocation) override;
 					// void on_map() override;
 					// void on_unmap() override;
@@ -88,7 +91,7 @@ namespace cadabra {
 					mutable tex::TeXRender* _render;
 					float           _text_size;
 					int             _padding;
-					std::string     fixed;
+					std::string     unfixed, fixed;
 #endif
 				};
 
