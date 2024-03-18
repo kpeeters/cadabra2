@@ -99,8 +99,12 @@ void LaTeX::init(string res_root_path) {
     auto path = queryResourceLocation(res_root_path);
     if (!path.empty()) {
       RES_BASE = path;
-    }
+		 }
+	 else {
+		 std::cerr << "Not found path " << res_root_path << std::endl;
+		 }
   } catch (std::exception&) {
+	  std::cerr << "Exception testing for presence of " << res_root_path << std::endl;
   }
   if (_formula != nullptr) return;
 

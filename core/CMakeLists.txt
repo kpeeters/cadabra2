@@ -320,6 +320,10 @@ elseif(CMAKE_SHARED_LINKER_FLAGS MATCHES ".*-Wl,--no-undefined.*")
   target_link_libraries(cadabra2 PRIVATE ${PYTHON_LIBRARIES})
 endif()
 
+# Make the python module pick up elements from two parents up.
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+set_target_properties(cadabra2 PROPERTIES INSTALL_RPATH "$ORIGIN/../../:$ORIGIN")
+
 if(MATHEMATICA_FOUND)
    target_link_libraries(cadabra2 PRIVATE ${Mathematica_WSTP_LIBRARIES})
 endif()

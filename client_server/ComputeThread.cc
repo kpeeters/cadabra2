@@ -184,7 +184,15 @@ void ComputeThread::try_spawn_server()
 #if defined(_WIN32) || defined(_WIN64)
 	argv.push_back(cadabra::install_prefix()+"\\bin\\cadabra-server.exe");
 #else
-	argv.push_back("cadabra-server");
+	const char *appdir = getenv("APPDIR");
+	if(appdir) {
+		std::cerr << "This is an AppImage, APPDIR = " << appdir << std::endl;
+		argv.push_back(std::string(appdir)+"/usr/bin/cadabra-server");
+		}
+	else {
+		std::cerr << "Not an AppImage." << std::endl;
+		argv.push_back("cadabra-server");
+		}
 #endif
 	Glib::Pid pid;
 	std::string wd("");

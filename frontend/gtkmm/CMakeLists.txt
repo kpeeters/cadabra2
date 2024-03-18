@@ -239,5 +239,6 @@ endif()
 # microtex resources
 if(USE_MICROTEX)
   install(DIRECTORY ${PROJECT_SOURCE_DIR}/../../libs/microtex/res/ DESTINATION ${INSTALL_MICROTEX_DIR})
+  install(CODE      "execute_process(COMMAND touch $ENV{DESTDIR}${INSTALL_MICROTEX_DIR}/.clatexmath-res_root)")
 endif()
 

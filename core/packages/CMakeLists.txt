@@ -58,7 +58,6 @@ endforeach()
 foreach(PACKAGE ${COMPILED_PACKAGES})
   SET(CMAKE_SKIP_BUILD_RPATH FALSE)
   SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-  SET(CMAKE_INSTALL_RPATH "${PYTHON_SITE_PATH}")
   get_filename_component(PINSTALL ${PACKAGE} DIRECTORY)
   get_filename_component(PNAME ${PACKAGE} NAME_WE)
   pybind11_add_module(${PNAME} SHARED ${SOURCE_PACKAGEDIR}/${PACKAGE})
@@ -66,7 +65,8 @@ foreach(PACKAGE ${COMPILED_PACKAGES})
   set_target_properties(${PNAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/cdb/${PINSTALL}")
   set_target_properties(${PNAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/cdb/${PINSTALL}")
   set_target_properties(${PNAME} PROPERTIES SUFFIX ".${PYTHON_MOD_SUFFIX}")
-
+  set_target_properties(${PNAME} PROPERTIES INSTALL_RPATH "$ORIGIN/../../:$ORIGIN/../../../../")
+  
   target_link_libraries(${PNAME} PUBLIC cadabra2 ${GMPXX_LIBRARIES})
   target_include_directories(${PNAME} PUBLIC ${CADABRA_CORE_DIR})
 

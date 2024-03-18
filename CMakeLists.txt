@@ -118,6 +118,15 @@ option(MSVC_TARGET_CONSOLE "Force Release book on MSVC to display a console wind
 # Provide option to build with Python 3 (default) or Python 2.
 option(USE_PYTHON_3 "Use Python 3 if ON, or fall back to Python 2 if OFF" ON)
 
+option(APPIMAGE_MODE "Run in AppImage mode, overriding path settings" OFF)
+if(APPIMAGE_MODE)
+  message(STATUS "Building for AppImage packaging (Debian paths, MicroTeX)")
+  if("${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
+  else()
+    MESSAGE(FATAL_ERROR "Building with -DAPPIMAGE_MODE=ON also requires -DCMAKE_INSTALL_PREFIX=/usr")
+  endif()
+endif()
+
 option(PACKAGING_MODE "Run in packaging mode, overriding path settings" OFF)
 if (PACKAGING_MODE)
 	message(STATUS "Building in packaging mode")
@@ -288,23 +297,26 @@ message(STATUS "Python version is ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR
 
 # The PYTHON_SITE_PATH variable is used throughout for installation purposes.
 if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
-   # Debian packages install all their Python things in 'dist-packages', not 'site-packages'.
-   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/dist-packages)
-   # set(PYTHON_SITE_DIST "dist-packages")
- else()
-   # The builder can override the path by setting it externally.
-   if(NOT DEFINED PYTHON_SITE_PATH)
-      # For everyone else there is 'site-packages' which we get from
-      # calling into python's 'site' package (and hoping that the 0th
-      # element is where we should be writing).
-      execute_process(
-        COMMAND ${PYTHON_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
-        OUTPUT_VARIABLE PYTHON_SITE_PATH
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-        )
-      #   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
-      # set(PYTHON_SITE_DIST "site-packages")
-    endif()
+  # Debian packages install all their Python things in 'dist-packages', not 'site-packages'.
+  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/dist-packages)
+  # set(PYTHON_SITE_DIST "dist-packages")
+elseif(APPIMAGE_MODE)
+  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/dist-packages)
+  set(PYTHON_SITE_DIST "dist-packages")
+else()
+  # The builder can override the path by setting it externally.
+  if(NOT DEFINED PYTHON_SITE_PATH)
+    # For everyone else there is 'site-packages' which we get from
+    # calling into python's 'site' package (and hoping that the 0th
+    # element is where we should be writing).
+    execute_process(
+      COMMAND ${PYTHON_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
+      OUTPUT_VARIABLE PYTHON_SITE_PATH
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    #   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
+    # set(PYTHON_SITE_DIST "site-packages")
+  endif()
 endif()
 message(STATUS "Installing Python modules in ${PYTHON_SITE_PATH}")
 # We need to give our Python module an abi-name extension
@@ -373,6 +385,9 @@ add_subdirectory(core)
 # Frontend
 if(ENABLE_FRONTEND)
   option(ENABLE_MICROTEX "Enable MicroTeX support" ON)
+  if(APPIMAGE_MODE)
+    set(ENABLE_MICROTEX TRUE)
+  endif()
   if(ENABLE_MICROTEX)
     set(USE_MICROTEX TRUE)
     message("MicroTeX enabled")
