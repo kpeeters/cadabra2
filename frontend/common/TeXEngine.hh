@@ -65,6 +65,7 @@ namespace cadabra {
 			void set_scale(double total_scale, double device_scale);
 			double get_scale() const;
 			void set_font_size(int font_size);
+			int  get_font_size() const;
 			std::vector<std::string> latex_packages;
 
 			// All checkin/checkout conversion routines. TeXEngine keeps

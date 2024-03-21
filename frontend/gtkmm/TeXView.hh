@@ -61,9 +61,15 @@ namespace cadabra {
 
 					Glib::RefPtr<Gdk::Pixbuf> pixbuf;
 					double                    scale_;
+					float                     _text_size;
 
 #ifdef USE_MICROTEX
+					/// Set the LaTeX string and replace/substitute so that MicroTeX can
+					/// render it (but do not actually render).
 					void set_latex(const std::string& latex);
+
+					/// Just run the LaTeX layout algorithms, do not draw.
+					void layout_latex() const;
 #endif
 
 				protected:
@@ -73,11 +79,6 @@ namespace cadabra {
 					void get_preferred_width_for_height_vfunc(int height, int& minimum_width,
 																			int& natural_width) const  override;
 					void on_size_allocate(Gtk::Allocation& allocation) override;
-					// void on_map() override;
-					// void on_unmap() override;
-					// void on_realize() override;
-					// void on_unrealize() override;
-					// virtual bool on_configure_event(GdkEventConfigure *) override;
 					
 				private:
 					mutable int     rendering_width;
@@ -85,11 +86,8 @@ namespace cadabra {
 #ifdef USE_MICROTEX
 					void check_invalidate();
 
-					// Just run the LaTeX layout algorithms, do not draw.
-					void layout_latex() const;
 					
 					mutable tex::TeXRender* _render;
-					float           _text_size;
 					int             _padding;
 					std::string     unfixed, fixed;
 #endif

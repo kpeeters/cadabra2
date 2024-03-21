@@ -32,6 +32,7 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, int hmargin)
 	vbox.set_margin_top(10);
 	vbox.set_margin_bottom(0);
 	vbox.pack_start(hbox, true, 0);
+	image._text_size = 2.5f*engine.get_font_size(); // make sure this aligns with logic elsewhere
 	hbox.pack_start(image, true, hmargin);
 	//	 add(image);
 	add_events( Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK );
@@ -160,6 +161,11 @@ bool TeXView::on_button_release_event(GdkEventButton *)
 
 void TeXView::update_image()
 	{
+	float new_size = 2.5f*engine.get_font_size();
+	if(image._text_size != new_size) {
+		image._text_size = new_size;
+		image.layout_latex();
+		}
 	image.update_image(content, engine.get_scale());
 	}
 
@@ -204,7 +210,6 @@ void TeXView::TeXArea::layout_latex() const
 	_render = tex::LaTeX::parse(
       tex::utf82wide(fixed),
 		rendering_width,
-		//  get_allocated_width() - _padding * 2,
       _text_size,
       _text_size / 3.f,
       0xff424242);
@@ -224,7 +229,7 @@ bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	cr->fill();
 	if (_render == nullptr) return true;
 	tex::Graphics2D_cairo g2(cr);
-	_render->draw(g2, _padding, _padding);
+	_render->draw(g2, 2*_padding, 2*_padding);
 	return true;
 
 #else
@@ -313,10 +318,10 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 											" ");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\section\*\{([^\}]*)\}\s*)"),
-											"\\text{\\Large\\bf{}$1}\\\\\n\\vspace{1.5ex}");
+											"\\text{\\Large\\bf{}$1}\\\\\n\\vspace{2.5ex}");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\subsection\*\{([^\}]*)\}\s*)"),
-											"\\text{\\large\\bf{}$1}\\\\\n\\vspace{1ex}");
+											"\\text{\\large\\bf{}$1}\\\\\n\\vspace{1.5ex}");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\algo\{(.*)\})"),
 											"{\\tt{}$1}");

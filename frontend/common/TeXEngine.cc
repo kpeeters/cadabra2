@@ -229,7 +229,13 @@ void TeXEngine::set_font_size(int fontsize)
 			++reqit;
 			}
 		}
+	std::cerr << "FONTSIZE " << fontsize << std::endl;
 	font_size_=fontsize;
+	}
+
+int TeXEngine::get_font_size() const
+	{
+	return font_size_;
 	}
 
 void TeXEngine::set_scale(double total_scale, double device_scale)

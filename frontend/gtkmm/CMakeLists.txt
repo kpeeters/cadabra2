@@ -111,6 +111,7 @@ else()
 endif()
 
 if(USE_MICROTEX)
+  message(STATUS "INCLUDE ${PROJECT_SOURCE_DIR}/../../libs/microtex/src")
   include_directories(
     #  ${GSVMM_INCLUDES}
     ${PROJECT_SOURCE_DIR}/../../libs/microtex/src
@@ -136,7 +137,7 @@ target_link_libraries(
 
 if(USE_MICROTEX)
   target_link_libraries(cadabra2-gtk 
-    ${PROJECT_SOURCE_DIR}/../../libs/microtex/build/libLaTeX.a
+    LaTeX                   # from MicroTeX
     PkgConfig::CairoMM      # for MicroTeX
     Fontconfig::Fontconfig  # for MicroTeX
     tinyxml2                # for MicroTeX

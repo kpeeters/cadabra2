@@ -390,8 +390,13 @@ if(ENABLE_FRONTEND)
   endif()
   if(ENABLE_MICROTEX)
     set(USE_MICROTEX TRUE)
+    add_subdirectory(libs/microtex EXCLUDE_FROM_ALL)
+    target_compile_options(LaTeX PUBLIC "-Wno-reorder" "-Wno-sign-compare" "-Wno-switch" "-Wno-unused-variable")
   endif()
   add_subdirectory(frontend)
+  if(ENABLE_MICROTEX)
+    add_dependencies(cadabra2-gtk LaTeX)
+  endif()
 endif()
 
 # Tests

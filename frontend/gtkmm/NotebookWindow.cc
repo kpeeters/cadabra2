@@ -927,6 +927,8 @@ void NotebookWindow::tex_run_async()
 		tex_thread->join();
 
 	tex_thread = std::make_unique<std::thread>( tex_code );
+#else
+	dispatch_refresh.emit();
 #endif
 	}
 
