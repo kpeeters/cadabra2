@@ -541,3 +541,8 @@ if(NOT MSVC)
     share/man/man1
     )
 endif()
+
+if(APPIMAGE_MODE)
+  # Install sympy and matplotlib.
+  install(CODE      "execute_process(COMMAND pip3 install --target $ENV{DESTDIR}${PYTHON_SITE_PATH} sympy matplotlib)")  
+endif()

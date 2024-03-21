@@ -882,6 +882,7 @@ void NotebookWindow::on_kernel_runstatus(bool running)
 
 void NotebookWindow::tex_run_async()
 	{
+#ifndef USE_MICROTEX
 	if(tex_error_string!="")
 		return;
 
@@ -926,6 +927,7 @@ void NotebookWindow::tex_run_async()
 		tex_thread->join();
 
 	tex_thread = std::make_unique<std::thread>( tex_code );
+#endif
 	}
 
 void NotebookWindow::process_todo_queue()

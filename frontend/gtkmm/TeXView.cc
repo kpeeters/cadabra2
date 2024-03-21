@@ -103,8 +103,10 @@ void TeXView::TeXArea::get_preferred_width_for_height_vfunc(int height,
 void TeXView::TeXArea::on_size_allocate(Gtk::Allocation& allocation)
 	{
 	set_allocation(allocation);
-	std::cerr << "**** offered allocation " << allocation.get_width()
-				 << " x " << allocation.get_height() << std::endl;
+//	std::cerr << "**** offered allocation " << allocation.get_width()
+//				 << " x " << allocation.get_height() << std::endl;
+
+#ifdef USE_MICROTEX
 	if(allocation.get_width() != rendering_width) {
 		std::cerr << "**** need to rerender" << std::endl;
 		rendering_width = allocation.get_width();
@@ -113,11 +115,12 @@ void TeXView::TeXArea::on_size_allocate(Gtk::Allocation& allocation)
 	int extra = (int) (_padding * 2);
 	int my_height = _render->getHeight() + extra;
 	if(allocation.get_height() != my_height) {
-		std::cerr << "*** need new height " << my_height << std::endl;
+//		std::cerr << "*** need new height " << my_height << std::endl;
 //		set_size_request(rendering_width, my_height);
 //		queue_resize();
 //		queue_draw();
 		}
+#endif
 	}
 
 void TeXView::convert()
