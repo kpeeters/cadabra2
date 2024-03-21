@@ -54,6 +54,8 @@ else ()
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(tinyxml2 REQUIRED IMPORTED_TARGET tinyxml2)
     target_link_libraries(LaTeX PRIVATE tinyxml2)
+    #KP:
+    target_include_directories(LaTeX PUBLIC /opt/homebrew/include)
 endif ()
 
 # source files
@@ -214,7 +216,8 @@ elseif (UNIX)
     pkg_check_modules(CairoMM REQUIRED IMPORTED_TARGET cairomm-1.0)
     target_sources(LaTeX PRIVATE
             src/platform/cairo/graphic_cairo.cpp
-            )
+          )
+#KP:
     target_link_libraries(LaTeX PRIVATE
             PkgConfig::GTKMM #include <pangomm/fontdescription.h>
             PkgConfig::CairoMM #include <cairomm/context.h>
