@@ -238,7 +238,7 @@ endif ()
 
 # compile options
 
-option(HAVE_LOG "If enable log" ON)
+option(HAVE_LOG "If enable log" OFF)
 if (HAVE_LOG)
     add_definitions(-DHAVE_LOG)
 endif ()

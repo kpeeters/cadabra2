@@ -32,7 +32,8 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, int hmargin)
 	vbox.set_margin_top(10);
 	vbox.set_margin_bottom(0);
 	vbox.pack_start(hbox, true, 0);
-	image._text_size = 2.5f*engine.get_font_size(); // make sure this aligns with logic elsewhere
+	std::cerr << "SCALE: " << engine.get_scale() << std::endl;
+	image._text_size = text_size();
 	hbox.pack_start(image, true, hmargin);
 	//	 add(image);
 	add_events( Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK );
@@ -41,6 +42,11 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, int hmargin)
 TeXView::~TeXView()
 	{
 	engine.checkout(content);
+	}
+
+float TeXView::text_size() const
+	{
+	return (2.5f*engine.get_font_size())/engine.get_scale();
 	}
 
 void TeXView::on_show()
@@ -69,11 +75,10 @@ void TeXView::TeXArea::get_preferred_height_for_width_vfunc(int width,
 		}
 	else {
 		int remember = rendering_width;
-		rendering_width = width;
+		rendering_width = width - 2*padding_x;
 		layout_latex();
-		int extra = (int) (_padding * 2);
-		minimum_height = _render->getHeight() + extra;
-		natural_height = _render->getHeight() + extra;
+		minimum_height = _render->getHeight() + 2*padding_y;
+		natural_height = _render->getHeight() + 2*padding_y;
 		std::cerr << "**** computed for width " << width << " height as " << natural_height << std::endl;
 		if(rendering_width==9999)
 			rendering_width = remember;
@@ -95,8 +100,8 @@ void TeXView::TeXArea::get_preferred_width_for_height_vfunc(int height,
 		natural_width = 99999;
 		}
 	else {
-		minimum_width = rendering_width;
-		natural_width = rendering_width;
+		minimum_width = rendering_width + 2 * padding_x;
+		natural_width = rendering_width + 2 * padding_x;
 		}
 	std::cerr << "**** asked width for height " << height << ", replied " << minimum_width << std::endl;
 	}
@@ -108,19 +113,19 @@ void TeXView::TeXArea::on_size_allocate(Gtk::Allocation& allocation)
 //				 << " x " << allocation.get_height() << std::endl;
 
 #ifdef USE_MICROTEX
-	if(allocation.get_width() != rendering_width) {
+	if(allocation.get_width() != rendering_width + 2*padding_x) {
 		std::cerr << "**** need to rerender" << std::endl;
-		rendering_width = allocation.get_width();
+		rendering_width = allocation.get_width() - 2*padding_x;
 		layout_latex();
 		}
-	int extra = (int) (_padding * 2);
-	int my_height = _render->getHeight() + extra;
-	if(allocation.get_height() != my_height) {
-//		std::cerr << "*** need new height " << my_height << std::endl;
-//		set_size_request(rendering_width, my_height);
-//		queue_resize();
-//		queue_draw();
-		}
+// 	int extra = (int) (_padding * 2);
+// 	int my_height = _render->getHeight() + extra;
+// 	if(allocation.get_height() != my_height) {
+// //		std::cerr << "*** need new height " << my_height << std::endl;
+// //		set_size_request(rendering_width, my_height);
+// //		queue_resize();
+// //		queue_draw();
+// 		}
 #endif
 	}
 
@@ -161,7 +166,7 @@ bool TeXView::on_button_release_event(GdkEventButton *)
 
 void TeXView::update_image()
 	{
-	float new_size = 2.5f*engine.get_font_size();
+	float new_size = text_size();
 	if(image._text_size != new_size) {
 		image._text_size = new_size;
 		image.layout_latex();
@@ -229,7 +234,7 @@ bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	cr->fill();
 	if (_render == nullptr) return true;
 	tex::Graphics2D_cairo g2(cr);
-	_render->draw(g2, 2*_padding, 2*_padding);
+	_render->draw(g2, padding_x, padding_y);
 	return true;
 
 #else
@@ -257,40 +262,6 @@ bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	}
 
 #ifdef USE_MICROTEX
-void TeXView::TeXArea::check_invalidate()
-	{
-	std::cerr << "**** check invalidate" << std::endl;
-
-	if (_render == nullptr) return;
-	
-	int parent_width = get_parent()->get_width();
-	int parent_height = get_parent()->get_height();
-	int target_width = parent_width;
-	int target_height = parent_height;
-	
-	int extra = (int) (_padding * 2);
-	if (parent_width < _render->getWidth() + extra) {
-      target_width = _render->getWidth() + extra;
-		}
-	if (parent_height < _render->getHeight() + extra) {
-      target_height = _render->getHeight() + extra;
-		}
-
-//	std::cerr << "**** adjust size request " << target_width << " x " << target_height <<
-//		" in parent " << parent_width << " x " << parent_height << std::endl;
-//	set_size_request(target_width, target_height);
-	queue_resize();
-	
-//	auto win = get_window();
-//	if (win) {
-//		std::cerr << "**** invalidating rect" << std::endl;
-//      auto al = get_allocation();
-//      Gdk::Rectangle r(0, 0, al.get_width(), al.get_height());
-//      win->invalidate_rect(r, false);
-//		queue_draw();
-//		}
-	}
-
 void TeXView::TeXArea::set_latex(const std::string& latex)
 	{
 	// std::cout << "**** fixing latex " << latex << std::endl;
@@ -348,7 +319,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 TeXView::TeXArea::TeXArea()
 	: rendering_width(1)
 #ifdef USE_MICROTEX
-	, _render(nullptr), _text_size(30.f), _padding(10)
+	, _render(nullptr), _text_size(30.f), padding_x(10), padding_y(0)
 #endif
 	{
 	set_hexpand(true);

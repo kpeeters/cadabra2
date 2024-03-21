@@ -285,6 +285,7 @@ else()
 	message(STATUS "Building for use with Python 2 (consider upgrading!)")
 endif()
 
+# set(PYBIND11_FINDPYTHON ON)
 add_subdirectory(libs/pybind11)
 
 message(STATUS "Found python ${PYTHON_LIBRARIES}")

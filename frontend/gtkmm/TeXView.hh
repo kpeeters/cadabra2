@@ -84,11 +84,8 @@ namespace cadabra {
 					mutable int     rendering_width;
 					
 #ifdef USE_MICROTEX
-					void check_invalidate();
-
-					
 					mutable tex::TeXRender* _render;
-					int             _padding;
+					int             padding_x, padding_y;
 					std::string     unfixed, fixed;
 #endif
 				};
@@ -113,6 +110,8 @@ namespace cadabra {
 
 		private:
 			TeXEngine& engine;
+
+			float text_size() const;
 		};
 
 	}

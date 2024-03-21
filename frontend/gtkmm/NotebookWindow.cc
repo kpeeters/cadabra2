@@ -185,13 +185,13 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	insert_action_group("cdb",  actiongroup);
 
 	// Set shortcuts for actions.
-	cdbapp->set_accel_for_action("cdb.New",                    "<control>N");
-	cdbapp->set_accel_for_action("cdb.Open",                   "<control>O");
-	cdbapp->set_accel_for_action("cdb.Save",                   "<control>S");
-	cdbapp->set_accel_for_action("cdb.Quit",                   "<control>Q");
-	cdbapp->set_accel_for_action("cdb.EditUndo",               "<control>Z");
-	cdbapp->set_accel_for_action("cdb.EditCopy",               "<control>C");
-	cdbapp->set_accel_for_action("cdb.EditPaste",              "<control>V");
+	cdbapp->set_accel_for_action("cdb.New",                    "<Primary>N");
+	cdbapp->set_accel_for_action("cdb.Open",                   "<Primary>O");
+	cdbapp->set_accel_for_action("cdb.Save",                   "<Primary>S");
+	cdbapp->set_accel_for_action("cdb.Quit",                   "<Primary>Q");
+	cdbapp->set_accel_for_action("cdb.EditUndo",               "<Primary>Z");
+	cdbapp->set_accel_for_action("cdb.EditCopy",               "<Primary>C");
+	cdbapp->set_accel_for_action("cdb.EditPaste",              "<Primary>V");
 	cdbapp->set_accel_for_action("cdb.EditInsertAbove",        "<alt>Up");
 	cdbapp->set_accel_for_action("cdb.EditInsertBelow",        "<alt>Down");
 	cdbapp->set_accel_for_action("cdb.EditDelete",             "<ctrl>Delete");
@@ -278,6 +278,10 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	   "        <item>"
 		"          <attribute name='label'>Copy</attribute>"
 		"          <attribute name='action'>cdb.EditCopy</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Paste</attribute>"
+		"          <attribute name='action'>cdb.EditPaste</attribute>"
 		"        </item>"
 		"      </section>"
 		"      <section>"
