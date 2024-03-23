@@ -20,22 +20,26 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, int hmargin)
 	// all requests will be empty.
 	content = engine.checkin(datacell->textbuf, "", "");
 	
-#if GTKMM_MINOR_VERSION>=10
-	add(rbox);
-	rbox.add(vbox);
-	rbox.set_reveal_child(false);
-	rbox.set_transition_duration(1); // 000);
-	rbox.set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_CROSSFADE); //SLIDE_DOWN);
-#else
-	add(vbox);
-#endif
+// #if GTKMM_MINOR_VERSION>=10
+// 	add(rbox);
+// 	rbox.add(vbox);
+// 	rbox.set_reveal_child(false);
+// 	rbox.set_transition_duration(1000);
+// 	rbox.set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_CROSSFADE); //SLIDE_DOWN);
+// #else
+// 	add(vbox);
+// #endif
 	vbox.set_margin_top(10);
 	vbox.set_margin_bottom(0);
-	vbox.pack_start(hbox, true, 0);
-	std::cerr << "SCALE: " << engine.get_scale() << std::endl;
+//	vbox.pack_start(hbox, true, 0);
+//	image._text_size = text_size();
+//	hbox.pack_start(image, true, hmargin);
+
+
+//	vbox.pack_start(hbox, true, 0);
 	image._text_size = text_size();
-	hbox.pack_start(image, true, hmargin);
-	//	 add(image);
+	add(image);
+
 	add_events( Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK );
 	}
 
@@ -46,7 +50,10 @@ TeXView::~TeXView()
 
 float TeXView::text_size() const
 	{
-	return (2.5f*engine.get_font_size())/engine.get_scale();
+	float ret = (4.0f*engine.get_font_size())/engine.get_scale();
+	std::cerr << "engine.font_size = " << engine.get_font_size() << ", .scale = " << engine.get_scale()
+				 << ", text_size = " << ret << std::endl;
+	return ret;
 	}
 
 void TeXView::on_show()
@@ -79,11 +86,11 @@ void TeXView::TeXArea::get_preferred_height_for_width_vfunc(int width,
 		layout_latex();
 		minimum_height = _render->getHeight() + 2*padding_y;
 		natural_height = _render->getHeight() + 2*padding_y;
-		std::cerr << "**** computed for width " << width << " height as " << natural_height << std::endl;
+//		std::cerr << "**** computed for width " << width << " height as " << natural_height << std::endl;
 		if(rendering_width==9999)
 			rendering_width = remember;
 		}
-	std::cerr << "**** asked height for width " << width << ", replied " << minimum_height << std::endl;
+//	std::cerr << "**** asked height for width " << width << ", replied " << minimum_height << std::endl;
 #else
 	Gtk::Widget::get_preferred_height_for_width_vfunc(width, minimum_height, natural_height);
 #endif
@@ -103,7 +110,7 @@ void TeXView::TeXArea::get_preferred_width_for_height_vfunc(int height,
 		minimum_width = rendering_width + 2 * padding_x;
 		natural_width = rendering_width + 2 * padding_x;
 		}
-	std::cerr << "**** asked width for height " << height << ", replied " << minimum_width << std::endl;
+//	std::cerr << "**** asked width for height " << height << ", replied " << minimum_width << std::endl;
 	}
 
 void TeXView::TeXArea::on_size_allocate(Gtk::Allocation& allocation)
@@ -114,7 +121,7 @@ void TeXView::TeXArea::on_size_allocate(Gtk::Allocation& allocation)
 
 #ifdef USE_MICROTEX
 	if(allocation.get_width() != rendering_width + 2*padding_x) {
-		std::cerr << "**** need to rerender" << std::endl;
+//		std::cerr << "**** need to rerender" << std::endl;
 		rendering_width = allocation.get_width() - 2*padding_x;
 		layout_latex();
 		}
@@ -212,6 +219,7 @@ void TeXView::TeXArea::layout_latex() const
 	if(_render)
 		delete _render;
 
+//	std::cerr << "running layout with text_size = " << _text_size << std::endl;
 	_render = tex::LaTeX::parse(
       tex::utf82wide(fixed),
 		rendering_width,
@@ -231,10 +239,20 @@ bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 
 	cr->set_source_rgb(1, 1, 1);
 	cr->rectangle(0, 0, get_width(), get_height());
+
+	auto surface = cr->get_target();
+	auto csurface = surface->cobj();
+	double device_scale_x, device_scale_y;
+	cairo_surface_get_device_scale(csurface, &device_scale_x, &device_scale_y);
+	std::cerr << "scale = " << device_scale_x << ", height = "<< _render->getHeight() << std::endl;
+	cr->scale(1.0/device_scale_x, 1.0/device_scale_y);
+	
 	cr->fill();
 	if (_render == nullptr) return true;
 	tex::Graphics2D_cairo g2(cr);
 	_render->draw(g2, padding_x, padding_y);
+
+	cr->scale(1.0, 1.0);
 	return true;
 
 #else
@@ -280,6 +298,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\+)"),
 											" + ");
+		fixed = "\\text{$"+fixed+"$}";
 		}
 	else {
 		// text mode
@@ -311,7 +330,8 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		fixed = "\\text{"+fixed+"}";
 		}
 
-	std::cout << "**** fixed to " << fixed << std::endl;
+//	fixed = "\\text{$A_{m n}$}";
+//	std::cout << "**** fixed to " << fixed << std::endl;
 	}
 
 #endif
@@ -319,7 +339,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 TeXView::TeXArea::TeXArea()
 	: rendering_width(1)
 #ifdef USE_MICROTEX
-	, _render(nullptr), _text_size(30.f), padding_x(10), padding_y(0)
+	, _render(nullptr), _text_size(5.f), padding_x(15), padding_y(20)
 #endif
 	{
 	set_hexpand(true);

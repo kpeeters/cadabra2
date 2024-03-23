@@ -3,6 +3,7 @@
 #include "atom/atom.h"
 #include "core/core.h"
 #include "core/formula.h"
+// #include <iostream>
 
 using namespace std;
 using namespace tex;
@@ -142,6 +143,7 @@ void TeXRender::draw(Graphics2D& g2, int x, int y) {
   }
 
   // draw formula box
+//  std::cerr << "TeXRender::draw: insets.top = " << _insets.top << ", box-height = " <<_box->_height << std::endl;
   _box->draw(g2, (x + _insets.left) / _textSize, (y + _insets.top) / _textSize + _box->_height);
 
   // restore
@@ -192,19 +194,19 @@ TeXRender* TeXRenderBuilder::build(const sptr<Atom>& fc) {
   TeXRender* render;
   if (_widthUnit != UnitType::none && _textWidth != 0) {
     HBox* hb;
-	 std::cerr << "SPLIT: attempt" << std::endl;
+//	 std::cerr << "SPLIT: attempt" << std::endl;
     if (_lineSpaceUnit != UnitType::none && _lineSpace != 0) {
       float space = _lineSpace * SpaceAtom::getFactor(_lineSpaceUnit, *env);
       auto split = BoxSplitter::split(box, env->getTextWidth(), space);
-	 std::cerr << "SPLIT: done " << std::endl;
+//	 std::cerr << "SPLIT: done " << std::endl;
       hb = new HBox(split, _isMaxWidth ? split->_width : env->getTextWidth(), _align);
     } else {
-		 std::cerr << "SPLIT: not done" << std::endl;
+//		 std::cerr << "SPLIT: not done" << std::endl;
       hb = new HBox(box, _isMaxWidth ? box->_width : env->getTextWidth(), _align);
     }
     render = new TeXRender(sptr<Box>(hb), _textSize, _trueValues);
   } else {
-	 std::cerr << "SPLIT: not" << std::endl;
+//	 std::cerr << "SPLIT: not" << std::endl;
     render = new TeXRender(box, _textSize, _trueValues);
   }
 

@@ -430,4 +430,22 @@ add_custom_target(uninstall
 	"${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake/cmake_uninstall.cmake"
 )
 
+#---------------------------------------------------------------------------
+# Provide target to build AppImage.
+#---------------------------------------------------------------------------
+
+if(APPIMAGE_MODE)
+  set(DEPLOY      linuxdeploy-${CMAKE_SYSTEM_PROCESSOR}.AppImage)
+  set(DEPLOY_URL  https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/${DEPLOY})
+  message(STATUS "Generating AppImage using ${DEPLOY_URL}")
+  if(NOT EXISTS ${DEPLOY})
+    message(STATUS "Downloading...")
+    file(DOWNLOAD ${DEPLOY_URL} ${DEPLOY})
+    execute_process(COMMAND chmod u+x ${DEPLOY})
+  endif()
+  add_custom_target(appimage
+    COMMAND ./${DEPLOY} --appdir AppDir --output appimage
+  )
+endif()
+
 print_header("All scripts completed")

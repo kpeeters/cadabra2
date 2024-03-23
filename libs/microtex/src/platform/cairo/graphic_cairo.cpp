@@ -1,4 +1,5 @@
 #include "config.h"
+// #include <iostream>
 
 #if defined(BUILD_GTK) && !defined(MEM_CHECK)
 
@@ -156,6 +157,7 @@ void TextLayout_cairo::draw(Graphics2D& g2, float x, float y) {
   g2.drawLine(x, y, x + 1, y);
   // draw layout
   g2.setColor(old);
+//  std::cerr << "drawing with ascent " << _ascent << std::endl;
   g2.translate(x, y - _ascent);
   auto& g = static_cast<Graphics2D_cairo&>(g2);
   _layout->show_in_cairo_context(g.getCairoContext());

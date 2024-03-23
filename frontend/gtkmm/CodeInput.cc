@@ -70,8 +70,10 @@ void CodeInput::init(const Prefs& prefs)
 	edit.set_pixels_above_lines(1);
 	edit.set_pixels_below_lines(1);
 	edit.set_pixels_inside_wrap(1);
+	// The following two are margins around the vbox which contains the
+	// text input and the LaTeX output(s).
 	set_margin_top(10);
-	set_margin_bottom(10);
+	set_margin_bottom(0);
 	//	edit.set_pixels_below_lines(Gtk::LINE_SPACING);
 	//	edit.set_pixels_inside_wrap(2*Gtk::LINE_SPACING);
 

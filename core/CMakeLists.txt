@@ -543,6 +543,7 @@ if(NOT MSVC)
 endif()
 
 if(APPIMAGE_MODE)
-  # Install sympy and matplotlib.
-  install(CODE      "execute_process(COMMAND pip3 install --target $ENV{DESTDIR}${PYTHON_SITE_PATH} sympy matplotlib)")  
+  # Install sympy. Matplotlib would be nice, but that pulls in blas and fortran and zillions of other things,
+  # which then don't link properly anymore either.
+  install(CODE      "execute_process(COMMAND pip3 install --target $ENV{DESTDIR}${PYTHON_SITE_PATH} sympy)")  
 endif()
