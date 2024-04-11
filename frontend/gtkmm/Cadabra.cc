@@ -31,7 +31,7 @@ Glib::RefPtr<Cadabra> Cadabra::create(int argc, char **argv)
 	}
 
 Cadabra::Cadabra(int argc, char **argv)
-	: Gtk::Application(argc, argv, "com.phi-sci.cadabra.Cadabra",
+	: Gtk::Application(argc, argv, "science.cadabra.cadabra2-gtk",
 	                   Gio::APPLICATION_HANDLES_OPEN |
 	                   Gio::APPLICATION_NON_UNIQUE),
 	  compute(0), compute_thread(0),

@@ -489,6 +489,27 @@ the old `xeus`-based kernel, see
 https://github.com/kpeeters/cadabra2/blob/master/JUPYTER.rst.
 
 
+Creating an AppImage
+--------------------
+
+When building Cadabra for bundling as an AppImage, the GUI will be
+configured to use MicroTeX (https://github.com/NanoMichael/MicroTeX)
+for typesetting (this dependency is included in the Cadabra
+source). MicroTeX is a rendering library which does not rely on an
+existing LaTeX installation.  Configure and build with::
+
+    cmake -DAPPIMAGE_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr ..
+    make
+    make install DESTDIR=AppDir
+
+This installs everything in the `AppDir` folder ready for packaging.
+Then run::
+
+    make appimage
+
+to create the AppImage itself.    
+
+
 Tutorials and other help
 ------------------------
 

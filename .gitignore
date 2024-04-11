@@ -15,3 +15,4 @@ __pycache__
 CMakeSettings.json
 config/pre_install.rtf
 .ccls-cache
+*appdata.xml

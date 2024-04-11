@@ -254,6 +254,10 @@ configure_file(
    "${CMAKE_CURRENT_SOURCE_DIR}/config/pre_install.rtf.in"
    "${CMAKE_CURRENT_SOURCE_DIR}/config/pre_install.rtf"
    )
+configure_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/frontend/gtkmm/science.cadabra.cadabra2-gtk.appdata.xml.in"
+  "${CMAKE_CURRENT_SOURCE_DIR}/frontend/gtkmm/science.cadabra.cadabra2-gtk.appdata.xml"  
+)
 
 
 #---------------------------------------------------------------------------
@@ -444,7 +448,7 @@ if(APPIMAGE_MODE)
     execute_process(COMMAND chmod u+x ${DEPLOY})
   endif()
   add_custom_target(appimage
-    COMMAND ./${DEPLOY} --appdir AppDir --output appimage
+    COMMAND ./${DEPLOY} --appdir AppDir --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
   )
 endif()
 

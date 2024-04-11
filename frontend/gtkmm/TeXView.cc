@@ -50,9 +50,14 @@ TeXView::~TeXView()
 
 float TeXView::text_size() const
 	{
-	float ret = (4.0f*engine.get_font_size())/engine.get_scale();
-	std::cerr << "engine.font_size = " << engine.get_font_size() << ", .scale = " << engine.get_scale()
-				 << ", text_size = " << ret << std::endl;
+	// The device pixel ratio scale is applied in the ::on_draw method,
+	// so we do not scale the font size by that here. But we do need
+	// to scale by the text scaling factor of the system, which is
+	// available in engine.get_scale().
+	
+	float ret = 28.0f/12.0f*engine.get_font_size()*engine.get_scale()/1.7f;
+//	std::cerr << "engine.font_size = " << engine.get_font_size() << ", .scale = " << engine.get_scale()
+//				 << ", text_size = " << ret << std::endl;
 	return ret;
 	}
 
@@ -244,8 +249,8 @@ bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	auto csurface = surface->cobj();
 	double device_scale_x, device_scale_y;
 	cairo_surface_get_device_scale(csurface, &device_scale_x, &device_scale_y);
-	std::cerr << "scale = " << device_scale_x << ", height = "<< _render->getHeight() << std::endl;
-	cr->scale(1.0/device_scale_x, 1.0/device_scale_y);
+//	std::cerr << "scale = " << device_scale_x << ", height = "<< _render->getHeight() << std::endl;
+	cr->scale(1.0, 1.0); // /device_scale_x, 1.0/device_scale_y);
 	
 	cr->fill();
 	if (_render == nullptr) return true;

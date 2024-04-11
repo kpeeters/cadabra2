@@ -66,6 +66,7 @@ else()
 endif()
 
 
+
 #---------------------------------------------------------------------------
 # Include directories and preprocessor definitions.
 #---------------------------------------------------------------------------
@@ -204,7 +205,7 @@ if (NOT INSTALL_TARGETS_ONLY)
 	install(FILES    ${CADABRA_IMAGES_DIR}/128x128/cadabra2-gtk.png   DESTINATION ${ICON_PREFIX}/share/icons/hicolor/128x128/apps)
 	install(FILES    ${CADABRA_IMAGES_DIR}/256x256/cadabra2-gtk.png   DESTINATION ${ICON_PREFIX}/share/icons/hicolor/256x256/apps)
 	install(FILES    ${CADABRA_IMAGES_DIR}/cadabra2-gtk.svg           DESTINATION ${ICON_PREFIX}/share/icons/hicolor/scalable/apps)
-	install(FILES    ${CADABRA_ROOT_DIR}/config/cadabra2-gtk.desktop  DESTINATION ${ICON_PREFIX}/share/applications)
+	install(FILES    ${CADABRA_ROOT_DIR}/config/science.cadabra.cadabra2-gtk.desktop  DESTINATION ${ICON_PREFIX}/share/applications)
 	install(CODE     "execute_process(COMMAND touch ${ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor/icon-theme.cache)")
 	install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 {ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor)")
 	install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor/icon-theme.cache)")
@@ -240,6 +241,7 @@ endif()
 # microtex resources
 if(USE_MICROTEX)
   install(DIRECTORY ${PROJECT_SOURCE_DIR}/../../libs/microtex/res/ DESTINATION ${INSTALL_MICROTEX_DIR})
+  install(FILES     ${PROJECT_SOURCE_DIR}/science.cadabra.cadabra2-gtk.appdata.xml DESTINATION ${CMAKE_INSTALL_PREFIX}/share/metainfo/)
   install(CODE      "execute_process(COMMAND touch $ENV{DESTDIR}${INSTALL_MICROTEX_DIR}/.clatexmath-res_root)")
 endif()
 

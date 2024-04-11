@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2001-2024 Kasper Peeters <info@cadabra.science> -->
+<component type="desktop-application">
+  <id>science.cadabra.cadabra2-gtk</id>
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <name>Cadabra</name>
+  <summary>Field-theory motivated symbolic computer algebra</summary>
+  <content_rating type="oars-1.1">
+    <content_attribute id="social-info">mild</content_attribute>
+  </content_rating>
+  
+  <description>
+    <p>
+      Cadabra is a symbolic computer algebra system, designed specifically
+      for the solution of problems encountered in quantum and classical
+      field theory. It has extensive functionality for tensor computer
+      algebra, tensor polynomial simplification including multi-term
+      symmetries, fermions and anti-commuting variables, Clifford algebras
+      and Fierz transformations, implicit coordinate dependence, multiple
+      index types and many more. The input format is a subset of TeX. Both a
+      command-line and a graphical interface are available, and there is a
+      kernel for Jupyter.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">science.cadabra.cadabra2-gtk.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>The notebook interface</caption>
+      <image>https://cadabra.science/static/images/screenshot.png</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://cadabra.science</url>
+  <developer_name>Kasper Peeters</developer_name>
+  
+  <provides>
+    <binary>cadabra2-gtk</binary>
+  </provides>
+
+  <releases>
+    <release version="@CADABRA_VERSION_MAJOR@.@CADABRA_VERSION_MINOR@.@CADABRA_VERSION_PATCH@" date="@CADABRA_VERSION_DATE@">
+      <description>
+        <p>First release as AppImage.</p>
+      </description>
+    </release>
+  </releases>
+</component>
