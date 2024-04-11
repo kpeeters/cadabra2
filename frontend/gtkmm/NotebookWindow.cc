@@ -76,6 +76,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	scale = screen->get_monitor_scale_factor(0);
 	display_scale = scale;
 #ifndef __APPLE__
+	// FIXME: this does not work for ssh sessions with ForwardX11.
 	const char *ds = std::getenv("DESKTOP_SESSION");
 	if(ds) {
 		settings = Gio::Settings::create((strcmp(ds, "cinnamon") == 0) ? "org.cinnamon.desktop.interface" : "org.gnome.desktop.interface");

@@ -255,6 +255,10 @@ configure_file(
    "${CMAKE_CURRENT_SOURCE_DIR}/config/pre_install.rtf"
    )
 configure_file(
+   "${CMAKE_CURRENT_SOURCE_DIR}/config/science.cadabra.cadabra2-gtk.desktop.in"
+   "${CMAKE_CURRENT_SOURCE_DIR}/config/science.cadabra.cadabra2-gtk.desktop"
+   )
+configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/frontend/gtkmm/science.cadabra.cadabra2-gtk.appdata.xml.in"
   "${CMAKE_CURRENT_SOURCE_DIR}/frontend/gtkmm/science.cadabra.cadabra2-gtk.appdata.xml"  
 )
