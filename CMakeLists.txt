@@ -453,6 +453,7 @@ if(APPIMAGE_MODE)
   endif()
   add_custom_target(appimage
     COMMAND ./${DEPLOY} --appdir AppDir --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
+    COMMAND mv Cadabra_2-${CMAKE_SYSTEM_PROCESSOR}.AppImage Cadabra_${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}_${CMAKE_SYSTEM_PROCESSOR}.AppImage
   )
 endif()
 
