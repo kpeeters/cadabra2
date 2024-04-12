@@ -75,6 +75,17 @@ namespace cadabra {
 		//	std::cout << "Ex copy constructor" << std::endl;
 		}
 
+	Ex& Ex::operator=(Ex other)
+		{
+		std::swap(static_cast<tree<str_node>&>(*this),
+					 static_cast<tree<str_node>&>(other));
+		std::swap((*this).state_, other.state_);
+		std::swap((*this).history, other.history);
+		std::swap((*this).terms, other.terms);
+
+		return *this;
+		}
+
 	Ex::Ex(const std::string& str)
 		: state_(result_t::l_no_action)
 		{

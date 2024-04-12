@@ -181,7 +181,9 @@ void TeXView::update_image()
 	float new_size = text_size();
 	if(image._text_size != new_size) {
 		image._text_size = new_size;
+#ifdef USE_MICROTEX
 		image.layout_latex();
+#endif
 		}
 	image.update_image(content, engine.get_scale());
 	}
@@ -344,8 +346,9 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 TeXView::TeXArea::TeXArea()
 	: rendering_width(1)
 #ifdef USE_MICROTEX
-	, _render(nullptr), _text_size(5.f), padding_x(15), padding_y(20)
+	, _render(nullptr), _text_size(5.f)
 #endif
+	, padding_x(15), padding_y(20)
 	{
 	set_hexpand(true);
 	}

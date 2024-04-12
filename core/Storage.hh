@@ -150,6 +150,8 @@ namespace cadabra {
 			Ex(const std::string&);
 			Ex(int);
 
+			Ex& operator=(Ex);
+			
 			/// Keeping track of what algorithms have done to this expression.
 			/// After a reset_state (or at initialisation), the expression sits
 			/// in the 'checkpointed' state. When an algorithm acts, it can then

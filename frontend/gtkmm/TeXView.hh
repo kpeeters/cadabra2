@@ -85,9 +85,9 @@ namespace cadabra {
 					
 #ifdef USE_MICROTEX
 					mutable tex::TeXRender* _render;
-					int             padding_x, padding_y;
 					std::string     unfixed, fixed;
 #endif
+					int             padding_x, padding_y;
 				};
 
 			TeXArea                   image;

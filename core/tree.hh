@@ -1,7 +1,7 @@
 
 //	STL-like templated tree class.
 //
-// Copyright (C) 2001-2023 Kasper Peeters <kasper@phi-sci.com>
+// Copyright (C) 2001-2024 Kasper Peeters <kasper@phi-sci.com>
 // Distributed under the GNU General Public License version 3.
 //
 // Special permission to use tree.hh under the conditions of a 
@@ -9,8 +9,8 @@
 
 /** \mainpage tree.hh
     \author   Kasper Peeters
-    \version  3.19
-    \date     2023-11-17
+    \version  3.20
+    \date     2024-04-12
     \see      http://github.com/kpeeters/tree.hh/
 
    The tree.hh library for C++ provides an STL-like container class
@@ -223,6 +223,9 @@ class tree {
 				fixed_depth_iterator(const sibling_iterator&);
 				fixed_depth_iterator(const fixed_depth_iterator&);
 
+				void swap(fixed_depth_iterator&, fixed_depth_iterator&);
+				fixed_depth_iterator& operator=(fixed_depth_iterator);
+
 				bool    operator==(const fixed_depth_iterator&) const;
 				bool    operator!=(const fixed_depth_iterator&) const;
 				fixed_depth_iterator&  operator++();
@@ -243,6 +246,9 @@ class tree {
 				sibling_iterator(const sibling_iterator&);
 				sibling_iterator(const iterator_base&);
 
+				void swap(sibling_iterator&, sibling_iterator&);
+				sibling_iterator& operator=(sibling_iterator);
+				
 				bool    operator==(const sibling_iterator&) const;
 				bool    operator!=(const sibling_iterator&) const;
 				sibling_iterator&  operator++();
@@ -3004,6 +3010,21 @@ tree<T, tree_node_allocator>::fixed_depth_iterator::fixed_depth_iterator(const f
 	}
 
 template <class T, class tree_node_allocator>
+void tree<T, tree_node_allocator>::fixed_depth_iterator::swap(fixed_depth_iterator& first, fixed_depth_iterator& second) 
+	{
+	std::swap(first.node, second.node);
+	std::swap(first.skip_current_children_, second.skip_current_children_);
+	std::swap(first.top_node, second.top_node);
+	}
+
+template <class T, class tree_node_allocator>
+typename tree<T, tree_node_allocator>::fixed_depth_iterator& tree<T, tree_node_allocator>::fixed_depth_iterator::operator=(fixed_depth_iterator other)
+	{
+	swap(*this, other);
+	return *this;
+	}
+		
+template <class T, class tree_node_allocator>
 bool tree<T, tree_node_allocator>::fixed_depth_iterator::operator==(const fixed_depth_iterator& other) const
 	{
 	if(other.node==this->node && other.top_node==top_node) return true;
@@ -3185,6 +3206,22 @@ tree<T, tree_node_allocator>::sibling_iterator::sibling_iterator(const sibling_i
 	{
 	}
 
+template <class T, class tree_node_allocator>
+void tree<T, tree_node_allocator>::sibling_iterator::swap(sibling_iterator& first, sibling_iterator& second) 
+	{
+	std::swap(first.node, second.node);
+	std::swap(first.skip_current_children_, second.skip_current_children_);
+	std::swap(first.parent_, second.parent_);
+	}
+
+
+template <class T, class tree_node_allocator>
+typename tree<T, tree_node_allocator>::sibling_iterator& tree<T, tree_node_allocator>::sibling_iterator::operator=(sibling_iterator other)
+	{
+	swap(*this, other);
+	return *this;
+	}
+		
 template <class T, class tree_node_allocator>
 void tree<T, tree_node_allocator>::sibling_iterator::set_parent_()
 	{

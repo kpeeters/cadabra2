@@ -175,7 +175,7 @@ NTensor NEvaluator::evaluate()
 
 void NEvaluator::set_variable(const Ex& var, const NTensor& val)
 	{
-	variable_values.push_back( VariableValues({var, val}) );
+	variable_values.push_back( VariableValues({var, val, {} }) );
 	}
 
 void NEvaluator::find_variable_locations()

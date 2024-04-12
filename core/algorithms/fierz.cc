@@ -204,8 +204,9 @@ Algorithm::result_t fierz::apply(iterator& it)
 				locgam2=tmpit;
 				if(i==0) cpyterm.erase(locgam2);
 				else 		cpyterm.erase_children(locgam2);
-				if(i>0)
+				if(i>0) {
 					DEBUG( std::cerr << "New gamma reads " << Ex(locgam2) << std::endl; );
+					}
 				}
 
 			++cpit;

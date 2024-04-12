@@ -65,6 +65,9 @@ namespace yngtab {
 
 	class tableau : public tableau_base {
 		public:
+			tableau();
+			tableau(const tableau&);
+			
 			virtual ~tableau();
 			virtual unsigned int number_of_rows() const;
 			virtual unsigned int row_size(unsigned int row) const;
@@ -85,6 +88,9 @@ namespace yngtab {
 		public:
 			typedef T value_type;
 
+			filled_tableau();
+			filled_tableau(const filled_tableau<T>&);
+			
 			virtual ~filled_tableau();
 			virtual unsigned int number_of_rows() const;
 			virtual unsigned int row_size(unsigned int row) const;
@@ -1714,6 +1720,18 @@ namespace yngtab {
 			if(sym.value_permute.size()>1)
 				sym.apply_symmetry();
 			}
+		}
+
+	template<class T>
+	filled_tableau<T>::filled_tableau()
+		: tableau()
+		{
+		}
+
+	template<class T>
+	filled_tableau<T>::filled_tableau(const filled_tableau<T>& other)
+		: tableau(other), rows(other.rows)
+		{
 		}
 
 	template<class T>

@@ -36,6 +36,16 @@ namespace yngtab {
 		{
 		}
 
+	tableau::tableau()
+		: tableau_base()
+		{
+		}
+
+	tableau::tableau(const tableau& other)
+		{
+		rows=other.rows;
+		}
+
 	void tableau_base::add_row(unsigned int row_size)
 		{
 		assert(row_size>0);
