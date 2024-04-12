@@ -12,10 +12,9 @@
 #include "DataCell.hh"
 #include "../common/TeXEngine.hh"
 
-#ifdef USE_MICROTEX
+// MicroTeX
 #include "latex.h"
 #include "utils/utf.h"
-#endif
 
 namespace cadabra {
 
@@ -28,25 +27,25 @@ namespace cadabra {
 
 	class TeXView : public Gtk::EventBox {
 		public:
-			TeXView(TeXEngine&, DTree::iterator, int hmargin=25);
+			TeXView(TeXEngine&, DTree::iterator, bool use_microtex_, int hmargin=25);
 			virtual ~TeXView();
 
 			std::shared_ptr<TeXEngine::TeXRequest> content;
 
 			sigc::signal1<bool, DTree::iterator>   show_hide_requested;
 
+			void set_use_microtex(bool);
+					
 			DTree::iterator           datacell;
-#if GTKMM_MINOR_VERSION>=10
 			Gtk::Revealer             rbox;
-#endif
 			Gtk::VBox                 vbox;
 			Gtk::HBox                 hbox;
 
 			class TeXArea : public Gtk::DrawingArea {
 				public:
-					TeXArea();
+					TeXArea(bool use_microtex);
 					~TeXArea();
-					
+
 					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
 
 					/// Update the visible image from the pixbuf. Call this in order to propagate
@@ -63,15 +62,16 @@ namespace cadabra {
 					double                    scale_;
 					float                     _text_size;
 
-#ifdef USE_MICROTEX
-					/// Set the LaTeX string and replace/substitute so that MicroTeX can
-					/// render it (but do not actually render).
+					/// MicroTeX: set the LaTeX string and
+					/// replace/substitute so that MicroTeX can render it
+					/// (but do not actually render).
 					void set_latex(const std::string& latex);
 
-					/// Just run the LaTeX layout algorithms, do not draw.
+					/// MicroTeX: just run the LaTeX layout algorithms, do
+					/// not draw.
 					void layout_latex() const;
-#endif
 
+					bool                    use_microtex;
 				protected:
 					Gtk::SizeRequestMode get_request_mode_vfunc() const override;
 					void get_preferred_height_for_width_vfunc(int width, int& minimum_height,
@@ -82,12 +82,11 @@ namespace cadabra {
 					
 				private:
 					mutable int     rendering_width;
-					
-#ifdef USE_MICROTEX
-					mutable tex::TeXRender* _render;
-					std::string     unfixed, fixed;
-#endif
 					int             padding_x, padding_y;
+
+					// MicroTeX
+					mutable tex::TeXRender* _render;
+					std::string             unfixed, fixed;
 				};
 
 			TeXArea                   image;
@@ -110,7 +109,8 @@ namespace cadabra {
 
 		private:
 			TeXEngine& engine;
-
+			bool use_microtex;
+			
 			float text_size() const;
 		};
 

@@ -256,6 +256,7 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	python_path        = data.value("python_path", "");
 	move_into_new_cell = data.value("move_into_new_cell", false);
 	tab_completion     = data.value("tab_completion", true);
+	microtex           = data.value("microtex", false);
 
 	if(git_path=="")
 		git_path="/usr/bin/git";
@@ -297,6 +298,7 @@ void DocumentThread::Prefs::save()
 		data["python_path"] = python_path;
 		data["move_into_new_cell"] = move_into_new_cell;
 		data["tab_completion"] = tab_completion;
+		data["microtex"] = microtex;
 		for (const auto& lang : colours) {
 			for (const auto& kw : lang.second)
 				data["colours"][lang.first][kw.first] = kw.second;

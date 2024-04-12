@@ -28,10 +28,9 @@
 #include "process.hpp"
 #include <internal/string_tools.h>
 
-#ifdef USE_MICROTEX
-  #include "latex.h"
-  #include <pangomm/init.h>
-#endif
+// For MicroTeX
+#include "latex.h"
+#include <pangomm/init.h>
 
 using namespace cadabra;
 
@@ -87,10 +86,9 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	engine.set_scale(scale, display_scale);
 	engine.set_font_size(12+(prefs.font_step*2));
 
-#ifdef USE_MICROTEX
-  Pango::init();
-  tex::LaTeX::init(install_prefix()+"/share/cadabra2/microtex/");
-#endif
+	// For MicroTeX
+	Pango::init();
+	tex::LaTeX::init(install_prefix()+"/share/cadabra2/microtex/");
 	
 #ifndef __APPLE__
 	if(ds) {
@@ -155,6 +153,9 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	action_highlight = actiongroup->add_action_radio_integer( "HighlightSyntax",
 																				 sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax),
 																				 prefs.highlight );	
+	action_microtex = actiongroup->add_action_radio_integer( "MicroTeX",
+																				 sigc::mem_fun(*this, &NotebookWindow::on_prefs_microtex),
+																				 prefs.microtex );	
 	actiongroup->add_action( "HighlightChoose",       sigc::mem_fun(*this, &NotebookWindow::on_prefs_choose_colours) );		
 	actiongroup->add_action( "ViewUseDefaultSettings",sigc::mem_fun(*this, &NotebookWindow::on_prefs_use_defaults) );		
 
@@ -383,6 +384,21 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	   "           <item>"
 		"              <attribute name='label'>Choose colours</attribute>"
 		"              <attribute name='action'>cdb.HighlightChoose</attribute>"
+		"           </item>"
+		"        </section>"
+		"      </submenu>"
+		"      <submenu>"
+		"        <attribute name='label'>Maths rendering</attribute>"
+		"        <section>"
+	   "           <item>"
+		"              <attribute name='label'>LaTeX (external)</attribute>"
+		"              <attribute name='action'>cdb.MicroTeX</attribute>"
+		"              <attribute name='target' type='i'>0</attribute>"
+		"           </item>"
+	   "           <item>"
+		"              <attribute name='label'>MicroTeX (internal)</attribute>"
+		"              <attribute name='action'>cdb.MicroTeX</attribute>"
+		"              <attribute name='target' type='i'>1</attribute>"
 		"           </item>"
 		"        </section>"
 		"      </submenu>"
@@ -887,54 +903,55 @@ void NotebookWindow::on_kernel_runstatus(bool running)
 
 void NotebookWindow::tex_run_async()
 	{
-#ifndef USE_MICROTEX
-	if(tex_error_string!="")
-		return;
-
-	// Run TeX on a separate thread; it'll take a while and
-	// we don't want to block the UI thread.
-	// FIXME: join properly when exiting the program, otherwise
-	// we get a 'terminate called without active exception' message.
-	auto tex_code = [this]() {
-							 try {
-								 for(;;) {
-									 {  std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
-										 engine.invalidate_all();
-										 engine.set_geometry(tex_need_width-2*30);
-										 }
-
-									 engine.convert_all();
-									 dispatch_refresh.emit();
-
-									 {  std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
-										 if(tex_need_width-2*30 == engine.get_geometry()) {
-											 tex_running=false;
-											 break;
-											 }
-										 }
-									 }
-								 }
-							 catch(TeXEngine::TeXException& ex) {
-								 // Display the error in the main thread.
-								 std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
-								 tex_error_string=ex.what();
-								 tex_running=false;
-								 dispatch_refresh.emit();
-								 dispatch_tex_error.emit();
-								 }
-						 };
-
-	std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
-	tex_running=true;
-
-	// Join any thread which may still exist.
-	if(tex_thread)
-		tex_thread->join();
-
-	tex_thread = std::make_unique<std::thread>( tex_code );
-#else
-	dispatch_refresh.emit();
-#endif
+	if(prefs.microtex==false) {
+		if(tex_error_string!="")
+			return;
+		
+		// Run TeX on a separate thread; it'll take a while and
+		// we don't want to block the UI thread.
+		// FIXME: join properly when exiting the program, otherwise
+		// we get a 'terminate called without active exception' message.
+		auto tex_code = [this]() {
+			try {
+				for(;;) {
+					{  std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
+						engine.invalidate_all();
+						engine.set_geometry(tex_need_width-2*30);
+						}
+					
+					engine.convert_all();
+					dispatch_refresh.emit();
+					
+					{  std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
+						if(tex_need_width-2*30 == engine.get_geometry()) {
+							tex_running=false;
+							break;
+							}
+						}
+					}
+				}
+			catch(TeXEngine::TeXException& ex) {
+				// Display the error in the main thread.
+				std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
+				tex_error_string=ex.what();
+				tex_running=false;
+				dispatch_refresh.emit();
+				dispatch_tex_error.emit();
+				}
+			};
+		
+		std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
+		tex_running=true;
+		
+		// Join any thread which may still exist.
+		if(tex_thread)
+			tex_thread->join();
+		
+		tex_thread = std::make_unique<std::thread>( tex_code );
+		}
+	else {
+		dispatch_refresh.emit();
+		}
 	}
 
 void NotebookWindow::process_todo_queue()
@@ -1092,8 +1109,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			case DataCell::CellType::latex_view: {
 				// FIXME: would be good to share the input and output of TeXView too.
 				// Right now nothing is shared...
-				newcell.outbox = manage( new TeXView(engine, it) );
-				std::cerr << "Add widget " << newcell.outbox << " for cell " << it->id().id << std::endl;
+				newcell.outbox = manage( new TeXView(engine, it, prefs.microtex) );
+				// std::cerr << "Add widget " << newcell.outbox << " for cell " << it->id().id << std::endl;
 				newcell.outbox->tex_error.connect(
 				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_tex_error), it ) );
 
@@ -2662,11 +2679,11 @@ void NotebookWindow::on_prefs_highlight_syntax(bool on)
 				case DataCell::CellType::python:
 				case DataCell::CellType::latex:
 					if(on) {
-					load_css();
+						load_css();
 						visualcell.second.inbox->enable_highlighting(visualcell.first->cell_type, prefs);
 						}
 					else {
-					load_css();
+						load_css();
 						visualcell.second.inbox->disable_highlighting();
 						}
 					break;
@@ -2675,6 +2692,38 @@ void NotebookWindow::on_prefs_highlight_syntax(bool on)
 				}
 			}
 		}
+	}
+
+void NotebookWindow::on_prefs_microtex(bool on)
+	{
+	if (prefs.microtex == on) return;
+	prefs.microtex = on;
+	prefs.save();
+	action_microtex->set_state(Glib::Variant<int>::create(on));
+
+	Gtk::MessageDialog md("Restart Cadabra to make the rendering setting take effect",
+								 false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+	md.set_resizable(false);
+	md.set_transient_for(*this);
+	md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+	md.run();
+	
+// 	for (auto& canvas : canvasses) {
+// 		for (auto& visualcell : canvas->visualcells) {
+// 			// Need to be careful to only try and do this on latex or
+// 			// python cells to avoid an exception being raised when
+// 			// trying to edit an immutable cell type
+// 			switch (visualcell.first->cell_type) {
+// 				// Fallthrough
+// 				case DataCell::CellType::python:
+// 				case DataCell::CellType::latex:
+// 					visualcell.second.outbox->set_use_microtex(prefs.microtex);
+// 					break;
+// 				default:
+// 					break;
+// 				}
+// 			}
+// 		}
 	}
 
 void NotebookWindow::on_prefs_choose_colours()

@@ -8,9 +8,9 @@ project(CadabraGtkmm)
 
 message(STATUS "Using gtkmm frontend")
 if(USE_MICROTEX)
-  message(STATUS "Using MicroTeX for typesetting (disabling LaTeX)")
+  message(STATUS "Including MicroTeX support for typesetting")
 else()
-  message(STATUS "Using LaTeX for typesetting (disabling MicroTeX)")
+  message(STATUS "Only using LaTeX for typesetting (disabling MicroTeX)")
 endif()
 
 set(INSTALL_SHARE_DIR share/cadabra2 CACHE PATH "Installation directory for shared files.")

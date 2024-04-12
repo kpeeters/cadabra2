@@ -230,6 +230,7 @@ namespace cadabra {
 			void on_prefs_set_cv(int vis);
 			void on_prefs_font_size(int num);
 			void on_prefs_highlight_syntax(bool on);
+			void on_prefs_microtex(bool on);
 			void on_prefs_choose_colours();
 			void on_prefs_use_defaults();
 
@@ -315,7 +316,7 @@ namespace cadabra {
 			// We keep references to a few menu actions so we can
 			// enable/disable them at runtime.
 			Glib::RefPtr<Gio::SimpleAction> action_copy, action_paste, action_fontsize, action_highlight,
-				action_stop, action_register, action_console;
+				action_stop, action_register, action_console, action_microtex;
 
 			// Transition animations.
 #if GTKMM_MINOR_VERSION>=10

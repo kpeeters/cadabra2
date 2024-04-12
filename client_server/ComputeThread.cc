@@ -186,11 +186,11 @@ void ComputeThread::try_spawn_server()
 #else
 	const char *appdir = getenv("APPDIR");
 	if(appdir) {
-		std::cerr << "This is an AppImage, APPDIR = " << appdir << std::endl;
+		// std::cerr << "This is an AppImage, APPDIR = " << appdir << std::endl;
 		argv.push_back(std::string(appdir)+"/usr/bin/cadabra-server");
 		}
 	else {
-		std::cerr << "Not an AppImage." << std::endl;
+		// std::cerr << "Not an AppImage." << std::endl;
 		argv.push_back("cadabra-server");
 		}
 #endif

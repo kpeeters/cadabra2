@@ -7,28 +7,24 @@
 #include <gdkmm/general.h> // set_source_pixbuf()
 #include <regex>
 
-#ifdef USE_MICROTEX
-  #include "platform/cairo/graphic_cairo.h"
-#endif
+// MicroTeX
+#include "platform/cairo/graphic_cairo.h"
 
 using namespace cadabra;
 
-TeXView::TeXView(TeXEngine& eng, DTree::iterator it, int hmargin)
-	: content(0), datacell(it), vbox(false, 10), hbox(false, hmargin), engine(eng)
+TeXView::TeXView(TeXEngine& eng, DTree::iterator it, bool use_microtex_, int hmargin)
+	: content(0), datacell(it), vbox(false, 10), hbox(false, hmargin), image(use_microtex_), engine(eng), use_microtex(use_microtex_)
 	{
 	// Still need to checkin even when using MicroTeX, otherwise
 	// all requests will be empty.
 	content = engine.checkin(datacell->textbuf, "", "");
 	
-// #if GTKMM_MINOR_VERSION>=10
 // 	add(rbox);
 // 	rbox.add(vbox);
 // 	rbox.set_reveal_child(false);
 // 	rbox.set_transition_duration(1000);
 // 	rbox.set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_CROSSFADE); //SLIDE_DOWN);
-// #else
-// 	add(vbox);
-// #endif
+
 	vbox.set_margin_top(10);
 	vbox.set_margin_bottom(0);
 //	vbox.pack_start(hbox, true, 0);
@@ -46,6 +42,15 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, int hmargin)
 TeXView::~TeXView()
 	{
 	engine.checkout(content);
+	}
+
+void TeXView::set_use_microtex(bool use_microtex_)
+	{
+	use_microtex = use_microtex_;
+//	remove(); // 'image' is the only child.
+	image.use_microtex = use_microtex_;
+	queue_draw();
+//	add(image);
 	}
 
 float TeXView::text_size() const
@@ -76,29 +81,27 @@ Gtk::SizeRequestMode TeXView::TeXArea::get_request_mode_vfunc() const
 void TeXView::TeXArea::get_preferred_height_for_width_vfunc(int width,
 																				int& minimum_height, int& natural_height) const
 	{
-#ifdef USE_MICROTEX
-//	Gtk::Widget::get_preferred_height_for_width_vfunc(width, minimum_height, natural_height);
-//	return;
-	
-	if(width==1) {
-		minimum_height=9999;
-		natural_height=9999;
-		// std::cerr << "**** skipped bogus width" << std::endl;
+	if(use_microtex) {
+		if(width==1) {
+			minimum_height=9999;
+			natural_height=9999;
+			// std::cerr << "**** skipped bogus width" << std::endl;
+			}
+		else {
+			int remember = rendering_width;
+			rendering_width = width - 2*padding_x;
+			layout_latex();
+			minimum_height = _render->getHeight() + 2*padding_y;
+			natural_height = _render->getHeight() + 2*padding_y;
+         //		std::cerr << "**** computed for width " << width << " height as " << natural_height << std::endl;
+			if(rendering_width==9999)
+				rendering_width = remember;
+			}
+      //	std::cerr << "**** asked height for width " << width << ", replied " << minimum_height << std::endl;
 		}
 	else {
-		int remember = rendering_width;
-		rendering_width = width - 2*padding_x;
-		layout_latex();
-		minimum_height = _render->getHeight() + 2*padding_y;
-		natural_height = _render->getHeight() + 2*padding_y;
-//		std::cerr << "**** computed for width " << width << " height as " << natural_height << std::endl;
-		if(rendering_width==9999)
-			rendering_width = remember;
+		Gtk::Widget::get_preferred_height_for_width_vfunc(width, minimum_height, natural_height);
 		}
-//	std::cerr << "**** asked height for width " << width << ", replied " << minimum_height << std::endl;
-#else
-	Gtk::Widget::get_preferred_height_for_width_vfunc(width, minimum_height, natural_height);
-#endif
 	}
 
 void TeXView::TeXArea::get_preferred_width_for_height_vfunc(int height,
@@ -107,14 +110,14 @@ void TeXView::TeXArea::get_preferred_width_for_height_vfunc(int height,
 	Gtk::Widget::get_preferred_width_for_height_vfunc(height, minimum_width, natural_width);
 	return;
 	
-	if(height==0) {
-		minimum_width = 99999;
-		natural_width = 99999;
-		}
-	else {
-		minimum_width = rendering_width + 2 * padding_x;
-		natural_width = rendering_width + 2 * padding_x;
-		}
+//	if(height==0) {
+//		minimum_width = 99999;
+//		natural_width = 99999;
+//		}
+//	else {
+//		minimum_width = rendering_width + 2 * padding_x;
+//		natural_width = rendering_width + 2 * padding_x;
+//		}
 //	std::cerr << "**** asked width for height " << height << ", replied " << minimum_width << std::endl;
 	}
 
@@ -124,12 +127,12 @@ void TeXView::TeXArea::on_size_allocate(Gtk::Allocation& allocation)
 //	std::cerr << "**** offered allocation " << allocation.get_width()
 //				 << " x " << allocation.get_height() << std::endl;
 
-#ifdef USE_MICROTEX
-	if(allocation.get_width() != rendering_width + 2*padding_x) {
+	if(use_microtex) {
+		if(allocation.get_width() != rendering_width + 2*padding_x) {
 //		std::cerr << "**** need to rerender" << std::endl;
-		rendering_width = allocation.get_width() - 2*padding_x;
-		layout_latex();
-		}
+			rendering_width = allocation.get_width() - 2*padding_x;
+			layout_latex();
+			}
 // 	int extra = (int) (_padding * 2);
 // 	int my_height = _render->getHeight() + extra;
 // 	if(allocation.get_height() != my_height) {
@@ -138,7 +141,7 @@ void TeXView::TeXArea::on_size_allocate(Gtk::Allocation& allocation)
 // //		queue_resize();
 // //		queue_draw();
 // 		}
-#endif
+		}
 	}
 
 void TeXView::convert()
@@ -150,9 +153,9 @@ void TeXView::convert()
 		// in hidden state. Then, at first show, the first cell will trigger the
 		// convert_all and run TeX on all cells in one shot.
 
-#ifndef USE_MICROTEX
-		engine.convert_all();
-#endif
+		if(!use_microtex) {
+			engine.convert_all();
+			}
 
 		// Set the Pixbuf to the image generated by engine.
 		// The `content` variable is the TeXRequest.
@@ -181,46 +184,45 @@ void TeXView::update_image()
 	float new_size = text_size();
 	if(image._text_size != new_size) {
 		image._text_size = new_size;
-#ifdef USE_MICROTEX
-		image.layout_latex();
-#endif
+		if(use_microtex)
+			image.layout_latex();
 		}
 	image.update_image(content, engine.get_scale());
 	}
 
 void TeXView::TeXArea::update_image(std::shared_ptr<TeXEngine::TeXRequest> content, double scale)
 	{
-#ifdef USE_MICROTEX
-	if(content) {
-		if(content->latex()!=unfixed)
-			set_latex(content->latex());
+	if(use_microtex) {
+		if(content) {
+			if(content->latex()!=unfixed)
+				set_latex(content->latex());
+			}
 		}
-#else
-	if(content->image().size()==0)
-		return;
-	
-	if(content->image().data()==0)
-		return;
-	
-
-	pixbuf =
-	   Gdk::Pixbuf::create_from_data(content->image().data(), Gdk::COLORSPACE_RGB,
-	                                 true,
-	                                 8,
-	                                 content->width(), content->height(),
-	                                 4*content->width());
-
-	if(pixbuf)
-		set_size_request(pixbuf->get_width(), pixbuf->get_height());
-
-	//	update=true;
-	scale_=scale;
-	// HERE
-	//	image.set(pixbuf);
-#endif
+	else {
+		if(content->image().size()==0)
+			return;
+		
+		if(content->image().data()==0)
+			return;
+		
+		
+		pixbuf =
+			Gdk::Pixbuf::create_from_data(content->image().data(), Gdk::COLORSPACE_RGB,
+													true,
+													8,
+													content->width(), content->height(),
+													4*content->width());
+		
+		if(pixbuf)
+			set_size_request(pixbuf->get_width(), pixbuf->get_height());
+		
+		//	update=true;
+		scale_=scale;
+		// HERE
+		//	image.set(pixbuf);
+		}
 	}
 
-#ifdef USE_MICROTEX
 void TeXView::TeXArea::layout_latex() const
 	{
 	if(_render)
@@ -234,59 +236,56 @@ void TeXView::TeXArea::layout_latex() const
       _text_size / 3.f,
       0xff424242);
 	}
-#endif
 
 bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	{
-#ifdef USE_MICROTEX
+	if(use_microtex) {
+      //	std::cerr << "*** blitting at size " << get_width() << " x " << get_height() << std::endl;
 
-	// FIXME: this gets called *many* times, not clear why.
-	
-//	std::cerr << "*** blitting at size " << get_width() << " x " << get_height() << std::endl;
-
-	cr->set_source_rgb(1, 1, 1);
-	cr->rectangle(0, 0, get_width(), get_height());
-
-	auto surface = cr->get_target();
-	auto csurface = surface->cobj();
-	double device_scale_x, device_scale_y;
-	cairo_surface_get_device_scale(csurface, &device_scale_x, &device_scale_y);
-//	std::cerr << "scale = " << device_scale_x << ", height = "<< _render->getHeight() << std::endl;
-	cr->scale(1.0, 1.0); // /device_scale_x, 1.0/device_scale_y);
-	
-	cr->fill();
-	if (_render == nullptr) return true;
-	tex::Graphics2D_cairo g2(cr);
-	_render->draw(g2, padding_x, padding_y);
-
-	cr->scale(1.0, 1.0);
-	return true;
-
-#else
-
-	if(!pixbuf) return false;
-
-	//	Gtk::Allocation allocation = get_allocation();
-	//	const int width = allocation.get_width();
-	//	const int height = allocation.get_height();
-	auto surface = cr->get_target();
-	auto csurface = surface->cobj();
-	//	cairo_surface_set_device_scale(csurface, 1.0, 1.0);
-	//	cairo_surface_mark_dirty(csurface);
-	double device_scale_x, device_scale_y;
-	cairo_surface_get_device_scale(csurface, &device_scale_x, &device_scale_y);
-	//	std::cerr << device_scale_x << std::endl;
-	set_size_request(pixbuf->get_width()/device_scale_x, pixbuf->get_height()/device_scale_y+1);
-	cr->scale(1.0/device_scale_x, 1.0/device_scale_y);
-	Gdk::Cairo::set_source_pixbuf(cr, pixbuf, 0, 0);
-	cr->paint();
-	cr->scale(1.0, 1.0);
-
-	return true;
-#endif
+		cr->set_source_rgb(1, 1, 1);
+		cr->rectangle(0, 0, get_width(), get_height());
+		
+		auto surface = cr->get_target();
+		auto csurface = surface->cobj();
+		double device_scale_x, device_scale_y;
+		cairo_surface_get_device_scale(csurface, &device_scale_x, &device_scale_y);
+      //	std::cerr << "scale = " << device_scale_x << ", height = "<< _render->getHeight() << std::endl;
+		cr->scale(1.0, 1.0); // /device_scale_x, 1.0/device_scale_y);
+		
+		cr->fill();
+		if (_render == nullptr) return true;
+		tex::Graphics2D_cairo g2(cr);
+		_render->draw(g2, padding_x, padding_y);
+		
+		cr->scale(1.0, 1.0);
+		return true;
+		}
+	else {
+		if(!pixbuf) return false;
+		
+		//	Gtk::Allocation allocation = get_allocation();
+		//	const int width = allocation.get_width();
+		//	const int height = allocation.get_height();
+		auto surface = cr->get_target();
+		auto csurface = surface->cobj();
+		//	cairo_surface_set_device_scale(csurface, 1.0, 1.0);
+		//	cairo_surface_mark_dirty(csurface);
+		double device_scale_x, device_scale_y;
+		cairo_surface_get_device_scale(csurface, &device_scale_x, &device_scale_y);
+		//	std::cerr << device_scale_x << std::endl;
+		set_size_request(pixbuf->get_width()/device_scale_x  + 2*padding_x,
+							  pixbuf->get_height()/device_scale_y + 1 + 2*padding_y);
+		cr->scale(1.0/device_scale_x, 1.0/device_scale_y);
+		cr->translate(padding_x, padding_y);
+		Gdk::Cairo::set_source_pixbuf(cr, pixbuf, 0, 0);
+		cr->paint();
+		cr->scale(1.0, 1.0);
+		cr->translate(0, 0);
+		
+		return true;
+		}
 	}
 
-#ifdef USE_MICROTEX
 void TeXView::TeXArea::set_latex(const std::string& latex)
 	{
 	// std::cout << "**** fixing latex " << latex << std::endl;
@@ -341,13 +340,9 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 //	std::cout << "**** fixed to " << fixed << std::endl;
 	}
 
-#endif
-
-TeXView::TeXArea::TeXArea()
-	: rendering_width(1)
-#ifdef USE_MICROTEX
+TeXView::TeXArea::TeXArea(bool use_microtex_)
+	: rendering_width(1), use_microtex(use_microtex_)
 	, _render(nullptr), _text_size(5.f)
-#endif
 	, padding_x(15), padding_y(20)
 	{
 	set_hexpand(true);
@@ -355,9 +350,7 @@ TeXView::TeXArea::TeXArea()
 
 TeXView::TeXArea::~TeXArea()
 	{
-#ifdef USE_MICROTEX
 	if(_render)
 		delete _render;
-#endif
 	}
 

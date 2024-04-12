@@ -112,6 +112,7 @@ namespace cadabra {
 					std::string python_path;
 					bool move_into_new_cell;
 					bool tab_completion;
+					bool microtex;
 				private:
 					nlohmann::json data;
 					std::string    config_path;

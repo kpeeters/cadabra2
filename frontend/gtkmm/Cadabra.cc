@@ -106,7 +106,6 @@ int Cadabra::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& opti
 
 void Cadabra::on_startup()
 	{
-	std::cout << "Cadabra: starting up" << std::endl;
 	Gtk::Application::on_startup();
 	}
 

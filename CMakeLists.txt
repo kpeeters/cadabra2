@@ -393,7 +393,7 @@ add_subdirectory(core)
 
 # Frontend
 if(ENABLE_FRONTEND)
-  option(ENABLE_MICROTEX "Enable MicroTeX support" OFF)
+  option(ENABLE_MICROTEX "Enable MicroTeX support" ON)
   if(APPIMAGE_MODE)
     set(ENABLE_MICROTEX TRUE)
   endif()
