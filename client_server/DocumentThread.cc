@@ -258,6 +258,11 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	tab_completion     = data.value("tab_completion", true);
 	microtex           = data.value("microtex", false);
 
+	// Force microtex when this is an AppImage.
+	const char *appdir = getenv("APPDIR");
+	if(appdir)
+		microtex=true;
+
 	if(git_path=="")
 		git_path="/usr/bin/git";
 
