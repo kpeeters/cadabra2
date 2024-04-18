@@ -287,25 +287,26 @@ message(STATUS "Python version is ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR
 set(OLD_PYTHON_SITE_PATH ${CMAKE_INSTALL_FULL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
 
 # The PYTHON_SITE_PATH variable is used throughout for installation purposes.
-# Note that some of the code (e.g. cadabra2-cli.cc) looks up this path based on the
-# location of the binary; make sure to change the search logic there too to keep it
-# compatible with what is done here.
 if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
    # Debian packages install all their Python things in 'dist-packages', not 'site-packages'.
    set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/dist-packages)
-   set(PYTHON_SITE_DIST "dist-packages")
-else()
-   # For everyone else there is 'site-packages'. We get it from calling python, as otherwise
-   # we may be going wrong on e.g. Anaconda.
-   execute_process(
-     COMMAND ${PYTHON_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
-     OUTPUT_VARIABLE PYTHON_SITE_PATH
-     OUTPUT_STRIP_TRAILING_WHITESPACE
-     )
-#   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
-   set(PYTHON_SITE_DIST "site-packages")   
+   # set(PYTHON_SITE_DIST "dist-packages")
+ else()
+   # The builder can override the path by setting it externally.
+   if(NOT DEFINED PYTHON_SITE_PATH)
+      # For everyone else there is 'site-packages' which we get from
+      # calling into python's 'site' package (and hoping that the 0th
+      # element is where we should be writing).
+      execute_process(
+        COMMAND ${PYTHON_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
+        OUTPUT_VARIABLE PYTHON_SITE_PATH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+      #   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
+      # set(PYTHON_SITE_DIST "site-packages")
+    endif()
 endif()
-message(STATUS "Installing Python module in ${PYTHON_SITE_PATH}")
+message(STATUS "Installing Python modules in ${PYTHON_SITE_PATH}")
 # We need to give our Python module an abi-name extension
 # so that it can be installed in a folder which does not
 # contain the abi name. See
