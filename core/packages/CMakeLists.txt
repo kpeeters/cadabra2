@@ -9,7 +9,7 @@ project(Cadabra)
 print_header("Configuring packages")
 
 set(PYTHON_CDB_PACKAGE_PATH    ${PYTHON_SITE_PATH}/cdb)
-set(OLDPYTHON_CDB_PACKAGE_PATH ${OLD_PYTHON_SITE_PATH}/cdb)
+# set(OLDPYTHON_CDB_PACKAGE_PATH ${OLD_PYTHON_SITE_PATH}/cdb)
 set(SOURCE_PACKAGEDIR          ${CMAKE_SOURCE_DIR}/core/packages/cdb)
 set(PACKAGEDIR                 ${CMAKE_BINARY_DIR}/core/packages/cdb)
 

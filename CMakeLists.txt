@@ -284,7 +284,7 @@ message(STATUS "Found python ${PYTHON_LIBRARIES}")
 message(STATUS "Python version is ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.")
 # We used to install in a different location; let's remove files from there
 # if we find them on install.
-set(OLD_PYTHON_SITE_PATH ${CMAKE_INSTALL_FULL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
+# set(OLD_PYTHON_SITE_PATH ${CMAKE_INSTALL_FULL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
 
 # The PYTHON_SITE_PATH variable is used throughout for installation purposes.
 if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)

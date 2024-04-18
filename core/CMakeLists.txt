@@ -429,10 +429,10 @@ add_subdirectory(packages)
 if(NOT WIN32)
    # Remove any old cadabra2.so files in the global site-wide path which may have been
    # left there from a previous install.
-   remove_file("${OLD_PYTHON_SITE_PATH}/cadabra2.${PYTHON_MOD_EXT}")
-   remove_file("${OLD_PYTHON_SITE_PATH}/cadabra2_defaults.py")
-   remove_file("${OLDER_PYTHON_SITE_PATH}/cadabra2.${PYTHON_MOD_EXT}")
-   remove_file("${OLDER_PYTHON_SITE_PATH}/cadabra2_defaults.py")
+   # remove_file("${OLD_PYTHON_SITE_PATH}/cadabra2.${PYTHON_MOD_EXT}")
+   # remove_file("${OLD_PYTHON_SITE_PATH}/cadabra2_defaults.py")
+   # remove_file("${OLDER_PYTHON_SITE_PATH}/cadabra2.${PYTHON_MOD_EXT}")
+   # remove_file("${OLDER_PYTHON_SITE_PATH}/cadabra2_defaults.py")
 endif()
 
 install_directory_permissions(${PYTHON_SITE_PATH})
