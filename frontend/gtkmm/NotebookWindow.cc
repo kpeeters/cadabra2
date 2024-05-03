@@ -71,6 +71,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// Query high-dpi settings. For all systems we can probe the
 	// HiDPI scale, and for some window managers we also probe the
 	// text scale factor.
+	auto display = Gdk::Display::get_default();
 	auto screen = Gdk::Screen::get_default();
 	scale = screen->get_monitor_scale_factor(0);
 	display_scale = scale;
@@ -96,6 +97,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		   sigc::mem_fun(*this, &NotebookWindow::on_text_scaling_factor_changed));
 		}
 #endif
+
 
 	// Setup styling. Note that 'margin-left' and so on do not work; you need
 	// to use 'padding'. However, 'padding-top' fails because it does not make the
@@ -576,6 +578,29 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	Glib::RefPtr<Gio::Menu> gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(menubar_obj);
 	Gtk::MenuBar* pMenuBar = Gtk::make_managed<Gtk::MenuBar>(gmenu);
 	topbox.pack_start(*pMenuBar, Gtk::PACK_SHRINK);
+
+//	auto theme = Gtk::IconTheme::get_for_screen(screen);
+//	theme->add_resource_path(install_prefix()+"/share/cadabra2/cdb-icons/");
+	toolbar.set_size_request(-1, 70);
+//	tool_run.set_image_from_icon_name("cdb-cancel");
+	
+	tool_stop.add(*Gtk::make_managed<Gtk::Image>(
+						  install_prefix()+"/share/cadabra2/cdb-icons/cdb-cancel.svg"));
+	tool_run.add(*Gtk::make_managed<Gtk::Image>(
+						 install_prefix()+"/share/cadabra2/cdb-icons/cdb-run.svg"));
+	tool_restart.add(*Gtk::make_managed<Gtk::Image>(
+							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart.svg"));
+	tool_stop.set_size_request(70, 70);
+	tool_run.set_size_request(70, 70);
+	tool_restart.set_size_request(70, 70);
+	// tool_run.set_has_frame(false);
+	// tool_stop.set_has_frame(false);
+	// tool_restart.set_has_frame(false);	
+	
+	topbox.pack_start(toolbar, Gtk::PACK_SHRINK);
+	toolbar.pack_start(tool_run, Gtk::PACK_SHRINK);
+	toolbar.pack_start(tool_stop, Gtk::PACK_SHRINK);
+	toolbar.pack_start(tool_restart, Gtk::PACK_SHRINK);
 //	
 //	Gtk::Widget *toolbar=0;
 //	uimanager->get_widget("/ToolBar", toolbar);

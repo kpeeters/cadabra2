@@ -209,6 +209,7 @@ if (NOT INSTALL_TARGETS_ONLY)
 	install(CODE     "execute_process(COMMAND touch ${ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor/icon-theme.cache)")
 	install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 {ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor)")
 	install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor/icon-theme.cache)")
+	install(DIRECTORY cdb-icons  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/cadabra2/)  
 
 	# Install shared libraries on Windows. 
 	# https://stackoverflow.com/questions/32662215/how-do-you-install-gtk-3-0-on-windows

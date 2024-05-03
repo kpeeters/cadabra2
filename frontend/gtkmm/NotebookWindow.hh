@@ -11,6 +11,7 @@
 #include <gtkmm/button.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/cssprovider.h>
+#include <gtkmm/toolbar.h>
 #include <glibmm/dispatcher.h>
 #include <giomm/settings.h>
 #include <giomm/actiongroup.h>
@@ -142,6 +143,8 @@ namespace cadabra {
 			Glib::RefPtr<Gtk::Builder>           uimanager;
 
 			Gtk::VBox                      topbox;
+			Gtk::HBox                      toolbar;
+			Gtk::Button                    tool_run, tool_run_to, tool_stop, tool_restart;
 			Gtk::HBox                      supermainbox;
 			Gtk::Paned                     dragbox;
 			Gtk::VBox                      mainbox;
