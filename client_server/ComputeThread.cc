@@ -231,8 +231,10 @@ void ComputeThread::on_open(websocketpp::connection_hdl )
 	{
 	connection_is_open=true;
 	restarting_kernel=false;
-	if(gui)
+	if(gui) {
 		gui->on_connect();
+		gui->on_kernel_runstatus(false);
+		}
 
 	//	// now it is safe to use the connection
 	//	std::string msg;
@@ -260,8 +262,13 @@ void ComputeThread::on_close(websocketpp::connection_hdl )
 	connection_is_open=false;
 	all_cells_nonrunning();
 	if(gui) {
-		if(restarting_kernel) gui->on_disconnect("restarting kernel");
-		else                  gui->on_disconnect("not connected");
+		if(restarting_kernel) {
+			gui->on_disconnect("restarting kernel");
+			gui->on_kernel_runstatus(true);
+			}
+		else {
+			gui->on_disconnect("not connected");
+			}
 		}
 
 	sleep(1); // do not cause a torrent...

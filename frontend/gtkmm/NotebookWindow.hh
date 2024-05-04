@@ -174,7 +174,7 @@ namespace cadabra {
 			Gtk::ProgressBar               progressbar;
 			Gtk::Spinner                   kernel_spinner;
 			bool                           kernel_spinner_status;
-			Gtk::Label                     status_label, kernel_label;
+			Gtk::Label                     status_label, kernel_label, top_label;
 
 			// GUI data which is the autoritative source for things displayed in
 			// the status bars declared above. These strings are filled on the

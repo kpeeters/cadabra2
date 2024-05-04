@@ -304,6 +304,9 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\+)"),
 											" + ");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\linebreak\[[0-9]\])"),
+											"");
 		fixed = "\\text{$"+fixed+"$}";
 		}
 	else {
@@ -321,6 +324,12 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\algo\{(.*)\})"),
 											"{\\tt{}$1}");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\algorithm\{(.*)\}\{(.*)\})"),
+											"\\text{\\large\\tt{}$1}\\\\\\vspace{2.5ex}\\text{\\textit{$2}}\\\\");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\property\{(.*)\}\{(.*)\})"),
+											"\\text{\\large\\tt{}$1}\\\\\\vspace{2.5ex}\\text{\\textit{$2}}\\\\");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\prop\{(.*)\})"),
 											"{\\tt{}$1}");

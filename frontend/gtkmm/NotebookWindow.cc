@@ -525,40 +525,6 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		"      </section>"
 		"    </submenu>"
 		"  </menu>"
-//		"  <object class='GtkBox' id='toolbar'>"
-//      "    <property name='can_focus'>False</property>"
-//      "    <child>"
-//      "      <object class='GtkButton' id='toolbutton_new'>"
-//      "        <property name='can_focus'>False</property>"
-//      "        <property name='tooltip_text' translatable='yes'>New Standard</property>"
-//      "        <property name='action_name'>app.newstandard</property>"
-//      "        <property name='icon_name'>document-new</property>"
-//      "        <property name='hexpand'>False</property>"
-//      "        <property name='vexpand'>False</property>"
-//      "      </object>"
-//      "    </child>"
-//      "    <child>"
-//      "      <object class='GtkButton' id='toolbutton_quit'>"
-//      "        <property name='can_focus'>False</property>"
-//      "        <property name='tooltip_text' translatable='yes'>Quit</property>"
-//      "        <property name='action_name'>app.quit</property>"
-//      "        <property name='icon_name'>application-exit</property>"
-//      "        <property name='hexpand'>False</property>"
-//      "        <property name='vexpand'>False</property>"
-//      "      </object>"
-//      "    </child>"
-//      "  </object>"
-//	   "  <toolbar name='ToolBar'>"
-//		"    <toolitem name='New' action='cdb.New'/>"
-//		"    <toolitem name='Open' action='cdb.Open' />"
-//		"    <toolitem name='Save' action='cdb.Save' />"
-//		"    <toolitem name='SaveAs' action='cdb.SaveAs' />"
-//		"    <separator />"
-//		"    <toolitem name='Undo' action='cdb.EditUndo' />"
-//		"    <separator />"
-//		"    <toolitem name='RunAll' action='cdb.EvaluateAll' />"
-//		"    <toolitem name='EvaluateStop' action='cdb.EvaluateStop' />"
-//	   "  </toolbar>"
 	   "</interface>";
 		};
 
@@ -573,44 +539,46 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 
 	// Setup the toolbar and buttons in it.
-	toolbar.set_size_request(-1, 70);
-	tool_stop.add(*Gtk::make_managed<Gtk::Image>(
-						  install_prefix()+"/share/cadabra2/cdb-icons/cdb-cancel.svg"));
-	tool_run.add(*Gtk::make_managed<Gtk::Image>(
-						 install_prefix()+"/share/cadabra2/cdb-icons/cdb-run.svg"));
-	tool_restart.add(*Gtk::make_managed<Gtk::Image>(
-							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart.svg"));
-	tool_open.add(*Gtk::make_managed<Gtk::Image>(
+	if(!read_only) {
+		toolbar.set_size_request(-1, 70);
+		tool_stop.add(*Gtk::make_managed<Gtk::Image>(
+							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-cancel.svg"));
+		tool_run.add(*Gtk::make_managed<Gtk::Image>(
+							 install_prefix()+"/share/cadabra2/cdb-icons/cdb-run.svg"));
+		tool_restart.add(*Gtk::make_managed<Gtk::Image>(
+								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart.svg"));
+		tool_open.add(*Gtk::make_managed<Gtk::Image>(
 							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-open.svg"));
-	tool_save.add(*Gtk::make_managed<Gtk::Image>(
+		tool_save.add(*Gtk::make_managed<Gtk::Image>(
 							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save.svg"));
-	tool_save_as.add(*Gtk::make_managed<Gtk::Image>(
-							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save-as.svg"));
-	tool_stop.set_size_request(70, 70);
-	tool_run.set_size_request(70, 70);
-	tool_restart.set_size_request(70, 70);
-	tool_open.set_size_request(70, 70);
-	tool_save.set_size_request(70, 70);
-	tool_save_as.set_size_request(70, 70);
-	tool_run.set_tooltip_text("Execute all cells");
-	tool_stop.set_tooltip_text("Stop execution");
-	tool_restart.set_tooltip_text("Restart kernel");
-	tool_open.set_tooltip_text("Open notebook...");
-	tool_save.set_tooltip_text("Save notebook");
-	tool_save_as.set_tooltip_text("Save notebook as...");
-	// tool_run.set_has_frame(false);
-	// tool_stop.set_has_frame(false);
-	// tool_restart.set_has_frame(false);	
+		tool_save_as.add(*Gtk::make_managed<Gtk::Image>(
+								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save-as.svg"));
+		tool_stop.set_size_request(70, 70);
+		tool_run.set_size_request(70, 70);
+		tool_restart.set_size_request(70, 70);
+		tool_open.set_size_request(70, 70);
+		tool_save.set_size_request(70, 70);
+		tool_save_as.set_size_request(70, 70);
+		tool_run.set_tooltip_text("Execute all cells");
+		tool_stop.set_tooltip_text("Stop execution");
+		tool_restart.set_tooltip_text("Restart kernel");
+		tool_open.set_tooltip_text("Open notebook...");
+		tool_save.set_tooltip_text("Save notebook");
+		tool_save_as.set_tooltip_text("Save notebook as...");
 	
-	topbox.pack_start(toolbar, Gtk::PACK_SHRINK);
-	toolbar.pack_start(tool_open, Gtk::PACK_SHRINK);
-	toolbar.pack_start(tool_save, Gtk::PACK_SHRINK);
-	toolbar.pack_start(tool_save_as, Gtk::PACK_SHRINK);
-	toolbar.pack_start(tool_run, Gtk::PACK_SHRINK);
-	toolbar.pack_start(tool_stop, Gtk::PACK_SHRINK);
-	toolbar.pack_start(tool_restart, Gtk::PACK_SHRINK);
-
-	// Normally we would use 'set_action_name' to assocate the
+		topbox.pack_start(toolbar, Gtk::PACK_SHRINK);
+		toolbar.pack_start(tool_open, Gtk::PACK_SHRINK);
+		toolbar.pack_start(tool_save, Gtk::PACK_SHRINK);
+		toolbar.pack_start(tool_save_as, Gtk::PACK_SHRINK);
+		toolbar.pack_start(tool_run, Gtk::PACK_SHRINK);
+		toolbar.pack_start(tool_stop, Gtk::PACK_SHRINK);
+		toolbar.pack_start(tool_restart, Gtk::PACK_SHRINK);
+		toolbar.pack_start(top_label);
+		toolbar.pack_end(kernel_spinner, Gtk::PACK_SHRINK);
+		kernel_spinner.set_size_request(60,60);
+		}
+	
+	// Normally we would use 'set_action_name' to associate the
 	// buttons to actions already defined, but gtkmm-3.24 has
 	// a TODO item "derive from and implement Actionable". So
 	// we re-do what we did for actions.
@@ -635,27 +603,27 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	search_hbox.pack_start(searchentry, Gtk::PACK_EXPAND_WIDGET, 10);
 	searchentry.set_size_request(200, -1);
 	search_hbox.pack_start(search_case_insensitive, Gtk::PACK_SHRINK, 10);
-//	search_hbox.pack_start(search_result, Gtk::PACK_EXPAND_WIDGET, 10);
 	search_case_insensitive.set_active(true);
 
 	// Status bar
-//	status_label.set_alignment( 0.0, 0.5 );
-//	kernel_label.set_alignment( 0.0, 0.5 );
-	status_label.set_size_request(200,-1);
-	status_label.set_justify(Gtk::JUSTIFY_LEFT);
-	kernel_label.set_justify(Gtk::JUSTIFY_LEFT);
 	kernel_label.set_text("Server: not connected");
 	statusbarbox.set_size_request(-1,50);
-	statusbarbox.pack_start(status_label);
-	statusbarbox.pack_start(kernel_label);
-	statusbarbox.pack_start(kernel_spinner);
-//	auto context = kernel_spinner.get_style_context();
-//	context->add_class("spinner");
-	statusbarbox.pack_start(progressbar);
-	statusbarbox.set_name("statusbar");
-	progressbar.set_size_request(200,-1);
+	statusbarbox.set_homogeneous(false);
+	statusbarbox.pack_start(status_label, false, false, 0);
+	statusbarbox.pack_start(kernel_label, false, false, 0);
+	statusbarbox.pack_start(progressbar, true, true, 0);
+	status_label.set_size_request(300,-1);
+	kernel_label.set_size_request(300,-1);
+	// status_label.set_halign(Gtk::Align::ALIGN_START);
+	// kernel_label.set_halign(Gtk::Align::ALIGN_START);
+	status_label.set_xalign(0);
+	kernel_label.set_xalign(0);
 	progressbar.set_text("Idle");
 	progressbar.set_show_text(true);
+
+   //	auto context = kernel_spinner.get_style_context();
+   //	context->add_class("spinner");
+	statusbarbox.set_name("statusbar");
 
 	searchentry.signal_search_changed().connect(sigc::mem_fun(*this, &NotebookWindow::on_search_text_changed));
 
@@ -718,6 +686,7 @@ void NotebookWindow::load_css()
 	data += "#ImageView { transition-property: padding, background-color; transition-duration: 1s; }\n";
 	data += "#CodeInput { font-family: monospace; font-size: "+std::to_string((100.0+(prefs.font_step*10.0)))+"%; }\n";
 	data += "#Console   { padding: 2px; }\n";
+	data += "label { margin-left: 4px; }\n";
 	data += "spinner { background: none; opacity: 1; -gtk-icon-source: -gtk-icontheme(\"process-working-symbolic\"); }\n";
 	data += "spinner:checked { opacity: 1; animation: spin 1s linear infinite; }\n";
 
@@ -1318,16 +1287,12 @@ void NotebookWindow::update_status()
 	progressbar.set_text(progress_string);
 	progressbar.set_fraction(progress_frac);
 
-	if (status_line < 0 || status_col < 0) {
-		status_label.set_text(status_string);
-		}
-	else {
-		std::string pos = " Line: " + std::to_string(status_line) + "   Col: " + std::to_string(status_col);
-		if (status_string == "")
-			status_label.set_text(pos);
-		else
-			status_label.set_text(pos + "   |   " + status_string);
-		}
+	std::string pos = " Line: " + std::to_string(status_line)
+		+ "   Col: " + std::to_string(status_col);
+	if (status_string == "")
+		status_label.set_text(pos);
+	else
+		status_label.set_text(pos + "   |   " + status_string);
 	}
 
 void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
@@ -2941,7 +2906,7 @@ void NotebookWindow::unselect_output_cell()
 
 bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
 	{
-//	std::cerr << "handle_outbox_select " << it->textbuf << std::endl;
+	std::cerr << "handle_outbox_select " << it->textbuf << std::endl;
 	unselect_output_cell();
 
 	// Colour the background of the selected cell, in all canvasses.
