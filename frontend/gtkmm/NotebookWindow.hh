@@ -144,7 +144,8 @@ namespace cadabra {
 
 			Gtk::VBox                      topbox;
 			Gtk::HBox                      toolbar;
-			Gtk::Button                    tool_run, tool_run_to, tool_stop, tool_restart;
+			Gtk::Button                    tool_open, tool_save, tool_save_as;
+			Gtk::Button                    tool_run, tool_run_to, tool_stop, tool_restart;		
 			Gtk::HBox                      supermainbox;
 			Gtk::Paned                     dragbox;
 			Gtk::VBox                      mainbox;

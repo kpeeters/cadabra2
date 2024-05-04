@@ -564,14 +564,6 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 	uimanager->add_from_string(ui_info);
 
-//	uimanager->get_widget("/ToolBar/New")->set_tooltip_text("New notebook");
-//	uimanager->get_widget("/ToolBar/Open")->set_tooltip_text("Open existing notebook");
-//	uimanager->get_widget("/ToolBar/Save")->set_tooltip_text("Save changes");
-//	uimanager->get_widget("/ToolBar/SaveAs")->set_tooltip_text("Save as new notebook");
-//	uimanager->get_widget("/ToolBar/Undo")->set_tooltip_text("Undo");
-//	uimanager->get_widget("/ToolBar/RunAll")->set_tooltip_text("Run all cells");
-//	uimanager->get_widget("/ToolBar/EvaluateStop")->set_tooltip_text("Stop evaluation");
-
 	// Main box structure dividing the window.
 	add(topbox);
 	Glib::RefPtr<Glib::Object> menubar_obj = uimanager->get_object("MenuBar");
@@ -579,28 +571,56 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	Gtk::MenuBar* pMenuBar = Gtk::make_managed<Gtk::MenuBar>(gmenu);
 	topbox.pack_start(*pMenuBar, Gtk::PACK_SHRINK);
 
-//	auto theme = Gtk::IconTheme::get_for_screen(screen);
-//	theme->add_resource_path(install_prefix()+"/share/cadabra2/cdb-icons/");
+
+	// Setup the toolbar and buttons in it.
 	toolbar.set_size_request(-1, 70);
-//	tool_run.set_image_from_icon_name("cdb-cancel");
-	
 	tool_stop.add(*Gtk::make_managed<Gtk::Image>(
 						  install_prefix()+"/share/cadabra2/cdb-icons/cdb-cancel.svg"));
 	tool_run.add(*Gtk::make_managed<Gtk::Image>(
 						 install_prefix()+"/share/cadabra2/cdb-icons/cdb-run.svg"));
 	tool_restart.add(*Gtk::make_managed<Gtk::Image>(
 							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart.svg"));
+	tool_open.add(*Gtk::make_managed<Gtk::Image>(
+							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-open.svg"));
+	tool_save.add(*Gtk::make_managed<Gtk::Image>(
+							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save.svg"));
+	tool_save_as.add(*Gtk::make_managed<Gtk::Image>(
+							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save-as.svg"));
 	tool_stop.set_size_request(70, 70);
 	tool_run.set_size_request(70, 70);
 	tool_restart.set_size_request(70, 70);
+	tool_open.set_size_request(70, 70);
+	tool_save.set_size_request(70, 70);
+	tool_save_as.set_size_request(70, 70);
+	tool_run.set_tooltip_text("Execute all cells");
+	tool_stop.set_tooltip_text("Stop execution");
+	tool_restart.set_tooltip_text("Restart kernel");
+	tool_open.set_tooltip_text("Open notebook...");
+	tool_save.set_tooltip_text("Save notebook");
+	tool_save_as.set_tooltip_text("Save notebook as...");
 	// tool_run.set_has_frame(false);
 	// tool_stop.set_has_frame(false);
 	// tool_restart.set_has_frame(false);	
 	
 	topbox.pack_start(toolbar, Gtk::PACK_SHRINK);
+	toolbar.pack_start(tool_open, Gtk::PACK_SHRINK);
+	toolbar.pack_start(tool_save, Gtk::PACK_SHRINK);
+	toolbar.pack_start(tool_save_as, Gtk::PACK_SHRINK);
 	toolbar.pack_start(tool_run, Gtk::PACK_SHRINK);
 	toolbar.pack_start(tool_stop, Gtk::PACK_SHRINK);
 	toolbar.pack_start(tool_restart, Gtk::PACK_SHRINK);
+
+	// Normally we would use 'set_action_name' to assocate the
+	// buttons to actions already defined, but gtkmm-3.24 has
+	// a TODO item "derive from and implement Actionable". So
+	// we re-do what we did for actions.
+	tool_open.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::on_file_open));
+	tool_save.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::on_file_save));
+	tool_save_as.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::on_file_save_as));
+	tool_run.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::on_run_runall));
+	tool_stop.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::on_run_stop));
+	tool_restart.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart));
+	
 //	
 //	Gtk::Widget *toolbar=0;
 //	uimanager->get_widget("/ToolBar", toolbar);
@@ -625,6 +645,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	status_label.set_justify(Gtk::JUSTIFY_LEFT);
 	kernel_label.set_justify(Gtk::JUSTIFY_LEFT);
 	kernel_label.set_text("Server: not connected");
+	statusbarbox.set_size_request(-1,50);
 	statusbarbox.pack_start(status_label);
 	statusbarbox.pack_start(kernel_label);
 	statusbarbox.pack_start(kernel_spinner);
