@@ -96,10 +96,14 @@ class Server {
 		bool handles(const std::string& otype) const;
 		std::string              architecture() const;
 
-		/// Start a thread which waits for blocks to appear on the block queue, and
-		/// executes them in turn.
-
+		/// Thread entry point for the code that waits for blocks to
+		/// appear on the block queue, and executes them in turn.
+		/// In practice we run this on the main thread.
 		void wait_for_job();
+
+		/// Thread entry point for code that sets up and runs the
+		/// websocket listener.
+		void wait_for_websocket();
 
 	protected:
 		void init();
@@ -144,6 +148,8 @@ class Server {
 		std::mutex              block_available_mutex;
 		std::condition_variable block_available;
 		bool                    exit_on_disconnect;
+		int                     run_on_port;
+		unsigned long           main_thread_id;
 
 		// Data and connection info for a single block of code.
 		class Block {
