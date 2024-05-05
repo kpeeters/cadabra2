@@ -29,7 +29,8 @@
 #include <internal/string_tools.h>
 
 // For MicroTeX
-#include "latex.h"
+#include "cairo/graphic_cairo.h"
+#include "microtex.h"
 #include <pangomm/init.h>
 
 using namespace cadabra;
@@ -89,7 +90,29 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 	// For MicroTeX
 	Pango::init();
-	tex::LaTeX::init(install_prefix()+"/share/cadabra2/microtex/");
+	//clmFile, mathFont};
+	const microtex::FontSrcFile math_font
+		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/xits/XITSMath-Regular.clm2",
+										install_prefix()+"/share/cadabra2/microtex/xits/XITSMath-Regular.otf");
+	microtex::Init init=&math_font;
+	microtex::MicroTeX::init(init);
+	const microtex::FontSrcFile main_font1
+		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/xits/XITS-Regular.clm2",
+										install_prefix()+"/share/cadabra2/microtex/xits/XITS-Regular.otf");
+	const microtex::FontSrcFile main_font2
+		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/xits/XITS-Bold.clm2",
+										install_prefix()+"/share/cadabra2/microtex/xits/XITS-Bold.otf");
+	const microtex::FontSrcFile main_font3
+		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/xits/XITS-Italic.clm2",
+										install_prefix()+"/share/cadabra2/microtex/xits/XITS-Italic.otf");
+	microtex::MicroTeX::addFont(main_font1);
+	microtex::MicroTeX::addFont(main_font2);
+	microtex::MicroTeX::addFont(main_font3);	
+	microtex::MicroTeX::setDefaultMathFont("XITSMath-Regular");	
+	microtex::MicroTeX::setDefaultMainFont("XITS-Regular");
+	microtex::PlatformFactory::registerFactory("gtk", std::make_unique<microtex::PlatformFactory_cairo>());
+	microtex::PlatformFactory::activate("gtk");
+	//microtex::LaTeX::init(install_prefix()+"/share/cadabra2/microtex/");
 	
 #ifndef __APPLE__
 	if(ds) {

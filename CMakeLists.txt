@@ -1,5 +1,5 @@
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
-set(CADABRA_CMAKE_VERSION 3.9)
+set(CADABRA_CMAKE_VERSION 3.11)
 
 # Policy settings for CMake to resolve ambiguities.
 
@@ -189,7 +189,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 			message(FATAL_ERROR "GCC version must be at least 4.9 for regex support! See http://askubuntu.com/questions/428198/getting-installing-gcc-g-4-9-on-ubuntu and then set the environment variables CXX to g++-4.9 and CC to gcc-4.9. You may have to erase the build directory before re-running cmake.")
 		endif()
 	endif()
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -Wall -Wextra -Wunused -fvisibility=hidden -Wno-unused-but-set-variable -Wno-unused-parameter")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -Wall -Wextra -Wunused -fvisibility=hidden -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-null-pointer-subtraction")
 endif()
 
 # Clang
@@ -198,7 +198,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.5)
 		message(FATAL_ERROR "Clang version must be at least 3.5 to avoid known bugs.")
 	endif()
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -fvisibility=hidden -Wall -Wextra -Wunused -Wno-unused-parameter")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -fvisibility=hidden -Wall -Wextra -Wunused -Wno-unused-parameter -Wno-null-pointer-subtraction")
 endif()
 
 # Visual Studio
@@ -400,14 +400,11 @@ if(ENABLE_FRONTEND)
   if(ENABLE_MICROTEX)
     set(USE_MICROTEX TRUE)
     set(tinyxml2_BUILD_TESTING FALSE)
-    add_subdirectory(libs/tinyxml2)
-    add_subdirectory(libs/microtex EXCLUDE_FROM_ALL)
-    target_compile_options(LaTeX PUBLIC "-Wno-reorder" "-Wno-sign-compare" "-Wno-switch" "-Wno-unused-variable" "-Wno-unused-parameter" "-Wno-ignored-qualifiers" "-Wno-mismatched-tags")
   endif()
   add_subdirectory(frontend)
-  if(ENABLE_MICROTEX)
-    add_dependencies(cadabra2-gtk LaTeX)
-  endif()
+#  if(ENABLE_MICROTEX)
+#    add_dependencies(cadabra2-gtk LaTeX)
+#  endif()
 endif()
 
 # Tests

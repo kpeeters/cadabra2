@@ -8,7 +8,7 @@
 #include <regex>
 
 // MicroTeX
-#include "platform/cairo/graphic_cairo.h"
+#include "cairo/graphic_cairo.h"
 
 using namespace cadabra;
 
@@ -229,8 +229,8 @@ void TeXView::TeXArea::layout_latex() const
 		delete _render;
 
 //	std::cerr << "running layout with text_size = " << _text_size << std::endl;
-	_render = tex::LaTeX::parse(
-      tex::utf82wide(fixed),
+	_render = microtex::MicroTeX::parse(
+      fixed, //microtex::utf82wide(fixed),
 		rendering_width,
       _text_size,
       _text_size / 3.f,
@@ -254,7 +254,7 @@ bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 		
 		cr->fill();
 		if (_render == nullptr) return true;
-		tex::Graphics2D_cairo g2(cr);
+		microtex::Graphics2D_cairo g2(cr->cobj());
 		_render->draw(g2, padding_x, padding_y);
 		
 		cr->scale(1.0, 1.0);

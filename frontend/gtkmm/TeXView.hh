@@ -13,7 +13,7 @@
 #include "../common/TeXEngine.hh"
 
 // MicroTeX
-#include "latex.h"
+#include "microtex.h"
 #include "utils/utf.h"
 
 namespace cadabra {
@@ -85,8 +85,8 @@ namespace cadabra {
 					int             padding_x, padding_y;
 
 					// MicroTeX
-					mutable tex::TeXRender* _render;
-					std::string             unfixed, fixed;
+					mutable microtex::Render* _render;
+					std::string               unfixed, fixed;
 				};
 
 			TeXArea                   image;

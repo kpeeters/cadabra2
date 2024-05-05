@@ -15,7 +15,7 @@ std::string LaTeXForm::unnamed_argument() const
 
 bool LaTeXForm::parse(Kernel&, keyval_t& keyvals)
 	{
-	keyval_t::const_iterator kv=keyvals.find("latex");
+//	keyval_t::const_iterator kv=keyvals.find("latex");
 	for(const auto& kv: keyvals)
 		latex.push_back(kv.second);
 

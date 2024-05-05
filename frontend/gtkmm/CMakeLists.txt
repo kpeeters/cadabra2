@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
 project(CadabraGtkmm)
-
+include(FetchContent)
 
 #---------------------------------------------------------------------------
 # Preamble.
@@ -9,6 +9,16 @@ project(CadabraGtkmm)
 message(STATUS "Using gtkmm frontend")
 if(USE_MICROTEX)
   message(STATUS "Including MicroTeX support for typesetting")
+  set(CAIRO TRUE)
+  set(HAVE_LOG FALSE)
+  set(GRAPHICS_DEBUG FALSE)
+  FetchContent_Declare(
+    microtex
+    GIT_REPOSITORY https://github.com/kpeeters/MicroTeX.git
+    GIT_TAG        openmath
+  )
+  FetchContent_MakeAvailable(microtex)
+  target_compile_options(microtex PUBLIC "-DHAVE_AUTO_FONT_FIND=1" "-Wno-reorder" "-Wno-sign-compare" "-Wno-switch" "-Wno-unused-variable" "-Wno-unused-parameter" "-Wno-ignored-qualifiers" "-Wno-mismatched-tags" "-Wno-missing-braces" "-Wno-missing-field-initializers")
 else()
   message(STATUS "Only using LaTeX for typesetting (disabling MicroTeX)")
 endif()
@@ -112,11 +122,11 @@ else()
 endif()
 
 if(USE_MICROTEX)
-  message(STATUS "INCLUDE ${PROJECT_SOURCE_DIR}/../../libs/microtex/src")
+  message(STATUS "MicroTeX binaries will be built at ${microtex_BINARY_DIR}")
   include_directories(
-    #  ${GSVMM_INCLUDES}
-    ${PROJECT_SOURCE_DIR}/../../libs/microtex/src
-    ${PROJECT_SOURCE_DIR}/../../libs/microtex/src/samples 
+    ${microtex_BINARY_DIR}/lib
+    ${microtex_SOURCE_DIR}/lib
+    ${microtex_SOURCE_DIR}/platform    
   )
   find_package(Fontconfig REQUIRED)
 #  pkg_check_modules(tinyxml2 REQUIRED IMPORTED_TARGET tinyxml2)
@@ -138,7 +148,8 @@ target_link_libraries(
 
 if(USE_MICROTEX)
   target_link_libraries(cadabra2-gtk 
-    LaTeX                   # from MicroTeX
+    microtex-cairo          # from MicroTeX
+    microtex                # from MicroTeX
     PkgConfig::CairoMM      # for MicroTeX
     Fontconfig::Fontconfig  # for MicroTeX
     tinyxml2                # for MicroTeX
@@ -241,8 +252,10 @@ endif()
 
 # microtex resources
 if(USE_MICROTEX)
-  install(DIRECTORY ${PROJECT_SOURCE_DIR}/../../libs/microtex/res/ DESTINATION ${INSTALL_MICROTEX_DIR})
-  install(FILES     ${PROJECT_SOURCE_DIR}/science.cadabra.cadabra2-gtk.appdata.xml DESTINATION ${CMAKE_INSTALL_PREFIX}/share/metainfo/)
+  add_dependencies(cadabra2-gtk microtex-cairo)
+  install(DIRECTORY    ${microtex_BINARY_DIR}/res/ DESTINATION ${INSTALL_MICROTEX_DIR})  
+  install(TARGETS microtex microtex-cairo LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+  install(FILES        ${PROJECT_SOURCE_DIR}/science.cadabra.cadabra2-gtk.appdata.xml DESTINATION ${CMAKE_INSTALL_PREFIX}/share/metainfo/)
   install(CODE      "execute_process(COMMAND touch \$ENV{DESTDIR}${INSTALL_MICROTEX_DIR}/.clatexmath-res_root)")
 endif()
 
