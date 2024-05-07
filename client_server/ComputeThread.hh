@@ -97,6 +97,9 @@ namespace cadabra {
 
 			void terminate();
 
+			/// Return the status of the connection to the kernel.
+			bool kernel_is_connected() const;
+			
 		private:
 			GUIBase        *gui;
 			DocumentThread *docthread;

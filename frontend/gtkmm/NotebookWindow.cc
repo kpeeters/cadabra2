@@ -91,27 +91,45 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// For MicroTeX
 	Pango::init();
 	//clmFile, mathFont};
+//	const microtex::FontSrcFile math_font
+//		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/xits/XITSMath-Regular.clm2",
+//										install_prefix()+"/share/cadabra2/microtex/xits/XITSMath-Regular.otf");
 	const microtex::FontSrcFile math_font
-		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/xits/XITSMath-Regular.clm2",
-										install_prefix()+"/share/cadabra2/microtex/xits/XITSMath-Regular.otf");
+		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/lm-math/latinmodern-math.clm1",
+										install_prefix()+"/share/cadabra2/microtex/lm-math/latinmodern-math.otf");
 	microtex::Init init=&math_font;
+//	microtex::Init init = microtex::InitFontSenseAuto{};
 	microtex::MicroTeX::init(init);
-	const microtex::FontSrcFile main_font1
+	const microtex::FontSrcFile main_font0
 		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/xits/XITS-Regular.clm2",
 										install_prefix()+"/share/cadabra2/microtex/xits/XITS-Regular.otf");
+	const microtex::FontSrcFile main_font1
+		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/cm/cmunrm.clm1",
+										install_prefix()+"/share/cadabra2/microtex/cm/cmunrm.otf");
+//	const microtex::FontSrcFile main_font2
+//		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/xits/XITS-Bold.clm2",
+//										install_prefix()+"/share/cadabra2/microtex/xits/XITS-Bold.otf");
 	const microtex::FontSrcFile main_font2
-		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/xits/XITS-Bold.clm2",
-										install_prefix()+"/share/cadabra2/microtex/xits/XITS-Bold.otf");
+		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/cm/cmunbx.clm1",
+										install_prefix()+"/share/cadabra2/microtex/cm/cmunbx.otf");
 	const microtex::FontSrcFile main_font3
-		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/xits/XITS-Italic.clm2",
+		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/xits/XITS-Italic.clm1",
 										install_prefix()+"/share/cadabra2/microtex/xits/XITS-Italic.otf");
+	microtex::MicroTeX::addFont(math_font);
 	microtex::MicroTeX::addFont(main_font1);
 	microtex::MicroTeX::addFont(main_font2);
 	microtex::MicroTeX::addFont(main_font3);	
-	microtex::MicroTeX::setDefaultMathFont("XITSMath-Regular");	
-	microtex::MicroTeX::setDefaultMainFont("XITS-Regular");
+	microtex::MicroTeX::setDefaultMathFont("latinmodern"); // XITSMath-Regular");	
+	microtex::MicroTeX::setDefaultMainFont("cmunrm");
 	microtex::PlatformFactory::registerFactory("gtk", std::make_unique<microtex::PlatformFactory_cairo>());
 	microtex::PlatformFactory::activate("gtk");
+
+	for(const auto& n: microtex::MicroTeX::mathFontNames()) {
+		std::cerr << "math font: " << n << std::endl;
+		}
+	for(const auto& n: microtex::MicroTeX::mainFontFamilies()) {
+		std::cerr << "main font: " << n << std::endl;
+		}
 	//microtex::LaTeX::init(install_prefix()+"/share/cadabra2/microtex/");
 	
 #ifndef __APPLE__
@@ -621,6 +639,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	supermainbox.pack_start(dragbox, true, true);
 	dragbox.add1(mainbox);
 	mainbox.pack_start(searchbar, false, false);
+	mainbox.set_name("mainbox");
 	searchbar.add(search_hbox);
 //	searchbar.set_halign(Gtk::ALIGN_START);
 	search_hbox.pack_start(searchentry, Gtk::PACK_EXPAND_WIDGET, 10);
@@ -709,6 +728,8 @@ void NotebookWindow::load_css()
 	data += "#ImageView { transition-property: padding, background-color; transition-duration: 1s; }\n";
 	data += "#CodeInput { font-family: monospace; font-size: "+std::to_string((100.0+(prefs.font_step*10.0)))+"%; }\n";
 	data += "#Console   { padding: 2px; }\n";
+	data += "#mainbox * { transition-property: opacity; transition-duration: 0.5s; }\n";
+	data += "#mainbox:disabled * { opacity: 0.85; }\n";
 	data += "label { margin-left: 4px; }\n";
 	data += "spinner { background: none; opacity: 1; -gtk-icon-source: -gtk-icontheme(\"process-working-symbolic\"); }\n";
 	data += "spinner:checked { opacity: 1; animation: spin 1s linear infinite; }\n";
@@ -1009,6 +1030,8 @@ void NotebookWindow::process_todo_queue()
 		{
 		std::lock_guard<std::mutex> guard(status_mutex);
 		kernel_label.set_text("Server: " + kernel_string);
+		if(compute)
+			mainbox.set_sensitive(compute->kernel_is_connected());
 
 		if(kernel_spinner_status) {
 			kernel_spinner.show();

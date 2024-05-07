@@ -130,6 +130,11 @@ void ComputeThread::terminate()
 		}
 	}
 
+bool ComputeThread::kernel_is_connected() const
+	{
+	return connection_is_open;
+	}
+
 void ComputeThread::all_cells_nonrunning()
 	{
 	for(auto it: running_cells) {

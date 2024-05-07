@@ -251,7 +251,8 @@ bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 		cairo_surface_get_device_scale(csurface, &device_scale_x, &device_scale_y);
       //	std::cerr << "scale = " << device_scale_x << ", height = "<< _render->getHeight() << std::endl;
 		cr->scale(1.0, 1.0); // /device_scale_x, 1.0/device_scale_y);
-		
+
+		// Don't fill, that will mess up the cell background colour.
 		cr->fill();
 		if (_render == nullptr) return true;
 		microtex::Graphics2D_cairo g2(cr->cobj());
