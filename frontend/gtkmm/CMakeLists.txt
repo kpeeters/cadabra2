@@ -15,7 +15,7 @@ if(USE_MICROTEX)
   FetchContent_Declare(
     microtex
     GIT_REPOSITORY https://github.com/kpeeters/MicroTeX.git
-    GIT_TAG        openmath
+    GIT_TAG        kpeeters/cadabra
   )
   FetchContent_MakeAvailable(microtex)
   target_compile_options(microtex PUBLIC "-DHAVE_AUTO_FONT_FIND=1" "-Wno-reorder" "-Wno-sign-compare" "-Wno-switch" "-Wno-unused-variable" "-Wno-unused-parameter" "-Wno-ignored-qualifiers" "-Wno-mismatched-tags" "-Wno-missing-braces" "-Wno-missing-field-initializers")
