@@ -152,7 +152,7 @@ if(USE_MICROTEX)
     microtex                # from MicroTeX
     PkgConfig::CairoMM      # for MicroTeX
     Fontconfig::Fontconfig  # for MicroTeX
-    tinyxml2                # for MicroTeX
+#    tinyxml2                # for MicroTeX
   )
 endif()
 
