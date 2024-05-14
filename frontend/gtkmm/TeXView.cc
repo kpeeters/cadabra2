@@ -296,11 +296,11 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		// math mode
 		std::regex begin_dmath(R"(\\begin\{dmath\*\})");
 		std::regex end_dmath(R"(\\end\{dmath\*\})");
-		std::regex discretionary(R"(\\discretionary)");
+		std::regex discretionary(R"(\\discretionary\{\}\{\}\{\})");
 		std::regex spacenewline(R"(\\\\\[.*\])");
 		fixed = std::regex_replace(latex, begin_dmath, "");
 		fixed = std::regex_replace(fixed, end_dmath, "");
-		fixed = std::regex_replace(fixed, discretionary, "");
+		fixed = std::regex_replace(fixed, discretionary, "\\-{}");
 		fixed = std::regex_replace(fixed, spacenewline, "\\\\");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\+)"),

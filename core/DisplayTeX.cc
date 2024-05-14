@@ -492,7 +492,7 @@ void DisplayTeX::print_commalike(std::ostream& str, Ex::iterator it)
 		if(first)
 			first=false;
 		else
-			str << ",~" << discr << " ";
+			str << ", " << discr; // << " ";
 		dispatch(str, sib);
 		++sib;
 		}
@@ -707,8 +707,10 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 	while(ch!=tree.end(it)) {
 		//		if(ch!=tree.begin(it))
 		//			str << "%\n"; // prevent LaTeX overflow.
+		if(steps>0)
+			str << discr;
 		if(++steps==20) {
-			steps=0;
+			steps=1;
 			str << "%\n"; // prevent LaTeX overflow.
 			}
 		if(*ch->multiplier>=0 && ch!=tree.begin(it)) {
