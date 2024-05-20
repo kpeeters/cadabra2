@@ -90,47 +90,34 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 	// For MicroTeX
 	Pango::init();
-	//clmFile, mathFont};
-//	const microtex::FontSrcFile math_font
-//		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/xits/XITSMath-Regular.clm2",
-//										install_prefix()+"/share/cadabra2/microtex/xits/XITSMath-Regular.otf");
-	const microtex::FontSrcFile math_font
-		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/lm-math/latinmodern-math.clm1",
-										install_prefix()+"/share/cadabra2/microtex/lm-math/latinmodern-math.otf");
-	microtex::Init init=&math_font;
-//	microtex::Init init = microtex::InitFontSenseAuto{};
+	std::vector<std::string> font_paths;
+//	font_paths.push_back(install_prefix()+"/share/cadabra2/microtex/newcm/");	
+	font_paths.push_back(install_prefix()+"/share/cadabra2/microtex/lm-math/");	
+//	font_paths.push_back(install_prefix()+"/share/cadabra2/microtex/xits/");
+	font_paths.push_back(install_prefix()+"/share/cadabra2/microtex/cm/");	
+
+	// Need to re-convert fonts setting the correct
+	
+	auto auto_init = microtex::InitFontSenseAuto();
+	auto_init.search_paths=font_paths;
+	microtex::Init init = auto_init;
 	microtex::MicroTeX::init(init);
-	const microtex::FontSrcFile main_font0
-		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/xits/XITS-Regular.clm2",
-										install_prefix()+"/share/cadabra2/microtex/xits/XITS-Regular.otf");
-	const microtex::FontSrcFile main_font1
-		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/cm/cmunrm.clm1",
-										install_prefix()+"/share/cadabra2/microtex/cm/cmunrm.otf");
-//	const microtex::FontSrcFile main_font2
-//		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/xits/XITS-Bold.clm2",
-//										install_prefix()+"/share/cadabra2/microtex/xits/XITS-Bold.otf");
-	const microtex::FontSrcFile main_font2
-		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/cm/cmunbx.clm1",
-										install_prefix()+"/share/cadabra2/microtex/cm/cmunbx.otf");
-	const microtex::FontSrcFile main_font3
-		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/xits/XITS-Italic.clm1",
-										install_prefix()+"/share/cadabra2/microtex/xits/XITS-Italic.otf");
-	microtex::MicroTeX::addFont(math_font);
-	microtex::MicroTeX::addFont(main_font1);
-	microtex::MicroTeX::addFont(main_font2);
-	microtex::MicroTeX::addFont(main_font3);	
-	microtex::MicroTeX::setDefaultMathFont("latinmodern"); // XITSMath-Regular");	
-	microtex::MicroTeX::setDefaultMainFont("cmunrm");
+	microtex::MicroTeX::setDefaultMathFont("LatinModernMath-Regular"); 
+//	microtex::MicroTeX::setDefaultMathFont("XITSMath-Regular");	
+//	microtex::MicroTeX::setDefaultMainFont("CMU Typewriter Text");
+	microtex::MicroTeX::setDefaultMainFont("CMU Serif");
 	microtex::PlatformFactory::registerFactory("gtk", std::make_unique<microtex::PlatformFactory_cairo>());
 	microtex::PlatformFactory::activate("gtk");
 
+	std::cerr << "MicroTeX::hasGlyphPathRender = " << microtex::MicroTeX::hasGlyphPathRender() << std::endl;
+	std::cerr << "Math fonts:" << std::endl;
 	for(const auto& n: microtex::MicroTeX::mathFontNames()) {
-		std::cerr << "math font: " << n << std::endl;
+		std::cerr << "   " << n << std::endl;
 		}
+	std::cerr << "Main fonts:" << std::endl;
 	for(const auto& n: microtex::MicroTeX::mainFontFamilies()) {
-		std::cerr << "main font: " << n << std::endl;
+		std::cerr << "   " << n << std::endl;
 		}
-	//microtex::LaTeX::init(install_prefix()+"/share/cadabra2/microtex/");
 	
 #ifndef __APPLE__
 	if(ds) {

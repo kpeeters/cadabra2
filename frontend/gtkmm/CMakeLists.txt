@@ -12,9 +12,11 @@ if(USE_MICROTEX)
   set(CAIRO TRUE)
   set(HAVE_LOG FALSE)
   set(GRAPHICS_DEBUG FALSE)
+  set(_GLYPH_RENDER_TYPE 2)  # force rendering using otf font, not paths1
   FetchContent_Declare(
     microtex
-    GIT_REPOSITORY https://github.com/kpeeters/MicroTeX.git
+    #    GIT_REPOSITORY https://github.com/kpeeters/MicroTeX.git
+    GIT_REPOSITORY file:///home/kasper/git/microtex/
     GIT_TAG        kpeeters/cadabra
   )
   FetchContent_MakeAvailable(microtex)
@@ -253,10 +255,12 @@ endif()
 # microtex resources
 if(USE_MICROTEX)
   add_dependencies(cadabra2-gtk microtex-cairo)
-  install(DIRECTORY    ${microtex_BINARY_DIR}/res/ DESTINATION ${INSTALL_MICROTEX_DIR})  
+#  install(DIRECTORY    ${microtex_BINARY_DIR}/res/ DESTINATION ${INSTALL_MICROTEX_DIR})  
   install(DIRECTORY    ${PROJECT_SOURCE_DIR}/../../libs/cm DESTINATION ${INSTALL_MICROTEX_DIR})  
-  install(TARGETS microtex microtex-cairo LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+  install(DIRECTORY    ${microtex_BINARY_DIR}/res/lm-math DESTINATION ${INSTALL_MICROTEX_DIR})  
+#  install(DIRECTORY    ${PROJECT_SOURCE_DIR}/../../libs/newcm DESTINATION ${INSTALL_MICROTEX_DIR})  
+  install(TARGETS microtex-cairo LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
   install(FILES        ${PROJECT_SOURCE_DIR}/science.cadabra.cadabra2-gtk.appdata.xml DESTINATION ${CMAKE_INSTALL_PREFIX}/share/metainfo/)
-  install(CODE      "execute_process(COMMAND touch \$ENV{DESTDIR}${INSTALL_MICROTEX_DIR}/.clatexmath-res_root)")
+#  install(CODE      "execute_process(COMMAND touch \$ENV{DESTDIR}${INSTALL_MICROTEX_DIR}/.clatexmath-res_root)")
 endif()
 
