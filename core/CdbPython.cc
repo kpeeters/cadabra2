@@ -233,7 +233,6 @@ std::string cadabra::cnb2python(const std::string& in_name, bool for_standalone)
 	    << "# Do not modify - changing the timestamp of this file may cause import errors\n"
 	    << "# Original file location: " << in_name << '\n'
 	    << "import cadabra2\n"
-	    << "import imp\n"
 	    << "from cadabra2 import *\n"
 		 << "from cadabra2_defaults import *\n"
 	    << "__cdbkernel__ = cadabra2.__cdbkernel__\n"
@@ -241,9 +240,6 @@ std::string cadabra::cnb2python(const std::string& in_name, bool for_standalone)
 	    << "def display(ex):\n"
 	    << "   pass\n\n";
 
-	//	    << "with open(imp.find_module('cadabra2_defaults')[1]) as f:\n"
-	//	    << "   code = compile(f.read(), 'cadabra2_defaults.py', 'exec')\n"
-	//	    << "   exec(code)\n\n";
 
 	// FIXME: this only does a single layer of cells below the top-level
 	// 'document' cell; need recursing, in principle.
