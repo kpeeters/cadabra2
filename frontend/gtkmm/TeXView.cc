@@ -318,9 +318,44 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 	else {
 		// text mode
 
-		fixed = std::regex_replace(latex,
+		// In a verbatim block, replace all newlines with explicit '\\'.
+		std::string line;
+		std::istringstream ss(latex);
+		bool inverbatim=false;
+		std::string beg("\\begin{verbatim}");
+		fixed="";
+		while(std::getline(ss, line)) {
+			size_t pos=line.find(beg);
+			if(pos!=std::string::npos) {
+				inverbatim=true;
+				if(pos!=0)
+					fixed += line.substr(0, pos);
+				fixed += "\\texttt{";
+				size_t endpos = pos+beg.size(); 
+				if(line.size() > endpos)
+					fixed += line.substr(endpos);
+				}
+			else if(line.find("\\end{verbatim}")!=std::string::npos) {
+				inverbatim=false;
+				fixed += "}";
+				}
+			else {
+				if(inverbatim) {
+					fixed += line+"\\\\";
+					}
+				else {
+					fixed += line+"\n";
+					}
+				}
+			}
+
+		// Now the rest.
+		fixed = std::regex_replace(fixed,
 											std::regex("\n"),
 											" ");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\color)"),
+											"\\textcolor");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\section\*\{([^\}]*)\}[ ]*)"),
 											"\\text{\\Large\\textbf{$1}}\\\\\\vspace{2.5ex}");
@@ -345,23 +380,25 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\verb\|([^\|]*)\|)"),
 											"\\texttt{$1}");
-		fixed = std::regex_replace(fixed,
-											std::regex(R"(\\begin\{verbatim\})"),
-											"\\texttt{");
-		fixed = std::regex_replace(fixed,
-											std::regex(R"(\\end\{verbatim\})"),
-											"}");
+//		fixed = std::regex_replace(fixed,
+//											std::regex(R"(\\begin\{verbatim\})"),
+//											"\\texttt{");
+//		fixed = std::regex_replace(fixed,
+//											std::regex(R"(\\end\{verbatim\})"),
+//											"}");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\begin\{equation\*?\})"),
 											"$");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\end\{equation\*?\})"),
 											"$");
+
+		
 		fixed = "\\text{"+fixed+"}";
 		}
 
 //	fixed = "\\text{$A_{m n}$}";
-//	std::cout << "**** fixed to " << fixed << std::endl;
+	// std::cout << "**** fixed to " << fixed << std::endl;
 	}
 
 TeXView::TeXArea::TeXArea(bool use_microtex_)

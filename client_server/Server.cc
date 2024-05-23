@@ -185,7 +185,7 @@ void Server::init()
 	std::string code_get_id = "import threading; print(threading.get_native_id())";
 	std::string main_thread_id_str = run_string(code_get_id);
 	main_thread_id = std::stol(main_thread_id_str);
-	std::cerr << "Server: main python thread id = " << main_thread_id << std::endl;
+	// std::cerr << "Server: main python thread id = " << main_thread_id << std::endl;
 
 	// Call the Cadabra default initialisation script.
 
