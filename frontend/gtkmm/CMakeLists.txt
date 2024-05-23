@@ -13,13 +13,19 @@ if(USE_MICROTEX)
   set(HAVE_LOG FALSE)
   set(GRAPHICS_DEBUG FALSE)
   set(_GLYPH_RENDER_TYPE 2)  # force rendering using otf font, not paths1
+  set(BUILD_STATIC ON)
   FetchContent_Declare(
     microtex
     GIT_REPOSITORY https://github.com/kpeeters/MicroTeX.git
     # GIT_REPOSITORY file:///home/kasper/git/microtex/
     GIT_TAG        kpeeters/cadabra
   )
-  FetchContent_MakeAvailable(microtex)
+  # FetchContent_MakeAvailable(microtex)
+  FetchContent_GetProperties(microtex)
+  if(NOT microtex_POPULATED)
+    FetchContent_Populate(microtex)
+    add_subdirectory(${microtex_SOURCE_DIR} ${microtex_BINARY_DIR} EXCLUDE_FROM_ALL)
+  endif()
   target_compile_options(microtex PUBLIC "-DHAVE_AUTO_FONT_FIND=1" "-Wno-reorder" "-Wno-sign-compare" "-Wno-switch" "-Wno-unused-variable" "-Wno-unused-parameter" "-Wno-ignored-qualifiers" "-Wno-mismatched-tags" "-Wno-missing-braces" "-Wno-missing-field-initializers")
 else()
   message(STATUS "Only using LaTeX for typesetting (disabling MicroTeX)")
@@ -255,11 +261,8 @@ endif()
 # microtex resources
 if(USE_MICROTEX)
   add_dependencies(cadabra2-gtk microtex-cairo)
-#  install(DIRECTORY    ${microtex_BINARY_DIR}/res/ DESTINATION ${INSTALL_MICROTEX_DIR})  
   install(DIRECTORY    ${PROJECT_SOURCE_DIR}/../../libs/cm DESTINATION ${INSTALL_MICROTEX_DIR})  
   install(DIRECTORY    ${microtex_BINARY_DIR}/res/lm-math DESTINATION ${INSTALL_MICROTEX_DIR})  
-#  install(DIRECTORY    ${PROJECT_SOURCE_DIR}/../../libs/newcm DESTINATION ${INSTALL_MICROTEX_DIR})  
-  install(TARGETS microtex-cairo LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
   install(FILES        ${PROJECT_SOURCE_DIR}/science.cadabra.cadabra2-gtk.appdata.xml DESTINATION ${CMAKE_INSTALL_PREFIX}/share/metainfo/)
 endif()
 
