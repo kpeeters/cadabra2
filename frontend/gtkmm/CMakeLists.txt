@@ -15,8 +15,8 @@ if(USE_MICROTEX)
   set(_GLYPH_RENDER_TYPE 2)  # force rendering using otf font, not paths1
   FetchContent_Declare(
     microtex
-    #    GIT_REPOSITORY https://github.com/kpeeters/MicroTeX.git
-    GIT_REPOSITORY file:///home/kasper/git/microtex/
+    GIT_REPOSITORY https://github.com/kpeeters/MicroTeX.git
+    # GIT_REPOSITORY file:///home/kasper/git/microtex/
     GIT_TAG        kpeeters/cadabra
   )
   FetchContent_MakeAvailable(microtex)
