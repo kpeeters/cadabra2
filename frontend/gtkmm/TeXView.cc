@@ -404,7 +404,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 TeXView::TeXArea::TeXArea(bool use_microtex_)
 	: rendering_width(1), use_microtex(use_microtex_)
 	, _render(nullptr), _text_size(5.f)
-	, padding_x(15), padding_y(20)
+	, padding_x(15), padding_y(10)
 	{
 	set_hexpand(true);
 	}

@@ -232,8 +232,13 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 						out=it->textbuf;
 					else
 						out=latex_to_html(it->textbuf);
-					if(out.size()>0)
+					if(out.size()>0) {
+						if(it->cell_type==DataCell::CellType::python) {
+							out = std::regex_replace(out, std::regex("<"), "&lt;");
+							out = std::regex_replace(out, std::regex(">"), "&gt;");
+							}
 						str << "<div class=\"source donthyphenate\">"+out+"</div>";
+						}
 					}
 				}
 			}
