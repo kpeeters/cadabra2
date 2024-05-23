@@ -1,93 +1,94 @@
-
 {
-	"cells" : 
-	[
-		
+	"cell_id": 12308248189559892792,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
-				
+			"cell_id": 6847719313692388189,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\property{Coordinate}{Declare a symbol to be a coordinate label.}\n\nDeclare a symbol to be a coordinate label (useful in combination\n  with \\prop{Depends}). This is required if you want to write a\n  derivative with respect to a coordinate: if you write"
+					"cell_id": 12202434670886178648,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\property{Coordinate}{Declare a symbol to be a coordinate label.}\n\nDeclare a symbol to be a coordinate label (useful in combination\nwith \\prop{Depends}). This is required if you want to write a\nderivative with respect to a coordinate: if you write"
 				}
 			],
-			"hidden" : true,
-			"source" : "\\property{Coordinate}{Declare a symbol to be a coordinate label.}\n\nDeclare a symbol to be a coordinate label (useful in combination\n  with \\prop{Depends}). This is required if you want to write a\n  derivative with respect to a coordinate: if you write"
+			"hidden": true,
+			"source": "\\property{Coordinate}{Declare a symbol to be a coordinate label.}\n\nDeclare a symbol to be a coordinate label (useful in combination\nwith \\prop{Depends}). This is required if you want to write a\nderivative with respect to a coordinate: if you write"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
+			"cell_id": 13965430122641534132,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A((x, y))+\\partial(B((x, y)))\\,_{x}\\end{dmath*}"
+					"cell_id": 2729351009933441984,
+					"cell_origin": "server",
+					"cell_type": "error",
+					"source": "{\\color{red}{\\begin{verbatim}RuntimeError: Free indices in different terms in a sum do not match.\n\nAt:\n  Notebook Cell (Line 2): ex = Ex(r''' A(x,y) + \\partial_{x}{B(x,y)}'''); _=ex; display(ex)\n\\end{verbatim}}}"
 				}
 			],
-			"source" : "\\partial{#}::PartialDerivative.\nex:= A(x,y) + \\partial{B(x,y)}_{x};"
+			"source": "\\partial{#}::PartialDerivative.\nex:= A(x,y) + \\partial_{x}{B(x,y)};"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
-				
+			"cell_id": 4819941896955382090,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "will by default be seen as incorrect because the $x$ in the second\nterm will be considered an index label, not a coordinate. The input"
+					"cell_id": 13958906734848960010,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "will by default be seen as incorrect because the $x$ in the second\nterm will be considered an index label, not a coordinate. The input"
 				}
 			],
-			"hidden" : true,
-			"source" : "will by default be seen as incorrect because the $x$ in the second\nterm will be considered an index label, not a coordinate. The input"
+			"hidden": true,
+			"source": "will by default be seen as incorrect because the $x$ in the second\nterm will be considered an index label, not a coordinate. The input"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
+			"cell_id": 14086010329010061981,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A((x, y))+\\partial(B((x, y)))\\,_{x}\\end{dmath*}"
+					"cell_id": 10147094821929357556,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3554707872972432039,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A(x , y) + \\partial_{x}(B(x , y))"
+						}
+					],
+					"source": "\\begin{dmath*}{}A\\left(x , \\discretionary{}{}{}y\\right)\\discretionary{}{}{}+\\partial_{x}{B\\left(x , \\discretionary{}{}{}y\\right)}\\end{dmath*}"
 				}
 			],
-			"source" : "{ x, y }::Coordinate.\nex:=A(x,y) + \\partial{B(x,y)}_{x};"
+			"source": "{ x, y }::Coordinate.\nex:=A(x,y) + \\partial_{x}{B(x,y)};"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
-				
+			"cell_id": 16416609308264552501,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "is allowed and interpreted in the right way."
+					"cell_id": 17507747920193600578,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "is allowed and interpreted in the right way."
 				}
 			],
-			"hidden" : true,
-			"source" : "is allowed and interpreted in the right way."
+			"hidden": true,
+			"source": "is allowed and interpreted in the right way."
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 12903276971402392966,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
 }
-

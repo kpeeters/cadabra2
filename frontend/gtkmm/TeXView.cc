@@ -313,7 +313,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 											"\\square~\\!");
 		fixed = std::regex_replace(fixed, std::regex(R"(\{\}_)"), "{\\,\\!}_");
 		fixed = std::regex_replace(fixed, std::regex(R"(\{\}^)"), "{\\,\\!}^");
-		fixed = "\\text{$"+fixed+"$}";
+		fixed = "\\text{$\\displaystyle{}"+fixed+"$}";
 		}
 	else {
 		// text mode
@@ -322,38 +322,41 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 											std::regex("\n"),
 											" ");
 		fixed = std::regex_replace(fixed,
-											std::regex(R"(\\section\*\{([^\}]*)\}\s*)"),
-											"\\text{\\Large\\bf{}$1}\\\\\n\\vspace{2.5ex}");
+											std::regex(R"(\\section\*\{([^\}]*)\}[ ]*)"),
+											"\\text{\\Large\\textbf{$1}}\\\\\\vspace{2.5ex}");
 		fixed = std::regex_replace(fixed,
-											std::regex(R"(\\subsection\*\{([^\}]*)\}\s*)"),
-											"\\text{\\large\\bf{}$1}\\\\\n\\vspace{1.5ex}");
+											std::regex(R"(\\subsection\*\{([^\}]*)\}[ ]*)"),
+											"\\text{\\large\\textbf{$1}}\\\\\\vspace{1.5ex}");
 		fixed = std::regex_replace(fixed,
-											std::regex(R"(\\algo\{(.*)\})"),
-											"{\\tt{}$1}");
+											std::regex(R"(\\package\{([^\}]*)\}\{([^\}]*)\})"),
+											"\\text{\\large\\texttt{$1}}\\\\\\vspace{2.5ex}\\text{\\textit{$2}}\\\\");
 		fixed = std::regex_replace(fixed,
-											std::regex(R"(\\prop\{(.*)\})"),
-											"{\\tt{}$1}");
+											std::regex(R"(\\algorithm\{([^\}]*)\}\{([^\}]*)\}[ ]*)"),
+											"\\text{\\large\\texttt{$1}}\\\\\\vspace{2.5ex}\\text{\\textit{$2}}\\\\\\vspace{2.5ex}");
 		fixed = std::regex_replace(fixed,
-											std::regex(R"(\\package\{(.*)\}\{(.*)\})"),
-											"\\text{\\large\\tt{}$1}\\\\\\vspace{2.5ex}\\text{\\textit{$2}}\\\\");
+											std::regex(R"(\\property\{([^\}]*)\}\{([^\}]*)\}[ ]*)"),
+											"\\text{\\large\\texttt{$1}}\\\\\\vspace{2.5ex}\\text{\\textit{$2}}\\\\\\vspace{2.5ex}");
 		fixed = std::regex_replace(fixed,
-											std::regex(R"(\\algorithm\{(.*)\}\{(.*)\})"),
-											"\\text{\\large\\tt{}$1}\\\\\\vspace{2.5ex}\\text{\\textit{$2}}\\\\");
+											std::regex(R"(\\algo\{([^\}]*)\})"),
+											"\\texttt{$1}");
 		fixed = std::regex_replace(fixed,
-											std::regex(R"(\\property\{(.*)\}\{(.*)\})"),
-											"\\text{\\large\\tt{}$1}\\\\\\vspace{2.5ex}\\text{\\textit{$2}}\\\\");
-		fixed = std::regex_replace(fixed,
-											std::regex(R"(\\prop\{(.*)\})"),
-											"{\\tt{}$1}");
+											std::regex(R"(\\prop\{([^\}]*)\})"),
+											"\\texttt{$1}");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\verb\|([^\|]*)\|)"),
-											"{\\tt{}$1}");
+											"\\texttt{$1}");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\begin\{verbatim\})"),
-											"{\\tt{}");
+											"\\texttt{");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\end\{verbatim\})"),
 											"}");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\begin\{equation\*?\})"),
+											"$");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\end\{equation\*?\})"),
+											"$");
 		fixed = "\\text{"+fixed+"}";
 		}
 

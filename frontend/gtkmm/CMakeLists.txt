@@ -261,6 +261,5 @@ if(USE_MICROTEX)
 #  install(DIRECTORY    ${PROJECT_SOURCE_DIR}/../../libs/newcm DESTINATION ${INSTALL_MICROTEX_DIR})  
   install(TARGETS microtex-cairo LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
   install(FILES        ${PROJECT_SOURCE_DIR}/science.cadabra.cadabra2-gtk.appdata.xml DESTINATION ${CMAKE_INSTALL_PREFIX}/share/metainfo/)
-#  install(CODE      "execute_process(COMMAND touch \$ENV{DESTDIR}${INSTALL_MICROTEX_DIR}/.clatexmath-res_root)")
 endif()
 

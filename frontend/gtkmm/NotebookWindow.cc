@@ -94,7 +94,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 //	font_paths.push_back(install_prefix()+"/share/cadabra2/microtex/newcm/");	
 	font_paths.push_back(install_prefix()+"/share/cadabra2/microtex/lm-math/");	
 //	font_paths.push_back(install_prefix()+"/share/cadabra2/microtex/xits/");
-	font_paths.push_back(install_prefix()+"/share/cadabra2/microtex/cm/");	
+//	font_paths.push_back(install_prefix()+"/share/cadabra2/microtex/cm/");	
 
 	// Need to re-convert fonts setting the correct
 	
@@ -102,22 +102,52 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	auto_init.search_paths=font_paths;
 	microtex::Init init = auto_init;
 	microtex::MicroTeX::init(init);
-	microtex::MicroTeX::setDefaultMathFont("LatinModernMath-Regular"); 
-//	microtex::MicroTeX::setDefaultMathFont("XITSMath-Regular");	
-//	microtex::MicroTeX::setDefaultMainFont("CMU Typewriter Text");
-	microtex::MicroTeX::setDefaultMainFont("CMU Serif");
+	microtex::MicroTeX::setDefaultMathFont("LatinModernMath-Regular");
+
+   // Add all the CMR fonts (as one family). See the url below for
+	// a list of all fonts with their standard names:
+	//
+	// https://usemodify.com/fonts/computer-modern/
+	
+	const microtex::FontSrcFile font_rm
+		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/cm/cmunrm.clm1",
+										install_prefix()+"/share/cadabra2/microtex/cm/cmunrm.otf");
+	const microtex::FontSrcFile font_tt
+		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/cm/cmuntt.clm1",
+										install_prefix()+"/share/cadabra2/microtex/cm/cmuntt.otf");
+	const microtex::FontSrcFile font_tt_bf
+		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/cm/cmuntb.clm1",
+										install_prefix()+"/share/cadabra2/microtex/cm/cmuntb.otf");
+	const microtex::FontSrcFile font_bf
+		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/cm/cmunbx.clm1",
+										install_prefix()+"/share/cadabra2/microtex/cm/cmunbx.otf");
+	const microtex::FontSrcFile font_it
+		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/cm/cmunti.clm1",
+										install_prefix()+"/share/cadabra2/microtex/cm/cmunti.otf");
+	const microtex::FontSrcFile font_it_bf
+		= microtex::FontSrcFile(install_prefix()+"/share/cadabra2/microtex/cm/cmunbi.clm1",
+										install_prefix()+"/share/cadabra2/microtex/cm/cmunbi.otf");
+
+	microtex::MicroTeX::addFont(font_rm,    "Computer Modern");
+	microtex::MicroTeX::addFont(font_tt,    "Computer Modern");
+	microtex::MicroTeX::addFont(font_tt_bf, "Computer Modern"); // FIXME: incorrect
+	microtex::MicroTeX::addFont(font_bf,    "Computer Modern");
+	microtex::MicroTeX::addFont(font_it,    "Computer Modern");
+	microtex::MicroTeX::addFont(font_it_bf, "Computer Modern");
+	
+	microtex::MicroTeX::setDefaultMainFont("Computer Modern");
 	microtex::PlatformFactory::registerFactory("gtk", std::make_unique<microtex::PlatformFactory_cairo>());
 	microtex::PlatformFactory::activate("gtk");
 
-	std::cerr << "MicroTeX::hasGlyphPathRender = " << microtex::MicroTeX::hasGlyphPathRender() << std::endl;
-	std::cerr << "Math fonts:" << std::endl;
-	for(const auto& n: microtex::MicroTeX::mathFontNames()) {
-		std::cerr << "   " << n << std::endl;
-		}
-	std::cerr << "Main fonts:" << std::endl;
-	for(const auto& n: microtex::MicroTeX::mainFontFamilies()) {
-		std::cerr << "   " << n << std::endl;
-		}
+	// std::cerr << "MicroTeX::hasGlyphPathRender = " << microtex::MicroTeX::hasGlyphPathRender() << std::endl;
+	// std::cerr << "Math fonts:" << std::endl;
+	// for(const auto& n: microtex::MicroTeX::mathFontNames()) {
+	// 	std::cerr << "   " << n << std::endl;
+	// 	}
+	// std::cerr << "Main fonts:" << std::endl;
+	// for(const auto& n: microtex::MicroTeX::mainFontFamilies()) {
+	// 	std::cerr << "   " << n << std::endl;
+	// 	}
 	
 #ifndef __APPLE__
 	if(ds) {
@@ -219,6 +249,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// Set shortcuts for actions.
 	cdbapp->set_accel_for_action("cdb.New",                    "<Primary>N");
 	cdbapp->set_accel_for_action("cdb.Open",                   "<Primary>O");
+	cdbapp->set_accel_for_action("cdb.Close",                  "<Primary>W");
 	cdbapp->set_accel_for_action("cdb.Save",                   "<Primary>S");
 	cdbapp->set_accel_for_action("cdb.Quit",                   "<Primary>Q");
 	cdbapp->set_accel_for_action("cdb.EditUndo",               "<Primary>Z");
@@ -678,7 +709,12 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 
 	// Window size and title, and ready to go.
-	set_default_size(screen->get_width()/2, screen->get_height()*0.8);
+	if(!ro) {
+		set_default_size(screen->get_width()/2, screen->get_height()*0.8);
+		}
+	else {
+		set_default_size(screen->get_width()/3, screen->get_height()*0.6);
+		}
 	// FIXME: the subtraction for the margin and scrollbar made below
 	// is estimated but should be computed.
 	//	engine.set_geometry(screen->get_width()/2 - 2*30);
