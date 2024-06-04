@@ -290,13 +290,13 @@ bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 void TeXView::TeXArea::set_latex(const std::string& latex)
 	{
 	// std::cout << "**** fixing latex " << latex << std::endl;
+	std::regex discretionary(R"(\\discretionary\{\}\{\}\{\})");
 
 	unfixed = latex;
 	if(latex.find(R"(\begin{dmath*})")==0) {
 		// math mode
 		std::regex begin_dmath(R"(\\begin\{dmath\*\})");
 		std::regex end_dmath(R"(\\end\{dmath\*\})");
-		std::regex discretionary(R"(\\discretionary\{\}\{\}\{\})");
 		std::regex spacenewline(R"(\\\\\[.*\])");
 		fixed = std::regex_replace(latex, begin_dmath, "");
 		fixed = std::regex_replace(fixed, end_dmath, "");
@@ -323,6 +323,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		std::istringstream ss(latex);
 		bool inverbatim=false;
 		std::string beg("\\begin{verbatim}");
+		std::string end("\\end{verbatim}");
 		fixed="";
 		while(std::getline(ss, line)) {
 			size_t pos=line.find(beg);
@@ -333,19 +334,33 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 				fixed += "\\texttt{";
 				size_t endpos = pos+beg.size(); 
 				if(line.size() > endpos)
-					fixed += line.substr(endpos);
+					line = line.substr(endpos);
+				else
+					line = "";
 				}
-			else if(line.find("\\end{verbatim}")!=std::string::npos) {
-				inverbatim=false;
-				fixed += "}";
+			pos = line.find(end);
+			if(pos!=std::string::npos) {
+				if(pos>0)
+					line = line.substr(0, pos);
+				else
+					line = "";
 				}
-			else {
+			if(line.size()>0) {
 				if(inverbatim) {
+					line = std::regex_replace(line, std::regex(R"(\\)"), "\\backslash ");
+					line = std::regex_replace(line, std::regex(R"(\{)"), "\\{");
+					line = std::regex_replace(line, std::regex(R"(\})"), "\\}");					
+					line = std::regex_replace(line, std::regex(R"(_)"), "\\_");
+					line = std::regex_replace(line, std::regex(R"(\~)"), "\\widetilde{~}");
 					fixed += line+"\\\\";
 					}
 				else {
 					fixed += line+"\n";
 					}
+				}
+			if(pos!=std::string::npos) {
+				inverbatim=false;
+				fixed += "}";
 				}
 			}
 
@@ -356,6 +371,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\color)"),
 											"\\textcolor");
+		fixed = std::regex_replace(fixed, discretionary, "\\-{}");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\section\*\{([^\}]*)\}[ ]*)"),
 											"\\text{\\Large\\textbf{$1}}\\\\\\vspace{2.5ex}");
@@ -380,12 +396,9 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\verb\|([^\|]*)\|)"),
 											"\\texttt{$1}");
-//		fixed = std::regex_replace(fixed,
-//											std::regex(R"(\\begin\{verbatim\})"),
-//											"\\texttt{");
-//		fixed = std::regex_replace(fixed,
-//											std::regex(R"(\\end\{verbatim\})"),
-//											"}");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\emph\{([^\}]*)\})"),
+											"\\textit{$1}");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\begin\{equation\*?\})"),
 											"$");
@@ -397,7 +410,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		fixed = "\\text{"+fixed+"}";
 		}
 
-//	fixed = "\\text{$A_{m n}$}";
+   //	fixed = "\\text{$A_{m n}$}";
 	// std::cout << "**** fixed to " << fixed << std::endl;
 	}
 
