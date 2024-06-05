@@ -56,17 +56,6 @@ void CodeInput::init(const Prefs& prefs)
 	//	scroll_.set_border_width(1);
 	//	scroll_.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
 	edit.set_wrap_mode(Gtk::WRAP_NONE); // WRAP_WORD_CHAR); wrapping leads to weird effects
-
-	//	edit.override_background_color(Gdk::RGBA("white"), Gtk::STATE_FLAG_ACTIVE);
-
-	//	edit.set_name("mywidget");
-	//	gtk_rc_parse_string("style \"mywidget\"\n"
-	//							  "{\n"
-	//							  "  bg[NORMAL] = white\n"
-	//							  "}\n"
-	//							  "widget \"*.mywidget\" style \"mywidget\"");
-	//
-
 	edit.set_pixels_above_lines(1);
 	edit.set_pixels_below_lines(1);
 	edit.set_pixels_inside_wrap(1);
@@ -602,16 +591,13 @@ bool CodeInput::handle_button_press(GdkEventButton* button)
 	else if(hastext)   sd=refClipboard->wait_for_contents("TEXT");
 	else if(hasstring) sd=refClipboard->wait_for_contents("STRING");
 	if(hascadabra || hastext || hasstring) {
-		// find out _where_ to insert
+		// Figure out where the mouse cursor is, so we know where to insert.
 		Gtk::TextBuffer::iterator insertpos;
 		int somenumber;
 		edit.get_iter_at_position(insertpos, somenumber, button->x, button->y);
 		if(insertpos!=edit.get_buffer()->end())
 			++insertpos;
-
-		// std::cerr << "inserting at " << insertpos << " text " << sd.get_data_as_string() << std::endl;
 		insertpos=edit.get_buffer()->insert(insertpos, sd.get_data_as_string());
-		// std::cerr << "placing cursor" << std::endl;
 		edit.get_buffer()->place_cursor(insertpos);
 		}
 

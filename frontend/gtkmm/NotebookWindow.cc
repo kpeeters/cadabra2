@@ -743,8 +743,8 @@ void NotebookWindow::load_css()
 	// std::cerr << "(re)loading css" << std::endl;
 	std::string text_colour = prefs.highlight ? "black" : "blue";
 	Glib::ustring data = "";
-	data += "scrolledwindow { background-color: white; }\n";
-	data += "textview text { color: "+text_colour+"; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
+	data += "scrolledwindow { background-color: @theme_base_color; }\n";
+	data += "textview text { color: "+text_colour+"; background-color: @theme_base_color; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
 	data += "textview *:focus { background-color: #eee; }\n";
 	data += ".view text selection { color: #fff; background-color: #888; }\n";
 	data += "textview.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
@@ -754,6 +754,7 @@ void NotebookWindow::load_css()
 	data += "#mainbox * { transition-property: opacity; transition-duration: 0.5s; }\n";
 	data += "#mainbox:disabled * { opacity: 0.85; }\n";
 	data += "label { margin-left: 4px; }\n";
+	data += "#TeXArea:selected { background-color: #eee; }\n";
 	data += "spinner { background: none; opacity: 1; -gtk-icon-source: -gtk-icontheme(\"process-working-symbolic\"); }\n";
 	data += "spinner:checked { opacity: 1; animation: spin 1s linear infinite; }\n";
 
@@ -2142,12 +2143,20 @@ void NotebookWindow::on_edit_copy(const Glib::VariantBase&)
 		on_outbox_copy(clipboard, selected_cell);
 		}
 	if(current_cell!=doc.end()) {
+		std::cerr << "copy called for non-outbox cell" << std::endl;
 		// FIXME: handle other cell types.
 		}
 	}
 
 void NotebookWindow::on_edit_paste()
 	{
+	if(current_cell!=doc.end()) {
+		auto vis = canvasses[current_canvas]->visualcells.find(&(*current_cell));
+		if(vis!=canvasses[current_canvas]->visualcells.end()) {
+			CodeInput *inbox = (*vis).second.inbox;
+			inbox->edit.get_buffer()->insert_at_cursor(clipboard_cdb);
+			}
+		}
 	}
 
 void NotebookWindow::on_edit_insert_above()
@@ -2967,6 +2976,7 @@ void NotebookWindow::unselect_output_cell()
 		if(canvasses[i]->visualcells.find(&(*selected_cell))!=canvasses[i]->visualcells.end()) {
 			auto& outbox = canvasses[i]->visualcells[&(*selected_cell)].outbox;
 			outbox->image.set_state_flags(Gtk::STATE_FLAG_NORMAL);
+			outbox->queue_draw();
 			}
 		}
 	selected_cell=doc.end();
@@ -2975,7 +2985,7 @@ void NotebookWindow::unselect_output_cell()
 
 bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
 	{
-	std::cerr << "handle_outbox_select " << it->textbuf << std::endl;
+	// std::cerr << "handle_outbox_select " << it->textbuf << std::endl;
 	unselect_output_cell();
 
 	// Colour the background of the selected cell, in all canvasses.
@@ -2983,10 +2993,10 @@ bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
 		if(canvasses[i]->visualcells.find(&(*it))!=canvasses[i]->visualcells.end()) {
 			auto& outbox = canvasses[i]->visualcells[&(*it)].outbox;
 			outbox->image.set_state_flags(Gtk::STATE_FLAG_SELECTED);
-//			std::cerr << "selecting" << std::endl;
-//			if(i==current_canvas)
-//				outbox->grab_focus();
-			// FIXME: need to remove focus from any CodeInput widget; the above does not do that.
+			outbox->queue_draw();
+			if(i==current_canvas) {
+				outbox->grab_focus();
+				}
 			}
 		}
 	selected_cell=it;

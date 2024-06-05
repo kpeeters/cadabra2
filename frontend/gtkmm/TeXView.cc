@@ -37,6 +37,7 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, bool use_microtex_, int hma
 	add(image);
 
 	add_events( Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK );
+	set_can_focus(true);
 	}
 
 TeXView::~TeXView()
@@ -237,25 +238,34 @@ void TeXView::TeXArea::layout_latex() const
       0xff424242);
 	}
 
+guint32 color_from_rgba(Gdk::RGBA color)
+	{
+	return
+		(guint8)(color.get_alpha()*255)<<24|
+		(guint8)(color.get_red()*255)<<16|
+		(guint8)(color.get_green()*255)<<8|
+		(guint8)(color.get_blue()*255);
+	}
+
 bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	{
 	if(use_microtex) {
-      //	std::cerr << "*** blitting at size " << get_width() << " x " << get_height() << std::endl;
-
-		cr->set_source_rgb(1, 1, 1);
-		cr->rectangle(0, 0, get_width(), get_height());
+		auto style_context = get_style_context();
+		style_context->render_background(cr, 0, 0, get_width(), get_height());
+		Gdk::RGBA fg_colour;
+		style_context->lookup_color("theme_text_color", fg_colour);
 		
 		auto surface = cr->get_target();
 		auto csurface = surface->cobj();
-		double device_scale_x, device_scale_y;
-		cairo_surface_get_device_scale(csurface, &device_scale_x, &device_scale_y);
+		// double device_scale_x, device_scale_y;
+		// cairo_surface_get_device_scale(csurface, &device_scale_x, &device_scale_y);
       //	std::cerr << "scale = " << device_scale_x << ", height = "<< _render->getHeight() << std::endl;
 		cr->scale(1.0, 1.0); // /device_scale_x, 1.0/device_scale_y);
 
-		// Don't fill, that will mess up the cell background colour.
-		cr->fill();
 		if (_render == nullptr) return true;
+		
 		microtex::Graphics2D_cairo g2(cr->cobj());
+		_render->setForeground(color_from_rgba(fg_colour));
 		_render->draw(g2, padding_x, padding_y);
 		
 		cr->scale(1.0, 1.0);
@@ -420,6 +430,8 @@ TeXView::TeXArea::TeXArea(bool use_microtex_)
 	, padding_x(15), padding_y(10)
 	{
 	set_hexpand(true);
+	set_name("TeXArea");
+	set_focus_on_click(true);
 	}
 
 TeXView::TeXArea::~TeXArea()
