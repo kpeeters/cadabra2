@@ -1259,6 +1259,15 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				w=newcell.imagebox;
 				break;
 				}
+			case DataCell::CellType::image_svg: {
+				// FIXME: horribly memory inefficient
+				ImageView *iv=new ImageView();
+
+				iv->set_image_from_svg(it->textbuf);
+				newcell.imagebox = manage( iv );
+				w=newcell.imagebox;
+				break;
+				}
 			case DataCell::CellType::input_form:
 				// This cell is there only for cutnpaste functionality; do not display.
 				break;
@@ -1558,6 +1567,8 @@ void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 			  cell->cell_type==DataCell::CellType::verbatim)
 		al=focusbox.outbox->get_allocation();
 	else if(cell->cell_type==DataCell::CellType::image_png)
+		al=focusbox.imagebox->get_allocation();
+	else if(cell->cell_type==DataCell::CellType::image_svg)
 		al=focusbox.imagebox->get_allocation();
 	else
 		return;
@@ -1891,6 +1902,9 @@ void NotebookWindow::on_file_save()
 	{
 	// check if name known, otherwise call save_as
 	if(name.size()>0) {
+		size_t dotpos = name.rfind(".");
+		if(dotpos==std::string::npos)
+			name += ".cnb";
 		std::string res=save(name);
 		if(res.size()>0) {
 			Gtk::MessageDialog md("Error saving notebook "+name);
@@ -1923,6 +1937,9 @@ void NotebookWindow::on_file_save_as()
 	case(Gtk::RESPONSE_OK): {
 			std::string old_name = name;
 			name = dialog.get_filename();
+			size_t dotpos = name.rfind(".");
+			if(dotpos==std::string::npos)
+				name += ".cnb";
 			std::string res=save(name);
 			if(res.size()>0) {
 				Gtk::MessageDialog md("Error saving notebook "+name);

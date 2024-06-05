@@ -446,6 +446,12 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
 					}
+				else if (msg_type == "image_svg") {
+					DataCell result(cell_id, DataCell::CellType::image_svg, content["output"].get<std::string>());
+					std::shared_ptr<ActionBase> action =
+					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
+					docthread->queue_action(action);
+					}
 				else {
 					std::cerr << "cadabra-client: received cell we did not expect: "
 					          << msg_type << std::endl;

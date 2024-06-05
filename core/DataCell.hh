@@ -40,6 +40,7 @@ namespace cadabra {
 				latex_view, ///< output: cell showing LaTeX text formatted using LaTeX
 				input_form, ///< output: cell containing input form of preceding output cell
 				image_png,  ///< output: cell showing a base64 encoded PNG image
+				image_svg,  ///< output: cell showing an SVG image
 				error,      ///< output: cell showing LaTeX text for errors
 				// section
 				};

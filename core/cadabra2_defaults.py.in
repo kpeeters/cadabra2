@@ -208,6 +208,7 @@ import base64
 # 
 # - "latex_view": text-mode LaTeX string.
 # - "image_png":  base64 encoded png image.
+# - "image_svg":  svg image.
 # - "verbatim":   ascii string to be displayed verbatim.
 
 def display(obj, delay_send=False):
@@ -224,10 +225,10 @@ def display(obj, delay_send=False):
     """
     if 'matplotlib' in sys.modules and isinstance(obj, matplotlib.figure.Figure):
         imgstring = io.BytesIO()
-        obj.savefig(imgstring,format='png')
+        obj.savefig(imgstring,format='svg')
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
-        server.send(b64, "image_png", 0, False)
+        server.send(b64, "image_svg", 0, False)
         # FIXME: Use the 'handles' query method on the Server object
         # to figure out whether it can do something useful
         # with a particular data type.
@@ -235,19 +236,19 @@ def display(obj, delay_send=False):
     elif 'matplotlib' in sys.modules and isinstance(obj, matplotlib.artist.Artist):
         f = obj.get_figure()
         imgstring = io.BytesIO()
-        f.savefig(imgstring,format='png')
+        f.savefig(imgstring,format='svg')
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
-        server.send(b64, "image_png", 0, False)
+        server.send(b64, "image_svg", 0, False)
 
     elif hasattr(obj,'_backend'):
         if hasattr(obj._backend,'fig'):
             f = obj._backend.fig
             imgstring = io.BytesIO()
-            f.savefig(imgstring,format='png')
+            f.savefig(imgstring,format='svg')
             imgstring.seek(0)
             b64 = base64.b64encode(imgstring.getvalue())
-            server.send(b64, "image_png", 0, False)
+            server.send(b64, "image_svg", 0, False)
 
     elif 'vtk' in sys.modules and isinstance(obj, vtk.vtkRenderer):
         # Vtk renderer, see http://nbviewer.ipython.org/urls/bitbucket.org/somada141/pyscience/raw/master/20140917_RayTracing/Material/PythonRayTracingEarthSun.ipynb

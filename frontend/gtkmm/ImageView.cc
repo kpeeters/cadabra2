@@ -80,3 +80,17 @@ void ImageView::set_image_from_base64(const std::string& b64)
 		image.set_size_request( pixbuf->get_width(), pixbuf->get_height() );
 		}
 	}
+
+void ImageView::set_image_from_svg(const std::string& svg)
+	{
+	auto str = Gio::MemoryInputStream::create();
+	std::string dec=Glib::Base64::decode(svg);
+	str->add_data(dec.c_str(), dec.size());
+	pixbuf = Gdk::Pixbuf::create_from_stream_at_scale(str, -1, -1, true);
+	if(!pixbuf)
+		std::cerr << "cadabra-client: unable to create image from svg data" << std::endl;
+	else {
+		image.set(pixbuf);
+		image.set_size_request( pixbuf->get_width(), pixbuf->get_height() );
+		}
+	}

@@ -253,6 +253,8 @@ bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 		auto style_context = get_style_context();
 		style_context->render_background(cr, 0, 0, get_width(), get_height());
 		Gdk::RGBA fg_colour;
+		// Theme colour names can be found at
+		// https://stackoverflow.com/questions/35045469/default-gtk-css-color-scheme
 		style_context->lookup_color("theme_text_color", fg_colour);
 		
 		auto surface = cr->get_target();
