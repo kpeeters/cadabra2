@@ -2143,7 +2143,7 @@ void NotebookWindow::on_edit_copy(const Glib::VariantBase&)
 		on_outbox_copy(clipboard, selected_cell);
 		}
 	if(current_cell!=doc.end()) {
-		std::cerr << "copy called for non-outbox cell" << std::endl;
+//		std::cerr << "copy called for non-outbox cell" << std::endl;
 		// FIXME: handle other cell types.
 		}
 	}
