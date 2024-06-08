@@ -64,6 +64,11 @@ namespace cadabra {
 			void print_dots(std::ostream&, Ex::iterator);
 			void print_other(std::ostream&, Ex::iterator);
 
+			/// Handle unprintable constructions like `\pow{#}`, which need
+			/// to print verbatim. Pass it the top-level iterator, will return
+			/// true if printing has been taken care of.
+			bool handle_unprintable_wildcards(std::ostream&, Ex::iterator it) const;
+
 			bool children_have_brackets(Ex::iterator ch) const;
 
 			std::map<std::string, std::string> symmap;

@@ -82,6 +82,11 @@ namespace cadabra {
 
 			bool children_have_brackets(Ex::iterator ch) const;
 
+			/// Handle unprintable constructions like `\pow{#}`, which need
+			/// to print verbatim. Pass it the top-level iterator, will return
+			/// true if printing has been taken care of.
+			bool handle_unprintable_wildcards(std::ostream&, Ex::iterator it) const;
+			
 			/// Determine whether the indicated object 'obj', when acting on
 			/// the single argument 'arg', reads as an operator, and therefore
 			/// 'arg' does not need to be wrapped in brackets.

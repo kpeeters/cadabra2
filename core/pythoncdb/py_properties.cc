@@ -55,6 +55,8 @@
 #include "properties/WeightInherit.hh"
 #include "properties/WeylTensor.hh"
 
+#include "DisplayTeX.hh"
+#include "DisplayTerminal.hh"
 
 namespace cadabra {
 	namespace py = pybind11;
@@ -260,6 +262,9 @@ namespace cadabra {
 		Kernel *kernel = get_kernel_from_scope();
 		Properties& props = kernel->properties;
 
+		pybind11::dict globals = get_globals();
+		bool handles_latex_view = globals["server"].attr("handles")(pybind11::str("latex_view")).cast<bool>();
+		
 		pybind11::list ret;
 		std::string res;
 		bool multi = false;
@@ -275,16 +280,19 @@ namespace cadabra {
 				multi = true;
 				}
 
-
-			//std::cerr << Ex(it->second->obj) << std::endl;
-			//		DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
+			
+			// std::cerr << Ex(it->second->obj) << std::endl;
 			std::ostringstream str;
-			// std::cerr << "displaying" << std::endl;
-			//		dt.output(str);
+			if(handles_latex_view) {
+				DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
+				dt.output(str);
+				}
+			else {
+				DisplayTerminal dt(*get_kernel_from_scope(), it->second->obj);
+				dt.output(str);
+//				str << it->second->obj;
+				}
 
-			str << it->second->obj;
-
-			// std::cerr << "displayed " << str.str() << std::endl;
 			res += str.str();
 
 			if (nxt == props.pats.end() || it->first != nxt->first) {

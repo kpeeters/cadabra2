@@ -461,6 +461,9 @@ void DisplayTeX::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, 
 
 void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	{
+	if(handle_unprintable_wildcards(str, it))
+		return;
+	
 	if(*it->name=="\\prod")                                   print_productlike(str, it, " ");
 	else if(*it->name=="\\sum" || *it->name=="\\oplus")       print_sumlike(str, it);
 	else if(*it->name=="\\frac")                              print_fraclike(str, it);
@@ -549,6 +552,7 @@ void DisplayTeX::print_fraclike(std::ostream& str, Ex::iterator it)
 		str << " - ";
 		mult=-1;
 		}
+
 	str << "\\frac{";
 	if(mult * (*it->multiplier)!=1) {
 		print_multiplier(str, it, mult);
@@ -740,12 +744,29 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 	str << std::flush;
 	}
 
+bool DisplayTeX::handle_unprintable_wildcards(std::ostream& str, Ex::iterator it) const
+	{
+	// Catch `\pow{#}` and other wildcard constructions, these
+	// need to print verbatim.
+
+	if(it.number_of_children()==1) {
+		if(*(it.begin()->name)=="#") {
+			str << "\\backslash\\texttt{" <<
+				(*(it->name)).substr(1)
+				 << "}\\{\\#\\}";
+			return true;
+			}
+		}
+	return false;
+	}
+
 void DisplayTeX::print_powlike(std::ostream& str, Ex::iterator it)
 	{
 	auto arg=tree.begin(it);
 	assert(arg!=tree.end(it));
 	auto exp=arg;
 	++exp;
+
 	assert(exp!=tree.end(it));
 
 	if (kernel.display_fractions && exp->is_rational() && *exp->multiplier < 0) {

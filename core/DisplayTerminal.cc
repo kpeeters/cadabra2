@@ -289,6 +289,9 @@ void DisplayTerminal::print_parent_rel(std::ostream& str, str_node::parent_rel_t
 
 void DisplayTerminal::dispatch(std::ostream& str, Ex::iterator it)
 	{
+	if(handle_unprintable_wildcards(str, it))
+		return;
+	
 	if(*it->name=="\\prod")            print_productlike(str, it, " ");
 	else if(*it->name=="\\sum")        print_sumlike(str, it);
 	else if(*it->name=="\\frac")       print_fraclike(str, it);
@@ -307,6 +310,20 @@ void DisplayTerminal::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\components") print_components(str, it);
 	else if(*it->name=="\\ldots")      print_dots(str, it);
 	else                               print_other(str, it);
+	}
+
+bool DisplayTerminal::handle_unprintable_wildcards(std::ostream& str, Ex::iterator it) const
+	{
+	// Catch `\pow{#}` and other wildcard constructions, these
+	// need to print verbatim.
+
+	if(it.number_of_children()==1) {
+		if(*(it.begin()->name)=="#") {
+			str << (*(it->name)) << "{#}";
+			return true;
+			}
+		}
+	return false;
 	}
 
 void DisplayTerminal::print_commalike(std::ostream& str, Ex::iterator it)

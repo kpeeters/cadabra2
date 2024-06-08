@@ -206,7 +206,10 @@ namespace cadabra {
 			virtual ~Inherit() {};
 			virtual std::string name() const
 				{
-				return std::string("Stay Away");
+//				T tmp;
+				// T can be abstract, so we cannot instantiate. Maybe use typeid,
+				// but then we need to be careful about name mangling.
+				return std::string("Inherit");
 				};
 		};
 
