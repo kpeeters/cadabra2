@@ -57,6 +57,7 @@
 
 #include "DisplayTeX.hh"
 #include "DisplayTerminal.hh"
+#include "Media.hh"
 
 namespace cadabra {
 	namespace py = pybind11;
@@ -258,7 +259,14 @@ namespace cadabra {
 
 	pybind11::list list_properties()
 		{
-		//	std::cout << "listing properties" << std::endl;
+		// This function is fundamentally limited. We would *like* to return a list of
+		// BoundProperties, so that you can do something with the output. But we cannot
+		// walk the full property list and create a BoundProperty for each of them, as
+		// we do not know the type (we can only dynamic_cast).
+		//
+		// So for now this is just returning a list of LaTeXStrings, obtained by asking
+		// each property to print itself.
+		
 		Kernel *kernel = get_kernel_from_scope();
 		Properties& props = kernel->properties;
 
@@ -270,18 +278,17 @@ namespace cadabra {
 		bool multi = false;
 		for (auto it = props.pats.begin(); it != props.pats.end(); ++it) {
 			if (it->first->hidden()) continue;
-
+			
 			// print the property name if we are at the end or if the next entry is for
 			// a different property.
 			decltype(it) nxt = it;
 			++nxt;
 			if (res == "" && (nxt != props.pats.end() && it->first == nxt->first)) {
-				res += "{";
+				if(handles_latex_view) res += "\\{";
+				else                   res += "{";
 				multi = true;
 				}
-
 			
-			// std::cerr << Ex(it->second->obj) << std::endl;
 			std::ostringstream str;
 			if(handles_latex_view) {
 				DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
@@ -290,25 +297,26 @@ namespace cadabra {
 			else {
 				DisplayTerminal dt(*get_kernel_from_scope(), it->second->obj);
 				dt.output(str);
-//				str << it->second->obj;
 				}
-
+			
 			res += str.str();
-
+			
 			if (nxt == props.pats.end() || it->first != nxt->first) {
-				if (multi)
-					res += "}";
+				if (multi) {
+					if(handles_latex_view) res += "\\}";
+					else                   res += "}";
+					}
 				multi = false;
-				res += "::";
-				res += (*it).first->name();
-				ret.append(res);
+				res += "::\\texttt{";
+				res += (*it).first->name() + "}";
+				ret.append(LaTeXString(res));
 				res = "";
 				}
 			else {
 				res += ", ";
 				}
 			}
-
+		
 		return ret;
 		}
 

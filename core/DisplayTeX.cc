@@ -750,10 +750,9 @@ bool DisplayTeX::handle_unprintable_wildcards(std::ostream& str, Ex::iterator it
 	// need to print verbatim.
 
 	if(it.number_of_children()==1) {
-		if(*(it.begin()->name)=="#") {
-			str << "\\backslash\\texttt{" <<
-				(*(it->name)).substr(1)
-				 << "}\\{\\#\\}";
+		const std::string& name = (*it->name);
+		if(name.size()>0 && name[0]=='\\' && *(it.begin()->name)=="#") {
+			str << "\\backslash\\texttt{" << name.substr(1) << "}\\{\\#\\}";
 			return true;
 			}
 		}

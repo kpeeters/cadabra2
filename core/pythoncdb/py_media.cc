@@ -9,6 +9,7 @@ namespace cadabra {
    	py::class_<LaTeXString>(m, "LaTeXString")
 			.def(py::init<std::string>())
 			.def("_latex_", &LaTeXString::latex)
+			.def("__str__", &LaTeXString::latex)
 			;
 		}
 }
