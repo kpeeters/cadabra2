@@ -1,0 +1,58 @@
+{
+	"cell_id": 4208743507568568802,
+	"cells": [
+		{
+			"cell_id": 11663224005027881326,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 13307240755558806970,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Cadabra now has proper UTF-8 support. 😊"
+				}
+			],
+			"hidden": true,
+			"source": "Cadabra now has proper UTF-8 support. 😊"
+		},
+		{
+			"cell_id": 11820404449086491630,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6826282126270786384,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Cadabra 现在具有适当的 UTF-8 支持。😊"
+				}
+			],
+			"hidden": true,
+			"source": "Cadabra 现在具有适当的 UTF-8 支持。😊"
+		},
+		{
+			"cell_id": 9518057759926663596,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6738555579131781445,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Цадабра сада има одговарајућу подршку за УТФ-8. 😊"
+				}
+			],
+			"hidden": true,
+			"source": "Цадабра сада има одговарајућу подршку за УТФ-8. 😊"
+		},
+		{
+			"cell_id": 10704240038917635801,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}
