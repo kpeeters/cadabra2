@@ -118,7 +118,7 @@ class Shell(InteractiveConsole):
         if lastchar=='.' or lastchar==';' or lastchar==':':
             if self.lhs!="":
                 line_stripped=line_stripped[:-1]
-                self.rhs += line_stripped
+                self.rhs += " "+line_stripped
                 rewrite = self.indent + self.lhs + ' = Ex(r"' + self.rhs+'")'
                 if self.operator==':=':
                     if rewrite[-1]!=';':
