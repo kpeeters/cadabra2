@@ -63,7 +63,7 @@ std::string cadabra::cdb2python_string(const std::string& blk, bool display)
 		std::string res=cadabra::convert_line(line, lhs, rhs, op, indent, display);
 		// std::cerr << "preparsed : " + res << std::endl;
 		if(res!="::empty")
-			newblk += res+'\n';
+			newblk += res+"\n";
 		}
 	return newblk;
 	}
@@ -108,7 +108,7 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 	if(lastchar=="." || lastchar==";" || lastchar==":") {
 		if(lhs!="") {
 			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
-			rhs += line_stripped;
+			rhs += " "+line_stripped;
 			ret = indent + lhs + " = Ex(r'" + escape_quotes(rhs) + "')";
 			if(op==":=") {
 				if(ret[ret.size()-1]!=';')

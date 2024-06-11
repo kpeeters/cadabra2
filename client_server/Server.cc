@@ -201,9 +201,11 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	std::string result;
 
 	// Preparse input block.
+	// std::cerr << "RAW:\n" << blk << std::endl;
+	
 	auto newblk = cadabra::cdb2python_string(blk, true);
 
-	//	std::cerr << "PREPARSED:\n" << newblk << std::endl;
+	// std::cerr << "PREPARSED:\n" << newblk << std::endl;
 	// snoop::log("preparsed") << newblk << snoop::flush;
 
 	// Run block. Catch output.
