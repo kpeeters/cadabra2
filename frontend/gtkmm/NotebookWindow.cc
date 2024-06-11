@@ -2168,11 +2168,41 @@ void NotebookWindow::on_edit_copy(const Glib::VariantBase&)
 void NotebookWindow::on_edit_paste()
 	{
 	if(current_cell!=doc.end()) {
-		auto vis = canvasses[current_canvas]->visualcells.find(&(*current_cell));
-		if(vis!=canvasses[current_canvas]->visualcells.end()) {
-			CodeInput *inbox = (*vis).second.inbox;
-			inbox->edit.get_buffer()->insert_at_cursor(clipboard_cdb);
-			}
+		// std::cerr << "paste: " << std::endl;
+      Glib::RefPtr<Gtk::Clipboard> clipboard = Gtk::Clipboard::get(GDK_SELECTION_CLIPBOARD);
+      clipboard->request_targets( [clipboard, this](const std::vector<Glib::ustring>& targets) {
+			// Figure out which formats we can request.
+			bool have_cadabra=false, have_utf8_string=false, have_text=false;
+			for(const auto& t: targets) {
+				// std::cerr << t << std::endl;
+				if(t=="cadabra")
+					have_cadabra=true;
+				else if(t=="UTF8_STRING")
+					have_utf8_string=true;
+				else if(t=="TEXT")
+					have_text=true;
+				}
+			// Now insert.
+			std::string target;
+			if(have_cadabra)   target="cadabra";
+			else if(have_utf8_string) target="UTF8_STRING";
+			else if(have_text)        target="TEXT";
+			else return;
+
+			// std::cerr << "requesting target " << target << std::endl;
+			clipboard->request_contents(target, [this](const Gtk::SelectionData& data) {
+				std::string content = data.get_data_as_string();
+				auto vis = canvasses[current_canvas]->visualcells.find(&(*current_cell));
+				if(vis!=canvasses[current_canvas]->visualcells.end()) {
+					// std::cerr << "inserting " << content << std::endl;
+					CodeInput *inbox = (*vis).second.inbox;
+					inbox->edit.get_buffer()->insert_at_cursor(content);
+					}
+//				else {
+//					std::cerr << "cannot find cell to insert into" << std::endl;
+//					}
+				});
+			});
 		}
 	}
 
@@ -3019,8 +3049,9 @@ bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
 	selected_cell=it;
 	action_copy->set_enabled(true);
 
-	Glib::RefPtr<Gtk::Clipboard> clipboard = Gtk::Clipboard::get(GDK_SELECTION_PRIMARY);
-	on_outbox_copy(clipboard, selected_cell);
+	// We now require that the user ctrl-c's this before copying to the clipboard.
+	// Glib::RefPtr<Gtk::Clipboard> clipboard = Gtk::Clipboard::get(GDK_SELECTION_PRIMARY);
+	// on_outbox_copy(clipboard, selected_cell);
 	return true;
 	}
 
@@ -3030,10 +3061,11 @@ void NotebookWindow::on_outbox_copy(Glib::RefPtr<Gtk::Clipboard> refClipboard, D
 
 	// Find the child cell which contains the input_form data.
 	auto sib=doc.begin(it);
+//	std::cerr << "Finding children of " << it->textbuf << std::endl;
 	while(sib!=doc.end(it)) {
 		if(sib->cell_type==DataCell::CellType::input_form) {
 			clipboard_cdb = sib->textbuf;
-			// std::cerr << "found input form " << clipboard_cdb << std::endl;
+//			std::cerr << "found input form " << clipboard_cdb << std::endl;
 			break;
 			}
 		++sib;
@@ -3042,8 +3074,10 @@ void NotebookWindow::on_outbox_copy(Glib::RefPtr<Gtk::Clipboard> refClipboard, D
 	// Setup clipboard handling
 	clipboard_txt = cpystring;
 	std::vector<Gtk::TargetEntry> listTargets;
-	if(clipboard_cdb.size()>0)
+	if(clipboard_cdb.size()>0) {
+//		std::cerr << "let them know we have cadabra format" << std::endl;
 		listTargets.push_back( Gtk::TargetEntry("cadabra") );
+		}
 	listTargets.push_back( Gtk::TargetEntry("UTF8_STRING") );
 	listTargets.push_back( Gtk::TargetEntry("TEXT") );
 	refClipboard->set( listTargets,
@@ -3055,8 +3089,10 @@ void NotebookWindow::on_clipboard_get(Gtk::SelectionData& selection_data, guint 
 	{
 	const Glib::ustring target = selection_data.get_target();
 
-	if(target == "cadabra")
+	if(target == "cadabra") {
+//		std::cerr << "received request for target cadabra: " << clipboard_cdb << std::endl;
 		selection_data.set("cadabra", clipboard_cdb);
+		}
 	else if(target == "UTF8_STRING" || target=="TEXT") {
 		selection_data.set_text(clipboard_txt);
 		}
