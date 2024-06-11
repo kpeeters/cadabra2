@@ -142,6 +142,22 @@ namespace cadabra {
 
 	/// \ingroup clientserver
 	///
+	/// Replace the contents of a cell. Not undo-able.
+
+	class ActionReplaceCell : public ActionBase {
+		public:
+			ActionReplaceCell(DataCell::id_t ref_id_);
+			virtual ~ActionReplaceCell();
+
+			virtual void execute(DocumentThread&, GUIBase&) override;
+			virtual void revert(DocumentThread&,  GUIBase&) override;
+
+			virtual bool undoable() const override;
+		private:
+		};
+	
+	/// \ingroup clientserver
+	///
 	/// Split a cell into two separate cells, at the point of the cursor.
 
 	class ActionSplitCell : public ActionBase {

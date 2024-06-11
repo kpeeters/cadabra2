@@ -579,7 +579,8 @@ bool Server::handles(const std::string& otype) const
 	return false;
 	}
 
-uint64_t Server::send(const std::string& output, const std::string& msg_type, uint64_t parent_id, bool last)
+uint64_t Server::send(const std::string& output, const std::string& msg_type,
+							 uint64_t parent_id, uint64_t cell_id, bool last)
 	{
 	// This is the function exposed to the Python side; not used
 	// directly in the server to send block output back to the client
@@ -587,7 +588,10 @@ uint64_t Server::send(const std::string& output, const std::string& msg_type, ui
 
 	nlohmann::json json, header, content;
 
-	auto return_cell_id=cadabra::generate_uuid<uint64_t>();
+	uint64_t return_cell_id=cell_id;
+	if(return_cell_id==0)
+		return_cell_id=cadabra::generate_uuid<uint64_t>();
+	
 	if(parent_id==0)
 		header["parent_id"]=current_id;
 	else

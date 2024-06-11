@@ -174,9 +174,10 @@ void DocumentThread::process_action_queue()
 	// FIXME: we certainly do not want any two threads to run this at the same time,
 	// but that is not guaranteed. Actions should always be run on the GUI thread.
 	// This absolutely has to be run on the main GUI thread.
-	//	assert(main_thread_id==std::this_thread::get_id());
 
-
+	// if(main_thread_id != std::this_thread::get_id())
+	// 	throw std::logic_error("DocumentThread::process_action_queue: internal error, not running on main thread.");
+	
 	stack_mutex.lock();
 	while(pending_actions.size()>0) {
 		std::shared_ptr<ActionBase> ab = pending_actions.front();

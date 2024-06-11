@@ -187,6 +187,28 @@ void ActionRemoveCell::revert(DocumentThread& cl, GUIBase& gb)
 	}
 
 
+ActionReplaceCell::ActionReplaceCell(DataCell::id_t ref_id)
+	: ActionBase(ref_id)
+	{
+	}
+
+ActionReplaceCell::~ActionReplaceCell()
+	{
+	}
+
+void ActionReplaceCell::execute(DocumentThread& cl, GUIBase& gb)
+	{
+	}
+
+void ActionReplaceCell::revert(DocumentThread& cl, GUIBase& gb)
+	{
+	}
+
+bool ActionReplaceCell::undoable() const
+	{
+	return false;
+	}
+
 ActionSplitCell::ActionSplitCell(DataCell::id_t ref_id)
 	: ActionBase(ref_id)
 	{

@@ -131,10 +131,10 @@ else:
         can talk to a remote client to display images and maths.
         """
         
-        def send(self, data, typestr, parent_id, last_in_sequence):
+        def send(self, data, typestr, parent_id, cell_id, last_in_sequence):
             """ Send a message to the client; 'typestr' indicates the cell type,
             'parent_id', if non-null, indicates the serial number of the parent
-            cell.
+            cell. If 'cell_id' is not 0, put the output in the cell with that id.
             """
             print(data)
             return 0
@@ -211,7 +211,7 @@ import base64
 # - "image_svg":  svg image.
 # - "verbatim":   ascii string to be displayed verbatim.
 
-def display(obj, delay_send=False):
+def display(obj, cell_id=0, delay_send=False):
     """
     Generalised 'print' function which knows how to display objects in the 
     best possible way on the used interface, be it a console or graphical
@@ -228,7 +228,7 @@ def display(obj, delay_send=False):
         obj.savefig(imgstring,format='svg')
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
-        server.send(b64, "image_svg", 0, False)
+        server.send(b64, "image_svg", 0, cell_id, False)
         # FIXME: Use the 'handles' query method on the Server object
         # to figure out whether it can do something useful
         # with a particular data type.
@@ -239,7 +239,7 @@ def display(obj, delay_send=False):
         f.savefig(imgstring,format='svg')
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
-        server.send(b64, "image_svg", 0, False)
+        server.send(b64, "image_svg", 0, cell_id, False)
 
     elif hasattr(obj,'_backend'):
         if hasattr(obj._backend,'fig'):
@@ -248,7 +248,7 @@ def display(obj, delay_send=False):
             f.savefig(imgstring,format='svg')
             imgstring.seek(0)
             b64 = base64.b64encode(imgstring.getvalue())
-            server.send(b64, "image_svg", 0, False)
+            server.send(b64, "image_svg", 0, cell_id, False)
 
     elif 'vtk' in sys.modules and isinstance(obj, vtk.vtkRenderer):
         # Vtk renderer, see http://nbviewer.ipython.org/urls/bitbucket.org/somada141/pyscience/raw/master/20140917_RayTracing/Material/PythonRayTracingEarthSun.ipynb
@@ -263,12 +263,13 @@ def display(obj, delay_send=False):
                 return obj._latex_()
             else:
                 ret = mopen+obj._latex_()+mclose
-                id=server.send(ret, "latex_view", 0, False)
+                id=server.send(ret, "latex_view", 0, cell_id, False)
                 # print(id)
                 # Make a child cell of the above with input form content.
-                server.send(obj.input_form(), "input_form", id, False)                
+                cell_id = server.send(obj.input_form(), "input_form", id, cell_id, False)
+                return cell_id
         else:
-            server.send(unicode(obj), "plain", 0, False)
+            server.send(unicode(obj), "plain", 0, cell_id, False)
 
     elif isinstance(obj, ExNode):
         if server.handles('latex_view'):
@@ -276,12 +277,13 @@ def display(obj, delay_send=False):
                 return obj._latex_()
             else:
                 ret = mopen+obj._latex_()+mclose
-                id=server.send(ret, "latex_view", 0, False)
+                id=server.send(ret, "latex_view", 0, cell_id, False)
                 # print(id)
                 # Make a child cell of the above with input form content.
-                server.send(obj.input_form(), "input_form", id, False)                
+                cell_id = server.send(obj.input_form(), "input_form", id, cell_id, False)
+                return cell_id
         else:
-            server.send(unicode(obj), "plain", 0, False)
+            server.send(unicode(obj), "plain", 0, cell_id, False)
 
     elif isinstance(obj, LaTeXString):
         if server.handles('latex_view'):
@@ -289,9 +291,10 @@ def display(obj, delay_send=False):
             if delay_send:
                 return ret
             else:
-                server.send(ret , "latex_view", 0, False)
+                cell_id = server.send(ret , "latex_view", 0, cell_id, False)
+                return cell_id
         else:
-            server.send(unicode(obj), "plain", 0, False)
+            server.send(unicode(obj), "plain", 0, cell_id, False)
             
     elif isinstance(obj, Property):
         if server.handles('latex_view'):
@@ -299,11 +302,11 @@ def display(obj, delay_send=False):
             if delay_send:
                 return ret
             else:
-                server.send(ret , "latex_view", 0, False)
+                server.send(ret , "latex_view", 0, cell_id, False)
                 # Not yet available.
                 # server.send(obj.input_form(), "input_form", 0, False)
         else:
-            server.send(unicode(obj), "plain", 0, False)
+            server.send(unicode(obj), "plain", 0, cell_id, False)
             
     elif type(obj)==list:
         if server.handles('latex_view'):
@@ -315,13 +318,13 @@ def display(obj, delay_send=False):
                    out+=","+discr
                else:
                    first=False
-               nxt = display(elm, True)
+               nxt = display(elm, delay_send=True)
                if nxt != None:
-                  out+= "$"+display(elm, True)+"$"
+                  out+= "$"+display(elm, delay_send=True)+"$"
                   atleast_one_unstolen=True
            out+="$\\big]$";
            if atleast_one_unstolen:
-              server.send(out, "latex_view", 0, False)
+              server.send(out, "latex_view", 0, cell_id, False)
         else:
            out = "["
            first=True           
@@ -332,14 +335,14 @@ def display(obj, delay_send=False):
                    first=False                  
                out += str(elm)
            out += "]"
-           server.send(unicode(out), "plain", 0, False)                  
+           server.send(unicode(out), "plain", 0, cell_id, False)
            # FIXME: send input_form version.
         
     elif hasattr(obj, "__module__") and hasattr(obj.__module__, "find") and obj.__module__.find("sympy")!=-1:
         if delay_send:
            return latex(obj)
         else:
-           server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view", 0, False)
+           server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view", 0, cell_id, False)
         
     else:
         # Failing all else, just dump a str representation to the notebook, asking
@@ -348,7 +351,7 @@ def display(obj, delay_send=False):
         if delay_send and server.handles('latex_view'):
             return "\\verb|"+str(obj)+"|"
         else:
-            server.send(unicode(obj), "verbatim", 0, False)
+            server.send(unicode(obj), "verbatim", 0, cell_id, False)
     
 __cdbkernel__.server=server
 __cdbkernel__.display=display
@@ -364,18 +367,18 @@ class Console(object):
             if server.architecture() == "terminal":
                 print(*objs)
             elif server.architecture() == "client-server":
-                server.send(" ".join(str(obj) for obj in objs), "csl_out", 0, False)
+                server.send(" ".join(str(obj) for obj in objs), "csl_out", 0, cell_id, False)
 
         def clear(self):
             """Clears the output of the console window"""
             if server.architecture() == "client-server":
-                server.send("", "csl_clear", 0, False)
+                server.send("", "csl_clear", 0, cell_id, False)
 
         def warn(self, msg):
             if server.architecture() == "terminal":
                 print("Warning: " + msg)
             elif server.architecture() == "client-server":
-                server.send(msg, "csl_warn", 0, False)
+                server.send(msg, "csl_warn", 0, cell_id, False)
 
 console = Console()
 __cdbkernel__.configure_warnings(callback=console.warn)

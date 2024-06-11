@@ -22,22 +22,22 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 11414296816065095148,
+					"cell_id": 7269302728364725573,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property Coordinate attached to~}\\left[r, \\discretionary{}{}{}t, \\discretionary{}{}{}\\phi, \\discretionary{}{}{}\\theta\\right].\\end{dmath*}"
 				},
 				{
-					"cell_id": 3892708982626329457,
+					"cell_id": 18175002100584386776,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property Indices(position=fixed) attached to~}\\left[\\mu, \\discretionary{}{}{}\\nu, \\discretionary{}{}{}\\rho, \\discretionary{}{}{}\\sigma, \\discretionary{}{}{}\\lambda, \\discretionary{}{}{}\\kappa, \\discretionary{}{}{}\\chi, \\discretionary{}{}{}\\gamma\\right].\\end{dmath*}"
 				},
 				{
-					"cell_id": 13352828307527056670,
+					"cell_id": 9762220735925145604,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
-					"source": "\\begin{dmath*}{}\\text{Property PartialDerivative attached to~}\\partial{\\#}.\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\text{Property PartialDerivative attached to~}\\backslash\\texttt{partial}\\{\\#\\}.\\end{dmath*}"
 				}
 			],
 			"source": "{r,t,\\phi,\\theta}::Coordinate;\n{\\mu,\\nu,\\rho,\\sigma,\\lambda,\\kappa,\\chi,\\gamma}::Indices(values={t,r,\\phi,\\theta}, position=fixed);\n\\partial{#}::PartialDerivative;\ng_{\\mu\\nu}::Metric.\ng^{\\mu\\nu}::InverseMetric."

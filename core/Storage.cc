@@ -345,7 +345,7 @@ namespace cadabra {
 		//	str << "  (" << calc_hash(it) << ")";
 		//	str << "  (" << depth(it) << ")";
 		//	str << "  (" << it->fl.bracket << " " << &(*it) << ")";
-		str << "  (" << it->fl.bracket << " " << it.node << ")";
+//		str << "  (" << it->fl.bracket << " " << it.node << ")";
 		if(!compact_tree) str << std::endl;
 
 		while(beg!=fin) {
