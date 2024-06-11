@@ -32,8 +32,8 @@ bool canonicalise::can_apply(iterator it)
 	// sums as factors. Products as factors are ok, they do not lead to multiple
 	// identically named free indices.
 
-	auto sum_or_prod = find_in_subtree(tr, it, [](Ex::iterator tst) {
-		if(*tst->name=="\\sum") return true;
+	auto sum_or_prod = find_in_subtree(tr, it, [this](Ex::iterator tst) {
+		if(*tst->name=="\\sum" && number_of_indices(tst)>0) return true;
 		return false;
 		}, false);
 	if(sum_or_prod!=tr.end()) {
