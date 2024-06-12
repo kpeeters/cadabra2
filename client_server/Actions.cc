@@ -35,7 +35,7 @@ void ActionBase::execute(DocumentThread& cl, GUIBase& )
 	}
 
 ActionAddCell::ActionAddCell(DataCell cell, DataCell::id_t ref_id, Position pos_)
-	: ActionBase(ref_id), newcell(cell), pos(pos_)
+	: ActionBase(ref_id), newcell(cell), pos(pos_), is_replacement(false)
 	{
 	}
 
@@ -43,7 +43,23 @@ void ActionAddCell::execute(DocumentThread& cl, GUIBase& gb)
 	{
 	ActionBase::execute(cl, gb);
 
-	// Insert this DataCell into the DTree document.
+	// Insert this DataCell into the DTree document. We first need
+	// to figure out whether we already have a cell with the DataCell's
+	// cell_id; in this case we have to replace, not append/insert.
+	auto it=cl.doc.begin();
+	while(it!=cl.doc.end()) {
+		if((*it).id().id==newcell.id().id) {
+			// FIXME: right now we only change textbuf.
+			// std::cerr << "found! " << it->id().id << ", " << static_cast<int>(it->cell_type) << std::endl;
+			it->textbuf=newcell.textbuf;
+			gb.update_cell(cl.doc, it);
+			is_replacement=true;
+			return;
+			}
+		++it;
+		}
+
+	// If we get here we have to append/insert.
 	switch(pos) {
 		case Position::before:
 			newref = cl.doc.insert(ref, newcell);
@@ -71,6 +87,10 @@ void ActionAddCell::revert(DocumentThread& cl, GUIBase& gb)
 	cl.doc.erase(ch);
 	}
 
+bool ActionAddCell::undoable() const
+	{
+	return !is_replacement;
+	}
 
 ActionPositionCursor::ActionPositionCursor(DataCell::id_t ref_id, Position pos_)
 	: ActionBase(ref_id), needed_new_cell(false), pos(pos_)

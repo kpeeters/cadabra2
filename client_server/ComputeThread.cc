@@ -332,7 +332,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		cell_id.created_by_client=false;
 	// std::cerr << "received cell with id " << cell_id.id << std::endl;
 
-	// Determine if we already have a cell with this cell_id.
+	// Determine if this refers to a special cell in the interactive console.
 	if (interactive_cells.find(parent_id.id) != interactive_cells.end()) {
 		interactive_cells.insert(cell_id.id);
 		docthread->on_interactive_output(root);

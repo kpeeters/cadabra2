@@ -24,6 +24,7 @@
   and aarch64 architectures.</li>
   <li>Removed deprecated GTK-3 features and cleaned up the UI.</li>
   <li>Fix bug in code to interrupt a running computation.</li>
+  <li>All changes of 2.4.5.</li>
 </ul>
 
 <a name="master"></a>
@@ -38,6 +39,8 @@
   <li>Add <tt>LaTeXString</tt> object to display LaTeX formatted strings on capable frontends.</li>
   <li>Fix a <a href="https://cadabra.science/qa/2723/interaction-between-canonicalise-and-vector-spinors">bug</a> with <tt>canonicalise</tt> acting on vector-spinor objects.</li>
   <li>Enable the use of Unicode greek characters as input (which will get converted to LaTeX automatically) to enable cut-n-paste in the terminal (Connor).</li>
+  <li>Fix handling of multi-line expressions (newlines now count as a whitespace).</li>
+  <li>Fix <tt>canonicalise</tt> to allow for factors which are sums, as long as these do not have indices.</li>
 </ul>
 
 <h3>2.4.4 (released 20-Sep-2023)</h3>

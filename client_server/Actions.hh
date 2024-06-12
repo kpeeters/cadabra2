@@ -66,6 +66,8 @@ namespace cadabra {
 			virtual void execute(DocumentThread&, GUIBase&) override;
 			virtual void revert(DocumentThread&,  GUIBase&) override;
 
+			/// Can this action be undone?
+			virtual bool undoable() const;
 		private:
 			// Keep track of the location where this cell is inserted into
 			// the notebook.
@@ -74,6 +76,10 @@ namespace cadabra {
 			DTree::iterator   newref;
 			Position          pos;
 			int               child_num;
+
+			// If we are replacing a cell, keep track of that so we
+			// report that we are not undoable.
+			bool              is_replacement;
 		};
 
 

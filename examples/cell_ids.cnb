@@ -1,0 +1,145 @@
+{
+	"cell_id": 11301361161958322865,
+	"cells": [
+		{
+			"cell_id": 3209737360045897807,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 1275646209966621667,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The \\verb|display| function will return the ID of the output cell. Using this ID it \nis possible to send subsequent output to the same output cell. This allows for \ndynamical updating (e.g. counters or progress bars)."
+				}
+			],
+			"hidden": true,
+			"source": "The \\verb|display| function will return the ID of the output cell. Using this ID it \nis possible to send subsequent output to the same output cell. This allows for \ndynamical updating (e.g. counters or progress bars)."
+		},
+		{
+			"cell_id": 2543726846254358456,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 689965496974128564,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9610737522023299257,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m n}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m n}\\end{dmath*}"
+				},
+				{
+					"cell_id": 2823807190979596582,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 15966417375204997629,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "B_{p q}"
+						}
+					],
+					"source": "\\begin{dmath*}{}B_{p q}\\end{dmath*}"
+				}
+			],
+			"source": "ex:=A_{m n};\nex2:=B_{p q};"
+		},
+		{
+			"cell_id": 13771311687216592030,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 12160042253445624459,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4777631753974189465,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m n}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m n}\\end{dmath*}"
+				}
+			],
+			"source": "c1=display(ex)"
+		},
+		{
+			"cell_id": 13687948512684403628,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9350841598844205305,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10397374464617081800,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "B_{p q}"
+						}
+					],
+					"source": "\\begin{dmath*}{}B_{p q}\\end{dmath*}"
+				}
+			],
+			"source": "c2=display(ex2)"
+		},
+		{
+			"cell_id": 1243683661280339692,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 11419632574425512943,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The above used the default \\verb|cell_id| parameter of \\verb|display| (zero), which led to the \ncreation of a new output cell. However, if we pass this ID to the \\verb|display| function, we \ncan overwrite an existing output cell:"
+				}
+			],
+			"hidden": true,
+			"source": "The above used the default \\verb|cell_id| parameter of \\verb|display| (zero), which led to the \ncreation of a new output cell. However, if we pass this ID to the \\verb|display| function, we \ncan overwrite an existing output cell:"
+		},
+		{
+			"cell_id": 14484998934473877948,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 10270840374210630885,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2471321157843722375,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m n}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m n}\\end{dmath*}"
+				}
+			],
+			"source": "display(ex, cell_id=c2)"
+		},
+		{
+			"cell_id": 13671896224003488670,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

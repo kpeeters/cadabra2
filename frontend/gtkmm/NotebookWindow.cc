@@ -1474,6 +1474,12 @@ void NotebookWindow::update_cell(const DTree&, DTree::iterator it)
 			vc.inbox->update_buffer();
 			vc.inbox->queue_draw();
 			}
+		else if(it->cell_type==DataCell::CellType::latex_view || it->cell_type==DataCell::CellType::verbatim
+				  || it->cell_type==DataCell::CellType::output) {
+			vc.outbox->image.set_latex(it->textbuf);
+			vc.outbox->image.layout_latex();
+			vc.outbox->queue_draw();
+			}
 		}
 
 	disable_stacks=false;
