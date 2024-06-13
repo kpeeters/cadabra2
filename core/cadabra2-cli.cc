@@ -386,8 +386,9 @@ void Shell::process_ps1(const std::string& line)
 {
 	// Convert cadabra to python
 	bool display = !(flags & Flags::IgnoreSemicolons);
-	std::string lhs, rhs, op, indent;
-	std::string output = cadabra::convert_line(line, lhs, rhs, op, indent, display);
+	cadabra::ConvertData cv;
+//	std::string lhs, rhs, op, indent;
+	std::string output = cadabra::convert_line(line, cv, display);
 	if (output == "::empty") {
 		// Cadabra continuation line, add to collect
 		collect += line + "\n";

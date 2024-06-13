@@ -99,6 +99,14 @@ namespace cadabra {
 		multiply(begin()->multiplier, val);
 		}
 
+	Ex::Ex(float val)
+		: state_(result_t::l_no_action)
+		{
+		std::ostringstream str;
+		str << val;
+		set_head(str_node(str.str()));
+		}
+
 	Ex::result_t Ex::state() const
 		{
 		return state_;
@@ -1065,7 +1073,8 @@ found:
 	bool str_node::operator<(const cadabra::str_node& other) const
 		{
 		if(*name<*other.name) return true;
-		else return false;
+		if(*name==*other.name && *multiplier<*other.multiplier) return true;
+		return false;
 		}
 
 	}

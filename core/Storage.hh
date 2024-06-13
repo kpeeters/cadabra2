@@ -149,6 +149,7 @@ namespace cadabra {
 			/// Initialise with given string as head node (does not parse this string).
 			Ex(const std::string&);
 			Ex(int);
+			Ex(float);
 
 			Ex& operator=(Ex);
 			

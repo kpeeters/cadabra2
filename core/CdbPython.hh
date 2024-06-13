@@ -19,12 +19,24 @@ namespace cadabra {
 	std::string cdb2python_string(const std::string&, bool display);	
 
 	/// \ingroup files
+	/// Object to store pre-parsing intermediate results. Necessary
+	/// to keep things tidy but also in order to avoid the fact that
+	/// we cannot pass strings by reference between C++ and Python.
+	class ConvertData {
+		public:
+			ConvertData();
+			ConvertData(const std::string&, const std::string&, const std::string&, const std::string&);
+			
+			std::string lhs, rhs, op, indent;
+	};
+	
+	/// \ingroup files
 	/// As above, but for a single line; for private use only.
 	/// If display is false, this will not make ';' characters 
 	/// generate 'display' statements (used in the conversion of
 	/// notebooks to python packages).
 
-	std::string convert_line(const std::string&, std::string& lhs, std::string& rhs, std::string& op, std::string& indent, bool display);
+	std::string convert_line(const std::string&, ConvertData& cv, bool display); //std::string& lhs, std::string& rhs, std::string& op, std::string& indent, bool display);
 
 	/// \ingroup files
 	/// Convert a Cadabra notebook file to pure Python. This gets

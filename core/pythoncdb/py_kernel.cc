@@ -124,6 +124,14 @@ namespace cadabra {
 			.def("warn", &Kernel::warn, pybind11::arg("msg"), pybind11::arg("level") = 0)
 			.def("configure_warnings", kernel_configure_warnings);
 
+		pybind11::class_<ConvertData>(m, "ConvertData")
+			.def(pybind11::init<>())
+			.def(pybind11::init<std::string, std::string, std::string, std::string>())
+			.def_readwrite("lhs", &ConvertData::lhs)
+			.def_readwrite("rhs", &ConvertData::rhs)
+			.def_readwrite("op", &ConvertData::op)			
+			.def_readwrite("indent", &ConvertData::indent);
+		
 		Kernel* kernel = create_scope();
 		m.attr("__cdbkernel__") = pybind11::cast(kernel);
 
@@ -156,6 +164,7 @@ namespace cadabra {
 
 		m.def("cdb2python", &cdb2python);
 		m.def("cdb2python_string", &cdb2python_string);
+		m.def("convert_line", &convert_line);
 		}
 
 	}

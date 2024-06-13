@@ -58,9 +58,10 @@ std::string cadabra::cdb2python_string(const std::string& blk, bool display)
 	std::stringstream str(blk);
 	std::string line;
 	std::string newblk;
-	std::string lhs, rhs, op, indent;
+	ConvertData cv;
+//	std::string lhs, rhs, op, indent;
 	while(std::getline(str, line, '\n')) {
-		std::string res=cadabra::convert_line(line, lhs, rhs, op, indent, display);
+		std::string res=cadabra::convert_line(line, cv, display); // lhs, rhs, op, indent, display);
 		// std::cerr << "preparsed : " + res << std::endl;
 		if(res!="::empty")
 			newblk += res+"\n";
@@ -68,9 +69,24 @@ std::string cadabra::cdb2python_string(const std::string& blk, bool display)
 	return newblk;
 	}
 
-std::string cadabra::convert_line(const std::string& line, std::string& lhs, std::string& rhs, std::string& op, std::string& indent, bool display)
+cadabra::ConvertData::ConvertData()
+	{
+	}
+
+cadabra::ConvertData::ConvertData(const std::string& lhs_, const std::string& rhs_,
+											 const std::string& op_, const std::string& indent_)
+	: lhs(lhs_), rhs(rhs_), op(op_), indent(indent_)
+	{
+	}
+
+std::string cadabra::convert_line(const std::string& line, ConvertData& cv, bool display) // std::string& lhs, std::string& rhs, std::string& op, std::string& indent, bool display)
 	{
 	std::string ret;
+
+	auto& lhs    = cv.lhs;
+	auto& rhs    = cv.rhs;
+	auto& op     = cv.op;
+	auto& indent = cv.indent;
 
 	std::regex imatch("([\\s]*)([^\\s].*[^\\s])([\\s]*)");
 	std::cmatch mres;
@@ -250,9 +266,10 @@ std::string cadabra::cnb2python(const std::string& in_name, bool for_standalone)
 			if(cell->cell_type==cadabra::DataCell::CellType::python) {
 				std::stringstream s, temp;
 				s << cell->textbuf; // cell["source"].asString();
-				std::string line, lhs, rhs, op, indent;
+				ConvertData cv;
+//				std::string line, lhs, rhs, op, indent;
 				while (std::getline(s, line)) {
-					auto res = convert_line(line, lhs, rhs, op, indent, for_standalone);
+					auto res = convert_line(line, cv, for_standalone); // lhs, rhs, op, indent, for_standalone);
 					if(res!="::empty")
 						ofs << res << '\n';
 					}

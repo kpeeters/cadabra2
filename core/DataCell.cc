@@ -394,13 +394,19 @@ void cadabra::JSON_deserialise(const std::string& cj, DTree& doc)
 		root=nlohmann::json::parse(cj);
 		}
 	catch(nlohmann::json::exception& e) {
-		std::cerr << "cannot parse json file" << std::endl;
+		std::cerr << "Cannot parse json file." << std::endl;
 		return;
 		}
 
 	// Setup main document.
 	DataCell::id_t id;
-	id.id=root.value("cell_id", generate_uuid<uint64_t>());
+	try {
+		id.id=root.value("cell_id", generate_uuid<uint64_t>());
+		}
+	catch(nlohmann::json::exception& e) {
+		std::cerr << "Failed to find root-level 'cell_id' element (must be an integer)." << std::endl;
+		return;
+		}
 	DataCell top(id, DataCell::CellType::document);
 	DTree::iterator doc_it = doc.set_head(top);
 
