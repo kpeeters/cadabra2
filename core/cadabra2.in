@@ -254,7 +254,7 @@ if __name__ == '__main__':
                     sline=line.strip()
 #                    if len(sline)>0 and sline[0]!='#':
                     collect += sh.preprocess(line, False)
-                print("----\n"+collect+"----\n")
+                # print("----\n"+collect+"----\n")
                 cmp = compile(collect, sys.argv[1], 'exec')
                 exec(cmp)
                 # would be nice to be able to continue from here on the command line, but that requires

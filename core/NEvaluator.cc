@@ -5,7 +5,7 @@
 
 using namespace cadabra;
 
-//#define DEBUG 1
+// #define DEBUG 1
 
 // void NEvaluator::find_common_subexpressions(std::vector<Ex *>)
 // 	{
@@ -73,7 +73,9 @@ NTensor NEvaluator::evaluate()
 
 		auto fnd = subtree_values.find(Ex::iterator(it));
 		if(fnd!=subtree_values.end()) {
-			//std::cerr << it << " has value " << fnd->second << std::endl;
+#ifdef DEBUG
+			std::cerr << it << " has value " << fnd->second << std::endl;
+#endif
 			}
 		else {
 			bool found_elementary=false;
@@ -85,7 +87,19 @@ NTensor NEvaluator::evaluate()
 				for(const auto& el: elementary) {
 					if(it->name == el.first) {
 						auto arg    = ex.begin(it);
-						auto argval = subtree_values.find(arg)->second;
+#ifdef DEBUG
+						std::cerr << "need to apply " << *el.first << " to " << arg << std::endl;
+#endif
+						auto argit  = subtree_values.find(arg);
+						auto argval = argit->second;
+#ifdef DEBUG
+						std::cerr << " argument equals " << argval
+									 << "; stored had multiplier " << *(argit->first->multiplier) << std::endl;
+#endif
+						// Any expressions are stored without multiplier, so we
+						// now need to first multiply-through with the current
+						// multiplier.
+						argval  *= to_double((*arg->multiplier)/(*argit->first->multiplier));
 						lastval  = argval.apply(el.second);
 						lastval *= to_double(*it->multiplier);
 						found_elementary=true;
@@ -152,16 +166,28 @@ NTensor NEvaluator::evaluate()
 #ifdef DEBUG
 							std::cerr << "found " << *(no_multiplier.begin()->name) << std::endl;
 #endif
-							subtree_values.insert(std::make_pair(it, var.values));
 							lastval = var.values;
 							lastval *= to_double(mult);
+							subtree_values.insert(std::make_pair(it, lastval) );
 							// std::cerr << "We know the value of " << *it << std::endl;
 							found=true;
 							break;
 							}
 						}
-					if(!found)
-						throw std::logic_error("Value unknown for subtree with head "+(*it->name)+".");
+
+					// Is this perhaps a string representing a float?
+					if(!found) {
+						try {
+							lastval = std::stof(*it->name);
+							subtree_values.insert(std::make_pair(it, lastval));
+							}
+						catch(const std::invalid_argument& err) {
+							throw std::logic_error("Value unknown for subtree with head "+(*it->name)+".");
+							}
+						catch(const std::out_of_range& err) {
+							throw std::logic_error("Value "+(*it->name)+" does not fit in a float.");
+							}
+						}
 					}
 				}
 			subtree_values.insert(std::make_pair(it, lastval));

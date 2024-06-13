@@ -41,7 +41,16 @@ void pull_in(std::shared_ptr<Ex> ex, Kernel *kernel)
 				it->fl.parent_rel=prel;
 				rr.rename_replacement_dummies(it, false);
 				}
-			else throw ArgumentException("Python object '"+pobj+"' does not exist.");
+//			else {
+//				// Perhaps this object is a float or int?
+//				if(py::isinstance<py::int_>(pobj))
+//					std::cerr << "it's a float!" << std::endl;
+//				else if(py::isinstance<py::float_>(pobj))
+//					std::cerr << "it's an int!" << std::endl;
+//				}
+			
+			if(!pull_ex)
+				throw ArgumentException("Python object '"+pobj+"' does not exist.");
 			}
 		++it;
 		}

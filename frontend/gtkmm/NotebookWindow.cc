@@ -1480,6 +1480,14 @@ void NotebookWindow::update_cell(const DTree&, DTree::iterator it)
 			vc.outbox->image.layout_latex();
 			vc.outbox->queue_draw();
 			}
+		else if(it->cell_type==DataCell::CellType::image_png) {
+			vc.imagebox->set_image_from_base64(it->textbuf);
+			vc.imagebox->queue_draw();
+			}
+		else if(it->cell_type==DataCell::CellType::image_svg) {
+			vc.imagebox->set_image_from_svg(it->textbuf);
+			vc.imagebox->queue_draw();			
+			}
 		}
 
 	disable_stacks=false;

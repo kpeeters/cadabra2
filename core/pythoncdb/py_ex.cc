@@ -222,25 +222,37 @@ namespace cadabra {
 
 	Ex_ptr fetch_from_python(const std::string& nm, pybind11::object scope)
 		{
-		// std::cerr << "fetch from python " << nm << std::endl;
-		if (!scope_has(scope, nm.c_str())) {
-			// std::cerr << "not present" << std::endl;
+		if( !scope_has(scope, nm) ) {
 			return 0;
 			}
 		auto obj = scope[nm.c_str()];
+
+		// Try 'Ex'
 		try {
 			return obj.cast<Ex_ptr>();
 			}
 		catch (const pybind11::cast_error& e) {
-			try {
-				auto exnode = obj.cast<ExNode>();
-				auto ret = std::make_shared<Ex>(exnode.it);
-				return ret;
-				}
-			catch (const pybind11::cast_error& e) {
-				std::cout << nm << " is not of type cadabra.Ex or cadabra.ExNode" << std::endl;
-				}
 			}
+
+		// Try 'ExNode'
+		try {
+			auto exnode = obj.cast<ExNode>();
+			auto ret = std::make_shared<Ex>(exnode.it);
+			return ret;
+			}
+		catch (const pybind11::cast_error& e) {
+			}
+
+		// Try float or int.
+		if(pybind11::isinstance<py::int_>(obj)) {
+			auto ret = std::make_shared<Ex>(pybind11::cast<int>(obj));
+			return ret;
+			}
+		if(pybind11::isinstance<py::float_>(obj)) {
+			auto ret = std::make_shared<Ex>(pybind11::cast<float>(obj));
+			return ret;
+			}
+			
 		return 0;
 		}
 

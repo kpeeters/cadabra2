@@ -8,7 +8,7 @@ import numpy as np
 
 def test01():
    start = time.time()
-   ex:= \cos(x) \sin(y);
+   ex:= \cos(x) \sin(y).
    xv = np.linspace(0, 3.14, 100);
    yv = np.linspace(0, 3.14, 100);
    z = np.array( nevaluate(ex, {$x$: xv, $y$: yv} ) )
@@ -51,7 +51,17 @@ def test03():
 
 test03()
 
+def test04():
+   res = np.array( nevaluate($3 \cos(5 x)$, {$x$: [0.1, 0.3]}) )
+   assert(np.max(res - np.array([2.6327, 0.2112])) < 0.01)
+   print("Test 04a passed")
+   xv = np.array([2.0, 5.0])
+   res = np.array( nevaluate($\sin(3.0*x)*\cos(-1/2 x)*\exp(-x**(2/5))$, {$x$: xv} ))
+   assert(np.max(res - np.sin(3.0*xv)*np.cos(-1/2*xv)*np.exp(-xv**(2/5))) < 0.01)
+   print("Test 04b passed")
 
+test04()
 
-
-   
+ex:=\cos(v x);
+vv=0.2
+substitute(ex, $v -> @(vv)$);

@@ -21,9 +21,11 @@ namespace cadabra {
 
 	bool scope_has(const py::dict& dict, const std::string& obj)
 		{
-		for (const auto& item : dict)
-			if (item.first.cast<std::string>() == obj)
+		for (const auto& item : dict) {
+			if (item.first.cast<std::string>() == obj) {
 				return true;
+				}
+			}
 		return false;
 		}
 

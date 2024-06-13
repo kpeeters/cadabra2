@@ -223,32 +223,41 @@ def display(obj, cell_id=0, delay_send=False):
     with a trailing semi-colon ';' will automatically be wrapped in a 
     'display' function call so that the expression is displayed immediately.
     """
+
+    if type(obj)==list and len(obj)>0 and (isinstance(obj[0], matplotlib.figure.Figure) or isinstance(obj[0], matplotlib.figure.Artist)):
+       # matplotlib has the annoying habit of returning plots as lists of figures.
+       # print("list of figures", file=sys.stderr)
+       return display(obj[0], cell_id, delay_send)
+    
     if 'matplotlib' in sys.modules and isinstance(obj, matplotlib.figure.Figure):
+        # print("figure 1", file=sys.stderr)
         imgstring = io.BytesIO()
         obj.savefig(imgstring,format='svg')
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
-        server.send(b64, "image_svg", 0, cell_id, False)
+        return server.send(b64, "image_svg", 0, cell_id, False)
         # FIXME: Use the 'handles' query method on the Server object
         # to figure out whether it can do something useful
         # with a particular data type.
 
     elif 'matplotlib' in sys.modules and isinstance(obj, matplotlib.artist.Artist):
+        # print("figure 2", file=sys.stderr)
         f = obj.get_figure()
         imgstring = io.BytesIO()
         f.savefig(imgstring,format='svg')
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
-        server.send(b64, "image_svg", 0, cell_id, False)
+        return server.send(b64, "image_svg", 0, cell_id, False)
 
     elif hasattr(obj,'_backend'):
+        # print("figure 3", file=sys.stderr)
         if hasattr(obj._backend,'fig'):
             f = obj._backend.fig
             imgstring = io.BytesIO()
             f.savefig(imgstring,format='svg')
             imgstring.seek(0)
             b64 = base64.b64encode(imgstring.getvalue())
-            server.send(b64, "image_svg", 0, cell_id, False)
+            return server.send(b64, "image_svg", 0, cell_id, False)
 
     elif 'vtk' in sys.modules and isinstance(obj, vtk.vtkRenderer):
         # Vtk renderer, see http://nbviewer.ipython.org/urls/bitbucket.org/somada141/pyscience/raw/master/20140917_RayTracing/Material/PythonRayTracingEarthSun.ipynb
@@ -269,7 +278,7 @@ def display(obj, cell_id=0, delay_send=False):
                 cell_id = server.send(obj.input_form(), "input_form", id, cell_id, False)
                 return cell_id
         else:
-            server.send(unicode(obj), "plain", 0, cell_id, False)
+            return server.send(unicode(obj), "plain", 0, cell_id, False)
 
     elif isinstance(obj, ExNode):
         if server.handles('latex_view'):
@@ -294,7 +303,7 @@ def display(obj, cell_id=0, delay_send=False):
                 cell_id = server.send(ret , "latex_view", 0, cell_id, False)
                 return cell_id
         else:
-            server.send(unicode(obj), "plain", 0, cell_id, False)
+            return server.send(unicode(obj), "plain", 0, cell_id, False)
             
     elif isinstance(obj, Property):
         if server.handles('latex_view'):
@@ -302,7 +311,7 @@ def display(obj, cell_id=0, delay_send=False):
             if delay_send:
                 return ret
             else:
-                server.send(ret , "latex_view", 0, cell_id, False)
+                return server.send(ret , "latex_view", 0, cell_id, False)
                 # Not yet available.
                 # server.send(obj.input_form(), "input_form", 0, False)
         else:
@@ -310,46 +319,52 @@ def display(obj, cell_id=0, delay_send=False):
             
     elif type(obj)==list:
         if server.handles('latex_view'):
+           # print(f"list {obj}", file=sys.stderr)
            atleast_one_unstolen=False
-           out="$\\big[$"
+           cdb_out="$\\big[$"
            first=True
            for elm in obj:
                if first==False:
-                   out+=","+discr
+                   cdb_out+=","+discr
                else:
                    first=False
-               nxt = display(elm, delay_send=True)
+               nxt = display(elm, cell_id, delay_send=True)
                if nxt != None:
-                  out+= "$"+display(elm, delay_send=True)+"$"
+                  cdb_out+= "$"+str(display(elm, cell_id=cell_id, delay_send=True))+"$"
                   atleast_one_unstolen=True
-           out+="$\\big]$";
+           cdb_out+="$\\big]$";
+           if delay_send:
+              return cdb_out
            if atleast_one_unstolen:
-              server.send(out, "latex_view", 0, cell_id, False)
+              return server.send(cdb_out, "latex_view", 0, cell_id, False)
         else:
-           out = "["
+           cdb_out = "["
            first=True           
            for elm in obj:
                if not first:
-                   out+=", "
+                   cdb_out+=", "
                else:
                    first=False                  
-               out += str(elm)
-           out += "]"
-           server.send(unicode(out), "plain", 0, cell_id, False)
+               cdb_out += str(elm)
+           cdb_out += "]"
+           return server.send(unicode(cdb_out), "plain", 0, cell_id, False)
            # FIXME: send input_form version.
         
     elif hasattr(obj, "__module__") and hasattr(obj.__module__, "find") and obj.__module__.find("sympy")!=-1:
         if delay_send:
            return latex(obj)
         else:
-           server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view", 0, cell_id, False)
+           return server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view", 0, cell_id, False)
         
     else:
         # Failing all else, just dump a str representation to the notebook, asking
         # it to display this verbatim.
         # server.send("\\begin{dmath*}{}"+str(obj)+"\\end{dmath*}", "latex")
-        if delay_send and server.handles('latex_view'):
-            return "\\verb|"+str(obj)+"|"
+        if delay_send:
+            if server.handles('latex_view'):
+               return "\\verb|"+str(obj)+"|"
+            else:
+               return str(obj)
         else:
             return server.send(unicode(obj), "verbatim", 0, cell_id, False)
     

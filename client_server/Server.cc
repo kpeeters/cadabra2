@@ -249,6 +249,10 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 		if(handle_output) {
 			result = catchOut.str();
 			catchOut.clear();
+			std::string result_err = catchErr.str();
+			if(result_err!="") 
+				std::cerr << "catchErr: " << result_err << std::endl;
+			catchErr.clear();
 			}
 		}
 	catch(pybind11::error_already_set& ex) {
@@ -586,6 +590,8 @@ uint64_t Server::send(const std::string& output, const std::string& msg_type,
 	// directly in the server to send block output back to the client
 	// (that's all handled by on_block_finished above).
 
+	// std::cerr << "Send: " << msg_type << ", " << output.substr(0, std::min(size_t(40), output.size())) << std::endl;
+	
 	nlohmann::json json, header, content;
 
 	uint64_t return_cell_id=cell_id;

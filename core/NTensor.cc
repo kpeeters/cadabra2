@@ -96,7 +96,7 @@ double& NTensor::at(const std::vector<size_t>& indices)
 	return values[idx];
 	}
 
-std::ostream& operator<<(std::ostream &str, const NTensor &nt)
+std::ostream& cadabra::operator<<(std::ostream &str, const NTensor &nt)
 	{
 	// For an {a,b} tensor, we display as a vector of size 'a', each
 	// element of which is a vector of size 'b'. And so on.
