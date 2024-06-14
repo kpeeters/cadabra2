@@ -598,6 +598,7 @@ void ComputeThread::stop()
 
 	server_pid=0;
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
+	all_cells_nonrunning();	
 	}
 
 void ComputeThread::restart_kernel()
