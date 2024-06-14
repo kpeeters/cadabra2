@@ -13,7 +13,7 @@ namespace cadabra {
 
 	class ImageView : public Gtk::EventBox {
 		public:
-			ImageView();
+			ImageView(double scale);
 			virtual ~ImageView();
 
 			void set_image_from_base64(const std::string& b64);
@@ -31,6 +31,7 @@ namespace cadabra {
 			bool   sizing;
 			double prev_x, prev_y;
 			int    height_at_press, width_at_press;
+			double scale;
 		};
 
 	};

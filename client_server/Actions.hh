@@ -67,7 +67,7 @@ namespace cadabra {
 			virtual void revert(DocumentThread&,  GUIBase&) override;
 
 			/// Can this action be undone?
-			virtual bool undoable() const;
+			virtual bool undoable() const override;
 		private:
 			// Keep track of the location where this cell is inserted into
 			// the notebook.

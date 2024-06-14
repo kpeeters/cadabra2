@@ -60,8 +60,11 @@ float TeXView::text_size() const
 	// so we do not scale the font size by that here. But we do need
 	// to scale by the text scaling factor of the system, which is
 	// available in engine.get_scale().
+
+	// FIXME: we used to multiply with engine.get_scale() but that seems
+	// wrong.
 	
-	float ret = 28.0f/12.0f*engine.get_font_size()*engine.get_scale()/1.7f;
+	float ret = 28.0f/12.0f*engine.get_font_size()/1.7f;
 //	std::cerr << "engine.font_size = " << engine.get_font_size() << ", .scale = " << engine.get_scale()
 //				 << ", text_size = " << ret << std::endl;
 	return ret;

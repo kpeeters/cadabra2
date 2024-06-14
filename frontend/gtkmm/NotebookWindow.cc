@@ -76,6 +76,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	auto screen = Gdk::Screen::get_default();
 	scale = screen->get_monitor_scale_factor(0);
 	display_scale = scale;
+	std::cerr << "Monitor scale factor = " << display_scale << std::endl;
 #ifndef __APPLE__
 	// FIXME: this does not work for ssh sessions with ForwardX11.
 	const char *ds = std::getenv("DESKTOP_SESSION");
@@ -596,28 +597,33 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	Gtk::MenuBar* pMenuBar = Gtk::make_managed<Gtk::MenuBar>(gmenu);
 	topbox.pack_start(*pMenuBar, Gtk::PACK_SHRINK);
 
-
+	auto get_icon = [this](const std::string& nm) {
+		Glib::RefPtr<Gdk::Pixbuf> pb = Gdk::Pixbuf::create_from_file(nm);
+		pb = pb->scale_simple(50/scale, 50/scale, Gdk::INTERP_BILINEAR);
+		return pb;
+		};
+	
 	// Setup the toolbar and buttons in it.
 	if(!read_only) {
-		toolbar.set_size_request(-1, 70);
+		toolbar.set_size_request(-1, 70/scale);
 		tool_stop.add(*Gtk::make_managed<Gtk::Image>(
-							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-cancel.svg"));
+							  get_icon(install_prefix()+"/share/cadabra2/cdb-icons/cdb-cancel.svg")));
 		tool_run.add(*Gtk::make_managed<Gtk::Image>(
-							 install_prefix()+"/share/cadabra2/cdb-icons/cdb-run.svg"));
+							 get_icon(install_prefix()+"/share/cadabra2/cdb-icons/cdb-run.svg")));
 		tool_restart.add(*Gtk::make_managed<Gtk::Image>(
-								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart.svg"));
+								  get_icon(install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart.svg")));
 		tool_open.add(*Gtk::make_managed<Gtk::Image>(
-							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-open.svg"));
+							  get_icon(install_prefix()+"/share/cadabra2/cdb-icons/cdb-open.svg")));
 		tool_save.add(*Gtk::make_managed<Gtk::Image>(
-							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save.svg"));
+							  get_icon(install_prefix()+"/share/cadabra2/cdb-icons/cdb-save.svg")));
 		tool_save_as.add(*Gtk::make_managed<Gtk::Image>(
-								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save-as.svg"));
-		tool_stop.set_size_request(70, 70);
-		tool_run.set_size_request(70, 70);
-		tool_restart.set_size_request(70, 70);
-		tool_open.set_size_request(70, 70);
-		tool_save.set_size_request(70, 70);
-		tool_save_as.set_size_request(70, 70);
+								  get_icon(install_prefix()+"/share/cadabra2/cdb-icons/cdb-save-as.svg")));
+		tool_stop.set_size_request(70/scale, 70/scale);
+		tool_run.set_size_request(70/scale, 70/scale);
+		tool_restart.set_size_request(70/scale, 70/scale);
+		tool_open.set_size_request(70/scale, 70/scale);
+		tool_save.set_size_request(70/scale, 70/scale);
+		tool_save_as.set_size_request(70/scale, 70/scale);
 		tool_run.set_tooltip_text("Execute all cells");
 		tool_stop.set_tooltip_text("Stop execution");
 		tool_restart.set_tooltip_text("Restart kernel");
@@ -634,7 +640,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		toolbar.pack_start(tool_restart, Gtk::PACK_SHRINK);
 		toolbar.pack_start(top_label);
 		toolbar.pack_end(kernel_spinner, Gtk::PACK_SHRINK);
-		kernel_spinner.set_size_request(60,60);
+		kernel_spinner.set_size_request(60/scale,60/scale);
 		}
 	
 	// Normally we would use 'set_action_name' to associate the
@@ -667,7 +673,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 	// Status bar
 	kernel_label.set_text("Server: not connected");
-	statusbarbox.set_size_request(-1,50);
+	statusbarbox.set_size_request(-1,50/scale);
 	statusbarbox.set_homogeneous(false);
 	statusbarbox.pack_start(status_label, false, false, 0);
 	statusbarbox.pack_start(kernel_label, false, false, 0);
@@ -1252,7 +1258,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				}
 			case DataCell::CellType::image_png: {
 				// FIXME: horribly memory inefficient
-				ImageView *iv=new ImageView();
+				ImageView *iv=new ImageView(display_scale);
 
 				iv->set_image_from_base64(it->textbuf);
 				newcell.imagebox = manage( iv );
@@ -1261,7 +1267,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				}
 			case DataCell::CellType::image_svg: {
 				// FIXME: horribly memory inefficient
-				ImageView *iv=new ImageView();
+				ImageView *iv=new ImageView(display_scale);
 
 				iv->set_image_from_svg(it->textbuf);
 				newcell.imagebox = manage( iv );

@@ -1,3 +1,7 @@
+# on macOS
+https://stackoverflow.com/questions/57535924/shipping-gtk-apps-for-macos-with-xcode
+
+
 # 
 # Test 1:= keep_terms
 
