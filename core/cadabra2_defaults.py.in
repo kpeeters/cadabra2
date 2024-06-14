@@ -278,7 +278,7 @@ def display(obj, cell_id=0, delay_send=False):
                 cell_id = server.send(obj.input_form(), "input_form", id, cell_id, False)
                 return cell_id
         else:
-            return server.send(unicode(obj), "plain", 0, cell_id, False)
+            server.send(unicode(obj), "plain", 0, cell_id, False)
 
     elif isinstance(obj, ExNode):
         if server.handles('latex_view'):
@@ -293,6 +293,7 @@ def display(obj, cell_id=0, delay_send=False):
                 return cell_id
         else:
             server.send(unicode(obj), "plain", 0, cell_id, False)
+            return None
 
     elif isinstance(obj, LaTeXString):
         if server.handles('latex_view'):
@@ -303,7 +304,8 @@ def display(obj, cell_id=0, delay_send=False):
                 cell_id = server.send(ret , "latex_view", 0, cell_id, False)
                 return cell_id
         else:
-            return server.send(unicode(obj), "plain", 0, cell_id, False)
+            server.send(unicode(obj), "plain", 0, cell_id, False)
+            return None
             
     elif isinstance(obj, Property):
         if server.handles('latex_view'):
@@ -316,6 +318,7 @@ def display(obj, cell_id=0, delay_send=False):
                 # server.send(obj.input_form(), "input_form", 0, False)
         else:
             server.send(unicode(obj), "plain", 0, cell_id, False)
+            return None
             
     elif type(obj)==list:
         if server.handles('latex_view'):
@@ -347,14 +350,19 @@ def display(obj, cell_id=0, delay_send=False):
                    first=False                  
                cdb_out += str(elm)
            cdb_out += "]"
-           return server.send(unicode(cdb_out), "plain", 0, cell_id, False)
+           server.send(unicode(cdb_out), "plain", 0, cell_id, False)
+           return None
            # FIXME: send input_form version.
         
     elif hasattr(obj, "__module__") and hasattr(obj.__module__, "find") and obj.__module__.find("sympy")!=-1:
         if delay_send:
            return latex(obj)
         else:
-           return server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view", 0, cell_id, False)
+           if server.handles('latex_view'):
+               return server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view", 0, cell_id, False)
+           else:
+               server.send(latex(obj), "plain", 0, cell_id, False)
+               return None
         
     else:
         # Failing all else, just dump a str representation to the notebook, asking
@@ -366,7 +374,11 @@ def display(obj, cell_id=0, delay_send=False):
             else:
                return str(obj)
         else:
-            return server.send(unicode(obj), "verbatim", 0, cell_id, False)
+            if server.handles('latex_view'):
+               return server.send(unicode(obj), "verbatim", 0, cell_id, False)
+            else:
+               server.send(unicode(obj), "plain", 0, cell_id, False)
+               return None
     
 __cdbkernel__.server=server
 __cdbkernel__.display=display

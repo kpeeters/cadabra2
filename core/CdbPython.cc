@@ -190,7 +190,7 @@ std::string cadabra::convert_line(const std::string& line, ConvertData& cv, bool
 	else {   // {a,b,c}::Indices(real, parent=holo);
 		found = line_stripped.find("::");
 		if(found!=std::string::npos) {
-			std::regex amatch(R"(([a-zA-Z]+)(\(.*\))?[;\.:]*)");
+			std::regex amatch(R"(([a-zA-Z]+)(\(.*\))?[ ]*[;\.:]*)");
 			std::smatch ares;
 			std::string subline=line_stripped.substr(found+2); // need to store the copy, not feed it straight into regex_match!
 			if(std::regex_match(subline, ares, amatch)) {

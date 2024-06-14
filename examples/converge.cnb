@@ -1,179 +1,269 @@
 {
-	"cells" : 
-	[
+	"cell_id": 16364440255809670543,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 4560948911837856818,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\section*{Applying operations until convergence}\n\nIt often happens that you want to perform a series of operations on an expression, until\nthe expression no longer changes. If it is just a single operation, you can use the \\verb|repeat=True|\nparameter to the algorithm. Let us have a look at a simple example:"
+					"cell_id": 8096814962229094915,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Applying operations until convergence}\n\nIt often happens that you want to perform a series of operations on an expression, until\nthe expression no longer changes. If it is just a single operation, you can use the \\verb|repeat=True|\nparameter to the algorithm. Let us have a look at a simple example:"
 				}
 			],
-			"hidden" : true,
-			"source" : "\\section*{Applying operations until convergence}\n\nIt often happens that you want to perform a series of operations on an expression, until\nthe expression no longer changes. If it is just a single operation, you can use the \\verb|repeat=True|\nparameter to the algorithm. Let us have a look at a simple example:"
+			"hidden": true,
+			"source": "\\section*{Applying operations until convergence}\n\nIt often happens that you want to perform a series of operations on an expression, until\nthe expression no longer changes. If it is just a single operation, you can use the \\verb|repeat=True|\nparameter to the algorithm. Let us have a look at a simple example:"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 8484402117747940808,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}Q Q Q Q Q Q\\end{dmath*}"
+					"cell_id": 6102843015116529563,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}Q Q Q Q Q Q\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(A%\n+B\\right) \\left(A%\n+B\\right) \\left(A%\n+B\\right) \\left(A%\n+B\\right) \\left(A%\n+B\\right) \\left(A%\n+B\\right)\\end{dmath*}"
+					"cell_id": 5930843567868132618,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\left(A%\n+B\\right) \\left(A%\n+B\\right) \\left(A%\n+B\\right) \\left(A%\n+B\\right) \\left(A%\n+B\\right) \\left(A%\n+B\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "ex:=Q Q Q Q Q Q;\nsubstitute(ex, $Q->A+B, A->3, B->5$);"
+			"source": "ex:=Q Q Q Q Q Q;\nsubstitute(ex, $Q->A+B, A->3, B->5$);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 17394728300667667090,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Here the \\verb|A->3| and \\verb|B->5| bits of the substitution rule did not get applied because substitute\nonly ran once. By adding the \\verb|repeat=True| flag you get the expected result:"
+					"cell_id": 12831285945235543173,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Here the \\verb|A->3| and \\verb|B->5| bits of the substitution rule did not get applied because substitute\nonly ran once. By adding the \\verb|repeat=True| flag you get the expected result:"
 				}
 			],
-			"hidden" : true,
-			"source" : "Here the \\verb|A->3| and \\verb|B->5| bits of the substitution rule did not get applied because substitute\nonly ran once. By adding the \\verb|repeat=True| flag you get the expected result:"
+			"hidden": true,
+			"source": "Here the \\verb|A->3| and \\verb|B->5| bits of the substitution rule did not get applied because substitute\nonly ran once. By adding the \\verb|repeat=True| flag you get the expected result:"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 5405106106766922936,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}Q Q Q Q Q Q\\end{dmath*}"
+					"cell_id": 1105927374242350850,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}Q Q Q Q Q Q\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}262144\\end{dmath*}"
+					"cell_id": 9385640161226065943,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}262144\\end{dmath*}"
 				}
 			],
-			"source" : "ex:=Q Q Q Q Q Q;\nsubstitute(ex, $Q->A+B, A->3, B->5$, repeat=True);"
+			"source": "ex:=Q Q Q Q Q Q;\nsubstitute(ex, $Q->A+B, A->3, B->5$, repeat=True);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 9537143133737954222,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "However, this only works if you have a single algorithm to work with. If you want to apply a series of \nalgorithms, you need to use the Cadabra specific \\verb|converge| construction (which is an extension of Python). \nIt works very similar to a \\verb|while| loop, and will run until the indicated expression no longer changes. Here is an example:"
+					"cell_id": 13101155018156104120,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "However, this only works if you have a single algorithm to work with. If you want to apply a series of \nalgorithms, you need to use the Cadabra specific \\verb|converge| construction (which is an extension of Python). \nIt works very similar to a \\verb|while| loop, and will run until the indicated expression no longer changes. Here is an example:"
 				}
 			],
-			"hidden" : true,
-			"source" : "However, this only works if you have a single algorithm to work with. If you want to apply a series of \nalgorithms, you need to use the Cadabra specific \\verb|converge| construction (which is an extension of Python). \nIt works very similar to a \\verb|while| loop, and will run until the indicated expression no longer changes. Here is an example:"
+			"hidden": true,
+			"source": "However, this only works if you have a single algorithm to work with. If you want to apply a series of \nalgorithms, you need to use the Cadabra specific \\verb|converge| construction (which is an extension of Python). \nIt works very similar to a \\verb|while| loop, and will run until the indicated expression no longer changes. Here is an example:"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 18076787751473649262,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}Q Q Q Q Q Q\\end{dmath*}"
+					"cell_id": 7473100367640179464,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1356417453824935185,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "Q Q Q Q Q Q"
+						}
+					],
+					"source": "\\begin{dmath*}{}Q Q Q Q Q Q\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(A%\n+B\\right) \\left(A%\n+B\\right) \\left(A%\n+B\\right) \\left(A%\n+B\\right) \\left(A%\n+B\\right) \\left(A%\n+B\\right)\\end{dmath*}"
+					"cell_id": 5881110624344566499,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 18420178688487594231,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(A + B) (A + B) (A + B) (A + B) (A + B) (A + B)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(A\\discretionary{}{}{}+B\\right) \\left(A\\discretionary{}{}{}+B\\right) \\left(A\\discretionary{}{}{}+B\\right) \\left(A\\discretionary{}{}{}+B\\right) \\left(A\\discretionary{}{}{}+B\\right) \\left(A\\discretionary{}{}{}+B\\right)\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A A A A A A%\n+A A A A A B%\n+A A A A B A%\n+A A A A B B%\n+A A A B A A%\n+A A A B A B%\n+A A A B B A%\n+A A A B B B%\n+A A B A A A%\n+A A B A A B%\n+A A B A B A%\n+A A B A B B%\n+A A B B A A%\n+A A B B A B%\n+A A B B B A%\n+A A B B B B%\n+A B A A A A%\n+A B A A A B%\n+A B A A B A%\n+A B A A B B%\n+A B A B A A%\n+A B A B A B%\n+A B A B B A%\n+A B A B B B%\n+A B B A A A%\n+A B B A A B%\n+A B B A B A%\n+A B B A B B%\n+A B B B A A%\n+A B B B A B%\n+A B B B B A%\n+A B B B B B%\n+B A A A A A%\n+B A A A A B%\n+B A A A B A%\n+B A A A B B%\n+B A A B A A%\n+B A A B A B%\n+B A A B B A%\n+B A A B B B%\n+B A B A A A%\n+B A B A A B%\n+B A B A B A%\n+B A B A B B%\n+B A B B A A%\n+B A B B A B%\n+B A B B B A%\n+B A B B B B%\n+B B A A A A%\n+B B A A A B%\n+B B A A B A%\n+B B A A B B%\n+B B A B A A%\n+B B A B A B%\n+B B A B B A%\n+B B A B B B%\n+B B B A A A%\n+B B B A A B%\n+B B B A B A%\n+B B B A B B%\n+B B B B A A%\n+B B B B A B%\n+B B B B B A%\n+B B B B B B\\end{dmath*}"
+					"cell_id": 15799923042721325090,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17480327659062318542,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A A A A A A + A A A A A B + A A A A B A + A A A A B B + A A A B A A + A A A B A B + A A A B B A + A A A B B B + A A B A A A + A A B A A B + A A B A B A + A A B A B B + A A B B A A + A A B B A B + A A B B B A + A A B B B B + A B A A A A + A B A A A B + A B A A B A + A B A A B B + A B A B A A + A B A B A B + A B A B B A + A B A B B B + A B B A A A + A B B A A B + A B B A B A + A B B A B B + A B B B A A + A B B B A B + A B B B B A + A B B B B B + B A A A A A + B A A A A B + B A A A B A + B A A A B B + B A A B A A + B A A B A B + B A A B B A + B A A B B B + B A B A A A + B A B A A B + B A B A B A + B A B A B B + B A B B A A + B A B B A B + B A B B B A + B A B B B B + B B A A A A + B B A A A B + B B A A B A + B B A A B B + B B A B A A + B B A B A B + B B A B B A + B B A B B B + B B B A A A + B B B A A B + B B B A B A + B B B A B B + B B B B A A + B B B B A B + B B B B B A + B B B B B B"
+						}
+					],
+					"source": "\\begin{dmath*}{}A A A A A A\\discretionary{}{}{}+A A A A A B\\discretionary{}{}{}+A A A A B A\\discretionary{}{}{}+A A A A B B\\discretionary{}{}{}+A A A B A A\\discretionary{}{}{}+A A A B A B\\discretionary{}{}{}+A A A B B A\\discretionary{}{}{}+A A A B B B\\discretionary{}{}{}+A A B A A A\\discretionary{}{}{}+A A B A A B\\discretionary{}{}{}+A A B A B A\\discretionary{}{}{}+A A B A B B\\discretionary{}{}{}+A A B B A A\\discretionary{}{}{}+A A B B A B\\discretionary{}{}{}+A A B B B A\\discretionary{}{}{}+A A B B B B\\discretionary{}{}{}+A B A A A A\\discretionary{}{}{}+A B A A A B\\discretionary{}{}{}+A B A A B A\\discretionary{}{}{}%\n+A B A A B B\\discretionary{}{}{}+A B A B A A\\discretionary{}{}{}+A B A B A B\\discretionary{}{}{}+A B A B B A\\discretionary{}{}{}+A B A B B B\\discretionary{}{}{}+A B B A A A\\discretionary{}{}{}+A B B A A B\\discretionary{}{}{}+A B B A B A\\discretionary{}{}{}+A B B A B B\\discretionary{}{}{}+A B B B A A\\discretionary{}{}{}+A B B B A B\\discretionary{}{}{}+A B B B B A\\discretionary{}{}{}+A B B B B B\\discretionary{}{}{}+B A A A A A\\discretionary{}{}{}+B A A A A B\\discretionary{}{}{}+B A A A B A\\discretionary{}{}{}+B A A A B B\\discretionary{}{}{}+B A A B A A\\discretionary{}{}{}+B A A B A B\\discretionary{}{}{}%\n+B A A B B A\\discretionary{}{}{}+B A A B B B\\discretionary{}{}{}+B A B A A A\\discretionary{}{}{}+B A B A A B\\discretionary{}{}{}+B A B A B A\\discretionary{}{}{}+B A B A B B\\discretionary{}{}{}+B A B B A A\\discretionary{}{}{}+B A B B A B\\discretionary{}{}{}+B A B B B A\\discretionary{}{}{}+B A B B B B\\discretionary{}{}{}+B B A A A A\\discretionary{}{}{}+B B A A A B\\discretionary{}{}{}+B B A A B A\\discretionary{}{}{}+B B A A B B\\discretionary{}{}{}+B B A B A A\\discretionary{}{}{}+B B A B A B\\discretionary{}{}{}+B B A B B A\\discretionary{}{}{}+B B A B B B\\discretionary{}{}{}+B B B A A A\\discretionary{}{}{}%\n+B B B A A B\\discretionary{}{}{}+B B B A B A\\discretionary{}{}{}+B B B A B B\\discretionary{}{}{}+B B B B A A\\discretionary{}{}{}+B B B B A B\\discretionary{}{}{}+B B B B B A\\discretionary{}{}{}+B B B B B B\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A A A A A A%\n+18A A A A%\n+135A A%\n+540%\n+135B B%\n+18B B B B%\n+B B B B B B\\end{dmath*}"
+					"cell_id": 12899213816227628911,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 15954440784425493878,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A A A A A A + 18A A A A + 135A A + 540 + 135B B + 18B B B B + B B B B B B"
+						}
+					],
+					"source": "\\begin{dmath*}{}A A A A A A\\discretionary{}{}{}+18A A A A\\discretionary{}{}{}+135A A\\discretionary{}{}{}+540\\discretionary{}{}{}+135B B\\discretionary{}{}{}+18B B B B\\discretionary{}{}{}+B B B B B B\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A A A A A A%\n+18A A A A%\n+135A A%\n+540%\n+135B B%\n+18B B B B%\n+B B B B B B\\end{dmath*}"
+					"cell_id": 12278366585207225484,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1380703068642686843,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A A A A A A + 18A A A A + 135A A + 540 + 135B B + 18B B B B + B B B B B B"
+						}
+					],
+					"source": "\\begin{dmath*}{}A A A A A A\\discretionary{}{}{}+18A A A A\\discretionary{}{}{}+135A A\\discretionary{}{}{}+540\\discretionary{}{}{}+135B B\\discretionary{}{}{}+18B B B B\\discretionary{}{}{}+B B B B B B\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A A A A A A%\n+18A A A A%\n+135A A%\n+540%\n+135B B%\n+18B B B B%\n+B B B B B B\\end{dmath*}"
+					"cell_id": 6644706389115648256,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8158280886788049335,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A A A A A A + 18A A A A + 135A A + 540 + 135B B + 18B B B B + B B B B B B"
+						}
+					],
+					"source": "\\begin{dmath*}{}A A A A A A\\discretionary{}{}{}+18A A A A\\discretionary{}{}{}+135A A\\discretionary{}{}{}+540\\discretionary{}{}{}+135B B\\discretionary{}{}{}+18B B B B\\discretionary{}{}{}+B B B B B B\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A A A A A A%\n+18A A A A%\n+135A A%\n+540%\n+135B B%\n+18B B B B%\n+B B B B B B\\end{dmath*}"
+					"cell_id": 16485223424872350895,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4033380256338516245,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A A A A A A + 18A A A A + 135A A + 540 + 135B B + 18B B B B + B B B B B B"
+						}
+					],
+					"source": "\\begin{dmath*}{}A A A A A A\\discretionary{}{}{}+18A A A A\\discretionary{}{}{}+135A A\\discretionary{}{}{}+540\\discretionary{}{}{}+135B B\\discretionary{}{}{}+18B B B B\\discretionary{}{}{}+B B B B B B\\end{dmath*}"
 				}
 			],
-			"source" : "ex:=Q Q Q Q Q Q;\n\nconverge(ex):\n\tsubstitute(_, $Q->A+B, A B->3$, repeat=True);\n\tdistribute(_);"
+			"source": "ex:=Q Q Q Q Q Q;\n\nconverge(ex):\n\tsubstitute(_, $Q->A+B, A B->3$, repeat=True);\n\tdistribute(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 12146602346513886272,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "We have added semicolons to every line in order to show precisely what happens: in the first iteration, the substitution \nexpands $Q$ to $A+B$. This gives an expression in which there are no $AB$ factors yet. Those arise only once\nthe \\verb|distribute| algorithm is called. At the second iteration, the substitution algorithm then replaces the~$AB$ product with~$3$.\n\nNormally one would suppress the printing and only print at the end, as in:"
+					"cell_id": 3425231414405124914,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "We have added semicolons to every line in order to show precisely what happens: in the first iteration, the substitution \nexpands $Q$ to $A+B$. This gives an expression in which there are no $AB$ factors yet. Those arise only once\nthe \\verb|distribute| algorithm is called. At the second iteration, the substitution algorithm then \nreplaces the~$AB$ product with~$3$."
 				}
 			],
-			"hidden" : true,
-			"source" : "We have added semicolons to every line in order to show precisely what happens: in the first iteration, the substitution \nexpands $Q$ to $A+B$. This gives an expression in which there are no $AB$ factors yet. Those arise only once\nthe \\verb|distribute| algorithm is called. At the second iteration, the substitution algorithm then replaces the~$AB$ product with~$3$.\n\nNormally one would suppress the printing and only print at the end, as in:"
+			"hidden": true,
+			"source": "We have added semicolons to every line in order to show precisely what happens: in the first iteration, the substitution \nexpands $Q$ to $A+B$. This gives an expression in which there are no $AB$ factors yet. Those arise only once\nthe \\verb|distribute| algorithm is called. At the second iteration, the substitution algorithm then \nreplaces the~$AB$ product with~$3$."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 14872399896822144370,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}Q Q Q Q Q Q\\end{dmath*}"
+					"cell_id": 17479584531350384548,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "As far as the output is concerned, the last line is repeated 4 times. First as the\nresult of the working substitute, then because of the \\verb|distribute| call which\nfollows (and does nothing). The loop then runs once more because the expression has\nchanged, creating two more output lines. As this is a bit verbose, one would normally\nsuppress the printing inside the \\verb|converge| block and only print at the end, as in:"
+				}
+			],
+			"hidden": true,
+			"source": "As far as the output is concerned, the last line is repeated 4 times. First as the\nresult of the working substitute, then because of the \\verb|distribute| call which\nfollows (and does nothing). The loop then runs once more because the expression has\nchanged, creating two more output lines. As this is a bit verbose, one would normally\nsuppress the printing inside the \\verb|converge| block and only print at the end, as in:"
+		},
+		{
+			"cell_id": 4018472621299398286,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 1255485117432132129,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}Q Q Q Q Q Q\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A A A A A A%\n+18A A A A%\n+135A A%\n+540%\n+135B B%\n+18B B B B%\n+B B B B B B\\end{dmath*}"
+					"cell_id": 8477564085412428496,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}A A A A A A%\n+18A A A A%\n+135A A%\n+540%\n+135B B%\n+18B B B B%\n+B B B B B B\\end{dmath*}"
 				}
 			],
-			"source" : "ex:=Q Q Q Q Q Q;\n\nconverge(ex):\n\tsubstitute(_, $Q->A+B, A B->3$, repeat=True)\n\tdistribute(_)\n;"
+			"source": "ex:=Q Q Q Q Q Q;\n\nconverge(ex):\n\tsubstitute(_, $Q->A+B, A B->3$, repeat=True)\n\tdistribute(_)\n;"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 13979277305687164122,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Note the semi-colon \\verb|;| at the very end of the \\verb|converge| block, which triggers printing of the final result."
+					"cell_id": 10078366637322340715,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Note the semi-colon \\verb|;| at the very end of the \\verb|converge| block, which triggers printing of the final result."
 				}
 			],
-			"hidden" : true,
-			"source" : "Note the semi-colon \\verb|;| at the very end of the \\verb|converge| block, which triggers printing of the final result."
+			"hidden": true,
+			"source": "Note the semi-colon \\verb|;| at the very end of the \\verb|converge| block, which triggers printing of the final result."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 2586718299574850030,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
 }

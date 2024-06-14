@@ -41,7 +41,6 @@ def test03():
     converge(ex):
         substitute(_, $Q->A+B, A B->3$, repeat=True)
         distribute(_)
-        
     tst:= A A A A A A + 18 A A A A + 135 A A + 540 + 18 B B B B + 135 B B + B B B B B B - @(ex);
     assert(tst==0)
     print("Test 03 passed")
