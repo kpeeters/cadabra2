@@ -257,6 +257,11 @@ double TeXEngine::get_scale() const
 	return total_scale_;
 	}
 
+double TeXEngine::get_device_scale() const
+	{
+	return device_scale_;
+	}
+
 TeXEngine::TeXRequest::TeXRequest()
 	: needs_generating(true)
 	{

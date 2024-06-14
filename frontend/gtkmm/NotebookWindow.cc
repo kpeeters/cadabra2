@@ -606,7 +606,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	
 	// Setup the toolbar and buttons in it.
 	if(!read_only) {
-		toolbar.set_size_request(-1, 70/scale);
+		toolbar.set_size_request(-1, 70/display_scale);
 		tool_stop.add(*Gtk::make_managed<Gtk::Image>(
 							  get_icon(install_prefix()+"/share/cadabra2/cdb-icons/cdb-cancel.svg")));
 		tool_run.add(*Gtk::make_managed<Gtk::Image>(
@@ -619,12 +619,12 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 							  get_icon(install_prefix()+"/share/cadabra2/cdb-icons/cdb-save.svg")));
 		tool_save_as.add(*Gtk::make_managed<Gtk::Image>(
 								  get_icon(install_prefix()+"/share/cadabra2/cdb-icons/cdb-save-as.svg")));
-		tool_stop.set_size_request(70/scale, 70/scale);
-		tool_run.set_size_request(70/scale, 70/scale);
-		tool_restart.set_size_request(70/scale, 70/scale);
-		tool_open.set_size_request(70/scale, 70/scale);
-		tool_save.set_size_request(70/scale, 70/scale);
-		tool_save_as.set_size_request(70/scale, 70/scale);
+		tool_stop.set_size_request(70/display_scale, 70/display_scale);
+		tool_run.set_size_request(70/display_scale, 70/display_scale);
+		tool_restart.set_size_request(70/display_scale, 70/display_scale);
+		tool_open.set_size_request(70/display_scale, 70/display_scale);
+		tool_save.set_size_request(70/display_scale, 70/display_scale);
+		tool_save_as.set_size_request(70/display_scale, 70/display_scale);
 		tool_run.set_tooltip_text("Execute all cells");
 		tool_stop.set_tooltip_text("Stop execution");
 		tool_restart.set_tooltip_text("Restart kernel");
@@ -641,8 +641,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		toolbar.pack_start(tool_restart, Gtk::PACK_SHRINK);
 		toolbar.pack_start(top_label);
 		toolbar.pack_end(kernel_spinner, Gtk::PACK_SHRINK);
-		kernel_spinner.set_size_request(50/scale, 50/scale);
-		kernel_spinner.set_margin_end(10/scale);
+		kernel_spinner.set_size_request(50/display_scale, 50/display_scale);
+		kernel_spinner.set_margin_end(10/display_scale);
 		}
 	
 	// Normally we would use 'set_action_name' to associate the
@@ -675,7 +675,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 	// Status bar
 	kernel_label.set_text("Server: not connected");
-	statusbarbox.set_size_request(-1,50/scale);
+	statusbarbox.set_size_request(-1,50/display_scale);
 	statusbarbox.set_homogeneous(false);
 	statusbarbox.pack_start(status_label, false, false, 0);
 	statusbarbox.pack_start(kernel_label, false, false, 0);
@@ -1260,7 +1260,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				}
 			case DataCell::CellType::image_png: {
 				// FIXME: horribly memory inefficient
-				ImageView *iv=new ImageView(display_scale);
+				ImageView *iv=new ImageView(scale/display_scale);
 
 				iv->set_image_from_base64(it->textbuf);
 				newcell.imagebox = manage( iv );
@@ -1269,7 +1269,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				}
 			case DataCell::CellType::image_svg: {
 				// FIXME: horribly memory inefficient
-				ImageView *iv=new ImageView(display_scale);
+				ImageView *iv=new ImageView(scale/display_scale);
 
 				iv->set_image_from_svg(it->textbuf);
 				newcell.imagebox = manage( iv );
