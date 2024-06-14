@@ -110,8 +110,9 @@ std::string cadabra::convert_line(const std::string& line, ConvertData& cv, bool
 	// Do not do anything with comment lines.
 	if(line_stripped[0]=='#') return line;
 
-	// Bare ';' gets replaced with 'display(_)'.
-	if(line_stripped==";") {
+	// Bare ';' gets replaced with 'display(_)' but *only* if we have no
+	// preceding lines which have not finished parsing.
+	if(line_stripped==";" && lhs=="") {
 		if(display)
 			return indent_line+"display(_)";
 		else
