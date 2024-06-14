@@ -598,8 +598,9 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	topbox.pack_start(*pMenuBar, Gtk::PACK_SHRINK);
 
 	auto get_icon = [this](const std::string& nm) {
-		Glib::RefPtr<Gdk::Pixbuf> pb = Gdk::Pixbuf::create_from_file(nm);
-		pb = pb->scale_simple(50/scale, 50/scale, Gdk::INTERP_BILINEAR);
+		Glib::RefPtr<Gio::File> ff = Gio::File::create_for_path(nm);
+		Glib::RefPtr<Gio::FileInputStream> str = ff->read();
+		Glib::RefPtr<Gdk::Pixbuf> pb = Gdk::Pixbuf::create_from_stream_at_scale(str, 50/scale, 50/scale, true);
 		return pb;
 		};
 	
@@ -640,7 +641,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		toolbar.pack_start(tool_restart, Gtk::PACK_SHRINK);
 		toolbar.pack_start(top_label);
 		toolbar.pack_end(kernel_spinner, Gtk::PACK_SHRINK);
-		kernel_spinner.set_size_request(60/scale,60/scale);
+		kernel_spinner.set_size_request(50/scale, 50/scale);
+		kernel_spinner.set_margin_end(10/scale);
 		}
 	
 	// Normally we would use 'set_action_name' to associate the
@@ -1911,11 +1913,21 @@ void NotebookWindow::set_name(const std::string& n)
 
 void NotebookWindow::load_file(const std::string& notebook_contents)
 	{
+	mainbox.set_sensitive(false);
+
 	load_from_string(notebook_contents);
 
 	mainbox.show_all();
 	modified=false;
 	update_title();
+
+	Glib::signal_idle().connect( sigc::mem_fun(*this, &NotebookWindow::on_first_redraw) );
+	}
+
+bool NotebookWindow::on_first_redraw()
+	{
+	mainbox.set_sensitive(true);
+	return false;
 	}
 
 void NotebookWindow::on_file_save()
@@ -2495,9 +2507,10 @@ void NotebookWindow::on_help_about()
 	about.set_logo(logo);
 	std::vector<Glib::ustring> special;
 	special.push_back("José M. Martín-García (for the xPerm canonicalisation code)");
-	special.push_back("Dominic Price (for the conversion to pybind and most of the Windows port)");
+	special.push_back("Dominic Price (for many additions, e.g. the conversion to pybind and the meld algorithm)");
 	special.push_back("Connor Behan (for various improvements related to index-free algorithms)");
 	special.push_back("James Allen (for writing much of the factoring code)");
+	special.push_back("NanoMichael (for the MicroTeX rendering library)");
 	special.push_back("Software Sustainability Institute");
 	special.push_back("Institute of Advanced Study (for a Christopherson/Knott fellowship)");
 	about.add_credit_section("Special thanks", special);

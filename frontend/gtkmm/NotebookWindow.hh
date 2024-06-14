@@ -210,6 +210,7 @@ namespace cadabra {
 			void on_file_export_python();
 			void on_file_quit();
 			bool quit_safeguard(bool quit);
+			bool on_first_redraw();
 
 			void on_edit_undo();
 			void on_edit_copy(const Glib::VariantBase&);
