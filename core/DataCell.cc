@@ -217,7 +217,7 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 			str << "<div class='image_png'><img src='data:image/png;base64,";
 			break;
 		case DataCell::CellType::image_svg:
-			str << "<div class='image_svg'><img src='data:image/svg,";
+			str << "<div class='image_svg'><img src='data:image/svg+xml;base64,";
 			break;
 		case DataCell::CellType::input_form:
 			str << "<div class='input_form'>";
@@ -229,7 +229,7 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 			if(it->textbuf.size()>0) {
 				if(it->cell_type==DataCell::CellType::image_png)
 					str << it->textbuf;
-				if(it->cell_type==DataCell::CellType::image_svg)
+				else if(it->cell_type==DataCell::CellType::image_svg)
 					str << it->textbuf;
 				else if(it->cell_type!=DataCell::CellType::document && it->cell_type!=DataCell::CellType::latex) {
 					std::string out;
@@ -607,8 +607,15 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 	else if(it->cell_type==DataCell::CellType::image_svg) {
 		// Images have to be saved to disk as separate files as
 		// LaTeX has no concept of images embedded in the .tex file.
-		std::ofstream out(image_file_base+std::to_string(image_num)+".svg");
-		out << it->textbuf;
+		std::string basename=image_file_base+std::to_string(image_num);
+		std::ofstream out(basename+".svg");
+		out << base64_decode(it->textbuf);
+		out.close();
+		// Convert to pdf, otherwise LaTeX cannot include it.
+      //		inkscape t.svg --export-pdf=t.pdf
+		int res = system((std::string("inkscape ")+basename+std::string(".svg --export-pdf=")+basename+std::string(".pdf")).c_str());
+		if(res!=0)
+			throw std::logic_error("DataCell::LaTeX_recurse: failed to run 'convert' to convert svg to pdf.");
 		++image_num;
 		}
 	else {
