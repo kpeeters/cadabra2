@@ -326,6 +326,9 @@ div.latex div.output {
 div.image_png { 
 	 width: 400px; 
 }
+div.image_svg { 
+	 width: 400px; 
+}
 div.output { 
 	 padding-left: 40px;
 	 font-family: monospace;
@@ -369,6 +372,9 @@ div.MathJax_Display {
 	 font-size: 14px;
 }
 div.image_png img { 
+	 width: 100%; 
+}
+div.image_svg img { 
 	 width: 100%; 
 }
 div.python {
