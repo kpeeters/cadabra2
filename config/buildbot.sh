@@ -6,7 +6,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export CDB_TAG=$1
 export CDB_PLATFORM=$2
 if [ "${CDB_TAG}" = "" -o "${CDB_TAG}" = "-h" ]; then
-    echo "Usage: bash buildbot.sh [tag|HEAD] [platform]"
+    echo "Usage: bash buildbot.sh [tag|HEAD] [platform|ALL]"
     exit
 fi
 if [ "${CDB_PLATFORM}" = "" ]; then

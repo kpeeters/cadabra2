@@ -17,7 +17,8 @@ rm -f config/install_script.iss config/pre_install.rtf
 git pull origin
 git checkout ${CDB_TAG}
 ls
-rm -Rf build/*
+# Weird: using sudo no longer works?!
+rm -Rf build
 mkdir build
 cd build
 if [ -f /etc/redhat-release ]; then
