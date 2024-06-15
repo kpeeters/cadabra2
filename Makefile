@@ -30,5 +30,8 @@ format:
 packages:
 	bash config/buildbot.sh
 
+appimage:
+	(mkdir build-appimage; cd build-appimage; cmake -DAPPIMAGE_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr ..; make; make install DESTDIR=AppDir; make appimage)
+
 updatesnoop:
 	cp ../snoop/src/Snoop.cc ../snoop/src/SnoopPrivate.hh ../snoop/src/Snoop.hh client_server/
