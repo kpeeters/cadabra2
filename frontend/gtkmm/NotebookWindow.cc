@@ -2006,7 +2006,7 @@ void NotebookWindow::on_file_save_as_jupyter()
 		case(Gtk::RESPONSE_OK): {
 			std::string ipynb_name = dialog.get_filename();
 			std::string out = JSON_serialise(doc);
-			auto json=nlohmann::json::parse(out);
+			nlohmann::json json=nlohmann::json::parse(out);
 			auto ipynb = cnb2ipynb(json);
 			std::ofstream file(ipynb_name);
 			file << ipynb.dump(3) << std::endl;
