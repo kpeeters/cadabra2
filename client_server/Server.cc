@@ -431,7 +431,7 @@ void Server::stop_block()
 	{
 //	interrupt_block=true;
 	std::cerr << "Server: sending SIGINT to python thread." << std::endl;
-	PyErr_SetInterruptEx(SIGINT);
+	PyErr_SetInterrupt();
 
 	// PyGILState_STATE state = PyGILState_Ensure();
 	// //	PyThreadState_SetAsyncExc ?
