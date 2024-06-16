@@ -14,18 +14,32 @@ if(USE_MICROTEX)
   set(GRAPHICS_DEBUG FALSE)
   set(_GLYPH_RENDER_TYPE 2)  # force rendering using otf font, not paths1
   set(BUILD_STATIC ON)
-  FetchContent_Declare(
-    microtex
-    GIT_REPOSITORY https://github.com/kpeeters/MicroTeX.git
-    # GIT_REPOSITORY file:///home/kasper/git/microtex/
-    GIT_TAG        kpeeters/cadabra
-  )
-  # FetchContent_MakeAvailable(microtex)
-  FetchContent_GetProperties(microtex)
-  if(NOT microtex_POPULATED)
-    FetchContent_Populate(microtex)
+
+  set(MICROTEX_SUBMODULE ${CMAKE_SOURCE_DIR}/submodules/microtex/)
+  if(EXISTS ${MICROTEX_SUBMODULE}/CMakeLists.txt)
+    message(STATUS "Found MicroTeX as submodule in ${MICROTEX_SUBMODULE}")
+    # Someone has already checked out the microtex submodule, use that.
+    set(microtex_POPULATED TRUE)
+    set(microtex_SOURCE_DIR ${MICROTEX_SUBMODULE})
+    set(microtex_BINARY_DIR ${microtex_SOURCE_DIR}/build)
     add_subdirectory(${microtex_SOURCE_DIR} ${microtex_BINARY_DIR} EXCLUDE_FROM_ALL)
+  else()
+    # Fetch microtex as we do not have it yet.
+    message(STATUS "Fetching MicroTeX using FetchContent")    
+    FetchContent_Declare(
+      microtex
+      GIT_REPOSITORY https://github.com/kpeeters/MicroTeX.git
+      # GIT_REPOSITORY file:///home/kasper/git/microtex/
+      GIT_TAG        kpeeters/cadabra
+    )
+    # FetchContent_MakeAvailable(microtex)
+    FetchContent_GetProperties(microtex)
+    if(NOT microtex_POPULATED)
+      FetchContent_Populate(microtex)
+      add_subdirectory(${microtex_SOURCE_DIR} ${microtex_BINARY_DIR} EXCLUDE_FROM_ALL)
+    endif()
   endif()
+  
   target_compile_options(microtex PUBLIC "-DHAVE_AUTO_FONT_FIND=1" "-Wno-reorder" "-Wno-sign-compare" "-Wno-switch" "-Wno-unused-variable" "-Wno-unused-parameter" "-Wno-ignored-qualifiers" "-Wno-mismatched-tags" "-Wno-missing-braces" "-Wno-missing-field-initializers")
 else()
   message(STATUS "Only using LaTeX for typesetting (disabling MicroTeX)")
