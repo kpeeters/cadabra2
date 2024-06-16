@@ -393,18 +393,12 @@ add_subdirectory(core)
 
 # Frontend
 if(ENABLE_FRONTEND)
-  option(ENABLE_MICROTEX "Enable MicroTeX support" ON)
-  if(APPIMAGE_MODE)
-    set(ENABLE_MICROTEX TRUE)
-  endif()
+  set(ENABLE_MICROTEX TRUE)
   if(ENABLE_MICROTEX)
     set(USE_MICROTEX TRUE)
     set(tinyxml2_BUILD_TESTING FALSE)
   endif()
   add_subdirectory(frontend)
-#  if(ENABLE_MICROTEX)
-#    add_dependencies(cadabra2-gtk LaTeX)
-#  endif()
 endif()
 
 # Tests
