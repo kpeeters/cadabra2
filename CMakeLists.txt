@@ -393,18 +393,12 @@ add_subdirectory(core)
 
 # Frontend
 if(ENABLE_FRONTEND)
-  option(ENABLE_MICROTEX "Enable MicroTeX support" ON)
-  if(APPIMAGE_MODE)
-    set(ENABLE_MICROTEX TRUE)
-  endif()
+  set(ENABLE_MICROTEX TRUE)
   if(ENABLE_MICROTEX)
     set(USE_MICROTEX TRUE)
     set(tinyxml2_BUILD_TESTING FALSE)
   endif()
   add_subdirectory(frontend)
-#  if(ENABLE_MICROTEX)
-#    add_dependencies(cadabra2-gtk LaTeX)
-#  endif()
 endif()
 
 # Tests
@@ -449,6 +443,8 @@ if(APPIMAGE_MODE)
     execute_process(COMMAND chmod u+x ${CMAKE_BINARY_DIR}/${DEPLOY})
   endif()
   add_custom_target(appimage
+    COMMAND mkdir -p AppDir/usr/lib/python3/dist-packages
+    COMMAND cp -a /usr/lib/python3/dist-packages/setuptools AppDir/usr/lib/python3/dist-packages/
     COMMAND ${CMAKE_BINARY_DIR}/${DEPLOY} --appdir AppDir --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
     COMMAND mv Cadabra_2-${CMAKE_SYSTEM_PROCESSOR}.AppImage Cadabra_${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}_${CMAKE_SYSTEM_PROCESSOR}.AppImage
   )

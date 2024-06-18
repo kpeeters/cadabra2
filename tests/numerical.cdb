@@ -59,6 +59,14 @@ def test03():
     tst:= 1/64 r**(-12) - @(ex);
     assert(tst==0)
     print("Test 03f passed")
+    tst:= s - s**2;
+    substitute(tst, $s=1$)
+    assert(tst==0)
+    print("Test 03g passed")
+    tst:= s - 3 s**2;
+    substitute(tst, $s=1$)
+    assert(tst==-2)
+    print("Test 03h passed")
     
 test03()
 
