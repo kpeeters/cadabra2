@@ -158,7 +158,6 @@ namespace cadabra {
 		
 		if(*arg->name=="1") {
 			if(*arg->multiplier==1) { // 1**anything = 1
-				one(it->multiplier);
 				tr.erase_children(it);
 				it->name=name_set.insert("1").first;
 				return true;
