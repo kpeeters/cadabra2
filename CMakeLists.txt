@@ -445,11 +445,11 @@ if(APPIMAGE_MODE)
   message(STATUS "Generating AppImage using ${DEPLOY_URL}")
   if(NOT EXISTS ${DEPLOY})
     message(STATUS "Downloading...")
-    file(DOWNLOAD ${DEPLOY_URL} ${DEPLOY})
-    execute_process(COMMAND chmod u+x ${DEPLOY})
+    file(DOWNLOAD ${DEPLOY_URL} ${CMAKE_BINARY_DIR}/${DEPLOY})
+    execute_process(COMMAND chmod u+x ${CMAKE_BINARY_DIR}/${DEPLOY})
   endif()
   add_custom_target(appimage
-    COMMAND ./${DEPLOY} --appdir AppDir --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
+    COMMAND ${CMAKE_BINARY_DIR}/${DEPLOY} --appdir AppDir --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
     COMMAND mv Cadabra_2-${CMAKE_SYSTEM_PROCESSOR}.AppImage Cadabra_${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}_${CMAKE_SYSTEM_PROCESSOR}.AppImage
   )
 endif()
