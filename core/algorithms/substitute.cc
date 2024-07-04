@@ -9,7 +9,7 @@
 #define DBG_MACRO_DISABLE
 #include "dbg.h"
 
-// #define DEBUG 1
+//#define DEBUG 1
 
 using namespace cadabra;
 
@@ -120,20 +120,43 @@ bool substitute::can_apply(iterator st)
 
 		if(*lhs->name=="\\prod")     ret=comparator.match_subproduct(tr, lhs, tr.begin(lhs), st, conditions);
 		else if(*lhs->name=="\\sum") ret=comparator.match_subsum(tr, lhs, tr.begin(lhs), st, conditions);
-		else                         ret=comparator.match_subtree(tr, lhs, st, conditions);
+		else {
+#ifdef DEBUG
+			std::cerr << "substitute::can_apply: testing " << *lhs << " against " << *st << std::endl;
+#endif
+			ret=comparator.match_subtree(tr, lhs, st, conditions);
+			}
 
 		if(ret == Ex_comparator::match_t::subtree_match ||
-		      ret == Ex_comparator::match_t::match_index_less ||
-		      ret == Ex_comparator::match_t::match_index_greater) {
+			ret == Ex_comparator::match_t::match_index_less ||
+			ret == Ex_comparator::match_t::match_index_greater) {
 			use_rule=arrow;
 
 			// If we are not matching a partial sum or partial product, need to check that all
 			// terms or factors are accounted for.
 			if(!partial) {
-				dbg(comparator.factor_locations.size());
-				dbg(tr.number_of_children(st));
-				if(comparator.factor_locations.size()!=tr.number_of_children(st))
-					return args.end();
+				if(*lhs->name=="\\prod") {
+					if(*st->name!="\\prod")
+						return args.end();
+					
+#ifdef DEBUG
+					std::cerr << "substitute::can_apply: partial=false, so " 
+								 << comparator.factor_locations.size()
+								 << " has to equal "
+								 << tr.number_of_children(st) << std::endl;
+#endif
+					if(comparator.factor_locations.size()!=tr.number_of_children(st))
+						return args.end();
+					}
+				else {
+					// If lhs is not a product, then we need to check that the node in the
+					// expression we act on does not sit inside a product (and hence has
+					// more factors).
+					if(tr.is_head(st) || (*tr.parent(st)->name)!="\\prod")
+						return arrow;
+					else
+						return args.end();
+					}
 				}
 
 			return arrow;

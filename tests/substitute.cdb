@@ -587,3 +587,13 @@ def test128():
     print("Test 128 passed")
 
 test128()
+
+def test129():
+    __cdbkernel__=create_scope()
+    ex:= A_{\mu} - B_{\mu}^{a} B^{\nu}_{a} A_{\nu};
+    substitute(_, $A_{\mu} = 0$, partial=False);
+    tst:= -B_{\mu}^{a} B^{\nu}_{a} A_{\nu} - @(ex);
+    assert(tst==0)
+    print("Test 129 passed")
+
+test129()
