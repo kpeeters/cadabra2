@@ -133,6 +133,7 @@ set(PROPERTY_SRC_FILES
    properties/Depends.cc
    properties/DependsInherit.cc
    properties/Derivative.cc
+   properties/DerivativeOp.cc   
    properties/Determinant.cc
    properties/Diagonal.cc
    properties/DifferentialForm.cc

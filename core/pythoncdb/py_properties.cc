@@ -10,6 +10,7 @@
 #include "properties/Depends.hh"
 #include "properties/DependsInherit.hh"
 #include "properties/Derivative.hh"
+#include "properties/DerivativeOp.hh"
 #include "properties/Determinant.hh"
 #include "properties/Diagonal.hh"
 #include "properties/DifferentialForm.hh"
@@ -397,6 +398,7 @@ namespace cadabra {
 		using Py_CommutingAsSum = BoundProperty<CommutingAsSum, BoundPropertyBase>;
 		using Py_Distributable = BoundProperty<Distributable, BoundPropertyBase>;
 		using Py_Determinant = BoundProperty<Determinant, BoundPropertyBase>;
+		using Py_DerivativeOp = BoundProperty<DerivativeOp, BoundPropertyBase>;
 		using Py_FilledTableau = BoundProperty<FilledTableau, BoundPropertyBase>;
 		using Py_ImplicitIndex = BoundProperty<ImplicitIndex, BoundPropertyBase>;
 		using Py_ImaginaryI = BoundProperty<ImaginaryI, BoundPropertyBase>;
@@ -419,6 +421,7 @@ namespace cadabra {
 		def_prop<Py_Distributable>(m);
 		def_prop<Py_Determinant>(m)
 			.def_property_readonly("obj", [](const Py_Determinant & p) { return p.get_prop()->obj; });
+		def_prop<Py_DerivativeOp>(m);
 		def_prop<Py_FilledTableau>(m)
 			.def_property_readonly("dimension", [](const Py_FilledTableau & p) { return p.get_prop()->dimension; });
 		def_prop<Py_ImplicitIndex>(m)
