@@ -375,17 +375,30 @@ def test05():
 
 test05()
 
-{\mu,\nu}::Indices(curved).
-{a,b,c}::Indices(flat).
-\gamma{#}::GammaMatrix(metric=g).
-ex := \gamma_{\mu} \gamma_{a};
-ex2:= \gamma_{a}\gamma_{\mu}\gamma_{\nu}\gamma_{b};
-join_gamma(_);
-ex := \gamma_{a} \gamma_{b};
-join_gamma(_);    
+def test06():
+    __cdbkernel__ = create_scope()
+    {a,b,c}::Indices(flat).
+    \gamma{#}::GammaMatrix(metric=g).
+    ex := \gamma_{m m} \gamma_{n};
+    join_gamma(ex);
+    tst:= assert(ex==0)
+    print("Test 06 passed")
 
-{\alpha,\beta}::Indices(position=fixed);
-\gamma{#}::Matrix;
-\lambda::ImplicitIndex;
-ex:=\lambda^{\alpha} (\gamma^{m})_{\alpha \beta};
-combine(ex);
+test06()
+
+#  {\mu,\nu}::Indices(curved).
+#  {a,b,c}::Indices(flat).
+#  \gamma{#}::GammaMatrix(metric=g).
+#  ex := \gamma_{\mu} \gamma_{a};
+#  ex2:= \gamma_{a}\gamma_{\mu}\gamma_{\nu}\gamma_{b};
+#  join_gamma(_);
+#  ex := \gamma_{a} \gamma_{b};
+#  join_gamma(_);    
+#  
+#  {\alpha,\beta}::Indices(position=fixed);
+#  \gamma{#}::Matrix;
+#  \lambda::ImplicitIndex;
+#  ex:=\lambda^{\alpha} (\gamma^{m})_{\alpha \beta};
+#  combine(ex);
+
+
