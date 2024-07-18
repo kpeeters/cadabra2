@@ -3,6 +3,7 @@
 #include "Cleanup.hh"
 #include "algorithms/product_rule.hh"
 #include "properties/Derivative.hh"
+#include "properties/DerivativeOp.hh"
 #include "properties/DifferentialForm.hh"
 
 using namespace cadabra;
@@ -37,6 +38,10 @@ bool product_rule::can_apply(iterator it)
 				}
 			if(prodnode!=tr.end()) return true;
 			}
+		}
+	else {
+		const DerivativeOp *derop=kernel.properties.get<DerivativeOp>(it);
+		if(derop) return true;
 		}
 
 	return false;
