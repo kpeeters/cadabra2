@@ -11,7 +11,7 @@ class Server:
     def __init__(self, kernel_instance):
         self._kernel = kernel_instance
 
-    def send(self, data, typestr, parent_id, last_in_sequence):
+    def send(self, data, typestr, parent_id, cell_id, last_in_sequence):
         if typestr == "latex_view":
             data = _latex_post_parser(data)
             self._kernel._send_result(data)
