@@ -22,12 +22,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 13340122236411534882,
+					"cell_id": 15552618808454340805,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 11333410999712696013,
+							"cell_id": 17909960130070292947,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "g_{m p} g^{p m}"
@@ -36,12 +36,12 @@
 					"source": "\\begin{dmath*}{}g_{m p} g^{p m}\\end{dmath*}"
 				},
 				{
-					"cell_id": 17894985963178002384,
+					"cell_id": 346245979832968625,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 5593101152482251246,
+							"cell_id": 18301710340624209207,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "g^{p}_{p}"
@@ -58,12 +58,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 11832355180757837612,
+					"cell_id": 692499475391029252,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 1419432383822709486,
+							"cell_id": 12623500600163379539,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "10"
@@ -110,30 +110,30 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 2830738818925621002,
+					"cell_id": 934843099193461823,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
-					"source": "\\begin{dmath*}{}\\text{Property Indices(position=fixed) attached to~}\\left[a,~\\discretionary{}{}{} b,~\\discretionary{}{}{} c,~\\discretionary{}{}{} d,~\\discretionary{}{}{} e,~\\discretionary{}{}{} f\\right].\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\text{Property Indices(position=fixed) attached to~}\\left[a, \\discretionary{}{}{}b, \\discretionary{}{}{}c, \\discretionary{}{}{}d, \\discretionary{}{}{}e, \\discretionary{}{}{}f\\right].\\end{dmath*}"
 				},
 				{
-					"cell_id": 9384043968720976150,
+					"cell_id": 816358059307477494,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property Metric attached to~}g_{a b}.\\end{dmath*}"
 				},
 				{
-					"cell_id": 3632907748806720927,
+					"cell_id": 2839007278772691664,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property TableauSymmetry attached to~}g^{a b}.\\end{dmath*}"
 				},
 				{
-					"cell_id": 14029841914135557336,
+					"cell_id": 13817763760227715534,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 16107652404209191630,
+							"cell_id": 10707513932396855145,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "X_{a} g^{a b} g_{b c} g^{c d} g_{d e} g^{e f}"
@@ -142,12 +142,12 @@
 					"source": "\\begin{dmath*}{}X_{a} g^{a b} g_{b c} g^{c d} g_{d e} g^{e f}\\end{dmath*}"
 				},
 				{
-					"cell_id": 11123767540161473056,
+					"cell_id": 15694279202429955163,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 10523281001881141507,
+							"cell_id": 16096105714669192847,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "X_{e} g^{e f}"

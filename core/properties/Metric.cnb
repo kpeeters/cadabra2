@@ -1,68 +1,79 @@
-
 {
-	"cells" : 
-	[
-		
+	"cell_id": 502887745135165894,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
-				
+			"cell_id": 1870763346216562312,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\property{Metric}{Makes a two-tensor a metric.}\n\nLabels the object as a symmetric tensor, and optionally gives it the\nindicated signature through the {\\tt signature} parameter."
+					"cell_id": 16590113103145697158,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\property{Metric}{Makes a two-tensor a metric.}\n\nLabels the object as a symmetric tensor, and optionally gives it the\nindicated signature through the {\\tt signature} parameter."
 				}
 			],
-			"hidden" : true,
-			"source" : "\\property{Metric}{Makes a two-tensor a metric.}\n\nLabels the object as a symmetric tensor, and optionally gives it the\nindicated signature through the {\\tt signature} parameter."
+			"hidden": true,
+			"source": "\\property{Metric}{Makes a two-tensor a metric.}\n\nLabels the object as a symmetric tensor, and optionally gives it the\nindicated signature through the {\\tt signature} parameter."
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
+			"cell_id": 6115743091450954657,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}g_{m n} A^{n p}\\end{dmath*}"
+					"cell_id": 8587770812173137284,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4066497848239046753,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "g_{m n} A^{n p}"
+						}
+					],
+					"source": "\\begin{dmath*}{}g_{m n} A^{n p}\\end{dmath*}"
 				},
-				
 				{
-					"cell_origin" : "server",
-					"cell_type" : "error",
-					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 3, in <module>\nNameError: name 'eliminate_metric' is not defined\n\\end{verbatim}}}"
+					"cell_id": 9658144980223638993,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8233761168233916260,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m}^{p}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m}\\,^{p}\\end{dmath*}"
 				}
 			],
-			"source" : "g_{m n}::Metric(signature=1).\nex:= g_{m n} A^{n p};\neliminate_metric(_);"
+			"source": "g_{m n}::Metric(signature=1).\nex:= g_{m n} A^{n p};\neliminate_metric(_);"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
-				
+			"cell_id": 1399993026065074684,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Objects declared as \\prop{Metric} can be used to automatically\nraise or lower indices using the\n\\algo{eliminate_metric} algorithm, as above.\n"
+					"cell_id": 10234102992620672473,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Objects declared as \\prop{Metric} can be used to automatically\nraise or lower indices using the\n\\algo{eliminate_metric} algorithm, as above.\n"
 				}
 			],
-			"hidden" : true,
-			"source" : "Objects declared as \\prop{Metric} can be used to automatically\nraise or lower indices using the\n\\algo{eliminate_metric} algorithm, as above.\n"
+			"hidden": true,
+			"source": "Objects declared as \\prop{Metric} can be used to automatically\nraise or lower indices using the\n\\algo{eliminate_metric} algorithm, as above.\n"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 9140251695264754467,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
 }
-

@@ -143,6 +143,7 @@ set(PROPS
   Determinant
   Diagonal
   DiracBar
+  Distributable
   EpsilonTensor
   FilledTableau
   GammaMatrix
