@@ -23,5 +23,12 @@ jobs:
         context: .
         file: docker/Dockerfile
         push: false
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+        with:
+          tags: cadabra2-jupyter:latest
+          outputs: type=docker,dest=/tmp/cadabra2-jupyter.tar
+
+  - name: Upload artifact
+    uses: actions/upload-artifact@v4
+    with:
+      name: cadabra2-jupyter
+      path: /tmp/cadabra2-jupyter.tar
