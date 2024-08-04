@@ -41,6 +41,7 @@ set(TUTORIALS
   ref_derivatives
   ref_default_simplification
   ref_programming
+  ref_dynamical_updates
   ref_import
   ref_implicit_versus_explicit
   ref_selecting
@@ -58,10 +59,11 @@ set(BOOK_PARTS
    ref_derivatives
    ref_default_simplification
    ref_programming
+   ref_dynamical_updates
    ref_import
    ref_implicit_versus_explicit
    ref_selecting
-	ref_c++_library
+   ref_c++_library
 )   
 
 # 3rd party contributions
