@@ -1,311 +1,335 @@
 {
-	"cells" : 
-	[
+	"cell_id": 1122815849851778574,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 5978568215711204063,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\section*{Derivatives and implicit dependence on coordinates}\n\nThere is no fixed notation for derivatives; as with all other objects\nyou have to declare derivatives by associating a property to them, in\nthis case the \\prop{Derivative} property. "
+					"cell_id": 9163289818544044159,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Derivatives and implicit dependence on coordinates}\n\nThere is no fixed notation for derivatives; as with all other objects\nyou have to declare derivatives by associating a property to them, in\nthis case the \\prop{Derivative} property. "
 				}
 			],
-			"hidden" : true,
-			"source" : "\\section*{Derivatives and implicit dependence on coordinates}\n\nThere is no fixed notation for derivatives; as with all other objects\nyou have to declare derivatives by associating a property to them, in\nthis case the \\prop{Derivative} property. "
+			"hidden": true,
+			"source": "\\section*{Derivatives and implicit dependence on coordinates}\n\nThere is no fixed notation for derivatives; as with all other objects\nyou have to declare derivatives by associating a property to them, in\nthis case the \\prop{Derivative} property. "
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 3121771876375322580,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Derivative to~}\\nabla{\\#}.\\end{dmath*}"
+					"cell_id": 17189132776906135827,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Derivative attached to~}\\backslash\\texttt{nabla}\\{\\#\\}.\\end{dmath*}"
 				}
 			],
-			"source" : "\\nabla{#}::Derivative;"
+			"source": "\\nabla{#}::Derivative;"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 13092358405604264614,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Derivative objects can be used in various ways. You can just write the\nderivative symbol, as in"
+					"cell_id": 13903985434684835252,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Derivative objects can be used in various ways. You can just write the\nderivative symbol, as in"
 				}
 			],
-			"hidden" : true,
-			"source" : "Derivative objects can be used in various ways. You can just write the\nderivative symbol, as in"
+			"hidden": true,
+			"source": "Derivative objects can be used in various ways. You can just write the\nderivative symbol, as in"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 18151900650212757933,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 13634587081560003361,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\nabla(A_{\\mu})"
+							"cell_id": 17401122873979242133,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla(A_{\\mu})"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\nabla{A_{\\mu}}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\nabla{A_{\\mu}}\\end{dmath*}"
 				}
 			],
-			"source" : "ex:=\\nabla{ A_{\\mu} };"
+			"source": "ex:=\\nabla{ A_{\\mu} };"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 2535925725272172629,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Or you can write the coordinate with\nrespect to which the derivative is taken,"
+					"cell_id": 2703885803720580789,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Or you can write the coordinate with\nrespect to which the derivative is taken,"
 				}
 			],
-			"hidden" : true,
-			"source" : "Or you can write the coordinate with\nrespect to which the derivative is taken,"
+			"hidden": true,
+			"source": "Or you can write the coordinate with\nrespect to which the derivative is taken,"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 16893005691693910276,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}s.\\end{dmath*}"
+					"cell_id": 6265159977008670288,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Coordinate attached to~}s.\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}A_{\\mu}.\\end{dmath*}"
+					"cell_id": 2508463848585078013,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Depends attached to~}A_{\\mu}.\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 9585809248094876254,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\nabla_{s}(A_{\\mu})"
+							"cell_id": 14661015508918667345,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{s}(A_{\\mu})"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\nabla_{s}{A_{\\mu}}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\nabla_{s}{A_{\\mu}}\\end{dmath*}"
 				}
 			],
-			"source" : "s::Coordinate;\nA_{\\mu}::Depends(s);\nex:=\\nabla_{s}{ A_{\\mu} };"
+			"source": "s::Coordinate;\nA_{\\mu}::Depends(s);\nex:=\\nabla_{s}{ A_{\\mu} };"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 10153963060502655636,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Finally, you can use an index as the subscript argument, as in"
+					"cell_id": 10916447968963342696,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Finally, you can use an index as the subscript argument, as in"
 				}
 			],
-			"hidden" : true,
-			"source" : "Finally, you can use an index as the subscript argument, as in"
+			"hidden": true,
+			"source": "Finally, you can use an index as the subscript argument, as in"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 13561250281933297262,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[\\mu,~\\discretionary{}{}{} \\nu\\right].\\end{dmath*}"
+					"cell_id": 2893963764896938419,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Indices(position=free) attached to~}\\left[\\mu, \\discretionary{}{}{}\\nu\\right].\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 10286893870653739756,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\nabla_{\\nu}(A_{\\mu})"
+							"cell_id": 8500921658553144632,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{\\nu}(A_{\\mu})"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\nabla_{\\nu}{A_{\\mu}}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\nabla_{\\nu}{A_{\\mu}}\\end{dmath*}"
 				}
 			],
-			"source" : "{ \\mu, \\nu }::Indices(vector);\nex:=\\nabla_{\\nu}{ A_{\\mu} };"
+			"source": "{ \\mu, \\nu }::Indices(vector);\nex:=\\nabla_{\\nu}{ A_{\\mu} };"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 10444583949408313065,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "(in which case the first line is, for the purpose of using the\nderivative operator, actually unnecessary). "
+					"cell_id": 4530724075209643387,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "(in which case the first line is, for the purpose of using the\nderivative operator, actually unnecessary). "
 				}
 			],
-			"hidden" : true,
-			"source" : "(in which case the first line is, for the purpose of using the\nderivative operator, actually unnecessary). "
+			"hidden": true,
+			"source": "(in which case the first line is, for the purpose of using the\nderivative operator, actually unnecessary). "
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 13397161166768324625,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "The main point of associating the \\prop{Derivative} property to an\nobject is to make the object obey the Leibnitz or product rule, as\nillustrated by the following example,"
+					"cell_id": 17715485633604521333,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The main point of associating the \\prop{Derivative} property to an\nobject is to make the object obey the Leibnitz or product rule, as\nillustrated by the following example,"
 				}
 			],
-			"hidden" : true,
-			"source" : "The main point of associating the \\prop{Derivative} property to an\nobject is to make the object obey the Leibnitz or product rule, as\nillustrated by the following example,"
+			"hidden": true,
+			"source": "The main point of associating the \\prop{Derivative} property to an\nobject is to make the object obey the Leibnitz or product rule, as\nillustrated by the following example,"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 4282409426609146563,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Derivative to~}\\nabla{\\#}.\\end{dmath*}"
+					"cell_id": 17039843437785172514,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Derivative attached to~}\\backslash\\texttt{nabla}\\{\\#\\}.\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 12960000548412277736,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\nabla(A_{\\mu} B_{\\nu})"
+							"cell_id": 535790888793878903,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla(A_{\\mu} B_{\\nu})"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\nabla\\left(A_{\\mu} B_{\\nu}\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\nabla\\left(A_{\\mu} B_{\\nu}\\right)\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 12457032370277415749,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\nabla(A_{\\mu}) B_{\\nu} + A_{\\mu} \\nabla(B_{\\nu})"
+							"cell_id": 3795438018106939319,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla(A_{\\mu}) B_{\\nu} + A_{\\mu} \\nabla(B_{\\nu})"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\nabla{A_{\\mu}} B_{\\nu}+A_{\\mu} \\nabla{B_{\\nu}}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\nabla{A_{\\mu}} B_{\\nu}\\discretionary{}{}{}+A_{\\mu} \\nabla{B_{\\nu}}\\end{dmath*}"
 				}
 			],
-			"source" : "\\nabla{#}::Derivative;\nex:= \\nabla{ A_{\\mu} * B_{\\nu} };\nproduct_rule(_);"
+			"source": "\\nabla{#}::Derivative;\nex:= \\nabla{ A_{\\mu} * B_{\\nu} };\nproduct_rule(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 8677916216204324123,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "This behaviour is a consequence of the fact that \\prop{Derivative}\nderives from \\prop{Distributable}. Note that the\n\\prop{Derivative} property does not automatically give you \ncommuting derivatives, so that you can e.g.~use it to write covariant\nderivatives. "
+					"cell_id": 17244218890176750790,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "This behaviour is a consequence of the fact that \\prop{Derivative}\nderives from \\prop{Distributable}. Note that the\n\\prop{Derivative} property does not automatically give you \ncommuting derivatives, so that you can e.g.~use it to write covariant\nderivatives. "
 				}
 			],
-			"hidden" : true,
-			"source" : "This behaviour is a consequence of the fact that \\prop{Derivative}\nderives from \\prop{Distributable}. Note that the\n\\prop{Derivative} property does not automatically give you \ncommuting derivatives, so that you can e.g.~use it to write covariant\nderivatives. "
+			"hidden": true,
+			"source": "This behaviour is a consequence of the fact that \\prop{Derivative}\nderives from \\prop{Distributable}. Note that the\n\\prop{Derivative} property does not automatically give you \ncommuting derivatives, so that you can e.g.~use it to write covariant\nderivatives. "
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 4266922430318706841,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "More specific derivative types exist too. An example are partial\nderivatives, declared using the \\prop{PartialDerivative} property.\nPartial derivatives are commuting and therefore automatically\nsymmetric in their indices,"
+					"cell_id": 7753763602494058227,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "More specific derivative types exist too. An example are partial\nderivatives, declared using the \\prop{PartialDerivative} property.\nPartial derivatives are commuting and therefore automatically\nsymmetric in their indices,"
 				}
 			],
-			"hidden" : true,
-			"source" : "More specific derivative types exist too. An example are partial\nderivatives, declared using the \\prop{PartialDerivative} property.\nPartial derivatives are commuting and therefore automatically\nsymmetric in their indices,"
+			"hidden": true,
+			"source": "More specific derivative types exist too. An example are partial\nderivatives, declared using the \\prop{PartialDerivative} property.\nPartial derivatives are commuting and therefore automatically\nsymmetric in their indices,"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 1000836246543036704,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+					"cell_id": 7592315176139174518,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property PartialDerivative attached to~}\\backslash\\texttt{partial}\\{\\#\\}.\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[a,~\\discretionary{}{}{} b,~\\discretionary{}{}{} m,~\\discretionary{}{}{} n\\right].\\end{dmath*}"
+					"cell_id": 1289170573850456116,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Indices(position=free) attached to~}\\left[a, \\discretionary{}{}{}b, \\discretionary{}{}{}m, \\discretionary{}{}{}n\\right].\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Symmetric to~}C_{m n}.\\end{dmath*}"
+					"cell_id": 11151070317708428483,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Symmetric attached to~}C_{m n}.\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 15420425853360909320,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "T^{b a} \\partial_{a b}(C_{m n} D_{n m})"
+							"cell_id": 16823369671527784028,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "T^{b a} \\partial_{a b}(C_{m n} D_{n m})"
 						}
 					],
-					"source" : "\\begin{dmath*}{}T^{b a} \\partial_{a b}\\left(C_{m n} D_{n m}\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}T^{b a} \\partial_{a b}\\left(C_{m n} D_{n m}\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "\\partial{#}::PartialDerivative;\n{a,b,m,n}::Indices(vector);\nC_{m n}::Symmetric;\nex:=T^{b a} \\partial_{a b}( C_{m n} D_{n m} );"
+			"source": "\\partial{#}::PartialDerivative;\n{a,b,m,n}::Indices(vector);\nC_{m n}::Symmetric;\nex:=T^{b a} \\partial_{a b}( C_{m n} D_{n m} );"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 17184423938730932951,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 14011557080814126640,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "T^{a b} \\partial_{a b}(C_{m n} D_{m n})"
+							"cell_id": 7167017290773373763,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "T^{a b} \\partial_{a b}(C_{m n} D_{m n})"
 						}
 					],
-					"source" : "\\begin{dmath*}{}T^{a b} \\partial_{a b}\\left(C_{m n} D_{m n}\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}T^{a b} \\partial_{a b}\\left(C_{m n} D_{m n}\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "canonicalise(_);"
+			"source": "canonicalise(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 17585485201075769805,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
 }

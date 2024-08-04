@@ -4,9 +4,11 @@
 
 int main(int argc, char **argv)
 	{
-	if(argc<3) {
-		std::cerr << "Usage: cadabra2html [--segment] [cadabra notebook] [html file]\n\n";
+	if(argc<2) {
+		std::cerr << "Usage: cadabra2html [--segment] [--strip-code] [cadabra notebook] [html file]\n\n";
 		std::cerr << "Convert a Cadabra v2 notebook to an HTML segment or standalone HTML file.\n"
+					 << "The '--segment' flag is used to generate output for the cadabra web site.\n"
+					 << "With '--strip-code' all Python cells will be suppressed.\n"
 		          << "If the HTML file name is not given, output goes to standard out.\n";
 		return -1;
 		}
@@ -26,7 +28,7 @@ int main(int argc, char **argv)
 			html_file=argv[n];
 		++n;
 		}
-	std::cerr << "stripping code: " << strip_code << std::endl;
+	//std::cerr << "stripping code: " << strip_code << std::endl;
 
 	auto from=cdb_file.find_last_of("/");
 	++from;
@@ -36,6 +38,11 @@ int main(int argc, char **argv)
 	std::string title="Cadabra manual: "+t;
 
 	std::ifstream file(cdb_file);
+	if(!file.is_open()) {
+		std::cerr << "cadabra2html: cannot open " << cdb_file << std::endl;
+		return -1;
+		}
+	
 	std::string content, line;
 	while(std::getline(file, line))
 		content+=line;

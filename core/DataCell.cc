@@ -126,9 +126,11 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex ftableau(R"(\\ftableau\{(\{[^\}]*\}[,]?)*\})");
 	std::regex begin_tabular(R"(\\begin\{tabular\}\{[^\}]*\})");
 	std::regex end_tabular(R"(\\end\{tabular\})");
+	std::regex hash_in_math(R"((\\begin\{dmath\*\}.*)\\#(\\end\{dmath\*\}))");
 	std::string res;
 
 	try {
+		res = std::regex_replace(res, hash_in_math, "$1#$2");
 		res = std::regex_replace(str, begin_dmath, R"(\(\displaystyle)");
 		res = std::regex_replace(res, discretionary, " ");
 		res = std::regex_replace(res, end_dmath, R"(\))");
