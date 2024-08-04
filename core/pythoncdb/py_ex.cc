@@ -290,7 +290,6 @@ namespace cadabra {
 		return str.str();
 		}
 
-
 	pybind11::object Ex_as_sympy(Ex_ptr ex)
 		{
 		// Generate a string which can be parsed by Sympy.
@@ -304,6 +303,11 @@ namespace cadabra {
 #endif
 		pybind11::object ret = parse(txt);
 		return ret;
+		}
+
+	pybind11::object ExNode_as_sympy(const ExNode& exnode)
+		{
+		return Ex_as_sympy(exnode.ex);
 		}
 
 	std::string Ex_as_sympy_string(Ex_ptr ex)
@@ -692,6 +696,7 @@ namespace cadabra {
 			.def("__setitem__", &ExNode::setitem_iterator)
 			.def("_latex_", &ExNode::_latex_)
 			.def("__str__", &ExNode::__str__)
+			.def("_sympy_", &ExNode_as_sympy)
 			.def("terms", &ExNode::terms, "Return an ExNode iterator over all terms at the level of the current ExNode.")
 			.def("factors", &ExNode::factors, "Return an ExNode iterator over all factors at the level of the current ExNode.")
 			.def("own_indices", &ExNode::own_indices, "Return an ExNode iterator over all indices which are not inherited from child nodes.")

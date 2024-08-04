@@ -4,7 +4,7 @@ def test01():
    __cdbkernel__=create_scope()    
    ex:=3x + x**2 + a x**2 + b x;
    q=SympyBridge(ex)
-   q.from_sympy( str(sympy.collect(q.to_sympy(), str($x$))) )
+   q.from_sympy( str(sympy.collect(q.to_sympy(), $x$)) )
    tst:= x**2 (a + 1) + x ( b + 3) - @(ex);
    assert(tst==0)
    print("Test 01 passed")
