@@ -1,4 +1,4 @@
-name: Linux
+name: Docker
 
 on: [push]
 
@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
 
     - name: Exit if not on devel branch
       if: github.ref != 'refs/heads/devel'
