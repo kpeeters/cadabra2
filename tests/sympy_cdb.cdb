@@ -4,7 +4,7 @@ def test01():
    __cdbkernel__=create_scope()    
    ex:=3x + x**2 + a x**2 + b x;
    q=SympyBridge(ex)
-   q.from_sympy( str(sympy.collect(q.to_sympy(), $x$)) )
+   q.from_sympy( str(sympy.collect(q.to_sympy(), str($x$))) )
    tst:= x**2 (a + 1) + x ( b + 3) - @(ex);
    assert(tst==0)
    print("Test 01 passed")
@@ -13,10 +13,10 @@ test01()
 
 def test02():
    __cdbkernel__=create_scope()
-   {r,t}::Coordinate;
-   f::Depends(r,t);
+   {r,t}::Coordinate.
+   f::Depends(r,t).
    ex:=f*A;
-   \partial{#}::PartialDerivative;
+   \partial{#}::PartialDerivative.
    ex:= \partial_{r}{ f + (\sin(r)**2)**2 };
    map_sympy(ex)
    tst:= \partial_{r}{f} + 4 \sin(r)**3 \cos(r) - @(ex);
@@ -27,9 +27,9 @@ test02()
 
 def test03():
    __cdbkernel__=create_scope() 
-   \tau::Coordinate;
-   \partial{#}::Derivative(\tau);
-   r::Depends(\tau);
+   \tau::Coordinate.
+   \partial{#}::Derivative(\tau).
+   r::Depends(\tau).
    ex:=\partial{r};
    q=SympyBridge(ex)
    q.from_sympy(str(q.to_sympy()))

@@ -18,7 +18,7 @@ namespace cadabra {
 
 	/// \ingroup pythoncore
 	///
-	/// Add two expressions, adding a top-level \sum node if required.
+	/// Add two expressions, adding a top-level '\sum' node if required.
 
 	Ex_ptr Ex_add(const Ex_ptr ex1, const ExNode ex2);
 	Ex_ptr Ex_add(const Ex_ptr ex1, const Ex_ptr ex2);
@@ -26,13 +26,13 @@ namespace cadabra {
 
 	/// \ingroup pythoncore
 	///
-	/// Multiply two expressions, adding a top-level \prod node if required.
+	/// Multiply two expressions, adding a top-level '\prod' node if required.
 	Ex_ptr Ex_mul(const Ex_ptr ex1, const Ex_ptr ex2);
 	Ex_ptr Ex_mul(const Ex_ptr ex1, const Ex_ptr ex2, Ex::iterator top2);
 
 	/// \ingroup pythoncore
 	///
-	/// Subtract two expressions, adding a top-level \sum node if required.
+	/// Subtract two expressions, adding a top-level '\sum' node if required.
 	Ex_ptr Ex_sub(const Ex_ptr ex1, const ExNode ex2);
 	Ex_ptr Ex_sub(const Ex_ptr ex1, const Ex_ptr ex2);
 	Ex_ptr Ex_sub(const Ex_ptr ex1, const Ex_ptr ex2, Ex::iterator top2);

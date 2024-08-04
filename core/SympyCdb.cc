@@ -32,10 +32,13 @@ pybind11::object sympy::SympyBridge::export_ex()
 	pybind11::module sympy_parser = pybind11::module::import("sympy.parsing.sympy_parser");
 	auto parse = sympy_parser.attr("parse_expr");
 #ifdef DEBUG
-	std::cerr << str.str() << std::endl;
+	std::cerr << "sympy::SympyBridge::export_ex: " << str.str() << std::endl;
 #endif
 	pybind11::object ret = parse(str.str());
-
+#ifdef DEBUG
+	std::cerr << "sympy::SympyBridge::export_ex: succes" << std::endl;
+#endif
+	
 	return ret;
 	}
 
@@ -43,7 +46,7 @@ void sympy::SympyBridge::import_ex(const std::string& s)
 	{
 	preparse_import(s);
 #ifdef DEBUG
-	std::cerr << s << std::endl;
+	std::cerr << "sympy::SympyBridge::import_ex: " << s << std::endl;
 #endif
 	auto ptr = std::make_shared<Ex>();
 	cadabra::Parser parser(ptr);
