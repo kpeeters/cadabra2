@@ -1,5 +1,5 @@
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
-set(CADABRA_CMAKE_VERSION 3.11)
+set(CADABRA_CMAKE_VERSION 3.12)
 
 # Policy settings for CMake to resolve ambiguities.
 
@@ -14,12 +14,7 @@ if(POLICY CMP0127)
 endif()
 
 cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
-if (${CMAKE_VERSION} VERSION_LESS "3.8.0")
-	set(CMAKE_CXX_STANDARD 14)
-	message(STATUS "Using C++14 as you are using CMake < 3.8; consider upgrading as future versions of Cadabra may use C++17 features")
-else()
-	set(CMAKE_CXX_STANDARD 17)
-endif()
+set(CMAKE_CXX_STANDARD 17)
 project(Cadabra)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -114,9 +109,6 @@ include(cmake/packaging.cmake)
 
 #
 option(MSVC_TARGET_CONSOLE "Force Release book on MSVC to display a console window" OFF)
-
-# Provide option to build with Python 3 (default) or Python 2.
-option(USE_PYTHON_3 "Use Python 3 if ON, or fall back to Python 2 if OFF" ON)
 
 option(APPIMAGE_MODE "Run in AppImage mode, overriding path settings" OFF)
 if(APPIMAGE_MODE)
@@ -285,15 +277,10 @@ print_header("Configuring Python")
 # NEEDED TO USE CMAKE_INSTALL_FULL<dir>
 include(GNUInstallDirs)
 
-if(USE_PYTHON_3)
-	set(PYTHON_POSTFIX "3")
-	message(STATUS "Building for use with Python 3 (good!)")
-else()
-	set(PYTHON_POSTFIX "")
-	message(STATUS "Building for use with Python 2 (consider upgrading!)")
-endif()
+set(PYTHON_POSTFIX "3")
+# message(STATUS "Building for use with Python 3 (good!)")
 
-# set(PYBIND11_FINDPYTHON ON)
+find_package(Python COMPONENTS Interpreter Development)
 add_subdirectory(libs/pybind11)
 
 message(STATUS "Found python ${PYTHON_LIBRARIES}")
