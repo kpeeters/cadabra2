@@ -4,7 +4,6 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     
     steps:
@@ -23,12 +22,11 @@ jobs:
         context: .
         file: docker/Dockerfile
         push: false
-        with:
-          tags: cadabra2-jupyter:latest
-          outputs: type=docker,dest=/tmp/cadabra2-jupyter.tar
+        tags: cadabra2-jupyter:latest
+        outputs: type=docker,dest=cadabra2-jupyter.tar
 
-  - name: Upload artifact
-    uses: actions/upload-artifact@v4
-    with:
-      name: cadabra2-jupyter
-      path: /tmp/cadabra2-jupyter.tar
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: cadabra2-jupyter
+        path: cadabra2-jupyter.tar
