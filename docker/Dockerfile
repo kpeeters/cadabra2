@@ -41,7 +41,7 @@ RUN apt update && apt install -y \
  && rm -rf /var/lib/apt/lists/*
 RUN pip install jupyter
 COPY --from=builder /usr/local/bin/cadabra* /usr/local/bin/
-COPY --from=builder /usr/local/lib/python3.11/dist-packages /usr/local/lib/python3.11/dist-packages
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=builder /usr/local/share/cadabra2 /usr/local/share/cadabra2
 COPY --from=builder /usr/local/share/jupyter/kernels/cadabra2 /usr/local/share/jupyter/kernels/cadabra2
 
