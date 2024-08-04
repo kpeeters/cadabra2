@@ -10,6 +10,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Exit if not on devel branch
+      if: github.ref != 'refs/heads/devel'
+      run: exit 1
+      
     - name: setup python
       uses: actions/setup-python@v5
       with:

@@ -1,0 +1,29 @@
+name: Linux
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Exit if not on devel branch
+      if: github.ref != 'refs/heads/devel'
+      run: exit 1
+      
+    - name: setup python
+      uses: actions/setup-python@v5
+      with:
+          python-version: 3.12
+
+    - name: Build Docker image
+      uses: docker/build-push-action
+      with:
+        context: .
+        file: docker/Dockerfile
+        push: false
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
