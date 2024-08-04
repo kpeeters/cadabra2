@@ -39,9 +39,10 @@ jobs:
         file: docker/Dockerfile
         push: false
         tags: cadabra2-jupyter-${{ matrix.arch }}:latest
-        outputs: type=docker
+        outputs: type=docker,dest=cadabra2-jupyter-${{ matrix.arch }}.tar
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: cadabra2-jupyter-${{ matrix.arch }}
+        path: cadabra2-jupyter-${{ matrix.arch }}.tar
