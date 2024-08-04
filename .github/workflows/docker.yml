@@ -12,14 +12,14 @@ jobs:
     strategy:
       fail-fast: false
       if: ${{ github.ref == "master" }}
-        matrix:
-          arch:
-            - amd64
-            - arm64
+      matrix:
+        arch:
+          - amd64
+          - arm64
       if: ${{ github.ref != "master" }}
-        matrix:
-          arch:
-            - amd64
+      matrix:
+        arch:
+          - amd64
 
     steps:
     - name: Prepare
