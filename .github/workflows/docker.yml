@@ -50,7 +50,7 @@ jobs:
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@master
-      
+
     - name: Build Docker image
       uses: docker/build-push-action@master
       with:
@@ -58,7 +58,7 @@ jobs:
         context: .
         file: docker/Dockerfile
         push: true
-	#${{ github.ref == 'master' }}
+#${{ github.ref == 'master' }}
         labels: ${{ steps.meta.outputs.labels }}
         tags:   cadabra2-jupyter-${{ matrix.arch }}:latest
         outputs: type=docker,dest=cadabra2-jupyter-${{ matrix.arch }}.tar
