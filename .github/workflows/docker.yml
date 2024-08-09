@@ -14,12 +14,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: false
-      matrix:
-        arch:
-          - amd64
-          - arm64
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         arch:
+#           - amd64
+#           - arm64
 
     steps:
     - name: Prepare
@@ -54,17 +54,17 @@ jobs:
     - name: Build Docker image
       uses: docker/build-push-action@master
       with:
-        platforms: linux/${{ matrix.arch }}
+        platforms: linux/amd64, linux/arm64
         context: .
         file: docker/Dockerfile
         push: true
 #${{ github.ref == 'master' }}
         labels: ${{ steps.meta.outputs.labels }}
         tags:   kpeeters/cadabra2-jupyter:latest
-        outputs: type=docker,dest=cadabra2-jupyter-${{ matrix.arch }}.tar
+        outputs: type=docker
 
-    - name: Upload artifact to github assets
-      uses: actions/upload-artifact@main
-      with:
-        name: cadabra2-jupyter-${{ matrix.arch }}
-        path: cadabra2-jupyter-${{ matrix.arch }}.tar
+#     - name: Upload artifact to github assets
+#       uses: actions/upload-artifact@main
+#       with:
+#         name: cadabra2-jupyter-${{ matrix.arch }}
+#         path: cadabra2-jupyter-${{ matrix.arch }}.tar
