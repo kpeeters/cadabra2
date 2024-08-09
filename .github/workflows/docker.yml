@@ -28,7 +28,7 @@ jobs:
         echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV          
 
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
+      uses: docker/setup-qemu-action@master
 
     - uses: actions/checkout@v3
 
@@ -37,22 +37,22 @@ jobs:
       run: exit 1
       
     - name: Log in to Docker Hub
-      uses: docker/login-action@v3
+      uses: docker/login-action@master
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Extract metadata (tags, labels) for Docker
       id: meta
-      uses: docker/metadata-action@v5
+      uses: docker/metadata-action@master
       with:
         images: kpeeters/cadabra2-jupyter
 
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@master
       
     - name: Build Docker image
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@master
       with:
         platforms: linux/${{ matrix.arch }}
         labels: ${{ steps.meta.outputs.labels }}
@@ -63,7 +63,7 @@ jobs:
         outputs: type=docker,dest=cadabra2-jupyter-${{ matrix.arch }}.tar
 
     - name: Upload artifact to github assets
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@main
       with:
         name: cadabra2-jupyter-${{ matrix.arch }}
         path: cadabra2-jupyter-${{ matrix.arch }}.tar
