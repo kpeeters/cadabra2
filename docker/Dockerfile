@@ -48,7 +48,8 @@ COPY --from=builder /usr/local/share/jupyter/kernels/cadabra2 /usr/local/share/j
 # Cleanup things not necessary for running the container.
 RUN apt-get remove -y gcc && apt-get autoremove -y
 
-ENV PYTHONPATH=${PYTHONPATH}:/usr/local/lib/python3.11/dist-packages
 EXPOSE 9057
 WORKDIR /home/cadabra
-ENTRYPOINT ["jupyter", "notebook", "--ip=0.0.0.0", "--port=9057", "--allow-root"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh", "--port=9057"]
