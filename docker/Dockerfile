@@ -50,6 +50,6 @@ RUN apt-get remove -y gcc && apt-get autoremove -y
 
 EXPOSE 9057
 WORKDIR /home/cadabra
-COPY entrypoint.sh /entrypoint.sh
+COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh", "--port=9057"]
