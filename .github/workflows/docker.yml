@@ -1,3 +1,11 @@
+
+# Build docker images with a Jupyter server with Cadabra
+# kernel whenever a commit is pushed to github.
+#
+# Lint this thing with
+#
+#   yq eval docker.yml
+
 name: Docker
 
 on: [push]
@@ -6,9 +14,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # If we are on the master branch, build for all architectures.
-    # Otherwise, only build on the architecture for which we can
-    # get a runner (for speed).
     strategy:
       fail-fast: false
       matrix:
@@ -53,7 +58,7 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
         context: .
         file: docker/Dockerfile
-        push: ${{ github.ref == "master" }}
+        push: ${{ github.ref == 'master' }}
         tags: cadabra2-jupyter-${{ matrix.arch }}:latest
         outputs: type=docker,dest=cadabra2-jupyter-${{ matrix.arch }}.tar
 
