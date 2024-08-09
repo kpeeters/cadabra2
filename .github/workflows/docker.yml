@@ -60,7 +60,7 @@ jobs:
         push: true
 #${{ github.ref == 'master' }}
         labels: ${{ steps.meta.outputs.labels }}
-        tags:   cadabra2-jupyter-${{ matrix.arch }}:latest
+        tags:   kpeeters/cadabra2-jupyter:latest
         outputs: type=docker,dest=cadabra2-jupyter-${{ matrix.arch }}.tar
 
     - name: Upload artifact to github assets
