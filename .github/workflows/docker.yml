@@ -19,7 +19,7 @@ jobs:
       matrix:
         arch:
           - amd64
-          - arm64
+#          - arm64
 
     steps:
     - name: Prepare
@@ -55,11 +55,12 @@ jobs:
       uses: docker/build-push-action@master
       with:
         platforms: linux/${{ matrix.arch }}
-        labels: ${{ steps.meta.outputs.labels }}
         context: .
         file: docker/Dockerfile
-        push: ${{ github.ref == 'master' }}
-        tags: cadabra2-jupyter-${{ matrix.arch }}:latest
+        push: true
+	#${{ github.ref == 'master' }}
+        labels: ${{ steps.meta.outputs.labels }}
+        tags:   cadabra2-jupyter-${{ matrix.arch }}:latest
         outputs: type=docker,dest=cadabra2-jupyter-${{ matrix.arch }}.tar
 
     - name: Upload artifact to github assets
