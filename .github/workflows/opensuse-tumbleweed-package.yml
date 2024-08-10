@@ -46,8 +46,8 @@ jobs:
                   gmp-devel libuuid-devel  \
                   gtkmm3-devel  \
                   python311-matplotlib \
-                  libboost_system1_71_0-devel libboost_filesystem1_71_0-devel \
-                  libboost_date_time1_71_0-devel libboost_program_options1_71_0-devel             
+                  libboost_system1_85_0-devel libboost_filesystem1_85_0-devel \
+                  libboost_date_time1_85_0-devel libboost_program_options1_85_0-devel             
              git config --global --add safe.directory /workspace
              mkdir build 
              cd build 
