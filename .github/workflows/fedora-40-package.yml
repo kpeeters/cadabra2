@@ -59,7 +59,7 @@ jobs:
 
     - name: Upload Release Assets
       run: |
-        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-fedora-40.deb --clobber
+        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-fedora-40.rpm --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
