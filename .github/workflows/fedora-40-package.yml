@@ -44,7 +44,6 @@ jobs:
            bash -c " 
              dnf install -y rpm-build make gcc-c++ git python3-devel cmake gmp-devel libuuid-devel sqlite-devel gtkmm30-devel boost-devel python3-matplotlib python3-pip 
              pip3 install sympy 
-             cd cadabra2 
              mkdir build 
              cd build 
              cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr .. 
@@ -54,7 +53,7 @@ jobs:
 
     - name: Set version variables from output of cmake
       run: |
-        VER=$(cat /workspace/cadabra2/build/VERSION)
+        VER=$(cat /workspace/build/VERSION)
         echo "VERSION=$VER" >> $GITHUB_ENV
 
     - name: Upload Release Assets
