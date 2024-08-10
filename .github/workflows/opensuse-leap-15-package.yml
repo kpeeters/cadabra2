@@ -22,7 +22,7 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@master
 
-    - name: Pull Fedora image
+    - name: Pull OpenSUSE image
       run: docker pull opensuse/leap:15
 
     - name: Set up GitHub CLI
@@ -40,7 +40,7 @@ jobs:
         docker run --rm \
            -v ${{ github.workspace }}:/workspace \
            -w /workspace \
-           fedora:40 \
+           opensuse/leap:15 \
            bash -c " 
              git config --global --add safe.directory /workspace
              sudo zypper install --no-recommends git cmake python3-devel gcc-c++ \
