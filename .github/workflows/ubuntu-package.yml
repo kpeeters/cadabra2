@@ -1,4 +1,4 @@
-name: Linux
+name: Ubuntu-22.04 package
 
 on: [push]
 
@@ -39,6 +39,6 @@ jobs:
     - name: Upload artifact to github assets
       uses: actions/upload-artifact@main
       with:
-        name: cadabra2-${VERSION}-jammy.deb
-        path: build/cadabra2-${VERSION}-jammy.deb
+        name: cadabra2-${{ env.VERSION }}-jammy.deb
+        path: build/cadabra2-${{ env.VERSION }}-jammy.deb
 
