@@ -42,7 +42,7 @@ jobs:
            -w /workspace \
            opensuse/tumbleweed:latest \
            bash -c " 
-             zypper -n install --no-recommends git cmake python311-devel gcc-c++ \
+             zypper -n install --no-recommends git cmake python311-devel gcc12-c++ \
                   gmp-devel libuuid-devel  \
                   gtkmm3-devel  \
                   python311-matplotlib \
