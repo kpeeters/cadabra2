@@ -74,6 +74,15 @@ message(STATUS "Build id '${CADABRA_VERSION_BUILD}' dated ${CADABRA_VERSION_DATE
 message(STATUS "Build mode is set to '${CMAKE_BUILD_TYPE}'")
 message(STATUS "Architecture is '${CMAKE_SYSTEM_PROCESSOR}}'")
 
+# Store the version number in a build/VERSION file (so that e.g. github
+# actions can pick it up).
+if(NOT "${CADABRA_VERSION_TWEAK}" STREQUAL "0")
+  file(WRITE build/VERSION       "${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}.${CADABRA_VERSION_TWEAK}")
+else()
+  file(WRITE build/VERSION       "${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}")
+endif()  
+
+
 # Notify about install directory
 if ("${CMAKE_INSTALL_PREFIX}" STREQUAL "")
 	message(STATUS "Install directory not set")
