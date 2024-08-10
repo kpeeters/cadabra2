@@ -1,0 +1,69 @@
+# Create a OpenSUSE Tumbleweed package on a github release event.
+# This assumes that the cadabra version is the same as the
+# release name, and it will attempt to add the .rpm file
+# to the release assets.
+
+name: OpenSUSE-Tumbleweed package
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - uses: actions/checkout@v3
+
+#    - name: Exit if not on devel branch
+#      if: github.ref != 'refs/heads/devel'
+#      run: exit 1
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@master
+
+    - name: Pull OpenSUSE image
+      run: docker pull opensuse/tumbleweed:latest
+
+    - name: Set up GitHub CLI
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gh
+
+    - name: Authenticate GitHub CLI
+      run: gh auth setup-git
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+    - name: Build RPM
+      run: |
+        docker run --rm \
+           -v ${{ github.workspace }}:/workspace \
+           -w /workspace \
+           opensuse/tumbleweed:latest \
+           bash -c " 
+             zypper -n install --no-recommends git cmake python311-devel gcc-c++ \
+                  gmp-devel libuuid-devel  \
+                  gtkmm3-devel  \
+                  python311-matplotlib \
+                  libboost_system1_71_0-devel libboost_filesystem1_71_0-devel \
+                  libboost_date_time1_71_0-devel libboost_program_options1_71_0-devel             
+             git config --global --add safe.directory /workspace
+             mkdir build 
+             cd build 
+             cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr .. 
+             make 
+             cpack 
+           "
+
+    - name: Set version variables from output of cmake
+      run: |
+        VER=$(cat ${{ github.workspace }}/build/VERSION)
+        echo "VERSION=$VER" >> $GITHUB_ENV
+
+    - name: Upload Release Assets
+      run: |
+        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-tumbleweed.rpm --clobber
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

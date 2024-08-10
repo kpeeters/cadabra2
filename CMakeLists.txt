@@ -296,6 +296,7 @@ include(GNUInstallDirs)
 set(PYTHON_POSTFIX "3")
 # message(STATUS "Building for use with Python 3 (good!)")
 
+#set(PYBIND11_FINDPYTHON ON)
 find_package(Python COMPONENTS Interpreter Development)
 add_subdirectory(libs/pybind11)
 
