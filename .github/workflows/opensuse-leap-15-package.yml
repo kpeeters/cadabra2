@@ -42,11 +42,11 @@ jobs:
            -w /workspace \
            opensuse/leap:15 \
            bash -c " 
-             zypper -n install --no-recommends git cmake python3-devel gcc-c++ \
+             zypper -n install --no-recommends git cmake python311-devel gcc-c++ \
                   gmp-devel libuuid-devel sqlite-devel \
                   gtkmm3-devel  \
-                  python3-matplotlib \
-                  python3-sympy \
+                  python311-matplotlib \
+                  python311-sympy \
                   libboost_system1_66_0-devel libboost_filesystem1_66_0-devel \
                   libboost_date_time1_66_0-devel libboost_program_options1_66_0-devel             
              git config --global --add safe.directory /workspace
