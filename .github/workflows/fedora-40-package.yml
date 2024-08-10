@@ -54,7 +54,7 @@ jobs:
 
     - name: Set version variables from output of cmake
       run: |
-        VER=$(cat /workspace/build/VERSION)
+        VER=$(cat ${{ github.workspace }}/build/VERSION)
         echo "VERSION=$VER" >> $GITHUB_ENV
 
     - name: Upload Release Assets
