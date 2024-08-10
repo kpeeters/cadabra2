@@ -1,6 +1,11 @@
+# Create an Ubuntu 22.04 package on a github release event.
+# This assumes that the cadabra version is the same as the
+# release name, and it will attempt to add the .deb file
+# to the release assets.
+
 name: Ubuntu-22.04 package
 
-on: [push]
+on: [release]
 
 jobs:
   build:
@@ -19,16 +24,26 @@ jobs:
       with:
           python-version: 3.11
 
-    - name: get dependencies
+    - name: Set up GitHub CLI
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gh
+
+    - name: Authenticate GitHub CLI
+      run: gh auth setup-git
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+    - name: Get dependencies
       run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev libmpfr-dev libmpc-dev && python3 --version && which python3 && python3 -m pip install --upgrade pip && python3 -m pip install wheel && python3 -m pip install sympy gmpy2 numpy
 
     - name: configure
       run:  mkdir build && cd build && cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
       
-    - name: make
+    - name: Make
       run:  cd build && make
       
-    - name: package
+    - name: Create the .deb package
       run:  cd build && cpack
       
     - name: Set version variables from output of cmake
@@ -36,9 +51,15 @@ jobs:
         VER=$(cat build/VERSION)
         echo "VERSION=$VER" >> $GITHUB_ENV
 
-    - name: Upload artifact to github assets
-      uses: actions/upload-artifact@main
-      with:
-        name: cadabra2-${{ env.VERSION }}-jammy.deb
-        path: build/cadabra2-${{ env.VERSION }}-jammy.deb
+    - name: Upload Release Assets
+        run: |
+          gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-jammy.deb --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#     - name: Upload artifact to github assets
+#       uses: actions/upload-artifact@main
+#       with:
+#         name: cadabra2-${{ env.VERSION }}-jammy.deb
+#         path: build/cadabra2-${{ env.VERSION }}-jammy.deb
 
