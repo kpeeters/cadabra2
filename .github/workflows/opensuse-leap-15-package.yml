@@ -42,7 +42,7 @@ jobs:
            -w /workspace \
            opensuse/leap:15 \
            bash -c " 
-             zypper install --no-recommends --non-interactive git cmake python3-devel gcc-c++ \
+             zypper -n install --no-recommends git cmake python3-devel gcc-c++ \
                   gmp-devel libuuid-devel sqlite-devel \
                   gtkmm3-devel  \
                   python3-matplotlib \
