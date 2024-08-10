@@ -37,11 +37,12 @@ jobs:
           
     - name: Build RPM in Fedora container
       run: |
-         docker run --rm \
+        docker run --rm \
            -v ${{ github.workspace }}:/workspace \
            -w /workspace \
            fedora:40 \
            bash -c " 
+             git config --global --add safe.directory /workspace
              dnf install -y rpm-build make gcc-c++ git python3-devel cmake gmp-devel libuuid-devel sqlite-devel gtkmm30-devel boost-devel python3-matplotlib python3-pip 
              pip3 install sympy 
              mkdir build 
