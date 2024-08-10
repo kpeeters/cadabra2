@@ -41,7 +41,9 @@ jobs:
            -v ${{ github.workspace }}:/workspace \
            -w /workspace \
            opensuse/tumbleweed:latest \
-           bash -c " 
+           bash -c "
+             zypper refresh
+             zypper update
              zypper -n install --no-recommends git cmake python311-devel gcc12-c++ \
                   gmp-devel libuuid-devel  \
                   gtkmm3-devel  \
