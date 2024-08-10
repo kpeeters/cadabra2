@@ -1,11 +1,11 @@
-# Create an Ubuntu 22.04 package on a github release event.
+# Create a Fedora 40 package on a github release event.
 # This assumes that the cadabra version is the same as the
-# release name, and it will attempt to add the .deb file
+# release name, and it will attempt to add the .rpm file
 # to the release assets.
 
 name: Fedora-40 package
 
-on: [push]
+on: [release]
 
 jobs:
   build:
