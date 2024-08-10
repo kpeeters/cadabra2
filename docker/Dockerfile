@@ -41,14 +41,15 @@ RUN apt update && apt install -y \
  && rm -rf /var/lib/apt/lists/*
 RUN pip install jupyter
 COPY --from=builder /usr/local/bin/cadabra* /usr/local/bin/
-COPY --from=builder /usr/local/lib/python3.11/dist-packages /usr/local/lib/python3.11/dist-packages
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=builder /usr/local/share/cadabra2 /usr/local/share/cadabra2
 COPY --from=builder /usr/local/share/jupyter/kernels/cadabra2 /usr/local/share/jupyter/kernels/cadabra2
 
 # Cleanup things not necessary for running the container.
 RUN apt-get remove -y gcc && apt-get autoremove -y
 
-ENV PYTHONPATH=${PYTHONPATH}:/usr/local/lib/python3.11/dist-packages
 EXPOSE 9057
 WORKDIR /home/cadabra
-ENTRYPOINT ["jupyter", "notebook", "--ip=0.0.0.0", "--port=9057", "--allow-root"]
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh", "--port=9057"]
