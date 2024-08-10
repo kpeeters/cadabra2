@@ -15,6 +15,9 @@ endif()
 if(POLICY CMP0148)
   cmake_policy(SET CMP0148 NEW)
 endif()
+if(POLICY CMP0167)
+  cmake_policy(SET CMP0167 NEW)
+endif()
 
 cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
 set(CMAKE_CXX_STANDARD 17)
@@ -69,6 +72,7 @@ include(cmake/version.cmake)
 print_header("Building Cadabra version ${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}.${CADABRA_VERSION_TWEAK} (${SYSTEM_BITS}-bit)")
 message(STATUS "Build id '${CADABRA_VERSION_BUILD}' dated ${CADABRA_VERSION_DATE}")
 message(STATUS "Build mode is set to '${CMAKE_BUILD_TYPE}'")
+message(STATUS "Architecture is '${CMAKE_SYSTEM_PROCESSOR}}'")
 
 # Notify about install directory
 if ("${CMAKE_INSTALL_PREFIX}" STREQUAL "")
