@@ -46,7 +46,7 @@ jobs:
              zypper update
              zypper -n install --no-recommends git cmake python311-devel gcc-c++ \
                   gmp-devel libuuid-devel  \
-                  gtkmm3-devel  \
+                  gtkmm3-devel sqlite3-devel \
                   python311-matplotlib \
                   libboost_system-devel libboost_filesystem-devel \
                   libboost_date_time-devel libboost_program_options-devel             
