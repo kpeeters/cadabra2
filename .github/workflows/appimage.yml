@@ -74,6 +74,8 @@ jobs:
           cd build
           git config --global --add safe.directory /home/runner/work/cadabra2/cadabra2
           cmake -DENABLE_MATHEMATICA=OFF -DAPPIMAGE_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr ..
+          file linuxdeploy-aarch64.AppImage
+          uname -m
           make
           make install DESTDIR=AppDir
           make appimage
