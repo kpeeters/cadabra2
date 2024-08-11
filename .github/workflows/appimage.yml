@@ -1,0 +1,76 @@
+# Create a Fedora 40 package on a github release event.
+# This assumes that the cadabra version is the same as the
+# release name, and it will attempt to add the .rpm file
+# to the release assets.
+
+name: AppImage
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    name: Build AppImage on ${{ matrix.distro }} ${{ matrix.arch }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch:   amd64
+            distro: ubuntu20.04
+          - arch:   aarch64
+            distro: ubuntu20.04
+
+    steps:
+    - name: Setup GitHub CLI
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gh
+
+    - name: Authenticate GitHub CLI
+      run: gh auth setup-git
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+    - uses: actions/checkout@master
+      name: Checkout source
+      
+    - uses: uraimo/run-on-arch-action@master
+      name: Build AppImage
+      id: build
+      with:
+        arch:   ${{ matrix.arch }}
+        distro: ${{ matrix.distro }}
+        githubToken: ${{ github.token }}
+        setup: |
+          mkdir -p "${PWD}/artifacts"
+
+        dockerRunArgs:
+          --volume "${PWD}/artifacts:/artifacts"
+
+        shell: /bin/sh
+
+        install: |
+          apt-get update -q -y
+          apt get install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev  libmpfr-dev libmpc-dev && python3 --version && which python3 && python3 -m pip install --upgrade pip && python3 -m pip install wheel && python3 -m pip install sympy gmpy2 numpy
+          
+        run: |
+          mkdir build
+          cd build
+          cmake -DENABLE_MATHEMATICA=OFF -DAPPIMAGE_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr ..
+          make
+          make install DESTDIR=AppDir
+          make appimage
+          cp Cadabra*.AppImage /artifacts
+          
+    - name: Set version variables from output of cmake
+      run: |
+        VER=$(cat ${{ github.workspace }}/build/VERSION)
+        echo "VERSION=$VER" >> $GITHUB_ENV
+
+    - name: Upload release assets
+      run: |
+        gh release upload "${{ env.VERSION }}" build/Cadabra2_${{ env.VERSION }}_${{ matrix.arch}.AppImage --clobber
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
