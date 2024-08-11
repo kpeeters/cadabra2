@@ -76,6 +76,7 @@ jobs:
           cmake -DENABLE_MATHEMATICA=OFF -DAPPIMAGE_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr ..
           file linuxdeploy-aarch64.AppImage
           uname -m
+          ./linuxdeploy-aarch64.AppImage
           make
           make install DESTDIR=AppDir
           make appimage
