@@ -38,7 +38,7 @@ jobs:
       if: ${{ contains(matrix.arch, 'x86') }}
       id: build-native
       run: |
-        mkdir -p "/artifacts"
+        mkdir -p "${{ github.workspace }}/artifacts"
         apt update -q -y
         DEBIAN_FRONTEND=noninteractive apt install -y git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev  libmpfr-dev libmpc-dev && python3 --version && which python3 && python3 -m pip install --upgrade pip && python3 -m pip install wheel && python3 -m pip install sympy gmpy2 numpy
         mkdir build
@@ -47,7 +47,7 @@ jobs:
         make
         make install DESTDIR=AppDir
         make appimage
-        cp Cadabra*.AppImage /artifacts
+        cp Cadabra*.AppImage "${{ github.workspace }}/artifacts"
 
     - name: QEMU build ${{ matrix.arch }}
       if: ${{ !contains(matrix.arch, 'x86') }}
