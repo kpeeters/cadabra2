@@ -34,7 +34,27 @@ jobs:
     - uses: actions/checkout@master
       name: Checkout source
       
-    - name: Build AppImage
+    - name: Native build
+      if: ${{ contains(matrix.arch, 'x86') }}
+      id: build-native
+      with:
+        setup: |
+          mkdir -p "${PWD}/artifacts"
+
+        install: |
+          apt update -q -y
+          DEBIAN_FRONTEND=noninteractive apt install -y git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev  libmpfr-dev libmpc-dev && python3 --version && which python3 && python3 -m pip install --upgrade pip && python3 -m pip install wheel && python3 -m pip install sympy gmpy2 numpy
+          
+        run: |
+          mkdir build
+          cd build
+          cmake -DENABLE_MATHEMATICA=OFF -DAPPIMAGE_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr ..
+          make
+          make install DESTDIR=AppDir
+          make appimage
+          cp Cadabra*.AppImage /artifacts
+
+    - name: QEMU build ${{ matrix.arch }}
       if: ${{ !contains(matrix.arch, 'x86') }}
       uses: uraimo/run-on-arch-action@master
       id: build
@@ -52,7 +72,7 @@ jobs:
 
         install: |
           apt update -q -y
-          apt  install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev  libmpfr-dev libmpc-dev && python3 --version && which python3 && python3 -m pip install --upgrade pip && python3 -m pip install wheel && python3 -m pip install sympy gmpy2 numpy
+          DEBIAN_FRONTEND=noninteractive apt install -y git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev  libmpfr-dev libmpc-dev && python3 --version && which python3 && python3 -m pip install --upgrade pip && python3 -m pip install wheel && python3 -m pip install sympy gmpy2 numpy
           
         run: |
           mkdir build
