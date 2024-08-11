@@ -35,7 +35,7 @@ jobs:
       name: Checkout source
       
     - name: Build AppImage
-      if: ${{ !contains(matrix.qemu_arch, 'x86') }}
+      if: ${{ !contains(matrix.arch, 'x86') }}
       uses: uraimo/run-on-arch-action@master
       id: build
       with:
@@ -52,7 +52,7 @@ jobs:
 
         install: |
           apt update -q -y
-          ap  install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev  libmpfr-dev libmpc-dev && python3 --version && which python3 && python3 -m pip install --upgrade pip && python3 -m pip install wheel && python3 -m pip install sympy gmpy2 numpy
+          apt  install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev  libmpfr-dev libmpc-dev && python3 --version && which python3 && python3 -m pip install --upgrade pip && python3 -m pip install wheel && python3 -m pip install sympy gmpy2 numpy
           
         run: |
           mkdir build
