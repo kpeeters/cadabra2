@@ -46,8 +46,8 @@ jobs:
         make
         make install DESTDIR=AppDir
         make appimage
-        mkdir -p $${ github.workspace }}/artifacts
-        cp Cadabra*.AppImage $${ github.workspace }}/artifacts
+        mkdir -p ${{ github.workspace }}/artifacts
+        cp Cadabra*.AppImage ${{ github.workspace }}/artifacts
 
     - name: QEMU build ${{ matrix.arch }}
       if: ${{ !contains(matrix.arch, 'x86') }}
@@ -58,7 +58,7 @@ jobs:
         distro: ${{ matrix.distro }}
         githubToken: ${{ github.token }}
         setup: |
-          mkdir -p $${{ github.workspace }}/artifacts
+          mkdir -p ${{ github.workspace }}/artifacts
 
         dockerRunArgs:
           --volume "${{ github.workspace }}/artifacts:/artifacts"
@@ -72,6 +72,7 @@ jobs:
         run: |
           mkdir build
           cd build
+          git config --global --add safe.directory /home/runner/work/cadabra2/cadabra2
           cmake -DENABLE_MATHEMATICA=OFF -DAPPIMAGE_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr ..
           make
           make install DESTDIR=AppDir
@@ -85,9 +86,9 @@ jobs:
 
     - name: Upload release assets
       run: |
-        ls $${ github.workspace }}/artifacts/
+        ls ${{ github.workspace }}/artifacts/
         ls artifacts/
-        mv ${{ github.workspace }}/artifacts/Cadabra_2-${{ matrix.arch }}.AppImage $${ github.workspace}}//artifacts/Cadabra_${{ env.VERSION }}_${{ matrix.arch }}.AppImage
+        mv ${{ github.workspace }}/artifacts/Cadabra_2-${{ matrix.arch }}.AppImage ${{ github.workspace}}//artifacts/Cadabra_${{ env.VERSION }}_${{ matrix.arch }}.AppImage
         gh release upload "${{ env.VERSION }}" ${{ github.workspace }}/artifacts/Cadabra_${{ env.VERSION }}_${{ matrix.arch }}.AppImage --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
