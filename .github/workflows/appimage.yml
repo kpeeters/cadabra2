@@ -1,7 +1,6 @@
-# Create a Fedora 40 package on a github release event.
-# This assumes that the cadabra version is the same as the
-# release name, and it will attempt to add the .rpm file
-# to the release assets.
+# Create AppImages on a github release event.  This assumes that the
+# cadabra version is the same as the release name, and it will attempt
+# to add the .AppImage files to the release assets.
 
 name: AppImage
 
@@ -70,7 +69,7 @@ jobs:
 
     - name: Upload release assets
       run: |
-        gh release upload "${{ env.VERSION }}" build/Cadabra2_${{ env.VERSION }}_${{ matrix.arch}.AppImage --clobber
+        gh release upload "${{ env.VERSION }}" build/Cadabra2_${{ env.VERSION }}_${{ matrix.arch }}.AppImage --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
