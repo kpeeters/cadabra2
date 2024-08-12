@@ -468,7 +468,7 @@ if(APPIMAGE_MODE)
   
   print_header("Configuring AppImage build")
   find_program(LINUXDEPLOY linuxdeploy "./")
-  if(NOT LINUXDEPLOY)
+  if(${LINUXDEPLOY} MATCHES "LINUXDEPLOY-NOTFOUND")
     message(STATUS "The 'linuxdeploy' binary is not present, downloading one")
     set(DEPLOY      linuxdeploy-${CMAKE_SYSTEM_PROCESSOR}.AppImage)
     set(DEPLOY_URL  https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/${DEPLOY})

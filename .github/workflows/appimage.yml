@@ -78,7 +78,7 @@ jobs:
           cmake --version
           # Install the rest.
           DEBIAN_FRONTEND=noninteractive apt install -y git cmake python3-dev python3-pip g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev  libmpfr-dev libmpc-dev python3-gmpy2 && python3 --version && which python3 && python3 -m pip install --upgrade pip && python3 -m pip install wheel && python3 -m pip install sympy numpy
-          DEBIAN_FRONTEND=noninteractive apt install -y cimg-dev libgtest-dev ca-certificates
+          DEBIAN_FRONTEND=noninteractive apt install -y cimg-dev libgtest-dev ca-certificates libgpgme-dev
           # Build appimagetool, linuxdeploy and linuxdeploy-plugin-appimage, as we
           # cannot run the linuxdeploy.AppImage inside QEMU.
           mkdir linuxdeploy
