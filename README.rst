@@ -509,7 +509,10 @@ Then run::
 
     make appimage
 
-to create the AppImage itself.    
+to create the AppImage itself. If you run into trouble with this,
+please first consult the comments in the top-level `CMakeLists.txt`
+file about `linuxdeploy` and friends.
+
 
 
 Tutorials and other help

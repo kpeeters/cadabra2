@@ -438,18 +438,54 @@ add_custom_target(uninstall
 #---------------------------------------------------------------------------
 
 if(APPIMAGE_MODE)
-  set(DEPLOY      linuxdeploy-${CMAKE_SYSTEM_PROCESSOR}.AppImage)
-  set(DEPLOY_URL  https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/${DEPLOY})
-  message(STATUS "Generating AppImage using ${DEPLOY_URL}")
-  if(NOT EXISTS ${DEPLOY})
-    message(STATUS "Downloading...")
-    file(DOWNLOAD ${DEPLOY_URL} ${CMAKE_BINARY_DIR}/${DEPLOY})
-    execute_process(COMMAND chmod u+x ${CMAKE_BINARY_DIR}/${DEPLOY})
+  # We need linuxdeploy to create the AppImage. It is best to have this built
+  # from source and installed locally. Make sure to first install deps by doing
+  #
+  #   sudo apt install libcimg-dev libgtest-dev
+  #
+  # Then checkout appimagetool, linuxdeploy, linuxdeploy-plugin-appimage using
+  #
+  #   git clone https://github.com/AppImage/appimagetool.git --recurse-submodules
+  #   git clone https://github.com/linuxdeploy/linuxdeploy.git --recurse-submodules
+  #   git clone https://github.com/linuxdeploy/linuxdeploy-plugin-appimage.git --recurse-submodules
+  #
+  # Do *not* forget the `--recurse-submodules` flag!
+  #
+  # Build `appimagetool` as usual, and for the other two use
+  #
+  #   cd linuxdeploy && mkdir build && cd build
+  #   cmake -DBUILD_TESTING=OFF ..
+  #   make && sudo make install
+  #
+  # and ditto for the plugin,
+  #
+  #   cd linuxdeploy && mkdir build && cd build
+  #   cmake -DBUILD_TESTING=OFF ..
+  #   make && sudo make install
+  #
+  # If you do not have it locally, the configure process will download an
+  # AppImage for linuxdeploy, but this does *not* run inside a QEMU container.
+  
+  print_header("Configuring AppImage build")
+  find_program(LINUXDEPLOY linuxdeploy "./")
+  if(NOT LINUXDEPLOY)
+    message(STATUS "The 'linuxdeploy' binary is not present, downloading one")
+    set(DEPLOY      linuxdeploy-${CMAKE_SYSTEM_PROCESSOR}.AppImage)
+    set(DEPLOY_URL  https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/${DEPLOY})
+    message(STATUS "Generating AppImage using ${DEPLOY_URL}")
+    if(NOT EXISTS "linuxdeploy")
+      message(STATUS "Downloading...")
+      file(DOWNLOAD ${DEPLOY_URL} ${CMAKE_BINARY_DIR}/linuxdeploy)
+      execute_process(COMMAND chmod u+x ${CMAKE_BINARY_DIR}/linuxdeploy)
+    endif()
+    find_program(LINUXDEPLOY linuxdeploy "./")
+  else()
+    message(STATUS "Found linuxdeploy at ${LINUXDEPLOY}")
   endif()
   add_custom_target(appimage
     COMMAND mkdir -p AppDir/usr/lib/python3/dist-packages
     COMMAND cp -a /usr/lib/python3/dist-packages/setuptools AppDir/usr/lib/python3/dist-packages/
-    COMMAND ${CMAKE_BINARY_DIR}/${DEPLOY} --appdir AppDir --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
+    COMMAND ${LINUXDEPLOY} --appdir AppDir --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
     COMMAND mv Cadabra_2-${CMAKE_SYSTEM_PROCESSOR}.AppImage Cadabra_${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}_${CMAKE_SYSTEM_PROCESSOR}.AppImage
   )
 endif()
