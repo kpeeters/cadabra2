@@ -4,7 +4,8 @@
 # inside the AppImage can find the Python installation.
 #
 export PYTHONHOME=$APPDIR/usr
-export PYTHONPATH=$APPDIR/usr/lib/python3.8:$APPDIR/usr/lib/python3.8/site-packages
+export PYTHONPATH=$APPDIR/usr/lib/python3.8:$APPDIR/usr/lib/python3.8/site-packages:$APPDIR/usr/lib/python3.8/dist-packages:$APPDIR/usr/lib/python3/site-packages:$APPDIR/usr/lib/python3/dist-packages
 export LD_LIBRARY_PATH=$APPDIR/usr/lib:$LD_LIBRARY_PATH
+export LANG=en_US.UTF-8
 
 exec $APPDIR/usr/bin/cadabra2-gtk "$@"

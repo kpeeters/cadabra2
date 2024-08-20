@@ -487,6 +487,7 @@ if(APPIMAGE_MODE)
     COMMAND cp -a ${CMAKE_SOURCE_DIR}/config/AppRun AppDir/
     COMMAND chmod gou+x ${CMAKE_SOURCE_DIR}/config/AppRun AppDir/AppRun
     COMMAND cp -a /usr/lib/python3/dist-packages/setuptools AppDir/usr/lib/python3/dist-packages/
+    COMMAND cp -a /usr/lib/python3.8/ AppDir/usr/lib/python3.8/
     COMMAND ${LINUXDEPLOY} --appdir AppDir --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
     COMMAND mv Cadabra_2-${CMAKE_SYSTEM_PROCESSOR}.AppImage Cadabra_${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}_${CMAKE_SYSTEM_PROCESSOR}.AppImage
   )
