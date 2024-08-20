@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+# Set the PYTHONHOME and PYTHONPATH variables to ensure that Cadabra
+# inside the AppImage can find the Python installation.
+#
+export PYTHONHOME=$APPDIR/usr
+export PYTHONPATH=$APPDIR/usr/lib/python3.8:$APPDIR/usr/lib/python3.8/site-packages
+export LD_LIBRARY_PATH=$APPDIR/usr/lib:$LD_LIBRARY_PATH
+
+exec $APPDIR/usr/bin/cadabra2-gtk "$@"
