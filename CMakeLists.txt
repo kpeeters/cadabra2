@@ -470,13 +470,16 @@ if(APPIMAGE_MODE)
   find_program(LINUXDEPLOY linuxdeploy "${CMAKE_BINARY_DIR}")
   if(${LINUXDEPLOY} MATCHES "LINUXDEPLOY-NOTFOUND")
     message(STATUS "The 'linuxdeploy' binary is not present, downloading one")
-    set(DEPLOY      linuxdeploy-${CMAKE_SYSTEM_PROCESSOR}.AppImage)
-    set(DEPLOY_URL  https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/${DEPLOY})
+    set(DEPLOY         linuxdeploy-${CMAKE_SYSTEM_PROCESSOR}.AppImage)
+    set(DEPLOY_URL     https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/${DEPLOY})
+    set(DEPLOY_GTK_URL https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh)
     message(STATUS "Generating AppImage using ${DEPLOY_URL}")
     if(NOT EXISTS "linuxdeploy")
       message(STATUS "Downloading...")
       file(DOWNLOAD ${DEPLOY_URL} ${CMAKE_BINARY_DIR}/linuxdeploy)
+      file(DOWNLOAD ${DEPLOY_GTK_URL} ${CMAKE_BINARY_DIR}/linuxdeploy-plugin-gtk.sh)
       execute_process(COMMAND chmod u+x ${CMAKE_BINARY_DIR}/linuxdeploy)
+      execute_process(COMMAND chmod u+x ${CMAKE_BINARY_DIR}/linuxdeploy-plugin-gtk.sh)
     endif()
     set(LINUXDEPLOY ${CMAKE_BINARY_DIR}/linuxdeploy)
   else()
@@ -488,7 +491,7 @@ if(APPIMAGE_MODE)
     COMMAND chmod gou+x ${CMAKE_SOURCE_DIR}/config/AppRun AppDir/AppRun
     COMMAND cp -a /usr/lib/python3/dist-packages/setuptools AppDir/usr/lib/python3/dist-packages/
     COMMAND cp -a /usr/lib/python3.8/* AppDir/usr/lib/python3.8/
-    COMMAND ${LINUXDEPLOY} --appdir AppDir --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
+    COMMAND ${LINUXDEPLOY} --appdir AppDir --plugin gtk --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
     COMMAND mv Cadabra_2-${CMAKE_SYSTEM_PROCESSOR}.AppImage Cadabra_${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}_${CMAKE_SYSTEM_PROCESSOR}.AppImage
   )
 endif()
