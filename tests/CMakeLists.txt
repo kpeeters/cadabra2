@@ -49,7 +49,7 @@ foreach(NBTEST ${NBTESTS})
 	 ARGS    ${CNBIN}/${NBTEST}.cnb ${CDBOUT}/${NBTEST}.cdb
 	 COMMENT "Creating ${NBTEST} notebook...")
   add_custom_target("${NBTEST}_test" ALL DEPENDS ${CDBOUT}/${NBTEST}.cdb)
-  add_test(${NBTEST}  ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CDBOUT}/${NBTEST}.cdb)
+  add_test(${NBTEST}  ${Python_EXECUTABLE} ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CDBOUT}/${NBTEST}.cdb)
   set_tests_properties(${NBTEST}      PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPATH};LANG=en_US.UTF-8;LC_ALL=en_US.UTF-8;PYTHONIOENCODING=utf-8")    
 endforeach()
 
@@ -101,7 +101,7 @@ if(MATHEMATICA_FOUND)
   set(RTESTS ${RTESTS} mma)
 endif()
 foreach(RTEST ${RTESTS})
-  add_test(${RTEST}  ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/${RTEST}.cdb)
+  add_test(${RTEST}  ${Python_EXECUTABLE} ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/${RTEST}.cdb)
   # We need to set the Python path so that we pick up the correct cadabra2.so Python module
   # even if we did not do 'make install' yet.
   set_tests_properties(${RTEST}      PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPATH};LANG=en_US.UTF-8;LC_ALL=en_US.UTF-8;PYTHONIOENCODING=utf-8")    

@@ -4,7 +4,7 @@
 
 name: AppImage
 
-on: [push]
+on: [release]
 
 jobs:
   build:
@@ -17,8 +17,8 @@ jobs:
         include:
           - arch:   x86_64
             distro: ubuntu20.04
-          - arch:   aarch64
-            distro: ubuntu20.04
+#          - arch:   aarch64
+#            distro: ubuntu20.04
 
     steps:
     - name: Setup GitHub CLI

@@ -293,80 +293,68 @@ print_header("Configuring Python")
 # NEEDED TO USE CMAKE_INSTALL_FULL<dir>
 include(GNUInstallDirs)
 
-set(PYTHON_POSTFIX "3")
-# message(STATUS "Building for use with Python 3 (good!)")
-
-#set(PYBIND11_FINDPYTHON ON)
+set(Python_POSTFIX "3")
 find_package(Python COMPONENTS Interpreter Development)
 add_subdirectory(libs/pybind11)
 
-message(STATUS "Found python ${PYTHON_LIBRARIES}")
-#find_package (Python COMPONENTS Interpreter)
-
-message(STATUS "Python version is ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.")
-# We used to install in a different location; let's remove files from there
-# if we find them on install.
-# set(OLD_PYTHON_SITE_PATH ${CMAKE_INSTALL_FULL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
+message(STATUS "Found python ${Python_LIBRARIES}")
+message(STATUS "Python version is ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.")
 
 # The PYTHON_SITE_PATH variable is used throughout for installation purposes.
 if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
   # Debian packages install all their Python things in 'dist-packages', not 'site-packages'.
-  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/dist-packages)
-  # set(PYTHON_SITE_DIST "dist-packages")
+  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
+  # set(Python_SITE_DIST "dist-packages")
 elseif(APPIMAGE_MODE)
-  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/dist-packages)
-  set(PYTHON_SITE_DIST "dist-packages")
+  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
+  set(Python_SITE_DIST "dist-packages")
 else()
   # The builder can override the path by setting it externally.
   if(NOT DEFINED PYTHON_SITE_PATH)
+    set(PYTHON_SITE_PATH ${Python_SITEARCH})
     # For everyone else there is 'site-packages' which we get from
     # calling into python's 'site' package (and hoping that the 0th
     # element is where we should be writing).
-    execute_process(
-      COMMAND ${PYTHON_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
-      OUTPUT_VARIABLE PYTHON_SITE_PATH
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    #   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
-    # set(PYTHON_SITE_DIST "site-packages")
+    # execute_process(
+    #   COMMAND ${Python_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
+    #   OUTPUT_VARIABLE PYTHON_SITE_PATH
+    #   OUTPUT_STRIP_TRAILING_WHITESPACE
+    # )
   endif()
 endif()
-message(STATUS "Installing Python modules in ${PYTHON_SITE_PATH}")
+message(STATUS "Python standard  platform-independent installation directory (Python_STDLIB)   ${Python_STDLIB}")
+message(STATUS "Python standard  platform-dependent   installation directory (Python_STDARCH)  ${Python_STDARCH}")
+message(STATUS "Python 3rd-party platform-independent installation directory (Python_SITELIB)  ${Python_SITELIB}")
+message(STATUS "Python 3rd-party platform-dependent   installation directory (Python_SITEARCH) ${Python_SITEARCH}")
+message(STATUS "Installing Cadabra Python modules in ${PYTHON_SITE_PATH}")
 # We need to give our Python module an abi-name extension
 # so that it can be installed in a folder which does not
 # contain the abi name. See
 # https://www.python.org/dev/peps/pep-3149/
 execute_process(
-	COMMAND ${PYTHON_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_config_var('SOABI'))"
-	OUTPUT_VARIABLE PYTHON_SOABI
+	COMMAND ${Python_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_config_var('SOABI'))"
+	OUTPUT_VARIABLE Python_SOABI
 	OUTPUT_STRIP_TRAILING_WHITESPACE
 	)
-message(STATUS "Python abi name ${PYTHON_SOABI}")
+message(STATUS "Python abi name ${Python_SOABI}")
 
 string(REGEX REPLACE "^${CMAKE_INSTALL_PREFIX}" "" PYTHON_SITE_PATH_REL ${PYTHON_SITE_PATH})
 set(PYTHON_SITE_PATH_REL ${PYTHON_SITE_PATH_REL})
-
-if(NOT WIN32)
-  execute_process(
-	 COMMAND ${PYTHON_EXECUTABLE} -c "import site; print (site.getsitepackages()[0]);"
-	 OUTPUT_VARIABLE OLDER_PYTHON_SITE_PATH
-	 OUTPUT_STRIP_TRAILING_WHITESPACE
-	 )
-endif()
+message(STATUS "Python relative path to installation directory (PYTHON_SITE_PATH_REL) ${PYTHON_SITE_PATH_REL}")
 
 # Suffixes
 if(WIN32)
 	set(STATIC_LIB_SUFFIX "lib")
 	set(SHARED_LIB_SUFFIX "dll")
-	set(PYTHON_MOD_SUFFIX "pyd")
+	set(Python_MOD_SUFFIX "pyd")
 else()
 	set(STATIC_LIB_SUFFIX "a")
 	set(SHARED_LIB_SUFFIX "so")
-	set(PYTHON_MOD_EXT    "so")   
-	set(PYTHON_MOD_SUFFIX "${PYTHON_SOABI}.so")
+	set(Python_MOD_EXT    "so")   
+	set(Python_MOD_SUFFIX "${Python_SOABI}.so")
 endif()
 
-message(STATUS "Python module extension ${PYTHON_MOD_SUFFIX}")
+message(STATUS "Python module extension ${Python_MOD_SUFFIX}")
 
 
 #---------------------------------------------------------------------------
@@ -488,11 +476,11 @@ if(APPIMAGE_MODE)
       execute_process(COMMAND chmod u+x ${CMAKE_BINARY_DIR}/linuxdeploy-plugin-gtk.sh)
   endif()
   add_custom_target(appimage
-    COMMAND mkdir -p AppDir/usr/lib/python3/dist-packages
+    COMMAND mkdir -p AppDir/${Python_SITELIB}
     COMMAND cp -a ${CMAKE_SOURCE_DIR}/config/AppRun AppDir/
     COMMAND chmod gou+x ${CMAKE_SOURCE_DIR}/config/AppRun AppDir/AppRun
-    COMMAND cp -a /usr/lib/python3/dist-packages/setuptools AppDir/usr/lib/python3/dist-packages/
-    COMMAND cp -a /usr/lib/python3.8/* AppDir/usr/lib/python3.8/
+    COMMAND cp -a ${Python_SITELIB}/setuptools AppDir/${PYTHON_SITELIB}/
+    COMMAND cp -a ${Python_STDARCH}/* AppDir/${Python_STDARCH}/
     COMMAND ${LINUXDEPLOY} --appdir AppDir --plugin gtk --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
     COMMAND mv Cadabra_2-${CMAKE_SYSTEM_PROCESSOR}.AppImage Cadabra_${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}_${CMAKE_SYSTEM_PROCESSOR}.AppImage
   )
