@@ -311,15 +311,15 @@ elseif(APPIMAGE_MODE)
 else()
   # The builder can override the path by setting it externally.
   if(NOT DEFINED PYTHON_SITE_PATH)
-    set(PYTHON_SITE_PATH ${Python_SITEARCH})
+    # set(PYTHON_SITE_PATH ${Python_SITEARCH})
     # For everyone else there is 'site-packages' which we get from
     # calling into python's 'site' package (and hoping that the 0th
     # element is where we should be writing).
-    # execute_process(
-    #   COMMAND ${Python_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
-    #   OUTPUT_VARIABLE PYTHON_SITE_PATH
-    #   OUTPUT_STRIP_TRAILING_WHITESPACE
-    # )
+    execute_process(
+      COMMAND ${Python_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
+      OUTPUT_VARIABLE PYTHON_SITE_PATH
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
   endif()
 endif()
 message(STATUS "Python standard  platform-independent installation directory (Python_STDLIB)   ${Python_STDLIB}")

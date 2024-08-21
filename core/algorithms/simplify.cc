@@ -41,6 +41,7 @@ bool simplify::can_apply(iterator st)
 	index_factors.clear();
 	index_map_t ind_free, ind_dummy;
 	classify_indices(st, ind_free, ind_dummy);
+//	print_classify_indices(std::cerr, st);
 
 	bool still_ok=true;
 

@@ -4,6 +4,7 @@
 #include "py_helpers.hh"
 #include "nlohmann/json.hpp"
 #include <iostream>
+#include <regex>
 
 namespace cadabra {
 
@@ -35,7 +36,10 @@ namespace cadabra {
 		std::ifstream ifs(manual_page);
 		try {
 			nlohmann::json root=nlohmann::json::parse(ifs);
-			return (*root["cells"].begin())["source"].get<std::string>();
+			std::string ret = (*root["cells"].begin())["source"].get<std::string>();
+			ret = std::regex_replace(ret, std::regex(R"(\\algorithm\{(.*)_(.*)\})"), "$2");
+			std::cerr << "hello" << std::endl;
+			return "none";
 			}
 		catch(nlohmann::json::exception& ex) {
 			return "Failed to collect help information; no info at "+manual_page+".";
