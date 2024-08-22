@@ -37,9 +37,12 @@ namespace cadabra {
 		try {
 			nlohmann::json root=nlohmann::json::parse(ifs);
 			std::string ret = (*root["cells"].begin())["source"].get<std::string>();
-			ret = std::regex_replace(ret, std::regex(R"(\\algorithm\{(.*)_(.*)\})"), "$2");
-			std::cerr << "hello" << std::endl;
-			return "none";
+			ret = std::regex_replace(ret, std::regex(R"(\\algorithm\{(.*)\}\{(.*)\})"), "$2");
+			ret = std::regex_replace(ret, std::regex(R"(\\property\{(.*)\}\{(.*)\})"), "$2");
+			ret = std::regex_replace(ret, std::regex(R"(\\algo\{([^\}]*)\})"), "$1");
+			ret = std::regex_replace(ret, std::regex(R"(\\prop\{([^\}]*)\})"), "$1");
+			ret += "\n\nFor more information see https://cadabra.science/manual/"+std::string(name)+".html";
+			return ret;
 			}
 		catch(nlohmann::json::exception& ex) {
 			return "Failed to collect help information; no info at "+manual_page+".";
