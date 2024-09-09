@@ -300,7 +300,11 @@ include(GNUInstallDirs)
 
 set(Python_POSTFIX "3")
 find_package(Python COMPONENTS Interpreter Development)
-add_subdirectory(libs/pybind11)
+find_package(pybind11 CONFIG)
+if (NOT pybind11_FOUND)
+  message(STATUS "Using included pybind11.")
+  add_subdirectory(libs/pybind11)
+endif()
 
 message(STATUS "Found python ${Python_LIBRARIES}")
 message(STATUS "Python version is ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.")
@@ -331,7 +335,7 @@ message(STATUS "Python standard  platform-independent installation directory (Py
 message(STATUS "Python standard  platform-dependent   installation directory (Python_STDARCH)  ${Python_STDARCH}")
 message(STATUS "Python 3rd-party platform-independent installation directory (Python_SITELIB)  ${Python_SITELIB}")
 message(STATUS "Python 3rd-party platform-dependent   installation directory (Python_SITEARCH) ${Python_SITEARCH}")
-message(STATUS "Installing Cadabra Python modules in ${PYTHON_SITE_PATH}")
+message(STATUS "Installing Cadabra Python modules in (PYTHON_SITE_PATH) ${PYTHON_SITE_PATH}")
 # We need to give our Python module an abi-name extension
 # so that it can be installed in a folder which does not
 # contain the abi name. See
