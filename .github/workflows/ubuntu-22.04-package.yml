@@ -52,14 +52,9 @@ jobs:
         echo "VERSION=$VER" >> $GITHUB_ENV
 
     - name: Upload Release Assets
-        run: |
-          gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-jammy.deb --clobber
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-jammy.deb --clobber
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-#     - name: Upload artifact to github assets
-#       uses: actions/upload-artifact@main
-#       with:
-#         name: cadabra2-${{ env.VERSION }}-jammy.deb
-#         path: build/cadabra2-${{ env.VERSION }}-jammy.deb
 
