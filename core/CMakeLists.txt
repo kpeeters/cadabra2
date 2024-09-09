@@ -1,6 +1,8 @@
-cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION}) # Required for various macros
+# cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION}) # Required for various macros
 project(Cadabra)
-
+if(POLICY CMP0167)
+  cmake_policy(SET CMP0167 NEW)
+endif()
 
 #---------------------------------------------------------------------------
 # Preamble.
