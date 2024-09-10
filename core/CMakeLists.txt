@@ -1,6 +1,8 @@
-cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION}) # Required for various macros
+# cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION}) # Required for various macros
 project(Cadabra)
-
+if(POLICY CMP0167)
+  cmake_policy(SET CMP0167 NEW)
+endif()
 
 #---------------------------------------------------------------------------
 # Preamble.
@@ -288,14 +290,14 @@ pybind11_add_module(cadabra2 SHARED
    ${MODULE_SRC_FILES}
 )
 set_target_properties(cadabra2 PROPERTIES 
-   SUFFIX ".${PYTHON_MOD_SUFFIX}" 
+   SUFFIX ".${Python_MOD_SUFFIX}" 
    CXX_VISIBILITY_PRESET default)
 
 target_link_libraries(cadabra2 PRIVATE
    ${GMPXX_LIBRARIES}
    ${GMP_LIBRARIES}   
    ${Boost_LIBRARIES}
-#  ${PYTHON_LIBRARIES}
+#  ${Python_LIBRARIES}
 #  ${GLIBMM3_LIBRARIES}    
    )
 
@@ -313,12 +315,12 @@ endif()
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   set_target_properties(cadabra2 PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-  target_link_libraries(cadabra2 PRIVATE ${PYTHON_LIBRARIES})
+  target_link_libraries(cadabra2 PRIVATE ${Python_LIBRARIES})
 elseif(CMAKE_SHARED_LINKER_FLAGS MATCHES ".*-Wl,--no-undefined.*")
   # Exception for systems that require no undefined symbols present
   # in shared libraries (e.g. openSUSE).
   message("-- Linking cadabra2.so to libpython.so because of default linker flags.")
-  target_link_libraries(cadabra2 PRIVATE ${PYTHON_LIBRARIES})
+  target_link_libraries(cadabra2 PRIVATE ${Python_LIBRARIES})
 endif()
 
 # Make the python module pick up elements from two parents up.
@@ -373,7 +375,7 @@ add_executable(cadabra2python
 target_link_libraries(cadabra2python 
    ${Boost_LIBRARIES}
    #    ${GLIBMM3_LIBRARIES}     
-   ${PYTHON_LIBRARIES}
+   ${Python_LIBRARIES}
    )
 
 # cadabra2ipynb executable
@@ -389,7 +391,7 @@ add_executable(cadabra2ipynb
 target_link_libraries(cadabra2ipynb
    ${Boost_LIBRARIES}
    #    ${GLIBMM3_LIBRARIES}     
-   ${PYTHON_LIBRARIES}
+   ${Python_LIBRARIES}
    )
 
 # cadabra2cadabra
@@ -430,15 +432,6 @@ add_subdirectory(packages)
 # Python module
 # 
 # https://stackoverflow.com/questions/21198030/installfiles-cmake-cfg-intdir-abc-win-dll-destination-bin
-
-if(NOT WIN32)
-   # Remove any old cadabra2.so files in the global site-wide path which may have been
-   # left there from a previous install.
-   # remove_file("${OLD_PYTHON_SITE_PATH}/cadabra2.${PYTHON_MOD_EXT}")
-   # remove_file("${OLD_PYTHON_SITE_PATH}/cadabra2_defaults.py")
-   # remove_file("${OLDER_PYTHON_SITE_PATH}/cadabra2.${PYTHON_MOD_EXT}")
-   # remove_file("${OLDER_PYTHON_SITE_PATH}/cadabra2_defaults.py")
-endif()
 
 install_directory_permissions(${PYTHON_SITE_PATH})
 

@@ -1,4 +1,4 @@
-#!${PYTHON_EXECUTABLE}
+#!${Python_EXECUTABLE}
 #
 # \ingroup pythoncore
 #
@@ -119,8 +119,8 @@ if __name__ == '__main__':
 
     if len(sys.argv)>1:
         if '-d' in sys.argv:
-            #rs = "lldb -ex r --args ${PYTHON_EXECUTABLE} "+sys.argv[0];
-            rs = "gdb -q -ex r --args ${PYTHON_EXECUTABLE} "+sys.argv[0];
+            #rs = "lldb -ex r --args ${Python_EXECUTABLE} "+sys.argv[0];
+            rs = "gdb -q -ex r --args ${Python_EXECUTABLE} "+sys.argv[0];
             for a in sys.argv[1:]:
                 if a!='-d':
                     rs += " "+a

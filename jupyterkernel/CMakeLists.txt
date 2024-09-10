@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
 project(Cadabra)
 
 
-if(PYTHON_POSTFIX MATCHES 2)
-   message(FATAL "Cannot build pure-Python Cadabra Jupyter kernel with Python version 2.")
-endif()
-
 configure_file(
 	"${CMAKE_CURRENT_SOURCE_DIR}/kernelspec/kernel.json.in"
 	"${CMAKE_CURRENT_SOURCE_DIR}/kernelspec/kernel.json"

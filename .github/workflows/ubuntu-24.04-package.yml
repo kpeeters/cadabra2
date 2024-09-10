@@ -1,16 +1,16 @@
-# Create an Ubuntu 22.04 package on a github release event.
+# Create an Ubuntu 24.04 package on a github release event.
 # This assumes that the cadabra version is the same as the
 # release name, and it will attempt to add the .deb file
 # to the release assets.
 
-name: Ubuntu-22.04 package
+name: Ubuntu-24.04 package
 
-on: [release]
+on: [push]
 
 jobs:
   build:
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     
     steps:
     - uses: actions/checkout@v3
@@ -22,7 +22,7 @@ jobs:
     - name: setup python
       uses: actions/setup-python@v4
       with:
-          python-version: 3.11
+          python-version: 3.12
 
     - name: Set up GitHub CLI
       run: |
@@ -53,13 +53,8 @@ jobs:
 
     - name: Upload Release Assets
       run: |
-        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-jammy.deb --clobber
+        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-ubuntu-24.04-noble.deb --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-#     - name: Upload artifact to github assets
-#       uses: actions/upload-artifact@main
-#       with:
-#         name: cadabra2-${{ env.VERSION }}-jammy.deb
-#         path: build/cadabra2-${{ env.VERSION }}-jammy.deb
 

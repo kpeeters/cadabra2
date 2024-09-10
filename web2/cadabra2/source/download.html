@@ -17,57 +17,58 @@
 <p>
   You can build .deb and .rpm packages yourself when building from
   source, by running <code>sudo cpack</code> after a successful
-  build. Note that on rpm systems this requires the use
-  of <code>cmake3</code> and <code>cpack3</code>; the default cmake will lead to a broken package.
+  build. 
 </p>
 
 <h2>Binary packages</h2>
 <p>
-  Packages for various Linux distributions and for Windows (beta!) are
-  available for download here. Installation on macOS can be done
-  through HomeBrew or Conda; see below. 
+  Packages for various Linux distributions are available
+  for <a href="https://github.com/kpeeters/cadabra2/releases/latest">download
+  from github</a>. These are generated automatically on every
+  release. Installation on macOS can be done through HomeBrew or
+  MacPorts; see below. There is also a Docker image if you only want
+  to use Cadabra via Jupyter.
 </p>
 <p>
-  Use at your own risk. Because of time constraints some of these
-  packages receive almost no testing, so any feedback is welcome.
-  If you want to help getting these into official distribution
-  repositories, please let me know.
+  Use these packages at your own risk. Because of time constraints
+  some of these packages receive almost no testing, so any feedback is
+  welcome.  If you want to help getting these into official
+  distribution repositories, please let me know.
 </p>
 
 <div class="packages">
   <div class="distrotype">
     <img src="static/images/appimage.svg"/>
-    <div class="distronum"><a href="https://cadabra.science/packages/appimage-x86_64">Cadabra AppImage (for x86_64)</a></div>
-    <div class="distronum"><a href="https://cadabra.science/packages/appimage-aarch64">Cadabra AppImage (for aarch64)</a></div>
     <div class="distrotxt">
       The AppImage version of Cadabra can be installed on any
       reasonably modern Linux distribution and it is completely
       self-contained. Just download and make the file executable
-      with <tt>chmod u+x *.AppImage</tt>.
+      with <tt>chmod u+x *.AppImage</tt>. Versions are provided for
+      <tt>x86_64</tt> and <tt>aarch64</tt> architectures from
+      the <a href="https://github.com/kpeeters/cadabra2/releases/latest">github
+      release page</a>.
     </div>
   </div>
   
   <div class="distrotype">
     <img src="static/images/ubuntulogo.png"/>
-    <div class="distronum"><a href="https://cadabra.science/packages/ubuntu1804">Ubuntu Bionic Beaver 18.04</a></div>
-    <div class="distronum"><a href="https://cadabra.science/packages/ubuntu2004">Ubuntu Focal Fossa 20.04</a></div>
-    <div class="distronum"><a href="https://cadabra.science/packages/ubuntu2204">Ubuntu Jammy Jellyfish 22.04</a></div>
     <div class="distrotxt">
-      Cadabra is now also available in Ubuntu 22.04 from the official
-      repositories, by installing the <tt>cadabra2</tt> package
-      (though this may not always be the most recent version). Thanks
-      to Alex Myczko for making this happen.
+      Packages for Ubuntu 22.04 Jammy and 24.04 Noble are available
+      from
+      the <a href="https://github.com/kpeeters/cadabra2/releases/latest">github
+      release page</a>. Cadabra is now also available from the
+      official repositories, by installing the <tt>cadabra2</tt>
+      package (though this may not always be the most recent
+      version). Thanks to Alex Myczko for making this happen.
     </div>
   </div>
 
   <div class="distrotype">
     <img src="static/images/fedora-logo.png"/>
-    <div class="distronum"><a href="https://cadabra.science/packages/fedora28/">Fedora 28</a></div>
-    <div class="distronum"><a href="https://cadabra.science/packages/fedora29/">Fedora 29</a></div>	 	 
-    <div class="distronum"><a href="https://cadabra.science/packages/fedora32/">Fedora 32</a></div>	 	 
-    <div class="distronum"><a href="https://cadabra.science/packages/fedora33/">Fedora 33</a></div>	 	 
-    <div class="distronum"><a href="https://cadabra.science/packages/fedora35/">Fedora 35</a></div>	 	 
     <div class="distrotxt">
+      Packages for Fedora 40 are available from
+      the <a href="https://github.com/kpeeters/cadabra2/releases/latest">github
+      release page</a>. 
     </div>
   </div>
 
@@ -102,14 +103,16 @@
 
   <div class="distrotype">
     <img src="static/images/opensuse_logo.png"/>
-    <div class="distronum"><a href="https://cadabra.science/packages/opensuse150/">openSUSE Leap 15.0</a></div>
-    <div class="distronum"><a href="https://cadabra.science/packages/opensusetw/">openSUSE Tumbleweed</a></div>
+    <div class="distrotxt">
+      A package for openSUSE Tumbleweed is available from
+      the <a href="https://github.com/kpeeters/cadabra2/releases/latest">github
+	release page</a>. You can still build it on openSUSE Leap, but you will need
+      to build from source or rely on 3rd party repositories.
+    </div>
   </div>
 
   <div class="distrotype">
     <img src="static/images/debian-logo.jpg"/>
-    <div class="distronum"><a href="https://cadabra.science/packages/debian9/">Debian Stretch 9</a></div>
-    <div class="distronum"><a href="https://cadabra.science/packages/debian10/">Debian Buster 10</a></div>
     <div class="distrotxt">
       Cadabra is now available in Debian 11 (Bullseye) from the
       official repositories, by installing the <tt>cadabra2</tt>
@@ -135,27 +138,27 @@
   <div class="distrotype">
     <img src="static/images/apple_logo.png"/>
     <div class="distronum">macOS</a></div>
-<div class="distrotxt">
-  Cadabra is available via the Homebrew package manager. Simply
-  do
-  <code>brew tap kpeeters/repo</code>		
-  <code>brew install cadabra2</code>
-  If you encounter problems, please
-  email <a href="mailto:info@cadabra.science">info@cadabra.science</a>
-  so they can be fixed and other people can benefit from it.
-</div>
-<div class="distrotxt">
-  Cadabra is
-  also <a href="https://ports.macports.org/port/cadabra2/">available
-    via MacPorts</a>,
-  <code>sudo port install cadabra2</code>
-  should do the trick. For more details follow the link above.
-</div>
-<div class="distrotxt">
-  If you want to build from source,
-  see <a href="https://github.com/kpeeters/cadabra2#macos">macOS
-    build instructions</a> for details.
-</div>
+    <div class="distrotxt">
+      Cadabra is available via the Homebrew package manager. Simply
+      do
+      <code>brew tap kpeeters/repo</code>		
+      <code>brew install cadabra2</code>
+      If you encounter problems, please
+      email <a href="mailto:info@cadabra.science">info@cadabra.science</a>
+      so they can be fixed and other people can benefit from it.
+    </div>
+    <div class="distrotxt">
+      Cadabra is
+      also <a href="https://ports.macports.org/port/cadabra2/">available
+        via MacPorts</a>,
+      <code>sudo port install cadabra2</code>
+      should do the trick. For more details follow the link above.
+    </div>
+    <div class="distrotxt">
+      If you want to build from source,
+      see <a href="https://github.com/kpeeters/cadabra2#macos">macOS
+        build instructions</a> for details.
+    </div>
 </div>
 
 <a name="windows"></a>

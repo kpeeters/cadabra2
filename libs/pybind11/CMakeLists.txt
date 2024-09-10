@@ -208,6 +208,11 @@ else()
   set(PYBIND11_INSTALL OFF)
 endif()
 
+# KP: eventually this policy inheritance will all work, for now set set the policy by hand.
+if(POLICY CMP0148)
+  cmake_policy(SET CMP0148 NEW)
+endif()
+
 include("${CMAKE_CURRENT_SOURCE_DIR}/tools/pybind11Common.cmake")
 # https://github.com/jtojnar/cmake-snips/#concatenating-paths-when-building-pkg-config-files
 # TODO: cmake 3.20 adds the cmake_path() function, which obsoletes this snippet

@@ -5,18 +5,23 @@ set(CADABRA_CMAKE_VERSION 3.12)
 
 if(POLICY CMP0042)
   cmake_policy(SET CMP0042 NEW)
+  message(STATUS "Set CMake policy CM0042 to NEW")
 endif()
 if(POLICY CMP0054)
   cmake_policy(SET CMP0054 NEW)
+  message(STATUS "Set CMake policy CM0054 to NEW")
 endif()
 if(POLICY CMP0127)
   cmake_policy(SET CMP0127 NEW)
+  message(STATUS "Set CMake policy CM0127 to NEW")
 endif()
 if(POLICY CMP0148)
   cmake_policy(SET CMP0148 NEW)
+  message(STATUS "Set CMake policy CM0148 to NEW")
 endif()
 if(POLICY CMP0167)
   cmake_policy(SET CMP0167 NEW)
+  message(STATUS "Set CMake policy CM0167 to NEW")
 endif()
 
 cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
@@ -293,79 +298,72 @@ print_header("Configuring Python")
 # NEEDED TO USE CMAKE_INSTALL_FULL<dir>
 include(GNUInstallDirs)
 
-set(PYTHON_POSTFIX "3")
-# message(STATUS "Building for use with Python 3 (good!)")
-
+set(Python_POSTFIX "3")
 find_package(Python COMPONENTS Interpreter Development)
-add_subdirectory(libs/pybind11)
+find_package(pybind11 CONFIG)
+if (NOT pybind11_FOUND)
+  message(STATUS "Using included pybind11.")
+  add_subdirectory(libs/pybind11)
+endif()
 
-message(STATUS "Found python ${PYTHON_LIBRARIES}")
-#find_package (Python COMPONENTS Interpreter)
-
-message(STATUS "Python version is ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.")
-# We used to install in a different location; let's remove files from there
-# if we find them on install.
-# set(OLD_PYTHON_SITE_PATH ${CMAKE_INSTALL_FULL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
+message(STATUS "Found python ${Python_LIBRARIES}")
+message(STATUS "Python version is ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.")
 
 # The PYTHON_SITE_PATH variable is used throughout for installation purposes.
 if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
   # Debian packages install all their Python things in 'dist-packages', not 'site-packages'.
-  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/dist-packages)
-  # set(PYTHON_SITE_DIST "dist-packages")
+  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
+  # set(Python_SITE_DIST "dist-packages")
 elseif(APPIMAGE_MODE)
-  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/dist-packages)
-  set(PYTHON_SITE_DIST "dist-packages")
+  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
+  set(Python_SITE_DIST "dist-packages")
 else()
   # The builder can override the path by setting it externally.
   if(NOT DEFINED PYTHON_SITE_PATH)
+    # set(PYTHON_SITE_PATH ${Python_SITEARCH})
     # For everyone else there is 'site-packages' which we get from
     # calling into python's 'site' package (and hoping that the 0th
     # element is where we should be writing).
     execute_process(
-      COMMAND ${PYTHON_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
+      COMMAND ${Python_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
       OUTPUT_VARIABLE PYTHON_SITE_PATH
       OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    #   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
-    # set(PYTHON_SITE_DIST "site-packages")
   endif()
 endif()
-message(STATUS "Installing Python modules in ${PYTHON_SITE_PATH}")
+message(STATUS "Python standard  platform-independent installation directory (Python_STDLIB)   ${Python_STDLIB}")
+message(STATUS "Python standard  platform-dependent   installation directory (Python_STDARCH)  ${Python_STDARCH}")
+message(STATUS "Python 3rd-party platform-independent installation directory (Python_SITELIB)  ${Python_SITELIB}")
+message(STATUS "Python 3rd-party platform-dependent   installation directory (Python_SITEARCH) ${Python_SITEARCH}")
+message(STATUS "Installing Cadabra Python modules in (PYTHON_SITE_PATH) ${PYTHON_SITE_PATH}")
 # We need to give our Python module an abi-name extension
 # so that it can be installed in a folder which does not
 # contain the abi name. See
 # https://www.python.org/dev/peps/pep-3149/
 execute_process(
-	COMMAND ${PYTHON_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_config_var('SOABI'))"
-	OUTPUT_VARIABLE PYTHON_SOABI
+	COMMAND ${Python_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_config_var('SOABI'))"
+	OUTPUT_VARIABLE Python_SOABI
 	OUTPUT_STRIP_TRAILING_WHITESPACE
 	)
-message(STATUS "Python abi name ${PYTHON_SOABI}")
+message(STATUS "Python abi name ${Python_SOABI}")
 
 string(REGEX REPLACE "^${CMAKE_INSTALL_PREFIX}" "" PYTHON_SITE_PATH_REL ${PYTHON_SITE_PATH})
 set(PYTHON_SITE_PATH_REL ${PYTHON_SITE_PATH_REL})
-
-if(NOT WIN32)
-  execute_process(
-	 COMMAND ${PYTHON_EXECUTABLE} -c "import site; print (site.getsitepackages()[0]);"
-	 OUTPUT_VARIABLE OLDER_PYTHON_SITE_PATH
-	 OUTPUT_STRIP_TRAILING_WHITESPACE
-	 )
-endif()
+message(STATUS "Python relative path to installation directory (PYTHON_SITE_PATH_REL) ${PYTHON_SITE_PATH_REL}")
 
 # Suffixes
 if(WIN32)
 	set(STATIC_LIB_SUFFIX "lib")
 	set(SHARED_LIB_SUFFIX "dll")
-	set(PYTHON_MOD_SUFFIX "pyd")
+	set(Python_MOD_SUFFIX "pyd")
 else()
 	set(STATIC_LIB_SUFFIX "a")
 	set(SHARED_LIB_SUFFIX "so")
-	set(PYTHON_MOD_EXT    "so")   
-	set(PYTHON_MOD_SUFFIX "${PYTHON_SOABI}.so")
+	set(Python_MOD_EXT    "so")   
+	set(Python_MOD_SUFFIX "${Python_SOABI}.so")
 endif()
 
-message(STATUS "Python module extension ${PYTHON_MOD_SUFFIX}")
+message(STATUS "Python module extension ${Python_MOD_SUFFIX}")
 
 
 #---------------------------------------------------------------------------
@@ -437,18 +435,62 @@ add_custom_target(uninstall
 #---------------------------------------------------------------------------
 
 if(APPIMAGE_MODE)
-  set(DEPLOY      linuxdeploy-${CMAKE_SYSTEM_PROCESSOR}.AppImage)
-  set(DEPLOY_URL  https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/${DEPLOY})
-  message(STATUS "Generating AppImage using ${DEPLOY_URL}")
-  if(NOT EXISTS ${DEPLOY})
-    message(STATUS "Downloading...")
-    file(DOWNLOAD ${DEPLOY_URL} ${CMAKE_BINARY_DIR}/${DEPLOY})
-    execute_process(COMMAND chmod u+x ${CMAKE_BINARY_DIR}/${DEPLOY})
+  # We need linuxdeploy to create the AppImage. It is best to have this built
+  # from source and installed locally. Make sure to first install deps by doing
+  #
+  #   sudo apt install libcimg-dev libgtest-dev
+  #
+  # Then checkout appimagetool, linuxdeploy, linuxdeploy-plugin-appimage using
+  #
+  #   git clone https://github.com/AppImage/appimagetool.git --recurse-submodules
+  #   git clone https://github.com/linuxdeploy/linuxdeploy.git --recurse-submodules
+  #   git clone https://github.com/linuxdeploy/linuxdeploy-plugin-appimage.git --recurse-submodules
+  #
+  # Do *not* forget the `--recurse-submodules` flag!
+  #
+  # Build `appimagetool` as usual, and for the other two use
+  #
+  #   cd linuxdeploy && mkdir build && cd build
+  #   cmake -DBUILD_TESTING=OFF ..
+  #   make && sudo make install
+  #
+  # and ditto for the plugin,
+  #
+  #   cd linuxdeploy && mkdir build && cd build
+  #   cmake -DBUILD_TESTING=OFF ..
+  #   make && sudo make install
+  #
+  # If you do not have it locally, the configure process will download an
+  # AppImage for linuxdeploy, but this does *not* run inside a QEMU container.
+  
+  print_header("Configuring AppImage build")
+  find_program(LINUXDEPLOY linuxdeploy "${CMAKE_BINARY_DIR}")
+  set(DEPLOY         linuxdeploy-${CMAKE_SYSTEM_PROCESSOR}.AppImage)
+  set(DEPLOY_URL     https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/${DEPLOY})
+  set(DEPLOY_GTK_URL https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh)
+  if(${LINUXDEPLOY} MATCHES "LINUXDEPLOY-NOTFOUND")
+    message(STATUS "The 'linuxdeploy' binary is not present, downloading one")
+    message(STATUS "Generating AppImage using ${DEPLOY_URL}")
+    if(NOT EXISTS "linuxdeploy")
+      message(STATUS "Downloading...")
+      file(DOWNLOAD ${DEPLOY_URL} ${CMAKE_BINARY_DIR}/linuxdeploy)
+      execute_process(COMMAND chmod u+x ${CMAKE_BINARY_DIR}/linuxdeploy)
+    endif()
+    set(LINUXDEPLOY ${CMAKE_BINARY_DIR}/linuxdeploy)
+  else()
+    message(STATUS "Found linuxdeploy at ${LINUXDEPLOY}")
+  endif()
+  if(NOT EXISTS "linuxdeploy-plugin-gtk.sh")
+      file(DOWNLOAD ${DEPLOY_GTK_URL} ${CMAKE_BINARY_DIR}/linuxdeploy-plugin-gtk.sh)
+      execute_process(COMMAND chmod u+x ${CMAKE_BINARY_DIR}/linuxdeploy-plugin-gtk.sh)
   endif()
   add_custom_target(appimage
-    COMMAND mkdir -p AppDir/usr/lib/python3/dist-packages
-    COMMAND cp -a /usr/lib/python3/dist-packages/setuptools AppDir/usr/lib/python3/dist-packages/
-    COMMAND ${CMAKE_BINARY_DIR}/${DEPLOY} --appdir AppDir --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
+    COMMAND mkdir -p AppDir/${Python_SITELIB}
+    COMMAND cp -a ${CMAKE_SOURCE_DIR}/config/AppRun AppDir/
+    COMMAND chmod gou+x ${CMAKE_SOURCE_DIR}/config/AppRun AppDir/AppRun
+    COMMAND cp -a ${Python_SITELIB}/setuptools AppDir/${PYTHON_SITELIB}/
+    COMMAND cp -a ${Python_STDARCH}/* AppDir/${Python_STDARCH}/
+    COMMAND ${LINUXDEPLOY} --appdir AppDir --plugin gtk --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
     COMMAND mv Cadabra_2-${CMAKE_SYSTEM_PROCESSOR}.AppImage Cadabra_${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}_${CMAKE_SYSTEM_PROCESSOR}.AppImage
   )
 endif()

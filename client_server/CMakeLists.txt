@@ -1,6 +1,9 @@
-cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
+# cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
 project(Cadabra)
 
+if(POLICY CMP0167)
+  cmake_policy(SET CMP0167 NEW)
+endif()
 
 #---------------------------------------------------------------------------
 # Preamble.
@@ -92,7 +95,7 @@ include_directories(
    "${CADABRA_LIBS_DIR}/base64"
    "${CADABRA_LIBS_DIR}/nlohmann"      
    ${Boost_INCLUDE_DIRS}
-   ${PYTHON_INCLUDE_DIRS}
+   ${Python_INCLUDE_DIRS}
    ${SQLITE3_INCLUDE_DIR}
 )
 
@@ -125,7 +128,7 @@ target_link_libraries(cadabra-server
    pybind11::embed
    ${Boost_LIBRARIES}
    ${SQLITE3_LIBRARIES}
-   ${PYTHON_LIBRARIES}
+   ${Python_LIBRARIES}
    ${GLIBMM3_LIBRARIES} 
    Threads::Threads
    )
@@ -145,7 +148,7 @@ add_library(cadabra_client STATIC ${CADABRA_CLIENT_SRC})
 target_link_libraries(cadabra_client
   ${Boost_LIBRARIES}
   ${SQLITE3_LIBRARIES}
-  ${PYTHON_LIBRARIES}
+  ${Python_LIBRARIES}
   ${GLIBMM3_LIBRARIES}
   Threads::Threads
   )
@@ -178,7 +181,7 @@ if(ENABLE_JUPYTER)
   add_executable(cadabra-jupyter-kernel ${JUPYTER_KERNEL_SRC})
   target_compile_definitions(cadabra-jupyter-kernel PRIVATE CDB_DONT_ACQUIRE_GIL=1)  
   message("-- UUID library at ${UUID_LIBRARIES}")
-  target_link_libraries(cadabra-jupyter-kernel xeus Threads::Threads uuid ${Boost_LIBRARIES} ${GLIBMM3_LIBRARIES} ${PYTHON_LIBRARIES})
+  target_link_libraries(cadabra-jupyter-kernel xeus Threads::Threads uuid ${Boost_LIBRARIES} ${GLIBMM3_LIBRARIES} ${Python_LIBRARIES})
 else()
   message("-- Not building Xeus Jupyter kernel")
 endif()
@@ -236,8 +239,8 @@ if (MSVC AND NOT INSTALL_TARGETS_ONLY)
          bin
          )
    # Python (for some reason this is not copied in)
-   get_filename_component(CDB_PYTHON_BASE ${PYTHON_LIBRARIES} NAME_WE)
-   get_filename_component(CDB_PYTHON_PATH ${PYTHON_LIBRARIES} DIRECTORY)
+   get_filename_component(CDB_PYTHON_BASE ${Python_LIBRARIES} NAME_WE)
+   get_filename_component(CDB_PYTHON_PATH ${Python_LIBRARIES} DIRECTORY)
    message("--- Python directory: ${CDB_PYTHON_PATH}")
    string(TOLOWER ${CDB_PYTHON_BASE} CDB_PYTHON_BASE)
    message("--- Python library:   ${CDB_PYTHON_BASE}.dll")
