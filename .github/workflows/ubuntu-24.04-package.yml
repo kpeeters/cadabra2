@@ -19,11 +19,6 @@ jobs:
 #      if: github.ref != 'refs/heads/devel'
 #      run: exit 1
       
-    - name: setup python
-      uses: actions/setup-python@v4
-      with:
-          python-version: 3.11
-
     - name: Set up GitHub CLI
       run: |
         sudo apt-get update
