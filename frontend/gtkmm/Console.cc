@@ -294,7 +294,7 @@ void Console::insert_graphic(uint64_t cell_id, const std::string& bytes)
 		auto& mark = cells.at(cell_id);
 		auto str = Gio::MemoryInputStream::create();
 		std::string dec = Glib::Base64::decode(bytes);
-		str->add_data(dec.c_str(), dec.size());
+		str->add_data(dec.c_str(), dec.size(), nullptr);
 		auto pixbuf = Gdk::Pixbuf::create_from_stream_at_scale(str, 400, -1, true);
 
 		buffer->insert(buffer->get_iter_at_mark(mark), "\n");
