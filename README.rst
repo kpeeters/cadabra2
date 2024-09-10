@@ -383,21 +383,16 @@ Windows
 On Windows the main constraint on the build process is that we want to
 link to Anaconda's Python, which has been built with Visual
 Studio. The recommended way to build Cadabra is thus to build against
-libraries which are all built using Visual Studio as well (if you are
-happy to not use Anaconda, you can also build with the excellent MSYS2
-system from https://www.msys2.org/). It is practically impossible to
-build all dependencies yourself without going crazy, but fortunately
-that is not necessary because of the VCPKG library at
-https://github.com/Microsoft/vcpkg. This contains all dependencies
-(boost, gtkmm, sqlite and various others) in ready-to-use form.
+libraries which are all built using Visual Studio as well. It is
+practically impossible to build all dependencies yourself without
+going crazy, but fortunately that is not necessary because of the
+VCPKG library at https://github.com/Microsoft/vcpkg. This contains all
+dependencies (boost, gtkmm, sqlite and various others) in ready-to-use
+form.
 
 If you do not already have it, first install Visual Studio Community
 Edition from https://www.visualstudio.com/downloads/ and install
 Anaconda (a 64 bit version!) from https://www.anaconda.com/download/.
-You also need a TeX distribution, for instance MiKTeX from
-https://miktex.org and of course git from
-e.g. https://gitforwindows.org/. You need all four before you can
-start building Cadabra.
 
 The instructions below are for building using the Visual Studio 'x64
 Native Tools Command Prompt' (not the GUI). First, clone the vcpkg
