@@ -77,8 +77,14 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// HiDPI scale, and for some window managers we also probe the
 	// text scale factor.
 	auto display = Gdk::Display::get_default();
+	realize();
+	auto gdk_window = get_window();
 	auto screen = Gdk::Screen::get_default();
-	scale = screen->get_monitor_scale_factor(0);
+	auto monitor = display->get_primary_monitor();
+	Gdk::Rectangle geometry;
+	monitor->get_geometry(geometry);
+	
+	scale = gdk_window->get_scale_factor();
 	display_scale = scale;
 //	std::cerr << "Monitor scale factor = " << display_scale << std::endl;
 #ifndef __APPLE__
@@ -755,10 +761,10 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 	// Window size and title, and ready to go.
 	if(!ro) {
-		set_default_size(screen->get_width()/2, screen->get_height()*0.8);
+		set_default_size(geometry.get_width()/2, geometry.get_height()*0.8);
 		}
 	else {
-		set_default_size(screen->get_width()/3, screen->get_height()*0.6);
+		set_default_size(geometry.get_width()/3, geometry.get_height()*0.6);
 		}
 	// FIXME: the subtraction for the margin and scrollbar made below
 	// is estimated but should be computed.
@@ -2051,8 +2057,13 @@ bool NotebookWindow::on_tex_error(const std::string& str, DTree::iterator it)
 		sw.add(tv);
 		auto context = tv.get_style_context();
 		context->add_class("error");
-		auto screen = Gdk::Screen::get_default();
-		sw.set_size_request(screen->get_width()/4, screen->get_width()/4);
+
+		auto display = Gdk::Display::get_default();
+		auto monitor = display->get_primary_monitor();
+		Gdk::Rectangle geometry;
+		monitor->get_geometry(geometry);
+		
+		sw.set_size_request(geometry.get_width()/4, geometry.get_width()/4);
 		sw.show_all();
 		md.run();
 		}
@@ -2819,11 +2830,12 @@ void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 	std::cerr << key << std::endl;
 #endif
 	if(key=="text-scaling-factor" || key=="scaling-factor") {
+		auto gdk_window = get_window();
 		auto screen = Gdk::Screen::get_default();
 		scale   = settings->get_double("text-scaling-factor");
-		scale  *= screen->get_monitor_scale_factor(0);
+		scale  *= gdk_window->get_scale_factor();
 		std::cout << "cadabra-client: total scaling-factor = " << scale << std::endl;
-		engine.set_scale(scale, screen->get_monitor_scale_factor(0));
+		engine.set_scale(scale, gdk_window->get_scale_factor());
 		engine.invalidate_all();
 		tex_run_async();
 
