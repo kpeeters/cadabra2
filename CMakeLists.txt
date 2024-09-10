@@ -77,7 +77,7 @@ include(cmake/version.cmake)
 print_header("Building Cadabra version ${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}.${CADABRA_VERSION_TWEAK} (${SYSTEM_BITS}-bit)")
 message(STATUS "Build id '${CADABRA_VERSION_BUILD}' dated ${CADABRA_VERSION_DATE}")
 message(STATUS "Build mode is set to '${CMAKE_BUILD_TYPE}'")
-message(STATUS "Architecture is '${CMAKE_SYSTEM_PROCESSOR}}'")
+message(STATUS "Architecture is '${CMAKE_SYSTEM_PROCESSOR}'")
 
 # Store the version number in a build/VERSION file (so that e.g. github
 # actions can pick it up).
