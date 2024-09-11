@@ -145,20 +145,19 @@ namespace cadabra {
 			Glib::RefPtr<Gio::SimpleActionGroup> actiongroup;
 			Glib::RefPtr<Gtk::Builder>           uimanager;
 
-			Gtk::VBox                      topbox;
-			Gtk::HBox                      toolbar;
+			Gtk::Box                       topbox;
+			Gtk::Box                       toolbar;
 			Gtk::Button                    tool_open, tool_save, tool_save_as;
 			Gtk::Button                    tool_run, tool_run_to, tool_stop, tool_restart;		
-			Gtk::HBox                      supermainbox;
+			Gtk::Box                       supermainbox;
 			Gtk::Paned                     dragbox;
-			Gtk::VBox                      mainbox;
-			//			Gtk::HBox                      buttonbox;
+			Gtk::Box                       mainbox;
 			Gtk::SearchBar                 searchbar;
-			Gtk::HBox                      search_hbox;
+			Gtk::Box                       search_hbox;
 			Gtk::SearchEntry               searchentry;
 			Gtk::CheckButton               search_case_insensitive;
 			Gtk::Label                     search_result;
-			Gtk::HBox                      statusbarbox;
+			Gtk::Box                       statusbarbox;
 
 			Console console;
 			Gtk::Dialog console_win;

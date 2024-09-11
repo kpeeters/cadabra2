@@ -175,8 +175,6 @@ if(USE_MICROTEX)
   # find_package(Fontconfig REQUIRED)
   pkg_check_modules(Fontconfig REQUIRED IMPORTED_TARGET fontconfig)
 endif()
-pkg_check_modules(CairoMM REQUIRED IMPORTED_TARGET cairomm-1.0)
-pkg_check_modules(PangoMM REQUIRED IMPORTED_TARGET pangomm-1.4)
 
 target_compile_options(
   cadabra2-gtk
@@ -192,8 +190,8 @@ target_link_libraries(
   PUBLIC
   cadabra_client 
   ${Boost_LIBRARIES} 
-  ${GLIBMM_LIBRARIES} 
-  ${GTKMM3_LIBRARIES} 
+  PkgConfig::GLIBMM
+  PkgConfig::GTKMM
   ${SQLITE3_LIBRARIES} 
   Threads::Threads
 )

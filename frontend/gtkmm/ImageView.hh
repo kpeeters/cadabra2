@@ -27,7 +27,7 @@ namespace cadabra {
 			std::string decoded; // raw byte content of image
 			bool        is_raster;
 			
-			Gtk::VBox   vbox;
+			Gtk::Box    vbox;
 			Gtk::Image  image;
 			Glib::RefPtr<Gdk::Pixbuf> pixbuf;
 

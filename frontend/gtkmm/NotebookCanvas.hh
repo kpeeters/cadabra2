@@ -32,8 +32,6 @@ namespace cadabra {
 
 			std::map<DataCell *, VisualCell> visualcells;
 
-			//			Gtk::EventBox             ebox;
-			//			Gtk::VBox                 ebox;
 			Gtk::EventBox             ebox;
 			Gtk::ScrolledWindow       scroll;
 			Gtk::Separator            bottomline;

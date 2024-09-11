@@ -7,6 +7,6 @@
 class PreferencesWindow : public class Gtk::Window {
 		public:
 		private:
-			Gtk::VBox mainbox;
+			Gtk::Box mainbox;
 			Gtk::
 		};

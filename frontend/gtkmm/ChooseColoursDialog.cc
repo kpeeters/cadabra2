@@ -20,7 +20,11 @@ namespace cadabra {
 
 	ChooseColoursDialog::ChooseColoursDialog(DocumentThread::Prefs& prefs, NotebookWindow& parent)
 		: Gtk::Dialog("Choose syntax highlighting colours", parent, true)
-		, prefs(prefs), button_ok("Ok"), parent(parent)
+		, prefs(prefs)
+		, main_vbox(Gtk::Orientation::ORIENTATION_VERTICAL)
+		, bottom_button_box(Gtk::Orientation::ORIENTATION_HORIZONTAL)
+		, button_ok("Ok")
+		, parent(parent)
 		{
 		using namespace std::string_literals;
 

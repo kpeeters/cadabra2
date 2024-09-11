@@ -8,7 +8,13 @@
 using namespace cadabra;
 
 ImageView::ImageView(double scale_)
-	: sizing(false), prev_x(0), prev_y(0), height_at_press(0), width_at_press(0), scale(scale_)
+	: vbox(Gtk::Orientation::ORIENTATION_VERTICAL)
+	, sizing(false)
+	, prev_x(0)
+	, prev_y(0)
+	, height_at_press(0)
+	, width_at_press(0)
+	, scale(scale_)
 	{
 	add(vbox);
 	vbox.add(image);

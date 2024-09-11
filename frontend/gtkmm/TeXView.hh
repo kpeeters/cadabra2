@@ -38,8 +38,8 @@ namespace cadabra {
 					
 			DTree::iterator           datacell;
 			Gtk::Revealer             rbox;
-			Gtk::VBox                 vbox;
-			Gtk::HBox                 hbox;
+			Gtk::Box                  vbox;
+			Gtk::Box                  hbox;
 
 			int                       window_width=0;
 

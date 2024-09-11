@@ -45,6 +45,12 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	, DocumentThread(this)
 	, current_cell(doc.end())
 	, cdbapp(c)
+	, topbox(Gtk::Orientation::ORIENTATION_VERTICAL)
+	, toolbar(Gtk::Orientation::ORIENTATION_HORIZONTAL)
+	, supermainbox(Gtk::Orientation::ORIENTATION_HORIZONTAL)
+	, mainbox(Gtk::Orientation::ORIENTATION_VERTICAL)
+	, search_hbox(Gtk::Orientation::ORIENTATION_HORIZONTAL)
+	, statusbarbox(Gtk::Orientation::ORIENTATION_HORIZONTAL)
 	, search_case_insensitive("Case insensitive", true)
 	, console(sigc::mem_fun(this, &NotebookWindow::interactive_execute))
 	, current_canvas(0)
@@ -1311,7 +1317,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 		Gtk::Widget *w=0;
 		switch(it->cell_type) {
 			case DataCell::CellType::document:
-				newcell.document = manage( new Gtk::VBox() );
+				newcell.document = manage( new Gtk::Box(Gtk::Orientation::ORIENTATION_VERTICAL) );
 				w=newcell.document;
 				break;
 
@@ -1443,7 +1449,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			assert(tr.is_valid(parent));
 
 			VisualCell& parent_visual = canvasses[i]->visualcells[&(*parent)];
-			Gtk::VBox *parentbox=0;
+			Gtk::Box *parentbox=0;
 			int offset=0;
 			if(parent->cell_type==DataCell::CellType::document)
 				parentbox=parent_visual.document;
@@ -1543,7 +1549,7 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 
 	for(unsigned int i=0; i<canvasses.size(); ++i) {
 		VisualCell& parent_visual = canvasses[i]->visualcells[&(*parent)];
-		Gtk::VBox *parentbox=0;
+		Gtk::Box *parentbox=0;
 		if(it->cell_type==DataCell::CellType::document)
 			parentbox=parent_visual.document;
 		else
@@ -2794,7 +2800,7 @@ void NotebookWindow::on_help_register()
 	grid.attach(affiliation_label, 0, 2, 1, 1);
 	grid.attach(affiliation, 1, 2, 1, 1);
 
-	Gtk::HBox hbox;
+	Gtk::Box hbox(Gtk::Orientation::ORIENTATION_HORIZONTAL);
 	box->pack_end(hbox, Gtk::PACK_SHRINK);
 	Gtk::Button reg("Register my support"), nothanks("I prefer to stay anonymous"), alreadyset("I am already registered");
 	hbox.pack_end(reg, Gtk::PACK_SHRINK, 10);

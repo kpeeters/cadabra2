@@ -14,7 +14,7 @@ namespace cadabra {
 	/// A text cell editor widget with support for editing Python and LaTeX.
 	/// CodeInput is essentially a TextView with some additional i/o logic.
 
-	class CodeInput : public Gtk::VBox {
+	class CodeInput : public Gtk::Box {
 		public:
 			using Prefs = cadabra::DocumentThread::Prefs;
 			/// Initialise with existing TextBuffer and a pointer to the Datacell

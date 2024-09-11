@@ -15,5 +15,5 @@ class SelectFileDialog : public Gtk::Dialog {
 
 		Gtk::Entry entry;
 		Gtk::Button choose;
-		Gtk::HBox hbox;
+		Gtk::Box hbox;
 	};
