@@ -1,0 +1,17 @@
+{
+	"dependencies": [
+		"mpir",
+		"glibmm",
+		"gtkmm",
+		"boost-system",
+		"boost-asio",
+		"boost-uuid",
+		"boost-program-options",
+		"boost-signals2",
+		"boost-property-tree",
+		"boost-date-time",
+		"boost-filesystem",
+		"boost-ublas"
+	],
+	"builtin-baseline": "3508985146f1b1d248c67ead13f8f54be5b4f5da"
+}
