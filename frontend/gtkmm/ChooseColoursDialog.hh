@@ -21,9 +21,9 @@ namespace cadabra {
 			DocumentThread::Prefs& prefs;
 			std::map<std::string, std::map<std::string, std::unique_ptr<Gtk::ColorButton>>> colour_buttons;
 			std::vector<std::unique_ptr<Gtk::Widget>> anonymous_widgets;
-			Gtk::Grid main_grid;
-			Gtk::VBox main_vbox;
-			Gtk::HBox bottom_button_box;
+			Gtk::Grid   main_grid;
+			Gtk::Box    main_vbox;
+			Gtk::Box    bottom_button_box;
 			Gtk::Button button_ok;
 			void on_my_response(int response_id);
 			void on_color_set();

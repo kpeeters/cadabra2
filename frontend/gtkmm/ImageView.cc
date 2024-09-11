@@ -17,6 +17,7 @@ using namespace cadabra;
 
 ImageView::ImageView(double display_scale_, int logical_width_)
 	: area(logical_width_, display_scale_)
+	: vbox(Gtk::Orientation::ORIENTATION_VERTICAL)
 	, sizing(false)
 	, prev_x(0)
 	, prev_y(0)

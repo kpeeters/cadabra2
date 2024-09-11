@@ -62,7 +62,6 @@ namespace cadabra {
 			bool      sizing;
 			double    prev_x, prev_y;
 			int       height_at_press, width_at_press;
-			
 	};
 	
 };

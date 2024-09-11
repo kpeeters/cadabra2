@@ -22,15 +22,15 @@ namespace cadabra {
 		public:
 			/// Union of pointers to one of the possible GUI realisations
 			/// of the cell types declared in DataCell::CellType. All
-			/// of these cells below should derive from Gtk::VBox.
+			/// of these cells below should derive from Gtk::Box.
 
 			union {
-					Gtk::VBox    *document; // top-level cell; only one ever occurs in a document
+					Gtk::Box     *document; // top-level cell; only one ever occurs in a document
 					CodeInput    *inbox;
 					TeXView      *outbox;
 					ImageView    *imagebox;
 					SliderView   *slider;
 			};
-		};
+	};
 
-	}
+}

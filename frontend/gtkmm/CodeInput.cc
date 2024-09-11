@@ -35,14 +35,18 @@ CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::Text
 
 CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double s, double ds, const Prefs& prefs,
 							Glib::RefPtr<Gtk::Adjustment> vadjustment)
-	: buffer(tb), edit(it, tb, s, ds, vadjustment)
+	: Gtk::Box(Gtk::Orientation::ORIENTATION_VERTICAL)
+	, buffer(tb)
+	, edit(it, tb, s, ds, vadjustment)
 	{
 	init(prefs, ds);
 	}
 
 CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s, double ds, const Prefs& prefs,
 							Glib::RefPtr<Gtk::Adjustment> vadjustment)
-	: buffer(Gtk::TextBuffer::create()), edit(it, buffer, s, ds, vadjustment)
+	: Gtk::Box(Gtk::Orientation::ORIENTATION_VERTICAL)
+	, buffer(Gtk::TextBuffer::create())
+	, edit(it, buffer, s, ds, vadjustment)
 	{
 	buffer->set_text(txt);
 	init(prefs, ds);

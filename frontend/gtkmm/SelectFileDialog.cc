@@ -3,6 +3,7 @@
 SelectFileDialog::SelectFileDialog(const Glib::ustring& title, Gtk::Window& parent, bool modal)
 	: Gtk::Dialog(title, parent, modal)
 	, choose("...")
+	, hbox(Gtk::Orientation::ORIENTATION_HORIZONTAL)
 	{
 	set_resizable(false);
 	entry.set_width_chars(60);
