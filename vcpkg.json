@@ -13,5 +13,22 @@
 		"boost-filesystem",
 		"boost-ublas"
 	],
+	"overrides":  [
+		{ "name": "atk", "version-string": "2.24.0-5", "port-version": 2 },
+		{ "name": "atkmm", "version-string": "2.24.2", "port-version": 5 },
+		{ "name": "cairo", "version-string": "1.16.0", "port-version": 10 },
+		{ "name": "cairomm", "version-string": "1.15.3", "port-version": 6 },
+		{ "name": "gdk-pixbuf", "version-string": "2.36.9-5", "port-version": 7 },
+		{ "name": "glib", "version-string": "2.52.3", "port-version": 27 },
+		{ "name": "glibmm", "version-string": "2.52.1", "port-version": 14 },
+		{ "name": "gtk", "version-string": "3.22.19-4", "port-version": 0 },
+		{ "name": "gtkmm", "version-string": "3.22.2", "port-version": 5 },
+		{ "name": "harfbuzz", "version-string": "2.7.4", "port-version": 1 },
+		{ "name": "libsigcpp", "version-string": "2.10-3", "port-version": 2 },
+		{ "name": "pango", "version-string": "1.40.11", "port-version": 9 },
+		{ "name": "pangomm", "version-string": "2.40.1", "port-version": 4 },
+		{ "name": "pixman", "version-string": "0.38.4", "port-version": 2 },
+		{ "name": "tool-meson", "version-string": "0.56.02", "port-version": 0 }
+	],
 	"builtin-baseline": "3508985146f1b1d248c67ead13f8f54be5b4f5da"
 }
