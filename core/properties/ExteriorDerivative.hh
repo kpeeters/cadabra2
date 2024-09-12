@@ -9,6 +9,7 @@ namespace cadabra {
 
 	class ExteriorDerivative : public Derivative, public DifferentialFormBase {
 		public:
+			virtual ~ExteriorDerivative() = default;
 			virtual std::string name() const override;
 
 			virtual Ex degree(const Properties&, Ex::iterator) const override;

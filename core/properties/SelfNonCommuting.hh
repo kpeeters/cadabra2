@@ -7,6 +7,7 @@ namespace cadabra {
 
 	class SelfNonCommuting : virtual public SelfCommutingBehaviour {
 		public:
+			virtual ~SelfNonCommuting() = default;
 			virtual std::string name() const override;
 			virtual int sign() const override;
 		};
