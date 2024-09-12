@@ -452,6 +452,12 @@ else()
 endif()
 
 if(WIN32)
+  file(GET_RUNTIME_DEPENDENCIES
+    RESOLVED_DEPENDENCIES_VAR   dependencies
+    UNRESOLVED_DEPENDENCIES_VAR unresolved
+    EXECUTABLES $<TARGET_FILE:cadabra2-cli>)
+  message(STATUS "Dependencies found ${dependencies}")
+  message(STATUS "Dependencies not found ${unresolved}")  
   install(
     TARGETS cadabra2-cli
     RUNTIME_DEPENDENCIES
