@@ -310,6 +310,9 @@ message(STATUS "Found python ${Python_LIBRARIES}")
 message(STATUS "Python version is ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.")
 
 # The PYTHON_SITE_PATH variable is used throughout for installation purposes.
+if(WIN32)
+  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
+else()
 if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
   # Debian packages install all their Python things in 'dist-packages', not 'site-packages'.
   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
@@ -331,6 +334,8 @@ else()
     )
   endif()
 endif()
+string(REGEX REPLACE "^${CMAKE_INSTALL_PREFIX}" "" PYTHON_SITE_PATH_REL ${PYTHON_SITE_PATH})
+
 message(STATUS "Python standard  platform-independent installation directory (Python_STDLIB)   ${Python_STDLIB}")
 message(STATUS "Python standard  platform-dependent   installation directory (Python_STDARCH)  ${Python_STDARCH}")
 message(STATUS "Python 3rd-party platform-independent installation directory (Python_SITELIB)  ${Python_SITELIB}")
@@ -347,7 +352,6 @@ execute_process(
 	)
 message(STATUS "Python abi name ${Python_SOABI}")
 
-string(REGEX REPLACE "^${CMAKE_INSTALL_PREFIX}" "" PYTHON_SITE_PATH_REL ${PYTHON_SITE_PATH})
 set(PYTHON_SITE_PATH_REL ${PYTHON_SITE_PATH_REL})
 message(STATUS "Python relative path to installation directory (PYTHON_SITE_PATH_REL) ${PYTHON_SITE_PATH_REL}")
 
