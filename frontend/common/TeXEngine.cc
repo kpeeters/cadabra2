@@ -188,6 +188,7 @@ TeXEngine::~TeXEngine()
 TeXEngine::TeXEngine()
 	: horizontal_pixels_(0), font_size_(12), total_scale_(1.0), device_scale_(1.0)
 	{
+#ifndef __WIN32
 	//	latex_packages.push_back("breqn");
 	latex_packages.push_back("hyperref");
 
@@ -199,6 +200,7 @@ TeXEngine::TeXEngine()
 	std::stringstream buffer;
 	buffer << preamble.rdbuf();
 	preamble_string = buffer.str();
+#endif
 	}
 
 void TeXEngine::set_geometry(int horpix)
