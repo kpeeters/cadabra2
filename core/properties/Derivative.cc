@@ -5,6 +5,10 @@
 
 using namespace cadabra;
 
+Derivative::~Derivative()
+	{
+	}
+
 bool Derivative::parse(Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator ki=keyvals.begin();

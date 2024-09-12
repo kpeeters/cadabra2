@@ -8,7 +8,7 @@ namespace cadabra {
 
 	class TableauBase : virtual public property {
 		public:
-			virtual ~TableauBase() {};
+			virtual ~TableauBase();
 			typedef yngtab::filled_tableau<unsigned int> tab_t;
 
 			virtual std::string name() const;

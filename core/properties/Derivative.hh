@@ -25,7 +25,7 @@ namespace cadabra {
 //		virtual public TableauBase,
 		public Distributable, virtual public property {
 		public :
-			virtual ~Derivative() {};
+			virtual ~Derivative();
 			virtual std::string name() const override;
 
 			virtual unsigned int size(const Properties&, Ex&, Ex::iterator) const override;

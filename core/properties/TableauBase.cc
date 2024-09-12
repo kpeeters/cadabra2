@@ -3,6 +3,10 @@
 
 using namespace cadabra;
 
+TableauBase::~TableauBase()
+	{
+	}
+
 std::string TableauBase::name() const
 {
 	return "TableauBase";
