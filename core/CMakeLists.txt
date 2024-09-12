@@ -347,7 +347,7 @@ add_executable(cdb-nbtool
   cdb-nbtool.cc
   ${CADABRA_LIBS_DIR}/tiny-process-library/process.cpp
 )
-if (MSVC)
+if(WIN32)
   target_sources(cdb-nbtool PRIVATE ${CADABRA_LIBS_DIR}/tiny-process-library/process_win.cpp)
 else()
   target_sources(cdb-nbtool PRIVATE ${CADABRA_LIBS_DIR}/tiny-process-library/process_unix.cpp)
@@ -435,7 +435,7 @@ add_subdirectory(packages)
 
 install_directory_permissions(${PYTHON_SITE_PATH})
 
-if (MSVC)
+if(WIN32)
   install(
     TARGETS
     cadabra2
@@ -495,33 +495,20 @@ install(
    bin
    )
 
-if (MSVC AND NOT INSTALL_TARGETS_ONLY)
+if(WIN32 AND NOT INSTALL_TARGETS_ONLY)
    install_dlls_from("core")
 endif()
 
-if(NOT MSVC)
+if(NOT WIN32)
    if(CMAKE_GENERATOR MATCHES "Ninja")
       set(destdir_expr "\$\${DESTDIR}")
    else()
       set(destdir_expr "\$(DESTDIR)")
    endif()
-   
-#    add_custom_target(deduplicate
-#       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2.1"
-#       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2cadabra.1"
-#       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2html.1"
-#       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2latex.1"      
-#       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2python.1"
-#       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2ipynb.1"      
-#       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2-gtk.1"
-#       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra-server.1"
-#       COMMAND rm -f "\$(destdir_expr)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2-cli.1"
-#       COMMENT "Removing manual pages from old location."
-#       )
 endif()             
 
 # manual pages
-if(NOT MSVC)
+if(NOT WIN32)
   install(
     FILES
     ../man/man1/cadabra2.1
