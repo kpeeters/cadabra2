@@ -4,6 +4,10 @@
 
 using namespace cadabra;
 
+ExteriorDerivative::~ExteriorDerivative()
+	{
+	}
+
 std::string ExteriorDerivative::name() const
 	{
 	return "ExteriorDerivative";

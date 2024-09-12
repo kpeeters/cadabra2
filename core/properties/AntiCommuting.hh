@@ -7,7 +7,7 @@ namespace cadabra {
 
 	class AntiCommuting : virtual public CommutingBehaviour {
 		public:
-			virtual ~AntiCommuting() = default;
+			virtual ~AntiCommuting();
 			virtual std::string name() const;
 			virtual int sign() const
 				{

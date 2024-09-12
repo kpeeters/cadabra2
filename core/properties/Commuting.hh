@@ -7,6 +7,7 @@ namespace cadabra {
 
 	class Commuting : virtual public CommutingBehaviour {
 		public:
+			virtual ~Commuting();
 			virtual std::string name() const;
 			virtual int sign() const
 				{

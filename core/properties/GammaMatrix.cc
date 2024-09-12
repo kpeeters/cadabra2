@@ -4,6 +4,10 @@
 
 using namespace cadabra;
 
+GammaMatrix::~GammaMatrix()
+	{
+	}
+
 std::string GammaMatrix::name() const
 	{
 	return "GammaMatrix";

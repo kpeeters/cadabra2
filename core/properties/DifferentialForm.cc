@@ -3,6 +3,10 @@
 
 using namespace cadabra;
 
+DifferentialForm::~DifferentialForm()
+	{
+	}
+
 std::string DifferentialForm::name() const
 	{
 	return "DifferentialForm";

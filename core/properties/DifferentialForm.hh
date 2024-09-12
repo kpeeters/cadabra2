@@ -10,6 +10,7 @@ namespace cadabra {
 
 	class DifferentialForm : public IndexInherit, public DifferentialFormBase {
 		public:
+			virtual ~DifferentialForm();
 			virtual std::string name() const override;
 			virtual bool parse(Kernel&, keyval_t&) override;
 

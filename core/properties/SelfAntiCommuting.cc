@@ -3,6 +3,10 @@
 
 using namespace cadabra;
 
+SelfAntiCommuting::~SelfAntiCommuting()
+	{
+	}
+
 std::string SelfAntiCommuting::name() const
 	{
 	return "SelfAntiCommuting";

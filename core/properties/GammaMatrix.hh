@@ -8,7 +8,7 @@ namespace cadabra {
 
 	class GammaMatrix : public AntiSymmetric, public Matrix, virtual public property {
 		public:
-			virtual ~GammaMatrix() = default;
+			virtual ~GammaMatrix();
 			virtual std::string name() const override;
 			virtual void        latex(std::ostream&) const override;
 			virtual bool        parse(Kernel&, keyval_t& keyvals) override;

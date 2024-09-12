@@ -3,6 +3,10 @@
 
 using namespace cadabra;
 
+NonCommuting::~NonCommuting()
+	{
+	}
+
 std::string NonCommuting::name() const
 	{
 	return "NonCommuting";
