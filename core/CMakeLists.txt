@@ -340,7 +340,7 @@ add_executable(cadabra2-cli
 )
 target_compile_definitions(cadabra2-cli PRIVATE CDBPYTHON_NO_NOTEBOOK)
 target_include_directories(cadabra2-cli PRIVATE pybind11::pybind11)
-target_link_libraries(cadabra2-cli PRIVATE pybind11::embed ${GLIBMM3_LIBRARIES})
+target_link_libraries(cadabra2-cli PRIVATE pybind11::embed ${GLIBMM3_LIBRARIES} ${Boost_LIBRARIES})
 
 # Notebook diff tool
 add_executable(cdb-nbtool
