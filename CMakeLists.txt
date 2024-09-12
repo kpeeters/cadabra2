@@ -197,45 +197,45 @@ endif()
 
 # GCC
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-	if (ENABLE_FRONTEND)
-		if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
-			message(FATAL_ERROR "GCC version must be at least 4.9 for regex support! See http://askubuntu.com/questions/428198/getting-installing-gcc-g-4-9-on-ubuntu and then set the environment variables CXX to g++-4.9 and CC to gcc-4.9. You may have to erase the build directory before re-running cmake.")
-		endif()
-	endif()
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -Wall -Wextra -Wunused -fvisibility=hidden -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-null-pointer-subtraction")
+  if (ENABLE_FRONTEND)
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
+      message(FATAL_ERROR "GCC version must be at least 4.9 for regex support! See http://askubuntu.com/questions/428198/getting-installing-gcc-g-4-9-on-ubuntu and then set the environment variables CXX to g++-4.9 and CC to gcc-4.9. You may have to erase the build directory before re-running cmake.")
+    endif()
+  endif()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -Wall -Wextra -Wunused -Wno-template-id-cdtor -fvisibility=hidden -Wno-unused-but-set-variable -Wno-unused-parameter")
 endif()
 
 # Clang
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-	# For Clang, need to additionally check version to avoid compiler bugs
-	if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.5)
-		message(FATAL_ERROR "Clang version must be at least 3.5 to avoid known bugs.")
-	endif()
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -fvisibility=hidden -Wall -Wextra -Wunused -Wno-unused-parameter -Wno-null-pointer-subtraction")
+  # For Clang, need to additionally check version to avoid compiler bugs
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.5)
+    message(FATAL_ERROR "Clang version must be at least 3.5 to avoid known bugs.")
+  endif()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -fvisibility=hidden -Wall -Wextra -Wunused -Wno-unused-parameter -Wno-null-pointer-subtraction")
 endif()
 
 # Visual Studio
 if(MSVC)
-	set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-	# Disable specific warnings
-	set(MSVC_FLAGS
-		"/wd4250"						# inherits via dominance (rampant in the GTKMM codebase)
-		"/wd4101"						# unreferenced local variable
-		"/wd4244"						# conversion from x to y, possible loss of data
-		"/wd4267"						# same as 4244
-		"/wd4305"						# truncation from '' to 'char'
-		"/wd4309"						# truncation of constant value
-		"/wd4390"						# empty control statement, due to a DEBUG macro which requires trailing ;
-		"/wd4996"						# deprecated POSIX functions
-		"-D_CRT_SECURE_NO_WARNINGS"		# don't warn about deprecated functions
-		"-D_SCL_SECURE_NO_WARNINGS"		# don't warn about unsafe function calls (e.g. std::copy with raw pointers)
-		"-DNOMINMAX"					# prevent windows headers from defining min and max macros
-		"-DWIN32_LEAN_AND_MEAN"			# stop windows from including a bunch of garbage
-		"-DBOOST_ALL_DYN_LINK"			# ensure boost's auto-linking is enabled
-	)
-	foreach(FLAG ${MSVC_FLAGS})
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAG}")
-	endforeach()
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+  # Disable specific warnings
+  set(MSVC_FLAGS
+    "/wd4250"						# inherits via dominance (rampant in the GTKMM codebase)
+    "/wd4101"						# unreferenced local variable
+    "/wd4244"						# conversion from x to y, possible loss of data
+    "/wd4267"						# same as 4244
+    "/wd4305"						# truncation from '' to 'char'
+    "/wd4309"						# truncation of constant value
+    "/wd4390"						# empty control statement, due to a DEBUG macro which requires trailing ;
+    "/wd4996"						# deprecated POSIX functions
+    "-D_CRT_SECURE_NO_WARNINGS"		# don't warn about deprecated functions
+    "-D_SCL_SECURE_NO_WARNINGS"		# don't warn about unsafe function calls (e.g. std::copy with raw pointers)
+    "-DNOMINMAX"					# prevent windows headers from defining min and max macros
+    "-DWIN32_LEAN_AND_MEAN"			# stop windows from including a bunch of garbage
+    "-DBOOST_ALL_DYN_LINK"			# ensure boost's auto-linking is enabled
+  )
+  foreach(FLAG ${MSVC_FLAGS})
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAG}")
+  endforeach()
 endif()
 
 
