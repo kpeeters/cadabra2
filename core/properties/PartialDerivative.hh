@@ -8,7 +8,7 @@ namespace cadabra {
 
 	class PartialDerivative : public Derivative, public Inherit<Spinor>, virtual public property {
 		public :
-			virtual ~PartialDerivative() {};
+			virtual ~PartialDerivative();
 			virtual std::string name() const;
 
 			virtual unsigned int size(const Properties&, Ex&, Ex::iterator) const;

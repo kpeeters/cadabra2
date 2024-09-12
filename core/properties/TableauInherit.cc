@@ -7,6 +7,10 @@ using namespace cadabra;
 
 // #define DEBUG 1
 
+TableauInherit::~TableauInherit()
+	{
+	}
+
 unsigned int TableauInherit::size(const Properties& properties, Ex& tr, Ex::iterator it) const
 	{
 //	it=properties.head<TableauInherit>(it);

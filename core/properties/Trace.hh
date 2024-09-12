@@ -18,6 +18,7 @@ namespace cadabra {
 			virtual public property {
 		public:
 			Trace();
+			virtual ~Trace();
 			virtual std::string name() const override;
 			virtual std::string unnamed_argument() const override;
 			virtual bool        parse(Kernel&, keyval_t&) override;

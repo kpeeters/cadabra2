@@ -8,6 +8,10 @@ Trace::Trace()
 	{
 	}
 
+Trace::~Trace()
+	{
+	}
+
 std::string Trace::name() const
 	{
 	return "Trace";

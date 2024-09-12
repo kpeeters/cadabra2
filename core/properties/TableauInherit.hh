@@ -13,6 +13,7 @@ namespace cadabra {
 	
 	class TableauInherit : virtual public TableauBase, virtual public property {
 		public:
+			virtual ~TableauInherit();
 			virtual std::string name() const
 				{
 				return std::string("TableauInherit");

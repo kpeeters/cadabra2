@@ -3,6 +3,10 @@
 
 using namespace cadabra;
 
+EpsilonTensor::~EpsilonTensor()
+	{
+	}
+
 std::string EpsilonTensor::name() const
 	{
 	return "EpsilonTensor";

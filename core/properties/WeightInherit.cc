@@ -4,6 +4,10 @@
 
 using namespace cadabra;
 
+WeightInherit::~WeightInherit()
+	{
+	}
+
 std::string WeightInherit::name() const
 	{
 	return "WeightInherit";

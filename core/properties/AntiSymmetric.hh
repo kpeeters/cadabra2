@@ -9,7 +9,7 @@ namespace cadabra {
 
 	class AntiSymmetric : public TableauBase, public Traceless, virtual public property {
 		public:
-			virtual ~AntiSymmetric() {};
+			virtual ~AntiSymmetric();
 			virtual std::string name() const override;
 
 			virtual unsigned int size(const Properties&, Ex&, Ex::iterator) const override;

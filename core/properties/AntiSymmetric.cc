@@ -4,6 +4,10 @@
 
 using namespace cadabra;
 
+AntiSymmetric::~AntiSymmetric()
+	{
+	}
+
 std::string AntiSymmetric::name() const
 	{
 	return "AntiSymmetric";

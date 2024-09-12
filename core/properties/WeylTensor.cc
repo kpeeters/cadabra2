@@ -17,6 +17,10 @@ WeylTensor::WeylTensor()
 	tabs.push_back(tab);
 	}
 
+WeylTensor::~WeylTensor()
+	{
+	}
+
 std::string WeylTensor::name() const
 	{
 	return "WeylTensor";

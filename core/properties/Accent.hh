@@ -15,6 +15,7 @@ namespace cadabra {
 
 	class Accent : public PropertyInherit, public IndexInherit, public NumericalFlat, virtual public property {
 		public:
+			virtual ~Accent();
 			virtual std::string name() const;
 		};
 

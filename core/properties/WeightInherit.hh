@@ -8,6 +8,8 @@ namespace cadabra {
 
 	class WeightInherit : virtual public WeightBase {
 		public:
+			virtual ~WeightInherit();
+			
 			// The following exception class is thrown when 'value' cannot figure out the
 			// weight because a sum contains terms of different weight.
 			class WeightException : public ConsistencyException {
