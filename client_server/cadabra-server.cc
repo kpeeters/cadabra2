@@ -47,25 +47,25 @@ int main(int argc, char **argv)
 #ifdef _WIN32
 	snoop::log("platform") << "windows" << snoop::flush;
 
-	// The Anaconda people _really_ do not understand packaging...
-	// We are going to find out the installation path for Anaconda/Miniconda
-	// by querying a registry key.
-	std::string pythonhome=Glib::getenv("PYTHONHOME");
-	std::string pythonpath=Glib::getenv("PYTHONPATH");
-
-	std::string s = getRegKey(std::string("SOFTWARE\\Python\\PythonCore\\")+Python_VERSION_MAJOR+"."+Python_VERSION_MINOR+"\\InstallPath", "", false);
-	snoop::log("key1") << s << snoop::flush;
-	if(s=="") {
-		s = getRegKey(std::string("SOFTWARE\\Python\\PythonCore\\")+Python_VERSION_MAJOR+"."+Python_VERSION_MINOR, "", true);
-		snoop::log("key2") << s << snoop::flush;
-		}
-
-//	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + Glib::get_home_dir()+"/Anaconda3");
-//	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + Glib::get_home_dir()+"/Anaconda3");
-	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + s);
-	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + s);
-	std::cerr << "Server::init: using PYTHONPATH = " << Glib::getenv("PYTHONPATH")
-				 << " and PYTHONHOME = " << Glib::getenv("PYTHONHOME") << "." << std::endl;
+// 	// The Anaconda people _really_ do not understand packaging...
+// 	// We are going to find out the installation path for Anaconda/Miniconda
+// 	// by querying a registry key.
+// 	std::string pythonhome=Glib::getenv("PYTHONHOME");
+// 	std::string pythonpath=Glib::getenv("PYTHONPATH");
+// 
+// 	std::string s = getRegKey(std::string("SOFTWARE\\Python\\PythonCore\\")+Python_VERSION_MAJOR+"."+Python_VERSION_MINOR+"\\InstallPath", "", false);
+// 	snoop::log("key1") << s << snoop::flush;
+// 	if(s=="") {
+// 		s = getRegKey(std::string("SOFTWARE\\Python\\PythonCore\\")+Python_VERSION_MAJOR+"."+Python_VERSION_MINOR, "", true);
+// 		snoop::log("key2") << s << snoop::flush;
+// 		}
+// 
+// //	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + Glib::get_home_dir()+"/Anaconda3");
+// //	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + Glib::get_home_dir()+"/Anaconda3");
+// 	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + s);
+// 	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + s);
+// 	std::cerr << "Server::init: using PYTHONPATH = " << Glib::getenv("PYTHONPATH")
+// 				 << " and PYTHONHOME = " << Glib::getenv("PYTHONHOME") << "." << std::endl;
 #else
 	snoop::log("platform") << "linux/macos" << snoop::flush;
 #endif
