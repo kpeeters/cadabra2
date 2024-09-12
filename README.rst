@@ -408,7 +408,7 @@ Checkout Cadabra and build::
     mkdir build
     cd build
     cmake ..
-    make
+    ninja
 
     
 
