@@ -313,25 +313,26 @@ message(STATUS "Python version is ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR
 if(WIN32)
   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
 else()
-if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
-  # Debian packages install all their Python things in 'dist-packages', not 'site-packages'.
-  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
-  # set(Python_SITE_DIST "dist-packages")
-elseif(APPIMAGE_MODE)
-  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
-  set(Python_SITE_DIST "dist-packages")
-else()
-  # The builder can override the path by setting it externally.
-  if(NOT DEFINED PYTHON_SITE_PATH)
-    # set(PYTHON_SITE_PATH ${Python_SITEARCH})
-    # For everyone else there is 'site-packages' which we get from
-    # calling into python's 'site' package (and hoping that the 0th
-    # element is where we should be writing).
-    execute_process(
-      COMMAND ${Python_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
-      OUTPUT_VARIABLE PYTHON_SITE_PATH
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
+  if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
+    # Debian packages install all their Python things in 'dist-packages', not 'site-packages'.
+    set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
+    # set(Python_SITE_DIST "dist-packages")
+  elseif(APPIMAGE_MODE)
+    set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
+    set(Python_SITE_DIST "dist-packages")
+  else()
+    # The builder can override the path by setting it externally.
+    if(NOT DEFINED PYTHON_SITE_PATH)
+      # set(PYTHON_SITE_PATH ${Python_SITEARCH})
+      # For everyone else there is 'site-packages' which we get from
+      # calling into python's 'site' package (and hoping that the 0th
+      # element is where we should be writing).
+      execute_process(
+	COMMAND ${Python_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
+	OUTPUT_VARIABLE PYTHON_SITE_PATH
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+    endif()
   endif()
 endif()
 string(REGEX REPLACE "^${CMAKE_INSTALL_PREFIX}" "" PYTHON_SITE_PATH_REL ${PYTHON_SITE_PATH})
