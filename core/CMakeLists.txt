@@ -457,6 +457,7 @@ if(WIN32)
     RUNTIME_DEPENDENCIES
     DIRECTORIES
     "C:\\msys64\\ucrt64\\lib"
+    "/ucrt64/bin"
     PRE_EXCLUDE_REGEXES "api-ms-" "ext-ms-"
     POST_EXCLUDE_REGEXES ".*system32/.*\\.dll"
     DESTINATION bin
