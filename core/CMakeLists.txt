@@ -452,7 +452,12 @@ else()
 endif()
 
 if(WIN32)
-  install(TARGETS cadabra2-cli RUNTIME_DEPENDENCIES DIRECTORIES /urct64/bin DESTINATION bin)
+  install(
+    TARGETS cadabra2-cli
+    RUNTIME_DEPENDENCIES DIRECTORIES /urct64/bin
+    PRE_EXCLUDE_REGEXES "api-ms-" "ext-ms-"
+    DESTINATION bin
+  )
 else()
   install(TARGETS cadabra2-cli DESTINATION bin)
 endif()
