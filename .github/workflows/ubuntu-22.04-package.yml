@@ -5,7 +5,7 @@
 
 name: Ubuntu-22.04 package
 
-on: [push]
+on: [release]
 
 jobs:
   build:

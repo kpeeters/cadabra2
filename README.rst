@@ -380,92 +380,37 @@ development platform.
 Windows
 ~~~~~~~
 
-On Windows the main constraint on the build process is that we want to
-link to Anaconda's Python, which has been built with Visual
-Studio. The recommended way to build Cadabra is thus to build against
-libraries which are all built using Visual Studio as well. It is
-practically impossible to build all dependencies yourself without
-going crazy, but fortunately that is not necessary because of the
-VCPKG library at https://github.com/Microsoft/vcpkg. This contains all
-dependencies (boost, gtkmm, sqlite and various others) in ready-to-use
-form.
+On Windows compilation is easiest by using the MSYS2 system, as their
+gtkmm-3.0 packages just work and the whole system can be driven from the
+command line. We used to build Cadabra using the vcpkg packages, but
+they no longer provide packages for gtkmm-3.0, and in general the lack
+of binary packages means that build times are on the order of many, many
+hours, instead of just a few minutes with MSYS2.
 
-If you do not already have it, first install Visual Studio Community
-Edition from https://www.visualstudio.com/downloads/ and install
-Anaconda (a 64 bit version!) from https://www.anaconda.com/download/.
+Install MSYS2 from https://www.msys2.org and start a UCRT64 shell.
+First update with::
 
-The instructions below are for building using the Visual Studio 'x64
-Native Tools Command Prompt' (not the GUI). First, clone the vcpkg
-repository::
+    pacman -Suy
 
-    git clone https://github.com/Microsoft/vcpkg
+Then install a compiler and the dependencies of Cadabra with::
 
-Run the bootstrap script to set things up::
+    pacman -S mingw-w64-ucrt-x86_64-gcc
+    pacman -S mingw-w64-ucrt-x86_64-gtkmm3
+    pacman -S mingw-w64-ucrt-x86_64-boost    
+    pacman -S mingw-w64-ucrt-x86_64-sqlite3
+    pacman -S mingw-w64-ucrt-x86_64-cmake
+    pacman -S git
 
-    cd vcpkg
-    bootstrap-vcpkg.bat
+Checkout Cadabra and build::
 
-Install all the dependencies with (this is a *very* slow process, be
-warned, it can easily take several hours, but at least it's automatic)::
-  
-    vcpkg install mpir:x64-windows glibmm:x64-windows sqlite3:x64-windows
-    vcpkg install boost-system:x64-windows                   boost-asio:x64-windows                   boost-uuid:x64-windows                   boost-program-options:x64-windows                   boost-signals2:x64-windows boost-property-tree:x64-windows                   boost-date-time:x64-windows                   boost-filesystem:x64-windows boost-ublas:x64-windows
-    vcpkg install gtkmm:x64-windows
-    vcpkg integrate install
-
-The last line will spit out a CMAKE toolchain path; write it down, you need that shortly.
-Now clone the cadabra repository and configure as::
-
-    cd ..
     git clone https://github.com/kpeeters/cadabra2
     cd cadabra2
     mkdir build
     cd build
-    cmake -DCMAKE_TOOLCHAIN_FILE=[the path obtained in the last step]
-          -DCMAKE_BUILD_TYPE=RelWithDebInfo -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_INSTALL_PREFIX=C:\Cadabra
-          -G "Visual Studio 16 2019" -A x64 ..
+    cmake ..
+    make
 
-the latter all on one line, in which you replace the
-``CMAKE_TOOLCHAIN_PATH`` with the path produced by the ``vcpkg
-integrate install`` step. Do _not_ forget the ``..`` at the very end!
-The last line can be adjusted to `-G "Visual Studio 15 2017 Win64"` if you
-are on the previous version of Visual Studio. You can ignore warnings
-(but not errors) about Boost. You may have to add::
-
-    -DCMAKE_INCLUDE_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.22.27821"
-
-or a similar path to make cmake pick up `msvc140.dll` and related;
-see [https://developercommunity.visualstudio.com/content/problem/618084/cmake-installrequiredsystemlibraries-broken-in-lat.html]
     
-Now build Cadabra with::
-		
-    cmake --build . --config RelWithDebInfo --target install
-
-This will build and then install in ``C:\Cadabra``. The self-tests can be run by
-doing::
-
-    ctest
-
-(still fails tensor_monomials, bianchi_identities, paper and young
-when in Release build).
-
-Finally, the command-line version of Cadabra can now be started with::
-
-    python C:\Cadabra\bin\cadabra2
-
-and you can start the notebook interface with::
-
-  C:\Cadabra\bin\cadabra2-gtk
-
-It should be possible to simply copy the C:\Cadabra folder to a
-different machine and run it there (that is essentially what the
-binary installer does).
-
-To create an installer, make sure you have Inno installer
-available. Then run, from the `cadabra2/config` directory::
-
-  "C:\Program Files (x86)\Inno Setup 6\ISCC" install_script.iss
-
 
 Building a Jupyter kernel
 -------------------------
