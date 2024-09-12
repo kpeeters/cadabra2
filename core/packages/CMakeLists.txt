@@ -36,10 +36,15 @@ set(PACKAGES
   relativity/schwarzschild
   )
 
-set(COMPILED_PACKAGES
-  core/_component.cc
-  utils/_algorithm.cc
+if(WIN32)
+  set(COMPILED_PACKAGES
   )
+else()
+  set(COMPILED_PACKAGES
+    core/_component.cc
+    utils/_algorithm.cc
+  )
+endif()
 
 #---------------------------------------------------------------------------
 # Install packages
