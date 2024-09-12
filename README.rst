@@ -385,7 +385,8 @@ gtkmm-3.0 packages just work and the whole system can be driven from the
 command line. We used to build Cadabra using the vcpkg packages, but
 they no longer provide packages for gtkmm-3.0, and in general the lack
 of binary packages means that build times are on the order of many, many
-hours, instead of just a few minutes with MSYS2.
+hours, instead of just a few minutes with MSYS2. More info on building and
+packaging gtk apps on windows at https://www.gtk.org/docs/installations/windows/.
 
 Install MSYS2 from https://www.msys2.org and start a UCRT64 shell.
 First update with::

@@ -90,7 +90,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	engine.set_font_size(12+(prefs.font_step*2));
 
 	// For MicroTeX
-	Pango::init();
+//	Pango::init(); Gtk::Main supposedly calls this for us.
 	std::vector<std::string> font_paths;
 //	font_paths.push_back(install_prefix()+"/share/cadabra2/microtex/newcm/");	
 	font_paths.push_back(install_prefix()+"/share/cadabra2/microtex/lm-math/");	
