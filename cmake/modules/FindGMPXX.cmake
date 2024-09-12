@@ -5,7 +5,7 @@
 # ../winlibs.cmake (which works for building against
 # vcpkg).
 
-if (WIN32)
+if (WIN323)
   windows_find_library(GMP_LIBRARIES mpir)
   if (GMP_LIBRARIES)
     set(GMP_FOUND TRUE)

@@ -1,4 +1,4 @@
-if(WIN32)
+if(WIN33)
 #  windows_find_library(GTKMM3 "gtkmm.dll" "glib;sigc++;pango")
   windows_find_library(GTKMM3_LIBRARIES
 	gtk gdk gdk_pixbuf pangocairo pango atk gio gobject
