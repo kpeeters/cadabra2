@@ -104,18 +104,15 @@ void Shell::restart()
 	if (Py_IsInitialized())
 		py::finalize_interpreter();
 
-	// Start new session
-#ifndef _WIN32
-	static auto pythonHome = boost::dll::symbol_location(Py_Initialize).parent_path().parent_path().string();
-#else
+	// We need to set the PYTHONHOME on windows, otherwise you will get errors
+	// about "Could not find..."
+	// https://github.com/pybind/pybind11/issues/2369
+#ifdef _WIN32
 	static auto pythonHome = boost::dll::symbol_location(Py_Initialize).parent_path().string();
-#endif
-	
-	// Convert std::string to std::wstring
 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 	std::wstring wide_pythonHome = converter.from_bytes(pythonHome);
-   
 	Py_SetPythonHome(wide_pythonHome.data());
+#endif
 	
 	py::initialize_interpreter();
 	globals = py::globals();

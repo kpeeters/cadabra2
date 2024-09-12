@@ -453,6 +453,7 @@ endif()
 
 install(TARGETS cadabra2-cli DESTINATION bin)
 install(TARGETS cdb-nbtool DESTINATION bin)
+install_deps_of(cadabra2-cli)
 
 install(
    FILES 
@@ -493,7 +494,7 @@ install(
    cadabra2cadabra
    DESTINATION 
    bin
-   )
+ )
 
 if(WIN32 AND NOT INSTALL_TARGETS_ONLY)
    install_dlls_from("core")

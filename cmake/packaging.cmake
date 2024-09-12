@@ -199,6 +199,13 @@ else()
   endif()
 endif()
 
+if(WIN32)
+  message("-- This is a Windows system")
+  set(CPACK_GENERATOR NSIS)
+  set(CPACK_PACKAGE_INSTALL_DIRECTORY "Cadabra")
+  set(CPACK_NSIS_MODIFY_PATH ON)
+endif()
+
 # Ensure that on Windows we also install the libraries provided
 # by Visual Studio, e.g. MSVCnnn.DLL. This does mean that the installer
 # will now contain both the normal and the debug libraries, but better
@@ -224,7 +231,7 @@ else()
   message("-- Building normal version (no tweak)")
 endif()
 set(CPACK_PACKAGE_VENDOR         "Kasper Peeters")
-set(CPACK_PACKAGE_CONTACT        "Kasper Peeters <kasper.peeters@phi-sci.com>")
+set(CPACK_PACKAGE_CONTACT        "Kasper Peeters <info@cadabra.science>")
 set(CPACK_STRIP_FILES            ON)
 set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_BINARY_DIR}/postinst)
 set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE ${CMAKE_CURRENT_BINARY_DIR}/postinst)
