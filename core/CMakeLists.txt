@@ -451,9 +451,12 @@ else()
     )
 endif()
 
-install(TARGETS cadabra2-cli DESTINATION bin)
+if(WIN32)
+  install(TARGETS cadabra2-cli RUNTIME_DEPENDENCIES /urct64/bin DESTINATION bin)
+else()
+  install(TARGETS cadabra2-cli DESTINATION bin)
+endif()
 install(TARGETS cdb-nbtool DESTINATION bin)
-install_deps_of(cadabra2-cli)
 
 install(
    FILES 
