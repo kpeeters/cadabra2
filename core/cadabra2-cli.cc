@@ -19,6 +19,10 @@
 #include "PreClean.hh"
 #include "Config.hh"
 
+#include <boost/dll.hpp>
+#include <locale>
+#include <codecvt>
+
 #ifdef _WIN32
 
 std::string getRegKey(const std::string& location, const std::string& name, bool system)
@@ -101,6 +105,18 @@ void Shell::restart()
 		py::finalize_interpreter();
 
 	// Start new session
+#ifndef _WIN32
+	static auto pythonHome = boost::dll::symbol_location(Py_Initialize).parent_path().parent_path().string();
+#else
+	static auto pythonHome = boost::dll::symbol_location(Py_Initialize).parent_path().string();
+#endif
+	
+	// Convert std::string to std::wstring
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	std::wstring wide_pythonHome = converter.from_bytes(pythonHome);
+   
+	Py_SetPythonHome(wide_pythonHome.data());
+	
 	py::initialize_interpreter();
 	globals = py::globals();
 	if (!globals) {
