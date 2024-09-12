@@ -157,9 +157,10 @@ if(USE_MICROTEX)
   find_package(Fontconfig REQUIRED)
 #  pkg_check_modules(tinyxml2 REQUIRED IMPORTED_TARGET tinyxml2)
 endif()
-pkg_check_modules(GTKMM REQUIRED IMPORTED_TARGET gtkmm-3.0)
-# pkg_check_modules(GSVMM REQUIRED IMPORTED_TARGET gtksourceviewmm-3.0)
 pkg_check_modules(CairoMM REQUIRED IMPORTED_TARGET cairomm-1.0)
+pkg_check_modules(PangoMM REQUIRED IMPORTED_TARGET pangomm-1.4)
+# pkg_check_modules(GTKMM REQUIRED IMPORTED_TARGET gtkmm-3.0)
+# pkg_check_modules(GSVMM REQUIRED IMPORTED_TARGET gtksourceviewmm-3.0)
 # add_executable(microtest microtest.cc)
 
 target_link_libraries(
@@ -177,8 +178,8 @@ if(USE_MICROTEX)
     microtex-cairo          # from MicroTeX
     microtex                # from MicroTeX
     PkgConfig::CairoMM      # for MicroTeX
+    PkgConfig::PangoMM      # for MicroTeX
     Fontconfig::Fontconfig  # for MicroTeX
-#    tinyxml2                # for MicroTeX
   )
 endif()
 
