@@ -497,3 +497,14 @@ Institute and the Institute of Advanced Study. Thanks to the many
 people who have sent me bug reports (keep 'm coming), and thanks to
 all of you who use Cadabra, sent feedback or cited the Cadabra
 papers.
+
+Licenses
+--------
+
+Cadabra itself is licensed under the GPL-3.0. It includes some dependencies
+which have the following licenses:
+
+* tiny-process-lib [https://gitlab.com/eidheim/tiny-process-library/]
+  MIT license
+
+  
