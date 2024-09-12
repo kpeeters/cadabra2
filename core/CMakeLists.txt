@@ -34,7 +34,7 @@ configure_file(
 #   # so no linking takes place
 #   set(Boost_USE_STATIC_LIBS   ON)
 # endif()
-find_package(Boost 1.53 COMPONENTS system)
+find_package(Boost 1.53 COMPONENTS system filesystem)
 
 # Find glibmm (for base64)
 # Conda will probably go belly-up again...
