@@ -465,7 +465,7 @@ if(WIN32)
       DEPENDS ${TARGET_EXECUTABLE}
       COMMENT "Running ldd to gather shared library dependencies for ${TARGET}"
     )
-  )
+  endforeach()
   
   # Read ldd output and install dependencies
   install(CODE [[
