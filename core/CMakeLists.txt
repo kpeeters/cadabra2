@@ -452,23 +452,54 @@ else()
 endif()
 
 if(WIN32)
-  set(CMAKE_GET_RUNTIME_DEPENDENCIES_TOOL objdump)
-  set(CMAKE_OBJDUMP /ucrt64/bin/objdump)
-  install(CODE [[file(GET_RUNTIME_DEPENDENCIES
-    RESOLVED_DEPENDENCIES_VAR   dependencies
-    UNRESOLVED_DEPENDENCIES_VAR unresolved
-    DIRECTORIES /ucrt64/lib /ucrt64/bin
-    EXECUTABLES ${CMAKE_BINARY_DIR}/core/cadabra2-cli.exe)
-  ]])
-  install(CODE [[message(STATUS "Dependencies found ${dependencies}")]])
-  install(CODE [[message(STATUS "Dependencies not found ${unresolved}")]])
-  install(
-    TARGETS cadabra2-cli
-    RUNTIME_DEPENDENCIES
-    PRE_EXCLUDE_REGEXES "api-ms-" "ext-ms-"
-    POST_EXCLUDE_REGEXES ".*system32/.*\\.dll"
-    DESTINATION bin
+  set(EXECUTABLES
+    cadabra2-cli
+    cdb-nbtool
   )
+  # Custom command to run ldd and get dependencies
+  file(REMOVE ${CMAKE_BINARY_DIR}/ldd_dependencies.txt)
+  foreach(TARGET ${EXECUTABLES})
+    add_custom_command(
+      OUTPUT ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
+      COMMAND ldd ${TARGET_EXECUTABLE} >> ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
+      DEPENDS ${TARGET_EXECUTABLE}
+      COMMENT "Running ldd to gather shared library dependencies for ${TARGET}"
+    )
+  )
+  
+  # Read ldd output and install dependencies
+  install(CODE [[
+    file(STRINGS "${CMAKE_BINARY_DIR}/ldd_dependencies.txt" ldd_output)
+    foreach(line IN LISTS ldd_output)
+        # The ldd output format is like: libname => /path/to/libname (0x...)
+        string(REGEX MATCH "=> ([^ ]+)" match ${line})
+        if(match)
+            set(shared_lib ${CMAKE_MATCH_1})
+            if(EXISTS "${shared_lib}")
+                message(STATUS "Copying dependency: ${shared_lib}")
+                file(INSTALL ${shared_lib} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+            endif()
+        endif()
+    endforeach()
+  ]])
+	
+  # set(CMAKE_GET_RUNTIME_DEPENDENCIES_TOOL objdump)
+  # set(CMAKE_OBJDUMP /ucrt64/bin/objdump)
+  # install(CODE [[file(GET_RUNTIME_DEPENDENCIES
+  #   RESOLVED_DEPENDENCIES_VAR   dependencies
+  #   UNRESOLVED_DEPENDENCIES_VAR unresolved
+  #   DIRECTORIES /ucrt64/lib /ucrt64/bin
+  #   EXECUTABLES ${CMAKE_BINARY_DIR}/core/cadabra2-cli.exe)
+  # ]])
+  # install(CODE [[message(STATUS "Dependencies found ${dependencies}")]])
+  # install(CODE [[message(STATUS "Dependencies not found ${unresolved}")]])
+  # install(
+  #   TARGETS cadabra2-cli
+  #   RUNTIME_DEPENDENCIES
+  #   PRE_EXCLUDE_REGEXES "api-ms-" "ext-ms-"
+  #   POST_EXCLUDE_REGEXES ".*system32/.*\\.dll"
+  #   DESTINATION bin
+  # )
 else()
   install(TARGETS cadabra2-cli DESTINATION bin)
 endif()
