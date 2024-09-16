@@ -453,6 +453,7 @@ endif()
 
 if(WIN32)
   set(CMAKE_GET_RUNTIME_DEPENDENCIES_TOOL objdump)
+  set(CMAKE_OBJDUMP /ucrt64/bin/objdump)
   install(CODE [[file(GET_RUNTIME_DEPENDENCIES
     RESOLVED_DEPENDENCIES_VAR   dependencies
     UNRESOLVED_DEPENDENCIES_VAR unresolved
