@@ -458,12 +458,12 @@ if(WIN32)
   )
   # Custom command to run ldd and get dependencies
   file(REMOVE ${CMAKE_BINARY_DIR}/ldd_dependencies.txt)
-  foreach(TARGET ${EXECUTABLES})
+  foreach(EXECUTABLE ${EXECUTABLES})
     add_custom_command(
       OUTPUT ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
-      COMMAND ldd ${TARGET_EXECUTABLE} >> ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
-      DEPENDS ${TARGET_EXECUTABLE}
-      COMMENT "Running ldd to gather shared library dependencies for ${TARGET}"
+      COMMAND ldd ${EXECUTABLE} >> ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
+      DEPENDS ${EXECUTABLE}
+      COMMENT "Running ldd to gather shared library dependencies for ${EXECUTABLE}"
     )
   endforeach()
   
