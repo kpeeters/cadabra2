@@ -456,7 +456,7 @@ if(WIN32)
   install(CODE [[file(GET_RUNTIME_DEPENDENCIES
     RESOLVED_DEPENDENCIES_VAR   dependencies
     UNRESOLVED_DEPENDENCIES_VAR unresolved
-    EXECUTABLES $<TARGET_FILE:cadabra2-cli>)
+    EXECUTABLES cadabra2-cli)
   ]])
   install(CODE [[message(STATUS "Dependencies found ${dependencies}")]])
   install(CODE [[message(STATUS "Dependencies not found ${unresolved}")]])
