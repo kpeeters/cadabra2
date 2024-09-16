@@ -457,14 +457,13 @@ if(WIN32)
     cdb-nbtool
   )
   # Custom command to run ldd and get dependencies
-    add_custom_command(
-      OUTPUT ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
-      COMMAND ldd ${EXECUTABLES} > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
-      DEPENDS ${EXECUTABLE}
-      COMMENT "Running ldd to gather shared library dependencies for ${EXECUTABLES}"
-    )
-    add_custom_target("LDD_deps" ALL echo -n DEPENDS ${CMAKE_BINARY_DIR}/ldd_dependencies.txt)
-  endforeach()
+  add_custom_command(
+    OUTPUT ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
+    COMMAND ldd ${EXECUTABLES} > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
+    DEPENDS ${EXECUTABLE}
+    COMMENT "Running ldd to gather shared library dependencies for ${EXECUTABLES}"
+  )
+  add_custom_target("LDD_deps" ALL echo -n DEPENDS ${CMAKE_BINARY_DIR}/ldd_dependencies.txt)
   
   # Read ldd output and install dependencies
   install(CODE [[
