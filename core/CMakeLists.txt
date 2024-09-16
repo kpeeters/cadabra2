@@ -453,8 +453,8 @@ endif()
 
 if(WIN32)
   set(EXECUTABLES
-    cadabra2-cli
-    cdb-nbtool
+    core/cadabra2-cli
+    core/cdb-nbtool
   )
   # Custom command to run ldd and get dependencies
   add_custom_command(
