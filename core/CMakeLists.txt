@@ -453,14 +453,14 @@ endif()
 
 if(WIN32)
   set(EXECUTABLES
-    core/cadabra2-cli
-    core/cdb-nbtool
+    cadabra2-cli
+    cdb-nbtool
   )
   # Custom command to run ldd and get dependencies
   add_custom_command(
     OUTPUT ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
     COMMAND ldd ${EXECUTABLES} > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
-    DEPENDS ${EXECUTABLE}
+    DEPENDS ${EXECUTABLES}
     COMMENT "Running ldd to gather shared library dependencies for ${EXECUTABLES}"
   )
   add_custom_target("LDD_deps" ALL echo -n DEPENDS ${CMAKE_BINARY_DIR}/ldd_dependencies.txt)
