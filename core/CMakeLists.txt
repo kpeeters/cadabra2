@@ -452,12 +452,11 @@ else()
 endif()
 
 if(WIN32)
-  message(STATUS "Probing ${CMAKE_BINARY_DIR}/cadabra2-cli")
   set(CMAKE_GET_RUNTIME_DEPENDENCIES_TOOL objdump)
   install(CODE [[file(GET_RUNTIME_DEPENDENCIES
     RESOLVED_DEPENDENCIES_VAR   dependencies
     UNRESOLVED_DEPENDENCIES_VAR unresolved
-    EXECUTABLES ${CMAKE_BINARY_DIR}/cadabra2-cli)
+    EXECUTABLES ${CMAKE_BINARY_DIR}/core/cadabra2-cli)
   ]])
   install(CODE [[message(STATUS "Dependencies found ${dependencies}")]])
   install(CODE [[message(STATUS "Dependencies not found ${unresolved}")]])
