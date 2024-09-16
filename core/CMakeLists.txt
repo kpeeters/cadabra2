@@ -457,7 +457,7 @@ if(WIN32)
   install(CODE [[file(GET_RUNTIME_DEPENDENCIES
     RESOLVED_DEPENDENCIES_VAR   dependencies
     UNRESOLVED_DEPENDENCIES_VAR unresolved
-    EXECUTABLES ${CMAKE_BINARY_DIR}/core/cadabra2-cli)
+    EXECUTABLES ${CMAKE_BINARY_DIR}/core/cadabra2-cli.exe)
   ]])
   install(CODE [[message(STATUS "Dependencies found ${dependencies}")]])
   install(CODE [[message(STATUS "Dependencies not found ${unresolved}")]])
