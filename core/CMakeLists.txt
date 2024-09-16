@@ -469,6 +469,7 @@ if(WIN32)
   install(CODE [[
     file(STRINGS "${CMAKE_BINARY_DIR}/ldd_dependencies.txt" ldd_output)
     foreach(line IN LISTS ldd_output)
+        message(STATUS "Considering ${line}")
         # The ldd output format is like: libname => /path/to/libname (0x...)
         string(REGEX MATCH "=> ([^ ]+)" match ${line})
         if(match)
