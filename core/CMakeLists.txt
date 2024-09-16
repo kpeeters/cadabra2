@@ -480,7 +480,15 @@ if(WIN32)
         endif()
     endforeach()
   ]])
-	
+
+  # Install the Python runtime packages.
+  file(INSTALL /ucrt64/lib/python3.11 ${CMAKE_INSTALL_PREFIX}/lib)    
+
+  # The above should be possible with CMake's GET_RUNTIME_DEPENDENCIES, but
+  # I could never get this to work right. Somehow there is always a problem
+  # finding libraries. It may have to do with the cygwin path translation
+  # issue we dealt with above too, but someone else will have to figure that out.
+  #
   # set(CMAKE_GET_RUNTIME_DEPENDENCIES_TOOL objdump)
   # set(CMAKE_OBJDUMP /ucrt64/bin/objdump)
   # install(CODE [[file(GET_RUNTIME_DEPENDENCIES
