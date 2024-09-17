@@ -482,7 +482,7 @@ if(WIN32)
   ]])
 
   # Install the Python runtime packages.
-  execute_process(COMMAND cygpath -m "/ucrt64/lib/python3.11" OUTPUT_VARIABLE WINPYTHON)
+  execute_process(COMMAND cygpath -m "/ucrt64/lib/python3.11" OUTPUT_VARIABLE WINPYTHON OUTPUT_STRIP_TRAILING_WHITESPACE)
   file(INSTALL ${WINPYTHON} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)    
   #file(INSTALL ${Python_SITELIB}/setuptools DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/python3.11/site-packages/)
   #file(INSTALL ${Python_STDARCH}/*          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/python3.11/)
