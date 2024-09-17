@@ -483,6 +483,8 @@ if(WIN32)
 
   # Install the Python runtime packages.
   file(INSTALL /ucrt64/lib/python3.11 ${CMAKE_INSTALL_PREFIX}/lib)    
+  file(INSTALL ${Python_SITELIB}/setuptools ${CMAKE_INSTALL_PREFIX}/lib/python3.11/site-packages/)
+  file(INSTALL ${Python_STDARCH}/*          ${CMAKE_INSTALL_PREFIX}/lib/python3.11/site-packages/)
 
   # The above should be possible with CMake's GET_RUNTIME_DEPENDENCIES, but
   # I could never get this to work right. Somehow there is always a problem
