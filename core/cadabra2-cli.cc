@@ -108,7 +108,8 @@ void Shell::restart()
 	// about "Could not find..."
 	// https://github.com/pybind/pybind11/issues/2369
 #ifdef _WIN32
-	static auto pythonHome = boost::dll::symbol_location(Py_Initialize).parent_path().string();
+	static auto pythonHome = boost::dll::symbol_location(Py_Initialize).parent_path().string() + "/lib/python3.11";
+	std::cerr << "setting PYTHONHOME = " << pythonHome << std::endl;
 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 	std::wstring wide_pythonHome = converter.from_bytes(pythonHome);
 	Py_SetPythonHome(wide_pythonHome.data());
