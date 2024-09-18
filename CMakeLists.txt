@@ -427,6 +427,7 @@ configure_file(
 # into the target installation directory on windows. 
 if(WIN32)
   set(EXECUTABLES
+    core/cadabra2.dll
     core/cadabra2-cli
     core/cdb-nbtool
     client_server/cadabra-server
@@ -435,6 +436,7 @@ if(WIN32)
   # Custom command to run ldd and get dependencies
   add_custom_command(
     OUTPUT ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
+    COMMAND cp core/cadabra2.pyd core/cadabra2.dll
     COMMAND ldd ${EXECUTABLES} > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
     DEPENDS ${EXECUTABLES}
     COMMENT "Running ldd to gather shared library dependencies for ${EXECUTABLES}"
