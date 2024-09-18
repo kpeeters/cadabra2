@@ -439,7 +439,7 @@ if(WIN32)
     OUTPUT ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
     COMMAND cp core/cadabra2.pyd core/cadabra2.dll
     COMMAND ldd core/cadabra2.dll ${EXECUTABLES} > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
-    DEPENDS ${EXECUTABLES}
+    DEPENDS core/cadabra2.pyd ${EXECUTABLES}
     COMMENT "Running ldd to gather shared library dependencies for ${EXECUTABLES}"
   )
   add_custom_target("LDD_deps" ALL echo -n DEPENDS ${CMAKE_BINARY_DIR}/ldd_dependencies.txt)
