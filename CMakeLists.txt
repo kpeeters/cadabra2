@@ -456,6 +456,10 @@ if(WIN32)
         endif()
     endforeach()
   ]])
+
+  # We need gdbus to setup the dbus, needed by gio, otherwise anything
+  # gtk-related will just bail out at start.
+  install(FILE /ucrt64/bin/gdbus.exe ${CMAKE_INSTALL_PREFIX}/bin)
 endif()
     
 #---------------------------------------------------------------------------
