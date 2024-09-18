@@ -432,7 +432,9 @@ if(WIN32)
     client_server/cadabra-server
     frontend/gtkmm/cadabra2-gtk
   )
-  # Custom command to run ldd and get dependencies
+  # Custom command to run ldd and get dependencies. The 'ldd' command does not
+  # run on the '*.pyd' file, but if we rename or copy it to have extension '.dll'
+  # all goes through fine.
   add_custom_command(
     OUTPUT ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
     COMMAND cp core/cadabra2.pyd core/cadabra2.dll
@@ -461,9 +463,9 @@ if(WIN32)
   # We need gdbus to setup the dbus, needed by Glib, otherwise anything
   # gtk-related will just bail out at start. We also need the helper
   # program to spawn programs using Glib.
-  install(FILES /ucrt64/bin/gdbus.exe                       DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-  install(FILES /ucrt64/bin/gspawn-win64-helper.exe         DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-  install(FILES /ucrt64/bin/gspawn-win64-helper-console.exe DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+  install(FILES C:\msys64\ucrt64\bin\gdbus.exe                       DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+  install(FILES C:\msys64\ucrt64\bin\gspawn-win64-helper.exe         DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+  install(FILES C:\msys64\ucrt64\bin\gspawn-win64-helper-console.exe DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 endif()
     
 #---------------------------------------------------------------------------
