@@ -457,9 +457,12 @@ if(WIN32)
     endforeach()
   ]])
 
-  # We need gdbus to setup the dbus, needed by gio, otherwise anything
-  # gtk-related will just bail out at start.
-  install(FILE /ucrt64/bin/gdbus.exe ${CMAKE_INSTALL_PREFIX}/bin)
+  # We need gdbus to setup the dbus, needed by Glib, otherwise anything
+  # gtk-related will just bail out at start. We also need the helper
+  # program to spawn programs using Glib.
+  install(FILE /ucrt64/bin/gdbus.exe                       ${CMAKE_INSTALL_PREFIX}/bin)
+  install(FILE /ucrt64/bin/gspawn-win64-helper.exe         ${CMAKE_INSTALL_PREFIX}/bin)
+  install(FILE /ucrt64/bin/gspawn-win64-helper-console.exe ${CMAKE_INSTALL_PREFIX}/bin)
 endif()
     
 #---------------------------------------------------------------------------
