@@ -429,7 +429,7 @@ if(WIN32)
   set(EXECUTABLES
     core/cadabra2-cli
     core/cdb-nbtool
-    client-server/cadabra-server
+    client_server/cadabra-server
     frontend/gtkmm/cadabra2-gtk
   )
   # Custom command to run ldd and get dependencies
