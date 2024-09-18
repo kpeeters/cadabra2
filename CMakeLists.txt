@@ -423,6 +423,41 @@ configure_file(
 	"${PROJECT_SOURCE_DIR}/core/Config.hh"
 )
 
+# Some additional logic to install all runtime dependencies of our binaries
+# into the target installation directory on windows. 
+if(WIN32)
+  set(EXECUTABLES
+    core/cadabra2-cli
+    core/cdb-nbtool
+    client-server/cadabra-server
+    frontend/gtkmm/cadabra2-gtk
+  )
+  # Custom command to run ldd and get dependencies
+  add_custom_command(
+    OUTPUT ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
+    COMMAND ldd ${EXECUTABLES} > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
+    DEPENDS ${EXECUTABLES}
+    COMMENT "Running ldd to gather shared library dependencies for ${EXECUTABLES}"
+  )
+  add_custom_target("LDD_deps" ALL echo -n DEPENDS ${CMAKE_BINARY_DIR}/ldd_dependencies.txt)
+  
+  # Read ldd output and install dependencies
+  install(CODE [[
+    file(STRINGS "${CMAKE_BINARY_DIR}/ldd_dependencies.txt" ldd_output)
+    foreach(line IN LISTS ldd_output)
+        message(STATUS "Considering ${line}")
+        # The ldd output format is like: libname => /path/to/libname (0x...)
+        string(REGEX MATCH "=> ([^ ]+)" match ${line})
+        if(match)
+            message(STATUS "Found dependency: ${CMAKE_MATCH_1}")
+            execute_process(COMMAND cygpath -m ${CMAKE_MATCH_1} OUTPUT_VARIABLE WINPATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+            message(STATUS "Copying dependency: ${WINPATH}")
+            file(INSTALL ${WINPATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+        endif()
+    endforeach()
+  ]])
+endif()
+    
 #---------------------------------------------------------------------------
 # Provide uninstall target.
 #---------------------------------------------------------------------------
