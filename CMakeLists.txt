@@ -463,9 +463,9 @@ if(WIN32)
   # We need gdbus to setup the dbus, needed by Glib, otherwise anything
   # gtk-related will just bail out at start. We also need the helper
   # program to spawn programs using Glib.
-  install(FILES C:\msys64\ucrt64\bin\gdbus.exe                       DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-  install(FILES C:\msys64\ucrt64\bin\gspawn-win64-helper.exe         DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-  install(FILES C:\msys64\ucrt64\bin\gspawn-win64-helper-console.exe DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+  install(FILES C:/msys64/ucrt64/bin/gdbus.exe                       DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+  install(FILES C:/msys64/ucrt64/bin/gspawn-win64-helper.exe         DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+  install(FILES C:/msys64/ucrt64/bin/gspawn-win64-helper-console.exe DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 endif()
     
 #---------------------------------------------------------------------------
