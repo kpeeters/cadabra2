@@ -440,7 +440,7 @@ if(WIN32)
     TARGETS
     cadabra2
     DESTINATION 
-    bin
+    ${CMAKE_INSTALL_PREFIX}
     )
 else()
   install(
@@ -455,7 +455,7 @@ if(WIN32)
   # Install the Python runtime packages.
   install(CODE [[
       execute_process(COMMAND cygpath -m "/ucrt64/lib/python3.11" OUTPUT_VARIABLE WINPYTHON OUTPUT_STRIP_TRAILING_WHITESPACE)
-      file(INSTALL ${WINPYTHON} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/lib)    
+      file(INSTALL ${WINPYTHON} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)    
   ]])
   #file(INSTALL ${Python_SITELIB}/setuptools DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/python3.11/site-packages/)
   #file(INSTALL ${Python_STDARCH}/*          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/python3.11/)
@@ -483,9 +483,9 @@ if(WIN32)
   #   DESTINATION bin
   # )
 else()
-  install(TARGETS cadabra2-cli DESTINATION bin)
+  install(TARGETS cadabra2-cli DESTINATION ${CDB_BIN_PATH})
 endif()
-install(TARGETS cdb-nbtool DESTINATION bin)
+install(TARGETS cdb-nbtool DESTINATION ${CDB_BIN_PATH})
 
 install(
    FILES 
@@ -500,7 +500,7 @@ install(
   PROGRAMS 
     "${PROJECT_SOURCE_DIR}/cadabra2" 
   DESTINATION 
-    bin
+    ${CDB_BIN_PATH}
 )
 install_directory_permissions("bin")
 
@@ -509,7 +509,7 @@ install(
   TARGETS 
     cadabra2python 
   DESTINATION 
-    bin
+    ${CDB_BIN_PATH}
 )
 
 # cadabra2ipynb
@@ -517,7 +517,7 @@ install(
   TARGETS 
     cadabra2ipynb
   DESTINATION 
-    bin
+    ${CDB_BIN_PATH}
 )
 
 # cadabra2cadabra
@@ -525,7 +525,7 @@ install(
    TARGETS 
    cadabra2cadabra
    DESTINATION 
-   bin
+   ${CDB_BIN_PATH}
  )
 
 if(WIN32 AND NOT INSTALL_TARGETS_ONLY)

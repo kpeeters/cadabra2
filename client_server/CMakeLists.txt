@@ -210,8 +210,8 @@ if (NOT INSTALL_TARGETS_ONLY)
 endif()
 #set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for libraries")
 
-install(TARGETS cadabra-server DESTINATION bin)
-install(TARGETS cadabra2html cadabra2latex DESTINATION bin)
+install(TARGETS cadabra-server             DESTINATION ${CDB_BIN_PATH})
+install(TARGETS cadabra2html cadabra2latex DESTINATION ${CDB_BIN_PATH})
 
 # We don't need to install the libcadabra_client library as it is statically
 # linked with our binaries anyway.
@@ -224,7 +224,7 @@ install(TARGETS cadabra2html cadabra2latex DESTINATION bin)
 # install(TARGETS cadabra_server LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 
 if(ENABLE_JUPYTER)
-  install(TARGETS cadabra-jupyter-kernel      DESTINATION bin)
+  install(TARGETS cadabra-jupyter-kernel      DESTINATION ${CDB_BIN_PATH})
   install(FILES   kernel.json connection.json DESTINATION share/jupyter/kernels/cadabra)
 endif()
 
@@ -236,7 +236,7 @@ if (MSVC AND NOT INSTALL_TARGETS_ONLY)
          "${_VCPKG_ROOT_DIR}/installed/x64-windows/tools/glib/gspawn-win64-helper.exe"    
          "${_VCPKG_ROOT_DIR}/installed/x64-windows/tools/glib/gspawn-win64-helper-console.exe"
       DESTINATION
-         bin
+         ${CDB_BIN_PATH}
          )
    # Python (for some reason this is not copied in)
    get_filename_component(CDB_PYTHON_BASE ${Python_LIBRARIES} NAME_WE)
@@ -245,7 +245,7 @@ if (MSVC AND NOT INSTALL_TARGETS_ONLY)
    string(TOLOWER ${CDB_PYTHON_BASE} CDB_PYTHON_BASE)
    message("--- Python library:   ${CDB_PYTHON_BASE}.dll")
    install(FILES "${CDB_PYTHON_PATH}/../${CDB_PYTHON_BASE}.dll"
-     DESTINATION    bin
+     DESTINATION    ${CDB_BIN_PATH}
    )
 endif()
 

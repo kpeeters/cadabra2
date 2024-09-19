@@ -201,7 +201,7 @@ endif()
 # Installation.
 #---------------------------------------------------------------------------
 
-install(TARGETS cadabra2-gtk DESTINATION bin)
+install(TARGETS cadabra2-gtk DESTINATION ${CDB_BIN_PATH})
 
 # Create installation directories with correct permissions.
 if (NOT INSTALL_TARGETS_ONLY)

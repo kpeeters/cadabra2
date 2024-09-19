@@ -95,15 +95,6 @@ else()
 	message(STATUS "Install directory set to ${CMAKE_INSTALL_PREFIX}")
 endif()
 
-# install(
-#   CODE
-#   "
-#   if (EXISTS \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2.1\")
-#      message(FATAL_ERROR \"\nThe location of the Cadabra manual has changed since the last installation. Please remove the old files with 'make deduplicate'.\n\")
-#   endif()
-#   "
-#   )
-
 # Turn Mathematica support on/off.
 option(ENABLE_MATHEMATICA "Enable Mathematica support" OFF)
 
@@ -312,7 +303,9 @@ message(STATUS "Python version is ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR
 # The PYTHON_SITE_PATH variable is used throughout for installation purposes.
 if(WIN32)
   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/bin/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
+  set(CDB_BIN_PATH ${CMAKE_INSTALL_PREFIX})
 else()
+  set(CDB_BIN_PATH bin)
   if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
     # Debian packages install all their Python things in 'dist-packages', not 'site-packages'.
     set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
@@ -455,7 +448,7 @@ if(WIN32)
             message(STATUS "Found dependency: ${CMAKE_MATCH_1}")
             execute_process(COMMAND cygpath -m ${CMAKE_MATCH_1} OUTPUT_VARIABLE WINPATH OUTPUT_STRIP_TRAILING_WHITESPACE)
             message(STATUS "Copying dependency: ${WINPATH}")
-            file(INSTALL ${WINPATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+            file(INSTALL ${WINPATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/)
         endif()
     endforeach()
   ]])
@@ -463,9 +456,9 @@ if(WIN32)
   # We need gdbus to setup the dbus, needed by Glib, otherwise anything
   # gtk-related will just bail out at start. We also need the helper
   # program to spawn programs using Glib.
-  install(FILES C:/msys64/ucrt64/bin/gdbus.exe                       DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-  install(FILES C:/msys64/ucrt64/bin/gspawn-win64-helper.exe         DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-  install(FILES C:/msys64/ucrt64/bin/gspawn-win64-helper-console.exe DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+  install(FILES C:/msys64/ucrt64/bin/gdbus.exe                       DESTINATION ${CMAKE_INSTALL_PREFIX}/)
+  install(FILES C:/msys64/ucrt64/bin/gspawn-win64-helper.exe         DESTINATION ${CMAKE_INSTALL_PREFIX}/)
+  install(FILES C:/msys64/ucrt64/bin/gspawn-win64-helper-console.exe DESTINATION ${CMAKE_INSTALL_PREFIX}/)
 endif()
     
 #---------------------------------------------------------------------------
