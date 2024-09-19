@@ -30,13 +30,9 @@ jobs:
           mingw-w64-ucrt-x86_64-cmake
           mingw-w64-x86_64-python-matplotlib
           mingw-w64-ucrt-x86_64-python-sympy
+          mingw-w64-ucrt-x86_64-github-cli
           
     - uses: actions/checkout@v4
-
-    - name: Setup GitHub CLI
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y gh
 
     - name: Authenticate GitHub CLI
       run: gh auth setup-git
