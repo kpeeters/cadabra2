@@ -1,0 +1,71 @@
+# Create AppImages on a github release event.  This assumes that the
+# cadabra version is the same as the release name, and it will attempt
+# to add the .AppImage files to the release assets.
+
+name: Windows 11
+
+on: [push]
+
+defaults:
+    run:
+      shell: msys2 {0}
+
+jobs:
+  build:
+    runs-on: windows-11
+    name: Windows 11
+
+    steps:
+    - uses: msys2/setup-msys2@v2
+      with:
+        system: UCRT64
+        update: true
+        install: >-
+          curl
+    
+    - shell: msys2 {0}
+      run: |
+        pacman -S mingw-w64-ucrt-x86_64-gcc
+        pacman -S mingw-w64-ucrt-x86_64-gtkmm3
+        pacman -S mingw-w64-ucrt-x86_64-boost    
+        pacman -S mingw-w64-ucrt-x86_64-sqlite3
+        pacman -S mingw-w64-ucrt-x86_64-cmake
+        pacman -S mingw-w64-x86_64-python-matplotlib
+        pacman -S mingw-w64-ucrt-x86_64-python-sympy
+        pacman -S git
+    
+    - uses: actions/checkout@v4
+
+    - name: Setup GitHub CLI
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gh
+
+    - name: Authenticate GitHub CLI
+      run: gh auth setup-git
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+    - uses: actions/checkout@master
+      name: Checkout source
+      
+    - name: Build
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        ninja
+        ninja install
+
+    - name: Set version variables from output of cmake
+      run: |
+        VER=$(cat ${{ github.workspace }}/build/VERSION)
+        echo "VERSION=$VER" >> $GITHUB_ENV
+
+#     - name: Upload release assets
+#       run: |
+#         ls ${{ github.workspace }}/artifacts/
+#         gh release upload "${{ env.VERSION }}" ${{ github.workspace }}/artifacts/Cadabra_${{ env.VERSION }}_${{ matrix.arch }}.AppImage --clobber
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
