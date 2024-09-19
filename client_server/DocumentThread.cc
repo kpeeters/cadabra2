@@ -257,12 +257,16 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	python_path        = data.value("python_path", "");
 	move_into_new_cell = data.value("move_into_new_cell", false);
 	tab_completion     = data.value("tab_completion", true);
-	microtex           = data.value("microtex", false);
+	microtex           = data.value("microtex", true);
 
 	// Force microtex when this is an AppImage.
 	const char *appdir = getenv("APPDIR");
 	if(appdir)
 		microtex=true;
+	// Force microtex when we are on Windows.
+#if(_WIN32)
+	microtex = true;
+#endif
 
 	if(git_path=="")
 		git_path="/usr/bin/git";
