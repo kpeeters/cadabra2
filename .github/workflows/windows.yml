@@ -22,18 +22,15 @@ jobs:
         update: true
         install: >-
           curl
-    
-    - shell: msys2 {0}
-      run: |
-        pacman -S mingw-w64-ucrt-x86_64-gcc
-        pacman -S mingw-w64-ucrt-x86_64-gtkmm3
-        pacman -S mingw-w64-ucrt-x86_64-boost    
-        pacman -S mingw-w64-ucrt-x86_64-sqlite3
-        pacman -S mingw-w64-ucrt-x86_64-cmake
-        pacman -S mingw-w64-x86_64-python-matplotlib
-        pacman -S mingw-w64-ucrt-x86_64-python-sympy
-        pacman -S git
-    
+          git
+          mingw-w64-ucrt-x86_64-gcc
+          mingw-w64-ucrt-x86_64-gtkmm3
+          mingw-w64-ucrt-x86_64-boost    
+          mingw-w64-ucrt-x86_64-sqlite3
+          mingw-w64-ucrt-x86_64-cmake
+          mingw-w64-x86_64-python-matplotlib
+          mingw-w64-ucrt-x86_64-python-sympy
+          
     - uses: actions/checkout@v4
 
     - name: Setup GitHub CLI
@@ -50,6 +47,7 @@ jobs:
       name: Checkout source
       
     - name: Build
+      shell: msys2 {0}      
       run: |
         mkdir build
         cd build
