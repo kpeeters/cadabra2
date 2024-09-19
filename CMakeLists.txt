@@ -303,6 +303,8 @@ message(STATUS "Python version is ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR
 # The PYTHON_SITE_PATH variable is used throughout for installation purposes.
 if(WIN32)
   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/bin/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
+  # NOTE: if you change the CDB_BIN_PATH, you also need to change the stripping
+  # logic in InstallPrefix.cc.
   set(CDB_BIN_PATH ${CMAKE_INSTALL_PREFIX})
 else()
   set(CDB_BIN_PATH bin)

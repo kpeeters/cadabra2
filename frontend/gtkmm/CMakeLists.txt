@@ -74,23 +74,23 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 #---------------------------------------------------------------------------
 
 set(cadabra_gtk_src 
-	main.cc 
-	ChooseColoursDialog.cc
-	DiffViewer.cc
-	NotebookWindow.cc 
-	NotebookCanvas.cc 
-	SelectFileDialog.cc
-	TeXView.cc 
-	CodeInput.cc 
-	ImageView.cc
-	Cadabra.cc
-	Console.cc
-	Keywords.cc 
-	../common/TeXEngine.cc
-	../common/lodepng.cc
-	# ../common/exec-stream.cc
-	${CADABRA_LIBS_DIR}/tiny-process-library/process.cpp
-	${CADABRA_LIBS_DIR}/base64/base64.cc
+  main.cc 
+  ChooseColoursDialog.cc
+  DiffViewer.cc
+  NotebookWindow.cc 
+  NotebookCanvas.cc 
+  SelectFileDialog.cc
+  TeXView.cc 
+  CodeInput.cc 
+  ImageView.cc
+  Cadabra.cc
+  Console.cc
+  Keywords.cc 
+  ../common/TeXEngine.cc
+  ../common/lodepng.cc
+  # ../common/exec-stream.cc
+  ${CADABRA_LIBS_DIR}/tiny-process-library/process.cpp
+  ${CADABRA_LIBS_DIR}/base64/base64.cc
 )
 if(WIN32)
   list(APPEND cadabra_gtk_src ${CADABRA_LIBS_DIR}/tiny-process-library/process_win.cpp)
@@ -108,33 +108,33 @@ endif()
 #---------------------------------------------------------------------------
 
 include_directories(
-	"."
-	"${CADABRA_CORE_DIR}"
-	"${CADABRA_CLIENT_SERVER_DIR}"
-	"${CADABRA_LIBS_DIR}/internal/include"
-	"${CADABRA_LIBS_DIR}/websocketpp"
-	"${CADABRA_LIBS_DIR}/tiny-process-library"
-	"${CADABRA_LIBS_DIR}/nlohmann"   
-	${Boost_INCLUDE_DIRS}
-	${SQLITE3_INCLUDE_DIR}  
-	)
+  "."
+  "${CADABRA_CORE_DIR}"
+  "${CADABRA_CLIENT_SERVER_DIR}"
+  "${CADABRA_LIBS_DIR}/internal/include"
+  "${CADABRA_LIBS_DIR}/websocketpp"
+  "${CADABRA_LIBS_DIR}/tiny-process-library"
+  "${CADABRA_LIBS_DIR}/nlohmann"   
+  ${Boost_INCLUDE_DIRS}
+  ${SQLITE3_INCLUDE_DIR}  
+)
 
 if(ENABLE_SYSTEM_JSONCPP)
   include_directories(
-	 ${JSONCPP_INCLUDE_DIRS}
-	 )
+    ${JSONCPP_INCLUDE_DIRS}
+  )
 else()
   include_directories(
-	  "${CADABRA_LIBS_DIR}/jsoncpp"
-	  )
+    "${CADABRA_LIBS_DIR}/jsoncpp"
+  )
 endif()
- 
+
 add_definitions(
-	"-D_WEBSOCKETPP_CPP11_STL_"
-	"-DBOOST_LOG_DYN_LINK"
-	"-DGTKMM_DISABLE_DEPRECATED"
-	"-DBUILD_GTK"
-	"-Wno-reorder"
+  "-D_WEBSOCKETPP_CPP11_STL_"
+  "-DBOOST_LOG_DYN_LINK"
+  "-DGTKMM_DISABLE_DEPRECATED"
+  "-DBUILD_GTK"
+  "-Wno-reorder"
 )
 
 #---------------------------------------------------------------------------
@@ -142,9 +142,9 @@ add_definitions(
 #---------------------------------------------------------------------------
 
 if ((NOT MSVC) OR (MSVC AND CADABRA_DEBUG_BUILD) OR (MSVC AND MSVC_TARGET_CONSOLE))
-	add_executable(cadabra2-gtk ${cadabra_gtk_src})
+  add_executable(cadabra2-gtk ${cadabra_gtk_src})
 else()
-	add_executable(cadabra2-gtk WIN32 ${cadabra_gtk_src})
+  add_executable(cadabra2-gtk WIN32 ${cadabra_gtk_src})
 endif()
 
 if(USE_MICROTEX)
@@ -155,7 +155,7 @@ if(USE_MICROTEX)
     ${microtex_SOURCE_DIR}/platform    
   )
   find_package(Fontconfig REQUIRED)
-#  pkg_check_modules(tinyxml2 REQUIRED IMPORTED_TARGET tinyxml2)
+  #  pkg_check_modules(tinyxml2 REQUIRED IMPORTED_TARGET tinyxml2)
 endif()
 pkg_check_modules(CairoMM REQUIRED IMPORTED_TARGET cairomm-1.0)
 pkg_check_modules(PangoMM REQUIRED IMPORTED_TARGET pangomm-1.4)
@@ -205,76 +205,78 @@ install(TARGETS cadabra2-gtk DESTINATION ${CDB_BIN_PATH})
 
 # Create installation directories with correct permissions.
 if (NOT INSTALL_TARGETS_ONLY)
-	install_directory_permissions(${INSTALL_SHARE_DIR})
-	install_directory_permissions(${INSTALL_IMAGES_DIR})
-	install_directory_permissions(${INSTALL_DESKTOP_DIR})
-	install_directory_permissions(${INSTALL_ICONS_DIR})
-	install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor")
-	install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor/64x64")
-	install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor/256x256")
-	install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor/scalable")
-	install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor/64x64/apps")
-	install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor/256x256/apps")
-	install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor/scalable/apps")
+  install_directory_permissions(${INSTALL_SHARE_DIR})
+  install_directory_permissions(${INSTALL_IMAGES_DIR})
+  install_directory_permissions(${INSTALL_DESKTOP_DIR})
+  install_directory_permissions(${INSTALL_ICONS_DIR})
+  install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor")
+  install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor/64x64")
+  install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor/256x256")
+  install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor/scalable")
+  install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor/64x64/apps")
+  install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor/256x256/apps")
+  install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor/scalable/apps")
 
-	install(FILES ${CADABRA_IMAGES_DIR}/256x256/cadabra2-gtk.png DESTINATION ${INSTALL_IMAGES_DIR})
+  install(FILES ${CADABRA_IMAGES_DIR}/256x256/cadabra2-gtk.png DESTINATION ${INSTALL_IMAGES_DIR})
 
-	#xdg-desktop-menu messes up the file permissions, so we just install things by hand...
-	#install(CODE "execute_process(COMMAND ${XDG-DESKTOP-MENU_EXECUTABLE} install --novendor ${PROJECT_SOURCE_DIR}/../../config/cadabra2.desktop)")
+  #xdg-desktop-menu messes up the file permissions, so we just install things by hand...
+  #install(CODE "execute_process(COMMAND ${XDG-DESKTOP-MENU_EXECUTABLE} install --novendor ${PROJECT_SOURCE_DIR}/../../config/cadabra2.desktop)")
 
-	# Icons are a nightmare...
-	# 
-	#   - You cannot just plainly install in /usr/share/icons/hicolor because that is not where Homebrew/OS X
-	#     stores the icons (it uses /usr/local/share/icons/hicolor).
-	#   - /usr/local/share/icons/hicolor may lack an index.theme file, which means that things below there
-	#     actually never get picked up (or at least not by cinnamon).
-	#   - So we need to copy index.theme into /usr/local if it does not exist there yet.
-	#   - In order to avoid all that, just use /usr/share/icons on Linux; package managers will install it
-	#     there anyway.
-	#   - gtk-update-icon-cache is broken and only works half of the time.
-	#
-	# BUT: package managers really do not like this approach, so we're back to doing the proper thing and
-	# hope window managers will eventually fix this.
-	
-	set(ICON_PREFIX "${CMAKE_INSTALL_PREFIX}")
+  # Icons are a nightmare...
+  # 
+  #   - You cannot just plainly install in /usr/share/icons/hicolor because that is not where Homebrew/OS X
+  #     stores the icons (it uses /usr/local/share/icons/hicolor).
+  #   - /usr/local/share/icons/hicolor may lack an index.theme file, which means that things below there
+  #     actually never get picked up (or at least not by cinnamon).
+  #   - So we need to copy index.theme into /usr/local if it does not exist there yet.
+  #   - In order to avoid all that, just use /usr/share/icons on Linux; package managers will install it
+  #     there anyway.
+  #   - gtk-update-icon-cache is broken and only works half of the time.
+  #
+  # BUT: package managers really do not like this approach, so we're back to doing the proper thing and
+  # hope window managers will eventually fix this.
+  
+  set(ICON_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
-	set(ICON_PREFIX_WITH_DESTDIR $ENV{DESTDIR}${ICON_PREFIX})
-	install(FILES    ${CADABRA_IMAGES_DIR}/64x64/cadabra2-gtk.png     DESTINATION ${ICON_PREFIX}/share/icons/hicolor/64x64/apps)
-	install(FILES    ${CADABRA_IMAGES_DIR}/128x128/cadabra2-gtk.png   DESTINATION ${ICON_PREFIX}/share/icons/hicolor/128x128/apps)
-	install(FILES    ${CADABRA_IMAGES_DIR}/256x256/cadabra2-gtk.png   DESTINATION ${ICON_PREFIX}/share/icons/hicolor/256x256/apps)
-	install(FILES    ${CADABRA_IMAGES_DIR}/cadabra2-gtk.svg           DESTINATION ${ICON_PREFIX}/share/icons/hicolor/scalable/apps)
-	install(FILES    ${CADABRA_ROOT_DIR}/config/science.cadabra.cadabra2-gtk.desktop  DESTINATION ${ICON_PREFIX}/share/applications)
-	install(CODE     "execute_process(COMMAND touch ${ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor/icon-theme.cache)")
-	install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 {ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor)")
-	install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor/icon-theme.cache)")
-	install(DIRECTORY cdb-icons  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/cadabra2/)  
+  set(ICON_PREFIX_WITH_DESTDIR $ENV{DESTDIR}${ICON_PREFIX})
+  install(FILES    ${CADABRA_IMAGES_DIR}/64x64/cadabra2-gtk.png     DESTINATION ${ICON_PREFIX}/share/icons/hicolor/64x64/apps)
+  install(FILES    ${CADABRA_IMAGES_DIR}/128x128/cadabra2-gtk.png   DESTINATION ${ICON_PREFIX}/share/icons/hicolor/128x128/apps)
+  install(FILES    ${CADABRA_IMAGES_DIR}/256x256/cadabra2-gtk.png   DESTINATION ${ICON_PREFIX}/share/icons/hicolor/256x256/apps)
+  install(FILES    ${CADABRA_IMAGES_DIR}/cadabra2-gtk.svg           DESTINATION ${ICON_PREFIX}/share/icons/hicolor/scalable/apps)
+  install(FILES    ${CADABRA_ROOT_DIR}/config/science.cadabra.cadabra2-gtk.desktop  DESTINATION ${ICON_PREFIX}/share/applications)
+  install(CODE     "execute_process(COMMAND touch ${ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor/icon-theme.cache)")
+  install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 {ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor)")
+  install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor/icon-theme.cache)")
+  install(DIRECTORY cdb-icons  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/cadabra2/)  
 
-	# Install shared libraries on Windows. 
-	# https://stackoverflow.com/questions/32662215/how-do-you-install-gtk-3-0-on-windows
-	if(WIN32)
-		# All things to make GTK apps work and look decent on Windows 10.
-		# We always need the Adwaita theme for fallback icons, but VCPKG
-		# does not yet distribute it, so we include it here (also see
-		# https://github.com/Microsoft/vcpkg/pull/693). The Windows 10 theme
-		# comes from https://github.com/B00merang-Project/Windows-10.
-		# Settings as suggested by Luca Bacci on gtk-devel-list.
-		install(FILES     config/gschemas.compiled DESTINATION ${CMAKE_INSTALL_PREFIX}/share/glib-2.0/schemas)
-		install(FILES     config/settings.ini      DESTINATION ${CMAKE_INSTALL_PREFIX}/etc/gtk-3.0/)  
-		install(DIRECTORY theme/Windows10          DESTINATION ${CMAKE_INSTALL_PREFIX}/share/themes)
-		install(DIRECTORY icons/Adwaita            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)
-		install(DIRECTORY icons/hicolor            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)  
-		install_dlls_from("frontend/gtkmm")
-	endif()
+  # Install shared libraries on Windows. 
+  # https://stackoverflow.com/questions/32662215/how-do-you-install-gtk-3-0-on-windows
+  if(WIN32)
+    # All things to make GTK apps work and look decent on Windows 10.
+    # We always need the Adwaita theme for fallback icons, but VCPKG
+    # does not yet distribute it, so we include it here (also see
+    # https://github.com/Microsoft/vcpkg/pull/693). The Windows 10 theme
+    # comes from https://github.com/B00merang-Project/Windows-10.
+    # Settings as suggested by Luca Bacci on gtk-devel-list.
+    install(FILES     config/gschemas.compiled DESTINATION ${CMAKE_INSTALL_PREFIX}/share/glib-2.0/schemas)
+    install(FILES     config/settings.ini      DESTINATION ${CMAKE_INSTALL_PREFIX}/etc/gtk-3.0/)  
+    install(DIRECTORY theme/Windows10          DESTINATION ${CMAKE_INSTALL_PREFIX}/share/themes)
+    install(DIRECTORY icons/Adwaita            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)
+    install(DIRECTORY icons/hicolor            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)
+    execute_process(COMMAND cygpath -m "/ucrt64/lib/gdk-pixbuf-2.0" OUTPUT_VARIABLE WINGDK OUTPUT_STRIP_TRAILING_WHITESPACE)
+    file(INSTALL ${WINGDK} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)    
+    # 1install_dlls_from("frontend/gtkmm")
+  endif()
 endif()
 
 # manual pages
 if(NOT MSVC)
   install(
-	 FILES
-	 ../../man/man1/cadabra2-gtk.1
-	 DESTINATION
-	 share/man/man1
-	 )
+    FILES
+    ../../man/man1/cadabra2-gtk.1
+    DESTINATION
+    share/man/man1
+  )
 endif()
 
 # microtex resources
