@@ -98,6 +98,9 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 //	font_paths.push_back(install_prefix()+"/share/cadabra2/microtex/cm/");	
 
 	// Need to re-convert fonts setting the correct
+
+	for(const std::string& path: font_paths)
+		std::cerr << "Will search " << path << " for fonts." << std::endl;
 	
 	microtex::MicroTeX::setDefaultMathFont("LatinModernMath-Regular");
 	auto auto_init = microtex::InitFontSenseAuto();
