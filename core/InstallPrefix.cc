@@ -24,7 +24,9 @@ std::string cadabra::install_prefix()
 		path[dirname_length] = '\0';
 		ret=std::string(path);
 		free(path);
+#ifndef(_WIN32)
 		ret=ret.substr(0, ret.size()-4); // strip '/bin'
+#endif
 		}
 	return ret;
 #endif
