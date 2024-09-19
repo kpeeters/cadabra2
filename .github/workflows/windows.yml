@@ -54,10 +54,10 @@ jobs:
         VER=$(cat ${{ github.workspace }}/build/VERSION)
         echo "VERSION=$VER" >> $GITHUB_ENV
 
-#     - name: Upload release assets
-#       run: |
-#         ls ${{ github.workspace }}/artifacts/
-#         gh release upload "${{ env.VERSION }}" ${{ github.workspace }}/artifacts/Cadabra_${{ env.VERSION }}_${{ matrix.arch }}.AppImage --clobber
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload release assets
+      run: |
+        ls ${{ github.workspace }}/artifacts/
+        gh release upload "${{ env.VERSION }}" ${{ github.workspace }}/artifacts/Cadabra_${{ env.VERSION }}_${{ matrix.arch }}.AppImage --clobber
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
