@@ -36,13 +36,13 @@ macro(install_dlls_from SUBPROJECT)
   if(CMAKE_GENERATOR MATCHES "Visual Studio.*")
     install(
       DIRECTORY "${CMAKE_BINARY_DIR}/${SUBPROJECT}/${CMAKE_BUILD_TYPE}/"
-      DESTINATION bin
+      DESTINATION ${CDB_BIN_PATH}
       FILES_MATCHING PATTERN "*.dll"
     )
   else()
     install(
       DIRECTORY "${CMAKE_BINARY_DIR}/${SUBPROJECT}/"
-      DESTINATION bin
+      DESTINATION ${CDB_BIN_PATH}
       FILES_MATCHING PATTERN "*.dll"
     )
   endif()
@@ -59,7 +59,7 @@ macro(install_deps_of BINARY)
     )
     install(
       DIRECTORY "${CMAKE_BINARY_DIR}/${SUBPROJECT}/"
-      DESTINATION bin
+      DESTINATION ${CDB_BIN_PATH}
       FILES ${DEPS}
     )
   endif()
