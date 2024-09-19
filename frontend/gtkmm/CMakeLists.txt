@@ -284,6 +284,10 @@ if(NOT MSVC)
   )
 endif()
 
+if(WIN32)
+  install(DIRECTORY ../examples DESTINATION ${CMAKE_INSTALL_PREFIX}/Examples)
+endif()
+
 # microtex resources
 if(USE_MICROTEX)
   add_dependencies(cadabra2-gtk microtex-cairo)
