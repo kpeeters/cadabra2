@@ -16,7 +16,7 @@ jobs:
     name: Windows 11
 
     steps:
-    - uses: msys2/setup-msys2@main
+    - uses: msys2/setup-msys2@v2
       with:
         msystem: UCRT64
         update: true
