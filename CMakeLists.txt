@@ -311,7 +311,7 @@ message(STATUS "Python version is ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR
 
 # The PYTHON_SITE_PATH variable is used throughout for installation purposes.
 if(WIN32)
-  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
+  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/bin/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
 else()
   if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
     # Debian packages install all their Python things in 'dist-packages', not 'site-packages'.
