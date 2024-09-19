@@ -285,7 +285,7 @@ if(NOT MSVC)
 endif()
 
 if(WIN32)
-  install(DIRECTORY ../examples DESTINATION ${CMAKE_INSTALL_PREFIX}/Examples)
+  install(DIRECTORY ../../examples DESTINATION ${CMAKE_INSTALL_PREFIX}/Examples)
 endif()
 
 # microtex resources
