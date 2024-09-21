@@ -305,7 +305,7 @@ if(WIN32)
   set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/bin/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
   # NOTE: if you change the CDB_BIN_PATH, you also need to change the stripping
   # logic in InstallPrefix.cc.
-  set(CDB_BIN_PATH "")
+  set(CDB_BIN_PATH .)
 else()
   set(CDB_BIN_PATH bin)
   if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
@@ -451,7 +451,7 @@ if(WIN32)
             # message(STATUS "Found dependency: ${CMAKE_MATCH_1}")
             execute_process(COMMAND cygpath -m ${CMAKE_MATCH_1} OUTPUT_VARIABLE WINPATH OUTPUT_STRIP_TRAILING_WHITESPACE)
             # message(STATUS "Copying dependency: ${WINPATH}")
-            file(INSTALL ${WINPATH} DESTINATION "")
+            file(INSTALL ${WINPATH} DESTINATION .)
         endif()
     endforeach()
   ]])
@@ -459,9 +459,9 @@ if(WIN32)
   # We need gdbus to setup the dbus, needed by Glib, otherwise anything
   # gtk-related will just bail out at start. We also need the helper
   # program to spawn programs using Glib.
-  install(FILES C:/msys64/ucrt64/bin/gdbus.exe                       DESTINATION "")
-  install(FILES C:/msys64/ucrt64/bin/gspawn-win64-helper.exe         DESTINATION "")
-  install(FILES C:/msys64/ucrt64/bin/gspawn-win64-helper-console.exe DESTINATION "")
+  install(FILES C:/msys64/ucrt64/bin/gdbus.exe                       DESTINATION .)
+  install(FILES C:/msys64/ucrt64/bin/gspawn-win64-helper.exe         DESTINATION .)
+  install(FILES C:/msys64/ucrt64/bin/gspawn-win64-helper-console.exe DESTINATION .)
 endif()
     
 #---------------------------------------------------------------------------
