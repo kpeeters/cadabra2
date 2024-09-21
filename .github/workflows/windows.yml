@@ -1,6 +1,6 @@
-# Create AppImages on a github release event.  This assumes that the
-# cadabra version is the same as the release name, and it will attempt
-# to add the .AppImage files to the release assets.
+# Create Windows installer on a github release event.  This assumes
+# that the cadabra version is the same as the release name, and it
+# will attempt to add the installer file to the release assets.
 
 name: Windows 11
 

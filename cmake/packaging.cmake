@@ -215,7 +215,9 @@ endif()
 
 include (InstallRequiredSystemLibraries)
 
-set(CPACK_SET_DESTDIR true)
+if(NOT WIN32)
+  set(CPACK_SET_DESTDIR true)
+endif()
 set(CPACK_INSTALL_PREFIX /usr)
 set(CPACK_PACKAGE_NAME           "cadabra2")
 set(CPACK_RESOURCE_FILE_LICENSE  "${CMAKE_CURRENT_SOURCE_DIR}/doc/license.txt")
