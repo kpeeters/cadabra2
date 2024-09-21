@@ -440,7 +440,7 @@ if(WIN32)
     TARGETS
     cadabra2
     DESTINATION 
-    ${CMAKE_INSTALL_PREFIX}
+    .
     )
 else()
   install(
@@ -455,10 +455,10 @@ if(WIN32)
   # Install the Python runtime packages.
   install(CODE [[
       execute_process(COMMAND cygpath -m "/ucrt64/lib/python3.11" OUTPUT_VARIABLE WINPYTHON OUTPUT_STRIP_TRAILING_WHITESPACE)
-      file(INSTALL ${WINPYTHON} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)    
+      file(INSTALL ${WINPYTHON} DESTINATION lib)    
   ]])
-  #file(INSTALL ${Python_SITELIB}/setuptools DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/python3.11/site-packages/)
-  #file(INSTALL ${Python_STDARCH}/*          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/python3.11/)
+  #file(INSTALL ${Python_SITELIB}/setuptools DESTINATION lib/python3.11/site-packages/)
+  #file(INSTALL ${Python_STDARCH}/*          DESTINATION lib/python3.11/)
 
   # The above should be possible with CMake's GET_RUNTIME_DEPENDENCIES, but
   # I could never get this to work right. Somehow there is always a problem

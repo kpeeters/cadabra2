@@ -11,7 +11,7 @@ endif()
 
 print_header("Configuring client-server")
 
-set(INSTALL_LATEX_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2")
+set(INSTALL_LATEX_DIR "share/cadabra2")
 
 
 #---------------------------------------------------------------------------

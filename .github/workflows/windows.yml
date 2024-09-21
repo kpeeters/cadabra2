@@ -4,7 +4,7 @@
 
 name: Windows 11
 
-on: [push]
+on: [release]
 
 defaults:
     run:

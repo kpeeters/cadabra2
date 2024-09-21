@@ -53,7 +53,7 @@ set(INSTALL_SHARE_DIR share/cadabra2 CACHE PATH "Installation directory for shar
 set(INSTALL_IMAGES_DIR share/cadabra2/images CACHE PATH "Installation directory for image files.")
 set(INSTALL_DESKTOP_DIR share/applications CACHE PATH "Installation directory for .desktop files.")
 set(INSTALL_ICONS_DIR share/icons CACHE PATH "Installation directory for icons.")
-set(INSTALL_MICROTEX_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2/microtex")
+set(INSTALL_MICROTEX_DIR "share/cadabra2/microtex")
 
 #---------------------------------------------------------------------------
 # Locate libraries.
@@ -236,7 +236,7 @@ if (NOT INSTALL_TARGETS_ONLY)
   # BUT: package managers really do not like this approach, so we're back to doing the proper thing and
   # hope window managers will eventually fix this.
   
-  set(ICON_PREFIX "${CMAKE_INSTALL_PREFIX}")
+  set(ICON_PREFIX ".")
 
   set(ICON_PREFIX_WITH_DESTDIR $ENV{DESTDIR}${ICON_PREFIX})
   install(FILES    ${CADABRA_IMAGES_DIR}/64x64/cadabra2-gtk.png     DESTINATION ${ICON_PREFIX}/share/icons/hicolor/64x64/apps)
@@ -250,7 +250,7 @@ if (NOT INSTALL_TARGETS_ONLY)
     install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 {ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor)")
     install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor/icon-theme.cache)")
   endif()
-  install(DIRECTORY cdb-icons  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/cadabra2/)  
+  install(DIRECTORY cdb-icons  DESTINATION share/cadabra2/)  
 
   # Install shared libraries on Windows. 
   # https://stackoverflow.com/questions/32662215/how-do-you-install-gtk-3-0-on-windows
@@ -261,14 +261,14 @@ if (NOT INSTALL_TARGETS_ONLY)
     # https://github.com/Microsoft/vcpkg/pull/693). The Windows 10 theme
     # comes from https://github.com/B00merang-Project/Windows-10.
     # Settings as suggested by Luca Bacci on gtk-devel-list.
-    install(FILES     config/gschemas.compiled DESTINATION ${CMAKE_INSTALL_PREFIX}/share/glib-2.0/schemas)
-    install(FILES     config/settings.ini      DESTINATION ${CMAKE_INSTALL_PREFIX}/etc/gtk-3.0/)  
-    install(DIRECTORY theme/Windows10          DESTINATION ${CMAKE_INSTALL_PREFIX}/share/themes)
-    install(DIRECTORY icons/Adwaita            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)
-    install(DIRECTORY icons/hicolor            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)
+    install(FILES     config/gschemas.compiled DESTINATION share/glib-2.0/schemas)
+    install(FILES     config/settings.ini      DESTINATION etc/gtk-3.0/)  
+    install(DIRECTORY theme/Windows10          DESTINATION share/themes)
+    install(DIRECTORY icons/Adwaita            DESTINATION share/icons)
+    install(DIRECTORY icons/hicolor            DESTINATION share/icons)
     install(CODE [[
         execute_process(COMMAND cygpath -m "/ucrt64/lib/gdk-pixbuf-2.0" OUTPUT_VARIABLE WINGDK OUTPUT_STRIP_TRAILING_WHITESPACE)
-        file(INSTALL ${WINGDK} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+        file(INSTALL ${WINGDK} DESTINATION lib)
     ]])
     # 1install_dlls_from("frontend/gtkmm")
   endif()
@@ -285,7 +285,7 @@ if(NOT MSVC)
 endif()
 
 if(WIN32)
-  install(DIRECTORY ../../examples DESTINATION ${CMAKE_INSTALL_PREFIX}/Examples)
+  install(DIRECTORY ../../examples DESTINATION Examples)
 endif()
 
 # microtex resources
@@ -293,6 +293,6 @@ if(USE_MICROTEX)
   add_dependencies(cadabra2-gtk microtex-cairo)
   install(DIRECTORY    ${PROJECT_SOURCE_DIR}/../../libs/cm DESTINATION ${INSTALL_MICROTEX_DIR})  
   install(DIRECTORY    ${microtex_BINARY_DIR}/res/lm-math DESTINATION ${INSTALL_MICROTEX_DIR})  
-  install(FILES        ${PROJECT_SOURCE_DIR}/science.cadabra.cadabra2-gtk.appdata.xml DESTINATION ${CMAKE_INSTALL_PREFIX}/share/metainfo/)
+  install(FILES        ${PROJECT_SOURCE_DIR}/science.cadabra.cadabra2-gtk.appdata.xml DESTINATION share/metainfo/)
 endif()
 
