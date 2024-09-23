@@ -188,7 +188,7 @@ void Server::init()
 
 	// Call the Cadabra default initialisation script.
 
-	//	pybind11::eval_file(PYTHON_SITE_PATH"/cadabra2_defaults.py");
+	//	pybind11::eval_file(python_path + "/cadabra2_defaults.py");
 	//	HERE: should use pybind11::eval_file instead, much simpler.
 	//
 	std::string startup =

@@ -300,20 +300,23 @@ endif()
 message(STATUS "Found python ${Python_LIBRARIES}")
 message(STATUS "Python version is ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.")
 
-# The PYTHON_SITE_PATH variable is used throughout for installation purposes.
+# The PYTHON_SITE_PATH variable is used for installation purposes
+# only. It is ideally a path relative to CMAKE_INSTALL_PREFIX, not an
+# absolute path which uses this variable explictly. See the CMake docs
+# for `install`.
 if(WIN32)
-  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/bin/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
+  set(PYTHON_SITE_PATH bin/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
   # NOTE: if you change the CDB_BIN_PATH, you also need to change the stripping
-  # logic in InstallPrefix.cc.
+  # logic in InstallPrefix.cc. Note that CDB_BIN_PATH needs to be a relative path.
   set(CDB_BIN_PATH .)
 else()
   set(CDB_BIN_PATH bin)
   if(PACKAGING_MODE AND IS_DEBIAN_PACKAGE)
     # Debian packages install all their Python things in 'dist-packages', not 'site-packages'.
-    set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
+    set(PYTHON_SITE_PATH lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
     # set(Python_SITE_DIST "dist-packages")
   elseif(APPIMAGE_MODE)
-    set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
+    set(PYTHON_SITE_PATH lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
     set(Python_SITE_DIST "dist-packages")
   else()
     # The builder can override the path by setting it externally.
@@ -330,13 +333,20 @@ else()
     endif()
   endif()
 endif()
-string(REGEX REPLACE "^${CMAKE_INSTALL_PREFIX}" "" PYTHON_SITE_PATH_REL ${PYTHON_SITE_PATH})
+if(IS_ABSOLUTE ${PYTHON_SITE_PATH})
+  message(STATUS "Making PYTHON_SITE_PATH relative if possible")
+  string(REPLACE "${CMAKE_INSTALL_PREFIX}/" "" PYTHON_SITE_PATH_REL "${PYTHON_SITE_PATH}")
+  set(PYTHON_SITE_PATH ${PYTHON_SITE_PATH_REL})
+else()
+  message(STATUS "PYTHON_SITE_PATH is already relative")
+endif()
 
-message(STATUS "Python standard  platform-independent installation directory (Python_STDLIB)   ${Python_STDLIB}")
-message(STATUS "Python standard  platform-dependent   installation directory (Python_STDARCH)  ${Python_STDARCH}")
-message(STATUS "Python 3rd-party platform-independent installation directory (Python_SITELIB)  ${Python_SITELIB}")
-message(STATUS "Python 3rd-party platform-dependent   installation directory (Python_SITEARCH) ${Python_SITEARCH}")
 message(STATUS "Installing Cadabra Python modules in (PYTHON_SITE_PATH) ${PYTHON_SITE_PATH}")
+message(STATUS "relative to CMake install prefix ${CMAKE_INSTALL_PREFIX}")
+# message(STATUS "Python standard  platform-independent installation directory (Python_STDLIB)   ${Python_STDLIB}")
+# message(STATUS "Python standard  platform-dependent   installation directory (Python_STDARCH)  ${Python_STDARCH}")
+# message(STATUS "Python 3rd-party platform-independent installation directory (Python_SITELIB)  ${Python_SITELIB}")
+# message(STATUS "Python 3rd-party platform-dependent   installation directory (Python_SITEARCH) ${Python_SITEARCH}")
 # We need to give our Python module an abi-name extension
 # so that it can be installed in a folder which does not
 # contain the abi name. See
@@ -347,9 +357,6 @@ execute_process(
 	OUTPUT_STRIP_TRAILING_WHITESPACE
 	)
 message(STATUS "Python abi name ${Python_SOABI}")
-
-set(PYTHON_SITE_PATH_REL ${PYTHON_SITE_PATH_REL})
-message(STATUS "Python relative path to installation directory (PYTHON_SITE_PATH_REL) ${PYTHON_SITE_PATH_REL}")
 
 # Suffixes
 if(WIN32)

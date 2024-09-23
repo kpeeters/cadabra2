@@ -238,7 +238,7 @@ if (NOT INSTALL_TARGETS_ONLY)
   
   set(ICON_PREFIX ".")
 
-  set(ICON_PREFIX_WITH_DESTDIR $ENV{DESTDIR}${ICON_PREFIX})
+  set(ICON_PREFIX_WITH_DESTDIR $ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${ICON_PREFIX})
   install(FILES    ${CADABRA_IMAGES_DIR}/64x64/cadabra2-gtk.png     DESTINATION ${ICON_PREFIX}/share/icons/hicolor/64x64/apps)
   install(FILES    ${CADABRA_IMAGES_DIR}/128x128/cadabra2-gtk.png   DESTINATION ${ICON_PREFIX}/share/icons/hicolor/128x128/apps)
   install(FILES    ${CADABRA_IMAGES_DIR}/256x256/cadabra2-gtk.png   DESTINATION ${ICON_PREFIX}/share/icons/hicolor/256x256/apps)
