@@ -305,7 +305,7 @@ message(STATUS "Python version is ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR
 # absolute path which uses this variable explictly. See the CMake docs
 # for `install`.
 if(WIN32)
-  set(PYTHON_SITE_PATH bin/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
+  set(PYTHON_SITE_PATH lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
   # NOTE: if you change the CDB_BIN_PATH, you also need to change the stripping
   # logic in InstallPrefix.cc. Note that CDB_BIN_PATH needs to be a relative path.
   set(CDB_BIN_PATH .)
