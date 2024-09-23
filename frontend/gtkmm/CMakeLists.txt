@@ -268,7 +268,7 @@ if (NOT INSTALL_TARGETS_ONLY)
     install(DIRECTORY icons/hicolor            DESTINATION share/icons)
     install(CODE [[
         execute_process(COMMAND cygpath -m "/ucrt64/lib/gdk-pixbuf-2.0" OUTPUT_VARIABLE WINGDK OUTPUT_STRIP_TRAILING_WHITESPACE)
-        file(INSTALL ${WINGDK} DESTINATION lib)
+        file(INSTALL ${WINGDK} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
     ]])
     # 1install_dlls_from("frontend/gtkmm")
   endif()
