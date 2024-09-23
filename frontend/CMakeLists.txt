@@ -8,10 +8,10 @@ project(Cadabra)
 
 print_header("Configuring native notebook frontend")
 
-set(INSTALL_LATEX_DIR    "${CMAKE_INSTALL_PREFIX}/share/cadabra2/latex")
-set(INSTALL_MAN_DIR      "${CMAKE_INSTALL_PREFIX}/share/cadabra2/manual")
-set(INSTALL_MAN_ALGO_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2/manual/algorithms")
-set(INSTALL_MAN_PROP_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2/manual/properties")
+set(INSTALL_LATEX_DIR    "share/cadabra2/latex")
+set(INSTALL_MAN_DIR      "share/cadabra2/manual")
+set(INSTALL_MAN_ALGO_DIR "share/cadabra2/manual/algorithms")
+set(INSTALL_MAN_PROP_DIR "share/cadabra2/manual/properties")
 
 FILE(GLOB man_algorithms "${PROJECT_SOURCE_DIR}/../core/algorithms/*.cnb")
 FILE(GLOB man_properties "${PROJECT_SOURCE_DIR}/../core/properties/*.cnb")

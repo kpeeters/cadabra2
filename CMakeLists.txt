@@ -438,9 +438,9 @@ if(WIN32)
   # run on the '*.pyd' file, but if we rename or copy it to have extension '.dll'
   # all goes through fine...
   add_custom_command(
-    OUTPUT ldd_dependencies.txt
+    OUTPUT  ${CMAKE_SOURCE_DIR}/ldd_dependencies.txt
     COMMAND cp core/cadabra2.pyd core/cadabra2.dll
-    COMMAND ldd core/cadabra2.dll ${EXECUTABLES} > ldd_dependencies.txt
+    COMMAND ldd core/cadabra2.dll ${EXECUTABLES} > ${CMAKE_SOURCE_DIR}/ldd_dependencies.txt
     COMMAND rm core/cadabra2.dll
     DEPENDS core/cadabra2.pyd ${EXECUTABLES}
     COMMENT "Running ldd to gather shared library dependencies for ${EXECUTABLES}"
@@ -449,7 +449,7 @@ if(WIN32)
   
   # Read ldd output and install dependencies
   install(CODE [[
-    file(STRINGS "ldd_dependencies.txt" ldd_output)
+    file(STRINGS "${CMAKE_SOURCE_DIR}/ldd_dependencies.txt" ldd_output)
     foreach(line IN LISTS ldd_output)
         message(STATUS "Considering ${line}")
         # The ldd output format is like: libname => /path/to/libname (0x...)
