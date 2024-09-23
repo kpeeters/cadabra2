@@ -4,8 +4,6 @@
 /// This file contains settings which are imported from the CMake
 /// configuration (installation path and version numbers)
 
-#define CMAKE_INSTALL_PREFIX  "@CMAKE_INSTALL_PREFIX@"
-
 #define CADABRA_VERSION_MAJOR "@CADABRA_VERSION_MAJOR@"
 #define CADABRA_VERSION_MINOR "@CADABRA_VERSION_MINOR@"
 #define CADABRA_VERSION_PATCH "@CADABRA_VERSION_PATCH@"
@@ -20,8 +18,6 @@
 #cmakedefine MATHEMATICA_FOUND
 #define Mathematica_KERNEL_EXECUTABLE "@Mathematica_KERNEL_EXECUTABLE@"
 
-#define PYTHON_SITE_PATH      "@PYTHON_SITE_PATH@"
-#define PYTHON_SITE_PATH_REL  "@PYTHON_SITE_PATH_REL@"
 #define Python_VERSION_MAJOR  "@Python_VERSION_MAJOR@"
 #define Python_VERSION_MINOR  "@Python_VERSION_MINOR@"
 

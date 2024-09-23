@@ -228,7 +228,7 @@ namespace cadabra {
 //		using cpp_type = typename base_type::cpp_type;
 		using py_type = typename base_type::py_type;
 
-		return py_type(m, name.c_str(), py::multiple_inheritance(), read_manual("properties", name.c_str()).c_str())
+		return py_type(m, name.c_str(), py::multiple_inheritance(), read_manual(m, "properties", name.c_str()).c_str())
 			.def_static("get", [](Ex_ptr ex, const std::string& label, bool ipr) { return base_type::get_from_kernel(ex->begin(), label, ipr); }, py::arg("ex"), py::arg("label") = "", py::arg("ignore_parent_rel") = false)
 			.def_static("get", [](ExNode node, const std::string& label, bool ipr) { return base_type::get_from_kernel(node.it, label, ipr); }, py::arg("exnode"), py::arg("label") = "", py::arg("ignore_parent_rel") = false)
 			.def("attach", &BoundPropT::attach)
@@ -244,7 +244,7 @@ namespace cadabra {
 		using cpp_type = typename base_type::cpp_type;
 		using py_type = typename base_type::py_type;
 
-		return py_type(m, std::make_shared<cpp_type>()->name().c_str(), py::multiple_inheritance(), read_manual("properties", std::make_shared<cpp_type>()->name().c_str()).c_str())
+		return py_type(m, std::make_shared<cpp_type>()->name().c_str(), py::multiple_inheritance(), read_manual(m, "properties", std::make_shared<cpp_type>()->name().c_str()).c_str())
 			.def(py::init<Ex_ptr, Ex_ptr>(), py::arg("ex"), py::arg("param")=Ex{})
 
 			.def_static("get", [](Ex_ptr ex, const std::string& label, bool ipr) { return base_type::get_from_kernel(ex->begin(), label, ipr); }, py::arg("ex"), py::arg("label") = "", py::arg("ignore_parent_rel") = false)

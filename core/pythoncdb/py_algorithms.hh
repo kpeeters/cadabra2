@@ -78,7 +78,7 @@ namespace cadabra {
 		      pybind11::arg("deep") = deep,
 		      pybind11::arg("repeat") = repeat,
 		      pybind11::arg("depth") = depth,
-		      pybind11::doc(read_manual("algorithms", name).c_str()),
+		      pybind11::doc(read_manual(m, "algorithms", name).c_str()),
 		      pybind11::return_value_policy::reference_internal);
 		}
 
@@ -120,7 +120,7 @@ namespace cadabra {
 		      pybind11::arg("deep") = deep,
 		      pybind11::arg("repeat") = repeat,
 		      pybind11::arg("depth") = depth,
-		      pybind11::doc(read_manual("algorithms", name).c_str()),
+		      pybind11::doc(read_manual(m, "algorithms", name).c_str()),
 		      pybind11::return_value_policy::reference_internal);
 		}
 

@@ -69,7 +69,7 @@ foreach(PACKAGE ${COMPILED_PACKAGES})
   message(STATUS "Storing algorithm C++ module as ${PINSTALL}")
   set_target_properties(${PNAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/cdb/${PINSTALL}")
   set_target_properties(${PNAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/cdb/${PINSTALL}")
-  set_target_properties(${PNAME} PROPERTIES SUFFIX ".${PYTHON_MOD_SUFFIX}")
+  set_target_properties(${PNAME} PROPERTIES SUFFIX ".${Python_MOD_SUFFIX}")
   set_target_properties(${PNAME} PROPERTIES INSTALL_RPATH "$ORIGIN/../../:$ORIGIN/../../../../")
   
   target_link_libraries(${PNAME} PUBLIC cadabra2 ${GMPXX_LIBRARIES})

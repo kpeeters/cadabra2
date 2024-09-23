@@ -336,6 +336,7 @@ add_executable(cadabra2-cli
    cadabra2-cli.cc
    CdbPython.cc
    InstallPrefix.cc
+   pythoncdb/py_helpers.cc
    ${CADABRA_LIBS_DIR}/whereami/whereami.c
 )
 target_compile_definitions(cadabra2-cli PRIVATE CDBPYTHON_NO_NOTEBOOK)

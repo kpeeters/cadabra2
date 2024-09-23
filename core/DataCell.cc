@@ -704,7 +704,7 @@ std::string cadabra::export_as_python(const DTree& doc)
 void cadabra::python_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str)
 	{
 	if(it->cell_type==DataCell::CellType::document)
-		str << "#!/usr/local/bin/cadabra2\n";
+		str << "#!/usr/bin/env cadabra2\n";
 	else {
 		if(it->cell_type==DataCell::CellType::python) {
 			if(it->textbuf.size()>0) {

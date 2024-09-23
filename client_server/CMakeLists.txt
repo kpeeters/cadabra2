@@ -41,6 +41,7 @@ set(CADABRA_SERVER_SRC
    ${CADABRA_CORE_DIR}/Exceptions.cc
    ${CADABRA_CORE_DIR}/CdbPython.cc 
    ${CADABRA_CORE_DIR}/Stopwatch.cc 
+   ${CADABRA_CORE_DIR}/pythoncdb/py_helpers.cc
    ${CADABRA_LIBS_DIR}/whereami/whereami.c
    ${CADABRA_LIBS_DIR}/base64/base64.cc
    )
