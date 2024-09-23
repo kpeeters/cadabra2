@@ -456,33 +456,10 @@ if(WIN32)
   # Install the Python runtime packages.
   install(CODE [[
       execute_process(COMMAND cygpath -m "/ucrt64/lib/python3.11" OUTPUT_VARIABLE WINPYTHON OUTPUT_STRIP_TRAILING_WHITESPACE)
-      file(INSTALL ${WINPYTHON} DESTINATION lib)    
+      file(INSTALL ${WINPYTHON} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)    
   ]])
   #file(INSTALL ${Python_SITELIB}/setuptools DESTINATION lib/python3.11/site-packages/)
   #file(INSTALL ${Python_STDARCH}/*          DESTINATION lib/python3.11/)
-
-  # The above should be possible with CMake's GET_RUNTIME_DEPENDENCIES, but
-  # I could never get this to work right. Somehow there is always a problem
-  # finding libraries. It may have to do with the cygwin path translation
-  # issue we dealt with above too, but someone else will have to figure that out.
-  #
-  # set(CMAKE_GET_RUNTIME_DEPENDENCIES_TOOL objdump)
-  # set(CMAKE_OBJDUMP /ucrt64/bin/objdump)
-  # install(CODE [[file(GET_RUNTIME_DEPENDENCIES
-  #   RESOLVED_DEPENDENCIES_VAR   dependencies
-  #   UNRESOLVED_DEPENDENCIES_VAR unresolved
-  #   DIRECTORIES /ucrt64/lib /ucrt64/bin
-  #   EXECUTABLES ${CMAKE_BINARY_DIR}/core/cadabra2-cli.exe)
-  # ]])
-  # install(CODE [[message(STATUS "Dependencies found ${dependencies}")]])
-  # install(CODE [[message(STATUS "Dependencies not found ${unresolved}")]])
-  # install(
-  #   TARGETS cadabra2-cli
-  #   RUNTIME_DEPENDENCIES
-  #   PRE_EXCLUDE_REGEXES "api-ms-" "ext-ms-"
-  #   POST_EXCLUDE_REGEXES ".*system32/.*\\.dll"
-  #   DESTINATION bin
-  # )
 else()
   install(TARGETS cadabra2-cli DESTINATION ${CDB_BIN_PATH})
 endif()
