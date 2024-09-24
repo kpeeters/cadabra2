@@ -389,7 +389,8 @@ hours, instead of just a few minutes with MSYS2. More info on building and
 packaging gtk apps on windows at https://www.gtk.org/docs/installations/windows/.
 
 Install MSYS2 from https://www.msys2.org and start a UCRT64 shell.
-First update with::
+First update with (if you don't do this you may end up not being able
+to install some of the required packages due to version conflicts)::
 
     pacman -Suy
 
@@ -400,7 +401,7 @@ Then install a compiler and the dependencies of Cadabra with::
     pacman -S mingw-w64-ucrt-x86_64-boost    
     pacman -S mingw-w64-ucrt-x86_64-sqlite3
     pacman -S mingw-w64-ucrt-x86_64-cmake
-    pacman -S mingw-w64-x86_64-python-matplotlib
+    pacman -S mingw-w64-ucrt-x86_64-python-matplotlib
     pacman -S mingw-w64-ucrt-x86_64-python-sympy
     pacman -S git
 

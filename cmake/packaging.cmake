@@ -201,6 +201,8 @@ endif()
 
 if(WIN32)
   message("-- This is a Windows system")
+  # A good resource (though not complete) for CPack on various platforms is
+  # https://martin-fieber.de/blog/cmake-cpack-cross-platform-distributables/
   set(CPACK_GENERATOR NSIS)
   set(CPACK_PACKAGE_INSTALL_DIRECTORY "Cadabra")
   set(CPACK_NSIS_MODIFY_PATH ON)
