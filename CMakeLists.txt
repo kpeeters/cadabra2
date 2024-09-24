@@ -440,7 +440,7 @@ if(WIN32)
   # run on the '*.pyd' file, but if we rename or copy it to have extension '.dll'
   # all goes through fine...
   add_custom_command(
-    OUTPUT  ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
+    OUTPUT  core/cadabra2.dll
     COMMAND cp core/cadabra2.pyd core/cadabra2.dll
     COMMAND ${CMAKE_COMMAND} -E env bash -c "ldd core/cadabra2.dll ${LEXECUTABLES} | grep '=>' | sed -e 's/^[^=]*=>[ ]*\\([^ ]*\\).*/\\1/' > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt"
     VERBATIM
@@ -448,15 +448,16 @@ if(WIN32)
     COMMENT "Using ldd to determine dependencies of ${EXECUTABLES}"
   )
   add_custom_command(
-    OUTPUT always_cleanup
-    COMMAND ${CMAKE_COMMAND} -E env bash -c "mkdir -p ${CMAKE_BINARY_DIR}/deps && rm core/cadabra2.dll"
+    OUTPUT cleaned_up
+    COMMAND ${CMAKE_COMMAND} -E env bash -c "touch cleaned_up && mkdir -p ${CMAKE_BINARY_DIR}/deps && rm core/cadabra2.dll"
     COMMENT "Cleaning up and preparing 'deps' folder"
+    DEPENDS core/cadabra2.dll
   )    
   add_custom_command(
     OUTPUT ${CMAKE_BINARY_DIR}/deps
     COMMAND ${CMAKE_COMMAND} -E env bash -c "for f in `cat ${CMAKE_BINARY_DIR}/ldd_dependencies.txt`; do cp \${f} ${CMAKE_BINARY_DIR}/deps/; done"
     VERBATIM
-    DEPENDS ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
+    DEPENDS ${CMAKE_BINARY_DIR}/ldd_dependencies.txt cleaned_up
     COMMENT "Copying dependencies into ${CMAKE_BINARY_DIR}/deps"
   )
   add_custom_target("ldd_deps"  ALL echo -n DEPENDS ldd_dependencies.txt)
