@@ -433,7 +433,7 @@ if(WIN32)
     core/cdb-nbtool
     client_server/cadabra-server
     frontend/gtkmm/cadabra2-gtk
-    /ucrt64/lib/gdk-pixbuf-2.0/2.10/loaders/libpixbufloader-svg.dll
+    /ucrt64/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll
   )
   list(JOIN EXECUTABLES " " LEXECUTABLES)
   # Custom command to run ldd, get dependencies, and install these in a
