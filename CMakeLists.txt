@@ -467,6 +467,12 @@ if(WIN32)
   # Install all the dependencies into the root destination folder.
   install(DIRECTORY deps/ DESTINATION . FILES_MATCHING PATTERN "*.dll")      
 
+  # And install a few more which, for reasons unknown, are not reported by dll.
+  install(FILES C:/msys64/ucrt64/bin/libcharset-1.dll                DESTINATION .)
+  install(FILES C:/msys64/ucrt64/bin/librsvg-2-2.dll                 DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/libxml2-2.dll                   DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/liblzma-5.dll                   DESTINATION .)  
+  
   # We need gdbus to setup the dbus, needed by Glib, otherwise anything
   # gtk-related will just bail out at start. We also need the helper
   # program to spawn programs using Glib.
