@@ -457,12 +457,12 @@ if(WIN32)
     OUTPUT ${CMAKE_SOURCE_DIR}/deps
     COMMAND ${CMAKE_COMMAND} -E env bash -c "for f in `cat ${CMAKE_BINARY_DIR}/ldd_dependencies.txt`; do cp \${f} ${CMAKE_SOURCE_DIR}/deps/; done"
     VERBATIM
-    DEPENDS ${CMAKE_BINARY_DIR}/ldd_dependencies.txt cleaned_up
+    DEPENDS cleaned_up
     COMMENT "Copying dependencies into ${CMAKE_SOURCE_DIR}/deps"
   )
-  add_custom_target("ldd_deps"  ALL echo -n DEPENDS ldd_dependencies.txt)
+  add_custom_target("ldd_deps"  ALL echo -n DEPENDS core/cadabra2.dll)
   add_custom_target("cleanup"   ALL echo -n DEPENDS cleaned_up) 
-  add_custom_target("copy_deps" ALL echo -n DEPENDS ${CMAKE_BINARY_DIR}/deps)
+  add_custom_target("copy_deps" ALL echo -n DEPENDS ${CMAKE_SOURCE_DIR}/deps)
   
   # Install all the dependencies into the root destination folder.
   install(DIRECTORY deps/ DESTINATION . FILES_MATCHING PATTERN "*.dll")      
@@ -473,6 +473,7 @@ if(WIN32)
   install(FILES C:/msys64/ucrt64/bin/gdbus.exe                       DESTINATION .)
   install(FILES C:/msys64/ucrt64/bin/gspawn-win64-helper.exe         DESTINATION .)
   install(FILES C:/msys64/ucrt64/bin/gspawn-win64-helper-console.exe DESTINATION .)
+  install(FILES C:/msys64/ucrt64/bin/gdk-pixbuf-query-loaders.exe    DESTINATION .)
 endif()
     
 #---------------------------------------------------------------------------

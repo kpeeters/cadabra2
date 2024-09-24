@@ -204,6 +204,10 @@ if(WIN32)
   set(CPACK_GENERATOR NSIS)
   set(CPACK_PACKAGE_INSTALL_DIRECTORY "Cadabra")
   set(CPACK_NSIS_MODIFY_PATH ON)
+  set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
+    "${CMAKE_INSTALL_PREFIX}/gdk-pixbuf-query-loaders --update-cache"
+  )
+  set(CPACK_NSIS_EXECUTABLES_DIRECTORY .)
 endif()
 
 # Ensure that on Windows we also install the libraries provided
