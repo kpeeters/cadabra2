@@ -96,7 +96,11 @@ if(WIN32)
   list(APPEND cadabra_gtk_src ${CADABRA_LIBS_DIR}/tiny-process-library/process_win.cpp)
   # Configure and add resource file to list of sources
   configure_file(win_res.rc.in ${CMAKE_CURRENT_BINARY_DIR}/win_res.rc)
-  execute_process(COMMAND windres ${CMAKE_CURRENT_BINARY_DIR}/win_res.rc ${CMAKE_CURRENT_BINARY_DIR}/win_res.o)
+  add_custom_command(
+    OUTPUT win_res.o
+    COMMAND windres ${CMAKE_CURRENT_BINARY_DIR}/win_res.rc ${CMAKE_CURRENT_BINARY_DIR}/win_res.o
+    COMMENT "Convert .rc file to .o to give us an icon."
+  )
   list(APPEND cadabra_gtk_src ${CMAKE_CURRENT_BINARY_DIR}/win_res.o)
 else()
   list(APPEND cadabra_gtk_src ${CADABRA_LIBS_DIR}/tiny-process-library/process_unix.cpp)
