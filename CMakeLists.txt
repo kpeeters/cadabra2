@@ -434,35 +434,40 @@ if(WIN32)
     client_server/cadabra-server
     frontend/gtkmm/cadabra2-gtk
   )
-  # Custom command to run ldd and get dependencies. The 'ldd' command does not
+  # Custom command to run ldd, get dependencies, and install these in a
+  # folder ready to be processed by `install`. The 'ldd' command does not
   # run on the '*.pyd' file, but if we rename or copy it to have extension '.dll'
   # all goes through fine...
   add_custom_command(
-    OUTPUT  ${CMAKE_SOURCE_DIR}/ldd_dependencies.txt
+    OUTPUT  ldd_dependencies.txt
     COMMAND cp core/cadabra2.pyd core/cadabra2.dll
-    COMMAND ldd core/cadabra2.dll ${EXECUTABLES} > ${CMAKE_SOURCE_DIR}/ldd_dependencies.txt
+    COMMAND ldd core/cadabra2.dll ${EXECUTABLES} > ldd_dependencies.txt
     COMMAND rm core/cadabra2.dll
+    COMMAND bash -e "for f in `cat ldd_dependencies.txt`; do cp ${f} ${CMAKE_BINARY_DIR}/deps/; done"
     DEPENDS core/cadabra2.pyd ${EXECUTABLES}
-    COMMENT "Running ldd to gather shared library dependencies for ${EXECUTABLES}"
+    COMMENT "Using ldd to copying dependencies of ${EXECUTABLES} to ${CMAKE_BINARY_DIR}/deps"
   )
   add_custom_target("LDD_deps" ALL echo -n DEPENDS ldd_dependencies.txt)
   
-  # Read ldd output and install dependencies
-  install(CODE [[
-    file(STRINGS "${CMAKE_SOURCE_DIR}/ldd_dependencies.txt" ldd_output)
-    foreach(line IN LISTS ldd_output)
-        message(STATUS "Considering ${line}")
-        # The ldd output format is like: libname => /path/to/libname (0x...)
-        string(REGEX MATCH "=> ([^ ]+)" match ${line})
-        if(match)
-            # message(STATUS "Found dependency: ${CMAKE_MATCH_1}")
-            execute_process(COMMAND cygpath -m ${CMAKE_MATCH_1} OUTPUT_VARIABLE WINPATH OUTPUT_STRIP_TRAILING_WHITESPACE)
-            # message(STATUS "Copying dependency: ${WINPATH}")
-            # Here we would like to use 'install', but that's not scriptable...
-            file(INSTALL ${WINPATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/${CDB_BIN_PATH})
-        endif()
-    endforeach()
-  ]])
+#  # Read ldd output and install dependencies
+#  install(CODE [[
+#    file(STRINGS "${CMAKE_SOURCE_DIR}/ldd_dependencies.txt" ldd_output)
+#    foreach(line IN LISTS ldd_output)
+#        message(STATUS "Considering ${line}")
+#        # The ldd output format is like: libname => /path/to/libname (0x...)
+#        string(REGEX MATCH "=> ([^ ]+)" match ${line})
+#        if(match)
+#            # message(STATUS "Found dependency: ${CMAKE_MATCH_1}")
+#            execute_process(COMMAND cygpath -m ${CMAKE_MATCH_1} OUTPUT_VARIABLE WINPATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+#            # message(STATUS "Copying dependency: ${WINPATH}")
+#            # Here we would like to use 'install', but that's not scriptable...
+#            file(INSTALL ${WINPATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/${CDB_BIN_PATH})
+#        endif()
+#    endforeach()
+#  ]])
+
+  # Install all the dependencies into the root destination folder.
+  install(DIRECTORY deps/ DESTINATION . FILES_MATCHING PATTERN "*.dll")      
 
   # We need gdbus to setup the dbus, needed by Glib, otherwise anything
   # gtk-related will just bail out at start. We also need the helper
