@@ -205,7 +205,7 @@ if(WIN32)
   set(CPACK_PACKAGE_INSTALL_DIRECTORY "Cadabra")
   set(CPACK_NSIS_MODIFY_PATH ON)
   set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
-    "\\\\"$INSTDIR\\\\gdk-pixbuf-query-loaders\\\\" --update-cache"
+    "$INSTDIR\\\\gdk-pixbuf-query-loaders --update-cache"
   )
   set(CPACK_NSIS_EXECUTABLES_DIRECTORY .)
 endif()
