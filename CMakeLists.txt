@@ -443,6 +443,7 @@ if(WIN32)
     COMMAND cp core/cadabra2.pyd core/cadabra2.dll
     COMMAND ldd core/cadabra2.dll ${EXECUTABLES} > ldd_dependencies.txt
     COMMAND rm core/cadabra2.dll
+    COMMAND mkdir -p ${CMAKE_BINARY_DIR}/deps
     COMMAND bash -e "for f in `cat ldd_dependencies.txt`; do cp ${f} ${CMAKE_BINARY_DIR}/deps/; done"
     DEPENDS core/cadabra2.pyd ${EXECUTABLES}
     COMMENT "Using ldd to copying dependencies of ${EXECUTABLES} to ${CMAKE_BINARY_DIR}/deps"
