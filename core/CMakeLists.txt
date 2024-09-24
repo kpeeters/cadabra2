@@ -458,11 +458,9 @@ if(WIN32)
       execute_process(COMMAND cygpath -m "/ucrt64/lib/python3.11" OUTPUT_VARIABLE WINPYTHON OUTPUT_STRIP_TRAILING_WHITESPACE)
       file(INSTALL ${WINPYTHON} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)    
   ]])
-  #file(INSTALL ${Python_SITELIB}/setuptools DESTINATION lib/python3.11/site-packages/)
-  #file(INSTALL ${Python_STDARCH}/*          DESTINATION lib/python3.11/)
-else()
-  install(TARGETS cadabra2-cli DESTINATION ${CDB_BIN_PATH})
 endif()
+
+install(TARGETS cadabra2-cli DESTINATION ${CDB_BIN_PATH})
 install(TARGETS cdb-nbtool DESTINATION ${CDB_BIN_PATH})
 
 install(
