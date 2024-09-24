@@ -449,16 +449,16 @@ if(WIN32)
   )
   add_custom_command(
     OUTPUT cleaned_up
-    COMMAND ${CMAKE_COMMAND} -E env bash -c "touch cleaned_up && mkdir -p ${CMAKE_BINARY_DIR}/deps && rm core/cadabra2.dll"
+    COMMAND ${CMAKE_COMMAND} -E env bash -c "touch cleaned_up && mkdir -p ${CMAKE_SOURCE_DIR}/deps && rm core/cadabra2.dll"
     COMMENT "Cleaning up and preparing 'deps' folder"
     DEPENDS core/cadabra2.dll
   )    
   add_custom_command(
-    OUTPUT ${CMAKE_BINARY_DIR}/deps
-    COMMAND ${CMAKE_COMMAND} -E env bash -c "for f in `cat ${CMAKE_BINARY_DIR}/ldd_dependencies.txt`; do cp \${f} ${CMAKE_BINARY_DIR}/deps/; done"
+    OUTPUT ${CMAKE_SOURCE_DIR}/deps
+    COMMAND ${CMAKE_COMMAND} -E env bash -c "for f in `cat ${CMAKE_BINARY_DIR}/ldd_dependencies.txt`; do cp \${f} ${CMAKE_SOURCE_DIR}/deps/; done"
     VERBATIM
     DEPENDS ${CMAKE_BINARY_DIR}/ldd_dependencies.txt cleaned_up
-    COMMENT "Copying dependencies into ${CMAKE_BINARY_DIR}/deps"
+    COMMENT "Copying dependencies into ${CMAKE_SOURCE_DIR}/deps"
   )
   add_custom_target("ldd_deps"  ALL echo -n DEPENDS ldd_dependencies.txt)
   add_custom_target("cleanup"   ALL echo -n DEPENDS cleaned_up) 
