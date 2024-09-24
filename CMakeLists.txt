@@ -442,33 +442,27 @@ if(WIN32)
   add_custom_command(
     OUTPUT  ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
     COMMAND cp core/cadabra2.pyd core/cadabra2.dll
-    COMMAND bash -c "ldd core/cadabra2.dll ${LEXECUTABLES} | grep '=>' | sed -e 's/^[^=]*=>[ ]*\\([^ ]*\\).*/\\1/' > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt"
-    COMMAND rm core/cadabra2.dll
-    COMMAND mkdir -p ${CMAKE_BINARY_DIR}/deps
-    COMMAND bash -c "for f in `cat ${CMAKE_BINARY_DIR}/ldd_dependencies.txt`; do cp \${f} ${CMAKE_BINARY_DIR}/deps/; done"
+    COMMAND ${CMAKE_COMMAND} -E env bash -c "ldd core/cadabra2.dll ${LEXECUTABLES} | grep '=>' | sed -e 's/^[^=]*=>[ ]*\\([^ ]*\\).*/\\1/' > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt"
     VERBATIM
     DEPENDS  core/cadabra2.pyd ${EXECUTABLES}
-    COMMENT "Using ldd to copying dependencies of ${EXECUTABLES} to ${CMAKE_BINARY_DIR}/deps"
+    COMMENT "Using ldd to determine dependencies of ${EXECUTABLES}"
   )
-  add_custom_target("LDD_deps" ALL echo -n DEPENDS ldd_dependencies.txt)
+  add_custom_command(
+    OUTPUT always_cleanup
+    COMMAND ${CMAKE_COMMAND} -E env bash -c "mkdir -p ${CMAKE_BINARY_DIR}/deps && rm core/cadabra2.dll"
+    COMMENT "Cleaning up and preparing 'deps' folder"
+  )    
+  add_custom_command(
+    OUTPUT ${CMAKE_BINARY_DIR}/deps
+    COMMAND ${CMAKE_COMMAND} -E env bash -c "for f in `cat ${CMAKE_BINARY_DIR}/ldd_dependencies.txt`; do cp \${f} ${CMAKE_BINARY_DIR}/deps/; done"
+    VERBATIM
+    DEPENDS ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
+    COMMENT "Copying dependencies into ${CMAKE_BINARY_DIR}/deps"
+  )
+  add_custom_target("ldd_deps"  ALL echo -n DEPENDS ldd_dependencies.txt)
+  add_custom_target("cleanup"   ALL echo -n DEPENDS always_cleanup) 
+  add_custom_target("copy_deps" ALL echo -n DEPENDS ${CMAKE_BINARY_DIR}/deps)
   
-#  # Read ldd output and install dependencies
-#  install(CODE [[
-#    file(STRINGS "${CMAKE_SOURCE_DIR}/ldd_dependencies.txt" ldd_output)
-#    foreach(line IN LISTS ldd_output)
-#        message(STATUS "Considering ${line}")
-#        # The ldd output format is like: libname => /path/to/libname (0x...)
-#        string(REGEX MATCH "=> ([^ ]+)" match ${line})
-#        if(match)
-#            # message(STATUS "Found dependency: ${CMAKE_MATCH_1}")
-#            execute_process(COMMAND cygpath -m ${CMAKE_MATCH_1} OUTPUT_VARIABLE WINPATH OUTPUT_STRIP_TRAILING_WHITESPACE)
-#            # message(STATUS "Copying dependency: ${WINPATH}")
-#            # Here we would like to use 'install', but that's not scriptable...
-#            file(INSTALL ${WINPATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/${CDB_BIN_PATH})
-#        endif()
-#    endforeach()
-#  ]])
-
   # Install all the dependencies into the root destination folder.
   install(DIRECTORY deps/ DESTINATION . FILES_MATCHING PATTERN "*.dll")      
 
