@@ -205,6 +205,8 @@ if(WIN32)
   set(CPACK_PACKAGE_INSTALL_DIRECTORY "Cadabra")
   set(CPACK_NSIS_MODIFY_PATH ON)
   set(CPACK_NSIS_EXECUTABLES_DIRECTORY .)
+  set(CPACK_NSIS_URL_INFO_ABOUT "https://cadabra.science/")
+  set(CPACK_NSIS_CONTACT "Kasper Peeters <info@cadabra.science>")
 endif()
 
 # Ensure that on Windows we also install the libraries provided

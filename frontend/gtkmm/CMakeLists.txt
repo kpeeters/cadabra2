@@ -277,6 +277,19 @@ if (NOT INSTALL_TARGETS_ONLY)
         file(INSTALL ${WINGDK} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
     ]])
     # 1install_dlls_from("frontend/gtkmm")
+
+    # Logic to get a start menu icon.
+    set(TARGET_EXECUTABLE "cadabra2-gtk")
+    install(CODE [[
+       file(WRITE "${CMAKE_INSTALL_PREFIX}/CreateShortcuts.nsh" "
+            CreateShortCut \"$SMPROGRAMS\\$STARTMENU_FOLDER\\YourApp.lnk\" \"$INSTDIR\\${TARGET_EXECUTABLE}.exe\"
+            CreateShortCut \"$DESKTOP\\Cadabra.lnk\" \"$INSTDIR\\${TARGET_EXECUTABLE}.exe\"
+          ")
+    ]])
+    set(CPACK_NSIS_CREATE_ICONS_EXTRA "ReadINIStr \$STARTMENU_FOLDER \$INSTDIR\\\\CreateShortcuts.nsh")
+    set(CPACK_PACKAGE_EXECUTABLES "cadabra2-gtk" "Cadabra2")
+    set(CPACK_NSIS_MENU_LINKS "cadabra2-gtk" "Cadabra2.lnk")
+    set(CPACK_NSIS_CREATE_ICONS_EXTRA "ReadINIStr \$STARTMENU_FOLDER \$INSTDIR\\\\CreateShortcuts.nsh")
   endif()
 endif()
 
