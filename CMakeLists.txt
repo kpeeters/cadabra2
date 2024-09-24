@@ -442,7 +442,7 @@ if(WIN32)
   add_custom_command(
     OUTPUT  core/cadabra2.dll
     COMMAND cp core/cadabra2.pyd core/cadabra2.dll
-    COMMAND ${CMAKE_COMMAND} -E env bash -c "ldd /ucrt64/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll core/cadabra2.dll ${LEXECUTABLES} | grep '=>' | sed -e 's/^[^=]*=>[ ]*\\([^ ]*\\).*/\\1/' | uniq > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt"
+    COMMAND ${CMAKE_COMMAND} -E env bash -c "ldd /ucrt64/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll core/cadabra2.dll ${LEXECUTABLES} | grep '=>' | sed -e 's/^[^=]*=>[ ]*\\([^ ]*\\).*/\\1/' | sort | uniq > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt"
     VERBATIM
     DEPENDS  core/cadabra2.pyd ${EXECUTABLES}
     COMMENT "Using ldd to determine dependencies of ${EXECUTABLES}"
