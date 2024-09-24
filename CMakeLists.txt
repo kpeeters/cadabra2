@@ -461,7 +461,7 @@ if(WIN32)
     COMMENT "Copying dependencies into ${CMAKE_BINARY_DIR}/deps"
   )
   add_custom_target("ldd_deps"  ALL echo -n DEPENDS ldd_dependencies.txt)
-  add_custom_target("cleanup"   ALL echo -n DEPENDS always_cleanup) 
+  add_custom_target("cleanup"   ALL echo -n DEPENDS cleaned_up) 
   add_custom_target("copy_deps" ALL echo -n DEPENDS ${CMAKE_BINARY_DIR}/deps)
   
   # Install all the dependencies into the root destination folder.
