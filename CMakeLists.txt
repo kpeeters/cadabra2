@@ -434,18 +434,20 @@ if(WIN32)
     client_server/cadabra-server
     frontend/gtkmm/cadabra2-gtk
   )
+  list(JOIN EXECUTABLES " " LEXECUTABLES)
   # Custom command to run ldd, get dependencies, and install these in a
   # folder ready to be processed by `install`. The 'ldd' command does not
   # run on the '*.pyd' file, but if we rename or copy it to have extension '.dll'
   # all goes through fine...
   add_custom_command(
-    OUTPUT  ldd_dependencies.txt
+    OUTPUT  ${CMAKE_BINARY_DIR}/ldd_dependencies.txt
     COMMAND cp core/cadabra2.pyd core/cadabra2.dll
-    COMMAND ldd core/cadabra2.dll ${EXECUTABLES} > ldd_dependencies.txt
+    COMMAND bash -c "ldd core/cadabra2.dll ${LEXECUTABLES} | grep '=>' | sed -e 's/^[^=]*=>[ ]*\\([^ ]*\\).*/\\1/' > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt"
     COMMAND rm core/cadabra2.dll
     COMMAND mkdir -p ${CMAKE_BINARY_DIR}/deps
-    COMMAND bash -e "for f in `cat ldd_dependencies.txt`; do cp ${f} ${CMAKE_BINARY_DIR}/deps/; done"
-    DEPENDS core/cadabra2.pyd ${EXECUTABLES}
+    COMMAND bash -c "for f in `cat ${CMAKE_BINARY_DIR}/ldd_dependencies.txt`; do cp \${f} ${CMAKE_BINARY_DIR}/deps/; done"
+    VERBATIM
+    DEPENDS  core/cadabra2.pyd ${EXECUTABLES}
     COMMENT "Using ldd to copying dependencies of ${EXECUTABLES} to ${CMAKE_BINARY_DIR}/deps"
   )
   add_custom_target("LDD_deps" ALL echo -n DEPENDS ldd_dependencies.txt)
