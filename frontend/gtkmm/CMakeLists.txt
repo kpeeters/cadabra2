@@ -95,8 +95,8 @@ set(cadabra_gtk_src
 if(WIN32)
   list(APPEND cadabra_gtk_src ${CADABRA_LIBS_DIR}/tiny-process-library/process_win.cpp)
   # Configure and add resource file to list of sources
-  #configure_file(win_res.rc.in ${CMAKE_CURRENT_BINARY_DIR}/win_res.rc)
-  #list(APPEND cadabra_gtk_src ${CMAKE_CURRENT_BINARY_DIR}/win_res.rc)
+  configure_file(win_res.rc.in ${CMAKE_CURRENT_BINARY_DIR}/win_res.rc)
+  list(APPEND cadabra_gtk_src ${CMAKE_CURRENT_BINARY_DIR}/win_res.rc)
 else()
   list(APPEND cadabra_gtk_src ${CADABRA_LIBS_DIR}/tiny-process-library/process_unix.cpp)
 endif()
@@ -250,7 +250,8 @@ if (NOT INSTALL_TARGETS_ONLY)
     install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 {ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor)")
     install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor/icon-theme.cache)")
   endif()
-  install(DIRECTORY cdb-icons  DESTINATION share/cadabra2/)  
+  install(DIRECTORY cdb-icons  DESTINATION share/cadabra2/)
+  install(FILES     ${CMAKE_SOURCE_DIR}/config/cadabra2.ico  DESTINATION share/cadabra2/cdb-icons/)    
 
   # Install shared libraries on Windows. 
   # https://stackoverflow.com/questions/32662215/how-do-you-install-gtk-3-0-on-windows
@@ -285,7 +286,7 @@ if(NOT MSVC)
 endif()
 
 if(WIN32)
-  install(DIRECTORY ../../examples DESTINATION Examples)
+  install(DIRECTORY ../../examples/ DESTINATION Examples)
 endif()
 
 # microtex resources
