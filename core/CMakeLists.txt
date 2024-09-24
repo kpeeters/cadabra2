@@ -506,10 +506,6 @@ install(
    ${CDB_BIN_PATH}
  )
 
-if(WIN32 AND NOT INSTALL_TARGETS_ONLY)
-   install_dlls_from("core")
-endif()
-
 if(NOT WIN32)
    if(CMAKE_GENERATOR MATCHES "Ninja")
       set(destdir_expr "\$\${DESTDIR}")

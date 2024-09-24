@@ -276,17 +276,13 @@ if (NOT INSTALL_TARGETS_ONLY)
         execute_process(COMMAND cygpath -m "/ucrt64/lib/gdk-pixbuf-2.0" OUTPUT_VARIABLE WINGDK OUTPUT_STRIP_TRAILING_WHITESPACE)
         file(INSTALL ${WINGDK} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
     ]])
-    # 1install_dlls_from("frontend/gtkmm")
 
     # Logic to get a start menu icon.
-    set(TARGET_EXECUTABLE "cadabra2-gtk")
-    install(CODE [[
-       file(WRITE "${CMAKE_INSTALL_PREFIX}/CreateShortcuts.nsh" "
-            CreateShortCut \"$SMPROGRAMS\\$STARTMENU_FOLDER\\YourApp.lnk\" \"$INSTDIR\\${TARGET_EXECUTABLE}.exe\"
-            CreateShortCut \"$DESKTOP\\Cadabra.lnk\" \"$INSTDIR\\${TARGET_EXECUTABLE}.exe\"
-          ")
-    ]])
-    set(CPACK_NSIS_CREATE_ICONS_EXTRA "ReadINIStr \$STARTMENU_FOLDER \$INSTDIR\\\\CreateShortcuts.nsh")
+    set(CPACK_NSIS_CREATE_ICONS_EXTRA
+      "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${CMAKE_PROJECT_NAME}.lnk' '$INSTDIR\\\\cadabra2-gtk.exe'")
+    set(CPACK_NSIS_DELETE_ICONS_EXTRA
+      "Delete '$SMPROGRAMS\\\\$START_MENU\\\\${CMAKE_PROJECT_NAME}.lnk'")
+
     set(CPACK_PACKAGE_EXECUTABLES "cadabra2-gtk" "Cadabra2")
     set(CPACK_NSIS_MENU_LINKS "cadabra2-gtk" "Cadabra2.lnk")
     set(CPACK_NSIS_CREATE_ICONS_EXTRA "ReadINIStr \$STARTMENU_FOLDER \$INSTDIR\\\\CreateShortcuts.nsh")

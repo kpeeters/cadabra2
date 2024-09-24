@@ -1062,7 +1062,9 @@ inline int win32_write(int fd, const void *buffer, unsigned int count) {
 
 #define LINENOISE_DEFAULT_HISTORY_MAX_LEN 100
 #define LINENOISE_MAX_LINE 4096
+#ifndef _WIN32
 static const char *unsupported_term[] = {"dumb","cons25","emacs",NULL};
+#endif
 static CompletionCallback completionCallback;
 
 #ifndef _WIN32

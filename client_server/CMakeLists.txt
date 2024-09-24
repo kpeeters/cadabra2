@@ -230,7 +230,6 @@ if(ENABLE_JUPYTER)
 endif()
 
 if (MSVC AND NOT INSTALL_TARGETS_ONLY)
-   install_dlls_from("client_server")
    # GTK helpers
    install(
       FILES
