@@ -403,6 +403,7 @@ Then install a compiler and the dependencies of Cadabra with::
     pacman -S mingw-w64-ucrt-x86_64-cmake
     pacman -S mingw-w64-ucrt-x86_64-python-matplotlib
     pacman -S mingw-w64-ucrt-x86_64-python-sympy
+    pacman -S mingw-w64-ucrt-x86_64-osslsigncode
     pacman -S git
 
 Checkout Cadabra and build::
@@ -419,8 +420,7 @@ This will leave an installation in `Program Files (x86)/Cadabra`, from where
 you can start `cadabra2-gtk`. 
 
 To build an installer, simply run `cpack` after having built
-Cadabra. To sign the installer, you need `signtool` from the Windows
-SDK, available from https://go.microsoft.com/fwlink/?LinkID=698771.
+Cadabra. 
     
 
 Building a Jupyter kernel

@@ -579,7 +579,7 @@ endif()
 if(WIN32)
   add_custom_target(windows-installer
     COMMAND cpack
-    COMMAND "/c/Program Files (x86)/Windows Kits/10/App Certification Kit/signtool" sign /v /n "Kasper Peeters" /tr http://timestamp.globalsign.com/?signature=sha2 /td sha256 cadabra2-${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}-win64.exe
+    COMMAND osslsigncode sign -pkcs12 "/mnt/c/path/to/certificate.p12" -pass "certificate password" -n "Cadabra2" -i "https://cadabra.science" -t "http://timestamp.comodoca.com/authenticode" -in "cadabra2-${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}-win64.exe" -out "cadabra2-${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}-win64-installer.exe"
   )
 endif()
 
