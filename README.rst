@@ -416,8 +416,11 @@ Checkout Cadabra and build::
     ninja install
 
 This will leave an installation in `Program Files (x86)/Cadabra`, from where
-you can start `cadabra2-gtk`.
+you can start `cadabra2-gtk`. 
 
+To build an installer, simply run `cpack` after having built
+Cadabra. To sign the installer, you need `signtool` from the Windows
+SDK, available from https://go.microsoft.com/fwlink/?LinkID=698771.
     
 
 Building a Jupyter kernel

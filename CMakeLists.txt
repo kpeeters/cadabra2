@@ -576,4 +576,11 @@ if(APPIMAGE_MODE)
   )
 endif()
 
+if(WIN32)
+  add_custom_target(windows-installer
+    COMMAND cpack
+    COMMAND "/c/Program Files (x86)/Windows Kits/10/App Certification Kit/signtool" sign /v /n "Kasper Peeters" /tr http://timestamp.globalsign.com/?signature=sha2 /td sha256 cadabra2-${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}-win64.exe
+  )
+endif()
+
 print_header("All scripts completed")

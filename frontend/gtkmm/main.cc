@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #endif
 
+#define NDEBUG 1
+
 // Cadabra frontend with GTK+ interface (using gtkmm).
 // Makes use of the client classes in the client_server directory.
 
