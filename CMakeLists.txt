@@ -471,7 +471,22 @@ if(WIN32)
   install(FILES C:/msys64/ucrt64/bin/libcharset-1.dll                DESTINATION .)
   install(FILES C:/msys64/ucrt64/bin/librsvg-2-2.dll                 DESTINATION .)  
   install(FILES C:/msys64/ucrt64/bin/libxml2-2.dll                   DESTINATION .)  
-  install(FILES C:/msys64/ucrt64/bin/liblzma-5.dll                   DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/liblzma-5.dll                   DESTINATION .)
+  # FIXME: these can be found by running ldd on numpy and matplotlib dlls.
+  install(FILES C:/msys64/ucrt64/bin/libopenblas.dll                 DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/libgomp-1.dll                   DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/libgfortran-5.dll               DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/libquadmath-0.dll               DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/libsharpyuv-0.dll               DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/libjpeg-8.dll                   DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/libtiff-6.dll                   DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/libdeflate.dll                  DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/libjbig-0.dll                   DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/libLerc.dll                     DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/libwebp-7.dll                   DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/libzstd.dll                     DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/imagequant.dll                  DESTINATION .)  
+  install(FILES C:/msys64/ucrt64/bin/libopenjp2-7.dll                DESTINATION .)  
   
   # We need gdbus to setup the dbus, needed by Glib, otherwise anything
   # gtk-related will just bail out at start. We also need the helper

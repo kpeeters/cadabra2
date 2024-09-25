@@ -142,7 +142,7 @@ void Shell::interact()
 	if (!(flags & Flags::NoBanner)) {
 		write_stdout("Cadabra " CADABRA_VERSION_FULL " (build " CADABRA_VERSION_BUILD
 						 " dated " CADABRA_VERSION_DATE ")");
-		write_stdout("Copyright (C) " COPYRIGHT_YEARS "  Kasper Peeters <kasper.peeters@phi-sci.com>");
+		write_stdout("Copyright (C) " COPYRIGHT_YEARS "  Kasper Peeters <info@cadabra.science>");
 		write_stdout("Using SymPy version " + str(evaluate("sympy.__version__")));
 		}
 
