@@ -1,3 +1,7 @@
+# This is a build which gets triggered on every commit push, to
+# ensure that we get some warnings when we push code that does
+# not build on macOS.
+
 name: macOS
 
 on: [push]

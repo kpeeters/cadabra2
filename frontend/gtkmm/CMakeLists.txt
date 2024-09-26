@@ -282,6 +282,8 @@ if (NOT INSTALL_TARGETS_ONLY)
     ]])
 
     # Logic to get a start menu icon.
+    # https://crascit.com/2015/08/07/cmake_cpack_nsis_shortcuts_with_parameters/
+    # Does not work.
     set(CPACK_NSIS_CREATE_ICONS_EXTRA
       "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${CMAKE_PROJECT_NAME}.lnk' '$INSTDIR\\\\cadabra2-gtk.exe'")
     set(CPACK_NSIS_DELETE_ICONS_EXTRA

@@ -5,7 +5,9 @@
 
 name: Ubuntu-22.04 package
 
-on: [release]
+on:
+  release:
+    types: [created]
 
 jobs:
   build:

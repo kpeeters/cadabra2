@@ -334,6 +334,10 @@ else()
   endif()
 endif()
 if(IS_ABSOLUTE ${PYTHON_SITE_PATH})
+  # CPack on windows complains if `install` commands contain absolute paths,
+  # so we do our best to make PYTHON_SITE_PATH relative to CMAKE_INSTALL_PREFIX.
+  # Of course, the net effect will be the same, as `install` with a relative
+  # DESTINATION will prepend CMAKE_INSTALL_PREFIX.
   message(STATUS "Making PYTHON_SITE_PATH relative if possible")
   string(REPLACE "${CMAKE_INSTALL_PREFIX}/" "" PYTHON_SITE_PATH_REL "${PYTHON_SITE_PATH}")
   set(PYTHON_SITE_PATH ${PYTHON_SITE_PATH_REL})
@@ -572,7 +576,7 @@ if(APPIMAGE_MODE)
     COMMAND cp -a ${Python_SITELIB}/setuptools AppDir/${PYTHON_SITELIB}/
     COMMAND cp -a ${Python_STDARCH}/* AppDir/${Python_STDARCH}/
     COMMAND ${LINUXDEPLOY} --appdir AppDir --plugin gtk --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
-    COMMAND mv Cadabra_2-${CMAKE_SYSTEM_PROCESSOR}.AppImage Cadabra_${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}_${CMAKE_SYSTEM_PROCESSOR}.AppImage
+    COMMAND mv Cadabra_2-${CMAKE_SYSTEM_PROCESSOR}.AppImage Cadabra_${CADABRA_VERSION_SEM}_${CMAKE_SYSTEM_PROCESSOR}.AppImage
   )
 endif()
 
@@ -581,7 +585,7 @@ if(WIN32)
     COMMAND cpack
 #    COMMAND osslsigncode sign -pkcs12 "/mnt/c/path/to/certificate.p12" -pass "certificate password" -n "Cadabra2" -i "https://cadabra.science" -t "http://timestamp.comodoca.com/authenticode" -in "cadabra2-${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}-win64.exe" -out "cadabra2-${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}-win64-installer.exe"
     COMMAND gh auth setup-git
-    COMMAND release upload "${{ env.VERSION }}" cadabra2-${{ env.VERSION }}-win64.exe --clobber
+    COMMAND release upload "${CADABRA_VERSION_SEM}" cadabra2-${CADABRA_VERSION_SEM}-win64.exe --clobber
   )
 endif()
 

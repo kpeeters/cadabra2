@@ -5,7 +5,9 @@
 
 name: Ubuntu-24.04 package
 
-on: [release]
+on:
+  release:
+    types: [created]
 
 jobs:
   build:

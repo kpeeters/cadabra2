@@ -16,8 +16,8 @@ Cadabra
 .. image:: https://github.com/kpeeters/cadabra2/workflows/Docker/badge.svg
    :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3ADocker
 
-.. image:: https://anaconda.org/conda-forge/cadabra2-jupyter-kernel/badges/version.svg
-   :target: https://anaconda.org/conda-forge/cadabra2-jupyter-kernel	    
+.. image:: https://github.com/kpeeters/cadabra2/workflows/Windows%2011/badge.svg
+   :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3AWindows%2011
 
 *A field-theory motivated approach to computer algebra.*
 

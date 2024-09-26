@@ -5,7 +5,9 @@
 
 name: OpenSUSE-Tumbleweed package
 
-on: [release]
+on:
+  release:
+    types: [created]
 
 jobs:
   build:

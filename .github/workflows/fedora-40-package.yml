@@ -5,7 +5,9 @@
 
 name: Fedora-40 package
 
-on: [release]
+on:
+  release:
+    types: [created]
 
 jobs:
   build:
