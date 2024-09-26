@@ -34,6 +34,7 @@ jobs:
           mingw-w64-ucrt-x86_64-cmake
           mingw-w64-ucrt-x86_64-python-matplotlib
           mingw-w64-ucrt-x86_64-python-sympy
+          mingw-w64-ucrt-x86_64-github-cli
           
     - name: Authenticate GitHub CLI
       run: gh auth setup-git
