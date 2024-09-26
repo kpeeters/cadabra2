@@ -579,7 +579,9 @@ endif()
 if(WIN32)
   add_custom_target(windows-installer
     COMMAND cpack
-    COMMAND osslsigncode sign -pkcs12 "/mnt/c/path/to/certificate.p12" -pass "certificate password" -n "Cadabra2" -i "https://cadabra.science" -t "http://timestamp.comodoca.com/authenticode" -in "cadabra2-${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}-win64.exe" -out "cadabra2-${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}-win64-installer.exe"
+#    COMMAND osslsigncode sign -pkcs12 "/mnt/c/path/to/certificate.p12" -pass "certificate password" -n "Cadabra2" -i "https://cadabra.science" -t "http://timestamp.comodoca.com/authenticode" -in "cadabra2-${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}-win64.exe" -out "cadabra2-${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}-win64-installer.exe"
+    COMMAND gh auth setup-git
+    COMMAND release upload "${{ env.VERSION }}" cadabra2-${{ env.VERSION }}-win64.exe --clobber
   )
 endif()
 
