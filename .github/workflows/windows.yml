@@ -15,9 +15,12 @@ defaults:
       shell: msys2 {0}
 
 jobs:
-  build:
+  msys2-ucrt64:
     runs-on: windows-latest
     name: Windows 11
+    defaults:
+      run:
+        shell: msys2 {0}
 
     steps:
     - uses: msys2/setup-msys2@v2
@@ -45,7 +48,6 @@ jobs:
       name: Checkout source
       
     - name: Build
-      shell: msys2 {0}      
       run: |
         mkdir build
         cd build
