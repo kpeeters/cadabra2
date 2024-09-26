@@ -27,13 +27,13 @@ jobs:
         install: >-
           curl
           git
-          pacman -S mingw-w64-ucrt-x86_64-gcc
-          pacman -S mingw-w64-ucrt-x86_64-gtkmm3
-          pacman -S mingw-w64-ucrt-x86_64-boost    
-          pacman -S mingw-w64-ucrt-x86_64-sqlite3
-          pacman -S mingw-w64-ucrt-x86_64-cmake
-          pacman -S mingw-w64-ucrt-x86_64-python-matplotlib
-          pacman -S mingw-w64-ucrt-x86_64-python-sympy
+          mingw-w64-ucrt-x86_64-gcc
+          mingw-w64-ucrt-x86_64-gtkmm3
+          mingw-w64-ucrt-x86_64-boost    
+          mingw-w64-ucrt-x86_64-sqlite3
+          mingw-w64-ucrt-x86_64-cmake
+          mingw-w64-ucrt-x86_64-python-matplotlib
+          mingw-w64-ucrt-x86_64-python-sympy
           
     - name: Authenticate GitHub CLI
       run: gh auth setup-git
