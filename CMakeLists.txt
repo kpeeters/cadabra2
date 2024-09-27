@@ -292,6 +292,13 @@ print_header("Configuring Python")
 include(GNUInstallDirs)
 
 set(Python_POSTFIX "3")
+if(WIN32)
+  # Set the PYTHON_EXECUTABLE variable explicitly to ensure
+  # that we use the msys2 python, not anything else that may
+  # be floating around too (like on github runners...).
+  set(Python_EXECUTABLE "/usr/bin/python3")
+  set(PYTHON_EXECUTABLE "/usr/bin/python3")  
+endif()
 find_package(Python COMPONENTS Interpreter Development)
 find_package(pybind11 CONFIG)
 if (NOT pybind11_FOUND)
