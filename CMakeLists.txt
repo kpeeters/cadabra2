@@ -296,19 +296,20 @@ print_header("Configuring Python")
 include(GNUInstallDirs)
 
 set(Python_POSTFIX "3")
-# if(WIN32)
-#   # Set a hint for finding Python, so we hopefully get the msys
-#   # version. This otherwise breaks on github runners.
-#   execute_process(
-#     COMMAND cygpath -m /usr/bin/
-#     OUTPUT_VARIABLE PYTHON_HINT
-#     OUTPUT_STRIP_TRAILING_WHITESPACE
-#   )
-#   message(STATUS "Using Python hint ${PYTHON_HINT}")
-#   find_package(Python REQUIRED COMPONENTS Interpreter Development HINTS ${PYTHON_HINT})
-# else()
+if(WIN32)
+  # Set a hint for finding Python, so we hopefully get the msys
+  # version. This otherwise breaks on github runners.
+  execute_process(
+    COMMAND cygpath -m /usr/lib/python3.11/
+    OUTPUT_VARIABLE PYTHON_HINT
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  message(STATUS "Using Python root dir ${PYTHON_HINT}")
+  set(Python_ROOT_DIR ${PYTHON_HINT})
   find_package(Python REQUIRED COMPONENTS Interpreter Development)
-# endif()
+else()
+  find_package(Python REQUIRED COMPONENTS Interpreter Development)
+endif()
 find_package(pybind11 CONFIG)
 if (NOT pybind11_FOUND)
   message(STATUS "Using included pybind11.")
