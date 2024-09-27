@@ -21,4 +21,9 @@ macro(install_directory_permissions DIR)
   )
 endmacro()
 
-
+# Macro just like `install`, but converting the path from a unix
+# path to a windows path using `cygpath`.
+macro(install_for_win TMP1 FILE TMP2 DEST)
+  execute_process(COMMAND cygpath -m ${FILE} OUTPUT_VARIABLE WFILE)
+  install(FILES ${WFILE} DESTINATION ${DEST})
+endmacro()
