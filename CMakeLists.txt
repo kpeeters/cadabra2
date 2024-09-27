@@ -446,29 +446,30 @@ if(WIN32)
   # run on the '*.pyd' file, but if we rename or copy it to have extension '.dll'
   # all goes through fine...
   add_custom_command(
-    OUTPUT  core/cadabra2.dll
+    OUTPUT  dummy1
     COMMAND cp core/cadabra2.pyd core/cadabra2.dll
     COMMAND ${CMAKE_COMMAND} -E env bash -c "ldd /ucrt64/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll core/cadabra2.dll ${LEXECUTABLES} | grep '=>' | sed -e 's/^[^=]*=>[ ]*\\([^ ]*\\).*/\\1/' | sort | uniq > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt"
+    COMMAND touch dummy1
     VERBATIM
     DEPENDS  core/cadabra2.pyd ${EXECUTABLES}
     COMMENT "Using ldd to determine dependencies of ${EXECUTABLES}"
   )
   add_custom_command(
-    OUTPUT cleaned_up
+    OUTPUT dummy2
     COMMAND ${CMAKE_COMMAND} -E env bash -c "touch cleaned_up && mkdir -p ${CMAKE_SOURCE_DIR}/deps && rm core/cadabra2.dll"
+    COMMAND touch dummy2
     COMMENT "Cleaning up and preparing 'deps' folder"
-    DEPENDS core/cadabra2.dll
+    DEPENDS dummy1
   )    
   add_custom_command(
-    OUTPUT ${CMAKE_SOURCE_DIR}/deps
+    OUTPUT dummy3
     COMMAND ${CMAKE_COMMAND} -E env bash -c "for f in `cat ${CMAKE_BINARY_DIR}/ldd_dependencies.txt`; do cp \${f} ${CMAKE_SOURCE_DIR}/deps/; done"
+    COMMAND touch dummy3
     VERBATIM
-    DEPENDS cleaned_up
+    DEPENDS dummy2
     COMMENT "Copying dependencies into ${CMAKE_SOURCE_DIR}/deps"
   )
-  add_custom_target("ldd_deps"  ALL echo -n DEPENDS core/cadabra2.dll)
-  add_custom_target("cleanup"   ALL echo -n DEPENDS cleaned_up) 
-  add_custom_target("copy_deps" ALL echo -n DEPENDS ${CMAKE_SOURCE_DIR}/deps)
+  add_custom_target("do_deps"  ALL echo -n DEPENDS dummy3)
   
   # Install all the dependencies into the root destination folder.
   install(DIRECTORY deps/ DESTINATION . FILES_MATCHING PATTERN "*.dll")      
