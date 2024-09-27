@@ -300,6 +300,7 @@ if(WIN32)
     OUTPUT_VARIABLE PYTHON_HINT
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
+  message(STATUS "Using Python hint ${PYTHON_HINT}")
   find_package(Python REQUIRED COMPONENTS Interpreter Development HINTS ${PYTHON_HINT})
 else()
   find_package(Python REQUIRED COMPONENTS Interpreter Development)
