@@ -23,6 +23,10 @@ if(POLICY CMP0167)
   cmake_policy(SET CMP0167 NEW)
   message(STATUS "Set CMake policy CM0167 to NEW")
 endif()
+if(POLICY CMP0094)
+  cmake_policy(SET CMP0094 NEW)
+  message(STATUS "Set CMake policy CM0094 to NEW (use first Python found)")
+endif()
 
 cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
 set(CMAKE_CXX_STANDARD 17)
@@ -292,19 +296,19 @@ print_header("Configuring Python")
 include(GNUInstallDirs)
 
 set(Python_POSTFIX "3")
-if(WIN32)
-  # Set a hint for finding Python, so we hopefully get the msys
-  # version. This otherwise breaks on github runners.
-  execute_process(
-    COMMAND cygpath -m /usr/bin/
-    OUTPUT_VARIABLE PYTHON_HINT
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  message(STATUS "Using Python hint ${PYTHON_HINT}")
-  find_package(Python REQUIRED COMPONENTS Interpreter Development HINTS ${PYTHON_HINT})
-else()
+# if(WIN32)
+#   # Set a hint for finding Python, so we hopefully get the msys
+#   # version. This otherwise breaks on github runners.
+#   execute_process(
+#     COMMAND cygpath -m /usr/bin/
+#     OUTPUT_VARIABLE PYTHON_HINT
+#     OUTPUT_STRIP_TRAILING_WHITESPACE
+#   )
+#   message(STATUS "Using Python hint ${PYTHON_HINT}")
+#   find_package(Python REQUIRED COMPONENTS Interpreter Development HINTS ${PYTHON_HINT})
+# else()
   find_package(Python REQUIRED COMPONENTS Interpreter Development)
-endif()
+# endif()
 find_package(pybind11 CONFIG)
 if (NOT pybind11_FOUND)
   message(STATUS "Using included pybind11.")
