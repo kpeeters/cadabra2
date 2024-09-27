@@ -296,13 +296,13 @@ if(WIN32)
   # Set a hint for finding Python, so we hopefully get the msys
   # version. This otherwise breaks on github runners.
   execute_process(
-    COMMAND cygpath -m /ucrt64/usr/bin/
+    COMMAND cygpath -m /usr/bin/
     OUTPUT_VARIABLE PYTHON_HINT
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
-  find_package(Python COMPONENTS Interpreter Development HINTS ${PYTHON_HINT})
+  find_package(Python REQUIRED COMPONENTS Interpreter Development HINTS ${PYTHON_HINT})
 else()
-  find_package(Python COMPONENTS Interpreter Development)
+  find_package(Python REQUIRED COMPONENTS Interpreter Development)
 endif()
 find_package(pybind11 CONFIG)
 if (NOT pybind11_FOUND)
