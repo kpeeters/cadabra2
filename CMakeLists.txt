@@ -72,6 +72,8 @@ if (APPLE)
    set(ENV{PKG_CONFIG_PATH} "/usr/local/opt/libffi/lib/pkgconfig:")
 endif()
 
+set(PKG_CONFIG_USE_STATIC_LIBS OFF)
+
 # Get version information.
 include(cmake/version.cmake)
 print_header("Building Cadabra version ${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}.${CADABRA_VERSION_TWEAK} (${SYSTEM_BITS}-bit)")

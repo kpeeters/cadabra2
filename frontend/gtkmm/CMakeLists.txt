@@ -159,8 +159,8 @@ if(USE_MICROTEX)
     ${microtex_SOURCE_DIR}/lib
     ${microtex_SOURCE_DIR}/platform    
   )
-  find_package(Fontconfig REQUIRED)
-  #  pkg_check_modules(tinyxml2 REQUIRED IMPORTED_TARGET tinyxml2)
+  # find_package(Fontconfig REQUIRED)
+  pkg_check_modules(Fontconfig REQUIRED IMPORTED_TARGET fontconfig)
 endif()
 pkg_check_modules(CairoMM REQUIRED IMPORTED_TARGET cairomm-1.0)
 pkg_check_modules(PangoMM REQUIRED IMPORTED_TARGET pangomm-1.4)
@@ -169,7 +169,8 @@ pkg_check_modules(PangoMM REQUIRED IMPORTED_TARGET pangomm-1.4)
 # add_executable(microtest microtest.cc)
 
 target_link_libraries(
-  cadabra2-gtk 
+  cadabra2-gtk
+  PUBLIC
   cadabra_client 
   ${Boost_LIBRARIES} 
   ${GLIBMM_LIBRARIES} 
@@ -179,27 +180,16 @@ target_link_libraries(
 )
 
 if(USE_MICROTEX)
-  target_link_libraries(cadabra2-gtk 
+  target_link_libraries(
+    cadabra2-gtk
+    PUBLIC
     microtex-cairo          # from MicroTeX
     microtex                # from MicroTeX
-    PkgConfig::CairoMM      # for MicroTeX
-    PkgConfig::PangoMM      # for MicroTeX
-    Fontconfig::Fontconfig  # for MicroTeX
+    ${CairoMM_LIBRARIES}
+    ${PangoMM_LIBRARIES}
+    ${Fontconfig_LIBRARIES}
   )
 endif()
-
-# target_link_libraries(microtest 
-# 	${PROJECT_SOURCE_DIR}/../../libs/microtex/build/libLaTeX.a
-# 	${GLIBMM_LIBRARIES} 
-# 	${GTKMM3_LIBRARIES} 
-# 	Threads::Threads
-# 	PkgConfig::GTKMM
-#         PkgConfig::CairoMM
-# 	PkgConfig::GSVMM
-#         Fontconfig::Fontconfig
-# 	tinyxml2
-# 	Threads::Threads
-# )
 
 
 #---------------------------------------------------------------------------
