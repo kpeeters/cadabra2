@@ -456,20 +456,13 @@ if(WIN32)
   )
   add_custom_command(
     OUTPUT dummy2
-    COMMAND ${CMAKE_COMMAND} -E env bash -c "touch cleaned_up && mkdir -p ${CMAKE_SOURCE_DIR}/deps && rm core/cadabra2.dll"
-    COMMAND touch dummy2
-    COMMENT "Cleaning up and preparing 'deps' folder"
     DEPENDS dummy1
-  )    
-  add_custom_command(
-    OUTPUT dummy3
-    COMMAND ${CMAKE_COMMAND} -E env bash -c "for f in `cat ${CMAKE_BINARY_DIR}/ldd_dependencies.txt`; do cp \${f} ${CMAKE_SOURCE_DIR}/deps/; done"
-    COMMAND touch dummy3
+    COMMAND ${CMAKE_COMMAND} -E env bash -c "mkdir -p ${CMAKE_SOURCE_DIR}/deps && for f in `cat ${CMAKE_BINARY_DIR}/ldd_dependencies.txt`; do cp \${f} ${CMAKE_SOURCE_DIR}/deps/; done"
+    COMMAND touch dummy2
     VERBATIM
-    DEPENDS dummy2
     COMMENT "Copying dependencies into ${CMAKE_SOURCE_DIR}/deps"
   )
-  add_custom_target("do_deps"  ALL echo -n DEPENDS dummy3)
+  add_custom_target("do_deps" ALL DEPENDS dummy2)
   
   # Install all the dependencies into the root destination folder.
   install(DIRECTORY deps/ DESTINATION . FILES_MATCHING PATTERN "*.dll")      
