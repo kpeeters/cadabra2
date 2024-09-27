@@ -24,6 +24,6 @@ endmacro()
 # Macro just like `install`, but converting the path from a unix
 # path to a windows path using `cygpath`.
 macro(winstall TMP1 FILE TMP2 DEST)
-  execute_process(COMMAND cygpath -m ${FILE} OUTPUT_VARIABLE WFILE)
+  execute_process(COMMAND cygpath -m ${FILE} OUTPUT_VARIABLE WFILE OUTPUT_STRIP_TRAILING_WHITESPACE)
   install(FILES ${WFILE} DESTINATION ${DEST})
 endmacro()
