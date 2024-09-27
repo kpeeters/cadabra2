@@ -457,7 +457,7 @@ if(WIN32)
   add_custom_command(
     OUTPUT dummy2
     DEPENDS dummy1
-    COMMAND ${CMAKE_COMMAND} -E env bash -c "mkdir -p ${CMAKE_SOURCE_DIR}/deps && for f in `cat ${CMAKE_BINARY_DIR}/ldd_dependencies.txt`; do cp \${f} ${CMAKE_SOURCE_DIR}/deps/; done"
+    COMMAND ${CMAKE_COMMAND} -E env bash -c "cat ${CMAKE_BINARY_DIR}/ldd_dependencies.txt && mkdir -p ${CMAKE_SOURCE_DIR}/deps && for f in `cat ${CMAKE_BINARY_DIR}/ldd_dependencies.txt`; do cp \${f} ${CMAKE_SOURCE_DIR}/deps/; done"
     COMMAND touch dummy2
     VERBATIM
     COMMENT "Copying dependencies into ${CMAKE_SOURCE_DIR}/deps"

@@ -164,9 +164,6 @@ if(USE_MICROTEX)
 endif()
 pkg_check_modules(CairoMM REQUIRED IMPORTED_TARGET cairomm-1.0)
 pkg_check_modules(PangoMM REQUIRED IMPORTED_TARGET pangomm-1.4)
-# pkg_check_modules(GTKMM REQUIRED IMPORTED_TARGET gtkmm-3.0)
-# pkg_check_modules(GSVMM REQUIRED IMPORTED_TARGET gtksourceviewmm-3.0)
-# add_executable(microtest microtest.cc)
 
 target_link_libraries(
   cadabra2-gtk
