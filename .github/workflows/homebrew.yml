@@ -19,6 +19,7 @@ jobs:
       with:
         repository: kpeeters/homebrew-repo
         path: homebrew-repo
+        token:  ${{ secrets.ACTIONS_HOMEBREW_REPO_TOKEN }}
     
     - name: Set up GitHub CLI
       run: |
