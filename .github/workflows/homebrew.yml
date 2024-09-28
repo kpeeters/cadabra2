@@ -43,7 +43,7 @@ jobs:
         echo "VERSION=$VERSION" >> $GITHUB_ENV
         wget https://github.com/kpeeters/cadabra2/archive/refs/tags/${VERSION}.tar.gz
         export SHA=`cat ${VERSION}.tar.gz | sha256sum -b | cut -d " " -f 1`
-        echo "SHA=${SHA}" >> GITHUB_ENV
+        echo "SHA=${SHA}" >> $GITHUB_ENV
       
     - name: Update Homebrew repo
       run: |
