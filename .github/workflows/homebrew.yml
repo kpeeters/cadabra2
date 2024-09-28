@@ -1,0 +1,48 @@
+# This is a build which gets triggered on every release, to
+# update the homebrew-repo.
+
+name: Homebrew
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Cadabra
+      uses: actions/checkout@v4
+
+    - name: Checkout Homebrew repo
+      uses: actions/checkout@v4
+      with:
+        repository: kpeeters/homebrew-repo
+        path: homebrew-repo
+    
+    - name: Set up GitHub CLI
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gh
+
+    - name: Authenticate GitHub CLI
+      run: gh auth setup-git
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+    - name: Get dependencies
+      run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev libmpfr-dev libmpc-dev && python3 --version && which python3 && python3 -m pip install --upgrade pip && python3 -m pip install wheel && python3 -m pip install sympy gmpy2 numpy
+
+    - name: configure
+      run:  mkdir build && cd build && cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
+
+    - name: Update Homebrew repo
+      run: |
+        VER=$(cat build/VERSION)
+        echo "VERSION=$VER" >> $GITHUB_ENV
+        wget https://github.com/kpeeters/cadabra2/archive/refs/tags/${VERSION}.tar.gz
+        SHA=`cat ${VERSION}.tar.gz | sha256sum -b | cut -d " " -f 1` 
+        cd ../homebrew-repo
+        cat cadabra2.rb | sed -e 's/$  url .*/  url "https:\/\/github.com\/kpeeters\/cadabra2\/archive\/refs\/tags\/${VERSION}.tar.gz"/'  | sed -e 's/  sha256.*/  sha256 "${SHA}"/' > out.rb
+        mv out.rb cadabra2.rb
+        cat cadabra2.rb
