@@ -48,5 +48,6 @@ jobs:
         cat cadabra2.rb
         git config user.name "Kasper Peeters"
         git config user.email "info@cadabra.science"
+        git add cadabra2.rb
         git commit -a -m "Update to release ${VERSION}."
         git push        
