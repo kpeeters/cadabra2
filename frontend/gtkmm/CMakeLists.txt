@@ -186,15 +186,27 @@ target_link_libraries(
 )
 
 if(USE_MICROTEX)
-  target_link_libraries(
-    cadabra2-gtk
-    PUBLIC
-    microtex-cairo          # from MicroTeX
-    microtex                # from MicroTeX
-    ${CairoMM_LIBRARIES}
-    ${PangoMM_LIBRARIES}
-    ${Fontconfig_LIBRARIES}
-  )
+  if(WIN32)
+    target_link_libraries(
+      cadabra2-gtk
+      PUBLIC
+      microtex-cairo          # from MicroTeX
+      microtex                # from MicroTeX
+      ${CairoMM_LIBRARIES}
+      ${PangoMM_LIBRARIES}
+      ${Fontconfig_LIBRARIES}
+    )
+  else()
+    target_link_libraries(
+      cadabra2-gtk
+      PUBLIC
+      microtex-cairo          # from MicroTeX
+      microtex                # from MicroTeX
+      PkgConfig::CairoMM
+      PkgConfig::PangoMM
+      PkgConfig::Fontconfig
+    )
+  endif()
 endif()
 
 
