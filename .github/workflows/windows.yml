@@ -50,6 +50,7 @@ jobs:
       
     - name: Build
       run: |
+        echo ${PATH}
         export PATH=$(echo $PATH | sed -e 's|/opt/hostedtoolcache/python/3\.[^:]*:||g')
         python --version
         which python
