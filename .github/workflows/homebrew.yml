@@ -46,3 +46,8 @@ jobs:
         cat cadabra2.rb | sed -e 's/$  url .*/  url "https:\/\/github.com\/kpeeters\/cadabra2\/archive\/refs\/tags\/${VERSION}.tar.gz"/'  | sed -e 's/$  sha256.*/  sha256 "${SHA}"/' > out.rb
         mv out.rb cadabra2.rb
         cat cadabra2.rb
+        git config user.name "Kasper Peeters"
+        git config user.email "info@cadabra.science"
+        git add .
+        git commit -m "Update to release ${VERSION}."
+        git push        
