@@ -4,7 +4,7 @@
 
 name: macOS
 
-on: [push]
+on: [release]
 
 jobs:
   build:

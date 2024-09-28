@@ -50,6 +50,9 @@ jobs:
       
     - name: Build
       run: |
+        export PATH=$(echo $PATH | sed -e 's|/opt/hostedtoolcache/python/3\.[^:]*:||g')
+        python --version
+        which python
         mkdir build
         cd build
         cmake -DPython_EXECUTABLE=/usr/bin/python3 ..
