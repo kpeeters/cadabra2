@@ -38,7 +38,7 @@ jobs:
       run:  mkdir build && cd build && cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
 
     - name: Set variables
-      run:
+      run: |
         export VERSION=$(cat build/VERSION)
         echo "VERSION=$VERSION" >> $GITHUB_ENV
         wget https://github.com/kpeeters/cadabra2/archive/refs/tags/${VERSION}.tar.gz
