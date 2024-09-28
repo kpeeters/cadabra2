@@ -50,12 +50,10 @@ jobs:
       
     - name: Build
       run: |
-        echo ${PATH}
-        export PATH=$(echo $PATH | sed -e 's|/opt/hostedtoolcache/python/3\.[^:]*:||g')
-        python --version
-        which python
         mkdir build
         cd build
+        # Turn off searching Python in the registry, as that contains the
+        # windows Python which is not the MSYS python that we want to use.
         cmake -DPython_FIND_REGISTRY=NEVER ..
         ninja
         ninja install
@@ -68,7 +66,7 @@ jobs:
 
     - name: Upload release assets
       run: |
-        gh release upload "${{ env.VERSION }}" cadabra2-${{ env.VERSION }}-win64.exe --clobber
+        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-win64.exe --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
