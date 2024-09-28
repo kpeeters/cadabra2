@@ -52,7 +52,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake -DPython3_EXECUTABLE=/usr/bin/python3 ..
+        cmake -DPython_EXECUTABLE=/usr/bin/python3 ..
         ninja
         ninja install
         cpack
