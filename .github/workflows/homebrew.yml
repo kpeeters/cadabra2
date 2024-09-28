@@ -37,18 +37,22 @@ jobs:
     - name: configure
       run:  mkdir build && cd build && cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
 
-    - name: Update Homebrew repo
-      run: |
+    - name: Set variables
+      run:
         export VERSION=$(cat build/VERSION)
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
         wget https://github.com/kpeeters/cadabra2/archive/refs/tags/${VERSION}.tar.gz
         export SHA=`cat ${VERSION}.tar.gz | sha256sum -b | cut -d " " -f 1`
-        echo ${SHA}
+        echo "SHA=${SHA}" >> GITHUB_ENV
+      
+    - name: Update Homebrew repo
+      run: |
         cd homebrew-repo
-        cat cadabra2.rb | sed -e 's/^  url .*/  url "https:\/\/github.com\/kpeeters\/cadabra2\/archive\/refs\/tags\/${VERSION}.tar.gz"/'  | sed -e 's/^  sha256.*/  sha256 "${SHA}"/' > out.rb
+        cat cadabra2.rb | sed -e 's/^  url .*/  url "https:\/\/github.com\/kpeeters\/cadabra2\/archive\/refs\/tags\/${{ env.VERSION }}.tar.gz"/'  | sed -e 's/^  sha256.*/  sha256 "${{ env.SHA }}"/' > out.rb
         mv out.rb cadabra2.rb
         cat cadabra2.rb
         git config user.name "Kasper Peeters"
         git config user.email "info@cadabra.science"
         git add cadabra2.rb
-        git commit -a -m "Update to release ${VERSION}."
+        git commit -a -m "Update to release ${{ env.VERSION }}."
         git push        
