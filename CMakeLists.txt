@@ -297,16 +297,11 @@ include(GNUInstallDirs)
 
 set(Python_POSTFIX "3")
 if(WIN32)
-  # Set a hint for finding Python, so we hopefully get the msys
-  # version. This otherwise breaks on github runners.
-  execute_process(
-    COMMAND cygpath -m /usr/lib/python3.11/
-    OUTPUT_VARIABLE PYTHON_HINT
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  message(STATUS "Using Python root dir ${PYTHON_HINT}")
-  set(Python_ROOT_DIR ${PYTHON_HINT})
-  find_package(Python 3.11 EXACT REQUIRED COMPONENTS Interpreter Development)
+  # No amount of fiddling seems to convince cmake to use the MSYS2 python
+  # instead of whatever other nonsense is installed on github runners.
+  # So we force it to an exact version which is not available except in
+  # the MSYS2 environment. Sue me.
+  find_package(Python 3.11.10 EXACT REQUIRED COMPONENTS Interpreter Development)
 else()
   find_package(Python REQUIRED COMPONENTS Interpreter Development)
 endif()
