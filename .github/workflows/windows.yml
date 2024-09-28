@@ -56,7 +56,7 @@ jobs:
         which python
         mkdir build
         cd build
-        cmake -DPython_EXECUTABLE=/usr/bin/python3 ..
+        cmake --trace-expand ..
         ninja
         ninja install
         cpack
