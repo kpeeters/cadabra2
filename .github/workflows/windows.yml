@@ -55,6 +55,7 @@ jobs:
         cmake -DPython3_EXECUTABLE=/usr/bin/python3 ..
         ninja
         ninja install
+        cpack
 
     - name: Set version variables from output of cmake
       run: |
