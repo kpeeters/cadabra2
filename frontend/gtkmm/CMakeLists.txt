@@ -165,6 +165,15 @@ endif()
 pkg_check_modules(CairoMM REQUIRED IMPORTED_TARGET cairomm-1.0)
 pkg_check_modules(PangoMM REQUIRED IMPORTED_TARGET pangomm-1.4)
 
+target_compile_options(
+  cadabra2-gtk
+  PUBLIC
+  ${Boost_CFLAGS_OTHER} 
+  ${GLIBMM_CFLAGS_OTHER} 
+  ${GTKMM3_CFLAGS_OTHER} 
+  ${SQLITE3_CFLAGS_OTHER} 
+  ${Fontconfig_CFLAGS_OTHER}
+)
 target_link_libraries(
   cadabra2-gtk
   PUBLIC

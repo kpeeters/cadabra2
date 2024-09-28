@@ -59,6 +59,8 @@ foreach(PACKAGE ${PACKAGES})
   )
 endforeach()
 
+find_package(GMPXX REQUIRED STATIC)
+
 foreach(PACKAGE ${COMPILED_PACKAGES})
   SET(CMAKE_SKIP_BUILD_RPATH FALSE)
   SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
@@ -71,7 +73,7 @@ foreach(PACKAGE ${COMPILED_PACKAGES})
   set_target_properties(${PNAME} PROPERTIES SUFFIX ".${Python_MOD_SUFFIX}")
   set_target_properties(${PNAME} PROPERTIES INSTALL_RPATH "$ORIGIN/../../:$ORIGIN/../../../../")
   
-  target_link_libraries(${PNAME} PUBLIC cadabra2 ${GMPXX_LIBRARIES})
+  target_link_libraries(${PNAME} PUBLIC cadabra2 ${GMPXX_LIBRARIES} ${GMP_LIBRARIES})
   target_include_directories(${PNAME} PUBLIC ${CADABRA_CORE_DIR})
 
   if(IPO_SUPPORTED)
