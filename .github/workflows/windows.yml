@@ -56,7 +56,7 @@ jobs:
         which python
         mkdir build
         cd build
-        cmake --trace-expand ..
+        cmake -DPython_FIND_REGISTRY=NEVER ..
         ninja
         ninja install
         cpack
