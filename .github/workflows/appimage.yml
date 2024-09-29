@@ -47,7 +47,7 @@ jobs:
         mkdir build
         cd build
         cmake -DENABLE_MATHEMATICA=OFF -DAPPIMAGE_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr ..
-        make
+        make DESTDIR=AppDir
         make install DESTDIR=AppDir
         make appimage
         mkdir -p ${{ github.workspace }}/artifacts

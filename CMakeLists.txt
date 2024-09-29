@@ -27,6 +27,9 @@ if(POLICY CMP0094)
   cmake_policy(SET CMP0094 NEW)
   message(STATUS "Set CMake policy CM0094 to NEW (use first Python found)")
 endif()
+if(POLICY CMP0169)
+  cmake_policy(SET CMP0169 OLD) # CMake 3.30: call FetchContent_Populate() with just the name of a dependency. This modern alternative was introduced in cmake 3.14 but we still support 3.12.
+endif()
 
 cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
 set(CMAKE_CXX_STANDARD 17)
