@@ -3,7 +3,7 @@
 #include <fstream>
 #include "py_helpers.hh"
 #include "nlohmann/json.hpp"
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <iostream>
 #include <regex>
 
@@ -47,6 +47,20 @@ namespace cadabra {
 			py::module_ sysconfig = py::module_::import("sysconfig");
 			py::object result = sysconfig.attr("get_path")("platlib");
 			spath = result.cast<std::string>();
+			// Some older systems return the wrong path in platlib: they
+			// use "dist-packages", but still return "site-packages". So we
+			// test for the existence of platlib, and if it does not
+			// exist, we swap "site-packages" <-> "dist-packages".
+			auto dpath = std::filesystem::path(spath);
+			if(!std::filesystem::is_directory(dpath)) {
+				auto parent = dpath.parent_path();
+				if(dpath.filename()=="site-packages")
+					dpath = parent / "dist-packages";
+				else
+					dpath = parent / "site-packages";
+				spath = dpath.string();
+				std::cerr << "swapped paths " << spath << std::endl;
+				}
 			}  		
 		return spath;
 		}

@@ -185,7 +185,8 @@ void Server::init()
 	std::string main_thread_id_str = run_string(code_get_id);
 	main_thread_id = std::stol(main_thread_id_str);
 	// std::cerr << "Server: main python thread id = " << main_thread_id << std::endl;
-
+	// std::cerr << "Server: python_path = " << python_path << std::endl;
+	
 	// Call the Cadabra default initialisation script.
 
 	//	pybind11::eval_file(python_path + "/cadabra2_defaults.py");
