@@ -76,7 +76,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	auto screen = Gdk::Screen::get_default();
 	scale = screen->get_monitor_scale_factor(0);
 	display_scale = scale;
-	std::cerr << "Monitor scale factor = " << display_scale << std::endl;
+//	std::cerr << "Monitor scale factor = " << display_scale << std::endl;
 #ifndef __APPLE__
 	// FIXME: this does not work for ssh sessions with ForwardX11.
 	const char *ds = std::getenv("DESKTOP_SESSION");
@@ -99,12 +99,12 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 	// Need to re-convert fonts setting the correct
 
-	for(const std::string& path: font_paths)
-		std::cerr << "Will search " << path << " for fonts." << std::endl;
+//	for(const std::string& path: font_paths)
+//		std::cerr << "Will search " << path << " for fonts." << std::endl;
 	
 	microtex::MicroTeX::setDefaultMathFont("LatinModernMath-Regular");
 	auto auto_init = microtex::InitFontSenseAuto();
-	std::cerr << "microtex::InitFontSenseAuto done" << std::endl;
+//	std::cerr << "microtex::InitFontSenseAuto done" << std::endl;
 	auto_init.search_paths=font_paths;
 	microtex::Init init = auto_init;
 	microtex::MicroTeX::init(init);
