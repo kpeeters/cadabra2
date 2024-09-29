@@ -148,10 +148,7 @@ void Server::init()
 	// Make the C++ CatchOutput class visible on the Python side.
 
 	auto python_path = cadabra::install_prefix_of_module();
-	char *appdir = getenv("APPDIR");
-	if(appdir)
-		python_path = std::string(appdir)+"/"+python_path;
-	
+
 	std::string stdOutErr =
 	   "import sys\n"
 	   "sys.path.append(r'"+python_path+"')\n"
