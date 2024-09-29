@@ -4,9 +4,11 @@
 
 name: AppImage
 
-on:
-  release:
-    types: [push]
+on: [push]
+
+# on:
+#   release:
+#     types: [created]
 
 jobs:
   build:
