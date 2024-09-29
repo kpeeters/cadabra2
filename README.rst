@@ -58,9 +58,10 @@ your system from the list below for detailed instructions.
 - `macOS`_
 - `Windows`_
 
-Binaries for these platforms may (or may not) be provided from the
-download page at https://cadabra.science/download.html, but they are
-not always very up-to-date.
+Binaries for most of these platforms are provided from the download
+page at https://cadabra.science/download.html, which links to
+https://github.com/kpeeters/cadabra2/releases/latest.  These binaries
+are automatically generated on every release.
 
 See `Building Cadabra as C++ library`_ for instructions on how to
 build the entire Cadabra functionality as a library which you can use
