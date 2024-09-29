@@ -59,7 +59,6 @@ namespace cadabra {
 				else
 					dpath = parent / "site-packages";
 				spath = dpath.string();
-				std::cerr << "swapped paths " << spath << std::endl;
 				}
 			}  		
 		return spath;
