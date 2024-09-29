@@ -49,6 +49,7 @@ jobs:
         cmake -DENABLE_MATHEMATICA=OFF -DAPPIMAGE_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr ..
         make DESTDIR=AppDir
         make install DESTDIR=AppDir
+        ls -laR AppDir/usr/lib/python3.8/
         make appimage
         mkdir -p ${{ github.workspace }}/artifacts
         cp Cadabra*.AppImage ${{ github.workspace }}/artifacts
