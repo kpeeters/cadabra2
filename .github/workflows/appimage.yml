@@ -51,7 +51,8 @@ jobs:
         make install DESTDIR=AppDir
         ls -laR AppDir/usr/lib/python3.8/
         # hack to make linuxdeploy find the numpy.libs libraries
-        cp AppDir/usr/lib/python3.8/dist-packages/numpy.libs/* /usr/lib
+        sudo cp AppDir/usr/lib/python3.8/dist-packages/numpy.libs/* /usr/lib
+        sudo ldconfig -v
         make appimage
         mkdir -p ${{ github.workspace }}/artifacts
         cp Cadabra*.AppImage ${{ github.workspace }}/artifacts
