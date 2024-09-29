@@ -587,7 +587,9 @@ if(APPIMAGE_MODE)
     COMMAND cp -a ${Python_SITELIB}/setuptools AppDir/${PYTHON_SITELIB}/
     COMMAND cp -a ${Python_STDARCH}/* AppDir/${Python_STDARCH}/
     COMMAND ${LINUXDEPLOY} --appdir AppDir --plugin gtk --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
+    COMMAND echo "Version is ${CADABRA_VERSION_SEM}"
     COMMAND mv Cadabra_2-${CMAKE_SYSTEM_PROCESSOR}.AppImage Cadabra_${CADABRA_VERSION_SEM}_${CMAKE_SYSTEM_PROCESSOR}.AppImage
+    COMMAND ls
   )
 endif()
 
