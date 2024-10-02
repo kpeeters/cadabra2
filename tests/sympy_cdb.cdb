@@ -67,3 +67,39 @@ def test05():
 
 test05()
       
+def test06():
+   # When acting on a super- or sub-script expression,
+   # make sure that this parent_rel is not dropped.
+   __cdbkernel__=create_scope()
+   {r,\theta}::Coordinate.
+   \partial{#}::PartialDerivative.
+   # Evaluate works, but that looks explicity at
+   # both sides separately and calls simplify on
+   # it without 'deep=True'.
+   ex:= \partial_{r}{\theta};
+   evaluate(ex, $$)
+   assert(ex==0)
+   print("Test 06a passed")
+   # When using 'deep=True', simplify gets called
+   # on the sub-script, and we need to be careful
+   # not to turn this into '\partial{r}{\theta}',
+   # as that is meaningless in sympy.
+   ex:= \partial_{r}{\theta};
+   simplify(ex, deep=True)
+   assert(ex==0)
+   print("Test 06b passed")
+
+test06()
+
+def test07():
+   __cdbkernel__=create_scope()
+   {r,\theta}::Coordinate.
+   \partial{#}::PartialDerivative.
+   f::Depends(r).
+   ex:= \partial_{r}{3 f};
+   simplify(ex, deep=True)
+   tst:= 3 \partial_{r}{f} - @(ex);
+   assert(tst==0)
+   print("Test 07 passed")
+
+test07()

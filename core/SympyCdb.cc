@@ -136,7 +136,9 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	std::cerr << "reparsed " << first.node << "\n" << Ex(first) << std::endl;
 	std::cerr << "before " << it.node << "\n" << Ex(it) << std::endl;
 #endif
+	str_node::parent_rel_t pr = it->fl.parent_rel;
 	it = ex.move_ontop(it, first);
+	it->fl.parent_rel = pr;
 #ifdef DEBUG
 	std::cerr << "after " << Ex(it) << std::endl;
 	std::cerr << "top node " << it.node << std::endl;
