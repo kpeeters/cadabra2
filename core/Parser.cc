@@ -27,7 +27,7 @@ You should have received a copy of the GNU General Public License
 #include <iostream>
 #include <typeinfo>
 
-//#define DEBUG 1
+// #define DEBUG 1
 
 std::istream& operator>>(std::istream& str, cadabra::Parser& pa)
 	{
@@ -387,6 +387,19 @@ bool Parser::string2tree(const std::string& inp)
 #endif
 				if(c==' ' || c=='\n' || c=='\\' || is_link(c)!=str_node::p_none
 				      || is_closing_bracket(c)!=str_node::b_no) {
+					current_mode.pop_back();
+					tree->append_child(current_parent,str_node(tmp,
+					                   current_bracket.back(),
+					                   current_parent_rel.back()));
+					tmp.clear();
+					break;
+					}
+				if(is_opening_bracket(c)!=str_node::b_no) {
+					// This happens with e.g. `\partial_\theta{f}`. The `\theta`
+					// is a backslashname, and should be terminated as soon as
+					// the opening brace is found. If you want the whole thing
+					// to go into the subscript you should use `\partial_{\theta{f}}`
+					// and that will then not trigger backslashname (just ordinary name).
 					current_mode.pop_back();
 					tree->append_child(current_parent,str_node(tmp,
 					                   current_bracket.back(),

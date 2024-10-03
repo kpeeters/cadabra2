@@ -392,3 +392,13 @@ def test42():
        print("Test 42b passed")
 
 test42()
+
+def test43():
+    ex:=\partial_\theta{A};
+    tst:= \partial_{\theta}{A} - @(ex);
+    assert(tst==0)
+    print("Test 43 passed")
+
+test43()
+
+    
