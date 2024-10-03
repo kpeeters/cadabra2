@@ -375,3 +375,20 @@ def test41():
 
 test41()
 
+def test42():
+    try:
+       ex:=\\bla;
+       print("The above should have triggered a RuntimeError")
+       assert(1==0)
+    except RuntimeError as ex:
+       print("Test 42a passed")
+
+    try:
+       ex:= A + 1\
+                ;
+       print("The above should have triggered a RuntimeError")
+       assert(1==0)
+    except RuntimeError as ex:
+       print("Test 42b passed")
+
+test42()

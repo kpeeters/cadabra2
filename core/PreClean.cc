@@ -11,6 +11,7 @@ namespace cadabra {
 		if(*it->name=="\\frac")                      cleanup_frac(kernel, ex, it);
 		else if(*it->name=="\\sub")                  cleanup_sub(kernel, ex, it);
 		else if(*it->name=="\\sqrt")                 cleanup_sqrt(kernel, ex, it);
+		else if(*it->name=="\\prod")                 cleanup_prod(kernel, ex, it);
 		else if((*it->name).substr(0,2)=="UP" || (*it->name).substr(0,2)=="DN")  cleanup_updown(kernel, ex, it);
 
 		cleanup_indexbracket(kernel, ex, it);
@@ -116,6 +117,16 @@ namespace cadabra {
 		{
 		st->name=name_set.insert("\\pow").first;
 		multiply(tr.append_child(st, str_node("1"))->multiplier, multiplier_t(1)/2);
+		}
+
+	void cleanup_prod(const Kernel&, Ex& tr, Ex::iterator& st)
+		{
+		auto sib=tr.begin(st);
+		while(sib!=tr.end(st)) {
+			if(*sib->name=="\\")
+				throw std::logic_error("Single backslash as name not allowed, did you mean to write a single slash but wrote two?");
+			++sib;
+			}
 		}
 
 	void cleanup_sub(const Kernel&, Ex& tr, Ex::iterator& it)

@@ -27,7 +27,7 @@ You should have received a copy of the GNU General Public License
 #include <iostream>
 #include <typeinfo>
 
-// #define DEBUG 1
+//#define DEBUG 1
 
 std::istream& operator>>(std::istream& str, cadabra::Parser& pa)
 	{
@@ -199,10 +199,10 @@ bool Parser::string2tree(const std::string& inp)
 
 #ifdef DEBUG
 	std::cout << "converted to utf32" << std::endl;
-	for(int i=0; i<inp.size(); ++i)
+	for(size_t i=0; i<inp.size(); ++i)
 		std::cout << (int)inp[i] << " ";
 	std::cout << std::endl;
-	for(int i=0; i<str.size(); ++i)
+	for(size_t i=0; i<str.size(); ++i)
 		std::cout << (int)str[i] << " ";
 	std::cout << std::endl;
 #endif
@@ -223,7 +223,9 @@ bool Parser::string2tree(const std::string& inp)
 			}
 		char32_t c=get_token(i);
 #ifdef DEBUG		
-		std::cerr << i << " " << (int)c << " mode " << static_cast<int>(current_mode.back()) << std::endl;
+		std::cerr << i << " " << (int)c << " " << (c>128 ? "\\":"")
+					 << (char)(c<128 ? c:(c-128)) << " mode "
+					 << static_cast<int>(current_mode.back()) << std::endl;
 #endif
 		switch(current_mode.back()) {
 			case m_skipwhite:
@@ -380,7 +382,9 @@ bool Parser::string2tree(const std::string& inp)
 				advance(i);
 				break;
 			case m_backslashname:
-				//				std::cerr << "m_backslashname" << " " << c << std::endl;
+#ifdef DEBUG
+				std::cerr << "m_backslashname" << " " << c << std::endl;
+#endif
 				if(c==' ' || c=='\n' || c=='\\' || is_link(c)!=str_node::p_none
 				      || is_closing_bracket(c)!=str_node::b_no) {
 					current_mode.pop_back();
@@ -395,22 +399,31 @@ bool Parser::string2tree(const std::string& inp)
 				if(c=='\"')
 					current_mode.push_back(m_verbatim);
 				break;
-			case m_childgroup:
-				// std::cerr << "m_childgroup" << " " << c << std::endl;
-				if(is_closing_bracket(c)!=str_node::b_no) {
+			case m_childgroup: {
+#ifdef DEBUG
+				std::cerr << "m_childgroup" << " " << c << std::endl;
+#endif
+				str_node::bracket_t cb = is_closing_bracket(c);
+				if(cb!=str_node::b_no) {
 					// std::cerr << "leaving group" << std::endl;
 					current_mode.pop_back();
+					if(current_bracket.back()!=cb)
+						throw std::logic_error("Closing bracket not matching opening bracket, or spurious backslash.");
 					current_bracket.pop_back();
 					current_parent_rel.pop_back();
 					advance(i);
 					break;
 					}
 				else {
+#ifdef DEBUG
+					std::cerr << "skip white then find name" << std::endl;
+#endif
 					current_mode.push_back(m_name);
 					current_mode.push_back(m_skipwhite);
 					break;
 					}
 				break;
+				}
 			case m_initialgroup:
 				current_mode.push_back(m_name);
 				current_mode.push_back(m_skipwhite);
