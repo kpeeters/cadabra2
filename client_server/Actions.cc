@@ -73,6 +73,7 @@ void ActionAddCell::execute(DocumentThread& cl, GUIBase& gb)
 			break;
 		}
 	child_num=cl.doc.index(newref);
+	// std::cerr << "ActionAddCell::execute: added as child " << child_num << std::endl;
 	gb.add_cell(cl.doc, newref, true);
 	}
 
@@ -81,9 +82,26 @@ void ActionAddCell::revert(DocumentThread& cl, GUIBase& gb)
 	// Remove the GUI cell from the notebook and then
 	// remove the corresponding DataCell from the DTree.
 
-	auto ch = cl.doc.child(ref, child_num);
-	//std::cerr << "removing cell " << ch->textbuf << std::endl;
+	// std::cerr << "ActionAddCell::revert: removing child " << child_num << std::endl;
+
+	DTree::sibling_iterator ch;
+	switch(pos) {
+		case Position::before:
+			// `ref` is a cell after our cell.
+			ch = cl.doc.child(cl.doc.parent(ref), child_num);
+			break;
+		case Position::after:
+			// `ref` is a cell before our cell.
+			ch = cl.doc.child(cl.doc.parent(ref), child_num);
+			break;
+		case Position::child:
+			// `ref` is a parent of our cell.
+			ch = cl.doc.child(ref, child_num);
+			break;
+		}
+	// std::cerr << "ActionAddCell::revert: removing cell " << ch->textbuf << std::endl;
 	gb.remove_cell(cl.doc, ch);
+	// std::cerr << "ActionAddCell::revert: finally erase datacell" << std::endl;
 	cl.doc.erase(ch);
 	}
 

@@ -2530,8 +2530,9 @@ template <class T, class tree_node_allocator>
 typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_allocator>::child(const iterator_base& it, unsigned int num) 
 	{
 	tree_node *tmp=it.node->first_child;
-	while(num--) {
-		assert(tmp!=0);
+	while(num-- != 0) {
+		if(tmp==0)
+			throw std::range_error("tree::child: reached null sibling with "+std::to_string(num+1)+" steps still to go");
 		tmp=tmp->next_sibling;
 		}
 	return tmp;

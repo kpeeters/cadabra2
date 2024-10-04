@@ -216,6 +216,10 @@ bool meld::apply_tableaux(iterator it)
 		return res;
 		}
 
+#ifdef DEBUG
+	std::cerr << "Applying tableau for node " << *it->name << std::endl;
+#endif
+	
 	using namespace boost::numeric::ublas;
 	using matrix_type = matrix<mpq_class>;
 	using vector_type = vector<mpq_class>;

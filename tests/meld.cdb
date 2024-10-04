@@ -624,20 +624,43 @@ def tab33():
 tab33()
 
 
-#  {a,b,c,i,j,k}::Indices;
-#  {a,b,c,i,j,k}::Integer(1..3);
-#  {ct, st}::Symbol;
-#  \nabla{#}::Derivative;
-#  {st,ct,n_{k}}::Depends(\nabla{#})
-#  
-#  {d{#}}::KroneckerDelta;
-#  {e_{a b c}}::EpsilonTensor(delta=d);
-#  
-#  rota := R_{a j} = ct d_{a j} + (1-ct) n_{a} n_{j} - st e_{a j k} n_{k};
-#  FGR := \nabla{R_{a k}}_{j} \nabla{R_{a k}}_{j};
-#  
-#  substitute(FGR, rota); distribute(_, repeat=True);
-#  product_rule(_); unwrap(_);
-#  distribute(_, repeat=True);
-#  collect_factors(_); sort_product(_); sort_sum(_);
-#  meld(_);        
+{a,b,c,i,j,k}::Indices;
+{a,b,c,i,j,k}::Integer(1..3);
+{ct, st}::Symbol;
+\nabla{#}::Derivative;
+{st,ct,n_{k}}::Depends(\nabla{#})
+
+{d{#}}::KroneckerDelta;
+{e_{a b c}}::EpsilonTensor(delta=d);
+
+rota := R_{a j} = ct d_{a j} + (1-ct) n_{a} n_{j} - st e_{a j k} n_{k};
+FGR := \nabla_{j}{R_{a k}} \nabla_{j}{R_{a k}};
+
+substitute(FGR, rota); distribute(_, repeat=True);
+product_rule(_); unwrap(_);
+distribute(_, repeat=True);
+collect_factors(_); sort_product(_);
+
+sort_sum(_);
+
+meld(_);        
+
+
+
+{a,b,c,i,j,k}::Indices;
+{a,b,c,i,j,k}::Integer(1..3);
+{ct, st}::Symbol;
+\nabla{#}::Derivative;
+{st,ct,n_{k}}::Depends(\nabla{#})
+
+{d{#}}::KroneckerDelta;
+{e_{a b c}}::EpsilonTensor(delta=d);
+
+rota := R_{a j} = ct d_{a j} + (1-ct) n_{a} n_{j} - st e_{a j k} n_{k};
+FGR := \nabla{R_{a k}}_{j} \nabla{R_{a k}}_{j};
+
+substitute(FGR, rota); distribute(_, repeat=True);\
+product_rule(_); unwrap(_);\
+distribute(_, repeat=True);\
+collect_factors(_); sort_product(_); sort_sum(_);\
+meld(_);
