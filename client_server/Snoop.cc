@@ -914,6 +914,11 @@ void Snoop::start_websocket_client()
 	wsclient.clear_access_channels(websocketpp::log::alevel::all);
 	wsclient.clear_error_channels(websocketpp::log::elevel::all);
 
+	SNOOPDEBUG(
+		wsclient.set_access_channels(websocketpp::log::alevel::all);
+		wsclient.clear_access_channels(websocketpp::log::alevel::frame_payload);
+				  )
+		
 	wsclient.set_open_handler(bind(&Snoop::on_client_open, this, websocketpp::lib::placeholders::_1));
 	wsclient.set_fail_handler(bind(&Snoop::on_client_fail, this, websocketpp::lib::placeholders::_1));
 	wsclient.set_close_handler(bind(&Snoop::on_client_close, this, websocketpp::lib::placeholders::_1));
@@ -1271,7 +1276,8 @@ std::vector<Snoop::AppEntry> Snoop::get_app_registrations(std::string uuid_filte
 
 void Snoop::on_client_open(websocketpp::connection_hdl)
 	{
-//   std::cerr << "Snoop: connection to " << server_  << " open " << std::this_thread::get_id() << std::endl;
+	SNOOPDEBUG( std::cerr << "Snoop: connection to " << server_  << " open " << std::this_thread::get_id() << std::endl; )
+	
 	sync_with_server(true);
 	std::unique_lock<std::mutex> lock(connection_mutex);
 	connection_is_open=true;
@@ -1280,14 +1286,15 @@ void Snoop::on_client_open(websocketpp::connection_hdl)
 	//std::cerr << "Snoop: connection open" << std::endl;
 	}
 
-void Snoop::on_client_fail(websocketpp::connection_hdl)
+void Snoop::on_client_fail(websocketpp::connection_hdl hdl)
 	{
 	// Clients may be waiting for the connection to open, but we may
 	// never get to that stage. Signal them to move on.
 	std::unique_lock<std::mutex> lock(connection_mutex);
 	connection_attempt_failed=true;
 	connection_cv.notify_all();
-//	std::cerr << "Snoop: connection failed" << std::endl;
+	WebsocketClient::connection_ptr con = wsclient.get_con_from_hdl(hdl);
+	SNOOPDEBUG( std::cerr << "Snoop: connection failed: " << con->get_ec().message() << " " << con->get_remote_close_code() << std::endl; )
 	}
 
 void Snoop::on_client_close(websocketpp::connection_hdl)

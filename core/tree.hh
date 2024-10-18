@@ -2535,6 +2535,9 @@ typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_alloca
 			throw std::range_error("tree::child: reached null sibling with "+std::to_string(num+1)+" steps still to go");
 		tmp=tmp->next_sibling;
 		}
+	if(tmp==0)
+		throw std::range_error("tree::child: reached null sibling at final step");
+	
 	return tmp;
 	}
 
