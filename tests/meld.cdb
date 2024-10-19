@@ -12,7 +12,7 @@ no_comp = ("--no-comp" in sys.argv)
 # Simple symmetric/antisymmetic tensors
 def tab01():
     __cdbkernel__ = create_scope()
-    S_{a b c}::Symmetric;
+    S_{a b c}::Symmetric.
     ex:= S_{a b c}S_{b a c} + S_{b a c}S_{c a b}:
     meld(ex)
     assert ex == $2S_{a b c}S_{b a c}$, ex
@@ -49,7 +49,7 @@ tab04()
 
 def tab05():
     __cdbkernel__ = create_scope()
-    A_{a b}::AntiSymmetric;
+    A_{a b}::AntiSymmetric.
     ex = meld($k * A_{a b} + l * A_{b a}$)
     assert ex == $(k - l) A_{a b}$, ex
     print("Test tab05 passed")
@@ -126,7 +126,7 @@ def tab12a():
     ex:= W_{p q r s} W_{p t r u} W_{t v q w} W_{u v s w} 
         - W_{p q r s} W_{p q t u} W_{r v t w} W_{s v u w}
         - W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a}
-        + (1/4) W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c}:
+        + (1/4) W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c}.
     meld(ex)
     assert ex == 0, ex
 
@@ -143,7 +143,7 @@ def tab12b():
     ex:= W_{p q r s} W_{p t r u} W_{t v q w} W_{u v s w} 
         - W_{p q r s} W_{p q t u} W_{r v t w} W_{s v u w}
         - W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a}
-        + (1/4) W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c}:
+        + (1/4) W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c}.
     young_project_product(ex)
     rename_dummies(ex)
     assert ex == 0, ex
@@ -206,9 +206,9 @@ tab17()
 
 def tab18a():
     __cdbkernel__ = create_scope()
-    {a,b,c,d}::Indices(group);
-    {\mu,\nu,\rho,\sigma}::Indices(spacetime);
-    \epsilon^{\mu\nu\rho\sigma}::EpsilonTensor;
+    {a,b,c,d}::Indices(group).
+    {\mu,\nu,\rho,\sigma}::Indices(spacetime).
+    \epsilon^{\mu\nu\rho\sigma}::EpsilonTensor.
     ex1:=F^{a b}_{\mu\sigma} A^{b c}_{\nu} A^{c a}_{\rho} \epsilon^{\mu\sigma\nu\rho}; 
     ex2:=A^{a b}_{\mu} F^{b c}_{\nu\sigma} A^{c a}_{\rho} \epsilon^{\mu\nu\sigma\rho};
     ex:=@(ex1)+@(ex2);
@@ -224,9 +224,9 @@ else:
 
 def test18b():
     __cdbkernel__ = create_scope()
-    {a,b,c,d}::Indices(group);
-    {\mu,\nu,\rho,\sigma}::Indices(spacetime);
-    \epsilon^{\mu\nu\rho\sigma}::EpsilonTensor;
+    {a,b,c,d}::Indices(group).
+    {\mu,\nu,\rho,\sigma}::Indices(spacetime).
+    \epsilon^{\mu\nu\rho\sigma}::EpsilonTensor.
     ex1:=F^{a b}_{\mu\sigma} A^{b c}_{\nu} A^{c a}_{\rho} \epsilon^{\mu\sigma\nu\rho}; 
     ex2:=A^{a b}_{\mu} F^{b c}_{\nu\sigma} A^{c a}_{\rho} \epsilon^{\mu\nu\sigma\rho};
     ex:=@(ex1)+@(ex2);
@@ -239,12 +239,12 @@ if not no_comp:
 
 def tab19():
     __cdbkernel__ = create_scope()
-    {\mu,\nu,\rho,\sigma}::Indices(spacetime)
+    {\mu,\nu,\rho,\sigma}::Indices(spacetime).
     \epsilon^{\mu\nu\rho\sigma}::EpsilonTensor.
-    {a,b,c,d}::Indices(group)
-    F_{\mu\sigma}::ImplicitIndex(F^{b c}_{\mu\sigma})
-    A_{\mu}::ImplicitIndex(A^{a b}_{\mu})
-    Tr{#}::Trace(indices=group)
+    {a,b,c,d}::Indices(group).
+    F_{\mu\sigma}::ImplicitIndex(F^{b c}_{\mu\sigma}).
+    A_{\mu}::ImplicitIndex(A^{a b}_{\mu}).
+    Tr{#}::Trace(indices=group).
     ex1:= F_{\mu\sigma} A_{\nu} A_{\rho} \epsilon^{\mu\sigma\nu\rho}:
     ex2:= A_{\mu} F_{\nu\sigma} A_{\rho} \epsilon^{\mu\nu\sigma\rho}:
     ex:= Tr {@(ex1) + @(ex2)};
@@ -282,9 +282,9 @@ tab21()
 
 def tab22():        
     __cdbkernel__ = create_scope()
-    {m,n,p,q,r,s}::Indices;
-    A_{m n}::AntiSymmetric;
-    B_{m n}::Symmetric;
+    {m,n,p,q,r,s}::Indices.
+    A_{m n}::AntiSymmetric.
+    B_{m n}::Symmetric.
     ex:= A_{m n} B_{n p} - A_{n m} B_{n p} + A_{m p} B_{q r} B_{q r} - A_{p m} B_{q s} B_{q s};
     meld(ex, repeat=False)
     assert ex == $2A_{m n} B_{n p} + 2A_{m p} B_{q r} B_{q r}$, ex
@@ -295,11 +295,11 @@ tab22()
 # Portugal's example.
 def tab23():
     __cdbkernel__ = create_scope()
-    R_{a b c d}::RiemannTensor;
+    R_{a b c d}::RiemannTensor.
     ex:= 2 R_{a b c d} R_{e f a k} R_{h c k b} R_{d h e f}
         +4 R_{a b c d} R_{e f k a} R_{h b c e} R_{d k f h}
         -  R_{a b c d} R_{e f k a} R_{h b f e} R_{c d k h}
-        +4 R_{a b c d} R_{h k d f} R_{e f k a} R_{h b c e};
+        +4 R_{a b c d} R_{h k d f} R_{e f k a} R_{h b c e}.
     meld(ex)
     assert ex == 0, ex
     print("Test tab23 passed")
@@ -309,9 +309,9 @@ tab23()
 # RiemannRule13 from MathTensor
 def tab24():
     __cdbkernel__ = create_scope()
-    R_{a b c d}::RiemannTensor;
+    R_{a b c d}::RiemannTensor.
     ex:= R_{a b c d} R_{e a g b} R_{c d e g}
-       -1/2 R_{p q r s} R_{t u p q} R_{r s t u};
+       -1/2 R_{p q r s} R_{t u p q} R_{r s t u}.
     meld(ex)
     assert ex == 0, ex
     print("Test tab24 passed")
@@ -439,7 +439,7 @@ def tab33():
 	  1/8 D_{e}{D_{e}{R_{a b c d}}} D_{h}{D_{i}{R_{a b f g}}} D_{i}{D_{h}{R_{c d f g}}}.
 	meld(ex)
 	assert ex == 0, ex
-	print("Test 33 passed")
+	print("Test tab33 passed")
 	
 tab33()
 
@@ -564,7 +564,7 @@ def cyctrace06():
         a A^{\mu\nu} B^{\mu\rho} B^{\nu\rho} + 
         b C^{\mu\nu} A^{\mu\rho} B^{\nu\rho} +
         c C^{\mu\nu} B^{\mu\rho} A^{\nu\rho}
-    };
+    }.
     assert meld($@(ex)$) == ex
     print("Test cyctrace06 passed")
 
@@ -575,9 +575,9 @@ cyctrace06()
 
 def diag01():
    __cdbkernel__=create_scope()
-   {t,r}::Coordinate;
-   {a,b}::Indices(values={t,r},position=fixed);
-   A_{a b}::Diagonal;
+   {t,r}::Coordinate.
+   {a,b}::Indices(values={t,r},position=fixed).
+   A_{a b}::Diagonal.
    ex = $A_{t r}$ + $A_{r r}$ + $A_{r t}$ + $A_{t t}$
    meld(ex)
    assert ex == $A_{r r} + A_{t t}$, ex
@@ -587,7 +587,7 @@ diag01()
 
 def diag02():
    __cdbkernel__=create_scope()
-   {m,n}::Integer;
+   {m,n}::Integer.
    \delta_{m n}::Diagonal.
    ex = $-\delta_{1 1}\delta_{2 2}$ + $\delta_{1 2}\delta_{1 2}$ + $\delta_{1 1}\delta_{2 2}$
    meld(ex)
@@ -611,56 +611,56 @@ def traceless01():
    
 traceless01()
 
-def tab33():
+def tab33b():
    __cdbkernel__=create_scope()
-   {a,b,c,d}::Indices;
+   {a,b,c,d}::Indices.
    X_{a b c}::TableauSymmetry(shape=(2,1), indices=(0,2,1)).
    ex:=X_{a d d};
    meld(ex)
    tst:= X_{a d d} - @(ex);
    assert(tst==0)
-   print("Test tab33 passed")
+   print("Test tab33b passed")
 
-tab33()
-
-
-{a,b,c,i,j,k}::Indices;
-{a,b,c,i,j,k}::Integer(1..3);
-{ct, st}::Symbol;
-\nabla{#}::Derivative;
-{st,ct,n_{k}}::Depends(\nabla{#})
-
-{d{#}}::KroneckerDelta;
-{e_{a b c}}::EpsilonTensor(delta=d);
-
-rota := R_{a j} = ct d_{a j} + (1-ct) n_{a} n_{j} - st e_{a j k} n_{k};
-FGR := \nabla_{j}{R_{a k}} \nabla_{j}{R_{a k}};
-
-substitute(FGR, rota); distribute(_, repeat=True);
-product_rule(_); unwrap(_);
-distribute(_, repeat=True);
-collect_factors(_); sort_product(_);
-
-sort_sum(_);
-
-meld(_);        
+tab33b()
 
 
-
-{a,b,c,i,j,k}::Indices;
-{a,b,c,i,j,k}::Integer(1..3);
-{ct, st}::Symbol;
-\nabla{#}::Derivative;
-{st,ct,n_{k}}::Depends(\nabla{#})
-
-{d{#}}::KroneckerDelta;
-{e_{a b c}}::EpsilonTensor(delta=d);
-
-rota := R_{a j} = ct d_{a j} + (1-ct) n_{a} n_{j} - st e_{a j k} n_{k};
-FGR := \nabla{R_{a k}}_{j} \nabla{R_{a k}}_{j};
-
-substitute(FGR, rota); distribute(_, repeat=True);\
-product_rule(_); unwrap(_);\
-distribute(_, repeat=True);\
-collect_factors(_); sort_product(_); sort_sum(_);\
-meld(_);
+# {a,b,c,i,j,k}::Indices;
+# {a,b,c,i,j,k}::Integer(1..3);
+# {ct, st}::Symbol;
+# \nabla{#}::Derivative;
+# {st,ct,n_{k}}::Depends(\nabla{#})
+# 
+# {d{#}}::KroneckerDelta;
+# {e_{a b c}}::EpsilonTensor(delta=d);
+# 
+# rota := R_{a j} = ct d_{a j} + (1-ct) n_{a} n_{j} - st e_{a j k} n_{k};
+# FGR := \nabla_{j}{R_{a k}} \nabla_{j}{R_{a k}};
+# 
+# substitute(FGR, rota); distribute(_, repeat=True);
+# product_rule(_); unwrap(_);
+# distribute(_, repeat=True);
+# collect_factors(_); sort_product(_);
+# 
+# sort_sum(_);
+# 
+# meld(_);        
+# 
+# 
+# 
+# {a,b,c,i,j,k}::Indices;
+# {a,b,c,i,j,k}::Integer(1..3);
+# {ct, st}::Symbol;
+# \nabla{#}::Derivative;
+# {st,ct,n_{k}}::Depends(\nabla{#})
+# 
+# {d{#}}::KroneckerDelta;
+# {e_{a b c}}::EpsilonTensor(delta=d);
+# 
+# rota := R_{a j} = ct d_{a j} + (1-ct) n_{a} n_{j} - st e_{a j k} n_{k};
+# FGR := \nabla{R_{a k}}_{j} \nabla{R_{a k}}_{j};
+# 
+# substitute(FGR, rota); distribute(_, repeat=True);\
+# product_rule(_); unwrap(_);\
+# distribute(_, repeat=True);\
+# collect_factors(_); sort_product(_); sort_sum(_);\
+# meld(_);
