@@ -154,11 +154,8 @@ void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)
 					newref=ref;
 					}
 				else {
-					// FIXME: adding a new cell should be part of the
-					// undo stack and going through ActionAddCell, otherwise
-					// undo/redo will generate it with a different cell id.
-					// Alternatively, make sure that we store the generated cell id
-					// so we can re-use it if we execute this in redo.
+					// Make sure that we store the generated cell id so we
+					// can re-use it if we execute this in redo.
 					if(needed_new_cell_with_id > 0) {
 						DataCell::id_t id;
 						id.id = needed_new_cell_with_id;
