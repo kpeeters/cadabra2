@@ -116,6 +116,7 @@ void Cadabra::on_activate()
 
 	auto nw = new cadabra::NotebookWindow(this);
 	compute->set_master(nw, nw);
+	nw->main_thread_id = std::this_thread::get_id();
 
 	// Connect the two threads.
 	nw->set_compute_thread(compute);

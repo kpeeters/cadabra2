@@ -193,8 +193,16 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	actiongroup->add_action( "ExportPython",          sigc::mem_fun(*this, &NotebookWindow::on_file_export_python) );
 	actiongroup->add_action( "Quit",                  sigc::mem_fun(*this, &NotebookWindow::on_file_quit) );
 
-	// Edit menu actions.
-	actiongroup->add_action( "EditUndo" ,             sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
+	// Edit menu actions for undo/redo; enabling/disabling of the above
+	// is done in update_title.
+	action_undo = Gio::SimpleAction::create("EditUndo");
+	action_redo = Gio::SimpleAction::create("EditRedo");	
+	action_undo->signal_activate().connect( sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
+	action_redo->signal_activate().connect( sigc::mem_fun(*this, &NotebookWindow::on_edit_redo) );
+	actiongroup->add_action( action_undo );
+	actiongroup->add_action( action_redo );
+
+	// Edit menu actions for copy/paste.
 	action_copy = Gio::SimpleAction::create("EditCopy");
 	action_copy->signal_activate().connect( sigc::mem_fun(*this, &NotebookWindow::on_edit_copy) );
 	action_copy->set_enabled(false);
@@ -259,6 +267,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	cdbapp->set_accel_for_action("cdb.Save",                   "<Primary>S");
 	cdbapp->set_accel_for_action("cdb.Quit",                   "<Primary>Q");
 	cdbapp->set_accel_for_action("cdb.EditUndo",               "<Primary>Z");
+	cdbapp->set_accel_for_action("cdb.EditRedo",               "<Primary>Y");
 	cdbapp->set_accel_for_action("cdb.EditCopy",               "<Primary>C");
 	cdbapp->set_accel_for_action("cdb.EditPaste",              "<Primary>V");
 	cdbapp->set_accel_for_action("cdb.EditInsertAbove",        "<alt>Up");
@@ -341,6 +350,10 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	   "        <item>"
 		"          <attribute name='label'>Undo</attribute>"
 		"          <attribute name='action'>cdb.EditUndo</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Redo</attribute>"
+		"          <attribute name='action'>cdb.EditRedo</attribute>"
 		"        </item>"
 		"      </section>"
 		"      <section>"
@@ -937,6 +950,11 @@ void NotebookWindow::update_title()
 		else
 			set_title("Cadabra");
 		}
+	
+	// std::cerr << "undo_stack.size() = " << undo_stack.size() << std::endl;
+	// std::cerr << "redo_stack.size() = " << redo_stack.size() << std::endl;
+	action_undo->set_enabled( undo_stack.size() > 0 );
+	action_redo->set_enabled( redo_stack.size() > 0 );
 	}
 
 void NotebookWindow::set_statusbar_message(const std::string& message, int line, int col)
@@ -1102,6 +1120,7 @@ void NotebookWindow::process_todo_queue()
 		req["header"]["from_server"] = true;
 		on_interactive_output(req);
 		}
+
 	}
 
 void NotebookWindow::on_crash_window_closed(int)
@@ -1378,14 +1397,14 @@ void NotebookWindow::update_status()
 	std::lock_guard<std::mutex> guard(status_mutex);
 	progressbar.set_text(progress_string);
 	progressbar.set_fraction(progress_frac);
-
+	
 	std::string pos = " Line: " + std::to_string(status_line)
 		+ "   Col: " + std::to_string(status_col);
 	if (status_string == "")
 		status_label.set_text(pos);
 	else
 		status_label.set_text(pos + "   |   " + status_string);
-	}
+ 	}
 
 void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 	{
@@ -1474,6 +1493,7 @@ void NotebookWindow::remove_all_cells()
 		canvasses[i]->visualcells.clear();
 		}
 	engine.checkout_all();
+	update_title();
 	}
 
 void NotebookWindow::update_cell(const DTree&, DTree::iterator it)
@@ -1504,6 +1524,7 @@ void NotebookWindow::update_cell(const DTree&, DTree::iterator it)
 		}
 
 	disable_stacks=false;
+	update_title();
 	}
 
 void NotebookWindow::position_cursor(const DTree&, DTree::iterator it, int pos)
@@ -1529,6 +1550,7 @@ void NotebookWindow::position_cursor(const DTree&, DTree::iterator it, int pos)
 		}
 
 	current_cell=it;
+	update_title();
 	}
 
 void NotebookWindow::select_range(const DTree&, DTree::iterator it, int start, int len)
@@ -2185,9 +2207,14 @@ void NotebookWindow::on_file_quit()
 		hide();
 	}
 
-void NotebookWindow::on_edit_undo()
+void NotebookWindow::on_edit_undo(const Glib::VariantBase&)
 	{
 	undo();
+	}
+
+void NotebookWindow::on_edit_redo(const Glib::VariantBase&)
+	{
+	redo();
 	}
 
 void NotebookWindow::on_edit_copy(const Glib::VariantBase&)

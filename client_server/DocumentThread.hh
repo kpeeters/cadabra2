@@ -5,6 +5,7 @@
 #include <mutex>
 #include <stack>
 #include <map>
+#include <thread>
 
 #include "DataCell.hh"
 #include "tree.hh"
@@ -85,6 +86,9 @@ namespace cadabra {
 			/// One undo step.
 			void undo();
 
+			/// One redo step.
+			void redo();
+
 			/// Find string, return match, or a (doc.end(), std::string::npos).
 			std::pair<DTree::iterator, size_t> find_string(DTree::iterator start_it, size_t start_pos, const std::string& f, bool case_ins) const;
 			
@@ -124,6 +128,10 @@ namespace cadabra {
 
 			void set_user_details(const std::string& name, const std::string& email, const std::string& affiliation);
 
+			/// For debugging purposes we store the main thread idea here (the
+			/// main Cadabra class sets it).
+			std::thread::id main_thread_id;
+			
 		protected:
 			GUIBase       *gui;
 			ComputeThread *compute;
@@ -150,8 +158,9 @@ namespace cadabra {
 
 			/// Process the action queue. It is allowed to call queue_action() above
 			/// while this is running. So a running action can add more actions.
+			/// Needs to be called on the GUI thread!
 
-			void                                             process_action_queue();
+			void         process_action_queue();
 			virtual bool on_unhandled_error(const std::exception& err);
 
 

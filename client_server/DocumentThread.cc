@@ -97,7 +97,29 @@ void DocumentThread::undo()
 
 	redo_stack.push(ua);
 	undo_stack.pop();
+	// std::cerr << "DocumentThread::undo: undo_stack.size() == " << undo_stack.size() << std::endl;
 	ua->revert(*this, *gui);
+	disable_stacks=false;
+
+	stack_mutex.unlock();
+	}
+
+void DocumentThread::redo()
+	{
+	stack_mutex.lock();
+	if(redo_stack.size()==0) {
+		//std::cerr << "no entries left on the stack" << std::endl;
+		stack_mutex.unlock();
+		return;
+		}
+
+	disable_stacks=true;
+	auto ua = redo_stack.top();
+	//std::cerr << "Undo action " << typeid(*ua).name() << std::endl;
+
+	undo_stack.push(ua);
+	redo_stack.pop();
+	ua->execute(*this, *gui);
 	disable_stacks=false;
 
 	stack_mutex.unlock();
@@ -175,9 +197,10 @@ void DocumentThread::process_action_queue()
 	// but that is not guaranteed. Actions should always be run on the GUI thread.
 	// This absolutely has to be run on the main GUI thread.
 
-	// if(main_thread_id != std::this_thread::get_id())
-	// 	throw std::logic_error("DocumentThread::process_action_queue: internal error, not running on main thread.");
-	
+	if(main_thread_id != std::this_thread::get_id())
+		std::cerr << "INTERNAL ERROR: DocumentThread::process_action_queue not running on main thread."
+					 << std::endl;
+
 	stack_mutex.lock();
 	while(pending_actions.size()>0) {
 		std::shared_ptr<ActionBase> ab = pending_actions.front();

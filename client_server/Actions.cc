@@ -10,6 +10,10 @@
 
 using namespace cadabra;
 
+#define DEBUG(ln)
+// #define DEBUG(ln) ln
+
+
 ActionBase::ActionBase(DataCell::id_t id)
 	: ref_id(id)
 	{
@@ -35,7 +39,7 @@ void ActionBase::execute(DocumentThread& cl, GUIBase& )
 	}
 
 ActionAddCell::ActionAddCell(DataCell cell, DataCell::id_t ref_id, Position pos_)
-	: ActionBase(ref_id), newcell(cell), pos(pos_), is_replacement(false)
+	: ActionBase(ref_id), newcell(cell), pos(pos_), is_replacement(false), is_input_form(false)
 	{
 	}
 
@@ -50,7 +54,7 @@ void ActionAddCell::execute(DocumentThread& cl, GUIBase& gb)
 	while(it!=cl.doc.end()) {
 		if((*it).id().id==newcell.id().id) {
 			// FIXME: right now we only change textbuf.
-			// std::cerr << "found! " << it->id().id << ", " << static_cast<int>(it->cell_type) << std::endl;
+			DEBUG( std::cerr << "found! " << it->id().id << ", " << static_cast<int>(it->cell_type) << std::endl; )
 			it->textbuf=newcell.textbuf;
 			gb.update_cell(cl.doc, it);
 			is_replacement=true;
@@ -60,21 +64,30 @@ void ActionAddCell::execute(DocumentThread& cl, GUIBase& gb)
 		}
 
 	// If we get here we have to append/insert.
+	DEBUG( std::cerr << "ActionAddCell::execute: add cell with id " << newcell.id().id; )
 	switch(pos) {
 		case Position::before:
 			newref = cl.doc.insert(ref, newcell);
+			DEBUG( std::cerr << " before "; )
 			break;
 		case Position::after:
 			newref = cl.doc.insert_after(ref, newcell);
+			DEBUG( std::cerr << " after "; )			
 			break;
 		case Position::child:
-			// std::cerr << "Append child to " << ref->id().id << std::endl;
 			newref = cl.doc.append_child(ref, newcell);
+			DEBUG( std::cerr << " as child of "; )			
 			break;
 		}
+	DEBUG( std::cerr << "  " << ref->id().id << std::endl; )
+		
 	child_num=cl.doc.index(newref);
-	// std::cerr << "ActionAddCell::execute: added as child " << child_num << std::endl;
+	DEBUG( std::cerr << "ActionAddCell::execute: added as child " << child_num <<
+			 ": |" << newcell.textbuf << "|" << std::endl; )
 	gb.add_cell(cl.doc, newref, true);
+
+	if(newcell.cell_type == DataCell::CellType::input_form)
+		is_input_form=true;
 	}
 
 void ActionAddCell::revert(DocumentThread& cl, GUIBase& gb)
@@ -82,7 +95,7 @@ void ActionAddCell::revert(DocumentThread& cl, GUIBase& gb)
 	// Remove the GUI cell from the notebook and then
 	// remove the corresponding DataCell from the DTree.
 
-	// std::cerr << "ActionAddCell::revert: removing child " << child_num << std::endl;
+	DEBUG( std::cerr << "ActionAddCell::revert: removing child " << child_num << std::endl; )
 
 	DTree::sibling_iterator ch;
 	switch(pos) {
@@ -99,7 +112,7 @@ void ActionAddCell::revert(DocumentThread& cl, GUIBase& gb)
 			ch = cl.doc.child(ref, child_num);
 			break;
 		}
-	// std::cerr << "ActionAddCell::revert: removing cell " << ch->textbuf << std::endl;
+	DEBUG( std::cerr << "ActionAddCell::revert: removing cell " << ch->textbuf << std::endl; )
 	gb.remove_cell(cl.doc, ch);
 	// std::cerr << "ActionAddCell::revert: finally erase datacell" << std::endl;
 	cl.doc.erase(ch);
@@ -107,11 +120,11 @@ void ActionAddCell::revert(DocumentThread& cl, GUIBase& gb)
 
 bool ActionAddCell::undoable() const
 	{
-	return !is_replacement;
+	return !(is_replacement || is_input_form);
 	}
 
 ActionPositionCursor::ActionPositionCursor(DataCell::id_t ref_id, Position pos_)
-	: ActionBase(ref_id), needed_new_cell(false), pos(pos_)
+	: ActionBase(ref_id), needed_new_cell_with_id(0), pos(pos_)
 	{
 	}
 
@@ -141,9 +154,22 @@ void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)
 					newref=ref;
 					}
 				else {
-					DataCell newcell(DataCell::CellType::python, "");
-					newref = cl.doc.insert(sib, newcell);
-					needed_new_cell=true;
+					// FIXME: adding a new cell should be part of the
+					// undo stack and going through ActionAddCell, otherwise
+					// undo/redo will generate it with a different cell id.
+					// Alternatively, make sure that we store the generated cell id
+					// so we can re-use it if we execute this in redo.
+					if(needed_new_cell_with_id > 0) {
+						DataCell::id_t id;
+						id.id = needed_new_cell_with_id;
+						DataCell newcell(id, DataCell::CellType::python, "");
+						newref = cl.doc.insert(sib, newcell);
+						}
+					else {
+						DataCell newcell(DataCell::CellType::python, "");
+						needed_new_cell_with_id=newcell.id().id;
+						newref = cl.doc.insert(sib, newcell);
+						}
 					}
 				}
 			break;
@@ -167,23 +193,24 @@ void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)
 		}
 
 	// Update GUI.
-	if(needed_new_cell) {
+	if(needed_new_cell_with_id > 0) {
 		// std::cerr << "cadabra-client: adding new visual cell before positioning cursor" << std::endl;
 		gb.add_cell(cl.doc, newref, true);
 		}
 	// std::cerr << "cadabra-client: positioning cursor" << std::endl;
 	gb.position_cursor(cl.doc, newref, -1);
+	DEBUG( std::cerr << "ActionPositionCursor::execute: done" << std::endl; )
 	}
 
 void ActionPositionCursor::revert(DocumentThread& cl, GUIBase& gb)
 	{
-	if(needed_new_cell) {
+	if(needed_new_cell_with_id > 0) {
 		gb.remove_cell(cl.doc, newref);
 		cl.doc.erase(newref);
 		}
 	gb.position_cursor(cl.doc, ref, -1);
+	DEBUG( std::cerr << "ActionPositionCursor::revert: done" << std::endl; )
 	}
-
 
 ActionRemoveCell::ActionRemoveCell(DataCell::id_t ref_id)
 	: ActionBase(ref_id)
@@ -203,13 +230,13 @@ void ActionRemoveCell::execute(DocumentThread& cl, GUIBase& gb)
 	reference_parent_cell = cl.doc.parent(ref);
 	reference_child_index = cl.doc.index(ref);
 	removed_tree=DTree(ref);
-	//	std::cerr << "removed has " << cl.doc.number_of_children(ref) << " children" << std::endl;
+	DEBUG( std::cerr << "removed has " << cl.doc.number_of_children(ref) << " children" << std::endl; )
 	cl.doc.erase(ref);
 	}
 
 void ActionRemoveCell::revert(DocumentThread& cl, GUIBase& gb)
 	{
-	//std::cerr << "need to undo a remove cell at index " << reference_child_index << std::endl;
+	DEBUG( std::cerr << "need to undo a remove cell at index " << reference_child_index << std::endl; )
 	DTree::iterator newcell;
 	if(cl.doc.number_of_children(reference_parent_cell)==0) {
 		newcell = cl.doc.append_child(reference_parent_cell, removed_tree.begin());
@@ -218,10 +245,10 @@ void ActionRemoveCell::revert(DocumentThread& cl, GUIBase& gb)
 		auto it = cl.doc.child(reference_parent_cell, reference_child_index);
 		//		++it;
 		newcell = cl.doc.insert_subtree(it, removed_tree.begin());
-		//		std::cerr << "added doc cell " << newcell->textbuf << " at " << &(*newcell) << " before " << it->textbuf << std::endl;
+		DEBUG( std::cerr << "added doc cell " << newcell->textbuf << " at " << &(*newcell) << " before " << it->textbuf << std::endl; )
 		}
 	gb.add_cell(cl.doc, newcell, true);
-	//std::cerr << "added vis rep" << std::endl;
+	DEBUG( std::cerr << "added vis rep" << std::endl; )
 	}
 
 
@@ -321,12 +348,14 @@ void ActionInsertText::execute(DocumentThread& cl, GUIBase& gb)
 	ActionBase::execute(cl, gb);
 
 	ref->textbuf.insert(insert_pos, text);
-	// std::cerr << "insert: textbuf now |" << ref->textbuf << "|" << std::endl;
+	DEBUG( std::cerr << "ActionInsertText::execute: textbuf now |" << ref->textbuf << "|" << std::endl; )
+	gb.update_cell(cl.doc, ref);
 	}
 
 void ActionInsertText::revert(DocumentThread& cl, GUIBase& gb)
 	{
 	ref->textbuf.erase(insert_pos, text.size());
+	DEBUG( std::cerr << "ActionInsertText::revert: textbuf now |" << ref->textbuf << "|" << std::endl; )
 	gb.update_cell(cl.doc, ref);
 	}
 
@@ -372,7 +401,7 @@ void ActionEraseText::execute(DocumentThread& cl, GUIBase& gb)
 	{
 	ActionBase::execute(cl, gb);
 
-	//std::cerr << from_pos << ", " << to_pos << std::endl;
+	DEBUG( std::cerr << from_pos << ", " << to_pos << std::endl; )
 	removed_text=ref->textbuf.substr(from_pos, to_pos-from_pos);
 	ref->textbuf.erase(from_pos, to_pos-from_pos);
 	}

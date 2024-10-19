@@ -212,7 +212,8 @@ namespace cadabra {
 			bool quit_safeguard(bool quit);
 			bool on_first_redraw();
 
-			void on_edit_undo();
+			void on_edit_undo(const Glib::VariantBase&);
+			void on_edit_redo(const Glib::VariantBase&);
 			void on_edit_copy(const Glib::VariantBase&);
 			void on_edit_paste();
 			void on_edit_insert_above();
@@ -320,7 +321,8 @@ namespace cadabra {
 
 			// We keep references to a few menu actions so we can
 			// enable/disable them at runtime.
-			Glib::RefPtr<Gio::SimpleAction> action_copy, action_paste, action_fontsize, action_highlight,
+			Glib::RefPtr<Gio::SimpleAction> action_copy, action_undo, action_redo,
+				action_paste, action_fontsize, action_highlight,
 				action_stop, action_register, action_console, action_microtex;
 
 			// Transition animations.

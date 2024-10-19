@@ -80,6 +80,10 @@ namespace cadabra {
 			// If we are replacing a cell, keep track of that so we
 			// report that we are not undoable.
 			bool              is_replacement;
+
+			// For input-form cells, we want no undo, as they will go
+			// when the owner cell will be reverted.
+			bool              is_input_form;
 		};
 
 
@@ -99,7 +103,7 @@ namespace cadabra {
 			virtual void revert(DocumentThread&,  GUIBase&) override;
 
 		private:
-			bool              needed_new_cell;
+			uint64_t          needed_new_cell_with_id;
 			DTree::iterator   newref;
 			Position          pos;
 		};
