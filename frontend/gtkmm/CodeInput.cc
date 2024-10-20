@@ -79,7 +79,7 @@ void CodeInput::init(const Prefs& prefs)
 	edit.set_tabs(tabs);
 
 	edit.signal_button_press_event().connect(sigc::mem_fun(this, &CodeInput::handle_button_press), false);
-	edit.get_buffer()->signal_insert().connect(sigc::mem_fun(this, &CodeInput::handle_insert), true);
+	edit.get_buffer()->signal_insert().connect(sigc::mem_fun(this, &CodeInput::handle_insert), true /* run before default handler */);
 	edit.get_buffer()->signal_erase().connect(sigc::mem_fun(this, &CodeInput::handle_erase), false);
 	if (prefs.highlight) {
 		using namespace std::string_literals;
@@ -510,7 +510,8 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	//	bool is_shift_tab    = get_editable() && event->keyval==GDK_KEY_Tab && (event->state&Gdk::SHIFT_MASK);
 	bool is_tab = get_editable() && event->keyval==GDK_KEY_Tab;
 	bool retval=false;
-	// std::cerr << event->keyval << ", " << event->state << " pressed" << std::endl;
+	// std::cerr << event->keyval << ", " << event->state << " pressed, focus = " << has_focus()
+	// 			 << ", editable = " << get_editable() << ", is_shift_return = " << is_shift_return << std::endl;
 
 	if(!is_shift_return && !is_tab)
 		retval=Gtk::TextView::on_key_press_event(event);
@@ -561,6 +562,10 @@ void CodeInput::exp_input_tv::shift_enter_pressed()
 
 void CodeInput::exp_input_tv::on_textbuf_change()
 	{
+	// When a keypress happens, this function gets called first (and for every
+	// widget which shares the TextBuffer). This feeds through that a change
+	// was made, but nothing else happens. The next event is the handle_insert
+	// signal.
 	content_changed(datacell);
 	}
 
@@ -681,6 +686,15 @@ void CodeInput::update_buffer()
 
 void CodeInput::handle_insert(const Gtk::TextIter& pos, const Glib::ustring& text, int bytes)
 	{
+	// If we have two CodeInput widgets which share the same
+	// TextBuffer, then manually inserting (typing) text into one will
+	// fire handle_insert on both widgets. So we need to not propagate
+	// this change if we are not focused.
+
+	if(edit.has_focus()==false) {
+		return;
+		}
+	
 	Glib::RefPtr<Gtk::TextBuffer> buf=edit.get_buffer();
 	// warning: pos contains the cursor pos, and because we get to this handler
 	// _after_ the default handler has run, the cursor will have moved by
@@ -693,6 +707,11 @@ void CodeInput::handle_insert(const Gtk::TextIter& pos, const Glib::ustring& tex
 
 void CodeInput::handle_erase(const Gtk::TextIter& start, const Gtk::TextIter& end)
 	{
+	// See handle_insert for the 'focus' logic.
+	if(edit.has_focus()==false) {
+		return;
+		}
+	
 	//std::cerr << "handle_erase: " << start << ", " << end << std::endl;
 	Glib::RefPtr<Gtk::TextBuffer> buf=edit.get_buffer();
 	int spos = buf->get_slice(buf->begin(), start).bytes();

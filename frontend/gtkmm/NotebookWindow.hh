@@ -226,7 +226,7 @@ namespace cadabra {
 			void on_edit_find();
 
 			void on_view_split();
-			void on_view_close();
+			void on_view_close(const Glib::VariantBase&);
 
 			void on_run_cell();
 			void on_run_runall();
@@ -322,7 +322,7 @@ namespace cadabra {
 			// We keep references to a few menu actions so we can
 			// enable/disable them at runtime.
 			Glib::RefPtr<Gio::SimpleAction> action_copy, action_undo, action_redo,
-				action_paste, action_fontsize, action_highlight,
+				action_paste, action_view_close, action_fontsize, action_highlight,
 				action_stop, action_register, action_console, action_microtex;
 
 			// Transition animations.

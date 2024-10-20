@@ -220,7 +220,10 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 	// View menu actions.
 	actiongroup->add_action( "ViewSplit",             sigc::mem_fun(*this, &NotebookWindow::on_view_split) );
-	actiongroup->add_action( "ViewClose",             sigc::mem_fun(*this, &NotebookWindow::on_view_close) );		
+	action_view_close = Gio::SimpleAction::create("ViewClose");
+	action_view_close->signal_activate().connect( sigc::mem_fun(*this, &NotebookWindow::on_view_close) );	
+	actiongroup->add_action( action_view_close );
+	
 	action_fontsize  = actiongroup->add_action_radio_integer( "FontSize",
 																				 sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size),
 																				 prefs.font_step );	
@@ -955,6 +958,7 @@ void NotebookWindow::update_title()
 	// std::cerr << "redo_stack.size() = " << redo_stack.size() << std::endl;
 	action_undo->set_enabled( undo_stack.size() > 0 );
 	action_redo->set_enabled( redo_stack.size() > 0 );
+	action_view_close->set_enabled( canvasses.size() > 1 );
 	}
 
 void NotebookWindow::set_statusbar_message(const std::string& message, int line, int col)
@@ -1730,7 +1734,6 @@ bool NotebookWindow::cell_content_insert(const std::string& content, int pos, DT
 	if(disable_stacks) return false;
 
 	unselect_output_cell();
-	//std::cerr << "cell_content_insert" << std::endl;
 	std::shared_ptr<ActionBase> action = std::make_shared<ActionInsertText>(it->id(), pos, content);
 	queue_action(action);
 	process_todo_queue();
@@ -1770,6 +1773,7 @@ void NotebookWindow::dim_output_cells(DTree::iterator it)
 
 bool NotebookWindow::cell_got_focus(DTree::iterator it, int canvas_number)
 	{
+//	std::cerr << "focus on cell " << &(*it) << " canvas " << canvas_number << std::endl;
 	current_cell=it;
 	current_canvas=canvas_number;
 
@@ -2413,7 +2417,7 @@ void NotebookWindow::on_view_split()
 	canvasses[canvasses.size()-2]->set_position(canvasses[canvasses.size()-2]->get_height()/2.0);
 	}
 
-void NotebookWindow::on_view_close()
+void NotebookWindow::on_view_close(const Glib::VariantBase&)
 	{
 	// FIXME: this always removes the last canvas, not the current one.
 	if(canvasses.size()>1) {
