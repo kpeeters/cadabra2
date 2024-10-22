@@ -171,12 +171,12 @@ void Example_GLArea::realize()
   try
   {
     m_GLArea.throw_if_error();
-    init_buffers();
+//    init_buffers();
 
-    const bool use_es = m_GLArea.get_context()->get_use_es();
-    const std::string vertex_path = use_es ? "glarea-gles.vs.glsl" : "glarea-gl.vs.glsl";
-    const std::string fragment_path = use_es ? "glarea-gles.fs.glsl" : "glarea-gl.fs.glsl";
-    init_shaders(vertex_path, fragment_path);
+//    const bool use_es = m_GLArea.get_context()->get_use_es();
+//    const std::string vertex_path = use_es ? "glarea-gles.vs.glsl" : "glarea-gl.vs.glsl";
+//    const std::string fragment_path = use_es ? "glarea-gles.fs.glsl" : "glarea-gl.fs.glsl";
+//    init_shaders(vertex_path, fragment_path);
 
     // GtkGLArea can drop its reference on the GLContext before the unrealize signal
     // is emitted. We get our own reference and keep it until Example_GLArea::unrealize()
@@ -223,36 +223,37 @@ bool Example_GLArea::render(const Glib::RefPtr<Gdk::GLContext>& context)
 	
 	m_GLArea.throw_if_error();
 	
-// 	 try {
-// 		 if(first_call) {
-// 			 first_call=false;
-// 			 first_render();
-// 			 }
-//     py::exec(R"(
-// print("rendering")
-// vao.render()
-// )");
-// catch(py::error_already_set &e) {
-// 	std::cerr << "Python exception: " << e.what() << std::endl;
-// 	}
-// return true;
-	
 	try {
-		m_GLArea.throw_if_error();
-		glClearColor(0.5, 0.5, 0.5, 1.0);
-		glClear(GL_COLOR_BUFFER_BIT);
-		
-		draw_triangle();
-		
-		glFlush();
-		
-		return true;
+		if(first_call) {
+			first_call=false;
+			first_render();
+			}
+		py::exec(R"(
+               print("rendering")
+               vao.render()
+      )");
 		}
-	catch(const Gdk::GLError& gle) {
-		cerr << "An error occurred in the render callback of the GLArea" << endl;
-		cerr << gle.domain() << "-" << gle.code() << "-" << gle.what() << endl;
-		return false;
+	catch(py::error_already_set &e) {
+		std::cerr << "Python exception: " << e.what() << std::endl;
 		}
+	return true;
+	
+// 	try {
+// 		m_GLArea.throw_if_error();
+// 		glClearColor(0.5, 0.5, 0.5, 1.0);
+// 		glClear(GL_COLOR_BUFFER_BIT);
+// 		
+// 		draw_triangle();
+// 		
+// 		glFlush();
+// 		
+// 		return true;
+// 		}
+// 	catch(const Gdk::GLError& gle) {
+// 		cerr << "An error occurred in the render callback of the GLArea" << endl;
+// 		cerr << gle.domain() << "-" << gle.code() << "-" << gle.what() << endl;
+// 		return false;
+// 		}
 	}
 
 Gtk::Box* Example_GLArea::create_axis_slider_box(int axis)
