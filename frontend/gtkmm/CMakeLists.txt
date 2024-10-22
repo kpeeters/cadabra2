@@ -152,6 +152,22 @@ else()
   add_executable(cadabra2-gtk WIN32 ${cadabra_gtk_src})
 endif()
 
+include_directories(
+  "."
+  "${CADABRA_LIBS_DIR}/pybind11/include"
+  ${Python_INCLUDE_DIRS}
+)
+
+add_executable(example_glarea example_glarea.cc)
+target_link_libraries(
+  example_glarea
+  PUBLIC
+  ${GTKMM3_LIBRARIES}
+  epoxy
+  pybind11::embed
+  ${Python_LIBRARIES}
+)
+
 if(USE_MICROTEX)
   message(STATUS "MicroTeX binaries will be built at ${microtex_BINARY_DIR}")
   include_directories(
