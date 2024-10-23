@@ -18,8 +18,8 @@ jobs:
 #       if: github.ref != 'refs/heads/devel'
 #       run: exit 1
       
-    - name: remove python 3.12
-      run:  brew uninstall python@3.12
+#    - name: remove python 3.12
+#      run:  brew uninstall python@3.12
           
     - name: get dependencies
       run:  brew install cmake boost pcre gmp python@3.13 pkgconfig gtkmm3 adwaita-icon-theme && python3 -m pip install --break-system-packages --user sympy gmpy2 numpy
