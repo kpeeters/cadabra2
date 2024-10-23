@@ -64,6 +64,7 @@ find_package(SQLITE3)
 find_package(GLIBMM)
 find_package(GTKMM3)
 find_package(Boost 1.45.0 COMPONENTS system)
+find_library(EPOXY epoxy)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
@@ -163,7 +164,7 @@ target_link_libraries(
   example_glarea
   PUBLIC
   ${GTKMM3_LIBRARIES}
-  epoxy
+  ${EPOXY}
   pybind11::embed
   ${Python_LIBRARIES}
 )
