@@ -18,14 +18,6 @@ jobs:
 #       if: github.ref != 'refs/heads/devel'
 #       run: exit 1
       
-    - name: setup python
-      uses: actions/setup-python@v5
-      with:
-          python-version: 3.12
-
-    - name: remove python 3.13
-      run:  brew uninstall python@3.13
-          
     - name: get dependencies
       run:  brew install cmake boost pcre gmp python@3.12 pkgconfig gtkmm3 adwaita-icon-theme && python3 -m pip install sympy gmpy2 numpy
 
