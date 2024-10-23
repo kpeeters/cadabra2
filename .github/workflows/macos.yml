@@ -27,7 +27,7 @@ jobs:
       run:  brew install cmake boost pcre gmp python@3.12 pkgconfig gtkmm3 adwaita-icon-theme && python3 -m pip install sympy gmpy2 numpy
 
     - name: configure
-      run:  mkdir build && cd build && cmake -DENABLE_MATHEMATICA=OFF ..
+      run:  mkdir build && cd build && cmake -DENABLE_MATHEMATICA=OFF -DPython_EXECUTABLE=/usr/bin/python3.12 ..
       
     - name: make
       run:  cd build && make
