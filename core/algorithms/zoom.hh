@@ -7,7 +7,7 @@ namespace cadabra {
 
 	class zoom : public Algorithm {
 		public:
-			zoom(const Kernel& k, Ex& e, Ex& r);
+			zoom(const Kernel& k, Ex& e, Ex& r, bool partial = true);
 
 			virtual bool     can_apply(iterator) override;
 			virtual result_t apply(iterator&) override;
@@ -17,6 +17,8 @@ namespace cadabra {
 
 			std::vector<sibling_iterator> to_erase;
 			std::vector<Ex::path_t>       to_keep;
+
+			bool partial;
 		};
 
 	}

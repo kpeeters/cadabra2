@@ -6,8 +6,8 @@
 
 using namespace cadabra;
 
-zoom::zoom(const Kernel& k, Ex& e, Ex& rules_)
-	: Algorithm(k, e), rules(rules_)
+zoom::zoom(const Kernel& k, Ex& e, Ex& rules_, bool partial)
+	: Algorithm(k, e), rules(rules_), partial(partial)
 	{
 	// Convert rules into a list (if it isn't already)
 	rules = cadabra::make_list(rules);
@@ -66,7 +66,7 @@ Algorithm::result_t zoom::apply(iterator& it)
    // Wrap all things which we want to remove from view in an
 	// \ldots node.
 
-	substitute subs(kernel, tr, rules);
+	substitute subs(kernel, tr, rules, partial);
 	sibling_iterator sib=tr.begin(it);
 	bool hiding=false;
 	sibling_iterator current_ldots=tr.end(it);
