@@ -187,6 +187,17 @@ def test10():
 
 test10()
 
+def test11():
+    __cdbkernel__=create_scope()
+    ex:=A D + A B C D E;
+    zoom(_, $A D$, partial=False)
+    substitute(ex, $A->Q$)
+    unzoom(_)
+    tst:= Q D + A B C D E - @(ex);
+    assert(tst==0)
+    print("Test 11 passed")
+
+test11()
 
 #def test08():
 # 
