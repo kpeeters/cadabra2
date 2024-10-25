@@ -39,7 +39,8 @@ jobs:
         cd submodules
         git clone -b kpeeters/cadabra https://github.com/kpeeters/MicroTeX.git microtex
         cd ../..
-        tar zcf cadabra2-${VERSION}-source-inclusive.tar.gz --exclude ".git" cadabra2
+        mv cadabra2 cadabra2-${VERSION}
+        tar zcf cadabra2-${VERSION}-source-inclusive.tar.gz --exclude ".git" cadabra2-${VERSION}
       
     - name: Upload tarball to assets
       run: |
