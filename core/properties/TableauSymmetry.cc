@@ -2,6 +2,7 @@
 #include "properties/TableauSymmetry.hh"
 #include "IndexIterator.hh"
 #include "Kernel.hh"
+#include "Exceptions.hh"
 
 using namespace cadabra;
 
@@ -69,6 +70,8 @@ bool TableauSymmetry::parse(Kernel&, keyval_t& keyvals)
 				++ii;
 				if((--tabdown)==0 && ii!=indices.end()) {
 					++si;
+					if(si==shape.end())
+						throw ConsistencyException("Number of indices larger than number of boxes in tableau.");
 					++rowind;
 					tabdown=to_long(*si->multiplier);
 					}
