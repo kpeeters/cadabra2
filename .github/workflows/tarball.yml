@@ -37,13 +37,13 @@ jobs:
         echo "VERSION=$VERSION" >> $GITHUB_ENV
         mkdir -p submodules
         cd submodules
-        git clone https://github.com/kpeeters/MicroTeX.git microtex
+        git clone -b kpeeters/cadabra https://github.com/kpeeters/MicroTeX.git microtex
         cd ../..
-        tar zcf cadabra2-${VERSION}-inclusive.tar.gz --exclude ".git" cadabra2
+        tar zcf cadabra2-${VERSION}-source-inclusive.tar.gz --exclude ".git" cadabra2
       
     - name: Upload tarball to assets
       run: |
-        gh release upload "${{ env.VERSION }}" ${{ github.workspace }}/../cadabra2-${VERSION}-inclusive.tar.gz --clobber
+        gh release upload "${{ env.VERSION }}" ${{ github.workspace }}/../cadabra2-${VERSION}-source-inclusive.tar.gz --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
