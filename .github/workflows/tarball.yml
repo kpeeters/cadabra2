@@ -31,8 +31,8 @@ jobs:
     - name: Create tarball
       run: |
         export CDB_MAJOR=`cat cmake/version.cmake |grep 'MAJOR '|sed -e 's/[^ ]* \([0-9]*\).*/\1/'`
-        export CDB_MINOR=`cat cmake/version.cmake |grep 'MAJOR '|sed -e 's/[^ ]* \([0-9]*\).*/\1/'`
-        export CDB_PATCH=`cat cmake/version.cmake |grep 'MAJOR '|sed -e 's/[^ ]* \([0-9]*\).*/\1/'`
+        export CDB_MINOR=`cat cmake/version.cmake |grep 'MINOR '|sed -e 's/[^ ]* \([0-9]*\).*/\1/'`
+        export CDB_PATCH=`cat cmake/version.cmake |grep 'PATCH '|sed -e 's/[^ ]* \([0-9]*\).*/\1/'`
         export VERSION=${CDB_MAJOR}.${CDB_MINOR}.${CDB_PATCH}
         echo "VERSION=$VERSION" >> $GITHUB_ENV
         mkdir -p submodules
@@ -43,7 +43,7 @@ jobs:
       
     - name: Upload tarball to assets
       run: |
-        gh release upload "${{ env.VERSION }}" ${{ github.workspace }}/cadabra2-${VERSION}-inclusive.tar.gz --clobber
+        gh release upload "${{ env.VERSION }}" ${{ github.workspace }}/../cadabra2-${VERSION}-inclusive.tar.gz --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
