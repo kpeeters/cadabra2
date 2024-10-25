@@ -1699,10 +1699,8 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int )
 	if(parent->cell_type==DataCell::CellType::latex) {
 		// FIXME: we are not allowed to do this directly, all should go through
 		// actions.
-		std::cerr << "toggling visibility" << std::endl;
 		parent->hidden = !parent->hidden;
 		for(unsigned int i=0; i<canvasses.size(); ++i) {
-			std::cerr << "canvas " << i << std::endl;			
 			auto vis = canvasses[i]->visualcells.find(&(*parent));
 			if(vis==canvasses[i]->visualcells.end()) {
 				throw std::logic_error("Cannot find visual cell.");
