@@ -41,6 +41,7 @@ jobs:
         cd ../..
         mv cadabra2 cadabra2-${VERSION}
         tar zcf cadabra2-${VERSION}-source-inclusive.tar.gz --exclude ".git" cadabra2-${VERSION}
+        mv cadabra2-${VERSION} cadabra2 
       
     - name: Upload tarball to assets
       run: |
