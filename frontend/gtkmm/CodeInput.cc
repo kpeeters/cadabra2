@@ -70,12 +70,19 @@ void CodeInput::init(const Prefs& prefs)
 	edit.set_left_margin(20);
 	//	if(gtk_get_minor_version()<11 || gtk_get_minor_version()>=14)
 
+	// Determine the width of a tab.
+	auto layout = Pango::Layout::create(edit.get_pango_context());
+	Pango::Rectangle logical_rect;
+	layout->set_text(" ");
+	int space_width, space_height;
+	layout->get_pixel_size(space_width, space_height);
+
+	// Set 10 tab stops, each 3 spaces wide.
+	edit.set_monospace(true);
 	edit.set_accepts_tab(true);
 	Pango::TabArray tabs(10);
-	// FIXME: use character width measured, instead of '8', or at least
-	// understand how Pango units are supposed to work.
 	for(int i=0; i<10; ++i)
-		tabs.set_tab(i, Pango::TAB_LEFT, 4*8*i);
+		tabs.set_tab(i, Pango::TAB_LEFT, 3*space_width*i);
 	edit.set_tabs(tabs);
 
 	edit.signal_button_press_event().connect(sigc::mem_fun(this, &CodeInput::handle_button_press), false);
@@ -509,12 +516,14 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	bool is_shift_return = get_editable() && event->keyval==GDK_KEY_Return && (event->state&Gdk::SHIFT_MASK);
 	//	bool is_shift_tab    = get_editable() && event->keyval==GDK_KEY_Tab && (event->state&Gdk::SHIFT_MASK);
 	bool is_tab = get_editable() && event->keyval==GDK_KEY_Tab;
-	bool retval=false;
-	// std::cerr << event->keyval << ", " << event->state << " pressed, focus = " << has_focus()
-	// 			 << ", editable = " << get_editable() << ", is_shift_return = " << is_shift_return << std::endl;
+	bool is_ctrl_k = get_editable() && event->keyval==GDK_KEY_k && (event->state&Gdk::CONTROL_MASK);
+	bool is_ctrl_a = get_editable() && event->keyval==GDK_KEY_a && (event->state&Gdk::CONTROL_MASK);
+	bool is_ctrl_e = get_editable() && event->keyval==GDK_KEY_e && (event->state&Gdk::CONTROL_MASK);
 
-	if(!is_shift_return && !is_tab)
-		retval=Gtk::TextView::on_key_press_event(event);
+	bool retval=false;
+//	std::cerr << event->keyval << ", " << event->state << " pressed, focus = " << has_focus()
+//	 			 << ", editable = " << get_editable() << ", is_shift_return = " << is_shift_return << std::endl;
+
 
 	Glib::RefPtr<Gtk::TextBuffer> textbuf=get_buffer();
 
@@ -523,7 +532,7 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 		content_execute(datacell);
 		return true;
 		}
-	if(is_tab) {
+	else if(is_tab) {
 		// Only complete if the last character is not whitespace.
 
 		Glib::RefPtr<Gtk::TextBuffer::Mark> ins = get_buffer()->get_insert();
@@ -535,6 +544,43 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 		else
 			retval=Gtk::TextView::on_key_press_event(event);				
 		}
+	else if(is_ctrl_a) {
+		Glib::RefPtr<Gtk::TextBuffer::Mark> ins = get_buffer()->get_insert();
+		Gtk::TextBuffer::iterator iter=textbuf->get_iter_at_mark(ins);
+		iter.set_line(iter.get_line());
+		textbuf->place_cursor(iter);
+		return true;
+		}
+	else if(is_ctrl_e) {
+		Glib::RefPtr<Gtk::TextBuffer::Mark> ins = get_buffer()->get_insert();
+		Gtk::TextBuffer::iterator iter=textbuf->get_iter_at_mark(ins);
+		iter.forward_to_line_end();
+		textbuf->place_cursor(iter);
+		return true;
+		}
+	else if(is_ctrl_k) {
+		Glib::RefPtr<Gtk::TextBuffer::Mark> ins = get_buffer()->get_insert();
+		Gtk::TextBuffer::iterator iter=textbuf->get_iter_at_mark(ins);
+		auto line = iter.get_line();
+		Gtk::TextBuffer::iterator line_start = iter;
+		Gtk::TextBuffer::iterator line_end = iter;
+
+		// Move to the start and end of the line
+		line_start.set_line(iter.get_line());  // Move to the beginning of the line
+		line_end.forward_to_line_end();        // Move to the end of the line
+
+		// Include the newline character if it exists (non-last line)
+		if (!line_end.is_end()) 
+			line_end.forward_char();
+
+		// Delete the text between line_start and line_end
+		get_buffer()->erase(line_start, line_end);		
+		return true;
+		}
+	else {
+		retval=Gtk::TextView::on_key_press_event(event);
+		}
+	
 	//	else {
 	//		// If this was a real key press (i.e. not just SHIFT or ALT or similar), emit a
 	//		// signal so that the cell can be scrolled into view if necessary.

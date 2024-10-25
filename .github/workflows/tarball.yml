@@ -3,11 +3,11 @@
 
 name: Tarball
 
-# on:
-#   release:
-#     types: [created]
+on:
+  release:
+    types: [created]
 
-on: [push]
+# on: [push]
 
 jobs:
   build:
