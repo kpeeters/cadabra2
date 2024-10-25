@@ -1,0 +1,49 @@
+# This is a build which gets triggered on every release, to
+# generate a tarball which includes all submodules.
+
+name: Tarball
+
+# on:
+#   release:
+#     types: [created]
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Cadabra
+      uses: actions/checkout@v4
+
+    - name: Set up GitHub CLI
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gh
+
+    - name: Authenticate GitHub CLI
+      run: gh auth setup-git
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+    - name: Create tarball
+      run: |
+        export CDB_MAJOR=`cat cmake/version.cmake |grep 'MAJOR '|sed -e 's/[^ ]* \([0-9]*\).*/\1/'`
+        export CDB_MINOR=`cat cmake/version.cmake |grep 'MAJOR '|sed -e 's/[^ ]* \([0-9]*\).*/\1/'`
+        export CDB_PATCH=`cat cmake/version.cmake |grep 'MAJOR '|sed -e 's/[^ ]* \([0-9]*\).*/\1/'`
+        export VERSION=${CDB_MAJOR}.${CDB_MINOR}.${CDB_PATCH}
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        mkdir -p submodules
+        cd submodules
+        git clone https://github.com/kpeeters/MicroTeX.git microtex
+        cd ../..
+        tar zcf cadabra2-${VERSION}-inclusive.tar.gz --exclude ".git" cadabra2
+      
+    - name: Upload tarball to assets
+      run: |
+        gh release upload "${{ env.VERSION }}" ${{ github.workspace }}/cadabra2-${VERSION}-inclusive.tar.gz --clobber
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
