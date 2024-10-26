@@ -2510,6 +2510,7 @@ void NotebookWindow::on_help() const
 
 	if(!ret) {
 		Gtk::MessageDialog md("No help available", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+		std::cerr << "NotebookWindow::on_help: did not find help in " << pref << std::endl;
 		//		md.set_transient_for(*this);
 		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 		md.set_secondary_text("No help available for '"+help_topic+"'.\nNot all algorithms and properties have manual pages yet, sorry.");
