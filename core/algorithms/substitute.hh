@@ -78,7 +78,7 @@ namespace cadabra {
 		};
 
 	/* Global instance of substitute::rules */
-	extern substitute::Rules global_rules;
+	extern substitute::Rules replacement_rules;
 
 	}
 
