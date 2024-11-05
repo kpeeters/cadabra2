@@ -130,7 +130,7 @@ namespace cadabra {
 		def_algo<factor_in, Ex>(m, "factor_in", true, false, 0, py::arg("factors"));
 		def_algo<factor_out, Ex, bool>(m, "factor_out", true, false, 0, py::arg("factors"), py::arg("right") = false);
 		def_algo<fierz, Ex>(m, "fierz", true, false, 0, py::arg("spinors"));
-		def_algo<substitute, Ex, bool>(m, "substitute", true, false, 0, py::arg("rules"), py::arg("partial") = true);
+		def_algo<substitute, Ex&, bool>(m, "substitute", true, false, 0, py::arg("rules"), py::arg("partial") = true);
 		def_algo<take_match, Ex>(m, "take_match", true, false, 0, py::arg("rules"));
 		def_algo<replace_match>(m, "replace_match", false, false, 0);
 		def_algo<zoom, Ex, bool>(m, "zoom", true, false, 0, py::arg("rules"), py::arg("partial") = true);

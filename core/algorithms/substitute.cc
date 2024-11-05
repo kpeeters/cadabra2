@@ -13,6 +13,11 @@
 
 using namespace cadabra;
 
+
+/* Global instance of substitute::rules */
+substitute::Rules replacement_rules;
+
+
 substitute::substitute(const Kernel& k, Ex& tr, Ex& args_, bool partial)
 	: Algorithm(k, tr), comparator(k.properties), args(args_), sort_product_(k, tr), partial(partial)
 	{
@@ -21,68 +26,81 @@ substitute::substitute(const Kernel& k, Ex& tr, Ex& args_, bool partial)
 
 	// Stopwatch sw;
 	// sw.start();
-	cadabra::do_list(args, args.begin(), [&](Ex::iterator arrow) {
-		//args.print_recursive_treeform(std::cerr, arrow);
-		if(*arrow->name!="\\arrow" && *arrow->name!="\\equals")
-			throw ArgumentException("substitute: Argument is neither a replacement rule nor an equality.");
 
-		sibling_iterator lhs=args.begin(arrow);
-		sibling_iterator rhs=lhs;
-		rhs.skip_children();
-		++rhs;
+	// Check if args are present in global_rules
+	// bool skipchecks = k.replacement_rules->is_present(args);
+	bool skipchecks = replacement_rules.is_present(args);
 
-		if(*lhs->name=="") { // replacing a sub or superscript
-			lhs=tr.flatten_and_erase(lhs);
-			}
-		if(*rhs->name=="") { // replacing with a sub or superscript
-			rhs=tr.flatten_and_erase(rhs);
-			}
+	// skip if args have already been checked
+	if (!skipchecks) {
+		cadabra::do_list(args, args.begin(), [&](Ex::iterator arrow) {
+			//args.print_recursive_treeform(std::cerr, arrow);
+			if(*arrow->name!="\\arrow" && *arrow->name!="\\equals")
+				throw ArgumentException("substitute: Argument is neither a replacement rule nor an equality.");
 
-		try {
-			if(*lhs->multiplier!=1) {
-				throw ArgumentException("substitute: No numerical pre-factors allowed on lhs of replacement rule.");
+			sibling_iterator lhs=args.begin(arrow);
+			sibling_iterator rhs=lhs;
+			rhs.skip_children();
+			++rhs;
+
+			if(*lhs->name=="") { // replacing a sub or superscript
+				lhs=tr.flatten_and_erase(lhs);
 				}
-			// test validity of lhs and rhs
-			iterator lhsit=lhs, stopit=lhs;
-			stopit.skip_children();
-			++stopit;
-			while(lhsit!=stopit) {
-				if(lhsit->is_object_wildcard()) {
-					if(tr.number_of_children(lhsit)>0) {
-						throw ArgumentException("substitute: Object wildcards cannot have child nodes.");
-						}
+			if(*rhs->name=="") { // replacing with a sub or superscript
+				rhs=tr.flatten_and_erase(rhs);
+				}
+
+			try {
+				if(*lhs->multiplier!=1) {
+					throw ArgumentException("substitute: No numerical pre-factors allowed on lhs of replacement rule.");
 					}
-				++lhsit;
-				}
-			lhsit=rhs;
-			stopit=rhs;
-			stopit.skip_children();
-			++stopit;
-			while(lhsit!=stopit) {
-				if(lhsit->is_object_wildcard()) {
-					if(tr.number_of_children(lhsit)>0) {
-						throw ArgumentException("substitute: Object wildcards cannot have child nodes.");
+				// test validity of lhs and rhs
+				iterator lhsit=lhs, stopit=lhs;
+				stopit.skip_children();
+				++stopit;
+				while(lhsit!=stopit) {
+					if(lhsit->is_object_wildcard()) {
+						if(tr.number_of_children(lhsit)>0) {
+							throw ArgumentException("substitute: Object wildcards cannot have child nodes.");
+							}
 						}
+					++lhsit;
 					}
-				++lhsit;
-				}
+				lhsit=rhs;
+				stopit=rhs;
+				stopit.skip_children();
+				++stopit;
+				while(lhsit!=stopit) {
+					if(lhsit->is_object_wildcard()) {
+						if(tr.number_of_children(lhsit)>0) {
+							throw ArgumentException("substitute: Object wildcards cannot have child nodes.");
+							}
+						}
+					++lhsit;
+					}
 
-			// check whether there are dummies.
-			index_map_t ind_free, ind_dummy;
-			classify_indices(lhs, ind_free, ind_dummy);
-			lhs_contains_dummies[arrow]= ind_dummy.size()>0;
-			ind_free.clear();
-			ind_dummy.clear();
-			if(rhs!=tr.end()) {
-				classify_indices(rhs, ind_free, ind_dummy);
-				rhs_contains_dummies[arrow]=ind_dummy.size()>0;
+				// check whether there are dummies.
+				index_map_t ind_free, ind_dummy;
+				classify_indices(lhs, ind_free, ind_dummy);
+				lhs_contains_dummies[arrow]= ind_dummy.size()>0;
+				ind_free.clear();
+				ind_dummy.clear();
+				if(rhs!=tr.end()) {
+					classify_indices(rhs, ind_free, ind_dummy);
+					rhs_contains_dummies[arrow]=ind_dummy.size()>0;
+					}
 				}
-			}
-		catch(std::exception& er) {
-			throw ArgumentException(std::string("substitute: Index error in replacement rule. ")+er.what());
-			}
-		return true;
-		});
+			catch(std::exception& er) {
+				throw ArgumentException(std::string("substitute: Index error in replacement rule. ")+er.what());
+				}
+			return true;
+			});
+		replacement_rules.store(args, lhs_contains_dummies, rhs_contains_dummies);
+		}
+	else {
+		replacement_rules.retrieve(args, lhs_contains_dummies, rhs_contains_dummies);
+		}
+
 	// sw.stop();
 	// std::cerr << "preparation took " << sw << std::endl;
 	}
@@ -436,3 +454,85 @@ Algorithm::result_t substitute::apply(iterator& st)
 	return result_t::l_applied;
 	}
 
+
+
+
+
+void substitute::Rules::store(Ex& rules,
+								std::map<iterator, bool>& lhs_contains_dummies,
+								std::map<iterator, bool>& rhs_contains_dummies) {
+
+	// if number of stored rules has grown large, clean them up.
+	if (properties.size() >= cleanup_threshold) {
+		cleanup();
+	}
+	// If that didn't fix it, double the cleanup_threshold up to max_size
+	if (cleanup_threshold != max_size && properties.size() >= cleanup_threshold) {
+			if (cleanup_threshold * 2 < max_size) {
+				cleanup_threshold *= 2;
+				} 
+			else {
+				cleanup_threshold = max_size;
+			}
+		}
+	// If we're too big, don't add anything else.
+	if (properties.size() >= max_size) {
+		return;
+	}
+
+	std::weak_ptr<Ex> rules_ptr = rules.shared_from_this();
+	properties[rules_ptr] = { lhs_contains_dummies, rhs_contains_dummies };
+	// Set state of rules to l_checkpointed to track if the rules ever change
+	rules.reset_state();
+	}
+
+void substitute::Rules::retrieve(Ex& rules,
+								std::map<iterator, bool>& lhs_contains_dummies,
+								std::map<iterator, bool>& rhs_contains_dummies) {
+
+	// Rules::present is assumed to have been called to check that the rules are valid
+	std::weak_ptr<Ex> rules_ptr = rules.shared_from_this();
+	lhs_contains_dummies = properties[rules_ptr].first;
+	rhs_contains_dummies = properties[rules_ptr].second;
+	}
+
+
+bool substitute::Rules::is_present(Ex& rules) {
+	// Look to see if the rules are present in the map
+
+	std::weak_ptr<Ex> rules_ptr = rules.shared_from_this();
+	bool rule_found = (properties.find(rules_ptr) != properties.end());
+	if (!rule_found) return false;
+
+	// rules should have l_checkpointed set
+	bool rule_unchanged = (rules.state() == result_t::l_checkpointed);
+	
+	// If rule has been changed, erase  it.
+	if (!rule_unchanged) {
+		properties.erase(rules_ptr);
+		return false;
+		} 
+	else {
+		return true;
+		}
+	}
+
+int substitute::Rules::size() {
+	return properties.size();
+}
+
+void substitute::Rules::cleanup() {
+	// Erase rules that are pointing to garbage-collected Ex expressions
+	// or rules that have possibly been changed.
+	for (auto it = properties.begin(); it != properties.end(); ) {
+		if (it->first.expired()) {
+			it = properties.erase(it);
+			} 
+		else if (it->first.lock()->state() != result_t::l_checkpointed) {
+			it = properties.erase(it);
+			}
+		else {
+			++it;
+			}
+		}
+    }
