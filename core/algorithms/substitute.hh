@@ -35,6 +35,35 @@ namespace cadabra {
 			virtual result_t apply(iterator&);
 
 			Ex_comparator comparator;
+			
+			// Rules is a class for caching properties of substitution rules to avoid
+			// processing them in subsequent calls
+			class Rules {
+				public:
+					// Associate rule properties with a specific object
+					void store(Ex& rules, std::map<iterator, bool>& lhs_contains_dummies, std::map<iterator, bool>& rhs_contains_dummies);
+					// Check if rules are present
+					bool is_present(Ex& rules);
+					// Retrieve properties from rules
+					void retrieve(Ex& rules, std::map<iterator, bool>& lhs_contains_dummies, std::map<iterator, bool>& rhs_contains_dummies);
+					// Count number of rules
+					int size();
+					// Eliminate rules that are expired
+					void cleanup();
+
+				private:
+					// Map storing weak pointers to `Ex` and pairs of lhs/rhs maps as values
+					std::map<std::weak_ptr<Ex>, 
+								std::pair<std::map<iterator, bool>, std::map<iterator, bool>>, 
+								std::owner_less<std::weak_ptr<Ex>>> properties;
+
+					// Initial size threshold to trigger cleanup_rules
+					unsigned int cleanup_threshold = 100;
+					// Store max size of the rules list to avoid it getting out of hand
+					unsigned int max_size = 1000;
+				};
+
+
 		private:
 			Ex&        args;
 
@@ -48,4 +77,9 @@ namespace cadabra {
 			bool            partial;
 		};
 
+	/* Global instance of substitute::rules */
+	extern substitute::Rules global_rules;
+
 	}
+
+	
