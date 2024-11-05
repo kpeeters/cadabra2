@@ -212,6 +212,9 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 		case DataCell::CellType::latex_view:
 			str << "<div class='latex_view hyphenate'>";
 			break;
+		case DataCell::CellType::graphics_view:
+			str << "<div class='graphics_view'>";
+			break;
 		case DataCell::CellType::error:
 			str << "<div class='error'>";
 			break;
@@ -290,6 +293,9 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 		case DataCell::CellType::latex_view:
 			str << "</div>\n";
 			break;
+		case DataCell::CellType::graphics_view:
+			str << "</div>\n";
+			break;
 		case DataCell::CellType::error:
 			str << "</div>\n";
 			break;
@@ -336,6 +342,9 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, nlohmann::json&
 			break;
 		case DataCell::CellType::latex_view:
 			json["cell_type"]="latex_view";
+			break;
+		case DataCell::CellType::graphics_view:
+			json["cell_type"]="graphics_view";
 			break;
 		case DataCell::CellType::error:
 			json["cell_type"]="error";
@@ -585,6 +594,8 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 			break;
 		case DataCell::CellType::latex_view:
 			break;
+		case DataCell::CellType::graphics_view:
+			break;
 		case DataCell::CellType::error:
 			break;
 		case DataCell::CellType::input_form:
@@ -658,6 +669,7 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		case DataCell::CellType::document:
 		case DataCell::CellType::latex:
 		case DataCell::CellType::latex_view:
+		case DataCell::CellType::graphics_view:
 		case DataCell::CellType::input_form:
 		case DataCell::CellType::error:
 		case DataCell::CellType::image_png:
@@ -684,6 +696,7 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		case DataCell::CellType::verbatim:
 		case DataCell::CellType::latex:
 		case DataCell::CellType::latex_view:
+		case DataCell::CellType::graphics_view:
 		case DataCell::CellType::input_form:
 		case DataCell::CellType::error:
 		case DataCell::CellType::image_png:

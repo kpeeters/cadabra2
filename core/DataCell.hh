@@ -32,16 +32,17 @@ namespace cadabra {
 			/// proper display.
 
 			enum class CellType {
-				document,   ///< head node, only one per document
-				python,     ///< input : editor cell for code in python
-				latex,      ///< input : editor cell for code in latex
-				output,     ///< output: cell showing python stdout, verbatim
-				verbatim,   ///< output: cell showing other verbatim output
-				latex_view, ///< output: cell showing LaTeX text formatted using LaTeX
-				input_form, ///< output: cell containing input form of preceding output cell
-				image_png,  ///< output: cell showing a base64 encoded PNG image
-				image_svg,  ///< output: cell showing an SVG image
-				error,      ///< output: cell showing LaTeX text for errors
+				document,      ///< head node, only one per document
+				python,        ///< input : editor cell for code in python
+				latex,         ///< input : editor cell for code in latex
+				output,        ///< output: cell showing python stdout, verbatim
+				verbatim,      ///< output: cell showing other verbatim output
+				latex_view,    ///< output: cell showing LaTeX text formatted using LaTeX
+				graphics_view, ///< output: cell showing OpenGL graphics
+				input_form,    ///< output: cell containing input form of preceding output cell
+				image_png,     ///< output: cell showing a base64 encoded PNG image
+				image_svg,     ///< output: cell showing an SVG image
+				error,         ///< output: cell showing LaTeX text for errors
 				// section
 				};
 

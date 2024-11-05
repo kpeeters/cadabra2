@@ -18,6 +18,7 @@ import re
 import readline
 import rlcompleter
 import os
+from cadabra2 import ConvertData
 
 # Make sure we can find the cadabra2 python module; is always
 # installed in PYTHON_SITE_PATH

@@ -9,6 +9,7 @@
 #include "ImageView.hh"
 #include "CodeInput.hh"
 #include "DataCell.hh"
+#include "GraphicsView.hh"
 
 namespace cadabra {
 
@@ -28,6 +29,7 @@ namespace cadabra {
 				CodeInput    *inbox;
 				TeXView      *outbox;
 				ImageView    *imagebox;
+				GraphicsView *graphicsbox;
 				};
 		};
 

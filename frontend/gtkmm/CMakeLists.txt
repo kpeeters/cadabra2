@@ -69,6 +69,19 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 
+# Filament
+
+if(NOT FILAMENT)
+  set(FILAMENT $ENV{FILAMENT})
+endif()
+if(NOT FILAMENT)
+  message(FATAL_ERROR "Set FILAMENT to the top-level directory of the filament repo.")
+endif()
+message(STATUS "Filament path: ${FILAMENT}")
+if(NOT EXISTS ${FILAMENT}/out/release/filament/lib/${CMAKE_SYSTEM_PROCESSOR}/libfilament.a)
+  message(FATAL_ERROR "${FILAMENT}/out/release/filament/${CMAKE_SYSTEM_PROCESSOR}/lib does not contain libfilament.a; did you do a Filament release build?")
+endif()
+
 
 #---------------------------------------------------------------------------
 # Enumerate input files and directories.
@@ -84,6 +97,7 @@ set(cadabra_gtk_src
   TeXView.cc 
   CodeInput.cc 
   ImageView.cc
+  GraphicsView.cc
   Cadabra.cc
   Console.cc
   Keywords.cc 

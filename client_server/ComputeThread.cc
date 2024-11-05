@@ -411,6 +411,13 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
 					}
+				else if (msg_type == "graphics_view") {
+					std::cerr << "received graphics cell " << content["output"].get<std::string>() << std::endl;
+					DataCell result(cell_id, DataCell::CellType::graphics_view, content["output"].get<std::string>());
+					std::shared_ptr<ActionBase> action =
+					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
+					docthread->queue_action(action);
+					}
 				else if (msg_type == "input_form") {
 					DataCell result(cell_id, DataCell::CellType::input_form, content["output"].get<std::string>());
 					std::shared_ptr<ActionBase> action =

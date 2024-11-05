@@ -1252,6 +1252,11 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::handle_outbox_select), it ) );
 				break;
 				}
+			case DataCell::CellType::graphics_view: {
+				newcell.graphicsbox = manage( new GraphicsView() );
+				w=newcell.graphicsbox;
+				break;
+				}
 			case DataCell::CellType::python:
 			case DataCell::CellType::latex: {
 				CodeInput *ci;
