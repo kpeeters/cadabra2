@@ -29,6 +29,8 @@
 #include "../common/TeXEngine.hh"
 #include "DiffViewer.hh"
 
+#include <filament/Engine.h>
+
 class Cadabra;
 
 namespace cadabra {
@@ -330,6 +332,8 @@ namespace cadabra {
 			std::vector<Gtk::Revealer *> to_reveal;
 #endif
 			bool idle_handler();
+
+			filament::Engine *filament_engine=0;
 		};
 
 	};

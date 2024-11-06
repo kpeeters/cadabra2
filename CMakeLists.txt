@@ -212,6 +212,8 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     message(FATAL_ERROR "Clang version must be at least 3.5 to avoid known bugs.")
   endif()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -fvisibility=hidden -Wall -Wextra -Wunused -Wno-unused-parameter -Wno-null-pointer-subtraction")
+#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+#  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
 endif()
 
 # Visual Studio

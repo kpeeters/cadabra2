@@ -761,6 +761,12 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		}
 
 	new_document();
+
+	// Initialise Filament.
+	// filament::Engine::Config engineConfig = {};
+	// engineConfig.stereoscopicEyeCount = 0;
+	// engineConfig.stereoscopicType = filament::Engine::StereoscopicType::NONE;
+	filament_engine = filament::Engine::create(filament::Engine::Backend::VULKAN);	
 	}
 
 NotebookWindow::~NotebookWindow()
@@ -1253,7 +1259,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				break;
 				}
 			case DataCell::CellType::graphics_view: {
-				newcell.graphicsbox = manage( new GraphicsView() );
+				newcell.graphicsbox = manage( new GraphicsView(filament_engine) );
 				w=newcell.graphicsbox;
 				break;
 				}

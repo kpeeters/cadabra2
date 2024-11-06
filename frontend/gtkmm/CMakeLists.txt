@@ -59,8 +59,8 @@ set(INSTALL_MICROTEX_DIR "share/cadabra2/microtex")
 # Locate libraries.
 #---------------------------------------------------------------------------
 
-find_package(Threads)
-find_package(SQLITE3)
+find_package(Threads REQUIRED)
+find_package(SQLITE3 REQUIRED)
 find_package(GLIBMM)
 find_package(GTKMM3)
 find_package(Boost 1.45.0 COMPONENTS system)
@@ -82,6 +82,36 @@ if(NOT EXISTS ${FILAMENT}/out/release/filament/lib/${CMAKE_SYSTEM_PROCESSOR}/lib
   message(FATAL_ERROR "${FILAMENT}/out/release/filament/${CMAKE_SYSTEM_PROCESSOR}/lib does not contain libfilament.a; did you do a Filament release build?")
 endif()
 
+set(FILAMENT_LIBRARIES
+  filament
+  ibl
+  backend
+  geometry
+  bluegl
+  bluevk
+  vkshaders
+  filabridge
+  filaflat
+  smol-v
+  image
+  utils
+)
+
+link_directories(${FILAMENT}/out/release/filament/lib/${CMAKE_SYSTEM_PROCESSOR})
+include_directories(${FILAMENT}/out/release/filament/include)
+set(FILAMENT_MATC ${FILAMENT}/out/cmake-release/tools/matc/matc)
+include_directories(
+  "."
+  "${PROJECT_BINARY_DIR}"
+)
+execute_process(COMMAND 
+  ${FILAMENT_MATC}
+  -p desktop
+  -a all
+  -o ${PROJECT_BINARY_DIR}/bakedcolor.inc
+  -f header
+  ${PROJECT_SOURCE_DIR}/bakedcolor.mat
+)
 
 #---------------------------------------------------------------------------
 # Enumerate input files and directories.
@@ -208,12 +238,14 @@ target_compile_options(
 target_link_libraries(
   cadabra2-gtk
   PUBLIC
-  cadabra_client 
+  cadabra_client
+  ${FILAMENT_LIBRARIES}
   ${Boost_LIBRARIES} 
   ${GLIBMM_LIBRARIES} 
   ${GTKMM3_LIBRARIES} 
   ${SQLITE3_LIBRARIES} 
   Threads::Threads
+  c++
 )
 
 if(USE_MICROTEX)
