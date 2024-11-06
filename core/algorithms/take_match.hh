@@ -13,7 +13,7 @@ namespace cadabra {
 			virtual result_t apply(iterator&) override;
 
 		private:
-			Ex rules;
+			Ex& rules;
 
 			std::vector<sibling_iterator> to_erase;
 			std::vector<Ex::path_t>       to_keep;

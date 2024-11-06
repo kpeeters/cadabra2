@@ -13,10 +13,7 @@
 
 using namespace cadabra;
 
-
-/* Global instance of substitute::rules */
-substitute::Rules replacement_rules;
-
+substitute::Rules substitute::replacement_rules = substitute::Rules();
 
 substitute::substitute(const Kernel& k, Ex& tr, Ex& args_, bool partial)
 	: Algorithm(k, tr), comparator(k.properties), args(args_), sort_product_(k, tr), partial(partial)

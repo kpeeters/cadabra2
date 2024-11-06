@@ -38,7 +38,7 @@ namespace cadabra {
 			
 			// Rules is a class for caching properties of substitution rules to avoid
 			// processing them in subsequent calls
-			class Rules {
+			class Rules : public std::enable_shared_from_this<Rules> {
 				public:
 					// Associate rule properties with a specific object
 					void store(Ex& rules, std::map<iterator, bool>& lhs_contains_dummies, std::map<iterator, bool>& rhs_contains_dummies);
@@ -65,7 +65,7 @@ namespace cadabra {
 
 
 		private:
-			Ex&        args;
+			Ex&           args;
 
 			iterator      use_rule;
 			iterator      conditions;
@@ -75,10 +75,12 @@ namespace cadabra {
 			// For object swap testing routines:
 			sort_product    sort_product_;
 			bool            partial;
-		};
+			
+			// Shared instance of all replacement rules.
+			static Rules    replacement_rules;
+			
+	};
 
-	/* Global instance of substitute::rules */
-	extern substitute::Rules replacement_rules;
 
 	}
 

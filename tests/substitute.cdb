@@ -597,3 +597,22 @@ def test129():
     print("Test 129 passed")
 
 test129()
+
+def test130():
+    # Test the effect of the substitute rule cache.
+    __cdbkernel__=create_scope()
+
+    megasum := x+y;
+    for i in range(10000):
+       megasum.top().append_child(Ex( r'B'+str(i) ))    
+    
+    rules = $$
+    for i in range(100):
+       rules = join(rules, Ex( r'A'+str(i)+'-> @(megasum)' ))
+    
+    ex:=A0;
+    substitute(ex, rules)
+    assert(ex[10001]==$B9999$)
+    print("Test 130 passed")
+
+test130()
