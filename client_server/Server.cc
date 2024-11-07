@@ -269,7 +269,8 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 			auto loc = reason.find("At:");
 			reason = "Interrupted a" + reason.substr(loc+1);
 			}
-		catchOut.clear();
+//		std::cerr << "gobbling " << catchOut.str() << std::endl;
+//		catchOut.clear();
 		throw std::runtime_error(reason);
 		}
 
@@ -407,6 +408,8 @@ void Server::wait_for_job()
 			std::queue<Block> empty;
 			std::swap(block_queue, empty);
 			lock.unlock();
+			block.output = catchOut.str();
+			catchOut.clear();
 			block.error = ex.what();
 			on_block_error(block);
 			}
@@ -417,6 +420,8 @@ void Server::wait_for_job()
 			std::queue<Block> empty;
 			std::swap(block_queue, empty);
 			lock.unlock();
+			block.output=catchOut.str();
+			catchOut.clear();
 			block.error=ex.what();
 			on_kernel_fault(block);
 			// Keep running
@@ -564,7 +569,7 @@ void Server::on_block_finished(Block block)
 		header["cell_id"]=cadabra::generate_uuid<uint64_t>();
 		header["time_total_microseconds"]=std::to_string(server_stopwatch.seconds()*1e6L + server_stopwatch.useconds());
 		header["time_sympy_microseconds"]=std::to_string(sympy_stopwatch.seconds()*1e6L  + sympy_stopwatch.useconds());
-		header["last_in_sequence"]=true;
+		header["last_in_sequence"]=block.error.empty(); // If this is the output followed by an error, it's not the last output cell for the running block.
 		content["output"]=block.output;
 		block.response["msg_type"]="output";
 		}
@@ -653,6 +658,9 @@ void Server::send_json(const std::string& msg)
 
 void Server::on_block_error(Block blk)
 	{
+	if(blk.output!="")
+		on_block_finished(blk);
+	
 	std::lock_guard<std::mutex> lock(ws_mutex);
 
 	// Make a JSON message.
@@ -679,6 +687,9 @@ void Server::on_block_error(Block blk)
 
 void Server::on_kernel_fault(Block blk)
 	{
+	if(blk.output!="")
+		on_block_finished(blk);
+	
 	std::lock_guard<std::mutex> lock(ws_mutex);
 
 	// Make a JSON message.
