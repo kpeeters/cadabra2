@@ -507,7 +507,8 @@ bool substitute::Rules::is_present(Ex& rules) const
 	
 	try {
 		std::weak_ptr<Ex> rules_ptr = rules.shared_from_this();
-		bool rule_found = (properties.find(rules_ptr) != properties.end());
+		auto rule_it = properties.find(rules_ptr);
+		bool rule_found = (rule_it != properties.end());
 		if (!rule_found) return false;
 		
 		// rules should have l_checkpointed set
@@ -515,7 +516,7 @@ bool substitute::Rules::is_present(Ex& rules) const
 		
 		// If rule has been changed, erase  it.
 		if (!rule_unchanged) {
-			properties.erase(rules_ptr);
+			properties.erase(rules_it);
 			return false;
 			} 
 		else {
