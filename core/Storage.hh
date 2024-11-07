@@ -161,7 +161,14 @@ namespace cadabra {
 			/// FIXME: the following should implement a stack of states,
 			/// so that it can be used with nested functions.
 
-			enum result_t { l_checkpointed, l_no_action, l_applied, l_applied_no_new_dummies, l_error };
+			enum result_t {
+				l_checkpointed,
+				l_no_action,
+				l_applied,
+				l_applied_no_new_dummies,
+				l_error,
+				l_cached
+			};
 			result_t state() const;
 			void     update_state(result_t);
 			void     reset_state();
@@ -170,6 +177,14 @@ namespace cadabra {
 			/// apply algorithms until they converge. Returns true when the
 			/// expression is in 'checkpointed' or 'applied' state. Will
 			/// set the state to 'no_action'.
+			///
+			/// This is used in `cadabra::convert_line` defined in `CdbPython.cc`,
+			/// which essentially defines `converge(ex): [block]` to mean
+			///
+			///   ex.reset_state()
+			///   while ex.changed():
+			///      [block]
+			
 			bool     changed_state();
 
 			/// Test if the expression is a rational number.

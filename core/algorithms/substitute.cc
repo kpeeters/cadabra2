@@ -473,6 +473,7 @@ void substitute::Rules::store(Ex& rules,
 				cleanup_threshold = max_size;
 				}
 			}
+
 		// If we're too big, don't add anything else.
 		if (properties.size() >= max_size) {
 			return;
@@ -480,8 +481,9 @@ void substitute::Rules::store(Ex& rules,
 		
 		std::weak_ptr<Ex> rules_ptr = rules.shared_from_this();
 		properties[rules_ptr] = { lhs_contains_dummies, rhs_contains_dummies };
-		// Set state of rules to l_checkpointed to track if the rules ever change
-		rules.reset_state();
+		// Mark this expression as cached; any change will remove that state
+		// and ensure that we do not use the cached expression later.
+		rules.update_state(result_t::l_cached);
 		}
 	catch(const std::bad_weak_ptr& error) {
 		return;
@@ -490,16 +492,16 @@ void substitute::Rules::store(Ex& rules,
 
 void substitute::Rules::retrieve(Ex& rules,
 								std::map<iterator, bool>& lhs_contains_dummies,
-								std::map<iterator, bool>& rhs_contains_dummies) {
-
+								std::map<iterator, bool>& rhs_contains_dummies) const
+	{
 	// Rules::present is assumed to have been called to check that the rules are valid
 	std::weak_ptr<Ex> rules_ptr = rules.shared_from_this();
-	lhs_contains_dummies = properties[rules_ptr].first;
-	rhs_contains_dummies = properties[rules_ptr].second;
-}
+	lhs_contains_dummies = properties.at(rules_ptr).first;
+	rhs_contains_dummies = properties.at(rules_ptr).second;
+	}
 
 
-bool substitute::Rules::is_present(Ex& rules)
+bool substitute::Rules::is_present(Ex& rules) const
 	{
 	// Look to see if the rules are present in the map
 	
@@ -509,7 +511,7 @@ bool substitute::Rules::is_present(Ex& rules)
 		if (!rule_found) return false;
 		
 		// rules should have l_checkpointed set
-		bool rule_unchanged = (rules.state() == result_t::l_checkpointed);
+		bool rule_unchanged = (rules.state() == result_t::l_cached);
 		
 		// If rule has been changed, erase  it.
 		if (!rule_unchanged) {
@@ -525,11 +527,13 @@ bool substitute::Rules::is_present(Ex& rules)
 		}
 	}
 
-int substitute::Rules::size() {
+int substitute::Rules::size() const
+	{
 	return properties.size();
-}
+	}
 
-void substitute::Rules::cleanup() {
+void substitute::Rules::cleanup()
+	{
 	// Erase rules that are pointing to garbage-collected Ex expressions
 	// or rules that have possibly been changed.
 	for (auto it = properties.begin(); it != properties.end(); ) {
@@ -543,4 +547,4 @@ void substitute::Rules::cleanup() {
 			++it;
 			}
 		}
-    }
+	}
