@@ -457,30 +457,35 @@ Algorithm::result_t substitute::apply(iterator& st)
 
 void substitute::Rules::store(Ex& rules,
 								std::map<iterator, bool>& lhs_contains_dummies,
-								std::map<iterator, bool>& rhs_contains_dummies) {
-
-	// if number of stored rules has grown large, clean them up.
-	if (properties.size() >= cleanup_threshold) {
-		cleanup();
-	}
-	// If that didn't fix it, double the cleanup_threshold up to max_size
-	if (cleanup_threshold != max_size && properties.size() >= cleanup_threshold) {
+								std::map<iterator, bool>& rhs_contains_dummies)
+	{
+	try {
+		// if number of stored rules has grown large, clean them up.
+		if (properties.size() >= cleanup_threshold) {
+			cleanup();
+			}
+		// If that didn't fix it, double the cleanup_threshold up to max_size
+		if (cleanup_threshold != max_size && properties.size() >= cleanup_threshold) {
 			if (cleanup_threshold * 2 < max_size) {
 				cleanup_threshold *= 2;
 				} 
 			else {
 				cleanup_threshold = max_size;
+				}
 			}
+		// If we're too big, don't add anything else.
+		if (properties.size() >= max_size) {
+			return;
+			}
+		
+		std::weak_ptr<Ex> rules_ptr = rules.shared_from_this();
+		properties[rules_ptr] = { lhs_contains_dummies, rhs_contains_dummies };
+		// Set state of rules to l_checkpointed to track if the rules ever change
+		rules.reset_state();
 		}
-	// If we're too big, don't add anything else.
-	if (properties.size() >= max_size) {
+	catch(const std::bad_weak_ptr& error) {
 		return;
-	}
-
-	std::weak_ptr<Ex> rules_ptr = rules.shared_from_this();
-	properties[rules_ptr] = { lhs_contains_dummies, rhs_contains_dummies };
-	// Set state of rules to l_checkpointed to track if the rules ever change
-	rules.reset_state();
+		}
 	}
 
 void substitute::Rules::retrieve(Ex& rules,
@@ -491,26 +496,32 @@ void substitute::Rules::retrieve(Ex& rules,
 	std::weak_ptr<Ex> rules_ptr = rules.shared_from_this();
 	lhs_contains_dummies = properties[rules_ptr].first;
 	rhs_contains_dummies = properties[rules_ptr].second;
-	}
+}
 
 
-bool substitute::Rules::is_present(Ex& rules) {
+bool substitute::Rules::is_present(Ex& rules)
+	{
 	// Look to see if the rules are present in the map
-
-	std::weak_ptr<Ex> rules_ptr = rules.shared_from_this();
-	bool rule_found = (properties.find(rules_ptr) != properties.end());
-	if (!rule_found) return false;
-
-	// rules should have l_checkpointed set
-	bool rule_unchanged = (rules.state() == result_t::l_checkpointed);
 	
-	// If rule has been changed, erase  it.
-	if (!rule_unchanged) {
-		properties.erase(rules_ptr);
+	try {
+		std::weak_ptr<Ex> rules_ptr = rules.shared_from_this();
+		bool rule_found = (properties.find(rules_ptr) != properties.end());
+		if (!rule_found) return false;
+		
+		// rules should have l_checkpointed set
+		bool rule_unchanged = (rules.state() == result_t::l_checkpointed);
+		
+		// If rule has been changed, erase  it.
+		if (!rule_unchanged) {
+			properties.erase(rules_ptr);
+			return false;
+			} 
+		else {
+			return true;
+			}
+		}
+	catch(const std::bad_weak_ptr& error) {
 		return false;
-		} 
-	else {
-		return true;
 		}
 	}
 

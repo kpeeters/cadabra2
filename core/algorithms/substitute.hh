@@ -38,7 +38,7 @@ namespace cadabra {
 			
 			// Rules is a class for caching properties of substitution rules to avoid
 			// processing them in subsequent calls
-			class Rules : public std::enable_shared_from_this<Rules> {
+			class Rules {
 				public:
 					// Associate rule properties with a specific object
 					void store(Ex& rules, std::map<iterator, bool>& lhs_contains_dummies, std::map<iterator, bool>& rhs_contains_dummies);
