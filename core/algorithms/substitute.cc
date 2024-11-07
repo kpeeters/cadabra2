@@ -516,7 +516,7 @@ bool substitute::Rules::is_present(Ex& rules) const
 		
 		// If rule has been changed, erase  it.
 		if (!rule_unchanged) {
-			properties.erase(rules_it);
+			properties.erase(rule_it);
 			return false;
 			} 
 		else {
