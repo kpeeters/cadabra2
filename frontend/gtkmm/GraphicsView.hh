@@ -16,6 +16,7 @@
 #include <filament/RenderableManager.h>
 #include <filament/Renderer.h>
 #include <filament/Scene.h>
+#include <filament/Skybox.h>
 #include <filament/VertexBuffer.h>
 #include <filament/View.h>
 #include <utils/EntityManager.h>
@@ -35,11 +36,11 @@ namespace cadabra {
 			virtual bool on_button_press_event(GdkEventButton *event) override;
 			virtual bool on_button_release_event(GdkEventButton *event) override;
 
-			class GLView : public Gtk::DrawingArea /* public Gtk::GLArea */ {
+			class GLView : public /* Gtk::DrawingArea */  Gtk::GLArea  {
 				public:
 					GLView(filament::Engine *);
-					// virtual bool on_render (const Glib::RefPtr< Gdk::GLContext > &context);
-					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
+					virtual bool on_render (const Glib::RefPtr< Gdk::GLContext > &context);
+					//virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
 
 				private:
 					void first_render();
@@ -56,6 +57,7 @@ namespace cadabra {
 					filament::Material*     mat;
 					filament::Camera*       cam;
 					filament::Scene*        scene;
+					filament::Skybox       *skybox;
 					filament::View*         view;
 					utils::Entity           camera;
 					utils::Entity           renderable;

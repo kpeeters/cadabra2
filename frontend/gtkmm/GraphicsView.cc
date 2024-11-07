@@ -61,8 +61,9 @@ void GraphicsView::GLView::first_render()
 	
 	Window x11_window_id = gdk_x11_window_get_xid(gdk_window->gobj());
 	
-	swapChain = engine->createSwapChain((void*)(uintptr_t)x11_window_id, 
+	swapChain = engine->createSwapChain((void*)x11_window_id, 
 													filament::SwapChain::CONFIG_TRANSPARENT);
+	std::cerr << swapChain << std::endl;
 
 	// Setup buffers.
 	vb = filament::VertexBuffer::Builder()
@@ -101,16 +102,20 @@ void GraphicsView::GLView::first_render()
 	view->setCamera(cam);
 	view->setScene(scene);
 
+	skybox = filament::Skybox::Builder().color({0.1, 0.125, 0.25, 1.0}).build(*engine);
+	scene->setSkybox(skybox);
+	
 	renderer = engine->createRenderer();
 	filament::Renderer::ClearOptions co;
 	co.clear=true;
 	co.discard=true;
 	co.clearColor=filament::math::float4({1.0,1.0,0.0,0.5});
 	renderer->setClearOptions(co);
+//	view->setClearTargets(filament::backend::TargetBufferFlags::COLOR | filament::backend::TargetBufferFlags::DEPTH);
 	}
 
-//bool GraphicsView::GLView::on_render(const Glib::RefPtr< Gdk::GLContext > &context)
-bool GraphicsView::GLView::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
+bool GraphicsView::GLView::on_render(const Glib::RefPtr< Gdk::GLContext > &context)
+//bool GraphicsView::GLView::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
 	{
 	static bool first=true;
 	
@@ -124,7 +129,7 @@ bool GraphicsView::GLView::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
 		first_render();
 		}
 	
-	if(renderer->beginFrame(swapChain, 0) || true /* always render */) {
+	if(renderer->beginFrame(swapChain) || true /* always render */) {
 		std::cerr << "filament rendering" << std::endl;
 		renderer->render(view);
 		renderer->endFrame();
@@ -132,18 +137,6 @@ bool GraphicsView::GLView::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
 	else {
 		std::cerr << "filament skipped" << std::endl;
 		}
-
-	if(renderer->beginFrame(swapChain, 0) || true /* always render */) {
-		std::cerr << "filament rendering pass 2" << std::endl;
-		renderer->render(view);
-		renderer->endFrame();
-		}
-	if(renderer->beginFrame(swapChain, 0) || true /* always render */) {
-		std::cerr << "filament rendering pass 3" << std::endl;
-		renderer->render(view);
-		renderer->endFrame();
-		}
-	
 	
 	return true;
 	}
