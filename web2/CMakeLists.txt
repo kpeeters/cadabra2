@@ -43,6 +43,8 @@ set(TUTORIALS
   ref_programming
   ref_dynamical_updates
   ref_import
+  ref_exponents
+  ref_spacing
   ref_implicit_versus_explicit
   ref_selecting
   ref_c++_library
@@ -61,6 +63,8 @@ set(BOOK_PARTS
    ref_programming
    ref_dynamical_updates
    ref_import
+   ref_exponents
+   ref_spacing
    ref_implicit_versus_explicit
    ref_selecting
    ref_c++_library
