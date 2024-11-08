@@ -1,204 +1,409 @@
 {
-	"cell_id" : 17995742875800745261,
-	"cells" : 
-	[
+	"cell_id": 17995742875800745261,
+	"cells": [
 		{
-			"cell_id" : 7233586445452571067,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 7233586445452571067,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 3554338300210336886,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\section*{Input format}\n\\subsection*{Mathematical expressions}\n\nThe input format of Cadabra is closely related to the notation used by\nLaTeX to denote tensorial expressions. That is, one can use not only\nbracketed notation to denote child objects, like in \n\\begin{verbatim}\nobject[child,child]\n\\end{verbatim}\nbut also the usual sub- and superscript notation like\n\\begin{verbatim}\nobject^{child child}_{child}\n\\end{verbatim}\nOne can use backslashes in the names of objects as well, just as in\nLaTeX. All of the symbols that one enters this way are considered\n``passive'', that is, they will go into the expression tree just like\none has entered them. \n\n"
+					"cell_id": 17102240285307488534,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Input format}\n\\subsection*{General structure}\n\nCadabra uses LaTeX for the input of mathematical expressions, and Python to\nwrite out actions and algorithms which act on these expressions. In order to make it \nsimpler to mix LaTeX and Python code, the cadabra2 command-line client and the\ncadabra2-gtk notebook interface use a pre-processor which accepts this mixture\nand converts it to pure Python. This happens under the hood and most people will\nnot need to know more about this, other than that it works."
 				}
 			],
-			"hidden" : true,
-			"source" : "\\section*{Input format}\n\\subsection*{Mathematical expressions}\n\nThe input format of Cadabra is closely related to the notation used by\nLaTeX to denote tensorial expressions. That is, one can use not only\nbracketed notation to denote child objects, like in \n\\begin{verbatim}\nobject[child,child]\n\\end{verbatim}\nbut also the usual sub- and superscript notation like\n\\begin{verbatim}\nobject^{child child}_{child}\n\\end{verbatim}\nOne can use backslashes in the names of objects as well, just as in\nLaTeX. All of the symbols that one enters this way are considered\n``passive'', that is, they will go into the expression tree just like\none has entered them. \n\n"
+			"hidden": true,
+			"source": "\\section*{Input format}\n\\subsection*{General structure}\n\nCadabra uses LaTeX for the input of mathematical expressions, and Python to\nwrite out actions and algorithms which act on these expressions. In order to make it \nsimpler to mix LaTeX and Python code, the cadabra2 command-line client and the\ncadabra2-gtk notebook interface use a pre-processor which accepts this mixture\nand converts it to pure Python. This happens under the hood and most people will\nnot need to know more about this, other than that it works."
 		},
 		{
-			"cell_id" : 3565968931941232174,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 3565968931941232174,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 14108138496162031989,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Expressions are entered by using the `\\verb|:=|' operator, as in"
+					"cell_id": 5264915254736913146,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Expressions are entered by using the '\\verb|:=|' operator, as in"
 				}
 			],
-			"source" : "Expressions are entered by using the `\\verb|:=|' operator, as in"
+			"hidden": true,
+			"source": "Expressions are entered by using the '\\verb|:=|' operator, as in"
 		},
 		{
-			"cell_id" : 11168178429144848554,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 11168178429144848554,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_id" : 162743159304939194,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 162743159304939194,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_id" : 8867733089192382465,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "A + B + C_{m} C^{m}"
+							"cell_id": 8867733089192382465,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A + B + C_{m} C^{m}"
 						}
 					],
-					"source" : "\\begin{dmath*}{}A+B+C_{m} C^{m}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}A+B+C_{m} C^{m}\\end{dmath*}"
 				}
 			],
-			"source" : "ex:=A+B+C_{m} C^{m};"
+			"source": "ex:=A+B+C_{m} C^{m};"
 		},
 		{
-			"cell_id" : 1591872224667350552,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 1591872224667350552,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 14532919110662461854,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Expressions (the `\\verb|ex|' above) are ordinary Python objects (of type \\verb|cadabra2.Ex|), and their names can thus only contain normal \nalphanumeric symbols. "
+					"cell_id": 6796051197936084455,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The \\verb|ex| identifier is a Python variable, and the above line assigns it the mathematical\nexpression which follows the '\\verb|:=|' operator. Internally, objects like \\verb|ex| are \nordinary Python objects (of type \\verb|cadabra2.Ex|), and their names can thus only contain normal \nalphanumeric symbols. "
 				}
 			],
-			"hidden" : true,
-			"source" : "Expressions (the `\\verb|ex|' above) are ordinary Python objects (of type \\verb|cadabra2.Ex|), and their names can thus only contain normal \nalphanumeric symbols. "
+			"hidden": true,
+			"source": "The \\verb|ex| identifier is a Python variable, and the above line assigns it the mathematical\nexpression which follows the '\\verb|:=|' operator. Internally, objects like \\verb|ex| are \nordinary Python objects (of type \\verb|cadabra2.Ex|), and their names can thus only contain normal \nalphanumeric symbols. "
 		},
 		{
-			"cell_id" : 4694010193013820647,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 4694010193013820647,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_id" : 2256005163083726401,
-					"cell_origin" : "server",
-					"cell_type" : "verbatim",
-					"source" : "\\begin{verbatim}<class 'cadabra2.Ex'>\\end{verbatim}"
+					"cell_id": 2256005163083726401,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}<class 'cadabra2.Ex'>\\end{verbatim}"
 				}
 			],
-			"source" : "type(ex);"
+			"source": "type(ex);"
 		},
 		{
-			"cell_id" : 1369026216775059075,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 1369026216775059075,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 14215033375371077236,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Lines  always have to be terminated with either a ``;'' or a ``:''. \nThese delimiting symbols act in the same way as in Maple: the second form suppresses the output of the entered\nexpression. Long expressions can, because of these\ndelimiters, be spread over many subsequent input lines. Any line\nstarting with a ``\\#'' sign is considered to be a comment (even when\nit appears within a multi-line expression). Comments are always\nignored completely (they do not end up in the expression tree."
+					"cell_id": 17589432926926272817,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Lines containing mathematical expressions like the above always have to be terminated with either a ';' or a ':'\n(or a '.', which acts in the same way as ':'). \nThese delimiting symbols act in the same way as in Maple: the second form suppresses the output of the entered\nexpression. Long expressions can, because of these\ndelimiters, be spread over many subsequent input lines. As in ordinary Python, any line\nstarting with a ``\\#'' sign is considered to be a comment (even when\nit appears within a multi-line expression). "
 				}
 			],
-			"hidden" : true,
-			"source" : "Lines  always have to be terminated with either a ``;'' or a ``:''. \nThese delimiting symbols act in the same way as in Maple: the second form suppresses the output of the entered\nexpression. Long expressions can, because of these\ndelimiters, be spread over many subsequent input lines. Any line\nstarting with a ``\\#'' sign is considered to be a comment (even when\nit appears within a multi-line expression). Comments are always\nignored completely (they do not end up in the expression tree."
+			"hidden": true,
+			"source": "Lines containing mathematical expressions like the above always have to be terminated with either a ';' or a ':'\n(or a '.', which acts in the same way as ':'). \nThese delimiting symbols act in the same way as in Maple: the second form suppresses the output of the entered\nexpression. Long expressions can, because of these\ndelimiters, be spread over many subsequent input lines. As in ordinary Python, any line\nstarting with a ``\\#'' sign is considered to be a comment (even when\nit appears within a multi-line expression). "
 		},
 		{
-			"cell_id" : 9939973578136241108,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 9939973578136241108,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 600935945505413330,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "When entering maths as above (using the `\\verb|:=|' assignment operator) you do not need to indicate that\nthe right-hand side is mathematics. There are situations, however, when you do need to give Cadabra a hint\nthat what you type is maths, not Python. In this case, you add dollar symbols, just as in LaTeX,"
+					"cell_id": 218911297618970187,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "When entering maths as above (using the `\\verb|:=|' assignment operator) you do not need to indicate that\nthe right-hand side is mathematics. There are situations, however, when you do need to give Cadabra a hint\nthat what you type is maths, not Python, namely when you want to write maths without assigning it to\na Python variable. In this case, you add dollar symbols, just as in LaTeX:"
 				}
 			],
-			"hidden" : true,
-			"source" : "When entering maths as above (using the `\\verb|:=|' assignment operator) you do not need to indicate that\nthe right-hand side is mathematics. There are situations, however, when you do need to give Cadabra a hint\nthat what you type is maths, not Python. In this case, you add dollar symbols, just as in LaTeX,"
+			"hidden": true,
+			"source": "When entering maths as above (using the `\\verb|:=|' assignment operator) you do not need to indicate that\nthe right-hand side is mathematics. There are situations, however, when you do need to give Cadabra a hint\nthat what you type is maths, not Python, namely when you want to write maths without assigning it to\na Python variable. In this case, you add dollar symbols, just as in LaTeX:"
 		},
 		{
-			"cell_id" : 7824582319615562940,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 7824582319615562940,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_id" : 13761891641704533245,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 13761891641704533245,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_id" : 13355639495689827370,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "A + B + D"
+							"cell_id": 13355639495689827370,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A + B + D"
 						}
 					],
-					"source" : "\\begin{dmath*}{}A+B+D\\end{dmath*}"
+					"source": "\\begin{dmath*}{}A+B+D\\end{dmath*}"
 				}
 			],
-			"source" : "substitute($A + B + C$, $C -> D$);"
+			"source": "substitute($A + B + C$, $C -> D$);"
 		},
 		{
-			"cell_id" : 8279289810202898585,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 8279289810202898585,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 13481872891682365066,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "As you can see, this uses an `inline' definition of a mathematical expression, without giving it a name."
+					"cell_id": 13481872891682365066,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "As you can see, this uses an `inline' definition of a mathematical expression, without giving it a name."
 				}
 			],
-			"hidden" : true,
-			"source" : "As you can see, this uses an `inline' definition of a mathematical expression, without giving it a name."
+			"hidden": true,
+			"source": "As you can see, this uses an `inline' definition of a mathematical expression, without giving it a name."
 		},
 		{
-			"cell_id" : 11875472874179676467,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 11333938729236975341,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 4812370376625991741,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\subsection*{Algorithms}"
+					"cell_id": 5940099392058433169,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Algorithms acting on mathematical expressions}\n\nMathematical expressions are manipulated by using ordinary Python functions, which act on \\verb|cadabra2.Ex| objects. \nYou have already seen an\nexample of this above: when we wrote \\verb|substitute(...)|, this is a normal Python function, and it\nacts on the \\verb|cadabra2.Ex| object which contains the mathematical expression $A+B+C$. It also gets\npassed a second argument, which is the substitution rule, in the example above given by $C \\rightarrow D$.\nIn both cases we have in-lined this expression using the LaTeX dollar notation. \n\nAn alternative way to write the above is to first define the two expressions, and then \nfeed those (as Python objects) to the substitute algorithm. This looks as follows:"
 				}
 			],
-			"hidden" : true,
-			"source" : "\\subsection*{Algorithms}"
+			"hidden": true,
+			"source": "\\subsection*{Algorithms acting on mathematical expressions}\n\nMathematical expressions are manipulated by using ordinary Python functions, which act on \\verb|cadabra2.Ex| objects. \nYou have already seen an\nexample of this above: when we wrote \\verb|substitute(...)|, this is a normal Python function, and it\nacts on the \\verb|cadabra2.Ex| object which contains the mathematical expression $A+B+C$. It also gets\npassed a second argument, which is the substitution rule, in the example above given by $C \\rightarrow D$.\nIn both cases we have in-lined this expression using the LaTeX dollar notation. \n\nAn alternative way to write the above is to first define the two expressions, and then \nfeed those (as Python objects) to the substitute algorithm. This looks as follows:"
 		},
 		{
-			"cell_id" : 11333938729236975341,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 17499779172771751965,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_id" : 8847384480363199435,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Algorithms are ordinary Python functions, which act on \\verb|cadabra2.Ex| objects. "
+					"cell_id": 13508214564903569542,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9670337921159490001,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A + B + C"
+						}
+					],
+					"source": "\\begin{dmath*}{}A\\discretionary{}{}{}+B\\discretionary{}{}{}+C\\end{dmath*}"
+				},
+				{
+					"cell_id": 15947743082636131503,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 15854571327032704552,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "C -> D"
+						}
+					],
+					"source": "\\begin{dmath*}{}C \\rightarrow D\\end{dmath*}"
+				},
+				{
+					"cell_id": 495408491245815016,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14065503871271261469,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A + B + D"
+						}
+					],
+					"source": "\\begin{dmath*}{}A\\discretionary{}{}{}+B\\discretionary{}{}{}+D\\end{dmath*}"
 				}
 			],
-			"hidden" : true,
-			"source" : "Algorithms are ordinary Python functions, which act on \\verb|cadabra2.Ex| objects. "
+			"source": "ex   := A+B+C;\nrule := C -> D;\nsubstitute(ex, rule);"
 		},
 		{
-			"cell_id" : 17499779172771751965,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 7336055377022334854,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 7249506248577668324,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Observe how we do not put dollar signs around the \\verb|ex| and \\verb|rule| arguments of the \\verb|substitute|\nfunction call: these things are Python objects, and therefore that last line above is just a standard\nPython function acting on Python objects. The only non-standard thing is the semi-colon at the end: it ensures\nthat when we execute the cell, the result of that function call gets displayed."
+				}
+			],
+			"hidden": true,
+			"source": "Observe how we do not put dollar signs around the \\verb|ex| and \\verb|rule| arguments of the \\verb|substitute|\nfunction call: these things are Python objects, and therefore that last line above is just a standard\nPython function acting on Python objects. The only non-standard thing is the semi-colon at the end: it ensures\nthat when we execute the cell, the result of that function call gets displayed."
+		},
+		{
+			"cell_id": 14142924753738253554,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 12968643109865116887,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Function calls inside mathematical expressions}\n\nMany computer algebra systems do not make a distinction between the language used to write the mathematical\nexpressions and the language used to write the actions and algorithms acting on them. If you prefer that\nnotation, you can instruct Cadabra to allow in-line Python code in mathematical expressions, by using\na particular kernel option:"
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{Function calls inside mathematical expressions}\n\nMany computer algebra systems do not make a distinction between the language used to write the mathematical\nexpressions and the language used to write the actions and algorithms acting on them. If you prefer that\nnotation, you can instruct Cadabra to allow in-line Python code in mathematical expressions, by using\na particular kernel option:"
+		},
+		{
+			"cell_id": 14839438110559465856,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "kernel(call_embedded_python_functions=True)"
+		},
+		{
+			"cell_id": 13320774661377944897,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 3868658765204075874,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "You can now write the above example in an even more compact form, as"
+				}
+			],
+			"hidden": true,
+			"source": "You can now write the above example in an even more compact form, as"
+		},
+		{
+			"cell_id": 9105043797411706950,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14670749530413958279,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16922367421830269796,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A + B + D"
+						}
+					],
+					"source": "\\begin{dmath*}{}A\\discretionary{}{}{}+B\\discretionary{}{}{}+D\\end{dmath*}"
+				}
+			],
+			"source": "ex:= substitute( A+B+C, C->D );"
+		},
+		{
+			"cell_id": 11677281993501439788,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 1718801022189349523,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Note that the entire line after the '\\verb|:=|' operator is considered a mathematical expression, but Cadabra has \nautomatically applied the \\verb|substitute| Python function on the two sub-expressions. The result is stored \nin the Python object \\verb|ex|. \n\nNote that with this option turned on, \\emph{any} function with a name two or more characters long will be treated\nas a Python function and Cadabra will attempt to run it. If your mathematical expressions contain such functions\nas mathematics (not Python), then you will need to keep this functionality turned off."
+				}
+			],
+			"hidden": true,
+			"source": "Note that the entire line after the '\\verb|:=|' operator is considered a mathematical expression, but Cadabra has \nautomatically applied the \\verb|substitute| Python function on the two sub-expressions. The result is stored \nin the Python object \\verb|ex|. \n\nNote that with this option turned on, \\emph{any} function with a name two or more characters long will be treated\nas a Python function and Cadabra will attempt to run it. If your mathematical expressions contain such functions\nas mathematics (not Python), then you will need to keep this functionality turned off."
+		},
+		{
+			"cell_id": 16834549477742454181,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "kernel(call_embedded_python_functions=False)"
+		},
+		{
+			"cell_id": 13066277311614345372,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6858387052763340044,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Similarity and difference with LaTeX}\n\nInside mathematical expressions you can use most of the standard LaTeX notation. You can write mathematical\nfunctions acting on variables, use special functions, and things like integrals. In some cases this deviates\nslightly from what you are used to, mostly in order to remove ambiguities in the LaTeX notation, as the\nexample below shows:"
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{Similarity and difference with LaTeX}\n\nInside mathematical expressions you can use most of the standard LaTeX notation. You can write mathematical\nfunctions acting on variables, use special functions, and things like integrals. In some cases this deviates\nslightly from what you are used to, mostly in order to remove ambiguities in the LaTeX notation, as the\nexample below shows:"
+		},
+		{
+			"cell_id": 7769968518645043704,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 2026161499493210645,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11841803707237998635,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "f(x) \\sin(x) \\int{\\cos(y)}{{y, 0, x}}"
+						}
+					],
+					"source": "\\begin{dmath*}{}f\\left(x\\right) \\sin{x} \\int_{0}^{x} \\cos{y}\\,\\,{\\rm d}y\\end{dmath*}"
+				}
+			],
+			"source": "ex:= f(x) \\sin(x) \\int{ \\cos(y) }{y, 0, x}; "
+		},
+		{
+			"cell_id": 9760342780766748218,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 10359152349042096761,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Cadabra always uses standard sub- and super-script notation for vector, spinor and other tensor indices, "
+				}
+			],
+			"hidden": true,
+			"source": "Cadabra always uses standard sub- and super-script notation for vector, spinor and other tensor indices, "
+		},
+		{
+			"cell_id": 16884170432113302203,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9536246187304007274,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6733921305923967445,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R^{m} _{n p q} v^{p} v^{q}"
+						}
+					],
+					"source": "\\begin{dmath*}{}R^{m} _{n p q} v^{p} v^{q}\\end{dmath*}"
+				}
+			],
+			"source": "ex:= R^m_{n p q} v^p v^q;"
+		},
+		{
+			"cell_id": 4134420176076535633,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 16419948048587530591,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Be careful that you will in general may need to be a little bit more generous in providing curly braces to \ngroup these sub- and superscripts; sometimes it is best to be on the cautious side. Also be aware that \nwhile Cadabra tries hard to figure out products of symbols even when you do not write a multiplication sign,\nyou need to give it some hints by using spaces appropriately. If you write '\\verb|mn|' this is treated as\none symbol, not the product of '\\verb|m|' and '\\verb|n|'. If you want the latter, put a space inbetween."
+				}
+			],
+			"hidden": true,
+			"source": "Be careful that you will in general may need to be a little bit more generous in providing curly braces to \ngroup these sub- and superscripts; sometimes it is best to be on the cautious side. Also be aware that \nwhile Cadabra tries hard to figure out products of symbols even when you do not write a multiplication sign,\nyou need to give it some hints by using spaces appropriately. If you write '\\verb|mn|' this is treated as\none symbol, not the product of '\\verb|m|' and '\\verb|n|'. If you want the latter, put a space inbetween."
+		},
+		{
+			"cell_id": 961384143615778850,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
 }

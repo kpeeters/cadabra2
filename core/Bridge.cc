@@ -71,6 +71,16 @@ void run_python_functions(std::shared_ptr<Ex> ex, Kernel *kernel)
 	while(it!=ex->end_post()) {
 		auto nxt=it;
 		++nxt;
+
+		// Do not call single-letter functions; assume those are
+		// always mathematics, not python. Also do not even attempt
+		// to call functions which start with a backslash (those
+		// are TeX).
+		if((*it->name).size()==1 || (*it->name)[0]=='\\') {
+			it=nxt;
+			continue;
+			}
+		
 		// Only call functions if the cadabra symbols have one or
 		// more child nodes which all have bracket_t::b_none.
 		Ex::sibling_iterator sib=ex->begin(it);
@@ -93,7 +103,7 @@ void run_python_functions(std::shared_ptr<Ex> ex, Kernel *kernel)
 			}
 		
 		if(scope_has(locals, *it->name)) {
-			//std::cerr << "can run function " << *it->name << std::endl;
+			// std::cerr << "can run function " << *it->name << std::endl;
 			py::object fun=locals[(*it->name).c_str()];
 			Ex::sibling_iterator sib=ex->begin(it);
 			py::object res;
