@@ -1,0 +1,254 @@
+{
+	"cell_id": 6780327821501550458,
+	"cells": [
+		{
+			"cell_id": 10095608579166230431,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 3568454378584712115,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Spacing and brackets}\n\nCadabra is reasonably flexible as far as spacing and brackets are\nconcerned, but the fact that objects do not have to be declared before\nthey can be used means that spaces have to be introduced in some cases\nto avoid ambiguity. As a general rule, all terms in a product have to\nbe separated by at least one whitespace character. Thus,"
+				}
+			],
+			"hidden": true,
+			"source": "\\section*{Spacing and brackets}\n\nCadabra is reasonably flexible as far as spacing and brackets are\nconcerned, but the fact that objects do not have to be declared before\nthey can be used means that spaces have to be introduced in some cases\nto avoid ambiguity. As a general rule, all terms in a product have to\nbe separated by at least one whitespace character. Thus,"
+		},
+		{
+			"cell_id": 5243956819659161058,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 828697262279609186,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5600925919959444274,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A(B + C)"
+						}
+					],
+					"source": "\\begin{dmath*}{}A\\left(B\\discretionary{}{}{}+C\\right)\\end{dmath*}"
+				}
+			],
+			"source": "ex:= A(B+C);"
+		},
+		{
+			"cell_id": 3521492023207671027,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6395206610982757740,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "is interpreted as a function $A$ with argument $B+C$, while"
+				}
+			],
+			"hidden": true,
+			"source": "is interpreted as a function $A$ with argument $B+C$, while"
+		},
+		{
+			"cell_id": 3254933193926073803,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13063679095181457061,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14301624096609751952,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A (B + C)"
+						}
+					],
+					"source": "\\begin{dmath*}{}A \\left(B\\discretionary{}{}{}+C\\right)\\end{dmath*}"
+				}
+			],
+			"source": "ex:= A (B+C);"
+		},
+		{
+			"cell_id": 9193648467922875359,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 15584829755797389306,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "(with a space inbetween the $A$ and the opening bracket) is interpreted as\n$A$ multiplying $B+C$. In a similar spirit, two consecutive characters without\na space are interpreted as a single symbol, so that"
+				}
+			],
+			"source": "(with a space inbetween the $A$ and the opening bracket) is interpreted as\n$A$ multiplying $B+C$. In a similar spirit, two consecutive characters without\na space are interpreted as a single symbol, so that"
+		},
+		{
+			"cell_id": 2596882454490953534,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 4545248679347908905,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14262944906308332001,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "AB"
+						}
+					],
+					"source": "\\begin{dmath*}{}AB\\end{dmath*}"
+				}
+			],
+			"source": "ex:= AB;"
+		},
+		{
+			"cell_id": 10200772961325234698,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 18174430478425350203,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "is not the product of $A$ times $B$, but rather a single, two-character\nsymbol. Put a space inbetween if you want it to be a product, or an\nexplicit multiplication sign,"
+				}
+			],
+			"hidden": true,
+			"source": "is not the product of $A$ times $B$, but rather a single, two-character\nsymbol. Put a space inbetween if you want it to be a product, or an\nexplicit multiplication sign,"
+		},
+		{
+			"cell_id": 3657900939440613632,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15898225287759389543,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1107696764486452994,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "2A B"
+						}
+					],
+					"source": "\\begin{dmath*}{}2A B\\end{dmath*}"
+				}
+			],
+			"source": "ex:= A*B + A B;"
+		},
+		{
+			"cell_id": 9336604298712487300,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 16999472921636049313,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If a whitespace character is absent, all brackets are interpreted as\nenclosing \\emph{argument} groups.  However, spaces will automatically be\ninserted after numbers, between a closing bracket and a name or\nnumber, and between two names if the second name starts with a\nbackslash. The following expressions are therefore interpreted as one\nwould expect:"
+				}
+			],
+			"hidden": true,
+			"source": "If a whitespace character is absent, all brackets are interpreted as\nenclosing \\emph{argument} groups.  However, spaces will automatically be\ninserted after numbers, between a closing bracket and a name or\nnumber, and between two names if the second name starts with a\nbackslash. The following expressions are therefore interpreted as one\nwould expect:"
+		},
+		{
+			"cell_id": 213025404522232061,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 147956388667526319,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 557146378947345533,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "3A"
+						}
+					],
+					"source": "\\begin{dmath*}{}3A\\end{dmath*}"
+				},
+				{
+					"cell_id": 17911863916385468643,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17293410605441509411,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(A + B) C"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(A\\discretionary{}{}{}+B\\right) C\\end{dmath*}"
+				},
+				{
+					"cell_id": 11032147089194360946,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16424943557105344906,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "3A + 3B"
+						}
+					],
+					"source": "\\begin{dmath*}{}3A\\discretionary{}{}{}+3B\\end{dmath*}"
+				},
+				{
+					"cell_id": 8988874013216573119,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 18102133924784247814,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A \\Gamma"
+						}
+					],
+					"source": "\\begin{dmath*}{}A \\Gamma\\end{dmath*}"
+				}
+			],
+			"source": "ex1:= 3A;\nex2:= (A+B)C;\nex3:= (A+B)3;\nex4:= A\\Gamma;"
+		},
+		{
+			"cell_id": 2954135611539678626,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 5674456039730473675,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Finally, note that\nbrackets in the input \\emph{must} be balanced (a decision made to\nsimplify the parser; it means that cadabra uses a different way to\nindicate groups of symmetric or anti-symmetric indices than one often\nencounters in the general relativity literature."
+				}
+			],
+			"hidden": true,
+			"source": "Finally, note that\nbrackets in the input \\emph{must} be balanced (a decision made to\nsimplify the parser; it means that cadabra uses a different way to\nindicate groups of symmetric or anti-symmetric indices than one often\nencounters in the general relativity literature."
+		},
+		{
+			"cell_id": 13147868089044620186,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

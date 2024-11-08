@@ -1,0 +1,232 @@
+{
+	"cell_id": 15015813501029528490,
+	"cells": [
+		{
+			"cell_id": 7579096609771855197,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 9721816120441887067,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Index brackets}\n\nIndices can be associated to tensors, as in~$T_{\\mu\\nu}$, but it often\nalso happens that we want to associate indices to a sum or product of\ntensors, without writing all indices out explicitly. Examples are\n\\begin{equation*}\n(A + B + C)_{\\alpha\\beta}\\,,\\quad\\text{or}\\quad\n(\\psi \\Gamma_{m n} \\Gamma_{p})_{\\beta}\\,.\n\\end{equation*}\nHere the objects $A$, $B$, $C$ and~$\\Gamma$ are matrices, while~$\\psi$\nis a vector. Their explicit components are labelled with~$\\alpha$\nand~$\\beta$ indices, but the notation above keeps most of these vector\nindices implicit."
+				}
+			],
+			"hidden": true,
+			"source": "\\section*{Index brackets}\n\nIndices can be associated to tensors, as in~$T_{\\mu\\nu}$, but it often\nalso happens that we want to associate indices to a sum or product of\ntensors, without writing all indices out explicitly. Examples are\n\\begin{equation*}\n(A + B + C)_{\\alpha\\beta}\\,,\\quad\\text{or}\\quad\n(\\psi \\Gamma_{m n} \\Gamma_{p})_{\\beta}\\,.\n\\end{equation*}\nHere the objects $A$, $B$, $C$ and~$\\Gamma$ are matrices, while~$\\psi$\nis a vector. Their explicit components are labelled with~$\\alpha$\nand~$\\beta$ indices, but the notation above keeps most of these vector\nindices implicit."
+		},
+		{
+			"cell_id": 3747593314381049400,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 15377235912404650595,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Cadabra can deal with such expressions through a construction which is\ncalled the ``indexbracket''. It is possible to convert from one form\nto the other by using the \\algo{combine} and\n\\algo{expand} algorithms. Combining terms goes like this:"
+				}
+			],
+			"hidden": true,
+			"source": "Cadabra can deal with such expressions through a construction which is\ncalled the ``indexbracket''. It is possible to convert from one form\nto the other by using the \\algo{combine} and\n\\algo{expand} algorithms. Combining terms goes like this:"
+		},
+		{
+			"cell_id": 3639762061202278259,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 4445289936618923500,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5271033377246372260,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\indexbracket(\\Gamma_{r})_{\\alpha \\beta} \\indexbracket(\\Gamma_{s t u})_{\\beta \\gamma}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(\\Gamma_{r}\\right)\\,_{\\alpha \\beta} \\left(\\Gamma_{s t u}\\right)\\,_{\\beta \\gamma}\\end{dmath*}"
+				},
+				{
+					"cell_id": 2579952125931719981,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9890904167601362925,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\indexbracket(\\Gamma_{r} \\Gamma_{s t u})_{\\alpha \\gamma}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(\\Gamma_{r} \\Gamma_{s t u}\\right)\\,_{\\alpha \\gamma}\\end{dmath*}"
+				}
+			],
+			"source": "ex:= (\\Gamma_r)_{\\alpha\\beta} (\\Gamma_{s t u})_{\\beta\\gamma};\ncombine(_);"
+		},
+		{
+			"cell_id": 2045427073752557899,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15309898336879391955,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5134532710074123407,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\indexbracket(\\Gamma_{r})_{\\alpha \\beta} Q_{\\beta}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(\\Gamma_{r}\\right)\\,_{\\alpha \\beta} Q_{\\beta}\\end{dmath*}"
+				},
+				{
+					"cell_id": 11166369338585191579,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11097134341779913894,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\indexbracket(\\Gamma_{r} Q)_{\\alpha}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(\\Gamma_{r} Q\\right)\\,_{\\alpha}\\end{dmath*}"
+				}
+			],
+			"source": "ex:= (\\Gamma_r)_{\\alpha\\beta} Q_\\beta;\ncombine(_);"
+		},
+		{
+			"cell_id": 15195548963049034984,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 3902786993697460889,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If the index bracket has only one index, either the first or the last\nargument should be a matrix, but not both:"
+				}
+			],
+			"hidden": true,
+			"source": "If the index bracket has only one index, either the first or the last\nargument should be a matrix, but not both:"
+		},
+		{
+			"cell_id": 7854483963016823975,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9055389825227335019,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8276388607940852606,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\indexbracket(A B)_{m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(A B\\right)\\,_{m}\\end{dmath*}"
+				},
+				{
+					"cell_id": 9463496701081442497,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3741645233334530940,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\indexbracket(A B)_{m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(A B\\right)\\,_{m}\\end{dmath*}"
+				}
+			],
+			"source": "A::Matrix.\n{m,n,p}::Indices(vector).\nex:= (A B)_{m};\nexpand(_);"
+		},
+		{
+			"cell_id": 12418331311729001079,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 3827274058311932496,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If the index bracket has two indices, all arguments should be matrices,"
+				}
+			],
+			"hidden": true,
+			"source": "If the index bracket has two indices, all arguments should be matrices,"
+		},
+		{
+			"cell_id": 17229919566251876524,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 12992989275292965348,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 766899928363640140,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\indexbracket(A B)_{m n}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(A B\\right)\\,_{m n}\\end{dmath*}"
+				},
+				{
+					"cell_id": 2382938984798027775,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14435010680306336547,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m p} B_{p n}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m p} B_{p n}\\end{dmath*}"
+				}
+			],
+			"source": "{A,B}::Matrix.\n{m,n,p}::Indices(vector).\nex:= (A B)_{m n};\nexpand(_);"
+		},
+		{
+			"cell_id": 5630921792772693475,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 13278504945955909698,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If there are more arguments inside the bracket, these of course all\nneed to be matrices (and are assumed to be so by default)."
+				}
+			],
+			"hidden": true,
+			"source": "If there are more arguments inside the bracket, these of course all\nneed to be matrices (and are assumed to be so by default)."
+		},
+		{
+			"cell_id": 5783698868778637130,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

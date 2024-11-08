@@ -1,350 +1,376 @@
 {
-	"cells" : 
-	[
+	"cell_id": 12664457255956679119,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 2603007457225824030,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\section*{Indices, dummy indices and automatic index renaming}\n\nIn Cadabra, all objects which occur as subscripts or superscripts\nare considered to be ``indices''. The names of indices are understood\nto be irrelevant when they occur in a pair, and automatic relabelling\nwill take place whenever necessary in order to avoid index clashes. \n\nCadabra knows about the differences between free and dummy indices. It \nchecks the input for consistency and displays a warning when the\nindex structure does not make sense. Thus, the input"
+					"cell_id": 16398884988095052806,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Indices, dummy indices and automatic index renaming}\n\nIn Cadabra, all objects which occur as subscripts or superscripts\nare considered to be ``indices''. The names of indices are understood\nto be irrelevant when they occur in a pair, and automatic relabelling\nwill take place whenever necessary in order to avoid index clashes. \n\nCadabra knows about the differences between free and dummy indices. It \nchecks the input for consistency and displays a warning when the\nindex structure does not make sense. Thus, the input"
 				}
 			],
-			"source" : "\\section*{Indices, dummy indices and automatic index renaming}\n\nIn Cadabra, all objects which occur as subscripts or superscripts\nare considered to be ``indices''. The names of indices are understood\nto be irrelevant when they occur in a pair, and automatic relabelling\nwill take place whenever necessary in order to avoid index clashes. \n\nCadabra knows about the differences between free and dummy indices. It \nchecks the input for consistency and displays a warning when the\nindex structure does not make sense. Thus, the input"
+			"hidden": true,
+			"source": "\\section*{Indices, dummy indices and automatic index renaming}\n\nIn Cadabra, all objects which occur as subscripts or superscripts\nare considered to be ``indices''. The names of indices are understood\nto be irrelevant when they occur in a pair, and automatic relabelling\nwill take place whenever necessary in order to avoid index clashes. \n\nCadabra knows about the differences between free and dummy indices. It \nchecks the input for consistency and displays a warning when the\nindex structure does not make sense. Thus, the input"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "ex:= A_{m n} + B_{m} = 0;"
+			"cell_id": 15901390708985939557,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "ex:= A_{m n} + B_{m} = 0;"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 3601763275766639027,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "will results in an error message."
+					"cell_id": 210781383732853346,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "will result in an error message."
 				}
 			],
-			"hidden" : true,
-			"source" : "will results in an error message."
+			"hidden": true,
+			"source": "will result in an error message."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 8873963798221486951,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "The location of indices is, by default, not considered to be\nrelevant. That is, you can write"
+					"cell_id": 2795464499727936181,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The location of indices is, by default, not considered to be\nrelevant. That is, you can write"
 				}
 			],
-			"hidden" : true,
-			"source" : "The location of indices is, by default, not considered to be\nrelevant. That is, you can write"
+			"hidden": true,
+			"source": "The location of indices is, by default, not considered to be\nrelevant. That is, you can write"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 2820740517798032455,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[m,~\\discretionary{}{}{} n\\right].\\end{dmath*}"
+					"cell_id": 3779065371905443791,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[m,~\\discretionary{}{}{} n\\right].\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 12237235239697771748,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "A_{m} + A^{m}"
+							"cell_id": 9414779593694940232,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m} + A^{m}"
 						}
 					],
-					"source" : "\\begin{dmath*}{}A_{m}+A^{m}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}A_{m}+A^{m}\\end{dmath*}"
 				}
 			],
-			"source" : "{m, n}::Indices(name=\"free\");\nex:=A_{m} + A^{m};"
+			"source": "{m, n}::Indices(name=\"free\");\nex:=A_{m} + A^{m};|"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 14542057507706825743,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "as input and these are considered to be consistent expressions. You can collect such terms\nby using \\algo{lower_free_indices} or \\algo{raise_free_indices},"
+					"cell_id": 9760096887462824147,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "as input and these are considered to be consistent expressions. You can collect such terms\nby using \\algo{lower_free_indices} or \\algo{raise_free_indices},"
 				}
 			],
-			"hidden" : true,
-			"source" : "as input and these are considered to be consistent expressions. You can collect such terms\nby using \\algo{lower_free_indices} or \\algo{raise_free_indices},"
+			"hidden": true,
+			"source": "as input and these are considered to be consistent expressions. You can collect such terms\nby using \\algo{lower_free_indices} or \\algo{raise_free_indices},"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 2736816848492249371,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 16332006585139489656,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "2A_{m}"
+							"cell_id": 12543664447024095469,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "2A_{m}"
 						}
 					],
-					"source" : "\\begin{dmath*}{}2A_{m}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}2A_{m}\\end{dmath*}"
 				}
 			],
-			"source" : "lower_free_indices(ex);"
+			"source": "lower_free_indices(ex);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 3420150786956556315,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "If,\nhowever, the position of an index means something (like in general\nrelativity, where index lowering and raising implies contraction with\na metric), then you can declare index positions to be ``fixed''. This\nis done using"
+					"cell_id": 16332361616390480422,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If,\nhowever, the position of an index means something (like in general\nrelativity, where index lowering and raising implies contraction with\na metric), then you can declare index positions to be ``fixed''. This\nis done using"
 				}
 			],
-			"hidden" : true,
-			"source" : "If,\nhowever, the position of an index means something (like in general\nrelativity, where index lowering and raising implies contraction with\na metric), then you can declare index positions to be ``fixed''. This\nis done using"
+			"hidden": true,
+			"source": "If,\nhowever, the position of an index means something (like in general\nrelativity, where index lowering and raising implies contraction with\na metric), then you can declare index positions to be ``fixed''. This\nis done using"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 9248052594616249299,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left[a,~\\discretionary{}{}{} b,~\\discretionary{}{}{} c,~\\discretionary{}{}{} d,~\\discretionary{}{}{} e,~\\discretionary{}{}{} f\\right].\\end{dmath*}"
+					"cell_id": 1143495560860578432,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left[a,~\\discretionary{}{}{} b,~\\discretionary{}{}{} c,~\\discretionary{}{}{} d,~\\discretionary{}{}{} e,~\\discretionary{}{}{} f\\right].\\end{dmath*}"
 				}
 			],
-			"source" : "{a,b,c,d,e,f}::Indices(name=\"fixed\", position=fixed);"
+			"source": "{a,b,c,d,e,f}::Indices(name=\"fixed\", position=fixed);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 6840758994246203573,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Cadabra will raise or lower indices on such expressions to a canonical form when the\n\\algo{canonicalise} algorithm is used,"
+					"cell_id": 9044396775528022498,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Cadabra will raise or lower indices on such expressions to a canonical form when the\n\\algo{canonicalise} algorithm is used,"
 				}
 			],
-			"hidden" : true,
-			"source" : "Cadabra will raise or lower indices on such expressions to a canonical form when the\n\\algo{canonicalise} algorithm is used,"
+			"hidden": true,
+			"source": "Cadabra will raise or lower indices on such expressions to a canonical form when the\n\\algo{canonicalise} algorithm is used,"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 2081072977466570259,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 14219870068814531026,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "G_{a b} F^{a b} + G^{a b} F_{a b}"
+							"cell_id": 9556788623881644461,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "G_{a b} F^{a b} + G^{a b} F_{a b}"
 						}
 					],
-					"source" : "\\begin{dmath*}{}G_{a b} F^{a b}+G^{a b} F_{a b}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}G_{a b} F^{a b}+G^{a b} F_{a b}\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 1394139579612278374,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "2G^{a b} F_{a b}"
+							"cell_id": 2525156888606985620,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "2G^{a b} F_{a b}"
 						}
 					],
-					"source" : "\\begin{dmath*}{}2G^{a b} F_{a b}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}2G^{a b} F_{a b}\\end{dmath*}"
 				}
 			],
-			"source" : "ex:= G_{a b} F^{a b} + G^{a b} F_{a b};\ncanonicalise(_);"
+			"source": "ex:= G_{a b} F^{a b} + G^{a b} F_{a b};\ncanonicalise(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 14302869922211230433,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "If upper and lower indices should remain untouched at all times, there is a third index position type,\ncalled `independent',"
+					"cell_id": 15592543561493567160,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If upper and lower indices should remain untouched at all times, there is a third index position type,\ncalled `independent',"
 				}
 			],
-			"hidden" : true,
-			"source" : "If upper and lower indices should remain untouched at all times, there is a third index position type,\ncalled `independent',"
+			"hidden": true,
+			"source": "If upper and lower indices should remain untouched at all times, there is a third index position type,\ncalled `independent',"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 5062804308848888743,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=independent) to~}\\left[q,~\\discretionary{}{}{} r,~\\discretionary{}{}{} s\\right].\\end{dmath*}"
+					"cell_id": 8544846990947287991,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Attached property Indices(position=independent) to~}\\left[q,~\\discretionary{}{}{} r,~\\discretionary{}{}{} s\\right].\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 17148728148626256032,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "G_{q r} F^{q r} + G^{q r} F_{q r}"
+							"cell_id": 10987261822505544553,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "G_{q r} F^{q r} + G^{q r} F_{q r}"
 						}
 					],
-					"source" : "\\begin{dmath*}{}G_{q r} F^{q r}+G^{q r} F_{q r}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}G_{q r} F^{q r}+G^{q r} F_{q r}\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 5705016383598053748,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "G_{q r} F^{q r} + G^{q r} F_{q r}"
+							"cell_id": 13029846229228925610,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "G_{q r} F^{q r} + G^{q r} F_{q r}"
 						}
 					],
-					"source" : "\\begin{dmath*}{}G_{q r} F^{q r}+G^{q r} F_{q r}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}G_{q r} F^{q r}+G^{q r} F_{q r}\\end{dmath*}"
 				}
 			],
-			"source" : "{q,r,s}::Indices(name=\"independent\", position=independent);\nex:= G_{q r} F^{q r} + G^{q r} F_{q r};\ncanonicalise(_);"
+			"source": "{q,r,s}::Indices(name=\"independent\", position=independent);\nex:= G_{q r} F^{q r} + G^{q r} F_{q r};\ncanonicalise(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 8471289050708003734,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "As the last line shows, the index positions have remained unchanged."
+					"cell_id": 12293302538623812488,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "As the last line shows, the index positions have remained unchanged."
 				}
 			],
-			"hidden" : true,
-			"source" : "As the last line shows, the index positions have remained unchanged."
+			"hidden": true,
+			"source": "As the last line shows, the index positions have remained unchanged."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 1923640147759365874,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "When substituting an expression into another one, dummy indices will\nautomatically be relabelled when necessary. To see this in action,\nconsider the following example:"
+					"cell_id": 18361553095233638011,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "When substituting an expression into another one, dummy indices will\nautomatically be relabelled when necessary. To see this in action,\nconsider the following example:"
 				}
 			],
-			"hidden" : true,
-			"source" : "When substituting an expression into another one, dummy indices will\nautomatically be relabelled when necessary. To see this in action,\nconsider the following example:"
+			"hidden": true,
+			"source": "When substituting an expression into another one, dummy indices will\nautomatically be relabelled when necessary. To see this in action,\nconsider the following example:"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 15697062427148001098,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 17002631327703913227,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "G_{a b} Q"
+							"cell_id": 16011245533710997120,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "G_{a b} Q"
 						}
 					],
-					"source" : "\\begin{dmath*}{}G_{a b} Q\\end{dmath*}"
+					"source": "\\begin{dmath*}{}G_{a b} Q\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 2713391754974550285,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "Q → F_{a b} F^{a b}"
+							"cell_id": 8078697658186934777,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "Q → F_{a b} F^{a b}"
 						}
 					],
-					"source" : "\\begin{dmath*}{}Q \\rightarrow F_{a b} F^{a b}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}Q \\rightarrow F_{a b} F^{a b}\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 10205932028176583645,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "G_{a b} F_{c d} F^{c d}"
+							"cell_id": 9371390078094034135,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "G_{a b} F_{c d} F^{c d}"
 						}
 					],
-					"source" : "\\begin{dmath*}{}G_{a b} F_{c d} F^{c d}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}G_{a b} F_{c d} F^{c d}\\end{dmath*}"
 				}
 			],
-			"source" : "ex:= G_{a b} Q;\nrl:= Q-> F_{a b} F^{a b};\nsubstitute(ex, rl);"
+			"source": "ex:= G_{a b} Q;\nrl:= Q-> F_{a b} F^{a b};\nsubstitute(ex, rl);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 18060735432401029226,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "The $a$ and $b$ indices have automatically been relabelled to $c$ and $d$\nin order to avoid a conflict with the free indices on the $G_{a b}$ object."
+					"cell_id": 3512684296452765657,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The $a$ and $b$ indices have automatically been relabelled to $c$ and $d$\nin order to avoid a conflict with the free indices on the $G_{a b}$ object.\nCadabra figured out that it could use these names as we attached $a$-$f$ to\nthe same \\prop{Indices} list property a few cells ago. If you do not declare\nsuch an index sets, Cadabra will complain that it does not know how to relabel\ndummy indices."
 				}
 			],
-			"hidden" : true,
-			"source" : "The $a$ and $b$ indices have automatically been relabelled to $c$ and $d$\nin order to avoid a conflict with the free indices on the $G_{a b}$ object."
+			"hidden": true,
+			"source": "The $a$ and $b$ indices have automatically been relabelled to $c$ and $d$\nin order to avoid a conflict with the free indices on the $G_{a b}$ object.\nCadabra figured out that it could use these names as we attached $a$-$f$ to\nthe same \\prop{Indices} list property a few cells ago. If you do not declare\nsuch an index sets, Cadabra will complain that it does not know how to relabel\ndummy indices."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 14522048402832550635,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "You may have noticed that when you write \\verb|T_{a b}| the `\\verb|a b|' in the subscript is\nnot interpreted as a product, but rather as two different indices to the tensor~$T$. "
+					"cell_id": 17201415940783896500,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "You may have noticed that when you write \\verb|T_{a b}| the `\\verb|a b|' in the subscript is\nnot interpreted as a product, but rather as two different indices to the tensor~$T$. If you really\ndo want to write a product inside a sub- or super-script, you need to write a multiplication '*' \nexplicitly."
 				}
 			],
-			"hidden" : true,
-			"source" : "You may have noticed that when you write \\verb|T_{a b}| the `\\verb|a b|' in the subscript is\nnot interpreted as a product, but rather as two different indices to the tensor~$T$. "
+			"hidden": true,
+			"source": "You may have noticed that when you write \\verb|T_{a b}| the `\\verb|a b|' in the subscript is\nnot interpreted as a product, but rather as two different indices to the tensor~$T$. If you really\ndo want to write a product inside a sub- or super-script, you need to write a multiplication '*' \nexplicitly."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 16546289900809526296,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
 }

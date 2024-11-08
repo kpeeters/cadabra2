@@ -1,0 +1,79 @@
+{
+	"cell_id": 14480591988213317330,
+	"cells": [
+		{
+			"cell_id": 2472153521307117009,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 5058811582632187013,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Exponents, indices and labels}\n\nExponents, indices and labels are traditionally all placed using\nsuper- or subscript notation, making these slightly ambiguous for a\ncomputer algebra system. Since this situation can become quite complex\n(how do you represent the third power of the first element of a\nvector?), Cadabra requires all powers to be entered with a double-star\n``$**$'' notation:"
+				}
+			],
+			"hidden": true,
+			"source": "\\section*{Exponents, indices and labels}\n\nExponents, indices and labels are traditionally all placed using\nsuper- or subscript notation, making these slightly ambiguous for a\ncomputer algebra system. Since this situation can become quite complex\n(how do you represent the third power of the first element of a\nvector?), Cadabra requires all powers to be entered with a double-star\n``$**$'' notation:"
+		},
+		{
+			"cell_id": 18294238673793497418,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 17667427082762968149,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10490233587446114323,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(a)**2"
+						}
+					],
+					"source": "\\begin{dmath*}{}{a}^{2}\\end{dmath*}"
+				},
+				{
+					"cell_id": 12288615719137532703,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7800622082703522619,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(a)**(2 + 3b)"
+						}
+					],
+					"source": "\\begin{dmath*}{}{a}^{\\left(2\\discretionary{}{}{}+3b\\right)}\\end{dmath*}"
+				}
+			],
+			"source": "ex1:= a**2;\nex2:= a**(2 + 3b);"
+		},
+		{
+			"cell_id": 1344652704977985610,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 8432529926233722226,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "In addition, all sub- or superscripts with \\emph{curly} braces\nindicate indices, to which the summation convention applies. In\nparticular, there are not allowed to be more than two identical\nindices in a single product. The summation convention does not apply\nto arguments with any other bracket types. In particular, sub- or\nsuperscripts with \\emph{square} or \\emph{pointy} brackets have (as of\nyet) no fixed meaning."
+				}
+			],
+			"hidden": true,
+			"source": "In addition, all sub- or superscripts with \\emph{curly} braces\nindicate indices, to which the summation convention applies. In\nparticular, there are not allowed to be more than two identical\nindices in a single product. The summation convention does not apply\nto arguments with any other bracket types. In particular, sub- or\nsuperscripts with \\emph{square} or \\emph{pointy} brackets have (as of\nyet) no fixed meaning."
+		},
+		{
+			"cell_id": 8007425223672013941,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}
