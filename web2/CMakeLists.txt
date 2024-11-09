@@ -46,6 +46,9 @@ set(TUTORIALS
   ref_exponents
   ref_spacing
   ref_implicit_versus_explicit
+  ref_indexbrackets
+  ref_accents
+  ref_ordering
   ref_selecting
   ref_c++_library
   )
@@ -66,6 +69,9 @@ set(BOOK_PARTS
    ref_exponents
    ref_spacing
    ref_implicit_versus_explicit
+   ref_indexbrackets
+   ref_accents
+   ref_ordering
    ref_selecting
    ref_c++_library
 )   
