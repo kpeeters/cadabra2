@@ -217,6 +217,9 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	actiongroup->add_action( "EditMakeCellTeX",       sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
 	actiongroup->add_action( "EditMakeCellPython",    sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_python) );	
 	actiongroup->add_action( "EditIgnoreCellOnImport",sigc::mem_fun(*this, &NotebookWindow::on_ignore_cell_on_import) );	
+	action_auto_close_latex = Gio::SimpleAction::create_bool("AutoCloseLaTeX", prefs.auto_close_latex);
+	action_auto_close_latex->signal_activate().connect( sigc::mem_fun(*this, &NotebookWindow::on_prefs_auto_close_latex) );
+	actiongroup->add_action(action_auto_close_latex);
 
 	// View menu actions.
 	actiongroup->add_action( "ViewSplit",             sigc::mem_fun(*this, &NotebookWindow::on_view_split) );
@@ -411,6 +414,12 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	   "        <item>"
 		"          <attribute name='label'>Ignore cell on import</attribute>"
 		"          <attribute name='action'>cdb.EditIgnoreCellOnImport</attribute>"
+		"        </item>"
+		"      </section>"
+		"      <section>"
+	   "        <item>"
+		"          <attribute name='label'>Auto-close LaTeX cells</attribute>"
+		"          <attribute name='action'>cdb.AutoCloseLaTeX</attribute>"
 		"        </item>"
 		"      </section>"
 		"    </submenu>"
@@ -1242,6 +1251,10 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 
 				newcell.outbox->show_hide_requested.connect(
 				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_toggle_visibility), i ) );
+
+				if(prefs.auto_close_latex) {
+					cell_toggle_visibility(it, i);
+					}
 
 #if GTKMM_MINOR_VERSION>=10
 				to_reveal.push_back(&newcell.outbox->rbox);
@@ -2548,6 +2561,7 @@ void NotebookWindow::on_help_about()
 	special.push_back("Connor Behan (for various improvements related to index-free algorithms)");
 	special.push_back("James Allen (for writing much of the factoring code)");
 	special.push_back("NanoMichael (for the MicroTeX rendering library)");
+	special.push_back("Daniel Butter (substitute rule cache and other improvements)");
 	special.push_back("Software Sustainability Institute");
 	special.push_back("Institute of Advanced Study (for a Christopherson/Knott fellowship)");
 	about.add_credit_section("Special thanks", special);
@@ -2838,6 +2852,18 @@ void NotebookWindow::compare_git_specific()
 		error_dialog.set_title("Git error");
 		error_dialog.run();
 		}
+	}
+
+void NotebookWindow::on_prefs_auto_close_latex(const Glib::VariantBase& vb)
+	{
+	auto state_variant = action_auto_close_latex->get_state_variant(); //.get_bool();
+	bool state = Glib::VariantBase::cast_dynamic<Glib::Variant<bool>>(state_variant).get();
+	
+	if(prefs.auto_close_latex == !state) return;
+
+	prefs.auto_close_latex = !state;
+	action_auto_close_latex->set_state(Glib::Variant<bool>::create(prefs.auto_close_latex));
+	prefs.save();
 	}
 
 void NotebookWindow::on_prefs_font_size(int num)

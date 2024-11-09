@@ -281,6 +281,7 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	move_into_new_cell = data.value("move_into_new_cell", false);
 	tab_completion     = data.value("tab_completion", true);
 	microtex           = data.value("microtex", true);
+	auto_close_latex   = data.value("auto_close_latex", true);
 
 	// Force microtex when this is an AppImage.
 	const char *appdir = getenv("APPDIR");
@@ -332,6 +333,7 @@ void DocumentThread::Prefs::save()
 		data["move_into_new_cell"] = move_into_new_cell;
 		data["tab_completion"] = tab_completion;
 		data["microtex"] = microtex;
+		data["auto_close_latex"] = auto_close_latex;
 		for (const auto& lang : colours) {
 			for (const auto& kw : lang.second)
 				data["colours"][lang.first][kw.first] = kw.second;
