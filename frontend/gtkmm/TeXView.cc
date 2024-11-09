@@ -95,9 +95,11 @@ void TeXView::TeXArea::get_preferred_height_for_width_vfunc(int width,
 			int remember = rendering_width;
 			rendering_width = width - 2*padding_x;
 			layout_latex();
-			minimum_height = _render->getHeight() + 2*padding_y;
-			natural_height = _render->getHeight() + 2*padding_y;
-         //		std::cerr << "**** computed for width " << width << " height as " << natural_height << std::endl;
+			if(_render!=nullptr) {
+				minimum_height = _render->getHeight() + 2*padding_y;
+				natural_height = _render->getHeight() + 2*padding_y;
+				//		std::cerr << "**** computed for width " << width << " height as " << natural_height << std::endl;
+				}
 			if(rendering_width==9999)
 				rendering_width = remember;
 			}
@@ -229,16 +231,24 @@ void TeXView::TeXArea::update_image(std::shared_ptr<TeXEngine::TeXRequest> conte
 
 void TeXView::TeXArea::layout_latex() const
 	{
-	if(_render)
+	if(_render) {
 		delete _render;
+		_render = nullptr;
+		}
 
 //	std::cerr << "running layout with text_size = " << _text_size << std::endl;
-	_render = microtex::MicroTeX::parse(
-      fixed, //microtex::utf82wide(fixed),
-		rendering_width,
-      _text_size,
-      _text_size / 3.f,
-      0xff424242);
+	try {
+		// std::cerr << "fixed = " << fixed << std::endl;
+		_render = microtex::MicroTeX::parse(
+			fixed, //microtex::utf82wide(fixed),
+			rendering_width,
+			_text_size,
+			_text_size / 3.f,
+			0xff424242);
+		}
+	catch(std::exception& err) {
+		std::cerr << "MicroTeX::parse: exception parsing input (" << fixed << "): " << err.what() << std::endl;
+		}
 	}
 
 guint32 color_from_rgba(Gdk::RGBA color)

@@ -104,9 +104,16 @@ namespace cadabra {
 		std::string bare = Ex_as_latex(for_obj);
 
 		if (dynamic_cast<const LaTeXForm*>(prop)) {
-			bare = std::regex_replace(bare, std::regex(R"(\\)"), "$\\backslash{}$}");
+			// Since the LaTeXForm property has already been attached, the
+			// Ex_as_latex call above will replace the original symbol and
+			// replace it with the LaTeXForm. But we want to show the original
+			// symbol!
+			bare = *(for_obj->begin()->name);
 			bare = std::regex_replace(bare, std::regex(R"(#)"), "\\#");
-			str << " attached to {\\tt " + bare + "}.";
+			bare = std::regex_replace(bare, std::regex(R"(\{)"), "\\{");
+			bare = std::regex_replace(bare, std::regex(R"(\})"), "\\}");
+			bare = std::regex_replace(bare, std::regex(R"(\\)"), "\\textbackslash{}");
+			str << " attached to {\\texttt{" + bare + "}}.}";
 		}
 		else {
 			str << " attached to~}" + bare + ".";
