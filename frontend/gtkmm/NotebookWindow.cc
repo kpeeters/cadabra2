@@ -1252,10 +1252,6 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				newcell.outbox->show_hide_requested.connect(
 				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_toggle_visibility), i ) );
 
-				if(prefs.auto_close_latex) {
-					cell_toggle_visibility(it, i);
-					}
-
 #if GTKMM_MINOR_VERSION>=10
 				to_reveal.push_back(&newcell.outbox->rbox);
 #endif
@@ -1858,6 +1854,22 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number,
 	// std::cerr << "Executing cell " << it->id().id << std::endl;
 	compute->execute_cell(it);
 
+	// If this is a LaTeX input cell, and auto-close is turned on, close
+	// the input cell.
+	if(it->cell_type==DataCell::CellType::latex) {
+		if(prefs.auto_close_latex) {
+			for(unsigned int i=0; i<canvasses.size(); ++i) {
+				auto vis = canvasses[i]->visualcells.find(&(*it));
+				if(vis==canvasses[i]->visualcells.end()) {
+					throw std::logic_error("Cannot find visual cell.");
+					}
+				else {
+					(*vis).second.inbox->edit.hide();
+					}
+				}
+			}
+		}
+	
 	return true;
 	}
 
