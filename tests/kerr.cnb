@@ -1,4 +1,4 @@
-kernel(scalar_backend="mathematica")
+__cdbkernel__.scalar_backend=scalar_backend_t.mathematica"
 
 {t,r,\theta,\phi}::Coordinate;
 {\mu,\nu,\rho,\sigma,\kappa,\lambda}::Indices(values={t,r,\phi,\theta}, position=fixed).

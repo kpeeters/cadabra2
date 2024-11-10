@@ -135,7 +135,7 @@ test07()
 
 def test08():
     __cdbkernel__=create_scope()
-    kernel(call_embedded_python_functions=True)
+    __cdbkernel__.call_embedded_python_functions=True
     ex:= f(x) \sin(x) \int{ \cos(y) }{y, 0, x}; 
     print("Test 08 passed")
 

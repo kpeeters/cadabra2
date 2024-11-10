@@ -50,7 +50,7 @@ test03()
 
 def test04():
     __cdbkernel__=create_scope()
-    kernel(scalar_backend="mathematica")
+    __cdbkernel__.scalar_backend = scalar_backend_t.mathematica
     ex:=\sin(x)**2 + \cos(x)**2;
     simplify(_)
     assert(ex==1)

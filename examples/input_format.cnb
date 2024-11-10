@@ -248,7 +248,7 @@
 			"cell_id": 14839438110559465856,
 			"cell_origin": "client",
 			"cell_type": "input",
-			"source": "kernel(call_embedded_python_functions=True)"
+			"source": "__cdbkernel__.call_embedded_python_functions=True"
 		},
 		{
 			"cell_id": 13320774661377944897,
@@ -271,12 +271,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 14670749530413958279,
+					"cell_id": 17277331614704024525,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 16922367421830269796,
+							"cell_id": 1818314009831986771,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "A + B + D"
@@ -306,7 +306,7 @@
 			"cell_id": 16834549477742454181,
 			"cell_origin": "client",
 			"cell_type": "input",
-			"source": "kernel(call_embedded_python_functions=False)"
+			"source": "__cdbkernel__.call_embedded_python_functions=False"
 		},
 		{
 			"cell_id": 13066277311614345372,

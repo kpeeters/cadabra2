@@ -1,0 +1,152 @@
+{
+	"cell_id": 15346339992211116796,
+	"cells": [
+		{
+			"cell_id": 16459148063967060997,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6792806555766337768,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Accents}\n\nIt often occurs that you want to put a hat or tilde or some other\naccent on top of a symbol, as a means to indicate a slightly different\nobject. In most of these cases, the properties of the normal symbol\nand the accented symbol are identical. Such accents are declared using\nthe \\prop{Accent} property, as in"
+				}
+			],
+			"hidden": true,
+			"source": "\\section*{Accents}\n\nIt often occurs that you want to put a hat or tilde or some other\naccent on top of a symbol, as a means to indicate a slightly different\nobject. In most of these cases, the properties of the normal symbol\nand the accented symbol are identical. Such accents are declared using\nthe \\prop{Accent} property, as in"
+		},
+		{
+			"cell_id": 16057021908384386123,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 11553527963445813639,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Accent attached to~}\\backslash\\texttt{hat}\\{\\#\\}.\\end{dmath*}"
+				}
+			],
+			"source": "\\hat{#}::Accent;"
+		},
+		{
+			"cell_id": 16972251731688036769,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 12965346805565846436,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "This automatically makes all symbols with hats inherit the properties\nof the unhatted symbols,"
+				}
+			],
+			"hidden": true,
+			"source": "This automatically makes all symbols with hats inherit the properties\nof the unhatted symbols,"
+		},
+		{
+			"cell_id": 17676320454094676305,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15299440598427965471,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4840539522801871562,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\hat{\\chi} \\psi"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\widehat{\\chi} \\psi\\end{dmath*}"
+				},
+				{
+					"cell_id": 11746078301643897089,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14275938498403721147,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "-\\psi \\hat{\\chi}"
+						}
+					],
+					"source": "\\begin{dmath*}{}-\\psi \\widehat{\\chi}\\end{dmath*}"
+				}
+			],
+			"source": "\\hat{#}::Accent.\n{\\psi, \\chi}::AntiCommuting.\n{\\psi, \\chi}::SortOrder.\nex:= \\hat{\\chi} \\psi;\nsort_product(_);"
+		},
+		{
+			"cell_id": 16254242404429757988,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 2296267821247394715,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If you want to put an accent on an object with indices, wrap the\naccent around the entire object, do not leave the indices outside."
+				}
+			],
+			"hidden": true,
+			"source": "If you want to put an accent on an object with indices, wrap the\naccent around the entire object, do not leave the indices outside."
+		},
+		{
+			"cell_id": 4078046895693549704,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 14719176952547821212,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Note that it is also possible to mark objects by attaching sub- or\nsuperscripted symbols to them, as in e.g.~$A^\\dagger$. This can be\ndone by declaring these symbols explicitly using the \\prop{Symbol}\nproperty,"
+				}
+			],
+			"hidden": true,
+			"source": "Note that it is also possible to mark objects by attaching sub- or\nsuperscripted symbols to them, as in e.g.~$A^\\dagger$. This can be\ndone by declaring these symbols explicitly using the \\prop{Symbol}\nproperty,"
+		},
+		{
+			"cell_id": 7750888541147789542,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 7392594223693586359,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Symbol attached to~}\\dagger.\\end{dmath*}"
+				}
+			],
+			"source": "\\dagger::Symbol;"
+		},
+		{
+			"cell_id": 865666516606114027,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 8568844144367393656,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If you do not do this, the dagger symbol will be seen as an index\nand an error will be reported if it appears more than twice."
+				}
+			],
+			"hidden": true,
+			"source": "If you do not do this, the dagger symbol will be seen as an index\nand an error will be reported if it appears more than twice."
+		},
+		{
+			"cell_id": 17791353427878308235,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}
