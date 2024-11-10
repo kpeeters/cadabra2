@@ -1,0 +1,474 @@
+{
+	"cell_id": 13629045816255798702,
+	"cells": [
+		{
+			"cell_id": 8849555755772786534,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 12370158924790282502,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{The kernel and other internals}\n\nBecause Cadabra stores mathematical expressions in a separate expression tree in \\verb|Ex| objects,\nit behaves somewhat differently from systems in which expressions are stored as a Python expression\ntree. In Cadabra, the meaning of a particular symbol in a mathematical expression is determined by\nthe properties which you have attached to it, not by the Python type of that symbol (it does not have\na Python type). To see what the above means, consider the following example:"
+				}
+			],
+			"source": "\\section*{The kernel and other internals}\n\nBecause Cadabra stores mathematical expressions in a separate expression tree in \\verb|Ex| objects,\nit behaves somewhat differently from systems in which expressions are stored as a Python expression\ntree. In Cadabra, the meaning of a particular symbol in a mathematical expression is determined by\nthe properties which you have attached to it, not by the Python type of that symbol (it does not have\na Python type). To see what the above means, consider the following example:"
+		},
+		{
+			"cell_id": 12042551384764104111,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13672040626640859045,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Symmetric attached to~}A_{m n}.\\end{dmath*}"
+				},
+				{
+					"cell_id": 9851969310638711740,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6574861475250942513,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m n} + A_{n m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m n}\\discretionary{}{}{}+A_{n m}\\end{dmath*}"
+				},
+				{
+					"cell_id": 16263284384910359364,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4397616846171026227,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "2A_{m n}"
+						}
+					],
+					"source": "\\begin{dmath*}{}2A_{m n}\\end{dmath*}"
+				}
+			],
+			"source": "A_{m n}::Symmetric;\nex:= A_{m n} + A_{n m};\ncanonicalise(ex);"
+		},
+		{
+			"cell_id": 9306146065819952695,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 3013271056476369623,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Here, the symbol \\verb|A_{m n}| is not a Python object, but rather a string which can appear in a mathematical\nexpression. If you look under the hood, the above cell can be written in pure Python as"
+				}
+			],
+			"source": "Here, the symbol \\verb|A_{m n}| is not a Python object, but rather a string which can appear in a mathematical\nexpression. If you look under the hood, the above cell can be written in pure Python as"
+		},
+		{
+			"cell_id": 6972904807946610316,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16462270235232285755,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Symmetric attached to~}A_{m n}.\\end{dmath*}"
+				},
+				{
+					"cell_id": 2462848695655197614,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8384194984997684422,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m n} + A_{n m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m n}\\discretionary{}{}{}+A_{n m}\\end{dmath*}"
+				},
+				{
+					"cell_id": 15823427100863555800,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8859566742968700959,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "2A_{m n}"
+						}
+					],
+					"source": "\\begin{dmath*}{}2A_{m n}\\end{dmath*}"
+				}
+			],
+			"source": "Symmetric( Ex(r\" A_{m n} \") );\nex = Ex(r\" A_{m n} + A_{n m} \" );\ncanonicalise(ex);"
+		},
+		{
+			"cell_id": 10585184257996959815,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 11136225035560683399,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "From this example, it should hopefully be clear that the only Python object is \\verb|ex|, and the mathematics\nis not stored as Python functions/objects.\n\nSo how does Cadabra now know that \\verb|A_{m n}| is symmetric in its indices? Where did that property get stored?\nIt is not because \\verb|A_{m n}| is of Python type \\verb|Symmetric| (it cannot be, because \\verb|A_{m n}| is not even\na valid Python identifier name). Rather, the first line in the example above makes this information go into \nthe Cadabra \\emph{kernel}. \n\nThe kernel is a global object which automatically gets created when you start Cadabra\n(or when you \\verb|import cadabra2| if you use it from pure Python). It has the name \\verb|__cdbkernel__|:"
+				}
+			],
+			"hidden": true,
+			"source": "From this example, it should hopefully be clear that the only Python object is \\verb|ex|, and the mathematics\nis not stored as Python functions/objects.\n\nSo how does Cadabra now know that \\verb|A_{m n}| is symmetric in its indices? Where did that property get stored?\nIt is not because \\verb|A_{m n}| is of Python type \\verb|Symmetric| (it cannot be, because \\verb|A_{m n}| is not even\na valid Python identifier name). Rather, the first line in the example above makes this information go into \nthe Cadabra \\emph{kernel}. \n\nThe kernel is a global object which automatically gets created when you start Cadabra\n(or when you \\verb|import cadabra2| if you use it from pure Python). It has the name \\verb|__cdbkernel__|:"
+		},
+		{
+			"cell_id": 45856600362238896,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16294516257136820305,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}<cadabra2.Kernel object at 0xffffaa9d1a30>\\end{verbatim}"
+				}
+			],
+			"source": "__cdbkernel__;"
+		},
+		{
+			"cell_id": 7025123213090975220,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 288800776347470677,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "All Cadabra algorithms look for this object and use it to extract or store property information about the symbols\nwhich appear in mathematical expressions. "
+				}
+			],
+			"source": "All Cadabra algorithms look for this object and use it to extract or store property information about the symbols\nwhich appear in mathematical expressions. "
+		},
+		{
+			"cell_id": 4539756454185987543,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 7809667929969088196,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "For most situations, having just this single global kernel object is sufficient, as you will want the properties\nof mathematical symbols to be shared between all expressions, whether they get created at global scope or in some\nlocal context inside a function. However, there are situations where you might want to \"start with a clean slate\" inside\na function. In that case, you can create a new local kernel scope by doing"
+				}
+			],
+			"source": "For most situations, having just this single global kernel object is sufficient, as you will want the properties\nof mathematical symbols to be shared between all expressions, whether they get created at global scope or in some\nlocal context inside a function. However, there are situations where you might want to \"start with a clean slate\" inside\na function. In that case, you can create a new local kernel scope by doing"
+		},
+		{
+			"cell_id": 12205210069457161110,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14069236159961730214,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}<cadabra2.Kernel object at 0xffffaa3fea70>\\end{verbatim}"
+				}
+			],
+			"source": "__cdbkernel__ = create_scope();"
+		},
+		{
+			"cell_id": 4201856381823193209,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 17402143550802271243,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "You will see this used in the test programs in the \\verb|test/| folder of the Cadabra source code."
+				}
+			],
+			"source": "You will see this used in the test programs in the \\verb|test/| folder of the Cadabra source code."
+		},
+		{
+			"cell_id": 2671523501922209461,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 18163868036366986479,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Kernel parameters and options}\n\nVarious global Cadabra settings can be queried and configured by setting options in the current kernel.\nIn order to determine the current version and build, there are some read-only options:"
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{Kernel parameters and options}\n\nVarious global Cadabra settings can be queried and configured by setting options in the current kernel.\nIn order to determine the current version and build, there are some read-only options:"
+		},
+		{
+			"cell_id": 18377425193476512512,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3851195423111399157,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}2.5.9\\end{verbatim}"
+				},
+				{
+					"cell_id": 5979562681690966676,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}3436.a19d6939e3\\end{verbatim}"
+				}
+			],
+			"source": "__cdbkernel__.version;\n__cdbkernel__.build;"
+		},
+		{
+			"cell_id": 9830875065386943985,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 12204927870060801580,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "To switch between the display of fractions in two-dimensional form or using the $(...)^{-1}$ notation,"
+				}
+			],
+			"hidden": true,
+			"source": "To switch between the display of fractions in two-dimensional form or using the $(...)^{-1}$ notation,"
+		},
+		{
+			"cell_id": 1725968702659204153,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15511308279008711323,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16277940918531804827,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "a (b)**(-1)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{a}{b}\\end{dmath*}"
+				}
+			],
+			"source": "__cdbkernel__.display_fractions=True\nex:= a/b;"
+		},
+		{
+			"cell_id": 2573922325839279496,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14940346752126201661,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5681444561252168539,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "a (b)**(-1)"
+						}
+					],
+					"source": "\\begin{dmath*}{}a {b}^{-1}\\end{dmath*}"
+				}
+			],
+			"source": "__cdbkernel__.display_fractions=False\nex:= a/b;"
+		},
+		{
+			"cell_id": 9355373558063200252,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 8079701494229551055,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "To switch the scalar backend used for simplification of scalar expressions using \\algo{simplify}, there\nare currently two options: \\verb|scalar_backend_t.mathematica| and \\verb|scalar_backend_t.sympy|. "
+				}
+			],
+			"hidden": true,
+			"source": "To switch the scalar backend used for simplification of scalar expressions using \\algo{simplify}, there\nare currently two options: \\verb|scalar_backend_t.mathematica| and \\verb|scalar_backend_t.sympy|. "
+		},
+		{
+			"cell_id": 11177374336733547393,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "__cdbkernel__.scalar_backend = scalar_backend_t.mathematica"
+		},
+		{
+			"cell_id": 17735255867559487334,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 4323940300054202230,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Unless you have built Cadabra with Mathematica support, the expression below will remain\nunsimplified:"
+				}
+			],
+			"hidden": true,
+			"source": "Unless you have built Cadabra with Mathematica support, the expression below will remain\nunsimplified:"
+		},
+		{
+			"cell_id": 3157742344791853514,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 11166821269592507071,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13660063936394300196,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(\\sin(x))**2 + (\\cos(x))**2"
+						}
+					],
+					"source": "\\begin{dmath*}{}{\\left(\\sin{x}\\right)}^{2}\\discretionary{}{}{}+{\\left(\\cos{x}\\right)}^{2}\\end{dmath*}"
+				}
+			],
+			"source": "simplify($\\sin(x)**2 + \\cos(x)**2$);"
+		},
+		{
+			"cell_id": 15117942814232253837,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "__cdbkernel__.scalar_backend=scalar_backend_t.sympy"
+		},
+		{
+			"cell_id": 2060847852779222105,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 95816655246225054,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6329887174223332697,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "1"
+						}
+					],
+					"source": "\\begin{dmath*}{}1\\end{dmath*}"
+				}
+			],
+			"source": "simplify($\\sin(x)**2 + \\cos(x)**2$);"
+		},
+		{
+			"cell_id": 15783455992243902484,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 2164321970993920001,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If you want to be able to write mathematical expressions which contain Python functions acting on\nsub-expressions, use"
+				}
+			],
+			"source": "If you want to be able to write mathematical expressions which contain Python functions acting on\nsub-expressions, use"
+		},
+		{
+			"cell_id": 13702456694274505585,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "__cdbkernel__.call_embedded_python_functions=True"
+		},
+		{
+			"cell_id": 9873818455953374450,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9662591733689155128,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 15675228372636278967,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A C + A D + B C + B D"
+						}
+					],
+					"source": "\\begin{dmath*}{}A C\\discretionary{}{}{}+A D\\discretionary{}{}{}+B C\\discretionary{}{}{}+B D\\end{dmath*}"
+				}
+			],
+			"source": "ex:= distribute( (A+B)*(C+D) );"
+		},
+		{
+			"cell_id": 4886129485221259673,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 11045096235463665163,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Compare the above to what happens when this functionality is turned off (the default):"
+				}
+			],
+			"source": "Compare the above to what happens when this functionality is turned off (the default):"
+		},
+		{
+			"cell_id": 4871737881202628813,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "__cdbkernel__.call_embedded_python_functions=False"
+		},
+		{
+			"cell_id": 10895627135241426619,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 45042463627634647,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14172362488317087161,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "distribute((A + B) (C + D))"
+						}
+					],
+					"source": "\\begin{dmath*}{}distribute\\left(\\left(A\\discretionary{}{}{}+B\\right) \\left(C\\discretionary{}{}{}+D\\right)\\right)\\end{dmath*}"
+				}
+			],
+			"source": "ex:= distribute( (A+B)*(C+D) );"
+		},
+		{
+			"cell_id": 7505202705468877718,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

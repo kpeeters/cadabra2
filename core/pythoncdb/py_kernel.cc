@@ -119,8 +119,9 @@ namespace cadabra {
 			.def(pybind11::init<bool>())
 			.def_readonly_static("version", &Kernel::version)
 			.def_readonly_static("build", &Kernel::build)
-			.def_readonly("scalar_backend", &Kernel::scalar_backend)
 			.def_readwrite("display_fractions", &Kernel::display_fractions)
+			.def_readwrite("call_embedded_python_functions", &Kernel::call_embedded_python_functions)
+			.def_readwrite("scalar_backend", &Kernel::scalar_backend)
 			.def("warn", &Kernel::warn, pybind11::arg("msg"), pybind11::arg("level") = 0)
 			.def("configure_warnings", kernel_configure_warnings);
 
@@ -134,26 +135,6 @@ namespace cadabra {
 		
 		Kernel* kernel = create_scope();
 		m.attr("__cdbkernel__") = pybind11::cast(kernel);
-
-		m.def("kernel", [](pybind11::kwargs dict) {
-			Kernel *k = get_kernel_from_scope();
-			for (auto& item : dict) {
-				std::string key = item.first.cast<std::string>();
-				if (key == "scalar_backend") {
-					std::string val = item.second.cast<std::string>();
-					if (val == "sympy")            k->scalar_backend = Kernel::scalar_backend_t::sympy;
-					else if (val == "mathematica") k->scalar_backend = Kernel::scalar_backend_t::mathematica;
-					else throw ArgumentException("scalar_backend must be 'sympy' or 'mathematica'.");
-					}
-				else if(key == "call_embedded_python_functions") {
-					bool val = item.second.cast<bool>();
-					k->call_embedded_python_functions=val;
-					}
-				else {
-					throw ArgumentException("unknown argument '" + key + "'.");
-					}
-				}
-			});
 
 		m.def("create_scope", &create_scope,
 		      pybind11::return_value_policy::take_ownership);
