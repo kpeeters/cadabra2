@@ -533,8 +533,10 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 		return true;
 		}
 	else if(is_tab) {
+		// If one or more lines are selected, indent the whole block.
+		// FIXME: implement
+		
 		// Only complete if the last character is not whitespace.
-
 		Glib::RefPtr<Gtk::TextBuffer::Mark> ins = get_buffer()->get_insert();
 		Gtk::TextBuffer::iterator it=textbuf->get_iter_at_mark(ins);
 		int ipos=textbuf->get_slice(textbuf->begin(), it).bytes();

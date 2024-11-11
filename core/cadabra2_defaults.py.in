@@ -172,6 +172,14 @@ try:
 except ImportError:
     have_matplotlib=False
 
+have_plotly=True
+try:
+    import plotly
+    import plotly.graph_objs  
+except ImportError:
+    have_plotly=False
+
+    
 def save_history(history_path):
     try:
         readline.write_history_file(history_path)
@@ -249,6 +257,11 @@ def display(obj, cell_id=0, delay_send=False):
         b64 = base64.b64encode(imgstring.getvalue())
         return server.send(b64, "image_svg", 0, cell_id, False)
 
+    elif have_plotly and isinstance(obj, plotly.graph_objs._figure.Figure):
+        imgstring = obj.to_image(format="svg")
+        b64 = base64.b64encode(imgstring)
+        return server.send(b64, "image_svg", 0, cell_id, False)
+     
     elif hasattr(obj,'_backend'):
         # print("figure 3", file=sys.stderr)
         if hasattr(obj._backend,'fig'):

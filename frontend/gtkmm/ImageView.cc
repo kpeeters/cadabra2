@@ -32,9 +32,10 @@ bool ImageView::on_motion_notify_event(GdkEventMotion *event)
 	//	std::cerr << event->x << ", " << event->y << std::endl;
 	if(sizing) {
 		auto cw = width_at_press  + (event->x - prev_x);
-		auto ratio = pixbuf->get_width() / ((double)pixbuf->get_height());
-		image.set(pixbuf->scale_simple(cw, cw/ratio, Gdk::INTERP_BILINEAR));
-		set_size_request( cw, cw/ratio );
+		rerender(cw);
+//		auto ratio = pixbuf->get_width() / ((double)pixbuf->get_height());
+//		image.set(pixbuf->scale_simple(cw, cw/ratio, Gdk::INTERP_BILINEAR));
+//		set_size_request( cw, cw/ratio );
 		}
 	return true;
 	}
@@ -62,33 +63,38 @@ bool ImageView::on_button_release_event(GdkEventButton *event)
 
 void ImageView::set_image_from_base64(const std::string& b64)
 	{
-	auto str = Gio::MemoryInputStream::create();
-
 	// The data is ok:
 	// std::ofstream tst("out2.png");
 	// tst << Glib::Base64::decode(b64);
 	// tst.close();
 
-	std::string dec=Glib::Base64::decode(b64);
-	str->add_data(dec.c_str(), dec.size());
-
-	pixbuf = Gdk::Pixbuf::create_from_stream_at_scale(str, 400*scale, -1, true);
-	if(!pixbuf)
-		std::cerr << "cadabra-client: unable to create image from data" << std::endl;
-	else {
-		image.set(pixbuf);
-		image.set_size_request( pixbuf->get_width(), pixbuf->get_height() );
-		}
+	decoded=Glib::Base64::decode(b64);
+	is_raster=true;
+	rerender();
 	}
 
 void ImageView::set_image_from_svg(const std::string& svg)
 	{
+	decoded=Glib::Base64::decode(svg);
+	is_raster=false;
+	rerender();
+	}
+
+void ImageView::rerender(int override_width)
+	{
 	auto str = Gio::MemoryInputStream::create();
-	std::string dec=Glib::Base64::decode(svg);
-	str->add_data(dec.c_str(), dec.size());
-	pixbuf = Gdk::Pixbuf::create_from_stream_at_scale(str, 400*scale, -1, true);
+	str->add_data(decoded.c_str(), decoded.size());
+
+	int curwidth=400*scale;
+	if(pixbuf)
+		curwidth = pixbuf->get_width();
+	if(override_width!=0)
+		curwidth=override_width;
+
+	pixbuf = Gdk::Pixbuf::create_from_stream_at_scale(str, curwidth, -1, true);
+	
 	if(!pixbuf)
-		std::cerr << "cadabra-client: unable to create image from svg data" << std::endl;
+		std::cerr << "cadabra-client: unable to create image from data" << std::endl;
 	else {
 		image.set(pixbuf);
 		image.set_size_request( pixbuf->get_width(), pixbuf->get_height() );
