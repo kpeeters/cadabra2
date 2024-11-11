@@ -511,7 +511,7 @@ bool substitute::Rules::is_present(Ex& rules) const
 		bool rule_found = (rule_it != properties.end());
 		if (!rule_found) return false;
 		
-		// rules should have l_checkpointed set
+		// rules should have l_cached set
 		bool rule_unchanged = (rules.state() == result_t::l_cached);
 		
 		// If rule has been changed, erase  it.
@@ -541,7 +541,7 @@ void substitute::Rules::cleanup()
 		if (it->first.expired()) {
 			it = properties.erase(it);
 			} 
-		else if (it->first.lock()->state() != result_t::l_checkpointed) {
+		else if (it->first.lock()->state() != result_t::l_cached) {
 			it = properties.erase(it);
 			}
 		else {
