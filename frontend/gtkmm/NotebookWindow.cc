@@ -1855,7 +1855,8 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number,
 	compute->execute_cell(it);
 
 	// If this is a LaTeX input cell, and auto-close is turned on, close
-	// the input cell.
+	// the input cell. Make sure to also feed that into the document
+	// itself!
 	if(it->cell_type==DataCell::CellType::latex) {
 		if(prefs.auto_close_latex) {
 			for(unsigned int i=0; i<canvasses.size(); ++i) {
@@ -1865,6 +1866,7 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number,
 					}
 				else {
 					(*vis).second.inbox->edit.hide();
+					it->hidden=true;
 					}
 				}
 			}

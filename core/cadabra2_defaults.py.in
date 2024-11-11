@@ -174,8 +174,7 @@ except ImportError:
 
 have_plotly=True
 try:
-    import plotly
-    import plotly.graph_objs  
+    import plotly.graph_objs._figure 
 except ImportError:
     have_plotly=False
 
