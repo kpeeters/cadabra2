@@ -36,14 +36,17 @@ namespace cadabra {
 			virtual bool on_button_press_event(GdkEventButton *event) override;
 			virtual bool on_button_release_event(GdkEventButton *event) override;
 
-			class GLView : public /* Gtk::DrawingArea */  Gtk::GLArea  {
+			class GLView :
+				public Gtk::DrawingArea  {
+//				public Gtk::GLArea  {
 				public:
 					GLView(filament::Engine *);
-					virtual bool on_render (const Glib::RefPtr< Gdk::GLContext > &context);
-					//virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
+					//virtual bool on_render (const Glib::RefPtr< Gdk::GLContext > &context);
+					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
 
 				private:
 					void first_render();
+					void setup_camera();
 
 					// Filament things. The engine is owned by the NotebookWindow and passed
 					// in on creation of GraphicsView. The swapchain, on the other hand, is
@@ -62,6 +65,8 @@ namespace cadabra {
 					utils::Entity           camera;
 					utils::Entity           renderable;
 					filament::Renderer     *renderer;
+
+					float zoom;
 			};
 			
 		private:

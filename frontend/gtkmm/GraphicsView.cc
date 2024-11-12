@@ -5,10 +5,14 @@
 #include <iostream>
 #include <fstream>
 #include <gdk/gdkx.h>
+#include <filament/Viewport.h>
+#include <filament/ColorGrading.h>
 
 using namespace cadabra;
 
+// LIBGL_ALWAYS_SOFTWARE=true cadabra2-gtk
 // a=server.send("hello", "graphics_view", 0, 123, False)
+// https://github.com/nitronoid/qt_filament/
 
 static constexpr uint8_t RESOURCES_BAKEDCOLOR_DATA[] = {
 #include "bakedcolor.inc"
@@ -31,7 +35,7 @@ GraphicsView::GraphicsView(filament::Engine *engine_)
 	}
 
 GraphicsView::GLView::GLView(filament::Engine *engine_)
-	: engine(engine_)
+	: engine(engine_), zoom(1.0)
 	{
 	}
 
@@ -96,26 +100,33 @@ void GraphicsView::GLView::first_render()
 
 	scene = engine->createScene();
 	view = engine->createView();
+	view->setViewport(filament::Viewport(0, 0, 400, 400));
 	scene->addEntity(renderable);
 	camera = utils::EntityManager::get().create();
 	cam = engine->createCamera(camera);
 	view->setCamera(cam);
 	view->setScene(scene);
 
-	skybox = filament::Skybox::Builder().color({0.1, 0.125, 0.25, 1.0}).build(*engine);
+//	skybox = filament::Skybox::Builder().color({0.1, 0.125, 0.25, 1.0}).build(*engine);
+	skybox = filament::Skybox::Builder().color({4.0, 4.0, 4.0, 1.0}).build(*engine);	
 	scene->setSkybox(skybox);
+	filament::PBRNeutralToneMapper tone_mapper;
+	auto color_grading = filament::ColorGrading::Builder().toneMapper(&tone_mapper).build(*engine);
+	view->setColorGrading(color_grading);
 	
 	renderer = engine->createRenderer();
+	view->setPostProcessingEnabled(true);
 	filament::Renderer::ClearOptions co;
 	co.clear=true;
 	co.discard=true;
-	co.clearColor=filament::math::float4({1.0,1.0,0.0,0.5});
+//	co.clearColor=filament::math::float4({1.0,1.0,0.0,0.5});
+	co.clearColor=filament::math::float4({1.0,1.0,1.0,1.0});	
 	renderer->setClearOptions(co);
 //	view->setClearTargets(filament::backend::TargetBufferFlags::COLOR | filament::backend::TargetBufferFlags::DEPTH);
 	}
 
-bool GraphicsView::GLView::on_render(const Glib::RefPtr< Gdk::GLContext > &context)
-//bool GraphicsView::GLView::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
+//bool GraphicsView::GLView::on_render(const Glib::RefPtr< Gdk::GLContext > &context)
+bool GraphicsView::GLView::on_draw(const Cairo::RefPtr<Cairo::Context>& context)
 	{
 	static bool first=true;
 	
@@ -128,7 +139,9 @@ bool GraphicsView::GLView::on_render(const Glib::RefPtr< Gdk::GLContext > &conte
 		std::cerr << "first render" << std::endl;
 		first_render();
 		}
-	
+
+	setup_camera();
+
 	if(renderer->beginFrame(swapChain) || true /* always render */) {
 		std::cerr << "filament rendering" << std::endl;
 		renderer->render(view);
@@ -172,3 +185,33 @@ bool GraphicsView::on_button_release_event(GdkEventButton *event)
 
 	return true;
 	}
+
+void GraphicsView::GLView::setup_camera()
+	{
+	// Get the width and height of our window, scaled by the pixel ratio
+	const auto pixel_ratio = 1.0; // FIXME: devicePixelRatio();
+	const uint32_t w = static_cast<uint32_t>(get_width() * pixel_ratio);
+	const uint32_t h = static_cast<uint32_t>(get_height() * pixel_ratio);
+	
+	// Set our view-port size
+	view->setViewport({0, 0, w, h});
+	
+	// setup view matrix
+	const filament::math::float3 eye(0.f, 0.f, 1.f);
+	const filament::math::float3 target(0.f, 0.f, 0.f);
+	const filament::math::float3 up(0.f, 1.f, 0.f);
+	cam->lookAt(eye, target, up);
+	
+	// setup projection matrix
+	const float aspect = float(w) / h;
+	std::cerr << "aspect = " << aspect << ", zoom = " << zoom << std::endl;
+	cam->setProjection(filament::Camera::Projection::ORTHO,
+								 -aspect * zoom,
+								 aspect * zoom,
+								 -zoom,
+								 zoom,
+								 0,
+								 10.0);
+	}
+
+

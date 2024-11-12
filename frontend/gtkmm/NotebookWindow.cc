@@ -766,7 +766,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// filament::Engine::Config engineConfig = {};
 	// engineConfig.stereoscopicEyeCount = 0;
 	// engineConfig.stereoscopicType = filament::Engine::StereoscopicType::NONE;
-	filament_engine = filament::Engine::create(filament::Engine::Backend::OPENGL); // VULKAN);	
+//	filament_engine = filament::Engine::create(filament::Engine::Backend::OPENGL);
+	filament_engine = filament::Engine::create(filament::Engine::Backend::VULKAN);
 	}
 
 NotebookWindow::~NotebookWindow()
