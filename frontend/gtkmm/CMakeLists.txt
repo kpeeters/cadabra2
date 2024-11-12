@@ -83,18 +83,78 @@ if(NOT EXISTS ${FILAMENT}/out/release/filament/lib/${CMAKE_SYSTEM_PROCESSOR}/lib
 endif()
 
 set(FILAMENT_LIBRARIES
+  filament-iblprefilter
+  geometry
+  meshoptimizer
+  mikktspace
+  imageio
+  png
+  tinyexr
+  z
+  basis_encoder
+  filamat
   filament
+  image
   ibl
   backend
-  geometry
   bluegl
   bluevk
   vkshaders
   filabridge
   filaflat
   smol-v
-  image
+  stb
   utils
+  gltfio
+  viewer
+)
+set(FILAMENT_ALL
+  ${FILAMENT}/out/cmake-release/libs/gltfio/libgltfio.a
+  ${FILAMENT}/out/cmake-release/libs/gltfio/libgltfio_core.a
+  ${FILAMENT}/out/cmake-release/third_party/draco/tnt/libdracodec.a
+  
+  ${FILAMENT}/out/cmake-release/libs/camutils/libcamutils.a
+  ${FILAMENT}/out/cmake-release/libs/filagui/libfilagui.a
+  ${FILAMENT}/out/cmake-release/libs/filamat/libfilamat.a
+  ${FILAMENT}/out/cmake-release/shaders/libshaders.a
+  ${FILAMENT}/out/cmake-release/third_party/glslang/tnt/SPIRV/libSPIRV.a
+  ${FILAMENT}/out/cmake-release/third_party/glslang/tnt/glslang/libglslang.a
+  ${FILAMENT}/out/cmake-release/third_party/glslang/tnt/OGLCompilersDLL/libOGLCompiler.a
+  ${FILAMENT}/out/cmake-release/third_party/glslang/tnt/glslang/OSDependent/Unix/libOSDependent.a
+  ${FILAMENT}/out/cmake-release/third_party/spirv-tools/source/opt/libSPIRV-Tools-opt.a
+  ${FILAMENT}/out/cmake-release/third_party/spirv-tools/source/libSPIRV-Tools.a
+  ${FILAMENT}/out/cmake-release/third_party/spirv-cross/tnt/libspirv-cross-glsl.a
+  ${FILAMENT}/out/cmake-release/third_party/spirv-cross/tnt/libspirv-cross-msl.a
+  ${FILAMENT}/out/cmake-release/third_party/spirv-cross/tnt/libspirv-cross-core.a
+  ${FILAMENT}/out/cmake-release/libs/iblprefilter/libfilament-iblprefilter.a
+  ${FILAMENT}/out/cmake-release/libs/geometry/libgeometry.a
+  ${FILAMENT}/out/cmake-release/third_party/meshoptimizer/tnt/libmeshoptimizer.a
+  ${FILAMENT}/out/cmake-release/third_party/mikktspace/libmikktspace.a
+  ${FILAMENT}/out/cmake-release/third_party/getopt/libgetopt.a
+  ${FILAMENT}/out/cmake-release/libs/imageio/libimageio.a
+  ${FILAMENT}/out/cmake-release/third_party/libpng/tnt/libpng.a
+  ${FILAMENT}/out/cmake-release/third_party/tinyexr/tnt/libtinyexr.a
+  ${FILAMENT}/out/cmake-release/third_party/libz/tnt/libz.a
+  ${FILAMENT}/out/cmake-release/third_party/basisu/tnt/libbasis_encoder.a
+  ${FILAMENT}/out/cmake-release/third_party/imgui/tnt/libimgui.a
+  ${FILAMENT}/out/cmake-release/libs/ktxreader/libktxreader.a
+  ${FILAMENT}/out/cmake-release/filament/libfilament.a
+  ${FILAMENT}/out/cmake-release/filament/backend/libbackend.a
+  ${FILAMENT}/out/cmake-release/libs/bluegl/libbluegl.a
+  ${FILAMENT}/out/cmake-release/libs/bluevk/libbluevk.a
+  ${FILAMENT}/out/cmake-release/filament/backend/libvkshaders.a
+  ${FILAMENT}/out/cmake-release/libs/filaflat/libfilaflat.a
+  ${FILAMENT}/out/cmake-release/libs/filabridge/libfilabridge.a
+  ${FILAMENT}/out/cmake-release/third_party/smol-v/tnt/libsmol-v.a
+  ${FILAMENT}/out/cmake-release/libs/ibl/libibl-lite.a
+  ${FILAMENT}/out/cmake-release/libs/image/libimage.a
+  ${FILAMENT}/out/cmake-release/third_party/basisu/tnt/libbasis_transcoder.a
+  ${FILAMENT}/out/cmake-release/third_party/basisu/tnt/libzstd.a
+  ${FILAMENT}/out/cmake-release/libs/math/libmath.a
+  ${FILAMENT}/out/cmake-release/third_party/libsdl2/tnt/libsdl2.a
+  ${FILAMENT}/out/cmake-release/third_party/stb/tnt/libstb.a
+  ${FILAMENT}/out/cmake-release/libs/utils/libutils.a
+#  libs/filamentapp/libfilamentapp-resources.a
 )
 
 link_directories(${FILAMENT}/out/release/filament/lib/${CMAKE_SYSTEM_PROCESSOR})
@@ -239,7 +299,6 @@ target_link_libraries(
   cadabra2-gtk
   PUBLIC
   cadabra_client
-  ${FILAMENT_LIBRARIES}
   ${Boost_LIBRARIES} 
   ${GLIBMM_LIBRARIES} 
   ${GTKMM3_LIBRARIES} 
@@ -247,6 +306,7 @@ target_link_libraries(
   Threads::Threads
   c++
 )
+target_link_libraries(cadabra2-gtk PRIVATE "-Wl,--start-group" ${FILAMENT_ALL} "-Wl,--end-group")
 
 if(USE_MICROTEX)
   if(WIN32)

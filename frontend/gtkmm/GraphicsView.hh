@@ -1,16 +1,13 @@
 
 #pragma once
 
-#include <gtkmm/box.h>
-#include <gtkmm/glarea.h>
-#include <gtkmm/eventbox.h>
-#include <gtkmm/drawingarea.h>
-
+#include <filament/FilamentAPI.h>
 #include <filament/Engine.h>
 #include <filament/SwapChain.h>
 #include <filament/Camera.h>
 #include <filament/Engine.h>
 #include <filament/IndexBuffer.h>
+#include <filament/LightManager.h>
 #include <filament/Material.h>
 #include <filament/MaterialInstance.h>
 #include <filament/RenderableManager.h>
@@ -20,6 +17,11 @@
 #include <filament/VertexBuffer.h>
 #include <filament/View.h>
 #include <utils/EntityManager.h>
+
+#include <gtkmm/box.h>
+#include <gtkmm/glarea.h>
+#include <gtkmm/eventbox.h>
+#include <gtkmm/drawingarea.h>
 
 namespace cadabra {
 
@@ -36,6 +38,9 @@ namespace cadabra {
 			virtual bool on_button_press_event(GdkEventButton *event) override;
 			virtual bool on_button_release_event(GdkEventButton *event) override;
 
+			/// Set the content of this 3d view to be the gltf (json).
+			void set_gltf(const std::string&);
+			
 			class GLView :
 				public Gtk::DrawingArea  {
 //				public Gtk::GLArea  {
@@ -44,10 +49,14 @@ namespace cadabra {
 					//virtual bool on_render (const Glib::RefPtr< Gdk::GLContext > &context);
 					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
 
+					void set_gltf(const std::string&);
 				private:
 					void first_render();
 					void setup_camera();
+					bool load(const std::string& gltf_data);
 
+					std::string gltf_str;
+					
 					// Filament things. The engine is owned by the NotebookWindow and passed
 					// in on creation of GraphicsView. The swapchain, on the other hand, is
 					// per-view, so we are responsible for it.
@@ -64,6 +73,7 @@ namespace cadabra {
 					filament::View*         view;
 					utils::Entity           camera;
 					utils::Entity           renderable;
+					utils::Entity           mainlight;
 					filament::Renderer     *renderer;
 
 					float zoom;

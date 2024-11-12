@@ -412,7 +412,9 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 					docthread->queue_action(action);
 					}
 				else if (msg_type == "graphics_view") {
-					std::cerr << "received graphics cell " << content["output"].get<std::string>() << std::endl;
+					// std::cerr << "received graphics cell " << content["output"].get<std::string>() << std::endl;
+					// The data is a base64 encoded .glb file. We send this straight
+					// to the action; FIXME: could perhaps decode already here?
 					DataCell result(cell_id, DataCell::CellType::graphics_view, content["output"].get<std::string>());
 					std::shared_ptr<ActionBase> action =
 					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);

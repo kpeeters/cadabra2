@@ -5,9 +5,14 @@
 #include <iostream>
 #include <fstream>
 #include <gdk/gdkx.h>
+#include <filament/FilamentAPI.h>
+#include <filament/Engine.h>
 #include <filament/Viewport.h>
 #include <filament/ColorGrading.h>
-
+#include <gltfio/AssetLoader.h>
+#include <gltfio/ResourceLoader.h>
+#include <filament/LightManager.h>
+ 
 using namespace cadabra;
 
 // LIBGL_ALWAYS_SOFTWARE=true cadabra2-gtk
@@ -34,6 +39,11 @@ GraphicsView::GraphicsView(filament::Engine *engine_)
 	show_all();
 	}
 
+void GraphicsView::set_gltf(const std::string& str)
+	{
+	glview.set_gltf(str);
+	}
+
 GraphicsView::GLView::GLView(filament::Engine *engine_)
 	: engine(engine_), zoom(1.0)
 	{
@@ -56,6 +66,11 @@ static constexpr uint16_t TRIANGLE_INDICES[3] = { 0, 1, 2 };
 using utils::Entity;
 using utils::EntityManager;
 
+void GraphicsView::GLView::set_gltf(const std::string& str)
+	{
+	gltf_str = 	Glib::Base64::decode(str);
+	}
+
 void GraphicsView::GLView::first_render()
 	{
 	// Setup swapchain.
@@ -67,7 +82,6 @@ void GraphicsView::GLView::first_render()
 	
 	swapChain = engine->createSwapChain((void*)x11_window_id, 
 													filament::SwapChain::CONFIG_TRANSPARENT);
-	std::cerr << swapChain << std::endl;
 
 	// Setup buffers.
 	vb = filament::VertexBuffer::Builder()
@@ -101,12 +115,21 @@ void GraphicsView::GLView::first_render()
 	scene = engine->createScene();
 	view = engine->createView();
 	view->setViewport(filament::Viewport(0, 0, 400, 400));
-	scene->addEntity(renderable);
 	camera = utils::EntityManager::get().create();
 	cam = engine->createCamera(camera);
 	view->setCamera(cam);
 	view->setScene(scene);
 
+	mainlight = utils::EntityManager::get().create();
+	filament::LightManager::Builder(filament::LightManager::Type::DIRECTIONAL)
+		.color(filament::Color::toLinear<filament::ACCURATE>(filament::sRGBColor(1.0f, 1.0f, 1.0f)))
+		.intensity(100000.0)
+		.position({0.0, 10.0, 0.0})
+		.direction({0.0, -1.0, 0.0})
+		.castShadows(true)
+		.build(*engine, mainlight);
+	scene->addEntity(mainlight);
+	
 //	skybox = filament::Skybox::Builder().color({0.1, 0.125, 0.25, 1.0}).build(*engine);
 	skybox = filament::Skybox::Builder().color({4.0, 4.0, 4.0, 1.0}).build(*engine);	
 	scene->setSkybox(skybox);
@@ -122,7 +145,17 @@ void GraphicsView::GLView::first_render()
 //	co.clearColor=filament::math::float4({1.0,1.0,0.0,0.5});
 	co.clearColor=filament::math::float4({1.0,1.0,1.0,1.0});	
 	renderer->setClearOptions(co);
-//	view->setClearTargets(filament::backend::TargetBufferFlags::COLOR | filament::backend::TargetBufferFlags::DEPTH);
+
+	if(gltf_str.size()>0) {
+		if(!load(gltf_str)) {
+			std::cerr << "GraphicsView::GLView::first_render: adding test triangle." << std::endl;
+			scene->addEntity(renderable);
+			}
+		}
+	else {
+		std::cerr << "GraphicsView::GLView::first_render: adding a test triangle." << std::endl;		
+		scene->addEntity(renderable);
+		}
 	}
 
 //bool GraphicsView::GLView::on_render(const Glib::RefPtr< Gdk::GLContext > &context)
@@ -197,21 +230,55 @@ void GraphicsView::GLView::setup_camera()
 	view->setViewport({0, 0, w, h});
 	
 	// setup view matrix
-	const filament::math::float3 eye(0.f, 0.f, 1.f);
+//	const filament::math::float3 eye(0.f, 0.f, 1.f);
+	const filament::math::float3 eye(2.f, 2.f, 1.f);
 	const filament::math::float3 target(0.f, 0.f, 0.f);
 	const filament::math::float3 up(0.f, 1.f, 0.f);
 	cam->lookAt(eye, target, up);
 	
 	// setup projection matrix
 	const float aspect = float(w) / h;
-	std::cerr << "aspect = " << aspect << ", zoom = " << zoom << std::endl;
-	cam->setProjection(filament::Camera::Projection::ORTHO,
-								 -aspect * zoom,
-								 aspect * zoom,
-								 -zoom,
-								 zoom,
-								 0,
-								 10.0);
+	// std::cerr << "aspect = " << aspect << ", zoom = " << zoom << std::endl;
+	// cam->setProjection(filament::Camera::Projection::PERSPECTIVE,
+	// 							 -aspect * zoom,
+	// 							 aspect * zoom,
+	// 							 -zoom,
+	// 							 zoom,
+	// 							 0,
+	// 							 100.0);
+	cam->setProjection(80.0, // fov
+							 aspect,
+							 0.01,
+							 100.0
+							 );
+//	cam->setExposure(1); //, 1.2, 100.0);
 	}
 
+bool GraphicsView::GLView::load(const std::string& gltf)
+	{
+	auto materials = filament::gltfio::createJitShaderProvider(engine);
+//	auto decoder = filament::gltfio::createStbProvider(engine);
+	auto loader = filament::gltfio::AssetLoader::create({engine, materials});
 
+	// Parse the glTF content and create Filament entities.
+	filament::gltfio::FilamentAsset* asset = loader->createAsset((uint8_t *)gltf.data(), gltf.size());
+	if(!asset) {
+		std::cerr << "GraphicsView::GLView::load: failed to parse/convert gltf." << std::endl;
+		return false;
+		}
+	
+	// Load buffers and textures from disk.
+	filament::gltfio::ResourceLoader resourceLoader({engine, ".", true});
+//	resourceLoader.addTextureProvider("image/png", decoder);
+//	resourceLoader.addTextureProvider("image/jpeg", decoder);
+	resourceLoader.loadResources(asset);
+	
+	// Free the glTF hierarchy as it is no longer needed.
+	asset->releaseSourceData();
+	
+	// Add renderables to the scene.
+	scene->addEntities(asset->getEntities(), asset->getEntityCount());
+
+	std::cerr << "GraphicsView::GLView::load: " << asset->getEntityCount() << " gltf entities added." << std::endl;
+	return true;
+	}

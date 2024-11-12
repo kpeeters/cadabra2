@@ -1261,6 +1261,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				}
 			case DataCell::CellType::graphics_view: {
 				newcell.graphicsbox = manage( new GraphicsView(filament_engine) );
+				newcell.graphicsbox->set_gltf(it->textbuf);
 				w=newcell.graphicsbox;
 				break;
 				}
