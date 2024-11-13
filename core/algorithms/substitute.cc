@@ -480,13 +480,9 @@ void substitute::Rules::store(Ex& rules,
 				}
 			}
 
-		// If we're too big, don't add anything else.
-		if (properties.size() >= max_size) {
-			return;
-			}
-		
 		std::weak_ptr<Ex> rules_ptr = rules.shared_from_this();
-		properties[rules_ptr] = { lhs_contains_dummies, rhs_contains_dummies };
+		// properties[rules_ptr] = { lhs_contains_dummies, rhs_contains_dummies };'
+		properties.insert(rules_ptr, { lhs_contains_dummies, rhs_contains_dummies });
 		// Mark this expression as cached; any change will remove that state
 		// and ensure that we do not use the cached expression later.
 		rules.update_state(result_t::l_cached);
@@ -520,7 +516,7 @@ bool substitute::Rules::is_present(Ex& rules) const
 		// rules should have l_cached set
 		bool rule_unchanged = (rules.state() == result_t::l_cached);
 		
-		// If rule has been changed, erase  it.
+		// If rule has been changed, erase it.
 		if (!rule_unchanged) {
 			properties.erase(rule_it);
 			return false;
