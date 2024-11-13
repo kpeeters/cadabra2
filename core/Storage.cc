@@ -122,6 +122,9 @@ namespace cadabra {
 				if(state_!=Ex::result_t::l_error)
 					state_=newstate;
 				break;
+			case Ex::result_t::l_cached:
+				state_=newstate;
+				break;
 			default:
 				break;
 			}
