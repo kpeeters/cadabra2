@@ -1,0 +1,81 @@
+{
+	"cell_id": 16461605748738409030,
+	"cells": [
+		{
+			"cell_id": 10635152356046299518,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "a=server.send(\"hello\", \"graphics_view\", 0, 123, False)"
+		},
+		{
+			"cell_id": 11350501809507979634,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "from pathlib import Path\ngltf = Path('test.glb').read_bytes()"
+		},
+		{
+			"cell_id": 13867252481123575504,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "gltf64=base64.b64encode(gltf)"
+		},
+		{
+			"cell_id": 2928652340647885648,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 123,
+					"cell_origin": "server",
+					"cell_type": "graphics_view",
+					"source": "Z2xURgIAAAAoDAAAOAgAAEpTT057ImFzc2V0Ijp7ImdlbmVyYXRvciI6Iktocm9ub3MgZ2xURiBCbGVuZGVyIEkvTyB2NC4xLjYzIiwidmVyc2lvbiI6IjIuMCJ9LCJleHRlbnNpb25zVXNlZCI6WyJLSFJfbWF0ZXJpYWxzX3NoZWVuIl0sInNjZW5lIjowLCJzY2VuZXMiOlt7Im5hbWUiOiJTY2VuZSIsIm5vZGVzIjpbMCwxXX1dLCJub2RlcyI6W3sibWVzaCI6MCwibmFtZSI6IkN1YmUifSx7Im1lc2giOjEsIm5hbWUiOiJQbGFuZSIsInJvdGF0aW9uIjpbMCwwLC0wLjcwNTk0NDQxODkwNzE2NTUsMC43MDgyNjcyMTE5MTQwNjI1XSwic2NhbGUiOlsyLjU3Mjk3MzcyODE3OTkzMTYsMi41NzI5NzM3MjgxNzk5MzE2LDIuNTcyOTczNzI4MTc5OTMxNl0sInRyYW5zbGF0aW9uIjpbLTEuMDc0NTU1Mzk3MDMzNjkxNCwtMC44MDY2MzAxMzQ1ODI1MTk1LC0wLjYwNDcxNDAzNTk4Nzg1NF19XSwibWF0ZXJpYWxzIjpbeyJkb3VibGVTaWRlZCI6dHJ1ZSwiZXh0ZW5zaW9ucyI6eyJLSFJfbWF0ZXJpYWxzX3NoZWVuIjp7InNoZWVuQ29sb3JGYWN0b3IiOlsxLjAsMS4wLDEuMF0sInNoZWVuUm91Z2huZXNzRmFjdG9yIjowLjYzMDQzNDc1MTUxMDYyMDF9fSwibmFtZSI6Ik1hdGVyaWFsIiwicGJyTWV0YWxsaWNSb3VnaG5lc3MiOnsiYmFzZUNvbG9yRmFjdG9yIjpbMC44MDAwMDAwMTE5MjA5MjksMC44MDAwMDAwMTE5MjA5MjksMC44MDAwMDAwMTE5MjA5MjksMC40MjkzNDc4MTMxMjk0MjUwNV0sIm1ldGFsbGljRmFjdG9yIjowLCJyb3VnaG5lc3NGYWN0b3IiOjAuNTIxNzM5MTI1MjUxNzd9fV0sIm1lc2hlcyI6W3sibmFtZSI6IkN1YmUiLCJwcmltaXRpdmVzIjpbeyJhdHRyaWJ1dGVzIjp7IlBPU0lUSU9OIjowLCJOT1JNQUwiOjEsIlRFWENPT1JEXzAiOjJ9LCJpbmRpY2VzIjozLCJtYXRlcmlhbCI6MH1dfSx7Im5hbWUiOiJQbGFuZSIsInByaW1pdGl2ZXMiOlt7ImF0dHJpYnV0ZXMiOnsiUE9TSVRJT04iOjQsIk5PUk1BTCI6NSwiVEVYQ09PUkRfMCI6Nn0sImluZGljZXMiOjd9XX1dLCJhY2Nlc3NvcnMiOlt7ImJ1ZmZlclZpZXciOjAsImNvbXBvbmVudFR5cGUiOjUxMjYsImNvdW50IjoyNCwibWF4IjpbMSwxLDFdLCJtaW4iOlstMSwtMSwtMV0sInR5cGUiOiJWRUMzIn0seyJidWZmZXJWaWV3IjoxLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMzIn0seyJidWZmZXJWaWV3IjoyLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMyIn0seyJidWZmZXJWaWV3IjozLCJjb21wb25lbnRUeXBlIjo1MTIzLCJjb3VudCI6MzYsInR5cGUiOiJTQ0FMQVIifSx7ImJ1ZmZlclZpZXciOjQsImNvbXBvbmVudFR5cGUiOjUxMjYsImNvdW50Ijo0LCJtYXgiOlsxLDAsMV0sIm1pbiI6Wy0xLDAsLTFdLCJ0eXBlIjoiVkVDMyJ9LHsiYnVmZmVyVmlldyI6NSwiY29tcG9uZW50VHlwZSI6NTEyNiwiY291bnQiOjQsInR5cGUiOiJWRUMzIn0seyJidWZmZXJWaWV3Ijo2LCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6NCwidHlwZSI6IlZFQzIifSx7ImJ1ZmZlclZpZXciOjcsImNvbXBvbmVudFR5cGUiOjUxMjMsImNvdW50Ijo2LCJ0eXBlIjoiU0NBTEFSIn1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlTGVuZ3RoIjoyODgsImJ5dGVPZmZzZXQiOjAsInRhcmdldCI6MzQ5NjJ9LHsiYnVmZmVyIjowLCJieXRlTGVuZ3RoIjoyODgsImJ5dGVPZmZzZXQiOjI4OCwidGFyZ2V0IjozNDk2Mn0seyJidWZmZXIiOjAsImJ5dGVMZW5ndGgiOjE5MiwiYnl0ZU9mZnNldCI6NTc2LCJ0YXJnZXQiOjM0OTYyfSx7ImJ1ZmZlciI6MCwiYnl0ZUxlbmd0aCI6NzIsImJ5dGVPZmZzZXQiOjc2OCwidGFyZ2V0IjozNDk2M30seyJidWZmZXIiOjAsImJ5dGVMZW5ndGgiOjQ4LCJieXRlT2Zmc2V0Ijo4NDAsInRhcmdldCI6MzQ5NjJ9LHsiYnVmZmVyIjowLCJieXRlTGVuZ3RoIjo0OCwiYnl0ZU9mZnNldCI6ODg4LCJ0YXJnZXQiOjM0OTYyfSx7ImJ1ZmZlciI6MCwiYnl0ZUxlbmd0aCI6MzIsImJ5dGVPZmZzZXQiOjkzNiwidGFyZ2V0IjozNDk2Mn0seyJidWZmZXIiOjAsImJ5dGVMZW5ndGgiOjEyLCJieXRlT2Zmc2V0Ijo5NjgsInRhcmdldCI6MzQ5NjN9XSwiYnVmZmVycyI6W3siYnl0ZUxlbmd0aCI6OTgwfV191AMAAEJJTgAAAIA/AACAPwAAgL8AAIA/AACAPwAAgL8AAIA/AACAPwAAgL8AAIA/AACAvwAAgL8AAIA/AACAvwAAgL8AAIA/AACAvwAAgL8AAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAvwAAgD8AAIA/AACAvwAAgD8AAIA/AACAvwAAgD8AAIC/AACAPwAAgL8AAIC/AACAPwAAgL8AAIC/AACAPwAAgL8AAIC/AACAvwAAgL8AAIC/AACAvwAAgL8AAIC/AACAvwAAgL8AAIC/AACAPwAAgD8AAIC/AACAPwAAgD8AAIC/AACAPwAAgD8AAIC/AACAvwAAgD8AAIC/AACAvwAAgD8AAIC/AACAvwAAgD8AAAAAAAAAAAAAgL8AAAAAAACAPwAAAAAAAIA/AAAAAAAAAAAAAAAAAAAAAAAAgL8AAAAAAACAvwAAAAAAAIA/AAAAAAAAAAAAAAAAAAAAAAAAgD8AAAAAAACAPwAAAAAAAIA/AAAAAAAAAAAAAAAAAAAAAAAAgD8AAAAAAACAvwAAAAAAAIA/AAAAAAAAAAAAAAAAAAAAAAAAgL8AAAAAAACAPwAAAAAAAIC/AAAAAAAAAAAAAAAAAAAAAAAAgL8AAAAAAACAvwAAAAAAAIC/AAAAAAAAAAAAAAAAAAAAAAAAgD8AAAAAAACAPwAAAAAAAIC/AAAAAAAAAAAAAAAAAAAAAAAAgD8AAAAAAACAvwAAAAAAAIC/AAAAAAAAAAAAACA/AAAAPwAAID8AAAA/AAAgPwAAAD8AAMA+AAAAPwAAwD4AAAA/AADAPgAAAD8AACA/AACAPgAAID8AAIA+AAAgPwAAgD4AAMA+AACAPgAAwD4AAIA+AADAPgAAgD4AACA/AABAPwAAYD8AAAA/AAAgPwAAQD8AAMA+AABAPwAAAD4AAAA/AADAPgAAQD8AACA/AAAAAAAAYD8AAIA+AAAgPwAAgD8AAMA+AAAAAAAAAD4AAIA+AADAPgAAgD8BAA0AEwABABMABwAJAAYAEgAJABIAFQAXABQADgAXAA4AEQAQAAQACgAQAAoAFgAFAAIACAAFAAgACwAPAAwAAAAPAAAAAwAAAIC/AAAAAAAAgD8AAIA/AAAAAAAAgD8AAIC/AAAAAAAAgL8AAIA/AAAAAAAAgL8AAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAQADAAAAAwACAA=="
+				}
+			],
+			"source": "a=server.send(gltf64, \"graphics_view\", 0, 123, False)"
+		},
+		{
+			"cell_id": 15466627643580859060,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13223587008277543184,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10140132123478261128,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m n}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m n}\\end{dmath*}"
+				}
+			],
+			"source": "ex:=A_{m n};"
+		},
+		{
+			"cell_id": 528262603261906739,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 2406524992584598329,
+					"cell_origin": "server",
+					"cell_type": "error",
+					"source": "{\\color{red}{\\begin{verbatim}NameError: name 'GraphicsView' is not defined\n\nAt:\n  cadabra2_defaults.py(323): display\n  Notebook Cell (Line 1): _ = print(\"hi\"); display(_)\n\\end{verbatim}}}"
+				}
+			],
+			"source": "print(\"hi\");"
+		},
+		{
+			"cell_id": 7971209662709436916,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

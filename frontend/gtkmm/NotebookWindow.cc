@@ -768,6 +768,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// engineConfig.stereoscopicType = filament::Engine::StereoscopicType::NONE;
 //	filament_engine = filament::Engine::create(filament::Engine::Backend::OPENGL);
 	filament_engine = filament::Engine::create(filament::Engine::Backend::VULKAN);
+	filament_renderer = filament_engine->createRenderer();
 	}
 
 NotebookWindow::~NotebookWindow()
@@ -1260,8 +1261,9 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				break;
 				}
 			case DataCell::CellType::graphics_view: {
-				newcell.graphicsbox = manage( new GraphicsView(filament_engine) );
+				newcell.graphicsbox = manage( new GraphicsView(filament_engine, filament_renderer) );
 				newcell.graphicsbox->set_gltf(it->textbuf);
+				widgets_needing_periodic_update.insert(newcell.graphicsbox);
 				w=newcell.graphicsbox;
 				break;
 				}
@@ -1379,7 +1381,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 		}
 
 	// Connect
-	Glib::signal_idle().connect(sigc::mem_fun(*this, &NotebookWindow::idle_handler));
+//	Glib::signal_idle().connect(sigc::mem_fun(*this, &NotebookWindow::idle_handler));
+	Glib::signal_timeout().connect(sigc::mem_fun(*this, &NotebookWindow::idle_handler), 33);
 
 	//	if(current_cell!=doc.end())
 	//		setup_focus_after_allocate(it);
@@ -3094,7 +3097,17 @@ bool NotebookWindow::idle_handler()
 		}
 	to_reveal.clear();
 #endif
-	return false; // disconnect
+	
+	// Queue widgets for drawing.
+	for(auto& gv: widgets_needing_periodic_update) {
+		bool need_more = gv->update(0);
+		gv->queue_draw();
+		}
+	// FIXME: disconnect the idle handler if no further updates
+	// are needed.
+	
+	return true;
+	//return false; // disconnect
 	}
 
 void NotebookWindow::unselect_output_cell()

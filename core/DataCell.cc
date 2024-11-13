@@ -522,6 +522,10 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const nlohmann::j
 				DataCell dc(id, cadabra::DataCell::CellType::image_svg, textbuf.get<std::string>(), hide);
 				last=doc.append_child(loc, dc);
 				}
+			else if(cell_type=="graphics_view") {
+				DataCell dc(id, cadabra::DataCell::CellType::graphics_view, textbuf.get<std::string>(), hide);
+				last=doc.append_child(loc, dc);
+				}
 			else {
 				std::cerr << "cadabra-client: found unknown cell type '"+cell_type+"', ignoring" << std::endl;
 				continue;

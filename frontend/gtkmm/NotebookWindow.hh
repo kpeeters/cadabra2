@@ -159,6 +159,8 @@ namespace cadabra {
 			Gtk::Label                     search_result;
 			Gtk::HBox                      statusbarbox;
 
+			std::set<GraphicsView *>       widgets_needing_periodic_update;
+			
 			Console console;
 			Gtk::Dialog console_win;
 
@@ -333,7 +335,9 @@ namespace cadabra {
 #endif
 			bool idle_handler();
 
-			filament::Engine *filament_engine=0;
+			filament::Engine   *filament_engine=0;
+			filament::Renderer *filament_renderer=0;
+			
 		};
 
 	};
