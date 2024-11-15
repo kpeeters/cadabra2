@@ -7,7 +7,7 @@
 /** \mainpage lru_cache.hh
     \author   Daniel Butter
     \version  1.00
-    \date     2024-11-13
+    \date     2024-11-15
     \see      http://github.com/dpbutter/lru_cache.hh/
 
 */
@@ -59,11 +59,11 @@ public:
             touch(lookup_it->second);
             lookup_it->second->second = value;
         } else {
-            while (cache_list.size() >= max_size) {
-                evict();
-            }
             cache_list.emplace_front(key, value);
             cache_lookup[key] = cache_list.begin();
+            while (cache_list.size() > max_size) {
+                evict();
+            }
         }
     }
 
@@ -75,13 +75,13 @@ public:
             touch(lookup_it->second);
             return lookup_it->second->second;
         } else {
-            while (cache_list.size() >= max_size) {
-                evict();
-            }
             // Create new entry, inserting at the front of the list
             cache_list.emplace_front(key, Value());
             iterator new_iter = cache_list.begin();
             cache_lookup[key] = new_iter;
+            while (cache_list.size() > max_size) {
+                evict();
+            }
             return new_iter->second;
         }
     }
@@ -145,7 +145,7 @@ public:
     // Resize the cache
     void resize(size_t new_size) {
         max_size = new_size;
-        while (cache_list.size() >= max_size) {
+        while (cache_list.size() > max_size) {
             evict();
         }
     }
