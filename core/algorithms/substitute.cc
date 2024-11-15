@@ -14,6 +14,8 @@
 using namespace cadabra;
 
 substitute::Rules substitute::replacement_rules = substitute::Rules();
+size_t substitute::cache_hits   = 0;
+size_t substitute::cache_misses = 0;
 
 substitute::substitute(const Kernel& k, Ex& tr, Ex& args_, bool partial)
 	: Algorithm(k, tr), comparator(k.properties), args(args_), sort_product_(k, tr), partial(partial)
@@ -27,7 +29,11 @@ substitute::substitute(const Kernel& k, Ex& tr, Ex& args_, bool partial)
 	// Check if args are present in global_rules
 	// bool skipchecks = k.replacement_rules->is_present(args);
 	bool skipchecks = replacement_rules.is_present(args);
+	if(skipchecks) ++cache_hits;
+	else           ++cache_misses;
 
+	// std::cerr << cache_hits << " vs " << cache_misses << std::endl;
+	
 	// skip if args have already been checked
 	if (!skipchecks) {
 		cadabra::do_list(args, args.begin(), [&](Ex::iterator arrow) {

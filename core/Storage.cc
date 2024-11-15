@@ -115,20 +115,28 @@ namespace cadabra {
 	void Ex::update_state(Ex::result_t newstate)
 		{
 		switch(newstate) {
-			case Ex::result_t::l_error:
-				state_=newstate;
-				break;
 			case Ex::result_t::l_applied:
+			case Ex::result_t::l_applied_no_new_dummies:
+			case Ex::result_t::l_cached:
+			case Ex::result_t::l_checkpointed:
+				// If we are in error state, preserve this.
 				if(state_!=Ex::result_t::l_error)
 					state_=newstate;
 				break;
-			default:
+			case Ex::result_t::l_error:
+				// Changing to error state is always possible,
+				// but it requires a reset_state to get out again.
+				state_=newstate;
+				break;
+			case Ex::result_t::l_no_action:
 				break;
 			}
 		}
 
 	void Ex::reset_state()
 		{
+		// Always use reset_state to clear error states; you cannot
+		// clear error states with update_state.
 		state_=Ex::result_t::l_checkpointed;
 		}
 
