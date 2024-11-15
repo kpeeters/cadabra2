@@ -35,7 +35,6 @@ namespace cadabra {
 			virtual result_t apply(iterator&);
 
 			Ex_comparator comparator;
-			
 
 		private:
 			Ex&     args;
@@ -87,6 +86,7 @@ namespace cadabra {
 
 			// Shared instance of all replacement rules.
 			static Rules    replacement_rules;
+			static size_t   cache_hits, cache_misses;
 			
 	};
 
