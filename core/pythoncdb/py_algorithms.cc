@@ -162,5 +162,9 @@ namespace cadabra {
 
 				}
 				);
+		
+		m.def("substitute_cache_size", []() {
+			return substitute::cache_size();
+			});
 		}
 	}

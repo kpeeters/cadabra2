@@ -3,6 +3,7 @@
 
 #include "Algorithm.hh"
 #include "algorithms/sort_product.hh"
+#include "lru_cache.hh"
 
 namespace cadabra {
 
@@ -31,11 +32,14 @@ namespace cadabra {
 			/// simple tree comparison logic, not pattern matching) for replacements to be made.
 
 			virtual bool     can_apply(iterator st);
-
 			virtual result_t apply(iterator&);
 
 			Ex_comparator comparator;
 
+			/// Return the number of substitution rules which have been
+			/// pre-processed and sit in the cache.
+			static size_t cache_size();
+			
 		private:
 			Ex&     args;
 
@@ -52,7 +56,11 @@ namespace cadabra {
 			// rules to avoid processing them in subsequent calls.
 
 			class Rules {
+
 				public:
+					Rules(size_t max_size_=1000, size_t cleanup_threshold_=100) 
+						: properties(max_size_), max_size(max_size_), cleanup_threshold(cleanup_threshold_) {}
+
 					// Associate rule properties with a specific object
 					void store(Ex& rules,
 								  std::map<iterator, bool>& lhs_contains_dummies,
@@ -67,30 +75,31 @@ namespace cadabra {
 									  std::map<iterator, bool>& rhs_contains_dummies) const;
 					
 					// Count number of rules
-					int size() const;
+					size_t size() const;
 					
 					// Eliminate rules that are expired
 					void cleanup();
 
 				private:
 					// Map storing weak pointers to `Ex` and pairs of lhs/rhs maps as values
-					mutable std::map<std::weak_ptr<Ex>, 
-								std::pair<std::map<iterator, bool>, std::map<iterator, bool>>, 
-								std::owner_less<std::weak_ptr<Ex>>> properties;
-
+					mutable LRUcache<std::weak_ptr<Ex>, 
+										std::pair< std::map<iterator, bool>, std::map<iterator, bool> >,
+										std::owner_less<std::weak_ptr<Ex>>
+										> properties;
+					// Max size of the rules list
+					size_t max_size;
 					// Initial size threshold to trigger cleanup_rules
-					unsigned int cleanup_threshold = 100;
-					// Store max size of the rules list to avoid it getting out of hand
-					unsigned int max_size = 1000;
+					size_t cleanup_threshold;
+
+
 				};
 
 			// Shared instance of all replacement rules.
 			static Rules    replacement_rules;
 			static size_t   cache_hits, cache_misses;
-			
 	};
 
 
 	}
 
-	
+
