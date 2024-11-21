@@ -1852,7 +1852,6 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number,
 	set_stop_sensitive(true);
 	follow_cell=it;
 	// std::cerr << "Executing cell " << it->id().id << std::endl;
-	compute->execute_cell(it);
 
 	// If this is a LaTeX input cell, and auto-close is turned on, close
 	// the input cell. Make sure to also feed that into the document
@@ -1871,35 +1870,58 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number,
 				}
 			}
 		}
-	
+
+	// Execute the cell. Make sure this comes after the hiding logic above.
+	compute->execute_cell(it);
+
 	return true;
 	}
 
-bool NotebookWindow::on_tex_error(const std::string& str, DTree::iterator )
+bool NotebookWindow::on_tex_error(const std::string& str, DTree::iterator it)
 	{
-	//	Gtk::Dialog md;
-	Gtk::MessageDialog md("Generic TeX error", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
-	md.set_resizable(true);
-	//	Gtk::Button ok(Gtk::Stock::OK);
-	md.set_transient_for(*this);
-	md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
-	auto box = md.get_message_area();
-	//	md.add_button(Gtk::Stock::OK, 1);
-	Gtk::ScrolledWindow sw;
-	Gtk::TextView tv;
-	auto buffer = tv.get_buffer();
-	buffer->set_text(str);
-	//	auto iter = buffer->get_iter_at_offset(0);
-	//	buffer->insert(iter, str);
-	tv.set_editable(false);
-	box->add(sw);
-	sw.add(tv);
-	auto context = tv.get_style_context();
-	context->add_class("error");
-	auto screen = Gdk::Screen::get_default();
-	sw.set_size_request(screen->get_width()/4, screen->get_width()/4);
-	sw.show_all();
-	md.run();
+	// Re-open the input cell if it was hidden, so we can fix the error.
+	DTree::iterator pit = doc.parent(it);
+	for(unsigned int i=0; i<canvasses.size(); ++i) {
+		auto vis = canvasses[i]->visualcells.find(&(*pit));
+		if(vis==canvasses[i]->visualcells.end()) {
+			}
+		else {
+			Gtk::Widget& w = (*vis).second.inbox->edit;
+			// Probably a bug: if we call show() without the delay below, we can have
+			// the hide() and show() happen very quickly after each other, which does not
+			// work (widget stays hidden).
+			Glib::signal_timeout().connect_once([&w]() { w.show(); }, 50);
+
+			pit->hidden=false;
+			}
+		}
+
+	if(!prefs.microtex) {
+		// Show the error in a dialog.
+		Gtk::MessageDialog md("Generic TeX error", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+		md.set_resizable(true);
+		//	Gtk::Button ok(Gtk::Stock::OK);
+		md.set_transient_for(*this);
+		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+		auto box = md.get_message_area();
+		//	md.add_button(Gtk::Stock::OK, 1);
+		Gtk::ScrolledWindow sw;
+		Gtk::TextView tv;
+		auto buffer = tv.get_buffer();
+		buffer->set_text(str);
+		//	auto iter = buffer->get_iter_at_offset(0);
+		//	buffer->insert(iter, str);
+		tv.set_editable(false);
+		box->add(sw);
+		sw.add(tv);
+		auto context = tv.get_style_context();
+		context->add_class("error");
+		auto screen = Gdk::Screen::get_default();
+		sw.set_size_request(screen->get_width()/4, screen->get_width()/4);
+		sw.show_all();
+		md.run();
+		}
+	
 	return true;
 	}
 

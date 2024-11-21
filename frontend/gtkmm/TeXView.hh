@@ -43,7 +43,7 @@ namespace cadabra {
 
 			class TeXArea : public Gtk::DrawingArea {
 				public:
-					TeXArea(bool use_microtex);
+					TeXArea(bool use_microtex, TeXView *owner_);
 					~TeXArea();
 
 					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
@@ -72,6 +72,7 @@ namespace cadabra {
 					void layout_latex() const;
 
 					bool                    use_microtex;
+
 				protected:
 					Gtk::SizeRequestMode get_request_mode_vfunc() const override;
 					void get_preferred_height_for_width_vfunc(int width, int& minimum_height,
@@ -81,6 +82,7 @@ namespace cadabra {
 					void on_size_allocate(Gtk::Allocation& allocation) override;
 					
 				private:
+					TeXView        *owner;
 					mutable int     rendering_width;
 					int             padding_x, padding_y;
 

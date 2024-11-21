@@ -306,6 +306,10 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		std::cerr << "cadabra-client: cannot parse message." << std::endl;
 		return;
 		}
+	if(getenv("CDB_SHOW_RECEIVED")) {
+		std::cerr << "RECV: " << root.dump(3) << std::endl;
+		}
+	
 	if(root.count("header")==0) {
 		std::cerr << "cadabra-client: received message without 'header'." << std::endl;
 		return;
@@ -498,6 +502,9 @@ void ComputeThread::execute_interactive(uint64_t id, const std::string& code)
 
 	std::ostringstream oss;
 	oss << req << std::endl;
+	if(getenv("CDB_SHOW_SENT")) {
+		std::cerr << "SEND: " << req.dump(3) << std::endl;
+		}
 	wsclient.send(our_connection_hdl, oss.str(), websocketpp::frame::opcode::text);
 	interactive_cells.insert(id);
 	}
@@ -557,6 +564,9 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		gui->on_kernel_runstatus(true);
 		std::ostringstream str;
 		str << req << std::endl;
+		if(getenv("CDB_SHOW_SENT")) {
+			std::cerr << "SEND: " << req.dump(3) << std::endl;
+			}
 		wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
 		// NOTE: we can get a return message in on_message at any point after this,
 		// it will come in on a different thread!
@@ -597,6 +607,9 @@ void ComputeThread::stop()
 	//	std::cerr << str.str() << std::endl;
 
 	server_pid=0;
+	if(getenv("CDB_SHOW_SENT")) {
+		std::cerr << "SEND: " << req.dump(3) << std::endl;
+		}
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
 	all_cells_nonrunning();	
 	}
@@ -626,6 +639,9 @@ void ComputeThread::restart_kernel()
 
 	//	std::cerr << str.str() << std::endl;
 
+	if(getenv("CDB_SHOW_SENT")) {
+		std::cerr << "SEND: " << req.dump(3) << std::endl;
+		}
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
 	docthread->on_interactive_output(req);
 	}
@@ -669,6 +685,9 @@ bool ComputeThread::complete(DTree::iterator it, int pos, int alternative)
 	// std::cerr << str.str() << std::endl;
 
 	server_pid=0;
+	if(getenv("CDB_SHOW_SENT")) {
+		std::cerr << "SEND: " << req.dump(3) << std::endl;
+		}
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
 
 	return true;

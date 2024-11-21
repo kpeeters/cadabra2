@@ -13,7 +13,13 @@
 using namespace cadabra;
 
 TeXView::TeXView(TeXEngine& eng, DTree::iterator it, bool use_microtex_, int hmargin)
-	: content(0), datacell(it), vbox(false, 10), hbox(false, hmargin), image(use_microtex_), engine(eng), use_microtex(use_microtex_)
+	: content(0)
+	, datacell(it)
+	, vbox(false, 10)
+	, hbox(false, hmargin)
+	, image(use_microtex_, this)
+	, engine(eng)
+	, use_microtex(use_microtex_)
 	{
 	// Still need to checkin even when using MicroTeX, otherwise
 	// all requests will be empty.
@@ -247,7 +253,16 @@ void TeXView::TeXArea::layout_latex() const
 			0xff424242);
 		}
 	catch(std::exception& err) {
-		std::cerr << "MicroTeX::parse: exception parsing input (" << fixed << "): " << err.what() << std::endl;
+		// std::cerr << "MicroTeX::parse: exception parsing input (" << fixed << "): " << err.what() << std::endl;
+		owner->tex_error.emit(err.what());
+
+		// Instead put an error message in the output cell.
+		_render = microtex::MicroTeX::parse(
+			"\\text{\\textcolor{red}{\\LaTeX error, probably mismatching brackets.}}", //microtex::utf82wide(fixed),
+			rendering_width,
+			_text_size,
+			_text_size / 3.f,
+			0xff424242);
 		}
 	}
 
@@ -441,8 +456,9 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 	// std::cout << "**** fixed to " << fixed << std::endl;
 	}
 
-TeXView::TeXArea::TeXArea(bool use_microtex_)
+TeXView::TeXArea::TeXArea(bool use_microtex_, TeXView *owner_)
 	: rendering_width(1), use_microtex(use_microtex_)
+	, owner(owner_)
 	, _render(nullptr), _text_size(5.f)
 	, padding_x(15), padding_y(10)
 	{

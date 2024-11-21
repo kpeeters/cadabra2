@@ -70,15 +70,19 @@ class Server {
 		Stopwatch sympy_stopwatch;
 
 		/// Raw code to send a string (which must be JSON formatted) as
-		/// a message to the client. Handles communication of the result back to the
-		/// client in JSON format. This is always of the form
+		/// a message to the client. Handles communication of the result
+		/// back to the client in JSON format. This is always of the
+		/// form
 		///
 		///      { "header":   { "parent_id":     "...",
 		///                      "parent_origin": "client" | "server",
 		///                      "cell_id":       "...",
 		///                      "cell_origin":   "client" | "server"
 		///                    },
-		///        "content":  { "output":  "..." },
+		///        "content":  { "output":  "...",
+		///                      "width":   int (optional),
+		///                      "height":  int (optional)
+      ///                    },
 		///        "msg_type": "..."
 		///      }
 		///
