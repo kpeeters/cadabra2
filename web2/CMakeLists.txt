@@ -52,6 +52,7 @@ set(TUTORIALS
   ref_ordering
   ref_selecting
   ref_c++_library
+  ref_flags_variables
   )
 
 # The Book
@@ -76,6 +77,7 @@ set(BOOK_PARTS
    ref_ordering
    ref_selecting
    ref_c++_library
+   ref_flags_variables
 )   
 
 # 3rd party contributions

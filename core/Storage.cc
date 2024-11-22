@@ -333,7 +333,7 @@ namespace cadabra {
 
 	std::ostream& Ex::print_recursive_treeform(std::ostream& str, Ex::iterator it, unsigned int& num)
 		{
-		bool compact_tree=getenv("CDB_COMPACTTREE");
+		bool compact_tree=getenv("CADABRA_COMPACT_TREE");
 
 		Ex::sibling_iterator beg=it.begin();
 		Ex::sibling_iterator fin=it.end();

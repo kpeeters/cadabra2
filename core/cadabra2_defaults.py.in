@@ -237,7 +237,6 @@ def display(obj, cell_id=0, delay_send=False):
        return display(obj[0], cell_id, delay_send)
     
     if 'matplotlib' in sys.modules and isinstance(obj, matplotlib.figure.Figure):
-        # print("figure 1", file=sys.stderr)
         imgstring = io.BytesIO()
         obj.savefig(imgstring,format='svg')
         imgstring.seek(0)
@@ -248,7 +247,6 @@ def display(obj, cell_id=0, delay_send=False):
         # with a particular data type.
 
     elif 'matplotlib' in sys.modules and isinstance(obj, matplotlib.artist.Artist):
-        # print("figure 2", file=sys.stderr)
         f = obj.get_figure()
         imgstring = io.BytesIO()
         f.savefig(imgstring,format='svg')

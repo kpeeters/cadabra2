@@ -41,7 +41,7 @@ void display_error(const std::string& message)
 
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 	{
-	if (getenv("CADABRA2_LOG_OUTPUT") != NULL) {
+	if (getenv("CADABRA_LOG_OUTPUT") != NULL) {
 		auto stdout_path = Glib::get_user_data_dir() + "/cadabra2-stdout.log";
 		if (freopen(stdout_path.c_str(), "w", stdout) == NULL) {
 			display_error("Could not redirect stdout to " + stdout_path);

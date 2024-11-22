@@ -1,0 +1,88 @@
+{
+	"cell_id": 4427753813546749341,
+	"cells": [
+		{
+			"cell_id": 4499672568827372488,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 13183467289063702239,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Startup flags and environment variables}\n\nThe behaviour of Cadabra can be tuned at startup by using startup flags as well as environment variables.\nMost of these are for debugging purposes and should normally left unchanged from their defaults."
+				}
+			],
+			"hidden": true,
+			"source": "\\section*{Startup flags and environment variables}\n\nThe behaviour of Cadabra can be tuned at startup by using startup flags as well as environment variables.\nMost of these are for debugging purposes and should normally left unchanged from their defaults."
+		},
+		{
+			"cell_id": 4610613234485604057,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 11074161799911474457,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Environment variables}\n\nEach of the following environment variables\n can be set to a non-empty value to trigger the behaviour listed in the right-hand column.\n\\begin{tabular}{ll}\n\\verb|CADABRA_SHOW_RECV|    & \\text{Show all messages which the notebook receives from the kernel on stdout.}\\\\\n\\verb|CADABRA_SHOW_SENT|    & \\text{Show all messages which the notebook sends to the kernel on stdout.}\\\\\n\\verb|CADABRA_NO_UNICODE|   & \\text{Do not use unicode when displaying expressions in the terminal.}\\\\\n\\verb|CADABRA_LOG_OUTPUT|   & \\text{Windows only: store stdout and stderr in a log file.}\n\\end{tabular}"
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{Environment variables}\n\nEach of the following environment variables\n can be set to a non-empty value to trigger the behaviour listed in the right-hand column.\n\\begin{tabular}{ll}\n\\verb|CADABRA_SHOW_RECV|    & \\text{Show all messages which the notebook receives from the kernel on stdout.}\\\\\n\\verb|CADABRA_SHOW_SENT|    & \\text{Show all messages which the notebook sends to the kernel on stdout.}\\\\\n\\verb|CADABRA_NO_UNICODE|   & \\text{Do not use unicode when displaying expressions in the terminal.}\\\\\n\\verb|CADABRA_LOG_OUTPUT|   & \\text{Windows only: store stdout and stderr in a log file.}\n\\end{tabular}"
+		},
+		{
+			"cell_id": 3401637449413597037,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 16519983505863779635,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Startup flags}\n\nThe notebook interface normally starts a new Cadabra kernel (\\verb|cadabra-server|) when it opens, but\nit is possible to start the kernel manually and then instruct the notebook interface to connect to that\nalready running kernel. The following flags achieve that:\n\n\\begin{tabular}{ll}\n\\verb|--server-port|, \\verb|-s| & \\text{Connect to a running server on a given port.} \\\\\n\\verb|--server-ip-address|, \\verb|-a| & \\text{Connect to a running server on the given IP address.}\\\\\n\\verb|--token|, \\verb|-t| & \\text{Use the given authentication token to connect to the server.}\n\\end{tabular}"
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{Startup flags}\n\nThe notebook interface normally starts a new Cadabra kernel (\\verb|cadabra-server|) when it opens, but\nit is possible to start the kernel manually and then instruct the notebook interface to connect to that\nalready running kernel. The following flags achieve that:\n\n\\begin{tabular}{ll}\n\\verb|--server-port|, \\verb|-s| & \\text{Connect to a running server on a given port.} \\\\\n\\verb|--server-ip-address|, \\verb|-a| & \\text{Connect to a running server on the given IP address.}\\\\\n\\verb|--token|, \\verb|-t| & \\text{Use the given authentication token to connect to the server.}\n\\end{tabular}"
+		},
+		{
+			"cell_id": 14749822792221338951,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 9930842036444179435,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The server itself can be started as \\verb|cadabra-server [port] [exit-on-disconnect]|, where \\verb|port|\nis the port on which the server will listen (use $0$ to let it pick a random free port) and \\verb|exit-on-disconnect|\n(if non-empty) instructs the server to exit as soon as the notebook disconnects."
+				}
+			],
+			"hidden": true,
+			"source": "The server itself can be started as \\verb|cadabra-server [port] [exit-on-disconnect]|, where \\verb|port|\nis the port on which the server will listen (use $0$ to let it pick a random free port) and \\verb|exit-on-disconnect|\n(if non-empty) instructs the server to exit as soon as the notebook disconnects."
+		},
+		{
+			"cell_id": 5548489942229082877,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 13181529303942452978,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Finally the command-line client \\verb|cadabra2| accepts a single flag \\verb|-d| which will run Cadabra under \ncontrol of the debugger."
+				}
+			],
+			"hidden": true,
+			"source": "Finally the command-line client \\verb|cadabra2| accepts a single flag \\verb|-d| which will run Cadabra under \ncontrol of the debugger."
+		},
+		{
+			"cell_id": 13846612080819932419,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

@@ -419,7 +419,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 											"\\text{\\Large\\textbf{$1}}\\\\\\vspace{2.5ex}");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\subsection\*\{([^\}]*)\}[ ]*)"),
-											"\\text{\\large\\textbf{$1}}\\\\\\vspace{1.5ex}");
+											"\\text{\\large\\textbf{$1}}\\\\\\vspace{2.0ex}");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\package\{([^\}]*)\}\{([^\}]*)\})"),
 											"\\text{\\large\\texttt{$1}}\\\\\\vspace{2.5ex}\\text{\\textit{$2}}\\\\");

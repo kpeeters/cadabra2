@@ -306,7 +306,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		std::cerr << "cadabra-client: cannot parse message." << std::endl;
 		return;
 		}
-	if(getenv("CDB_SHOW_RECEIVED")) {
+	if(getenv("CADABRA_SHOW_RECEIVED")) {
 		std::cerr << "RECV: " << root.dump(3) << std::endl;
 		}
 	
@@ -502,7 +502,7 @@ void ComputeThread::execute_interactive(uint64_t id, const std::string& code)
 
 	std::ostringstream oss;
 	oss << req << std::endl;
-	if(getenv("CDB_SHOW_SENT")) {
+	if(getenv("CADABRA_SHOW_SENT")) {
 		std::cerr << "SEND: " << req.dump(3) << std::endl;
 		}
 	wsclient.send(our_connection_hdl, oss.str(), websocketpp::frame::opcode::text);
@@ -564,7 +564,7 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		gui->on_kernel_runstatus(true);
 		std::ostringstream str;
 		str << req << std::endl;
-		if(getenv("CDB_SHOW_SENT")) {
+		if(getenv("CADABRA_SHOW_SENT")) {
 			std::cerr << "SEND: " << req.dump(3) << std::endl;
 			}
 		wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
@@ -607,7 +607,7 @@ void ComputeThread::stop()
 	//	std::cerr << str.str() << std::endl;
 
 	server_pid=0;
-	if(getenv("CDB_SHOW_SENT")) {
+	if(getenv("CADABRA_SHOW_SENT")) {
 		std::cerr << "SEND: " << req.dump(3) << std::endl;
 		}
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
@@ -639,7 +639,7 @@ void ComputeThread::restart_kernel()
 
 	//	std::cerr << str.str() << std::endl;
 
-	if(getenv("CDB_SHOW_SENT")) {
+	if(getenv("CADABRA_SHOW_SENT")) {
 		std::cerr << "SEND: " << req.dump(3) << std::endl;
 		}
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
@@ -685,8 +685,8 @@ bool ComputeThread::complete(DTree::iterator it, int pos, int alternative)
 	// std::cerr << str.str() << std::endl;
 
 	server_pid=0;
-	if(getenv("CDB_SHOW_SENT")) {
-		std::cerr << "SEND: " << req.dump(3) << std::endl;
+	if(getenv("CADABRA_SHOW_SENT")) {
+		std::cerr << "SENT: " << req.dump(3) << std::endl;
 		}
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
 
