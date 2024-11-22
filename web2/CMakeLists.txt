@@ -43,6 +43,7 @@ set(TUTORIALS
   ref_programming
   ref_kernel
   ref_dynamical_updates
+  ref_plotting
   ref_import
   ref_exponents
   ref_spacing
@@ -68,6 +69,7 @@ set(BOOK_PARTS
    ref_programming
    ref_kernel
    ref_dynamical_updates
+   ref_plotting
    ref_import
    ref_exponents
    ref_spacing
