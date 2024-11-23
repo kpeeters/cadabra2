@@ -513,13 +513,15 @@ void CodeInput::relay_cursor_pos(std::function<void(int, int)> callback)
 
 bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	{
+	// The key symbols are in /usr/include/gtk-3.0/gdk/gdkkeysyms.h
 	bool is_shift_return = get_editable() && event->keyval==GDK_KEY_Return && (event->state&Gdk::SHIFT_MASK);
 	//	bool is_shift_tab    = get_editable() && event->keyval==GDK_KEY_Tab && (event->state&Gdk::SHIFT_MASK);
 	bool is_tab = get_editable() && event->keyval==GDK_KEY_Tab;
 	bool is_ctrl_k = get_editable() && event->keyval==GDK_KEY_k && (event->state&Gdk::CONTROL_MASK);
 	bool is_ctrl_a = get_editable() && event->keyval==GDK_KEY_a && (event->state&Gdk::CONTROL_MASK);
 	bool is_ctrl_e = get_editable() && event->keyval==GDK_KEY_e && (event->state&Gdk::CONTROL_MASK);
-
+	bool is_ctrl_qm = get_editable() && event->keyval==GDK_KEY_question && (event->state&Gdk::CONTROL_MASK);
+	
 	bool retval=false;
 //	std::cerr << event->keyval << ", " << event->state << " pressed, focus = " << has_focus()
 //	 			 << ", editable = " << get_editable() << ", is_shift_return = " << is_shift_return << std::endl;
@@ -535,16 +537,37 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	else if(is_tab) {
 		// If one or more lines are selected, indent the whole block.
 		// FIXME: implement
-		
-		// Only complete if the last character is not whitespace.
-		Glib::RefPtr<Gtk::TextBuffer::Mark> ins = get_buffer()->get_insert();
-		Gtk::TextBuffer::iterator it=textbuf->get_iter_at_mark(ins);
-		int ipos=textbuf->get_slice(textbuf->begin(), it).bytes();
-		
-		if(complete_request(datacell, ipos))
+		Gtk::TextBuffer::iterator beg, end;
+		if(get_buffer()->get_selection_bounds(beg, end)) {
+			if(beg.starts_line()) {
+				int start_line = beg.get_line();
+				int end_line = end.get_line();
+				for (int line = start_line; line <= end_line; ++line) {
+					auto line_start = get_buffer()->get_iter_at_line(line);
+					get_buffer()->insert(line_start, "\t"); 
+					}
+				// Move start of selection back to start of line.
+				get_buffer()->get_selection_bounds(beg, end);
+				int line_number = beg.get_line();
+				beg = get_buffer()->get_iter_at_line(line_number);
+				get_buffer()->select_range(beg, end);
+				}
+			else {
+				std::cerr << "start of selection not at start of line" << std::endl;
+				}
 			return true;
-		else
-			retval=Gtk::TextView::on_key_press_event(event);				
+			}
+		else {
+			// Only complete if the last character is not whitespace.
+			Glib::RefPtr<Gtk::TextBuffer::Mark> ins = get_buffer()->get_insert();
+			Gtk::TextBuffer::iterator it=textbuf->get_iter_at_mark(ins);
+			int ipos=textbuf->get_slice(textbuf->begin(), it).bytes();
+			
+			if(complete_request(datacell, ipos))
+				return true;
+			else
+				retval=Gtk::TextView::on_key_press_event(event);
+			}
 		}
 	else if(is_ctrl_a) {
 		Glib::RefPtr<Gtk::TextBuffer::Mark> ins = get_buffer()->get_insert();
@@ -567,15 +590,11 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 		Gtk::TextBuffer::iterator line_start = iter;
 		Gtk::TextBuffer::iterator line_end = iter;
 
-		// Move to the start and end of the line
-		line_start.set_line(iter.get_line());  // Move to the beginning of the line
-		line_end.forward_to_line_end();        // Move to the end of the line
-
-		// Include the newline character if it exists (non-last line)
-		if (!line_end.is_end()) 
+		if(line_end.ends_line())
 			line_end.forward_char();
+		else
+			line_end.forward_to_line_end();
 
-		// Delete the text between line_start and line_end
 		get_buffer()->erase(line_start, line_end);		
 		return true;
 		}
