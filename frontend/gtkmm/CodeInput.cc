@@ -21,8 +21,9 @@ std::string trim(const std::string& s)
 	return std::string(s, b, e - b + 1);
 	}
 
-CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double scale)
-	: Gtk::TextView(tb), scale_(scale), datacell(it)
+CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double scale,
+												  Glib::RefPtr<Gtk::Adjustment> vadjustment_)
+	: Gtk::TextView(tb), scale_(scale), datacell(it), vadjustment(vadjustment_)
 	{
 	set_events(Gdk::STRUCTURE_MASK);
 	//	get_buffer()->signal_insert().connect(sigc::mem_fun(this, &exp_input_tv::on_my_insert), false);
@@ -31,20 +32,16 @@ CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::Text
 	set_name("CodeInput"); // to be able to style it with CSS
 	}
 
-//CodeInput::CodeInput()
-//	: buffer(Gtk::TextBuffer::create()), edit(buffer)
-//	{
-//	init();
-//	}
-
-CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double s, const Prefs& prefs)
-	: buffer(tb), edit(it, tb, s)
+CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double s, const Prefs& prefs,
+							Glib::RefPtr<Gtk::Adjustment> vadjustment)
+	: buffer(tb), edit(it, tb, s, vadjustment)
 	{
 	init(prefs);
 	}
 
-CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s, const Prefs& prefs)
-	: buffer(Gtk::TextBuffer::create()), edit(it, buffer, s)
+CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s, const Prefs& prefs,
+							Glib::RefPtr<Gtk::Adjustment> vadjustment)
+	: buffer(Gtk::TextBuffer::create()), edit(it, buffer, s, vadjustment)
 	{
 	buffer->set_text(txt);
 	init(prefs);
@@ -102,6 +99,9 @@ void CodeInput::init(const Prefs& prefs)
 		}
 	edit.set_can_focus(true);
 
+	auto dummy_adj = Gtk::Adjustment::create(0,0,0);
+	edit.set_focus_hadjustment(dummy_adj);
+	
 	add(edit);
 	//	set_border_width(3);
 	show_all();
@@ -536,7 +536,6 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 		}
 	else if(is_tab) {
 		// If one or more lines are selected, indent the whole block.
-		// FIXME: implement
 		Gtk::TextBuffer::iterator beg, end;
 		if(get_buffer()->get_selection_bounds(beg, end)) {
 			if(beg.starts_line()) {
@@ -729,8 +728,31 @@ bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 bool CodeInput::exp_input_tv::on_focus_in_event(GdkEventFocus *event)
 	{
 	cell_got_focus(datacell);
-	return Gtk::TextView::on_focus_in_event(event);
+	vadjustment->set_value(previous_value);
+	return false;
 	}
+
+bool CodeInput::exp_input_tv::on_motion_notify_event(GdkEventMotion* event)
+	{
+	previous_value = vadjustment->get_value();
+	return false;
+	}
+
+// bool CodeInput::exp_input_tv::on_move_cursor_event(Glib::RefPtr<Gtk::TextBuffer::Mark> iter, Gtk::MovementStep step, bool extend_selection)
+// 	{
+// 	std::cerr << "on move cursor" << std::endl;
+// 	return false;
+// //	return Gtk::TextView::on_move_cursor(iter, step, extend_selection);
+// // 	auto mark_iter = get_buffer()->get_insert();
+// // 	
+// //    // Explicitly control scrolling with the custom parameters (minimal scrolling)
+// //    // 0.0 means no scrolling, so it won't scroll automatically
+// // 	get_buffer()->scroll_to_mark(mark_iter, 0.0, false, 0.0, 0.0);
+// // 	
+// // 	// Return false to allow the cursor movement to proceed without interfering with other behaviors
+// // 	return false;
+// 	}
+
 
 void CodeInput::exp_input_tv::on_show()
 	{

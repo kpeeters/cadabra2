@@ -23,24 +23,29 @@ namespace cadabra {
 			/// it (e.g. in order to know when to display a 'busy' indicator).
 			/// The scale parameter refers to hdpi scaling.
 
-			CodeInput(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale, const Prefs& prefs);
+			CodeInput(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale, const Prefs& prefs,
+						 Glib::RefPtr<Gtk::Adjustment>);
 
 			/// Initialise with a new TextBuffer (to be created by
 			/// CodeInput), filling it with the content of the given
 			/// string.
 
-			CodeInput(DTree::iterator, const std::string&, double scale, const Prefs& prefs);
+			CodeInput(DTree::iterator, const std::string&, double scale, const Prefs& prefs,
+						 Glib::RefPtr<Gtk::Adjustment>);
 
 			/// The actual text widget used by CodeInput.
 
 			class exp_input_tv : public Gtk::TextView {
 				public:
-					exp_input_tv(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale);
+					exp_input_tv(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale,
+									 Glib::RefPtr<Gtk::Adjustment>);
 					virtual bool on_key_press_event(GdkEventKey*) override;
 					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) override;
 					virtual bool on_focus_in_event(GdkEventFocus *) override;
 					virtual void on_show() override;
-
+//					virtual bool on_move_cursor_event(Glib::RefPtr<Gtk::TextBuffer::Mark>, Gtk::MovementStep, bool) override;
+					virtual bool on_motion_notify_event(GdkEventMotion *event) override;
+					
 					void         shift_enter_pressed();
 					void         on_textbuf_change();
 
@@ -54,8 +59,10 @@ namespace cadabra {
 					friend CodeInput;
 
 				private:
-					double scale_;
-					DTree::iterator datacell;
+					double                        scale_;
+					DTree::iterator               datacell;
+					Glib::RefPtr<Gtk::Adjustment> vadjustment;
+					double                        previous_value = 0.0; 
 				};
 
 			/// Set highlighting modes.

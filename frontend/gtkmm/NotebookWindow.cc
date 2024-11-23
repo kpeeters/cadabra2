@@ -1269,10 +1269,12 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				CodeInput *ci;
 				// Ensure that all CodeInput cells share the same text buffer.
 				if(i==0) {
-					ci = new CodeInput(it, it->textbuf,scale/display_scale,prefs);
+					ci = new CodeInput(it, it->textbuf, scale/display_scale, prefs,
+											 canvasses[i]->scroll.get_vadjustment() );
 					global_buffer=ci->buffer;
 					}
-				else ci = new CodeInput(it, global_buffer,scale/display_scale,prefs);
+				else ci = new CodeInput(it, global_buffer, scale/display_scale, prefs,
+												canvasses[i]->scroll.get_vadjustment());
 				using namespace std::placeholders;
 				ci->relay_cursor_pos(std::bind(&NotebookWindow::set_statusbar_message, this, "", _1, _2));
 				if(read_only)
@@ -1613,7 +1615,7 @@ void NotebookWindow::scroll_current_cell_into_view()
 void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 	{
 //	std::cerr << "-----" << std::endl;
-//	std::cerr << "cell content to show: " << cell->textbuf << std::endl;
+	std::cerr << "cell content to show: " << cell->textbuf << std::endl;
 
 	if(current_canvas>=(int)canvasses.size()) return;
 
