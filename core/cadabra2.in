@@ -85,7 +85,7 @@ class Shell(InteractiveConsole):
     def push(self, line):
 
         # line = self.preprocess(line, True)
-        line = convert_line(line, self.convert_data, True)
+        prefix, line = convert_line(line, self.convert_data, True)
         if self.convert_data.lhs == "":
             # print('executing: ')
             # print(line) # line is generically multiple lines
@@ -136,7 +136,7 @@ if __name__ == '__main__':
                 collect=""
                 for line in f:
                     line=line.rstrip()
-                    res = convert_line(line, sh.convert_data, True)
+                    prefix, res = convert_line(line, sh.convert_data, True)
                     if res!="::empty":
                        collect += res+"\n"		    
                 # print("----\n"+collect+"----\n")

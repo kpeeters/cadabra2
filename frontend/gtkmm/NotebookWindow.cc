@@ -1615,7 +1615,7 @@ void NotebookWindow::scroll_current_cell_into_view()
 void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 	{
 //	std::cerr << "-----" << std::endl;
-	std::cerr << "cell content to show: " << cell->textbuf << std::endl;
+//	std::cerr << "cell content to show: " << cell->textbuf << std::endl;
 
 	if(current_canvas>=(int)canvasses.size()) return;
 

@@ -33,6 +33,9 @@ namespace cadabra {
 			CodeInput(DTree::iterator, const std::string&, double scale, const Prefs& prefs,
 						 Glib::RefPtr<Gtk::Adjustment>);
 
+
+			virtual void on_size_allocate(Gtk::Allocation& allocation) override;
+			
 			/// The actual text widget used by CodeInput.
 
 			class exp_input_tv : public Gtk::TextView {
@@ -42,6 +45,7 @@ namespace cadabra {
 					virtual bool on_key_press_event(GdkEventKey*) override;
 					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) override;
 					virtual bool on_focus_in_event(GdkEventFocus *) override;
+					virtual bool on_focus_out_event(GdkEventFocus *) override;
 					virtual void on_show() override;
 //					virtual bool on_move_cursor_event(Glib::RefPtr<Gtk::TextBuffer::Mark>, Gtk::MovementStep, bool) override;
 					virtual bool on_motion_notify_event(GdkEventMotion *event) override;
@@ -62,7 +66,7 @@ namespace cadabra {
 					double                        scale_;
 					DTree::iterator               datacell;
 					Glib::RefPtr<Gtk::Adjustment> vadjustment;
-					double                        previous_value = 0.0; 
+					double                        previous_value = -99.0;
 				};
 
 			/// Set highlighting modes.

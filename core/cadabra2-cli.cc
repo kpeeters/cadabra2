@@ -400,8 +400,9 @@ void Shell::process_ps1(const std::string& line)
 	// Convert cadabra to python
 	bool display = !(flags & Flags::IgnoreSemicolons);
 	cadabra::ConvertData cv;
-//	std::string lhs, rhs, op, indent;
-	std::string output = cadabra::convert_line(line, cv, display);
+	std::pair<std::string, std::string> res = cadabra::convert_line(line, cv, display);
+	// FIXME: we need to process res.first
+	const std::string& output = res.second;
 	if (output == "::empty") {
 		// Cadabra continuation line, add to collect
 		collect += line + "\n";

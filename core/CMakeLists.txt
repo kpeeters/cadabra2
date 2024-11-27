@@ -270,6 +270,7 @@ set(IMAGES
 
 include_directories(
    "."
+   "${CADABRA_LIBS_DIR}/pybind11/include"
    "${CADABRA_LIBS_DIR}/internal/include"
    "${CADABRA_LIBS_DIR}/whereami"
    "${CADABRA_LIBS_DIR}/base64"   
@@ -277,6 +278,7 @@ include_directories(
    "${CADABRA_LIBS_DIR}/linenoise"
    "${CADABRA_LIBS_DIR}/nlohmann"     
    ${Boost_INCLUDE_DIRS}
+   ${Python_INCLUDE_DIRS}
    )
 
 

@@ -47,15 +47,26 @@ CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s, const
 	init(prefs);
 	}
 
+void CodeInput::on_size_allocate(Gtk::Allocation& allocation)
+	{
+//	allocation.set_width(400); // Fixed width
+	Gtk::Box::on_size_allocate(allocation);
+	}
+
 void CodeInput::init(const Prefs& prefs)
 	{
 	//	scroll_.set_size_request(-1,200);
 	//	scroll_.set_border_width(1);
 	//	scroll_.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
-	edit.set_wrap_mode(Gtk::WRAP_NONE); // WRAP_WORD_CHAR); wrapping leads to weird effects
+//	edit.set_wrap_mode(Gtk::WRAP_NONE); // WRAP_WORD_CHAR); wrapping leads to weird effects
 	edit.set_pixels_above_lines(1);
 	edit.set_pixels_below_lines(1);
 	edit.set_pixels_inside_wrap(1);
+
+	// Fix the size of the outer box, we re-fix this on window resize.
+//	set_hexpand(false);
+//	set_size_request(400, -1);
+	
 	// The following two are margins around the vbox which contains the
 	// text input and the LaTeX output(s).
 	set_margin_top(10);
@@ -88,9 +99,13 @@ void CodeInput::init(const Prefs& prefs)
 	if (prefs.highlight) {
 		using namespace std::string_literals;
 		switch (edit.datacell->cell_type) {
-			// Fallthrough
-			case DataCell::CellType::python:
 			case DataCell::CellType::latex:
+				edit.set_wrap_mode(Gtk::WRAP_WORD_CHAR);
+				std::cerr << "wrapping!" << std::endl;
+				enable_highlighting(edit.datacell->cell_type, prefs);
+				break;
+			case DataCell::CellType::python:
+				edit.set_wrap_mode(Gtk::WRAP_NONE);
 				enable_highlighting(edit.datacell->cell_type, prefs);
 				break;
 			default:
@@ -101,7 +116,7 @@ void CodeInput::init(const Prefs& prefs)
 
 	auto dummy_adj = Gtk::Adjustment::create(0,0,0);
 	edit.set_focus_hadjustment(dummy_adj);
-	
+
 	add(edit);
 	//	set_border_width(3);
 	show_all();
@@ -727,15 +742,25 @@ bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 
 bool CodeInput::exp_input_tv::on_focus_in_event(GdkEventFocus *event)
 	{
+	// std::cerr << "FOCUS IN" << std::endl;
 	cell_got_focus(datacell);
-	vadjustment->set_value(previous_value);
-	return false;
+	if(previous_value>=0) 
+		vadjustment->set_value(previous_value);
+	return Gtk::TextView::on_focus_in_event(event);
+	}
+
+bool CodeInput::exp_input_tv::on_focus_out_event(GdkEventFocus *event)
+	{
+	// std::cerr << "FOCUS OUT" << std::endl;
+	previous_value = -99.0;
+	return Gtk::TextView::on_focus_out_event(event);
 	}
 
 bool CodeInput::exp_input_tv::on_motion_notify_event(GdkEventMotion* event)
 	{
+	// std::cerr << "MOTION" << std::endl;
 	previous_value = vadjustment->get_value();
-	return false;
+	return Gtk::TextView::on_motion_notify_event(event);
 	}
 
 // bool CodeInput::exp_input_tv::on_move_cursor_event(Glib::RefPtr<Gtk::TextBuffer::Mark> iter, Gtk::MovementStep step, bool extend_selection)

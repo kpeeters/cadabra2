@@ -18,6 +18,14 @@ namespace cadabra {
 
 	std::string cdb2python_string(const std::string&, bool display);	
 
+	/// Test whether a block of Python code is complete or requires
+	/// more input lines. This uses `codeop.compile_command`.
+	///     1: complete
+   ///     0: incomplete
+   ///    -1: indentation error, need backtracking
+
+	int         is_python_code_complete(const std::string&);
+	
 	/// \ingroup files
 	/// Object to store pre-parsing intermediate results. Necessary
 	/// to keep things tidy but also in order to avoid the fact that
@@ -42,8 +50,10 @@ namespace cadabra {
    /// 
    /// TODO: make ';' at the end of '::' line result the print statement printing 
    /// property objects using their readable form; addresses one issue report).
+	///
+	/// Returns two strings, one which should be prefixed to the block so far, the other postfixed.
 
-	std::string convert_line(const std::string&, ConvertData& cv, bool display); //std::string& lhs, std::string& rhs, std::string& op, std::string& indent, bool display);
+	std::pair<std::string, std::string> convert_line(const std::string&, ConvertData& cv, bool display); //std::string& lhs, std::string& rhs, std::string& op, std::string& indent, bool display);
 
 	/// \ingroup files
 	/// Convert a Cadabra notebook file to pure Python. This gets

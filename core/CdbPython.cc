@@ -6,6 +6,8 @@
 #include <iomanip>
 #include <iostream>
 #include "CdbPython.hh"
+#include <pybind11/pybind11.h>
+#include <pybind11/embed.h>
 
 #ifndef CDBPYTHON_NO_NOTEBOOK
 #include "DataCell.hh"
@@ -57,16 +59,106 @@ std::string cadabra::cdb2python_string(const std::string& blk, bool display)
 	{
 	std::stringstream str(blk);
 	std::string line;
-	std::string newblk;
+	std::string tmpblk;
+	std::vector<std::string> newblks;
 	ConvertData cv;
-//	std::string lhs, rhs, op, indent;
+
+	std::pair<std::string, std::string> res;
+
+	// We collect lines into blocks until they pass python
+	// validation. If we ever hit an indentation error, we add
+	// previous successful blocks and re-try, successively,
+	// until the block compiles again.
+	
 	while(std::getline(str, line, '\n')) {
-		std::string res=cadabra::convert_line(line, cv, display); // lhs, rhs, op, indent, display);
-		// std::cerr << "preparsed : " + res << std::endl;
-		if(res!="::empty")
-			newblk += res+"\n";
+		res = cadabra::convert_line(line, cv, display);
+
+//		if(res.second!="::empty")
+//			tmpblk += res.first + res.second + "\n";
+
+		if(res.second!="::empty")
+			tmpblk += res.second;
+
+		while(true) {
+			// std::cerr << "CHECK:---\n" << tmpblk << "\n---" << std::endl;
+			int ic = is_python_code_complete(tmpblk);
+			if(ic==1) {
+				newblks.push_back(res.first + tmpblk + "\n");
+				tmpblk = "";
+				break;
+				}
+			if(ic==0) {
+				tmpblk += "\n";
+				break;
+				}
+			if(ic==-1) {
+				if(newblks.size()==0)
+					break;
+				// Grow block by adding previously ok block,
+				// then try compiling again.
+				tmpblk = newblks.back() + tmpblk;
+				newblks.pop_back();
+				}
+			}
 		}
+
+	// Collect.
+	std::string newblk;
+	for(const auto& blk: newblks)
+		newblk += blk;
+
+	// Add anything still left and cross fingers.
+	newblk += tmpblk+"\n";
+	
 	return newblk;
+	}
+
+//  1: complete
+//  0: incomplete
+// -1: indentation error, need backtracking
+
+int cadabra::is_python_code_complete(const std::string& code)
+	{
+	// The following code prints None, <code object> and <code object>.
+	// Make sure that the string you feed here does *not* include the
+	// newline on the last line.
+	//
+	// 
+   //  from codeop import *
+   //  
+   //  str1='''def fun():
+   //     print("hello")'''
+   //  str2='''def fun():
+   //     print("hello")
+   //  '''
+   //  str3='''print("hello")'''
+   //  
+   //  print(compile_command(str1, "<string>", "single"))
+   //  print(compile_command(str2, "<string>", "single"))
+   //  print(compile_command(str3, "<string>", "single"))
+
+   //	pybind11::scoped_interpreter guard{}; // Ensures the Python interpreter is initialized.
+	
+	// Import the 'codeop' module.
+	pybind11::object codeop = pybind11::module_::import("codeop");
+	pybind11::object compile_command = codeop.attr("compile_command");
+
+	// std::cerr << "CHECK:\n" << code << "END" << std::endl;
+	try {
+		pybind11::object result = compile_command(code, "<string>", "single");
+		if( result.is_none() ) return 0;
+		else                   return 1;
+		}
+	catch (pybind11::error_already_set& e) {
+		// std::cerr << "EXCEPTION: " << e.what() << std::endl;
+		if (std::string(e.what()).find("unexpected EOF") != std::string::npos) {
+			return -1;
+			}
+		if (std::string(e.what()).find("Indentation") != std::string::npos) {
+			return -1;
+			}
+		throw;
+		}
 	}
 
 cadabra::ConvertData::ConvertData()
@@ -79,9 +171,9 @@ cadabra::ConvertData::ConvertData(const std::string& lhs_, const std::string& rh
 	{
 	}
 
-std::string cadabra::convert_line(const std::string& line, ConvertData& cv, bool display) // std::string& lhs, std::string& rhs, std::string& op, std::string& indent, bool display)
+std::pair<std::string, std::string> cadabra::convert_line(const std::string& line, ConvertData& cv, bool display)
 	{
-	std::string ret;
+	std::string ret, prefix;
 
 	auto& lhs    = cv.lhs;
 	auto& rhs    = cv.rhs;
@@ -104,19 +196,19 @@ std::string cadabra::convert_line(const std::string& line, ConvertData& cv, bool
 		}
 
 	if(line_stripped.size()==0) {
-		return "";
+		return std::make_pair(prefix, "");
 		}
 
 	// Do not do anything with comment lines.
-	if(line_stripped[0]=='#') return line;
+	if(line_stripped[0]=='#') return std::make_pair(prefix, line);
 
 	// Bare ';' gets replaced with 'display(_)' but *only* if we have no
 	// preceding lines which have not finished parsing.
 	if(line_stripped==";" && lhs=="") {
 		if(display)
-			return indent_line+"display(_)";
+			return std::make_pair(prefix, indent_line+"display(_)");
 		else
-			return indent_line;
+			return std::make_pair(prefix, indent_line);
 		}
 
 	// 'lastchar' is either a Cadabra termination character, or empty.
@@ -139,7 +231,7 @@ std::string cadabra::convert_line(const std::string& line, ConvertData& cv, bool
 			lhs="";
 			rhs="";
 			op="";
-			return ret;
+			return std::make_pair(prefix, ret);
 			}
 		}
 	else {
@@ -147,7 +239,7 @@ std::string cadabra::convert_line(const std::string& line, ConvertData& cv, bool
 		// and return an empty line immediately.
 		if(lhs!="") {
 			rhs += line_stripped+" ";
-			return "::empty";
+			return std::make_pair(prefix, "::empty");
 			}
 		}
 
@@ -165,7 +257,7 @@ std::string cadabra::convert_line(const std::string& line, ConvertData& cv, bool
 	if(std::regex_match(line_stripped, converge_res, converge_match)) {
 		ret = indent_line+std::string(converge_res[1])+std::string(converge_res[2])+".reset(); _="+std::string(converge_res[2])+"\n"
 		      + indent_line+std::string(converge_res[1])+"while "+std::string(converge_res[2])+".changed():";
-		return ret;
+		return std::make_pair(prefix, ret);
 		}
 
 	size_t found = line_stripped.find(":=");
@@ -176,7 +268,7 @@ std::string cadabra::convert_line(const std::string& line, ConvertData& cv, bool
 			lhs=line_stripped.substr(0,found);
 			rhs=line_stripped.substr(found+2);
 			op=":=";
-			return "::empty";
+			return std::make_pair(prefix, "::empty");
 			}
 		else {
 			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
@@ -218,13 +310,16 @@ std::string cadabra::convert_line(const std::string& line, ConvertData& cv, bool
 				}
 			}
 		else {
-			if(lastchar==";" && display)
-				ret = indent_line + "_ = " + line_stripped + " display(_)";
-			else
+			if(lastchar==";" && display) {
+				prefix = "_ = " + prefix;
+				ret = indent_line + line_stripped + " display(_)";
+				}
+			else {
 				ret = indent_line + line_stripped;
+				}
 			}
 		}
-	return ret+end_of_line;
+	return std::make_pair(prefix, ret+end_of_line);
 	}
 
 #ifndef CDBPYTHON_NO_NOTEBOOK
@@ -270,9 +365,10 @@ std::string cadabra::cnb2python(const std::string& in_name, bool for_standalone)
 				ConvertData cv;
 //				std::string line, lhs, rhs, op, indent;
 				while (std::getline(s, line)) {
-					auto res = convert_line(line, cv, for_standalone); // lhs, rhs, op, indent, for_standalone);
-					if(res!="::empty")
-						ofs << res << '\n';
+					std::pair<std::string, std::string> res
+						= convert_line(line, cv, for_standalone); // lhs, rhs, op, indent, for_standalone);
+					if(res.second!="::empty")
+						ofs << res.second << '\n';
 					}
 				}
 			}
