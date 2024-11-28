@@ -902,6 +902,51 @@ void NotebookWindow::on_prefs_set_cv(int npos)
 		}
 	}
 
+void NotebookWindow::resize_codeinput_texview_all(int width)
+	{
+	// Inform CodeInput and TeXView widgets about the size; they need to
+   // have a maximum width equal to the window width (minus scrollbar),
+	// except when they contain Python code (which does not word-wrap).
+	auto it=doc.begin();
+	while(it!=doc.end()) {
+		resize_codeinput_texview(it, width);
+		++it;
+		}
+	}
+
+void NotebookWindow::resize_codeinput_texview(DTree::iterator it, int width)
+	{
+	// std::cerr << "resizing cell to " << width << std::endl;
+	if(it->cell_type==DataCell::CellType::python || it->cell_type==DataCell::CellType::latex) {
+		for(unsigned int i=0; i<canvasses.size(); ++i) {
+			auto fnd = canvasses[i]->visualcells.find(&(*it));
+			if(fnd != canvasses[i]->visualcells.end()) {
+				CodeInput *code_input = fnd->second.inbox;
+				//	code_input->edit.set_size_request(width, -1);  seems unnecessary
+				Gtk::Allocation allocation = code_input->edit.get_allocation();
+				allocation.set_width(width);
+				code_input->edit.size_allocate(allocation);
+				code_input->edit.queue_draw();
+				code_input->edit.window_width = width;
+				code_input->update_buffer();
+				}
+			}
+		}
+	else if(it->cell_type==DataCell::CellType::latex_view) {
+		for(unsigned int i=0; i<canvasses.size(); ++i) {
+			auto fnd = canvasses[i]->visualcells.find(&(*it));
+			if(fnd != canvasses[i]->visualcells.end()) {
+				TeXView *tex_view = fnd->second.outbox;
+				Gtk::Allocation allocation = tex_view->get_allocation();
+				allocation.set_width(width - 20);
+				tex_view->size_allocate(allocation);
+				tex_view->window_width = width;
+				tex_view->queue_draw();
+				}
+			}
+		}
+	}
+
 bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	{
 	// std::cerr << "cadabra-client: on_configure_event " << cfg->width << " x " << cfg->height << std::endl;
@@ -910,17 +955,23 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	bool ret=Gtk::Window::on_configure_event(cfg);
 
 	if(cfg->width != last_configure_width) {
-		std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
-		if(tex_running) {
-			tex_need_width = cfg->width;
+		if(prefs.microtex) {
+			resize_codeinput_texview_all(cfg->width);
 			}
 		else {
-			tex_need_width = cfg->width;
-			// std::cerr << "Attempting to run" << std::endl;
+			// Re-run latex.
+			std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
+			if(tex_running) {
+				tex_need_width = cfg->width;
+				}
+			else {
+				tex_need_width = cfg->width;
+				// std::cerr << "Attempting to run" << std::endl;
 			tex_run_async();
 			// std::cerr << "OK, running" << std::endl;
+				}
+			last_configure_width = cfg->width;
 			}
-		last_configure_width = cfg->width;
 		}
 
 	return ret;
@@ -1723,8 +1774,20 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int )
 				if(parent->hidden) {
 					(*vis).second.inbox->edit.hide();
 					}
-				else
-					(*vis).second.inbox->edit.show();
+				else {
+					CodeInput *w = (*vis).second.inbox;
+					w->edit.show_all();
+					// The very first time a widget is toggled to visible,
+					// the TextView will have a height which is incorrect
+					// (looks like it computes the maximal height if the
+					// width would be minimal). The hack below makes that
+					// problem go away. Similar to the hack used for
+					// hide followed by immediate show.
+					Glib::signal_timeout().connect_once([w]()
+							{
+							w->edit.queue_resize();							
+							}, 30);
+					}
 				}
 			}
 		}
@@ -1895,7 +1958,7 @@ bool NotebookWindow::on_tex_error(const std::string& str, DTree::iterator it)
 			// Probably a bug: if we call show() without the delay below, we can have
 			// the hide() and show() happen very quickly after each other, which does not
 			// work (widget stays hidden).
-			Glib::signal_timeout().connect_once([&w]() { w.show(); }, 50);
+			Glib::signal_timeout().connect_once([&w]() { w.show_all(); }, 50);
 
 			pit->hidden=false;
 			}

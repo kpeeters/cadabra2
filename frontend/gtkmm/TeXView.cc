@@ -135,6 +135,8 @@ void TeXView::TeXArea::get_preferred_width_for_height_vfunc(int height,
 
 void TeXView::TeXArea::on_size_allocate(Gtk::Allocation& allocation)
 	{
+	if(owner->window_width != 0)
+		allocation.set_width(owner->window_width - 20);
 	set_allocation(allocation);
 //	std::cerr << "**** offered allocation " << allocation.get_width()
 //				 << " x " << allocation.get_height() << std::endl;

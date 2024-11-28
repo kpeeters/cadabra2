@@ -294,6 +294,8 @@ namespace cadabra {
 			void interactive_execute();
 
 			void dim_output_cells(DTree::iterator it);
+			void resize_codeinput_texview_all(int width);
+			void resize_codeinput_texview(DTree::iterator, int width);			
 
 			// Handler for callbacks from TeXView cells.
 

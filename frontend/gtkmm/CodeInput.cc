@@ -3,6 +3,7 @@
 #include <gtkmm/messagedialog.h>
 #include <gdk/gdkkeysyms.h>
 #include <gdkmm/rgba.h>
+//#include <gdkmm/root.h>
 #include <iostream>
 #include <regex>
 #include "Keywords.hh"
@@ -49,8 +50,47 @@ CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s, const
 
 void CodeInput::on_size_allocate(Gtk::Allocation& allocation)
 	{
-//	allocation.set_width(400); // Fixed width
+//	allocation.set_width(edit.window_width); // Fixed width
+
+//	Gtk::Widget* current = this;
+//	while (current->get_parent()) {
+//		current = current->get_parent();
+//		}
+//	
+//	Gtk::Window *mywindow = static_cast<Gtk::Window *>(current);
+//	if(mywindow) {
+//		std::cerr << "The root window of CodeInput has " << mywindow->get_allocation().get_width() << std::endl;
+//		}	
+////	allocation.set_width(thewidth);
+//
 	Gtk::Box::on_size_allocate(allocation);
+	}
+
+
+Gtk::SizeRequestMode CodeInput::exp_input_tv::get_request_mode_vfunc() const
+	{
+	return Gtk::SizeRequestMode::SIZE_REQUEST_WIDTH_FOR_HEIGHT;
+	}
+
+void CodeInput::exp_input_tv::get_preferred_width_for_height_vfunc(int height,
+																						 int& minimum_width, int& natural_width) const
+	{
+	if(datacell->cell_type==DataCell::CellType::latex) {
+		minimum_width = window_width-20;
+		natural_width = window_width-20;
+		// std::cerr << "requested widths for " << datacell->textbuf.substr(0, 20) << ": " << window_width << std::endl;
+		}
+	else {
+		return Gtk::TextView::get_preferred_width_for_height_vfunc(height, minimum_width, natural_width);
+		}
+	}
+
+void CodeInput::exp_input_tv::on_size_allocate(Gtk::Allocation& allocation)
+	{
+	// std::cerr << "allocation requested for " << datacell->textbuf.substr(0, 20) << ": " << allocation.get_width() << std::endl;
+	if(datacell->cell_type==DataCell::CellType::latex) 
+		allocation.set_width(window_width-20);
+	Gtk::TextView::on_size_allocate(allocation);
 	}
 
 void CodeInput::init(const Prefs& prefs)
@@ -63,8 +103,6 @@ void CodeInput::init(const Prefs& prefs)
 	edit.set_pixels_below_lines(1);
 	edit.set_pixels_inside_wrap(1);
 
-	// Fix the size of the outer box, we re-fix this on window resize.
-//	set_hexpand(false);
 //	set_size_request(400, -1);
 	
 	// The following two are margins around the vbox which contains the
@@ -100,18 +138,16 @@ void CodeInput::init(const Prefs& prefs)
 		using namespace std::string_literals;
 		switch (edit.datacell->cell_type) {
 			case DataCell::CellType::latex:
-				edit.set_wrap_mode(Gtk::WRAP_WORD_CHAR);
-				std::cerr << "wrapping!" << std::endl;
 				enable_highlighting(edit.datacell->cell_type, prefs);
 				break;
 			case DataCell::CellType::python:
-				edit.set_wrap_mode(Gtk::WRAP_NONE);
 				enable_highlighting(edit.datacell->cell_type, prefs);
 				break;
 			default:
 				break;
 			}
 		}
+
 	edit.set_can_focus(true);
 
 	auto dummy_adj = Gtk::Adjustment::create(0,0,0);
@@ -694,7 +730,7 @@ bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	{
 	Glib::RefPtr<Gdk::Window> win = Gtk::TextView::get_window(Gtk::TEXT_WINDOW_TEXT);
 
-	//	std::cerr << "on draw for " << get_buffer()->get_text() << std::endl;
+	// std::cerr << "on draw for " << get_buffer()->get_text() << std::endl;
 
 	bool ret=Gtk::TextView::on_draw(cr);
 
@@ -796,6 +832,22 @@ void CodeInput::update_buffer()
 		// 			 << " to " << newtxt << std::endl;
 		buffer->set_text(newtxt);
 		}
+
+	// Word wrapping
+	switch (edit.datacell->cell_type) {
+		case DataCell::CellType::latex:
+			edit.set_hexpand(false);
+			edit.set_wrap_mode(Gtk::WRAP_WORD_CHAR);
+			// std::cerr << "enabled word wrapping" << std::endl;
+			break;
+		case DataCell::CellType::python:
+			edit.set_hexpand(true);
+			edit.set_wrap_mode(Gtk::WRAP_NONE);
+			break;
+		default:
+			break;
+		}
+
 	}
 
 void CodeInput::handle_insert(const Gtk::TextIter& pos, const Glib::ustring& text, int bytes)

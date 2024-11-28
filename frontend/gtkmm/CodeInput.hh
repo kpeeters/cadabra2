@@ -47,8 +47,11 @@ namespace cadabra {
 					virtual bool on_focus_in_event(GdkEventFocus *) override;
 					virtual bool on_focus_out_event(GdkEventFocus *) override;
 					virtual void on_show() override;
-//					virtual bool on_move_cursor_event(Glib::RefPtr<Gtk::TextBuffer::Mark>, Gtk::MovementStep, bool) override;
+
+					virtual Gtk::SizeRequestMode get_request_mode_vfunc() const override;
+					virtual void get_preferred_width_for_height_vfunc(int height, int& minimum_width, int& natural_width) const  override;
 					virtual bool on_motion_notify_event(GdkEventMotion *event) override;
+					virtual void on_size_allocate(Gtk::Allocation& allocation) override;
 					
 					void         shift_enter_pressed();
 					void         on_textbuf_change();
@@ -62,6 +65,7 @@ namespace cadabra {
 
 					friend CodeInput;
 
+					int                           window_width = 100;
 				private:
 					double                        scale_;
 					DTree::iterator               datacell;

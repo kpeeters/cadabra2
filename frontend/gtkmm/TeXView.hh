@@ -41,6 +41,8 @@ namespace cadabra {
 			Gtk::VBox                 vbox;
 			Gtk::HBox                 hbox;
 
+			int                       window_width=0;
+
 			class TeXArea : public Gtk::DrawingArea {
 				public:
 					TeXArea(bool use_microtex, TeXView *owner_);
