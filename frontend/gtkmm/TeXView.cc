@@ -98,6 +98,13 @@ void TeXView::TeXArea::get_preferred_height_for_width_vfunc(int width,
 			// std::cerr << "**** skipped bogus width" << std::endl;
 			}
 		else {
+			// If we are given a width which is not the window_width - 20, force the
+			// width. This should not happen, but alas, it does.
+			// std::cerr << width << " > " << owner->window_width - 20 << "?" << std::endl;
+			if(owner->window_width != 0) {
+				if(width > owner->window_width - 20)
+					width = owner->window_width - 20;
+				}
 			int remember = rendering_width;
 			rendering_width = width - 2*padding_x;
 			layout_latex();
@@ -109,7 +116,7 @@ void TeXView::TeXArea::get_preferred_height_for_width_vfunc(int width,
 			if(rendering_width==9999)
 				rendering_width = remember;
 			}
-      //	std::cerr << "**** asked height for width " << width << ", replied " << minimum_height << std::endl;
+      // std::cerr << "**** asked height for width " << width << ", replied " << minimum_height << std::endl;
 		}
 	else {
 		Gtk::Widget::get_preferred_height_for_width_vfunc(width, minimum_height, natural_height);
@@ -135,8 +142,10 @@ void TeXView::TeXArea::get_preferred_width_for_height_vfunc(int height,
 
 void TeXView::TeXArea::on_size_allocate(Gtk::Allocation& allocation)
 	{
-	if(owner->window_width != 0)
+	if(owner->window_width != 0) {
+		// std::cerr << "setting texview width = " << owner->window_width - 20 << std::endl;
 		allocation.set_width(owner->window_width - 20);
+		}
 	set_allocation(allocation);
 //	std::cerr << "**** offered allocation " << allocation.get_width()
 //				 << " x " << allocation.get_height() << std::endl;

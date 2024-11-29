@@ -957,6 +957,7 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	if(cfg->width != last_configure_width) {
 		if(prefs.microtex) {
 			resize_codeinput_texview_all(cfg->width);
+			last_configure_width = cfg->width;
 			}
 		else {
 			// Re-run latex.
@@ -1299,6 +1300,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				// FIXME: would be good to share the input and output of TeXView too.
 				// Right now nothing is shared...
 				newcell.outbox = manage( new TeXView(engine, it, prefs.microtex) );
+				newcell.outbox->window_width = last_configure_width;
 				// std::cerr << "Add widget " << newcell.outbox << " for cell " << it->id().id << std::endl;
 				newcell.outbox->tex_error.connect(
 				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_tex_error), it ) );
@@ -1772,7 +1774,20 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int )
 				}
 			else {
 				if(parent->hidden) {
+//					Glib::signal_timeout().connect_once([it, this]()
+//							{
+//							resize_codeinput_texview(it, get_width());
+////							w->queue_resize();							
+//							}, 50);
 					(*vis).second.inbox->edit.hide();
+//					auto vis2 = canvasses[i]->visualcells.find(&(*it));
+//					if(vis2==canvasses[i]->visualcells.end()) {
+//						TeXView *w = (*vis2).second.outbox;
+//						Glib::signal_timeout().connect_once([w]()
+//								{
+//								w->queue_resize();							
+//								}, 30);
+//						}
 					}
 				else {
 					CodeInput *w = (*vis).second.inbox;
