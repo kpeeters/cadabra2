@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <iostream>
 #include <regex>
+#include "Kernel.hh"
 
 namespace py = pybind11;
 
@@ -44,42 +45,20 @@ namespace cadabra {
 		static std::string spath;
 
 		if(spath=="") {
-			py::module_ sysconfig = py::module_::import("sysconfig");
-			py::object result = sysconfig.attr("get_path")("platlib");
-			spath = result.cast<std::string>();
-			// Some older systems return the wrong path in platlib: they
-			// use "dist-packages", but still return "site-packages". So we
-			// test for the existence of platlib, and if it does not
-			// exist, we swap "site-packages" <-> "dist-packages".
-			auto dpath = std::filesystem::path(spath);
-			if(!std::filesystem::is_directory(dpath)) {
-				auto parent = dpath.parent_path();
-				if(dpath.filename()=="site-packages")
-					dpath = parent / "dist-packages";
-				else
-					dpath = parent / "site-packages";
-				spath = dpath.string();
-				}
-
-			// Unfortunately, if cadabra2 was installed as a system package,
-			// it will have ended up in platstdlib. Check whether our startup
-			// `cadabra2_defaults.py` is in the path found above, and if not,
-			// try again with `platstdlib`.
+			// We have an empty helper module 'cdb.main' which we import
+			// to figure out the location, as the __file__ attribute will
+			// contain that after successful import.
+			py::module_ cdb = py::module_::import("cdb.main");
+			py::object  result = cdb.attr("__file__");
+			std::string tmp = result.cast<std::string>();
+			auto dpath = std::filesystem::path(tmp).parent_path().parent_path();
 			if(!std::filesystem::is_regular_file(dpath / "cadabra2_defaults.py")) {
-				py::object result2 = sysconfig.attr("get_path")("platstdlib");
-				std::string spath2 = result2.cast<std::string>()+"/dist-packages";
-				auto dpath2 = std::filesystem::path(spath2);
-				if(!std::filesystem::is_regular_file(dpath2 / "cadabra2_defaults.py")) {
-					std::string spath3 = result2.cast<std::string>()+"/site-packages";
-					auto dpath3 = std::filesystem::path(spath3);
-					if(!std::filesystem::is_regular_file(dpath3 / "cadabra2_defaults.py")) {
-						throw std::logic_error("Cannot find cadabra2_defaults.py at either "+spath+
-													  " or "+spath2+" or "+spath3+"; giving up.");
-						}
-					spath=spath3;
-					}
-				else spath=spath2;
+				throw std::logic_error("The cadabra2 binary module is in "
+											  +dpath.string()
+											  +" but the initialisation file 'cadabra2_defaults.py' is not there;"
+											  +" giving up.");
 				}
+			spath = dpath.string();
 			}  		
 		return spath;
 		}

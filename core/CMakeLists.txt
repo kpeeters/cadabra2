@@ -12,11 +12,11 @@ print_header("Configuring core")
 
 configure_file(
    "${PROJECT_SOURCE_DIR}/cadabra2.in"
-   "${PROJECT_SOURCE_DIR}/cadabra2"
+   "${PROJECT_BINARY_DIR}/cadabra2"
 )
 configure_file(
    "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py.in"
-   "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py"
+   "${PROJECT_BINARY_DIR}/packages/cadabra2_defaults.py"
 )
 
 
@@ -465,7 +465,7 @@ install(TARGETS cdb-nbtool DESTINATION ${CDB_BIN_PATH})
 
 install(
    FILES 
-      "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" 
+      "${PROJECT_BINARY_DIR}/packages/cadabra2_defaults.py" 
       "${CADABRA_LIBS_DIR}/appdirs/cdb_appdirs.py"
    DESTINATION 
       "${PYTHON_SITE_PATH}"
@@ -474,7 +474,7 @@ install(
 # CLI
 install(
   PROGRAMS 
-    "${PROJECT_SOURCE_DIR}/cadabra2" 
+    "${PROJECT_BINARY_DIR}/cadabra2" 
   DESTINATION 
     ${CDB_BIN_PATH}
 )

@@ -11,6 +11,7 @@
 #include "py_tableau.hh"
 #include "py_ntensor.hh"
 #include "py_media.hh"
+#include "py_helpers.hh"
 
 #include "Kernel.hh"
 

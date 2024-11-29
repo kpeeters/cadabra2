@@ -58,6 +58,20 @@ foreach(PACKAGE ${PACKAGES})
       ${PYTHON_CDB_PACKAGE_PATH}/${PINSTALL}
   )
 endforeach()
+install(
+  FILES
+  "${SOURCE_PACKAGEDIR}/main.py"
+  DESTINATION 
+  "${PYTHON_CDB_PACKAGE_PATH}/"
+)
+# Also add it to the build folder where we 
+add_custom_target(
+  copy-main ALL
+  COMMAND ${CMAKE_COMMAND} -E copy
+  "${SOURCE_PACKAGEDIR}/main.py"
+  "${CMAKE_CURRENT_BINARY_DIR}/cdb/main.py"
+)
+
 
 find_package(GMPXX REQUIRED STATIC)
 
