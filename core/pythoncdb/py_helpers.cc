@@ -60,6 +60,21 @@ namespace cadabra {
 					dpath = parent / "site-packages";
 				spath = dpath.string();
 				}
+
+			// Unfortunately, if cadabra2 was installed as a system package,
+			// it will have ended up in platstdlib. Check whether our startup
+			// `cadabra2_defaults.py` is in the path found above, and if not,
+			// try again with `platstdlib`.
+			if(!std::filesystem::is_regular_file(dpath / "cadabra2_defaults.py")) {
+				py::object result = sysconfig.attr("get_path")("platstdlib");
+				std::string spath2 = result.cast<std::string>();
+				auto dpath2 = std::filesystem::path(spath);
+				if(!std::filesystem::is_regular_file(dpath2 / "cadabra2_defaults.py")) {
+					throw std::logic_error("Cannot find cadabra2_defaults.py at either "+spath+
+												  " or "+spath2+"; giving up.");
+					}
+				spath=spath2;
+				}
 			}  		
 		return spath;
 		}
