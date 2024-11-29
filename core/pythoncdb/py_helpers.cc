@@ -67,7 +67,7 @@ namespace cadabra {
 			// try again with `platstdlib`.
 			if(!std::filesystem::is_regular_file(dpath / "cadabra2_defaults.py")) {
 				py::object result = sysconfig.attr("get_path")("platstdlib");
-				std::string spath2 = result.cast<std::string>();
+				std::string spath2 = result.cast<std::string>()+"/dist-packages";
 				auto dpath2 = std::filesystem::path(spath);
 				if(!std::filesystem::is_regular_file(dpath2 / "cadabra2_defaults.py")) {
 					throw std::logic_error("Cannot find cadabra2_defaults.py at either "+spath+
