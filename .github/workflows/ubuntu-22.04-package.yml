@@ -5,9 +5,11 @@
 
 name: Ubuntu-22.04 package
 
-on:
-  release:
-    types: [created]
+on: [push]
+
+# on:
+#  release:
+#    types: [created]
 
 jobs:
   build:
@@ -24,7 +26,7 @@ jobs:
     - name: setup python
       uses: actions/setup-python@v4
       with:
-          python-version: 3.11
+          python-version: 3.10
 
     - name: Set up GitHub CLI
       run: |
