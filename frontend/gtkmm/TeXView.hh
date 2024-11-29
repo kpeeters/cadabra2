@@ -75,6 +75,7 @@ namespace cadabra {
 
 					bool                    use_microtex;
 
+					int need_height(int width) const;
 				protected:
 					Gtk::SizeRequestMode get_request_mode_vfunc() const override;
 					void get_preferred_height_for_width_vfunc(int width, int& minimum_height,

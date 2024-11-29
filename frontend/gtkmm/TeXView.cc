@@ -123,6 +123,13 @@ void TeXView::TeXArea::get_preferred_height_for_width_vfunc(int width,
 		}
 	}
 
+int TeXView::TeXArea::need_height(int width) const
+	{
+	int h1, h2;
+	get_preferred_height_for_width_vfunc(width, h1, h2);
+	return h1;
+	}
+
 void TeXView::TeXArea::get_preferred_width_for_height_vfunc(int height,
 																				int& minimum_width, int& natural_width) const
 	{

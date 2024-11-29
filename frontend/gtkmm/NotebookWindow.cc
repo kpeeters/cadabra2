@@ -908,6 +908,7 @@ void NotebookWindow::resize_codeinput_texview_all(int width)
    // have a maximum width equal to the window width (minus scrollbar),
 	// except when they contain Python code (which does not word-wrap).
 	auto it=doc.begin();
+	std::cerr << "----" << std::endl;
 	while(it!=doc.end()) {
 		resize_codeinput_texview(it, width);
 		++it;
@@ -937,11 +938,20 @@ void NotebookWindow::resize_codeinput_texview(DTree::iterator it, int width)
 			auto fnd = canvasses[i]->visualcells.find(&(*it));
 			if(fnd != canvasses[i]->visualcells.end()) {
 				TeXView *tex_view = fnd->second.outbox;
-				Gtk::Allocation allocation = tex_view->get_allocation();
-				allocation.set_width(width - 20);
-				tex_view->size_allocate(allocation);
 				tex_view->window_width = width;
+
+				Gtk::Allocation allocation = tex_view->image.get_allocation();
+				allocation.set_width(width - 20);
+				int need_height = tex_view->image.need_height(width - 20);
+				std::cerr << "Need height " << need_height << std::endl;
+				allocation.set_height(need_height+100);
+				tex_view->image.size_allocate(allocation);
+				
 				tex_view->queue_draw();
+				Glib::signal_timeout().connect_once([tex_view]()
+						{
+						tex_view->queue_resize();
+						}, 50);
 				}
 			}
 		}
@@ -1949,6 +1959,7 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number,
 				else {
 					(*vis).second.inbox->edit.hide();
 					it->hidden=true;
+//					resize_codeinput_texview(it, last_configure_width);
 					}
 				}
 			}
