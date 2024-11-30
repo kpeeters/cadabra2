@@ -41,7 +41,7 @@
   </provides>
 
   <releases>
-    <release version="@CADABRA_VERSION_MAJOR@.@CADABRA_VERSION_MINOR@.@CADABRA_VERSION_PATCH@" date="@CADABRA_VERSION_DATE@">
+    <release version="@CADABRA_VERSION_SEM@" date="@CADABRA_VERSION_DATE@">
       <description>
         <p>First release as AppImage.</p>
       </description>

@@ -129,7 +129,7 @@ void Cadabra::on_activate()
 	add_window(*nw);
 	nw->show();
 
-	std::string version=std::string(CADABRA_VERSION_MAJOR)+"."+CADABRA_VERSION_MINOR+"."+CADABRA_VERSION_PATCH;
+	std::string version=std::string(CADABRA_VERSION_SEM);
 	snoop::log("start") << version << snoop::flush;
 
 	if(!nw->prefs.is_registered && !nw->prefs.is_anonymous) {

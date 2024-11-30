@@ -88,19 +88,14 @@ set(PKG_CONFIG_USE_STATIC_LIBS OFF)
 
 # Get version information.
 include(cmake/version.cmake)
-print_header("Building Cadabra version ${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}.${CADABRA_VERSION_TWEAK} (${SYSTEM_BITS}-bit)")
+print_header("Building Cadabra version ${CADABRA_VERSION_SEM} (${SYSTEM_BITS}-bit)")
 message(STATUS "Build id '${CADABRA_VERSION_BUILD}' dated ${CADABRA_VERSION_DATE}")
 message(STATUS "Build mode is set to '${CMAKE_BUILD_TYPE}'")
 message(STATUS "Architecture is '${CMAKE_SYSTEM_PROCESSOR}'")
 
 # Store the version number in a build/VERSION file (so that e.g. github
 # actions can pick it up).
-if(NOT "${CADABRA_VERSION_TWEAK}" STREQUAL "0")
-  file(WRITE build/VERSION       "${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}.${CADABRA_VERSION_TWEAK}")
-else()
-  file(WRITE build/VERSION       "${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}")
-endif()  
-
+file(WRITE build/VERSION       "${CADABRA_VERSION_SEM}")
 
 # Notify about install directory
 if ("${CMAKE_INSTALL_PREFIX}" STREQUAL "")
@@ -599,7 +594,7 @@ endif()
 if(WIN32)
   add_custom_target(windows-installer
     COMMAND cpack
-#    COMMAND osslsigncode sign -pkcs12 "/mnt/c/path/to/certificate.p12" -pass "certificate password" -n "Cadabra2" -i "https://cadabra.science" -t "http://timestamp.comodoca.com/authenticode" -in "cadabra2-${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}-win64.exe" -out "cadabra2-${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}-win64-installer.exe"
+#    COMMAND osslsigncode sign -pkcs12 "/mnt/c/path/to/certificate.p12" -pass "certificate password" -n "Cadabra2" -i "https://cadabra.science" -t "http://timestamp.comodoca.com/authenticode" -in "cadabra2-${CADABRA_VERSION_SEM}-win64.exe" -out "cadabra2-${CADABRA_VERSION_SEM}-win64-installer.exe"
     COMMAND gh auth setup-git
     COMMAND release upload "${CADABRA_VERSION_SEM}" cadabra2-${CADABRA_VERSION_SEM}-win64.exe --clobber
   )

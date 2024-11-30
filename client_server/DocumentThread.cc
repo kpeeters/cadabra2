@@ -25,7 +25,7 @@ DocumentThread::DocumentThread(GUIBase* g)
 	: gui(g), compute(0), disable_stacks(false)
 	{
 	// Setup logging.
-	std::string version=std::string(CADABRA_VERSION_MAJOR)+"."+CADABRA_VERSION_MINOR+"."+CADABRA_VERSION_PATCH;
+	std::string version=std::string(CADABRA_VERSION_SEM);
 #ifndef EMSCRIPTEN
 	snoop::log.init("Cadabra", version, "log.cadabra.science");
 	snoop::log.set_sync_immediately(true);

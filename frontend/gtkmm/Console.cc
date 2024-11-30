@@ -158,7 +158,7 @@ Console::Console(sigc::slot<void> run_slot)
 void Console::initialize()
 	{
 	std::string welcome_message =
-		"Cadabra v" CADABRA_VERSION_MAJOR "." CADABRA_VERSION_MINOR "." CADABRA_VERSION_PATCH
+		"Cadabra v" CADABRA_VERSION_SEM
 		" Interactive Console\nFor more information, type help(console)\n";
 	buffer->insert_with_tag(buffer->begin(), welcome_message, output_tag);
 	server_cell_id = 0;

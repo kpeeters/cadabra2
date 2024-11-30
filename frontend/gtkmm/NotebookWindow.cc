@@ -2674,8 +2674,7 @@ void NotebookWindow::on_help_about()
 	about.set_transient_for(*this);
 	about.set_program_name("Cadabra");
 	about.set_comments("A field-theory motivated approach to computer algebra");
-	about.set_version(std::string("Version ")+CADABRA_VERSION_MAJOR+"."+CADABRA_VERSION_MINOR
-	                  +"."+CADABRA_VERSION_PATCH
+	about.set_version(std::string("Version ")+CADABRA_VERSION_SEM
 	                  +" (build "+CADABRA_VERSION_BUILD+" dated "+CADABRA_VERSION_DATE+")");
 	std::vector<Glib::ustring> authors;
 	authors.push_back("Kasper Peeters");

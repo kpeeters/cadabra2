@@ -5,7 +5,7 @@ name: Tarball
 
 on:
   release:
-    types: [created]
+    types: [released]
 
 # on: [push]
 

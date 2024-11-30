@@ -151,8 +151,7 @@ xjson cadabra::CadabraJupyter::kernel_info_request_impl()
 	{
 	xjson result;
 	result["implementation"] = "Cadabra";
-	result["implementation_version"] = std::string(CADABRA_VERSION_MAJOR)+"."+CADABRA_VERSION_MINOR
-	                                   +"."+CADABRA_VERSION_PATCH;
+	result["implementation_version"] = std::string(CADABRA_VERSION_SEM);
 	result["language_info"]["name"] = "cadabra";
 	result["language_info"]["version"] = "2.0.0";
 	result["language_info"]["mimetype"] = "text/cadabra";
