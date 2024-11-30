@@ -152,10 +152,11 @@ void TeXView::TeXArea::on_size_allocate(Gtk::Allocation& allocation)
 	if(owner->window_width != 0) {
 		// std::cerr << "setting texview width = " << owner->window_width - 20 << std::endl;
 		allocation.set_width(owner->window_width - 20);
+		// allocation.set_height(need_height(owner->window_width - 20));
 		}
 	set_allocation(allocation);
-//	std::cerr << "**** offered allocation " << allocation.get_width()
-//				 << " x " << allocation.get_height() << std::endl;
+	// std::cerr << "**** offered allocation " << allocation.get_width()
+	// 			 << " x " << allocation.get_height() << std::endl;
 
 	if(use_microtex) {
 		if(allocation.get_width() != rendering_width + 2*padding_x) {
@@ -163,14 +164,17 @@ void TeXView::TeXArea::on_size_allocate(Gtk::Allocation& allocation)
 			rendering_width = allocation.get_width() - 2*padding_x;
 			layout_latex();
 			}
-// 	int extra = (int) (_padding * 2);
-// 	int my_height = _render->getHeight() + extra;
-// 	if(allocation.get_height() != my_height) {
-// //		std::cerr << "*** need new height " << my_height << std::endl;
-// //		set_size_request(rendering_width, my_height);
-// //		queue_resize();
-// //		queue_draw();
-// 		}
+		// Some truly undocumented behaviour is happening when messing with
+		// size allocation in gtk-3.0. In any case, if we need a new height,
+		// we need to request a new size as below.
+		int extra = (int) (padding_y * 2);
+		int my_height = _render->getHeight() + extra;
+		if(allocation.get_height() != my_height) {
+			// std::cerr << "*** need new height " << my_height << std::endl;
+			set_size_request(rendering_width, my_height);
+			queue_resize();
+			// queue_draw();
+			}
 		}
 	}
 
