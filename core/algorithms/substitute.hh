@@ -37,6 +37,10 @@ namespace cadabra {
 
 			Ex_comparator comparator;
 
+			/// Return the number of substitution rules which have been
+			/// pre-processed and sit in the cache.
+			static size_t cache_size();
+
 		private:
 			Ex&     args;
 
@@ -72,7 +76,7 @@ namespace cadabra {
 									  std::map<iterator, bool>& rhs_contains_dummies) const;
 					
 					// Count number of rules
-					int size() const;
+					size_t size() const;
 					
 					// Eliminate rules that are expired
 					void cleanup();

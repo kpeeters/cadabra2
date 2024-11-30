@@ -458,8 +458,10 @@ Algorithm::result_t substitute::apply(iterator& st)
 	}
 
 
-
-
+size_t substitute::cache_size()
+	{
+	return replacement_rules.size();
+	}
 
 void substitute::Rules::store(Ex& rules,
 								std::map<iterator, bool>& lhs_contains_dummies,
@@ -530,7 +532,7 @@ bool substitute::Rules::is_present(Ex& rules) const
 		}
 	}
 
-int substitute::Rules::size() const
+size_t substitute::Rules::size() const
 	{
 	return properties.size();
 	}
