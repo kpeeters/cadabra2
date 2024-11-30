@@ -908,7 +908,7 @@ void NotebookWindow::resize_codeinput_texview_all(int width)
    // have a maximum width equal to the window width (minus scrollbar),
 	// except when they contain Python code (which does not word-wrap).
 	auto it=doc.begin();
-	std::cerr << "----" << std::endl;
+	// std::cerr << "----" << std::endl;
 	while(it!=doc.end()) {
 		resize_codeinput_texview(it, width);
 		++it;
@@ -943,7 +943,7 @@ void NotebookWindow::resize_codeinput_texview(DTree::iterator it, int width)
 				Gtk::Allocation allocation = tex_view->image.get_allocation();
 				allocation.set_width(width - 20);
 				int need_height = tex_view->image.need_height(width - 20);
-				std::cerr << "Need height " << need_height << std::endl;
+				// std::cerr << "Need height " << need_height << std::endl;
 				allocation.set_height(need_height+100);
 				tex_view->image.size_allocate(allocation);
 				
