@@ -454,6 +454,19 @@ else()
     )
 endif()
 
+if(WIN32)
+  # Install the Python runtime packages.
+  set(PYLIBDIR "/ucrt64/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}")
+  configure_file(
+    ${CMAKE_SOURCE_DIR}/config/install_python_windows.cmake.in
+    ${CMAKE_BINARY_DIR}/install_python_windows.cmake
+    @ONLY
+  )
+  file(READ ${CMAKE_BINARY_DIR}/install_python_windows.cmake WTF)
+  message(STATUS "Python installation cmake file content:\n${WTF}")
+  install(SCRIPT ${CMAKE_BINARY_DIR}/install_python_windows.cmake)
+endif()
+
 install(TARGETS cadabra2-cli DESTINATION ${CDB_BIN_PATH})
 install(TARGETS cdb-nbtool DESTINATION ${CDB_BIN_PATH})
 
