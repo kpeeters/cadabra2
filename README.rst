@@ -402,6 +402,7 @@ Then install a compiler and the dependencies of Cadabra with::
     pacman -S mingw-w64-ucrt-x86_64-boost    
     pacman -S mingw-w64-ucrt-x86_64-sqlite3
     pacman -S mingw-w64-ucrt-x86_64-cmake
+    pacman -S mingw-w64-ucrt-x86_64-python
     pacman -S mingw-w64-ucrt-x86_64-python-matplotlib
     pacman -S mingw-w64-ucrt-x86_64-python-sympy
     pacman -S mingw-w64-ucrt-x86_64-osslsigncode
