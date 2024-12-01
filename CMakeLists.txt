@@ -524,6 +524,8 @@ if(WIN32)
     ${CMAKE_BINARY_DIR}/install_python_windows.cmake
     @ONLY
   )
+  file(READ ${CMAKE_BINARY_DIR}/install_python_windows.cmake WTF)
+  message(STATUS "Python installation cmake file content:\n${WTF}")
   install(SCRIPT ${CMAKE_BINARY_DIR}/install_python_windows.cmake)
 endif()
     
