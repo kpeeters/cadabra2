@@ -456,8 +456,9 @@ endif()
 
 if(WIN32)
   # Install the Python runtime packages.
+  set(PYLIBDIR "/ucrt64/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}")
   install(CODE [[
-      execute_process(COMMAND cygpath -m "/ucrt64/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}" OUTPUT_VARIABLE WINPYTHON OUTPUT_STRIP_TRAILING_WHITESPACE)
+      execute_process(COMMAND cygpath -m ${PYLIBDIR} OUTPUT_VARIABLE WINPYTHON OUTPUT_STRIP_TRAILING_WHITESPACE)
       file(INSTALL ${WINPYTHON} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)    
   ]])
 endif()
