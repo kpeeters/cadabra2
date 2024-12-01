@@ -456,7 +456,7 @@ endif()
 
 if(WIN32)
   # Install the Python runtime packages.
-  set(PYLIBDIR "/ucrt64/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}")
+  set(PYLIBDIR CACHE STRING "/ucrt64/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}")
   install(CODE [[
       execute_process(COMMAND cygpath -m ${PYLIBDIR} OUTPUT_VARIABLE WINPYTHON OUTPUT_STRIP_TRAILING_WHITESPACE)
       message(STATUS "Copying python runtime from ${PYLIBDIR} aka ${WINPYTHON}")
