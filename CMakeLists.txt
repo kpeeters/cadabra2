@@ -35,6 +35,10 @@ if(POLICY CMP0169)
   # but we still support 3.12; we call the old behaviour in
   # frontend/gtkmm/CMakeLists.txt
 endif()
+if(POLICY CMP0177)
+  cmake_policy(SET CMP0177 NEW)
+  message(STATUS "Set CMake policy CMP0177 to NEW (destination paths are normalised)")
+endif()
 
 cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
 set(CMAKE_CXX_STANDARD 17)
