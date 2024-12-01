@@ -4,9 +4,11 @@
 
 name: Windows 11
 
-on:
-  release:
-    types: [created]
+on: [push]
+
+# on:
+#   release:
+#     types: [created]
 
 defaults:
     run:
