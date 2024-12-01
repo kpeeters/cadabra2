@@ -515,6 +515,17 @@ if(WIN32)
   winstall(FILES /ucrt64/bin/gspawn-win64-helper-console.exe DESTINATION .)
   winstall(FILES /ucrt64/bin/gdk-pixbuf-query-loaders.exe    DESTINATION .)
 endif()
+
+if(WIN32)
+  # Install the Python runtime packages.
+  set(PYLIBDIR "/ucrt64/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}")
+  configure_file(
+    ${CMAKE_SOURCE_DIR}/config/install_python_windows.cmake.in
+    ${CMAKE_BINARY_DIR}/install_python_windows.cmake
+    @ONLY
+  )
+  install(SCRIPT ${CMAKE_BINARY_DIR}/install_python_windows.cmake)
+endif()
     
 #---------------------------------------------------------------------------
 # Provide uninstall target.
