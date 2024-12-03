@@ -465,7 +465,7 @@ if(WIN32)
   file(READ ${CMAKE_BINARY_DIR}/install_python_windows.cmake WTF)
   message(STATUS "Python installation cmake file content:\n${WTF}")
   #install(SCRIPT ${CMAKE_BINARY_DIR}/install_python_windows.cmake)
-  install(DIRECTORY ${PYLIBDIR} DESTINATION "@CMAKE_INSTALL_PREFIX@/lib")
+  install(DIRECTORY ${PYLIBDIR} DESTINATION lib)
 endif()
 
 install(TARGETS cadabra2-cli DESTINATION ${CDB_BIN_PATH})
