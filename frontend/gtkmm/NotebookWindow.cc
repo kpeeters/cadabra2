@@ -67,6 +67,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	dispatch_update_status.connect(sigc::mem_fun(*this, &NotebookWindow::update_status));
 
 	// Set the window icon.
+	set_default_icon_name("cadabra2-gtk");
 	set_icon_name("cadabra2-gtk");
 
 	// Query high-dpi settings. For all systems we can probe the
