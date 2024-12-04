@@ -1338,6 +1338,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 					}
 				else ci = new CodeInput(it, global_buffer, scale/display_scale, prefs,
 												canvasses[i]->scroll.get_vadjustment());
+
 				using namespace std::placeholders;
 				ci->relay_cursor_pos(std::bind(&NotebookWindow::set_statusbar_message, this, "", _1, _2));
 				if(read_only)
@@ -1392,6 +1393,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 
 		if(w!=0) {
 			canvasses[i]->visualcells[&(*it)]=newcell;
+			resize_codeinput_texview(it, last_configure_width);
 
 			// Document cells are easy; just add. They have no parent in the DTree.
 
