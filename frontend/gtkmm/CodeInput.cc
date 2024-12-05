@@ -794,7 +794,8 @@ bool CodeInput::exp_input_tv::on_focus_out_event(GdkEventFocus *event)
 
 bool CodeInput::exp_input_tv::on_motion_notify_event(GdkEventMotion* event)
 	{
-	// std::cerr << "MOTION" << std::endl;
+	// static int count=0;
+   //	std::cerr << "MOTION " << ++count << std::endl;
 	previous_value = vadjustment->get_value();
 	return Gtk::TextView::on_motion_notify_event(event);
 	}

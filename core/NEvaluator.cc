@@ -60,8 +60,17 @@ NTensor NEvaluator::evaluate()
 			 { name_set.find("\\log2"),    std::log2},
 			 { name_set.find("\\ln"),      std::log},
 			 { name_set.find("\\exp"),     std::exp},
-			 { name_set.find("\\sqrt"),    std::sqrt},			 			 
+			 { name_set.find("\\sqrt"),    std::sqrt},
 
+			 // Steps, absolute values and so on.
+
+			 { name_set.find("\\abs"),    std::abs},
+			 { name_set.find("\\floor"),  std::floor},
+			 { name_set.find("\\sign"),   [](double x) {
+				 if(x==0)     return  0.0;
+				 else if(x<0) return -1.0;
+				 else         return  1.0;
+				 } }
 	};
 
 	const auto n_pow  = name_set.find("\\pow");
