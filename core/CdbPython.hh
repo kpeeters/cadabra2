@@ -27,6 +27,10 @@ namespace cadabra {
 
 	int         is_python_code_complete(const std::string&, std::string& error);
 	
+	/// Determine if the python code `code` contains a reference to
+	/// the variable `variable` by parsing it into an AST.
+	bool code_contains_variable(const std::string& code, const std::string& variable);
+	
 	/// \ingroup files
 	/// Object to store pre-parsing intermediate results. Necessary
 	/// to keep things tidy but also in order to avoid the fact that

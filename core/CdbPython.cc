@@ -184,6 +184,55 @@ int cadabra::is_python_code_complete(const std::string& code, std::string& error
 		}
 	}
 
+bool cadabra::code_contains_variable(const std::string& code, const std::string& variable)
+	{
+	pybind11::scoped_interpreter guard{};	
+		
+	static std::string testcode = R"CODE(
+def contains_variable(code_str, variable_name):
+    """
+    Check if the Python code references a specific variable.
+    
+    Args:
+        code_str (str): The Python code as a string.
+        variable_name (str): The variable name to check for.
+
+    Returns:
+        bool: True if the variable is referenced, False otherwise.
+    """
+    import ast
+
+    class VariableVisitor(ast.NodeVisitor):
+        def __init__(self):
+            self.found = False
+        
+        def visit_Name(self, node):
+            if node.id == variable_name:
+                self.found = True
+
+    try:
+        # Parse the code into an AST
+        tree = ast.parse(code_str)
+        visitor = VariableVisitor()
+        visitor.visit(tree)
+        return visitor.found
+    except SyntaxError:
+        # Handle invalid Python code
+        return False
+)CODE";
+
+		try {
+			pybind11::exec(testcode);
+			pybind11::object contains_variable = pybind11::globals()["contains_variable"];
+			pybind11::object result = contains_variable(code, variable);
+			return result.cast<bool>();
+			}
+		catch(const pybind11::error_already_set& e) {
+			std::cerr << "Python error: " << e.what() << std::endl;
+			return false;
+			}
+		}
+
 cadabra::ConvertData::ConvertData()
 	{
 	}

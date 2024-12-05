@@ -2,6 +2,7 @@
 #include "../InstallPrefix.hh"
 #include <fstream>
 #include "py_helpers.hh"
+#include <pybind11/embed.h>
 #include "nlohmann/json.hpp"
 #include <filesystem>
 #include <iostream>
@@ -65,12 +66,18 @@ namespace cadabra {
 
 	std::string read_manual(pybind11::module& m, const char* category, const char* name)
 		{
-		// We are assuming that if the module is installed in
-		//    /usr/local/lib/python3.11/dist-packages/
-		// that the manual pages can be found at
+		// If the module is installed in
+		//
+		//    /usr/local/lib/pythonX.YY/dist-packages/
+		//
+		// (which is `install_prefix_of_module()`) or
+		//
+		//    /usr/local/lib/pythonX.YY/site-packages/
+		//
+		// the manual pages can be found at
+		//
 		//    /usr/local/share/cadabra2/manual/
-		// So in other words, these are relative to `Python_SITEARCH`,
-		// or what sysconfig calls `platlib`.
+		
 		std::string manual_page = install_prefix_of_module()
 			+ "/../../../share/cadabra2/manual/" + category + "/" + name + ".cnb";
 		std::ifstream ifs(manual_page);

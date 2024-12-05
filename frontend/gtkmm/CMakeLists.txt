@@ -95,6 +95,7 @@ set(cadabra_gtk_src
   ../common/TeXEngine.cc
   ../common/lodepng.cc
   # ../common/exec-stream.cc
+  ${CADABRA_CORE_DIR}/CdbPython.cc 
   ${CADABRA_LIBS_DIR}/tiny-process-library/process.cpp
   ${CADABRA_LIBS_DIR}/base64/base64.cc
 )
@@ -122,11 +123,13 @@ include_directories(
   "."
   "${CADABRA_CORE_DIR}"
   "${CADABRA_CLIENT_SERVER_DIR}"
+  "${CADABRA_LIBS_DIR}/pybind11/include"
   "${CADABRA_LIBS_DIR}/internal/include"
   "${CADABRA_LIBS_DIR}/websocketpp"
   "${CADABRA_LIBS_DIR}/tiny-process-library"
   "${CADABRA_LIBS_DIR}/nlohmann"   
   ${Boost_INCLUDE_DIRS}
+  ${Python_INCLUDE_DIRS}
   ${SQLITE3_INCLUDE_DIR}  
 )
 
