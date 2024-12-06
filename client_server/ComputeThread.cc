@@ -65,6 +65,8 @@ void ComputeThread::try_connect()
 
 void ComputeThread::run()
 	{
+	// This does *not* run on the GUI thread.
+	
 	init();
 	try_spawn_server();
 	try_connect();
@@ -252,13 +254,19 @@ void ComputeThread::on_close()
 
 void ComputeThread::cell_finished_running(DataCell::id_t id)
 	{
-	auto it=running_cells.find(id);
-	if(it==running_cells.end()) {
-		throw std::logic_error("Cannot find cell with id = "+std::to_string(id.id));
+	if(id.id==0) {
+		// This was code without a cell representation (run in
+		// response to e.g. a slider update). Ignore.
 		}
-
-	//	DTree::iterator ret = (*it).second;
-	running_cells.erase(it);
+	else {
+		auto it=running_cells.find(id);
+		if(it==running_cells.end()) {
+			throw std::logic_error("Cannot find cell with id = "+std::to_string(id.id));
+			}
+		
+		//	DTree::iterator ret = (*it).second;
+		running_cells.erase(it);
+		}
 	}
 
 void ComputeThread::on_message(const std::string& msg)
@@ -342,9 +350,11 @@ void ComputeThread::on_message(const std::string& msg)
 			bool finished = header["last_in_sequence"].get<bool>();
 
 			if (finished) {
-				std::shared_ptr<ActionBase> rs_action =
-				   std::make_shared<ActionSetRunStatus>(parent_id, false);
-				docthread->queue_action(rs_action);
+				if(parent_id.id!=0) {
+					std::shared_ptr<ActionBase> rs_action =
+						std::make_shared<ActionSetRunStatus>(parent_id, false);
+					docthread->queue_action(rs_action);
+					}
 				cell_finished_running(parent_id);
 				}
 
@@ -421,6 +431,12 @@ void ComputeThread::on_message(const std::string& msg)
 					}
 				else if (msg_type == "image_svg") {
 					DataCell result(cell_id, DataCell::CellType::image_svg, content["output"].get<std::string>());
+					std::shared_ptr<ActionBase> action =
+					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
+					docthread->queue_action(action);
+					}
+				else if (msg_type == "slider") {
+					DataCell result(cell_id, DataCell::CellType::slider, content["output"].get<std::string>());
 					std::shared_ptr<ActionBase> action =
 					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
@@ -551,6 +567,27 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		docthread->queue_action(action);
 		}
 	}
+
+void ComputeThread::update_variable_on_server(std::string variable, double value)
+	{
+	nlohmann::json req, header, content;
+	header["uuid"]="none";
+	header["cell_id"]=0;
+	header["cell_origin"]="client";
+	header["msg_type"]="execute_request";
+	req["auth_token"]=authentication_token;
+	req["header"]=header;
+	content["code"]=variable + "=" + std::to_string(value);
+	req["content"]=content;
+	
+	std::ostringstream str;
+	str << req << std::endl;
+	if(getenv("CADABRA_SHOW_SENT")) {
+		std::cerr << "SEND: " << req.dump(3) << std::endl;
+		}
+	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
+	}
+
 
 int ComputeThread::number_of_cells_executing() const
 	{

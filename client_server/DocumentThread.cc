@@ -2,6 +2,8 @@
 #include "Actions.hh"
 #include "DocumentThread.hh"
 #include "GUIBase.hh"
+#include "ComputeThread.hh"
+#include "CdbPython.hh"
 
 #include <typeinfo>
 #include <iostream>
@@ -190,6 +192,30 @@ void DocumentThread::queue_action(std::shared_ptr<ActionBase> ab)
 	pending_actions.push(ab);
 	}
 
+void DocumentThread::run_cells_referencing_variable(std::string variable, double value)
+	{
+	// First update the variable itself.
+	compute->update_variable_on_server(variable, value);
+
+	// Find all cells referencing this variable.
+	// FIXME: needs caching.
+	DTree::iterator it = doc.begin();
+	while(it!=doc.end()) {
+		if(it->cell_type==DataCell::CellType::python) {
+			if(cadabra::code_contains_variable(it->textbuf, variable)) {
+				// DTree::sibling_iterator sib=doc.begin(it);
+				// while(sib!=doc.end(it)) {
+				// 	auto nxt = sib;
+				// 	++nxt;
+				// 	gui->remove_cell(doc, sib);
+				// 	sib=nxt;
+				// 	}
+				compute->execute_cell(it);
+				}
+			}
+		++it;
+		}
+	}
 
 void DocumentThread::process_action_queue()
 	{

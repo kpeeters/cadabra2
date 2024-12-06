@@ -61,6 +61,12 @@ namespace cadabra {
 
 			void execute_interactive(uint64_t id, const std::string& code);
 
+			/// Update a variable in the kernel. This does essentially the
+			/// same thing as execute_cell, but will not refer to any
+			/// cell as it creates the code itself.
+
+			void update_variable_on_server(std::string variable, double value);
+			
 			/// Stop the current cell execution on the server and remove
 			/// all other cells from the run queue as well.
 

@@ -221,6 +221,8 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 		case DataCell::CellType::image_svg:
 			str << "<div class='image_svg'><img src='data:image/svg+xml;base64,";
 			break;
+		case DataCell::CellType::slider:
+			break;
 		case DataCell::CellType::input_form:
 			str << "<div class='input_form'>";
 			break;
@@ -233,6 +235,8 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 					str << it->textbuf;
 				else if(it->cell_type==DataCell::CellType::image_svg)
 					str << it->textbuf;
+				else if(it->cell_type==DataCell::CellType::slider) {
+					}
 				else if(it->cell_type!=DataCell::CellType::document && it->cell_type!=DataCell::CellType::latex) {
 					std::string out;
 					if(it->cell_type==DataCell::CellType::python)
@@ -299,6 +303,8 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 		case DataCell::CellType::image_svg:
 			str << "' /></div>\n";
 			break;
+		case DataCell::CellType::slider:
+			break;
 		case DataCell::CellType::input_form:
 			str << "</div>\n";
 		}
@@ -345,6 +351,9 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, nlohmann::json&
 			break;
 		case DataCell::CellType::image_svg:
 			json["cell_type"]="image_svg";
+			break;
+		case DataCell::CellType::slider:
+			json["cell_type"]="slider";
 			break;
 		case DataCell::CellType::input_form:
 			json["cell_type"]="input_form";
@@ -513,6 +522,10 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const nlohmann::j
 				DataCell dc(id, cadabra::DataCell::CellType::image_svg, textbuf.get<std::string>(), hide);
 				last=doc.append_child(loc, dc);
 				}
+			else if(cell_type=="slider") {
+				DataCell dc(id, cadabra::DataCell::CellType::slider, textbuf.get<std::string>(), hide);
+				last=doc.append_child(loc, dc);
+				}
 			else {
 				std::cerr << "cadabra-client: found unknown cell type '"+cell_type+"', ignoring" << std::endl;
 				continue;
@@ -586,6 +599,8 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		case DataCell::CellType::latex_view:
 			break;
 		case DataCell::CellType::error:
+			break;
+		case DataCell::CellType::slider:
 			break;
 		case DataCell::CellType::input_form:
 			break;
@@ -662,6 +677,7 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		case DataCell::CellType::error:
 		case DataCell::CellType::image_png:
 		case DataCell::CellType::image_svg:
+		case DataCell::CellType::slider:
 			break;
 		}
 
@@ -688,6 +704,7 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		case DataCell::CellType::error:
 		case DataCell::CellType::image_png:
 		case DataCell::CellType::image_svg:
+		case DataCell::CellType::slider:
 			break;
 		}
 

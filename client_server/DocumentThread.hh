@@ -69,6 +69,14 @@ namespace cadabra {
 
 			void queue_action(std::shared_ptr<ActionBase>);
 
+			/// Run all cells containing references to a given variable.
+			/// This will eventually call compute->execute on the
+			/// relevant cells, but is part of DocumentThread because
+			/// this function takes care of scanning through the document
+			/// to find out *which* cells to run.
+
+			void run_cells_referencing_variable(std::string variable, double value);
+			
 			/// Setup an empty new document with a single Python input cell.
 
 			void new_document();

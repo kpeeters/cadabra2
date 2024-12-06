@@ -221,17 +221,20 @@ def contains_variable(code_str, variable_name):
         return False
 )CODE";
 
-		try {
-			pybind11::exec(testcode);
-			pybind11::object contains_variable = pybind11::globals()["contains_variable"];
-			pybind11::object result = contains_variable(code, variable);
-			return result.cast<bool>();
-			}
-		catch(const pybind11::error_already_set& e) {
-			std::cerr << "Python error: " << e.what() << std::endl;
-			return false;
-			}
+	try {
+		pybind11::exec(testcode);
+		pybind11::object contains_variable = pybind11::globals()["contains_variable"];
+		pybind11::object result = contains_variable(code, variable);
+		return result.cast<bool>();
 		}
+	catch(const pybind11::error_already_set& e) {
+		std::cerr << "Python error: " << e.what() << std::endl;
+		return false;
+		}
+	}
+
+
+
 
 cadabra::ConvertData::ConvertData()
 	{

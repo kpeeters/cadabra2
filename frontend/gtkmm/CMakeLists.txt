@@ -89,6 +89,7 @@ set(cadabra_gtk_src
   TeXView.cc 
   CodeInput.cc 
   ImageView.cc
+  SliderView.cc
   Cadabra.cc
   Console.cc
   Keywords.cc 

@@ -9,6 +9,7 @@
 #include "ImageView.hh"
 #include "CodeInput.hh"
 #include "DataCell.hh"
+#include "SliderView.hh"
 
 namespace cadabra {
 
@@ -24,11 +25,12 @@ namespace cadabra {
 			/// of these cells below should derive from Gtk::VBox.
 
 			union {
-				Gtk::VBox    *document; // top-level cell; only one ever occurs in a document
-				CodeInput    *inbox;
-				TeXView      *outbox;
-				ImageView    *imagebox;
-				};
+					Gtk::VBox    *document; // top-level cell; only one ever occurs in a document
+					CodeInput    *inbox;
+					TeXView      *outbox;
+					ImageView    *imagebox;
+					SliderView   *slider;
+			};
 		};
 
 	}

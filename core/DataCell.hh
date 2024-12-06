@@ -41,6 +41,7 @@ namespace cadabra {
 				input_form, ///< output: cell containing input form of preceding output cell
 				image_png,  ///< output: cell showing a base64 encoded PNG image
 				image_svg,  ///< output: cell showing an SVG image
+				slider,     ///< output: cell showing a slider
 				error,      ///< output: cell showing LaTeX text for errors
 				// section
 				};

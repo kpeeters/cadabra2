@@ -34,6 +34,8 @@
 #include "microtex.h"
 #include <pangomm/init.h>
 
+#include <nlohmann/json.hpp>
+
 using namespace cadabra;
 
 // #define DEBUG 1
@@ -1401,6 +1403,22 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				w=newcell.imagebox;
 				break;
 				}
+			case DataCell::CellType::slider: {
+				try {
+					SliderView *iv=new SliderView(it->textbuf);
+					iv->adjustment->signal_value_changed().connect(
+						[this, iv]() {
+						on_slider_changed(iv->get_variable(), iv->adjustment->get_value());
+						});
+
+					newcell.slider = manage( iv );
+					w=newcell.slider;
+					}
+				catch(const nlohmann::json::parse_error& ex) {
+					std::cerr << "NotebookWindow::add_cell: problem parsing SliderView JSON settings." << std::endl;
+					}
+				break;
+				}
 			case DataCell::CellType::input_form:
 				// This cell is there only for cutnpaste functionality; do not display.
 				break;
@@ -1721,6 +1739,8 @@ void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 		al=focusbox.imagebox->get_allocation();
 	else if(cell->cell_type==DataCell::CellType::image_svg)
 		al=focusbox.imagebox->get_allocation();
+	else if(cell->cell_type==DataCell::CellType::slider)
+		al=focusbox.slider->get_allocation();
 	else
 		return;
 
@@ -1753,6 +1773,12 @@ bool NotebookWindow::on_vscroll_changed(Gtk::ScrollType, double )
 	// FIXME: does not catch scroll wheel events.
 	follow_cell=doc.end();
 	return false;
+	}
+
+void NotebookWindow::on_slider_changed(std::string variable, double value)
+	{
+	run_cells_referencing_variable(variable, value);
+ 	// std::cerr << "Variable " << variable << " changed to value " << value << std::endl;
 	}
 
 //bool NotebookWindow::on_mouse_wheel(GdkEventButton *b)

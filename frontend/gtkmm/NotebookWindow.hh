@@ -69,6 +69,9 @@ namespace cadabra {
 			// Handler for vertical scrollbar changes.
 			bool on_vscroll_changed(Gtk::ScrollType, double);
 
+			// Handler for SliderView change events.
+			void on_slider_changed(std::string variable, double value);
+			
 			// Handler for mouse wheel events.
 			// bool on_mouse_wheel(GdkEventButton*);
 
