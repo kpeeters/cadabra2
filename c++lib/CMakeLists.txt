@@ -31,6 +31,9 @@ endif()
 set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY TRUE)
 
 find_package(Python REQUIRED COMPONENTS Interpreter Development)
+message(STATUS "Found python library: ${Python_LIBRARIES}")
+message(STATUS "Found python headers: ${Python_INCLUDE_DIRS}")
+message(STATUS "Python version is ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.")
 
 #---------------------------------------------------------------------------
 # User options.
