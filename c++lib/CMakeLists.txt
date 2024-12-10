@@ -289,6 +289,7 @@ file(APPEND "${CMAKE_BINARY_DIR}/include/cadabra2++.hh" "\n//Helper functions\n$
 set(LIB_INCLUDE_DIRS
 	"." 
 	"${CADABRA_CORE_DIR}"
+	"${CADABRA_LIBS_DIR}/pybind11/include"
 	"${CADABRA_LIBS_DIR}/internal/include"
 	"${CADABRA_LIBS_DIR}/dbg"
 	${Python_INCLUDE_DIRS}
