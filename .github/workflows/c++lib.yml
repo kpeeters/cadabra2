@@ -1,0 +1,25 @@
+# This is a build which gets triggered on every commit push, to
+# ensure that Cadabra builds as c++lib. Does not yet contain any
+# tests, it just checks for build issues.
+
+name: c++lib
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: get dependencies
+      run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev libmpfr-dev libmpc-dev 
+
+    - name: configure
+      run:  mkdir build-lib && cd build-lib && cmake -DBUILD_AS_CPP_LIBRARY=ON ..
+      
+    - name: make
+      run:  cd build-lib && make
+      

@@ -143,6 +143,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/properties/Depends.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/properties/DependsInherit.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/properties/Derivative.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/properties/DerivativeOp.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/properties/Determinant.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/properties/Diagonal.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/properties/DifferentialForm.cc
@@ -290,6 +291,7 @@ set(LIB_INCLUDE_DIRS
 	"${CADABRA_CORE_DIR}"
 	"${CADABRA_LIBS_DIR}/internal/include"
 	"${CADABRA_LIBS_DIR}/dbg"
+	${Python_INCLUDE_DIRS}
 )
 message("${LIB_INCLUDE_DIRS}")
 

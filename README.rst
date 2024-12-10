@@ -487,7 +487,8 @@ Building Cadabra as C++ library
 If you want to use the functionality of Cadabra inside your own C++
 programs, you can build Cadabra as a shared library. To do this::
 
-    mkdir build
+    mkdir build-lib
+    cd build-lib
     cmake -DBUILD_AS_CPP_LIBRARY=ON ..
     make
     sudo make install
