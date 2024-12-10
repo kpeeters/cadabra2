@@ -327,17 +327,32 @@ target_link_libraries(cadabra2++_static ${GMPXX_LIB} ${GMP_LIB})
 
 # Trivial example
 add_executable(trivial trivial.cc)
-target_include_directories(trivial PUBLIC "${CMAKE_BINARY_DIR}/include" "${CMAKE_BINARY_DIR}/include/cadabra2++")
+target_include_directories(trivial PUBLIC
+  "${CADABRA_LIBS_DIR}/pybind11/include"
+  "${CMAKE_BINARY_DIR}/include"
+  "${CMAKE_BINARY_DIR}/include/cadabra2++"
+  ${Python_INCLUDE_DIRS}
+)
 target_link_libraries(trivial cadabra2++)
- 
+
 # Sample executable
 add_executable(simple simple.cc)
-target_include_directories(simple PUBLIC "${CMAKE_BINARY_DIR}/include" "${CMAKE_BINARY_DIR}/include/cadabra2++")
+target_include_directories(simple PUBLIC
+  "${CADABRA_LIBS_DIR}/pybind11/include"
+  "${CMAKE_BINARY_DIR}/include"
+  "${CMAKE_BINARY_DIR}/include/cadabra2++"
+  ${Python_INCLUDE_DIRS}
+)
 target_link_libraries(simple cadabra2++)
  
 # Test for adjform
 add_executable(adjform adjform.cc)
-target_include_directories(adjform PUBLIC "${CMAKE_BINARY_DIR}/include" "${CMAKE_BINARY_DIR}/include/cadabra2++")
+target_include_directories(adjform PUBLIC
+  "${CADABRA_LIBS_DIR}/pybind11/include"
+  "${CMAKE_BINARY_DIR}/include"
+  "${CMAKE_BINARY_DIR}/include/cadabra2++"
+  ${Python_INCLUDE_DIRS}
+)
 target_link_libraries(adjform cadabra2++)
  
 # Test for numerical evaluation
