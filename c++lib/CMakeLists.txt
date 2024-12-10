@@ -342,7 +342,12 @@ target_link_libraries(adjform cadabra2++)
  
 # Test for numerical evaluation
 add_executable(nevaluate nevaluate.cc)
-target_include_directories(nevaluate PUBLIC "${CMAKE_BINARY_DIR}/include" "${CMAKE_BINARY_DIR}/include/cadabra2++")
+target_include_directories(nevaluate PUBLIC
+  "${CADABRA_LIBS_DIR}/pybind11/include"
+  "${CMAKE_BINARY_DIR}/include"
+  "${CMAKE_BINARY_DIR}/include/cadabra2++"
+  ${Python_INCLUDE_DIRS}
+)
 target_link_libraries(nevaluate cadabra2++)
  
 
