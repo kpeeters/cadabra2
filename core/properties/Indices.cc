@@ -40,42 +40,48 @@ bool Indices::parse(Kernel& kernel, std::shared_ptr<Ex> ex, keyval_t& keyvals)
 	keyval_t::const_iterator ki=keyvals.begin();
 	while(ki!=keyvals.end()) {
 		if(ki->first=="name") {
-			if(*ki->second->multiplier!=1) {
+			if(*ki->second.begin()->multiplier!=1) 
 				throw std::logic_error("Indices: use quotes to label names when they start with a number.");
-				}
-			set_name=*ki->second->name;
+			if(!ki->second.is_string())
+				throw std::logic_error("Indices: label has to be a normal string, not a mathematical expression.");
+			
+			set_name=*ki->second.begin()->name;
 			if(set_name.size()>0) {
 				if(set_name[0]=='\"' && set_name[set_name.size()-1]=='\"')
 					set_name=set_name.substr(1,set_name.size()-2);
 				}
 			}
 		else if(ki->first=="parent") {
-			parent_name=*ki->second->name;
+			if(*ki->second.begin()->multiplier!=1) 
+				throw std::logic_error("Indices: use quotes to label names when they start with a number.");
+			if(!ki->second.is_string())
+				throw std::logic_error("Indices: 'parent' has to be a normal string, not a mathematical expression.");
+
+			parent_name=*ki->second.begin()->name;
 			if(parent_name.size()>0) {
 				if(parent_name[0]=='\"' && parent_name[set_name.size()-1]=='\"')
 					parent_name=parent_name.substr(1,parent_name.size()-2);
 				}
 			}
 		else if(ki->first=="position") {
-			if(*ki->second->name=="free")
+			if(ki->second.equals("free"))
 				position_type=free;
-			else if(*ki->second->name=="fixed")
+			else if(ki->second.equals("fixed"))
 				position_type=fixed;
-			else if(*ki->second->name=="independent")
+			else if(ki->second.equals("independent"))
 				position_type=independent;
 			else throw ConsistencyException("Position type should be fixed, free or independent.");
 			}
 		else if(ki->first=="values") {
 			//std::cerr << "got values keyword " << *(ki->second->name) << std::endl;
-			if(*ki->second->name=="\\sequence") {
+			if(*ki->second.begin()->name=="\\sequence") {
 				// Only accept a sequence if both start and end are explicit integers.
-				Ex::sibling_iterator sqit1 = Ex::begin(ki->second);
-				Ex::sibling_iterator sqit2 = sqit1;
-				++sqit2;
+				Ex::sibling_iterator sqit1 = Ex::child(ki->second.begin(), 0);
+				Ex::sibling_iterator sqit2 = Ex::child(ki->second.begin(), 1);
 				if(!sqit1->is_integer() || !sqit2->is_integer()) 
-					throw ConsistencyException("Value sequence for Indices property not explicit integers.");
+					throw ConsistencyException("Value sequence for Indices property should contain explicit integers.");
 
-				auto args = std::make_shared<cadabra::Ex>(ki->second);
+				auto args = std::make_shared<cadabra::Ex>(ki->second.begin());
 				auto prop = new Integer();
 				kernel.inject_property(prop, ex, args);
 
@@ -90,7 +96,7 @@ bool Indices::parse(Kernel& kernel, std::shared_ptr<Ex> ex, keyval_t& keyvals)
 				continue;
 				}
 
-			collect_index_values(ki->second);
+			collect_index_values(ki->second.begin());
 			// If all values are integers, add an `Integer' property for the object,
 			// listing these integers.
 			bool is_number=true;

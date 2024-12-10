@@ -178,6 +178,25 @@ namespace cadabra {
 		return to_long(*(begin()->multiplier));
 		}
 
+	bool Ex::is_string() const
+		{
+		iterator it=begin();
+		if(it != end()) {
+			multiplier_t mult = *it->multiplier;
+			++it;
+			if(it==end() && mult==1)
+				return true;
+			}
+		return false;
+		}
+
+	bool Ex::equals(const std::string& str) const
+		{
+		if(is_string())
+			return (*begin()->name == str);
+		throw ConsistencyException("Expected string, found maths expression.");
+		}
+
 	bool Ex::is_empty() const
 		{
 		return begin()==end();

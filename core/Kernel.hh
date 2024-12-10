@@ -19,6 +19,7 @@ namespace cadabra {
 			~Kernel();
 
 			/// Inject a property into the system and attach it to the given pattern.
+			/// Transfers property ownership to the kernel.
 			void inject_property(property *prop, std::shared_ptr<Ex> pattern, std::shared_ptr<Ex> property_arguments);
 
 			/// Create an Ex expression object from a string, which will be parsed.

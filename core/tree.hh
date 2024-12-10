@@ -111,7 +111,7 @@ class tree {
 
 		tree();                                         // empty constructor
 		tree(const T&);                                 // constructor setting given element as head
-		tree(const iterator_base&);
+		tree(const iterator_base&);                     // create tree with copy of subtree at iterator
 		tree(const tree<T, tree_node_allocator>&);      // copy constructor
 		tree(tree<T, tree_node_allocator>&&);           // move constructor
 		~tree();

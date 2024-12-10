@@ -28,8 +28,12 @@ bool Trace::parse(Kernel&, keyval_t& keyvals)
 	if(kv!=keyvals.end())
 		obj = kv->second;
 	kv=keyvals.find("indices");
-	if(kv!=keyvals.end())
-		index_set_name=*(kv->second->name);
+	if(kv!=keyvals.end()) {
+		if(kv->second.is_string())
+			index_set_name=*(kv->second.begin()->name);
+		else
+			throw ConsistencyException("Trace: 'indices' argument should be a string.");
+		}
 	return true;
 	}
 

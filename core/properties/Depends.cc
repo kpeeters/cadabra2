@@ -24,16 +24,16 @@ bool Depends::parse(Kernel& kernel, keyval_t& kv)
 	//	Ex::iterator comma = dependencies_.append_child(dependencies_.begin(), str_node("\\comma"));
 	while(it!=kv.end()) {
 		if(it->first=="dependants") {
-			const Indices    *dum=pr.get<Indices>(it->second, true);
-			const Coordinate *crd=pr.get<Coordinate>(it->second);
-			const Derivative *der=pr.get<Derivative>(it->second);
-			const Accent     *acc=pr.get<Accent>(it->second);
+			const Indices    *dum=pr.get<Indices>(it->second.begin(), true);
+			const Coordinate *crd=pr.get<Coordinate>(it->second.begin());
+			const Derivative *der=pr.get<Derivative>(it->second.begin());
+			const Accent     *acc=pr.get<Accent>(it->second.begin());
 			if(dum==0 && crd==0 && der==0 && acc==0) {
-				throw ArgumentException(std::string("Depends: ")+*it->second->name
+				throw ArgumentException(std::string("Depends: ")+*it->second.begin()->name
 				                        +" lacks property Coordinate, Derivative, Accent or Indices.\nIn 2.x, make sure to write dependence on a derivative\nas A::Depends(\\partial{#}), note the '{#}'.");
 				}
 			//			std::cout << "adding " << *it->second->name << " to deps list" << std::endl;
-			dependencies_.append_child(comma, it->second);
+			dependencies_.append_child(comma, it->second.begin());
 			}
 		++it;
 		}

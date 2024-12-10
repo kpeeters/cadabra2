@@ -26,12 +26,12 @@ bool TableauSymmetry::parse(Kernel&, keyval_t& keyvals)
 
 	while(kvit!=keyvals.end()) {
 		if(kvit->first=="shape") {
-			shape=kvit->second;
+			shape=kvit->second.begin();
 			gotshape=true;
 			}
 		if(kvit->first=="indices") {
 			gotindices=true;
-			indices=kvit->second;
+			indices=kvit->second.begin();
 			}
 
 		if(gotshape && gotindices) {

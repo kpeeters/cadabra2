@@ -1,5 +1,6 @@
 
 #include "Weight.hh"
+#include "Exceptions.hh"
 
 using namespace cadabra;
 
@@ -15,8 +16,12 @@ std::string Weight::name() const
 bool Weight::parse(Kernel& k, std::shared_ptr<Ex> ex, keyval_t& kv)
 	{
 	keyval_t::const_iterator kvit=kv.find("value");
-	if(kvit!=kv.end()) value_=*kvit->second->multiplier;
-	else               value_=1;
+	if(kvit!=kv.end()) {
+		if(kvit->second.is_rational()==false)
+			throw ConsistencyException("Weight: weight should be an explicit rational.");
+		value_=*kvit->second.begin()->multiplier;
+		}
+	else value_=1;
 
 	return WeightBase::parse(k, ex, kv);
 	}

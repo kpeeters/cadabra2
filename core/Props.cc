@@ -264,12 +264,12 @@ bool property::parse_one_argument(Ex::iterator arg, keyval_t& keyvals)
 		Ex::sibling_iterator val=key;
 		++val;
 		if(val==arg.end()) return false;
-		keyvals.push_back(keyval_t::value_type(*arg.begin()->name, val));
+		keyvals.push_back(keyval_t::value_type(*arg.begin()->name, Ex(val)));
 		}
 	else {
 		if(unnamed_argument()!="") {
 			// std::cerr << unnamed_argument() << " unnamed " << *arg->name << std::endl;
-			keyvals.push_back(keyval_t::value_type(unnamed_argument(), arg));
+			keyvals.push_back(keyval_t::value_type(unnamed_argument(), Ex(arg)));
 			}
 		else return false;
 		}
@@ -321,7 +321,7 @@ bool labelled_property::parse(Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator lit=keyvals.find("label");
 	if(lit!=keyvals.end()) {
-		label=*lit->second->name;
+		label=*lit->second.begin()->name;
 		return true;
 		}
 	else {

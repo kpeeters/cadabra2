@@ -15,19 +15,18 @@ bool Integer::parse(Kernel& kernel, keyval_t& keyvals)
 	{
 	keyval_t::iterator kv=keyvals.find("range");
 	if(kv!=keyvals.end()) {
-		from=Ex(Ex::child(kv->second,0));
-		to  =Ex(Ex::child(kv->second,1));
-		//	tr.subtree(from, tr.child(seq,0), tr.child(seq,1));
-		//	tr.subtree(to,   tr.child(seq,1), tr.end(seq));
-		//	from=to_long(*(tr.child(seq,0)->multiplier));
-		//	to  =to_long(*(tr.child(seq,1)->multiplier));
+		if(*kv->second.begin()->name!="\\sequence")
+			throw ConsistencyException("Integer range should use '..' notation.");
+
+		from=Ex(Ex::child(kv->second.begin(), 0));
+		to  =Ex(Ex::child(kv->second.begin(), 1));
 
 		Ex::iterator sm=difference.set_head(str_node("\\sum"));
-		difference.append_child(sm,to.begin())->fl.bracket=str_node::b_round;
-		Ex::iterator term2=difference.append_child(sm,from.begin());
+		difference.append_child(sm, to.begin())->fl.bracket=str_node::b_round;
+		Ex::iterator term2=difference.append_child(sm, from.begin());
 		flip_sign(term2->multiplier);
 		term2->fl.bracket=str_node::b_round;
-		difference.append_child(sm,str_node("1"))->fl.bracket=str_node::b_round;
+		difference.append_child(sm, str_node("1"))->fl.bracket=str_node::b_round;
 
 		Ex::sibling_iterator sib=difference.begin(sm);
 		while(sib!=difference.end(sm)) {

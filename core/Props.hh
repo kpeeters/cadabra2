@@ -67,8 +67,8 @@ namespace cadabra {
 
 	class keyval_t {
 		public:
-			typedef std::pair<std::string, Ex::iterator> kvpair_t;
-			typedef std::list<kvpair_t>                       kvlist_t;
+			typedef std::pair<std::string, Ex> kvpair_t;
+			typedef std::list<kvpair_t>        kvlist_t;
 
 			typedef kvlist_t::const_iterator const_iterator;
 			typedef kvlist_t::iterator       iterator;

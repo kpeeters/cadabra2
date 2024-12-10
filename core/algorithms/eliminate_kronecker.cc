@@ -121,7 +121,7 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 		else ++it;
 		}
 
-	// the product may have reduced to a single term or even just a constant
+	// the product may have reduced to a single factor or even just a constant
 	//	txtout << "exiting eliminate" << std::endl;
 	//	prod_unwrap_single_term(st);
 	//	txtout << st.node << " " << tr.parent(st).node << std::endl;
@@ -135,7 +135,7 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 		if(ff==tr.end(st)) {
 			tr.begin(st)->fl.bracket=st->fl.bracket;
 			tr.begin(st)->fl.parent_rel=st->fl.parent_rel;
-			tr.begin(st)->multiplier=st->multiplier;
+			multiply( tr.begin(st)->multiplier, *st->multiplier );
 			tr.flatten(st);
 			st=tr.erase(st);
 			}

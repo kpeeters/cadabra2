@@ -22,7 +22,7 @@ bool Metric::parse(Kernel&, keyval_t& keyvals)
 	keyval_t::const_iterator kv=keyvals.find("signature");
 	signature=1;
 	if(kv!=keyvals.end())
-		signature=to_long(*(kv->second->multiplier));
+		signature=to_long(*(kv->second.begin()->multiplier));
 	return true;
 	}
 

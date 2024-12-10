@@ -142,13 +142,17 @@ namespace cadabra {
 	class Ex : public std::enable_shared_from_this<Ex>, public tree<str_node> {
 		public:
 			Ex();
-			//		Ex(const tree<str_node>&);
+			/// Create a new Ex with a copy of the subtree at the given iterator.
 			Ex(tree<str_node>::iterator);
+			/// Create new Ex with single head node being a copy of the given node.
 			Ex(const str_node&);
+			/// Copy constructor: create a full copy of the given other Ex.
 			Ex(const Ex&);
 			/// Initialise with given string as head node (does not parse this string).
 			Ex(const std::string&);
+			/// Create a single-node Ex representing the given integer.
 			Ex(int);
+			/// Create a single-node Ex representing the given float.
 			Ex(float);
 
 			Ex& operator=(Ex);
@@ -191,8 +195,12 @@ namespace cadabra {
 			/// FIXME: add tests for integers as well.
 			bool          is_rational() const;
 			multiplier_t  to_rational() const;
-			bool          is_integer() const;
-			long          to_integer() const;
+			bool          is_integer()  const;
+			long          to_integer()  const;
+			bool          is_string()   const;
+
+			/// Comparison operators with primitive types.
+			bool          equals(const std::string&) const;
 
 			/// Test if the expression is empty (no content at all).
 			bool          is_empty() const;

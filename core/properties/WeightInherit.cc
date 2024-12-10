@@ -1,6 +1,7 @@
 
 #include "WeightInherit.hh"
 #include "Kernel.hh"
+#include "Exceptions.hh"
 
 using namespace cadabra;
 
@@ -22,16 +23,19 @@ bool WeightInherit::parse(Kernel& k, std::shared_ptr<Ex> ex, keyval_t& kv)
 	{
 	keyval_t::const_iterator tpit=kv.find("type");
 	if(tpit!=kv.end()) {
-		if(*tpit->second->name=="multiplicative") combination_type=multiplicative;
-		else if(*tpit->second->name=="additive")  combination_type=additive;
-		else if(*tpit->second->name=="power")     combination_type=power;
+		if(tpit->second.equals("multiplicative")) combination_type=multiplicative;
+		else if(tpit->second.equals("additive"))  combination_type=additive;
+		else if(tpit->second.equals("power"))     combination_type=power;
 		else throw ArgumentException("weight type must be 'multiplicative', 'additive' or 'power'.");
 		}
 	else combination_type=multiplicative;
 
 	tpit = kv.find("self");
 	if(tpit!=kv.end()) {
-		value_self=*tpit->second->multiplier;
+		if(tpit->second.is_rational()==false)
+			throw ConsistencyException("WeightInherit: 'self' value should be an explicit rational.");
+		
+		value_self=*tpit->second.begin()->multiplier;
 		}
 	else value_self=0;
 
