@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <glibmm/spawn.h>
 #include "internal/unistd.h"
+#include "CdbPython.hh"
 
 using namespace cadabra;
 
@@ -492,7 +493,7 @@ void ComputeThread::execute_interactive(uint64_t id, const std::string& code)
 	interactive_cells.insert(id);
 	}
 
-void ComputeThread::execute_cell(DTree::iterator it)
+void ComputeThread::execute_cell(DTree::iterator it, std::string no_assign)
 	{
 	// This absolutely has to be run on the main GUI thread.
 	assert(gui_thread_id==std::this_thread::get_id());
@@ -541,7 +542,10 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		header["msg_type"]="execute_request";
 		req["auth_token"]=authentication_token;
 		req["header"]=header;
-		content["code"]=dc.textbuf;
+		if(no_assign!="") 
+			content["code"]=remove_variable_assignments(dc.textbuf, no_assign);
+		else
+			content["code"]=dc.textbuf;
 		req["content"]=content;
 
 		gui->on_kernel_runstatus(true);

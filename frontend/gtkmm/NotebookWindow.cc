@@ -776,23 +776,6 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		set_stop_sensitive(false);
 		}
 
-	std::string code1 = R"(
-x = 5
-print(x)
-y = xyz + 2
-)";
-
-	std::string code2 = R"(
-x = 5
-print(x)
-y = xyzw + 2
-)";
-
-	std::string variable = "xyz";
-
-	std::cerr << cadabra::code_contains_variable(code1, variable) << ", "
-				 << cadabra::code_contains_variable(code2, variable) << std::endl;
-	
 	new_document();
 	}
 

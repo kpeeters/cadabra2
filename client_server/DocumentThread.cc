@@ -210,7 +210,8 @@ void DocumentThread::run_cells_referencing_variable(std::string variable, double
 				// 	gui->remove_cell(doc, sib);
 				// 	sib=nxt;
 				// 	}
-				compute->execute_cell(it);
+
+				compute->execute_cell(it, variable);
 				}
 			}
 		++it;

@@ -57,7 +57,7 @@ namespace cadabra {
 			/// directly, and will also never modify any other cells in
 			/// the document tree.
 
-			void execute_cell(DTree::iterator);
+			void execute_cell(DTree::iterator, std::string no_assign="");
 
 			void execute_interactive(uint64_t id, const std::string& code);
 

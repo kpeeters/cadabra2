@@ -2,6 +2,7 @@
 #pragma once
 
 #include <string>
+#include <set>
 
 namespace cadabra {
 
@@ -30,7 +31,11 @@ namespace cadabra {
 	/// Determine if the python code `code` contains a reference to
 	/// the variable `variable` by parsing it into an AST.
 	bool code_contains_variable(const std::string& code, const std::string& variable);
-	
+
+	bool variables_in_code(const std::string& code, std::set<std::string>& variables);
+
+	std::string remove_variable_assignments(const std::string& code, const std::string& variable);
+
 	/// \ingroup files
 	/// Object to store pre-parsing intermediate results. Necessary
 	/// to keep things tidy but also in order to avoid the fact that
@@ -58,7 +63,7 @@ namespace cadabra {
 	///
 	/// Returns two strings, one which should be prefixed to the block so far, the other postfixed.
 
-	std::pair<std::string, std::string> convert_line(const std::string&, ConvertData& cv, bool display); //std::string& lhs, std::string& rhs, std::string& op, std::string& indent, bool display);
+	std::pair<std::string, std::string> convert_line(const std::string&, ConvertData& cv, bool display);
 
 	/// \ingroup files
 	/// Convert a Cadabra notebook file to pure Python. This gets

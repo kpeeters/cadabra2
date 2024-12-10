@@ -184,21 +184,105 @@ int cadabra::is_python_code_complete(const std::string& code, std::string& error
 		}
 	}
 
+std::string cadabra::remove_variable_assignments(const std::string& code, const std::string& variable)
+	{
+	pybind11::scoped_interpreter guard{};	
+
+	static std::string removal_code = R"PYTHON(
+import ast
+
+class AssignmentRemover(ast.NodeTransformer):
+    def __init__(self, var_name):
+        self.var_name = var_name
+
+    def visit_Assign(self, node):
+        for target in node.targets:
+            if isinstance(target, ast.Name) and target.id == self.var_name:
+                return ast.Pass()
+        return node
+
+    def visit_AnnAssign(self, node):
+        if isinstance(node.target, ast.Name) and node.target.id == self.var_name:
+            return ast.Pass()
+        return node
+
+    def visit_AugAssign(self, node):
+        if isinstance(node.target, ast.Name) and node.target.id == self.var_name:
+            return ast.Pass()
+        return node
+
+def remove_assignments(code: str, var_name: str) -> str:
+    tree = ast.parse(code)
+    transformer = AssignmentRemover(var_name)
+    modified_tree = transformer.visit(tree)
+    ast.fix_missing_locations(modified_tree)
+    return ast.unparse(modified_tree)
+)PYTHON";
+
+	
+	try {
+		pybind11::exec(removal_code);
+		pybind11::object remove_assignments = pybind11::globals()["remove_assignments"];
+		pybind11::object result = remove_assignments(code, variable);
+		return result.cast<std::string>();
+		}
+	catch(const pybind11::error_already_set& e) {
+		std::cerr << "Python error: " << e.what() << std::endl;
+		return code;
+		}
+	}
+
+
 bool cadabra::code_contains_variable(const std::string& code, const std::string& variable)
 	{
 	pybind11::scoped_interpreter guard{};	
 		
-	static std::string testcode = R"CODE(
+	static std::string testcode = R"PYTHON(
 def contains_variable(code_str, variable_name):
-    """
-    Check if the Python code references a specific variable.
-    
-    Args:
-        code_str (str): The Python code as a string.
-        variable_name (str): The variable name to check for.
+    import ast
 
-    Returns:
-        bool: True if the variable is referenced, False otherwise.
+    class VariableVisitor(ast.NodeVisitor):
+        def __init__(self):
+            self.found = False
+        
+        def visit_Name(self, node):
+            if node.id == variable_name:
+                self.found = True
+
+    try:
+        tree = ast.parse(code_str)
+        visitor = VariableVisitor()
+        visitor.visit(tree)
+        return visitor.found
+    except SyntaxError:
+        return False
+   )PYTHON";
+
+	try {
+		pybind11::exec(testcode);
+		pybind11::object contains_variable = pybind11::globals()["contains_variable"];
+		pybind11::object result = contains_variable(code, variable);
+		return result.cast<bool>();
+		}
+	catch(const pybind11::error_already_set& e) {
+		std::cerr << "Python error: " << e.what() << std::endl;
+		return false;
+		}
+	}
+
+bool cadabra::variables_in_code(const std::string& code, std::set<std::string>& variables)
+	{
+	// It would be great if we could parse Python code and then walk
+	// the AST directly using the Python C API. However, that does not
+	// seem to exist (or rather, it seems to have been removed, as the
+	// `ast.h` header is no longer public). So we have to do all this
+	// in Python using the `ast` module, and then move the resulting
+	// variable list to the C++ side.
+	
+	static std::string testcode = R"CODE(
+def variable_set(code_str, variable_name):
+    """
+    Collect all variable names in a piece of Python code.
     """
     import ast
 
@@ -223,8 +307,9 @@ def contains_variable(code_str, variable_name):
 
 	try {
 		pybind11::exec(testcode);
-		pybind11::object contains_variable = pybind11::globals()["contains_variable"];
-		pybind11::object result = contains_variable(code, variable);
+		pybind11::object variable_set = pybind11::globals()["variable_set"];
+		pybind11::object result = variable_set(code);
+		
 		return result.cast<bool>();
 		}
 	catch(const pybind11::error_already_set& e) {
@@ -232,8 +317,6 @@ def contains_variable(code_str, variable_name):
 		return false;
 		}
 	}
-
-
 
 
 cadabra::ConvertData::ConvertData()
