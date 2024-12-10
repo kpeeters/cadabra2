@@ -30,6 +30,8 @@ endif()
 # build the samples.
 set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY TRUE)
 
+find_package(Python REQUIRED COMPONENTS Interpreter Development)
+
 #---------------------------------------------------------------------------
 # User options.
 #---------------------------------------------------------------------------
