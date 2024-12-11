@@ -253,6 +253,7 @@ set(MAIN_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexClassifier.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexIterator.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Kernel.hh
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/lru_cache.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Hash.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/NTensor.hh  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Parser.hh
