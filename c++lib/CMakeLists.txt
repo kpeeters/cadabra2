@@ -1,12 +1,6 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.12)
 
-if(${CMAKE_VERSION} VERSION_LESS "3.8.0")
-	set(CMAKE_CXX_STANDARD 14)
-	message(STATUS "Using C++14 as you are using CMkake < 3.8, consider upgrading as future versions of Cadabra may make use of C++17 features")
-else()
-	set(CMAKE_CXX_STANDARD 17)
-endif()
-
+set(CMAKE_CXX_STANDARD 17)
 project(Cadabra)
 
 #---------------------------------------------------------------------------
@@ -326,10 +320,10 @@ target_include_directories(cadabra2++objects PUBLIC "${LIB_INCLUDE_DIRS}")
 add_library(cadabra2++         SHARED $<TARGET_OBJECTS:cadabra2++objects>)
 set_target_properties(cadabra2++        PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
 
-target_link_libraries(cadabra2++        ${GMPXX_LIB} ${GMP_LIB})
+target_link_libraries(cadabra2++        ${GMPXX_LIB} ${GMP_LIB} ${Python_LIBRARIES})
 
 add_library(cadabra2++_static  STATIC $<TARGET_OBJECTS:cadabra2++objects>)
-target_link_libraries(cadabra2++_static ${GMPXX_LIB} ${GMP_LIB})
+target_link_libraries(cadabra2++_static ${GMPXX_LIB} ${GMP_LIB} ${Python_LIBRARIES})
 
 # Trivial example
 add_executable(trivial trivial.cc)
