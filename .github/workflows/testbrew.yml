@@ -1,0 +1,20 @@
+# This is a build which gets triggered on every commit push,
+# to test whether the homebrew package works.
+
+name: testbrew
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: get dependencies
+      run:  brew install cadabra2
+
+    - name: run
+      run:  echo "A+B;\nquit()\n" > tst.cdb && cadabra2 tst.cdb
