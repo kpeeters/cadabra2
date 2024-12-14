@@ -16,5 +16,8 @@ jobs:
     - name: get dependencies
       run:  brew tap kpeeters/repo && brew install cadabra2
 
-    - name: run
+    - name: show
+      run:  cat `which cadabra2`
+      
+    - name: test
       run:  echo "A+B;\nquit()\n" > tst.cdb && cadabra2 tst.cdb
