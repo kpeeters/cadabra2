@@ -1,7 +1,7 @@
 # This is a build which gets triggered on every commit push,
 # to test whether the homebrew package works.
 
-name: testbrew
+name: testbrew-devel
 
 on:
   workflow_run:
