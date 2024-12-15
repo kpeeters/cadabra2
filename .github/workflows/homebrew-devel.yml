@@ -44,7 +44,7 @@ jobs:
     - name: Set variables
       run: |
         export VERSION=$(cat build/VERSION)
-        export COMMIT=$(curl -s https://api.github.com/repos/kpeeters/cadabra2/commits/devel | jq .sha)
+        export COMMIT=$(curl -s https://api.github.com/repos/kpeeters/cadabra2/commits/devel | jq -r .sha)
         wget  https://github.com/kpeeters/cadabra2/archive/${COMMIT}.tar.gz
         export SHA=`cat ${COMMIT}.tar.gz | sha256sum -b | cut -d " " -f 1`
         echo "SHA=${SHA}" >> $GITHUB_ENV
