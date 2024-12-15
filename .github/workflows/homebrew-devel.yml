@@ -54,7 +54,7 @@ jobs:
     - name: Update Homebrew repo
       run: |
         cd homebrew-repo
-        cat cadabra2-devel.rb | sed -e 's/^  url .*/  url "https:\/\/github.com\/kpeeters\/cadabra2\/archive\/${{ env.COMMIT }}.tar.gz"/'  | sed -e 's/^  sha256.*/  sha256 "${{ env.SHA }}"/' > out.rb
+        cat cadabra2-devel.rb | sed -e 's/^  url .*/  url "https:\/\/github.com\/kpeeters\/cadabra2\/archive\/${{ env.COMMIT }}.tar.gz"/'  | sed -e 's/^  sha256.*/  sha256 "${{ env.SHA }}"/' | sed -e 's/^  version.*/  version "${{ env.VERSION }}.${{ env.COMMIT }}"/' > out.rb
         mv out.rb cadabra2-devel.rb
         cat cadabra2-devel.rb
         git config user.name "Kasper Peeters"
