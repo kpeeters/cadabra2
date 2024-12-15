@@ -3,7 +3,11 @@
 
 name: testbrew
 
-on: [push]
+on:
+  workflow_run:
+    workflows: ["homebrew"]
+    types:
+      - completed
 
 jobs:
   build:
