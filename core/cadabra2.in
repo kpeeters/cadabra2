@@ -22,7 +22,7 @@ import os
 # Make sure we can find the cadabra2 python module; is always
 # installed in PYTHON_SITE_PATH
 install_prefix=os.path.realpath(sys.argv[0])
-install_prefix=install_prefix.replace(os.sep+'bin'+os.sep+'cadabra2', '${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PATH}')
+install_prefix=install_prefix.replace(os.sep+'bin'+os.sep+'cadabra2', os.sep+'${PYTHON_SITE_PATH}')
 # print("Module path ", install_prefix)
 sys.path.append(install_prefix)
 
