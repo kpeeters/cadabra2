@@ -63,4 +63,19 @@ jobs:
         git commit -a -m "Update to release ${{ env.VERSION }} commit ${{ env.COMMIT }}."
         git push        
 
-        
+  test:
+    needs: build
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: get dependencies
+      run:  brew tap kpeeters/repo && brew install cadabra2-devel
+
+    - name: show
+      run:  cat `which cadabra2`
+      
+    - name: test
+      run:  echo "A+B;\nquit()\n" > tst.cdb && cadabra2 tst.cdb
+    
