@@ -75,5 +75,5 @@ jobs:
       run:  cat `which cadabra2`
       
     - name: test simple cli run
-      run:  printf "A+B;\nquit()\n" > tst.cdb && cadabra2 tst.cdb
+      run:  printf "ex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n" > tst.cdb && cadabra2 tst.cdb
     
