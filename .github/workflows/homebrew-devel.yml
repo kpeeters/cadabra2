@@ -1,0 +1,66 @@
+# This is a build which gets triggered on every release, to
+# update the homebrew-repo.
+
+name: Homebrew-devel
+
+# on:
+#   release:
+#     types: [released]
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Cadabra
+      uses: actions/checkout@v4
+
+    - name: Checkout Homebrew repo
+      uses: actions/checkout@v4
+      with:
+        repository: kpeeters/homebrew-repo
+        path: homebrew-repo
+        token:  ${{ secrets.ACTIONS_HOMEBREW_REPO_TOKEN }}
+    
+    - name: Set up GitHub CLI
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gh
+
+    - name: Authenticate GitHub CLI
+      run: gh auth setup-git
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+    - name: Get dependencies
+      run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install git cmake jq python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev libmpfr-dev libmpc-dev && python3 --version && which python3 && python3 -m pip install --upgrade pip && python3 -m pip install wheel && python3 -m pip install sympy gmpy2 numpy
+
+    - name: configure
+      run:  git checkout devel && mkdir build && cd build && cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
+
+    - name: Set variables
+      run: |
+        export VERSION=$(cat build/VERSION)
+        export COMMIT=$(curl -s https://api.github.com/repos/kpeeters/cadabra2/commits/devel | jq .sha)
+        wget  https://github.com/kpeeters/cadabra2/archive/${COMMIT}.tar.gz
+        export SHA=`cat ${COMMIT}.tar.gz | sha256sum -b | cut -d " " -f 1`
+        echo "SHA=${SHA}" >> $GITHUB_ENV
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        echo "COMMIT=$COMMIT" >> $GITHUB_ENV
+      
+    - name: Update Homebrew repo
+      run: |
+        cd homebrew-repo
+        cat cadabra2-devel.rb | sed -e 's/^  url .*/  url "https://github.com/kpeeters/cadabra2/archive/${COMMIT}.tar.gz"/'  | sed -e 's/^  sha256.*/  sha256 "${{ env.SHA }}"/' > out.rb
+        mv out.rb cadabra2-devel.rb
+        cat cadabra2-devel.rb
+        git config user.name "Kasper Peeters"
+        git config user.email "info@cadabra.science"
+        git add cadabra2-devel.rb
+        git commit -a -m "Update to release ${{ env.VERSION }} commit ${{ env.COMMIT }}."
+        git push        
+
+        
