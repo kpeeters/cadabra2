@@ -68,8 +68,6 @@ jobs:
     runs-on: macos-latest
     
     steps:
-    - uses: actions/checkout@v4
-
     - name: get dependencies
       run:  brew tap kpeeters/repo && brew install cadabra2-devel
 
