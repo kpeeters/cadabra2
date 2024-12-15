@@ -1,132 +1,138 @@
 {
-	"cell_id" : 10332960512342882681,
-	"cells" : 
-	[
+	"cell_id": 10332960512342882681,
+	"cells": [
 		{
-			"cell_id" : 16101808746726886949,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 16101808746726886949,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 629152003197411965,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\property{LaTeXForm}{Changes the way in which expressions are displayed.}\n\nChanges the way in which expressions are displayed in the graphical\ninterface. Example:"
+					"cell_id": 17922711406420684199,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\property{LaTeXForm}{Changes the way in which expressions are displayed.}\n\nThe \\prop{LaTeXForm} property changes the way in which expressions are displayed in the graphical\ninterface. In its simplest form, it acts just like a node rename operation,"
 				}
 			],
-			"hidden" : true,
-			"source" : "\\property{LaTeXForm}{Changes the way in which expressions are displayed.}\n\nChanges the way in which expressions are displayed in the graphical\ninterface. Example:"
+			"hidden": true,
+			"source": "\\property{LaTeXForm}{Changes the way in which expressions are displayed.}\n\nThe \\prop{LaTeXForm} property changes the way in which expressions are displayed in the graphical\ninterface. In its simplest form, it acts just like a node rename operation,"
 		},
 		{
-			"cell_id" : 8166426365570956951,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 8166426365570956951,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_id" : 17154926141228239702,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 17154926141228239702,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_id" : 76011697136639576,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\del_{m}(A)"
+							"cell_id": 76011697136639576,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\del_{m}(A)"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\partial_{m}\\left(A\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\partial_{m}\\left(A\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "\\del{#}::LaTeXForm(\"\\partial\").\nex:=\\del_{m}(A);"
+			"source": "\\del{#}::LaTeXForm(\"\\partial\").\nex:=\\del_{m}(A);"
 		},
 		{
-			"cell_id" : 12137153977390704291,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 12137153977390704291,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 1199599436471906871,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "This prints $\\partial_{m}(A);$ in the notebook, despite the fact\nthat \\verb|\\del| is not a LaTeX{} command.\n\nIf you use this property to make a symbol printable, make sure to\ndeclare it \\emph{before} any other properties are declared, otherwise\nthe notebook will not know how to display the symbol and produce an\nerror message.\n\nNote that the property is attached to a pattern (\\verb|\\del{#}| in\nthis case) which matches the expression in which the replacement has\nto be made. If the pattern matches, the replacement will be done on\nthe head symbol (\\verb|\\del| in this case). A pattern \\verb|\\del|\nwithout the argument wildcard \\verb|#| would only replace\nwhen \\verb|\\del| occurs without any arguments (as in \ne.g.~\\verb|\\del + A|)."
+					"cell_id": 1199599436471906871,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "This prints $\\partial_{m}(A);$ in the notebook, despite the fact\nthat \\verb|\\del| is not a LaTeX{} command.\n\nIf you use this property to make a symbol printable, make sure to\ndeclare it \\emph{before} any other properties are declared, otherwise\nthe notebook will not know how to display the symbol and produce an\nerror message.\n\nNote that the property is attached to a pattern (\\verb|\\del{#}| in\nthis case) which matches the expression in which the replacement has\nto be made. If the pattern matches, the replacement will be done on\nthe head symbol (\\verb|\\del| in this case). A pattern \\verb|\\del|\nwithout the argument wildcard \\verb|#| would only replace\nwhen \\verb|\\del| occurs without any arguments (as in \ne.g.~\\verb|\\del + A|)."
 				}
 			],
-			"hidden" : true,
-			"source" : "This prints $\\partial_{m}(A);$ in the notebook, despite the fact\nthat \\verb|\\del| is not a LaTeX{} command.\n\nIf you use this property to make a symbol printable, make sure to\ndeclare it \\emph{before} any other properties are declared, otherwise\nthe notebook will not know how to display the symbol and produce an\nerror message.\n\nNote that the property is attached to a pattern (\\verb|\\del{#}| in\nthis case) which matches the expression in which the replacement has\nto be made. If the pattern matches, the replacement will be done on\nthe head symbol (\\verb|\\del| in this case). A pattern \\verb|\\del|\nwithout the argument wildcard \\verb|#| would only replace\nwhen \\verb|\\del| occurs without any arguments (as in \ne.g.~\\verb|\\del + A|)."
+			"hidden": true,
+			"source": "This prints $\\partial_{m}(A);$ in the notebook, despite the fact\nthat \\verb|\\del| is not a LaTeX{} command.\n\nIf you use this property to make a symbol printable, make sure to\ndeclare it \\emph{before} any other properties are declared, otherwise\nthe notebook will not know how to display the symbol and produce an\nerror message.\n\nNote that the property is attached to a pattern (\\verb|\\del{#}| in\nthis case) which matches the expression in which the replacement has\nto be made. If the pattern matches, the replacement will be done on\nthe head symbol (\\verb|\\del| in this case). A pattern \\verb|\\del|\nwithout the argument wildcard \\verb|#| would only replace\nwhen \\verb|\\del| occurs without any arguments (as in \ne.g.~\\verb|\\del + A|)."
 		},
 		{
-			"cell_id" : 16855295245100204448,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 16855295245100204448,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 12511356882212983496,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "If you want more control over the way in which elements of your original expression \nare printed, you can use patterns like in the example below:"
+					"cell_id": 12511356882212983496,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If you want more control over the way in which elements of your original expression \nare printed, you can use patterns like in the example below:"
 				}
 			],
-			"hidden" : true,
-			"source" : "If you want more control over the way in which elements of your original expression \nare printed, you can use patterns like in the example below:"
+			"hidden": true,
+			"source": "If you want more control over the way in which elements of your original expression \nare printed, you can use patterns like in the example below:"
 		},
 		{
-			"cell_id" : 5079904273003789391,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "\\ket{A??}{q??}::LaTeXForm(\"|\", A??, \"\\rangle_{\", q??, \"}\")."
+			"cell_id": 5079904273003789391,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "\\ket{A??}{q??}::LaTeXForm(\"|\", A??, \"\\rangle_{\", q??, \"}\")."
 		},
 		{
-			"cell_id" : 7082940046924425757,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 7082940046924425757,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_id" : 2786973104563996210,
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 2786973104563996210,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_id" : 4241976921930736084,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\ket(n + 1 , a)"
+							"cell_id": 4241976921930736084,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\ket(n + 1 , a)"
 						}
 					],
-					"source" : "\\begin{dmath*}{}|n+1\\rangle_{a}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}|n+1\\rangle_{a}\\end{dmath*}"
 				}
 			],
-			"source" : "ex:=\\ket{n+1}{a};"
+			"source": "ex:=\\ket{n+1}{a};"
 		},
 		{
-			"cell_id" : 9144468563272193427,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 9144468563272193427,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_id" : 2257828966897303850,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "The comma-separated list of arguments to \\prop{LaTeXForm} will be concatenated\ninto a single LaTeX output string, with patterns replaced by their normal output\nform."
+					"cell_id": 2257828966897303850,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The comma-separated list of arguments to \\prop{LaTeXForm} will be concatenated\ninto a single LaTeX output string, with patterns replaced by their normal output\nform."
 				}
 			],
-			"hidden" : true,
-			"source" : "The comma-separated list of arguments to \\prop{LaTeXForm} will be concatenated\ninto a single LaTeX output string, with patterns replaced by their normal output\nform."
+			"hidden": true,
+			"source": "The comma-separated list of arguments to \\prop{LaTeXForm} will be concatenated\ninto a single LaTeX output string, with patterns replaced by their normal output\nform."
 		},
 		{
-			"cell_id" : 105812070507528914,
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 4022895960666784505,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 5631816431885168242,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Note that in all of the strings used inside the \\prop{LaTeXForm} property, you do not need to do any escaping of special characters: these strings are always interpreted as raw strings. Also note that you need to use double quotes, not single quotes."
+				}
+			],
+			"hidden": true,
+			"source": "Note that in all of the strings used inside the \\prop{LaTeXForm} property, you do not need to do any escaping of special characters: these strings are always interpreted as raw strings. Also note that you need to use double quotes, not single quotes."
+		},
+		{
+			"cell_id": 386464782893588846,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
 }

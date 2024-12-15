@@ -1775,6 +1775,8 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int )
 	// Find the parent node. If that one is a latex cell, toggle visibility of
 	// the CodeInput widget (but not anything else in its vbox).
 
+	if(read_only) return false;
+	
 	auto parent=DTree::parent(it);
 	if(parent->cell_type==DataCell::CellType::latex) {
 		// FIXME: we are not allowed to do this directly, all should go through
@@ -2438,6 +2440,8 @@ void NotebookWindow::on_edit_insert_above()
 
 void NotebookWindow::on_edit_insert_below()
 	{
+	if(read_only) return;
+	
 	if(current_cell==doc.end()) return;
 
 	DataCell newcell(DataCell::CellType::python, "");
@@ -2454,6 +2458,8 @@ void NotebookWindow::on_edit_insert_below()
 
 void NotebookWindow::on_edit_delete()
 	{
+	if(read_only) return;
+	
 	if(current_cell==doc.end()) return;
 
 	if(current_cell->running) return; // we are still expecting results, don't delete

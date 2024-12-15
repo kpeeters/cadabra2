@@ -279,6 +279,8 @@ void TeXView::TeXArea::layout_latex() const
 		owner->tex_error.emit(err.what());
 
 		// Instead put an error message in the output cell.
+		std::cerr << err.what() << std::endl;
+		std::cerr << fixed << std::endl;
 		_render = microtex::MicroTeX::parse(
 			"\\text{\\textcolor{red}{\\LaTeX error, probably mismatching brackets.}}", //microtex::utf82wide(fixed),
 			rendering_width,
@@ -349,6 +351,17 @@ bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 		}
 	}
 
+std::string TeXView::TeXArea::verbatimise(const std::string& inp) const
+	{
+	std::string line;
+	line = std::regex_replace(inp,  std::regex(R"(\\)"), "\\,\\backslash\\! ");
+	line = std::regex_replace(line, std::regex(R"(\{)"), "\\{");
+	line = std::regex_replace(line, std::regex(R"(\})"), "\\}");					
+	line = std::regex_replace(line, std::regex(R"(_)"), "\\_");
+	line = std::regex_replace(line, std::regex(R"(\~)"), "\\widetilde{~}");
+	return line;
+	}
+
 void TeXView::TeXArea::set_latex(const std::string& latex)
 	{
 	// std::cout << "**** fixing latex " << latex << std::endl;
@@ -409,11 +422,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 				}
 			if(line.size()>0) {
 				if(inverbatim) {
-					line = std::regex_replace(line, std::regex(R"(\\)"), "\\backslash ");
-					line = std::regex_replace(line, std::regex(R"(\{)"), "\\{");
-					line = std::regex_replace(line, std::regex(R"(\})"), "\\}");					
-					line = std::regex_replace(line, std::regex(R"(_)"), "\\_");
-					line = std::regex_replace(line, std::regex(R"(\~)"), "\\widetilde{~}");
+					line = verbatimise(line);
 					fixed += line+"\\\\";
 					}
 				else {
@@ -458,9 +467,6 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 											std::regex(R"(\\prop\{([^\}]*)\})"),
 											"\\texttt{$1}");
 		fixed = std::regex_replace(fixed,
-											std::regex(R"(\\verb\|([^\|]*)\|)"),
-											"\\texttt{$1}");
-		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\emph\{([^\}]*)\})"),
 											"\\textit{$1}");
 		fixed = std::regex_replace(fixed,
@@ -470,6 +476,21 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 											std::regex(R"(\\end\{equation\*?\})"),
 											"$");
 
+		// Finally, the inline verbatim.
+		auto verb_regex = std::regex(R"(\\verb\|([^\|]*)\|)");
+		std::sregex_iterator it(fixed.begin(), fixed.end(), verb_regex);
+		std::sregex_iterator endit;
+		size_t last_pos=0;
+		std::string result;
+		for (; it != endit; ++it) {
+			result += fixed.substr(last_pos, it->position() - last_pos);
+			std::string transformed = verbatimise(it->str(1));
+			result += "\\texttt{" + transformed + "}";
+			last_pos = it->position() + it->length();
+			}
+		if(last_pos < fixed.length()) 
+			result += fixed.substr(last_pos);
+		fixed=result;
 		
 		fixed = "\\text{"+fixed+"}";
 		}

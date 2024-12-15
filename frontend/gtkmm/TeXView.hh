@@ -92,6 +92,11 @@ namespace cadabra {
 					// MicroTeX
 					mutable microtex::Render* _render;
 					std::string               unfixed, fixed;
+
+					// Return a string in which backslashes, curly braces,
+					// underscores and tildes are properly backslashed, so they
+					// typeset as if we are in a verbatim environment.
+					std::string verbatimise(const std::string&) const;
 				};
 
 			TeXArea                   image;
