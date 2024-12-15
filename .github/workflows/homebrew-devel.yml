@@ -38,7 +38,7 @@ jobs:
     - name: Get dependencies
       run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install git cmake jq python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev libmpfr-dev libmpc-dev
 
-    - name: configure
+    - name: Configure
       run:  git checkout devel && mkdir build && cd build && cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
 
     - name: Set variables
@@ -73,9 +73,9 @@ jobs:
     - name: get dependencies
       run:  brew tap kpeeters/repo && brew install cadabra2-devel
 
-    - name: show
+    - name: show where cadabra is located
       run:  cat `which cadabra2`
       
-    - name: test
+    - name: test simple cli run
       run:  echo "A+B;\nquit()\n" > tst.cdb && cadabra2 tst.cdb
     
