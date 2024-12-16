@@ -1,14 +1,14 @@
-# This is a build which gets triggered on every release, to
-# update the homebrew-repo.
+# This is a build which gets triggered on every push to the
+# 'devel' branch, to update the homebrew-repo the cadabra2-devel
+# package.
 
 name: Homebrew-devel
 
-# on:
-#   release:
-#     types: [released]
-
-on: [push]
-
+on:
+  push:
+    branches:
+      - devel
+      
 jobs:
   build:
 
@@ -17,7 +17,9 @@ jobs:
     steps:
     - name: Checkout Cadabra
       uses: actions/checkout@v4
-
+      with:
+        ref: 'devel'
+      
     - name: Checkout Homebrew repo
       uses: actions/checkout@v4
       with:
@@ -39,7 +41,7 @@ jobs:
       run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install git cmake jq python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev libmpfr-dev libmpc-dev
 
     - name: Configure
-      run:  git checkout devel && mkdir build && cd build && cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
+      run:  mkdir build && cd build && cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
 
     - name: Set variables
       run: |

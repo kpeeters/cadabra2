@@ -1,8 +1,14 @@
-# Test the build on Windows; does not create any assets.
+# Create Windows installer on a github release event.  This assumes
+# that the cadabra version is the same as the release name, and it
+# will attempt to add the installer file to the release assets.
 
-name: Windows 11
+name: Windows 11 installer
 
-on: [push]
+# on: [push]
+
+on:
+  release:
+    types: [created]
 
 defaults:
     run:
@@ -53,4 +59,14 @@ jobs:
         ninja install
         cpack
 
+    - name: Set version variables from output of cmake
+      run: |
+        VER=$(cat build/VERSION)
+        echo "VERSION=$VER" >> $GITHUB_ENV
+
+    - name: Upload release assets
+      run: |
+        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-win64.exe --clobber
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
