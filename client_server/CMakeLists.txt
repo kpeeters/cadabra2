@@ -106,7 +106,6 @@ add_definitions(
    -DBOOST_BIND_GLOBAL_PLACEHOLDERS
    -DBOOST_ASIO_USE_TS_EXECUTOR_AS_DEFAULT
    -DASIO_STANDALONE
-   -D_WEBSOCKETPP_CPP11_INTERNAL_
  )
 
 #---------------------------------------------------------------------------
