@@ -60,3 +60,19 @@ jobs:
         git add cadabra2.rb
         git commit -a -m "Update to release ${{ env.VERSION }}."
         git push        
+
+
+  test:
+    needs: build
+    runs-on: macos-latest
+    
+    steps:
+    - name: get dependencies
+      run:  brew tap kpeeters/repo && brew install cadabra2
+
+    - name: show where cadabra is located
+      run:  cat `which cadabra2`
+      
+    - name: test simple cli run
+      run:  printf "ex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n" > tst.cdb && cadabra2 tst.cdb
+
