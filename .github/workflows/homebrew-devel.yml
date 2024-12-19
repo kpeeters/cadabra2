@@ -79,3 +79,17 @@ jobs:
     - name: test simple cli run
       run:  printf "ex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n" > tst.cdb && cadabra2 tst.cdb
     
+    - name: test gtk app launch
+      run: |
+        cadabra2-gtk &
+        APP_PID=$!
+        sleep 10
+        
+        if kill -0 $APP_PID 2>/dev/null; then
+          echo "Application started successfully"
+          kill $APP_PID
+          exit 0
+        else
+          echo "Application failed to start"
+          exit 1
+        fi
