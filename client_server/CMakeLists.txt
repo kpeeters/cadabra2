@@ -143,7 +143,7 @@ target_link_libraries(cadabra-server
    ${OPENSSL_LIBRARIES}
    )
 if(WIN32)
-   target_link_libraries(cadabra-server ws2_32 mswsock bcrypt ssl cryto)
+   target_link_libraries(cadabra-server ws2_32 mswsock bcrypt ssl crypto)
  endif()
  if(UNIX)
     if(${CMAKE_SYSTEM_NAME} MATCHES ".*BSD|DragonFly")
