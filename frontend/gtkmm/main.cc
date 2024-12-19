@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #endif
 
+#include <iostream>
+
 #define NDEBUG 1
 
 // Cadabra frontend with GTK+ interface (using gtkmm).

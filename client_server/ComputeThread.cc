@@ -12,8 +12,6 @@
 #include <glibmm/spawn.h>
 #include "internal/unistd.h"
 
-typedef websocketpp::client<websocketpp::config::asio_client> client;
-
 using namespace cadabra;
 
 ComputeThread::ComputeThread(int server_port, std::string token, std::string ip_address)
@@ -49,47 +47,19 @@ void ComputeThread::set_master(GUIBase *b, DocumentThread *d)
 void ComputeThread::init()
 	{
 	// Setup the WebSockets client.
-
-	wsclient.init_asio();
-	wsclient.start_perpetual();
 	}
 
 void ComputeThread::try_connect()
 	{
-	using websocketpp::lib::bind;
-
-	// Make the resolver work when there is no network up at all, only localhost.
-	// https://svn.boost.org/trac/boost/ticket/2456
-	// Not sure why this works here, as the compiler claims this statement does
-	// not have any effect.
-	// No longer necessary with websocketpp-0.6.0.
-	//
-	// boost::asio::ip::resolver_query_base::flags(0);
-
-	wsclient.clear_access_channels(websocketpp::log::alevel::all);
-	wsclient.clear_error_channels(websocketpp::log::elevel::all);
-
-	wsclient.set_open_handler(bind(&ComputeThread::on_open,
-	                               this, websocketpp::lib::placeholders::_1));
-	wsclient.set_fail_handler(bind(&ComputeThread::on_fail,
-	                               this, websocketpp::lib::placeholders::_1));
-	wsclient.set_close_handler(bind(&ComputeThread::on_close,
-	                                this, websocketpp::lib::placeholders::_1));
-	wsclient.set_message_handler(bind(&ComputeThread::on_message, this,
-	                                  websocketpp::lib::placeholders::_1,
-	                                  websocketpp::lib::placeholders::_2));
+	wsclient.set_connect_handler(std::bind(&ComputeThread::on_open, this));
+	wsclient.set_fail_handler(std::bind(&ComputeThread::on_fail, this, std::placeholders::_1));
+	wsclient.set_close_handler(std::bind(&ComputeThread::on_close, this));
+	wsclient.set_message_handler(std::bind(&ComputeThread::on_message, this, std::placeholders::_1));
 
 	std::ostringstream uristr;
 	uristr << "ws://" << forced_server_ip_address << ":" << port;
-	websocketpp::lib::error_code ec;
-	connection = wsclient.get_connection(uristr.str(), ec);
-	if (ec) {
-		std::cerr << "cadabra-client: websocket connection error " << ec.message() << std::endl;
-		return;
-		}
+	wsclient.connect(uristr.str());
 
-	our_connection_hdl = connection->get_handle();
-	wsclient.connect(connection);
 	// std::cerr << "cadabra-client: connect done" << std::endl;
 	}
 
@@ -149,7 +119,7 @@ void ComputeThread::all_cells_nonrunning()
 	running_cells.clear();
 	}
 
-void ComputeThread::on_fail(websocketpp::connection_hdl )
+void ComputeThread::on_fail(const boost::beast::error_code& ec)
 	{
 	std::cerr << "cadabra-client: connection to server on port " << port << " failed" << std::endl;
 	connection_is_open=false;
@@ -232,7 +202,7 @@ void ComputeThread::try_spawn_server()
 		}
 	}
 
-void ComputeThread::on_open(websocketpp::connection_hdl )
+void ComputeThread::on_open()
 	{
 	connection_is_open=true;
 	restarting_kernel=false;
@@ -261,7 +231,7 @@ void ComputeThread::on_open(websocketpp::connection_hdl )
 	//	c->send(hdl, msg, websocketpp::frame::opcode::text);
 	}
 
-void ComputeThread::on_close(websocketpp::connection_hdl )
+void ComputeThread::on_close()
 	{
 	// std::cerr << "cadabra-client: connection closed" << std::endl;
 	connection_is_open=false;
@@ -291,16 +261,13 @@ void ComputeThread::cell_finished_running(DataCell::id_t id)
 	running_cells.erase(it);
 	}
 
-void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
+void ComputeThread::on_message(const std::string& msg)
 	{
-	client::connection_ptr con = wsclient.get_con_from_hdl(hdl);
-	// std::cerr << "payload: " << msg->get_payload() << std::endl;
-
 	// Parse the JSON message.
 	nlohmann::json root;
 
 	try {
-		root=nlohmann::json::parse(msg->get_payload());
+		root=nlohmann::json::parse(msg);
 		}
 	catch(nlohmann::json::exception& e) {
 		std::cerr << "cadabra-client: cannot parse message." << std::endl;
@@ -505,7 +472,7 @@ void ComputeThread::execute_interactive(uint64_t id, const std::string& code)
 	if(getenv("CADABRA_SHOW_SENT")) {
 		std::cerr << "SEND: " << req.dump(3) << std::endl;
 		}
-	wsclient.send(our_connection_hdl, oss.str(), websocketpp::frame::opcode::text);
+	wsclient.send(oss.str());
 	interactive_cells.insert(id);
 	}
 
@@ -567,7 +534,7 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		if(getenv("CADABRA_SHOW_SENT")) {
 			std::cerr << "SEND: " << req.dump(3) << std::endl;
 			}
-		wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
+		wsclient.send(str.str());
 		// NOTE: we can get a return message in on_message at any point after this,
 		// it will come in on a different thread!
 		}
@@ -610,7 +577,7 @@ void ComputeThread::stop()
 	if(getenv("CADABRA_SHOW_SENT")) {
 		std::cerr << "SEND: " << req.dump(3) << std::endl;
 		}
-	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
+	wsclient.send(str.str());
 	all_cells_nonrunning();	
 	}
 
@@ -642,7 +609,7 @@ void ComputeThread::restart_kernel()
 	if(getenv("CADABRA_SHOW_SENT")) {
 		std::cerr << "SEND: " << req.dump(3) << std::endl;
 		}
-	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
+	wsclient.send(str.str());
 	docthread->on_interactive_output(req);
 	}
 
@@ -688,7 +655,7 @@ bool ComputeThread::complete(DTree::iterator it, int pos, int alternative)
 	if(getenv("CADABRA_SHOW_SENT")) {
 		std::cerr << "SENT: " << req.dump(3) << std::endl;
 		}
-	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
+	wsclient.send(str.str());
 
 	return true;
 	}

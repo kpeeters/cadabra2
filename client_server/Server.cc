@@ -27,10 +27,6 @@
 // #define DEBUG 1
 
 
-using websocketpp::lib::placeholders::_1;
-using websocketpp::lib::placeholders::_2;
-using websocketpp::lib::bind;
-
 bool interrupt_block=false;
 
 Server::Server()
@@ -277,33 +273,33 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	return result;
 	}
 
-void Server::on_socket_init(websocketpp::connection_hdl, boost::asio::ip::tcp::socket & /* s */)
-	{
-	boost::asio::ip::tcp::no_delay option(true);
-	// FIXME: this used to work in older websocketpp
-//	s.lowest_layer().set_option(option);
-	}
+//void Server::on_socket_init(websocketpp::connection_hdl, boost::asio::ip::tcp::socket & /* s */)
+//	{
+//	boost::asio::ip::tcp::no_delay option(true);
+//	// FIXME: this used to work in older websocketpp
+////	s.lowest_layer().set_option(option);
+//	}
 
 Server::Connection::Connection()
 	{
 	uuid = boost::uuids::random_generator()();
 	}
 
-void Server::on_open(websocketpp::connection_hdl hdl)
+void Server::on_open(websocket_server::id_type ws_id)
 	{
 	std::lock_guard<std::mutex> lock(ws_mutex);
 	Connection con;
-	con.hdl=hdl;
+	con.ws_id = ws_id;
 	// snoop::log(snoop::info) << "Connection " << con.uuid << " open." << snoop::flush;
-	connections[hdl]=con;
+	connections[ws_id]=con;
 	}
 
-void Server::on_close(websocketpp::connection_hdl hdl)
+void Server::on_close(websocket_server::id_type ws_id)
 	{
 	std::lock_guard<std::mutex> lock(ws_mutex);
 	//	auto it = connections.find(hdl);
 	// snoop::log(snoop::info) << "Connection " << it->second.uuid << " close." << snoop::flush;
-	connections.erase(hdl);
+	connections.erase(ws_id);
 
 	if(exit_on_disconnect)
 		exit(-1);
@@ -320,27 +316,20 @@ int quit(void *)
 void Server::wait_for_websocket()
 	{
 	try {
-		wserver.clear_access_channels(websocketpp::log::alevel::all);
-		wserver.clear_error_channels(websocketpp::log::elevel::all);
-		
-		wserver.init_asio();
-		wserver.set_reuse_addr(true);
-		
-		wserver.set_socket_init_handler(bind(&Server::on_socket_init, this, ::_1,::_2));
-		wserver.set_message_handler(bind(&Server::on_message, this, ::_1, ::_2));
-		wserver.set_open_handler(bind(&Server::on_open,this,::_1));
-		wserver.set_close_handler(bind(&Server::on_close,this,::_1));
-		
-		wserver.listen(websocketpp::lib::asio::ip::tcp::v4(), run_on_port);
-		wserver.start_accept();
-		websocketpp::lib::asio::error_code ec;
-		auto p = wserver.get_local_endpoint(ec);
-		std::cout << p.port()  << std::endl;
+		wserver.set_message_handler(bind(&Server::on_message, this,
+														 std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+		wserver.set_connect_handler(bind(&Server::on_open, this,     std::placeholders::_1));
+		wserver.set_disconnect_handler(bind(&Server::on_close, this, std::placeholders::_1));
+
+		wserver.listen(run_on_port);
+
+		auto p = wserver.get_local_port();
+		std::cout << p  << std::endl;
 		std::cout << authentication_token << std::endl;
 		wserver.run();
 		}
-	catch(websocketpp::exception& ex) {
-		std::cerr << "Server: websocket exception " << ex.code() << " " << ex.what() << std::endl;
+	catch(std::exception& ex) {
+		std::cerr << "Server::wait_for_websocket: exception " << ex.what() << std::endl;
 		throw;
 		}
 	}
@@ -388,7 +377,7 @@ void Server::wait_for_job()
 			// master thread can push new blocks onto it.
 			// snoop::log(snoop::info) << "Block finished running" << snoop::flush;
 			server_stopwatch.stop();
-			current_hdl=block.hdl;
+			current_ws_id=block.ws_id;
 			current_id =block.cell_id;
 			block.output = run_string(block.input);
 			on_block_finished(block);
@@ -445,8 +434,8 @@ void Server::stop_block()
 //	PyGILState_Release(state);
 	}
 
-Server::Block::Block(websocketpp::connection_hdl h, const std::string& str, uint64_t id_, const std::string& msg_type_)
-	: hdl(h), msg_type(msg_type_), input(str), cell_id(id_)
+Server::Block::Block(websocket_server::id_type ws_id_, const std::string& str, uint64_t id_, const std::string& msg_type_)
+	: ws_id(ws_id_), msg_type(msg_type_), input(str), cell_id(id_)
 	{
 	nlohmann::json content, header;
 	response["header"]=header;
@@ -454,11 +443,12 @@ Server::Block::Block(websocketpp::connection_hdl h, const std::string& str, uint
 	response["msg_type"]=msg_type;
 	}
 
-void Server::on_message(websocketpp::connection_hdl hdl, WebsocketServer::message_ptr msg)
+void Server::on_message(websocket_server::id_type ws_id, const std::string& msg,
+								const websocket_server::request_type& req, const std::string& ip_address)
 	{
 	std::lock_guard<std::mutex> lock(ws_mutex);
 
-	auto it = connections.find(hdl);
+	auto it = connections.find(ws_id);
 	if(it==connections.end()) {
 //#ifndef ENABLE_JUPYTER
 //		snoop::log(snoop::warn) << "Message from unknown connection." << snoop::flush;
@@ -468,10 +458,10 @@ void Server::on_message(websocketpp::connection_hdl hdl, WebsocketServer::messag
 
 	//	std::cout << "Message from " << it->second.uuid << std::endl;
 
-	dispatch_message(hdl, msg->get_payload());
+	dispatch_message(ws_id, msg);
 	}
 
-void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string& json_msg)
+void Server::dispatch_message(websocket_server::id_type ws_id, const std::string& json_msg)
 	{
 	//	std::cout << json_msg << std::endl;
 
@@ -503,7 +493,7 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 		// std::cerr << code << std::endl;
 		uint64_t id = header.value("cell_id", uint64_t(0));
 		std::unique_lock<std::mutex> lock(block_available_mutex);
-		Block block(hdl, code, id, msg_type);
+		Block block(ws_id, code, id, msg_type);
 		block.response["header"]["parent_origin"]="client";
 		block.response["header"]["parent_id"]=id;
 		block_queue.push(block);
@@ -533,7 +523,7 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 		std::string todo="print(__cdbkernel__.completer.complete(\""+str+"\", "+std::to_string(alternative)+"))";
 
 		uint64_t id = header.value("cell_id", uint64_t(0));
-		Block blk(hdl, todo, id, "completed");
+		Block blk(ws_id, todo, id, "completed");
 		blk.response["header"]["cell_id"]=id;
 		blk.response["content"]["original"]=str;
 		blk.response["content"]["position"]=root["position"].get<int>();
@@ -652,7 +642,7 @@ void Server::send_json(const std::string& msg)
 	{
 	//	std::cerr << "*** sending message " << msg << std::endl;
 	std::lock_guard<std::mutex> lock(ws_mutex);
-	wserver.send(current_hdl, msg, websocketpp::frame::opcode::text);
+	wserver.send(current_ws_id, msg);
 	}
 
 void Server::on_block_error(Block blk)
@@ -681,7 +671,7 @@ void Server::on_block_error(Block blk)
 	str << json << std::endl;
 	// std::cerr << "cadabra-server: sending error, " << str.str() << std::endl;
 
-	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
+	wserver.send(blk.ws_id, str.str());
 	}
 
 void Server::on_kernel_fault(Block blk)
@@ -710,7 +700,7 @@ void Server::on_kernel_fault(Block blk)
 	str << json << std::endl;
 	// std::cerr << "cadabra-server: sending kernel crash report, " << str.str() << std::endl;
 
-	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
+	wserver.send(blk.ws_id, str.str());
 	}
 
 void Server::run(int port, bool eod)

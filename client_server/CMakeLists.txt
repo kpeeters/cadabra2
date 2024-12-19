@@ -30,6 +30,7 @@ find_package(Threads)
 # We need at least Boost 1.75.0 because we now use `beast` (for the
 # websocket functionality) which was not stable before that version.
 find_package(Boost 1.75.0 COMPONENTS system program_options date_time filesystem REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 #---------------------------------------------------------------------------
 # Enumerate input files.
@@ -60,6 +61,7 @@ set(CADABRA_CLIENT_SRC
    ${CADABRA_CORE_DIR}/DataCell.cc 
    ${CADABRA_CORE_DIR}/Exceptions.cc 
    ${CADABRA_CORE_DIR}/InstallPrefix.cc
+   ${CADABRA_CORE_DIR}/Stopwatch.cc
    ${CADABRA_LIBS_DIR}/whereami/whereami.c
    )
 
@@ -138,6 +140,7 @@ target_link_libraries(cadabra-server
    ${Python_LIBRARIES}
    ${GLIBMM3_LIBRARIES} 
    Threads::Threads
+   ${OPENSSL_LIBRARIES}
    )
 if(WIN32)
    target_link_libraries(cadabra-server ws2_32 mswsock bcrypt)
@@ -158,6 +161,7 @@ target_link_libraries(cadabra_client
   ${Python_LIBRARIES}
   ${GLIBMM3_LIBRARIES}
   Threads::Threads
+  ${OPENSSL_LIBRARIES}
   )
 if(WIN32)
   target_link_libraries(cadabra_client ws2_32 bcrypt)

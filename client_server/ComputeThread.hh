@@ -2,17 +2,10 @@
 #pragma once
 
 #include <signal.h>
-#include <websocketpp/config/asio_no_tls_client.hpp>
-#include <websocketpp/client.hpp>
-#include <websocketpp/common/thread.hpp>
-#include <websocketpp/common/functional.hpp>
 #include <thread>
 #include <set>
 #include <glibmm/spawn.h>
-
-typedef websocketpp::client<websocketpp::config::asio_client> WSClient;
-typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
-typedef websocketpp::lib::lock_guard<websocketpp::lib::mutex> scoped_lock;
+#include "websocket_client.hh"
 
 #include "DataCell.hh"
 
@@ -117,17 +110,16 @@ namespace cadabra {
 			std::map<DataCell::id_t, DTree::iterator> running_cells;
 
 			// WebSocket++ things.
-			WSClient wsclient;
-			bool     connection_is_open, restarting_kernel;
-			WSClient::connection_ptr    connection;
-			websocketpp::connection_hdl our_connection_hdl;
+			websocket_client            wsclient;
+			bool                        connection_is_open, restarting_kernel;
+
 			void init();
 			void try_connect();
 			void try_spawn_server();
-			void on_open(websocketpp::connection_hdl hdl);
-			void on_fail(websocketpp::connection_hdl hdl);
-			void on_close(websocketpp::connection_hdl hdl);
-			void on_message(websocketpp::connection_hdl hdl, message_ptr msg);
+			void on_open();
+			void on_fail(const boost::beast::error_code&);
+			void on_close();
+			void on_message(const std::string& msg);
 
 			void cell_finished_running(DataCell::id_t);
 

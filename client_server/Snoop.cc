@@ -56,8 +56,8 @@ std::string snoop_base64_decode(std::string const& encoded_string);
    #include <boost/uuid/uuid_generators.hpp> // generators
    #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 
-//#define SNOOPDEBUG(ln) 
-#define SNOOPDEBUG(ln) ln
+#define SNOOPDEBUG(ln) 
+//#define SNOOPDEBUG(ln) ln
 
 using namespace snoop;
 

@@ -203,6 +203,11 @@ void websocket_server::listen(uint16_t port)
 	do_accept();
 	}
 
+uint16_t websocket_server::get_local_port() const
+	{
+	return acceptor_->local_endpoint().port();
+	}
+
 void websocket_server::set_message_handler(message_handler h)
 	{
 	message_handler_ = std::move(h);

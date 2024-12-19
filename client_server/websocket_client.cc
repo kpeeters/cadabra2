@@ -46,7 +46,6 @@ void websocket_client::connect(const std::string& uri_string)
 	if (is_ssl_) {
 		wss_stream_ = std::make_unique<boost::beast::websocket::stream<
 			boost::beast::ssl_stream<boost::asio::ip::tcp::socket>>>(ioc_, ssl_ctx_);
-		std::cerr << "connecting with wss to " << host_ << " port " << port_ << std::endl;
 		}
 	else {
 		ws_stream_ = std::make_unique<boost::beast::websocket::stream<
@@ -67,7 +66,6 @@ void websocket_client::on_resolve(const boost::beast::error_code& ec,
 	if (ec) return fail(ec);
 	
 	if (is_ssl_) {
-		// std::cerr << "host resolved, going to connect" << std::endl;
 		boost::asio::async_connect(
 			wss_stream_->next_layer().next_layer(),
 			results,
@@ -92,7 +90,6 @@ void websocket_client::on_connect(const boost::beast::error_code& ec)
 	if (ec) return fail(ec);
 	
 	if (is_ssl_) {
-		// std::cerr << "connection open, doing handshake" << std::endl;
 		wss_stream_->next_layer().async_handshake(
 			boost::asio::ssl::stream_base::client,
 			[this](const boost::beast::error_code& ec) {
@@ -111,8 +108,6 @@ void websocket_client::on_ssl_handshake(const boost::beast::error_code& ec)
 	{
 	if (ec) return fail(ec);
 	
-	std::cerr << "connection open, doing ssl handshake for " << host_ << "|"
-				 << path_ << std::endl;
 	wss_stream_->async_handshake(host_, path_,
 										  [this](const boost::beast::error_code& ec) {
 										  on_handshake(ec);
@@ -123,7 +118,6 @@ void websocket_client::on_handshake(const boost::beast::error_code& ec)
 	{
 	if (ec) return fail(ec);
 	
-	// std::cerr << "handshake succeeded" << std::endl;
 	if (connect_handler_) {
 		connect_handler_();
 		}

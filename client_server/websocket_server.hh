@@ -41,6 +41,8 @@ class websocket_server {
 		void send(id_type id, const std::string& message);
 		void close(id_type id);
 
+		uint16_t get_local_port() const;
+		
 	private:
 		// The connection class handles all actual communication. There
 		// is one instance for each connection. Connections are

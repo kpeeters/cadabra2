@@ -1,9 +1,6 @@
 
 #pragma once
 
-#include <websocketpp/server.hpp>
-#include <websocketpp/config/asio_no_tls.hpp>
-#include <websocketpp/common/functional.hpp>
 #include <string>
 #include <signal.h>
 #include <boost/uuid/uuid.hpp>
@@ -11,6 +8,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
 #include "nlohmann/json.hpp"
+#include "websocket_server.hh"
 
 #include "Stopwatch.hh"
 
@@ -114,13 +112,12 @@ class Server {
 		void init();
 
 		// WebSocket++ dependent parts below.
-		typedef websocketpp::server<websocketpp::config::asio> WebsocketServer;
-		void on_socket_init(websocketpp::connection_hdl hdl, boost::asio::ip::tcp::socket & s);
-		void on_message(websocketpp::connection_hdl hdl, WebsocketServer::message_ptr msg);
-		void on_open(websocketpp::connection_hdl hdl);
-		void on_close(websocketpp::connection_hdl hdl);
-		WebsocketServer wserver;
-		std::string     socket_name;
+		void on_message(websocket_server::id_type id, const std::string& msg,
+							 const websocket_server::request_type& req, const std::string& ip_address);
+		void on_open(websocket_server::id_type id);
+		void on_close(websocket_server::id_type id);
+		websocket_server wserver;
+		std::string      socket_name;
 
 		// Connection tracking.  There can be multiple connections to
 		// the server, but they all have access to the same Python
@@ -132,13 +129,12 @@ class Server {
 			public:
 				Connection();
 
-				websocketpp::connection_hdl hdl;
-				boost::uuids::uuid          uuid;
+				websocket_server::id_type ws_id;
+				boost::uuids::uuid        uuid;
 			};
-		typedef std::map<websocketpp::connection_hdl, Connection,
-		        std::owner_less<websocketpp::connection_hdl>> ConnectionMap;
+		typedef std::map<websocket_server::id_type, Connection> ConnectionMap;
 		ConnectionMap connections;
-
+		
 		// Authentication token, needs to be sent along with any message.
 		// Gets set when the server announces its port.
 		std::string  authentication_token;
@@ -159,8 +155,8 @@ class Server {
 		// Data and connection info for a single block of code.
 		class Block {
 			public:
-				Block(websocketpp::connection_hdl, const std::string&, uint64_t id, const std::string& msg_type);
-				websocketpp::connection_hdl hdl; // FIXME: decouple from websocket?
+				Block(websocket_server::id_type, const std::string&, uint64_t id, const std::string& msg_type);
+				websocket_server::id_type   ws_id; // FIXME: decouple from websocket?
 				std::string                 msg_type;
 				std::string                 input;
 				std::string                 output;
@@ -172,7 +168,7 @@ class Server {
 				nlohmann::json              response;
 			};
 		std::queue<Block>           block_queue;
-		websocketpp::connection_hdl current_hdl;
+		websocket_server::id_type   current_ws_id;
 		uint64_t                    current_id;   // id of the block given to us by the client.
 
 		// Run a piece of Python code. This is called from a separate
@@ -202,7 +198,7 @@ class Server {
 		/// Where applicable these messages are compatible with IPython's message types,
 		/// http://ipython.org/ipython-doc/dev/development/messaging.html
 
-		void dispatch_message(websocketpp::connection_hdl, const std::string& json_string);
+		void dispatch_message(websocket_server::id_type, const std::string& json_string);
 
 		// Python global info.
 		pybind11::scoped_interpreter guard;
