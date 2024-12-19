@@ -13,6 +13,7 @@
      #include <sys/utsname.h>
   #endif
 #endif
+#include <time.h>
 #include <stdint.h>
 #include <set>
 #include "nlohmann/json.hpp"
