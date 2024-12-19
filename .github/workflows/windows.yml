@@ -53,4 +53,15 @@ jobs:
         ninja install
         cpack
 
+    - name: Set version variables from output of cmake
+      run: |
+        VER=$(cat build/VERSION)
+        echo "VERSION=$VER" >> $GITHUB_ENV
+
+    - name: Upload installer
+      uses: actions/upload-artifact@v4
+      with:
+        name: cadabra2-win64.exe
+        path: build/cadabra2-${{ env.VERSION }}-win64.exe
+        retention-days: 2
 
