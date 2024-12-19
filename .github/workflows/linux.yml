@@ -30,7 +30,7 @@ jobs:
       run:  mkdir build && cd build && cmake -G Ninja -DENABLE_MATHEMATICA=OFF ..
       
     - name: build
-      run:  cd build && cmake --build
+      run:  cd build && cmake --build .
       
     - name: test
       run:  cd build && ctest ARGS="-V"
