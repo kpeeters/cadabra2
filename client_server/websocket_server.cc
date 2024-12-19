@@ -235,7 +235,6 @@ void websocket_server::do_accept()
 	acceptor_->async_accept(
 		[this](boost::beast::error_code ec, boost::asio::ip::tcp::socket socket) {
 		if (!ec) {
-			std::cerr << "websocket::server::do_accept: opening connection." << std::endl;
 			auto id = next_connection_id_++;
 			auto conn = std::make_shared<connection>(ioc_, *this, id);
 			socket.set_option(boost::asio::ip::tcp::no_delay(true));
