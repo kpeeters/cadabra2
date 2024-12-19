@@ -30,7 +30,14 @@ find_package(Threads)
 # We need at least Boost 1.75.0 because we now use `beast` (for the
 # websocket functionality) which was not stable before that version.
 find_package(Boost 1.75.0 COMPONENTS system program_options date_time filesystem REQUIRED)
+
+# OpenSSL needs to be linked in explicitly (probably because the boost
+# material referring to it is all in headers?).
+set(OpenSSL_USE_STATIC_LIBS OFF)
 find_package(OpenSSL REQUIRED)
+message(STATUS "OPENSSL_LIBRARIES:      ${OPENSSL_LIBRARIES}")
+message(STATUS "OPENSSL_SSL_LIBRARY:    ${OPENSSL_SSL_LIBRARY}")
+message(STATUS "OPENSSL_CRYPTO_LIBRARY: ${OPENSSL_CRYPTO_LIBRARY}")
 
 #---------------------------------------------------------------------------
 # Enumerate input files.

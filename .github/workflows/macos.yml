@@ -22,13 +22,13 @@ jobs:
 #      run:  brew uninstall python@3.12
           
     - name: get dependencies
-      run:  brew install cmake boost pcre gmp python@3.13 pkgconfig gtkmm3 adwaita-icon-theme && python3 -m pip install --break-system-packages --user sympy gmpy2 numpy
+      run:  brew install cmake ninja boost pcre gmp python@3.13 pkgconfig gtkmm3 adwaita-icon-theme && python3 -m pip install --break-system-packages --user sympy gmpy2 numpy
 
     - name: configure
-      run:  mkdir build && cd build && cmake -DENABLE_MATHEMATICA=OFF -DPython_EXECUTABLE=python3.12 ..
+      run:  mkdir build && cd build && cmake -G Ninja -DENABLE_MATHEMATICA=OFF -DPython_EXECUTABLE=python3.12 ..
       
-    - name: make
-      run:  cd build && make
+    - name: build
+      run:  cd build && cmake --build .
       
-    - name: make test
-      run:  cd build && make test ARGS="-V"
+    - name: test
+      run:  cd build && ctest ARGS="-V"
