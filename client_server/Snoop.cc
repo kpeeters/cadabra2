@@ -14,6 +14,9 @@
   #endif
 #endif
 #include <time.h>
+#ifdef _WIN32
+    #define timegm _mkgmtime
+#endif
 #include <stdint.h>
 #include <set>
 #include "nlohmann/json.hpp"
