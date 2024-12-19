@@ -57,7 +57,7 @@ void ComputeThread::try_connect()
 	wsclient.set_message_handler(std::bind(&ComputeThread::on_message, this, std::placeholders::_1));
 
 	std::ostringstream uristr;
-	uristr << "ws://" << (forced_server_ip_address.empty() ? "localhost" : forced_server_ip_address) << ":" << port;
+	uristr << "ws://" << (forced_server_ip_address.empty() ? "127.0.0.1" : forced_server_ip_address) << ":" << port;
 	wsclient.connect(uristr.str());
 
 	// std::cerr << "cadabra-client: connect done" << std::endl;

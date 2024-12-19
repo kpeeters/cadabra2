@@ -117,7 +117,6 @@ class Server {
 		void on_open(websocket_server::id_type id);
 		void on_close(websocket_server::id_type id);
 		websocket_server wserver;
-		std::string      socket_name;
 
 		// Connection tracking.  There can be multiple connections to
 		// the server, but they all have access to the same Python

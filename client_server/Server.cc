@@ -35,14 +35,12 @@ Server::Server()
 	boost::uuids::uuid authentication_uuid = boost::uuids::random_generator()();
 	authentication_token = boost::uuids::to_string( authentication_uuid );
 	// FIXME: we do not actually do anything with this.
-	socket_name="tcp://localhost:5454";
 	init();
 	}
 
 Server::Server(const std::string& socket)
 //	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)
 	{
-	socket_name=socket;
 	init();
 	}
 
