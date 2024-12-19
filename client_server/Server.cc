@@ -143,6 +143,10 @@ void Server::init()
 
 	auto python_path = cadabra::install_prefix_of_module();
 
+	// FIXME: since the logic above *requires* that we can find the
+	// `cdb.main` module, we will already have the correct path
+	// set. So appending it once more below is useless.
+	
 	std::string stdOutErr =
 	   "import sys\n"
 	   "sys.path.append(r'"+python_path+"')\n"
