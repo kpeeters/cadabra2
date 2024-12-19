@@ -26,7 +26,10 @@ find_package(SQLITE3 REQUIRED)
 # won't find anything, or we're on a road-much-less-traveled OS where the user
 # can figure out what's wrong without a hard error here.
 find_package(Threads)
-find_package(Boost 1.53.0 COMPONENTS system program_options date_time filesystem REQUIRED)
+
+# We need at least Boost 1.75.0 because we now use `beast` (for the
+# websocket functionality) which was not stable before that version.
+find_package(Boost 1.75.0 COMPONENTS system program_options date_time filesystem REQUIRED)
 
 #---------------------------------------------------------------------------
 # Enumerate input files.
@@ -36,6 +39,8 @@ set(CADABRA_SERVER_SRC
    cadabra-server.cc
    Server.cc
    Snoop.cc
+   websocket_client.cc
+   websocket_server.cc
    ${CADABRA_CORE_DIR}/InstallPrefix.cc
    ${CADABRA_CORE_DIR}/DataCell.cc
    ${CADABRA_CORE_DIR}/Exceptions.cc
@@ -50,7 +55,8 @@ set(CADABRA_CLIENT_SRC
    ComputeThread.cc 
    DocumentThread.cc 
    Actions.cc 
-   Snoop.cc 
+   Snoop.cc
+   websocket_client.cc
    ${CADABRA_CORE_DIR}/DataCell.cc 
    ${CADABRA_CORE_DIR}/Exceptions.cc 
    ${CADABRA_CORE_DIR}/InstallPrefix.cc
@@ -90,7 +96,7 @@ include_directories(
    "." 
    "${CADABRA_CORE_DIR}"
    "${CADABRA_LIBS_DIR}/pybind11/include"
-   "${CADABRA_LIBS_DIR}/websocketpp" 
+#   "${CADABRA_LIBS_DIR}/websocketpp" 
    "${CADABRA_LIBS_DIR}/internal/include"
    "${CADABRA_LIBS_DIR}/whereami"
    "${CADABRA_LIBS_DIR}/base64"
@@ -100,13 +106,11 @@ include_directories(
    ${SQLITE3_INCLUDE_DIR}
 )
 
-add_definitions(
-   -D_WEBSOCKETPP_CPP11_STL_
-   -DBOOST_ASIO_HAS_STD_CHRONO
-   -DBOOST_BIND_GLOBAL_PLACEHOLDERS
-   -DBOOST_ASIO_USE_TS_EXECUTOR_AS_DEFAULT
-   -DASIO_STANDALONE
- )
+# add_definitions(
+#    -D_WEBSOCKETPP_CPP11_STL_
+#    -DBOOST_ASIO_HAS_STD_CHRONO
+#    -DBOOST_BIND_GLOBAL_PLACEHOLDERS
+#  )
 
 #---------------------------------------------------------------------------
 # Make targets.

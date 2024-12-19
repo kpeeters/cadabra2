@@ -2,7 +2,7 @@
 /*
 
    Snoop
-   Copyright (C) 2015-2020  Kasper Peeters
+   Copyright (C) 2015-2024  Kasper Peeters
    Available under the terms of the GPL v3.
 
    Snoop is a lightweight logging library which stores its log entries in
@@ -12,6 +12,11 @@
 
 #pragma once
 
+#ifndef __ANDROID__
+   // Android uses Java/Kotlin networking, don't attempt to do it native.
+   #define SNOOP_SSL
+#endif
+
 #include <string>
 #include <sstream>
 #include <sqlite3.h>
@@ -19,26 +24,14 @@
 #include <mutex>
 #include "nlohmann/json.hpp"
 #include <thread>
+#include <condition_variable>
 #include <set>
-#ifdef SNOOP_SSL
-  #include <websocketpp/config/asio_client.hpp>
-#else
-  #include <websocketpp/config/asio_no_tls_client.hpp>
-#endif
-#include <websocketpp/client.hpp>
-#include <websocketpp/common/thread.hpp>
-#include <websocketpp/common/functional.hpp>
+
+#include "websocket_client.hh"
 
 #ifndef _MSC_VER
   #include <unistd.h>
 #endif
-
-#ifdef SNOOP_SSL
-   typedef websocketpp::client<websocketpp::config::asio_tls_client> WebsocketClient;
-#else
-   typedef websocketpp::client<websocketpp::config::asio_client> WebsocketClient;
-#endif
-typedef websocketpp::config::asio_client::message_type::ptr   message_ptr;
 
 std::string safestring(const unsigned char *c);
 
@@ -75,7 +68,7 @@ namespace snoop {
 			/// number and method.
 
 			Snoop& operator()(const std::string& type="", std::string fl="", int loc=-1, std::string method="");
-
+       
          /// Determine the 'type' field of records which should not be
          /// sent to the remote logging server. Can be called multiple times.
 
@@ -130,10 +123,27 @@ namespace snoop {
 
          /// Authentication logic; passes ticket or credentials
          /// to server, and registers callback function for when
-         /// the response comes back.
+         /// the response comes back. If the `always_reauth` flag
+			/// is true, always ask the server for a new ticket using
+			/// the user/password combo.
 
-         bool authenticate(std::function<void (std::string, bool)>, std::string user="", std::string pass="");
-       
+         bool authenticate(std::function<void (std::string, bool)>, std::string user="", std::string pass="", bool always_reauth=false);
+			/// Set error handler for clients; will be called on
+			/// any networking errors. When this function returns
+			/// false, no further attempts will be made to connect
+			/// or send, and if authentication was in progress, a
+			/// final call to the authentication callback will be
+			/// made, with 'false' as argument.
+
+			void set_error_handler(std::function<bool (std::string)>);
+			
+			/// Exception used to flag invalid/unparseable data received on the wire.
+
+			class ParseError : public std::logic_error {
+				public:
+					ParseError(const std::string&);
+			};
+			
          /// Get status of a given authentication ticket.
 
 			class Ticket {
@@ -228,7 +238,22 @@ namespace snoop {
           /// Client-side fetching of ticket.
        
           std::string get_local_ticket();
-       
+
+			/// Retrieve the (single) local username from the database, empty string
+			/// if no such row exists.
+
+			std::string local_user() const;
+
+			/// Set the session uuid so log entries can be easily grouped by session.
+			
+			void set_session_uuid(const std::string&);
+			
+         /// Add a user/password combo to the user database. This can also be used
+			/// locally (client mode, not server) to save a username to persistent
+			/// storage. If `single` is true, first flush the local user database (so
+			/// at any time only one record is present). 
+
+         bool add_user(std::string user, std::string password, bool single=false);
 
       protected:
 			/// Start the websocket client. This tries to connect to the server and then
@@ -292,42 +317,44 @@ namespace snoop {
          /// If ticket is empty, only deletes current ticket.
 
          void set_local_ticket(std::string ticket_uuid);
-         
+			
          /// Variables
          
          bool          sync_immediately_;
 	      sqlite3      *db, *payload_db, *auth_db;
-			sqlite3_stmt *insert_statement, *id_for_uuid_statement, *payload_insert_statement;
+			sqlite3_stmt *insert_statement, *id_for_uuid_statement, *payload_insert_statement, *testq_statement;
 			std::recursive_mutex    sqlite_mutex;
-
+			
       private:
 			/// Websocket client to talk to a remote logging server.
 			
-			WebsocketClient                 wsclient;
+			websocket_client                wsclient;
 			std::thread                     wsclient_thread;
 			std::mutex                      connection_mutex;
 			std::condition_variable         connection_cv;
 			bool                            connection_is_open, connection_attempt_failed;
-			WebsocketClient::connection_ptr connection;
-			websocketpp::connection_hdl     our_connection_hdl;
-			
-			void on_client_open(websocketpp::connection_hdl hdl);
-			void on_client_fail(websocketpp::connection_hdl hdl);
-			void on_client_close(websocketpp::connection_hdl hdl);
-			void on_client_message(websocketpp::connection_hdl hdl, message_ptr msg);
+
+	      // Main entry point for the I/O thread.
+	      void io_thread_run();
+	      void try_connect();
+	  
+			void on_client_open();
+			void on_client_fail(const boost::beast::error_code& ec);
+			void on_client_close();
+			void on_client_message(const std::string& msg);
 
 			std::ostringstream out_;
 			
 			Snoop::AppEntry    this_app_;
 			Snoop::LogEntry    this_log_;
 			std::string        server_;
+			std::string        session_uuid_; // gets copied into every LogEntry.
 
          std::recursive_mutex   call_mutex;
-			bool         secure;
 
 	      std::set<std::string> local_types;
-//	      std::set<std::string> ...
          std::function<void (std::string, bool)> authentication_callback;
+			std::function<bool (std::string)>       error_callback;
 
    };
 
