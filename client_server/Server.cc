@@ -316,10 +316,10 @@ int quit(void *)
 void Server::wait_for_websocket()
 	{
 	try {
-		wserver.set_message_handler(bind(&Server::on_message, this,
+		wserver.set_message_handler(std::bind(&Server::on_message, this,
 														 std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-		wserver.set_connect_handler(bind(&Server::on_open, this,     std::placeholders::_1));
-		wserver.set_disconnect_handler(bind(&Server::on_close, this, std::placeholders::_1));
+		wserver.set_connect_handler(std::bind(&Server::on_open, this,     std::placeholders::_1));
+		wserver.set_disconnect_handler(std::bind(&Server::on_close, this, std::placeholders::_1));
 
 		wserver.listen(run_on_port);
 
