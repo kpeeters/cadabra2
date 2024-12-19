@@ -77,7 +77,7 @@ jobs:
       run:  cat `which cadabra2`
       
     - name: test simple cli run
-      run:  printf "import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n" > tst.cdb && cadabra2 tst.cdb
+      run:  printf "import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B)  (C+D);\ndistribute(ex);\nquit()\n" > tst.cdb && cadabra2 tst.cdb
     
     - name: test gtk app launch
       run: |
