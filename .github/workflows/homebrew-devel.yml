@@ -71,7 +71,7 @@ jobs:
     
     steps:
     - name: get dependencies
-      run:  brew tap kpeeters/repo && brew install --verbose cadabra2-devel
+      run:  brew tap kpeeters/repo && HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_BOTTLE_HOOKS=1 brew install --debug cadabra2-devel
 
     - name: show where cadabra is located
       run:  cat `which cadabra2`
