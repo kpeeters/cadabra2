@@ -5,9 +5,11 @@
 
 name: Ubuntu-24.04 package
 
-on:
-  release:
-    types: [created]
+on: [push]
+
+# on:
+#   release:
+#     types: [created]
 
 jobs:
   build:
@@ -32,13 +34,13 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
     - name: Get dependencies
-      run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install git cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev libmpfr-dev libmpc-dev && python3 --version && which python3 && python3 -m pip install --upgrade pip && python3 -m pip install wheel && python3 -m pip install sympy gmpy2 numpy
+      run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install git cmake ninja-build python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev libmpfr-dev libmpc-dev && python3 --version && which python3 && python3 -m pip install --upgrade pip && python3 -m pip install wheel && python3 -m pip install sympy gmpy2 numpy
 
     - name: configure
-      run:  mkdir build && cd build && cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
+      run:  mkdir build && cd build && cmake -G Ninja -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
       
     - name: Make
-      run:  cd build && make
+      run:  cd build && cmake --build .
       
     - name: Create the .deb package
       run:  cd build && cpack
@@ -55,3 +57,34 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
+  test:
+    needs: build
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Get and install package
+      run: |
+        sudo apt install xvfb
+        export VERSION=$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
+        export DEBNAME=cadabra2-${VERSION}-ubuntu-24.04-noble.deb
+        wget https://github.com/kpeeters/cadabra2/releases/download/${VERSION}/${DEBNAME}
+        dpkg -i ./${DEBNAME}
+        apt-get install -f
+
+    - name: Test simple cli run
+      run:  printf "import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n" > tst.cdb && cadabra2 tst.cdb
+
+    - name: Test gtk app launch
+      run: |
+        xvfg-run -a cadabra2-gtk &
+        APP_PID=$!
+        sleep 10
+        
+        if kill -0 $APP_PID 2>/dev/null; then
+          echo "Application started successfully"
+          kill $APP_PID
+          exit 0
+        else
+          echo "Application failed to start"
+          exit 1
+        fi
