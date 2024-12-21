@@ -77,7 +77,7 @@ jobs:
 
     - name: Test gtk app launch
       run: |
-        xvfg-run -a cadabra2-gtk &
+        xvfb-run -a cadabra2-gtk &
         APP_PID=$!
         sleep 10
         
