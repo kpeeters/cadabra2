@@ -57,3 +57,34 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
+  test:
+    needs: build
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: get and install package
+      run: |
+        apt install xvfb
+        export VERSION=$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
+        export DEBNAME=cadabra2-${VERSION}-ubuntu-22.04-jammy.deb
+        wget https://github.com/kpeeters/cadabra2/releases/download/${DEBNAME}
+        dpkg -i ./${DEBNAME}
+        apt-get install -f
+
+    - name: test simple cli run
+      run:  printf "import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n" > tst.cdb && cadabra2 tst.cdb
+
+    - name: test gtk app launch
+      run: |
+        xvfg-run -a cadabra2-gtk &
+        APP_PID=$!
+        sleep 10
+        
+        if kill -0 $APP_PID 2>/dev/null; then
+          echo "Application started successfully"
+          kill $APP_PID
+          exit 0
+        else
+          echo "Application failed to start"
+          exit 1
+        fi
