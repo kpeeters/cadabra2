@@ -64,7 +64,7 @@ jobs:
     steps:
     - name: get and install package
       run: |
-        apt install xvfb
+        sudo apt install xvfb
         export VERSION=$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
         export DEBNAME=cadabra2-${VERSION}-ubuntu-22.04-jammy.deb
         wget https://github.com/kpeeters/cadabra2/releases/download/${DEBNAME}
