@@ -6,19 +6,7 @@
 
 /sbin/ldconfig -v
 
-
-# For some reason, on openSUSE, you cannot write the
-# ls-R even when running texhash as root... and the 
-# folder needs to be sticky... Hack.
-if [ "@CPACK_SYSTEM_NAME@" = "leap421" ]; then
-	TEXPATH=`kpsewhich -var-value=TEXMFLOCAL`
-	chmod o+t ${TEXPATH}
-   chmod go+w ${TEXPATH}/ls-R
-   texhash
-   chmod go-w ${TEXPATH}/ls-R
-else
-   texhash
-fi
+# texhash
 
 if hash gtk-update-icon-cache-3.0 2>/dev/null; then 
    gtk-update-icon-cache-3.0 -t /usr/share/icons/hicolor

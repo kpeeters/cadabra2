@@ -68,7 +68,9 @@ jobs:
         export VERSION=$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
         export DEBNAME=cadabra2-${VERSION}-ubuntu-22.04-jammy.deb
         wget https://github.com/kpeeters/cadabra2/releases/download/${VERSION}/${DEBNAME}
-        sudo apt-get install ./${DEBNAME}
+        sudo apt -y update
+        sudo apt -y upgrade
+        sudo apt -y install ./${DEBNAME}
 
     - name: Test simple cli run
       run:  printf "import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n" > tst.cdb && cadabra2 tst.cdb

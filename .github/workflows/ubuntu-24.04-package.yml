@@ -70,7 +70,7 @@ jobs:
         wget https://github.com/kpeeters/cadabra2/releases/download/${VERSION}/${DEBNAME}
         sudo apt -y update
         sudo apt -y upgrade
-        sudo apt-get install ./${DEBNAME}
+        sudo apt -y install ./${DEBNAME}
 
     - name: Test simple cli run
       run:  printf "import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n" > tst.cdb && cadabra2 tst.cdb
