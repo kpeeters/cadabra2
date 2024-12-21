@@ -68,6 +68,8 @@ jobs:
         export VERSION=$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
         export DEBNAME=cadabra2-${VERSION}-ubuntu-24.04-noble.deb
         wget https://github.com/kpeeters/cadabra2/releases/download/${VERSION}/${DEBNAME}
+        sudo apt -y update
+        sudo apt -y upgrade
         sudo apt-get install ./${DEBNAME}
 
     - name: Test simple cli run
