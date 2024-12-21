@@ -303,15 +303,9 @@ print_header("Configuring Python")
 include(GNUInstallDirs)
 
 set(Python_POSTFIX "3")
-#if(WIN32)
-#  # No amount of fiddling seems to convince cmake to use the MSYS2 python
-#  # instead of whatever other nonsense is installed on github runners.
-#  # So we force it to an exact version which is not available except in
-#  # the MSYS2 environment. Sue me.
-#  find_package(Python 3.11.10 EXACT REQUIRED COMPONENTS Interpreter Development)
-#else()
-  find_package(Python REQUIRED COMPONENTS Interpreter Development)
-#endif()
+find_package(Python REQUIRED COMPONENTS Interpreter Development)
+set(PYTHON_EXECUTABLE ${Python_EXECUTABLE} CACHE INTERNAL "")
+set(PYBIND11_PYTHON_VERSION ${Python_VERSION} CACHE INTERNAL "")
 find_package(pybind11 CONFIG)
 if (NOT pybind11_FOUND)
   message(STATUS "Using included pybind11.")
