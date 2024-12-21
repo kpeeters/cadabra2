@@ -86,19 +86,19 @@ jobs:
            fedora:40 \
            bash -c " 
              dnf install -y xorg-x11-server-Xvfb wget curl jq
-             export VERSION=$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
-             export RPMNAME=cadabra2-${VERSION}-fedora40.rpm
-             wget https://github.com/kpeeters/cadabra2/releases/download/${VERSION}/${RPMNAME}
-             dnf install ${RPMNAME}
+             export VERSION=\$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
+             export RPMNAME=cadabra2-\${VERSION}-fedora40.rpm
+             wget https://github.com/kpeeters/cadabra2/releases/download/\${VERSION}/\${RPMNAME}
+             dnf install \${RPMNAME}
              printf 'import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n' > tst.cdb
              cadabra2 tst.cdb
              
              xvfb-run -a cadabra2-gtk &
-             APP_PID=$!
+             APP_PID=\$!
              sleep 10
-             if kill -0 $APP_PID 2>/dev/null; then
+             if kill -0 \$APP_PID 2>/dev/null; then
                 echo 'cadabra2-gtk started successfully'
-                kill $APP_PID
+                kill \$APP_PID
                 exit 0
              else
                 echo 'cadabra2-gtk failed to start'
