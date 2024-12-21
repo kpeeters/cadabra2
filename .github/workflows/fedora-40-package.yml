@@ -85,7 +85,7 @@ jobs:
            -w /workspace \
            fedora:40 \
            bash -c " 
-             dnf install -y xorg-x11-server-Xvfb wget curl
+             dnf install -y xorg-x11-server-Xvfb wget curl jq
              export VERSION=$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
              export RPMNAME=cadabra2-${VERSION}-fedora40.rpm
              wget https://github.com/kpeeters/cadabra2/releases/download/${VERSION}/${RPMNAME}
