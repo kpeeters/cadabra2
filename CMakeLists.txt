@@ -299,7 +299,6 @@ endif()
 
 print_header("Configuring Python")
 
-# NEEDED TO USE CMAKE_INSTALL_FULL<dir>
 include(GNUInstallDirs)
 
 set(Python_POSTFIX "3")
