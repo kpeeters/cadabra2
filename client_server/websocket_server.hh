@@ -8,6 +8,7 @@
 #include <memory>
 #include <string>
 #include <queue>
+#include <optional>
 #include <unordered_map>
 
 class websocket_server {
