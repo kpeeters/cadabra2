@@ -5,9 +5,11 @@
 
 name: Fedora-40 package
 
-on:
-  release:
-    types: [created]
+on: [push]
+
+# on:
+#   release:
+#     types: [created]
 
 jobs:
   build:
@@ -91,7 +93,7 @@ jobs:
              printf 'import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n' > tst.cdb
              cadabra2 tst.cdb
              
-             xvfg-run -a cadabra2-gtk &
+             xvfb-run -a cadabra2-gtk &
              APP_PID=$!
              sleep 10
              if kill -0 $APP_PID 2>/dev/null; then
