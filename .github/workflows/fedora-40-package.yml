@@ -65,3 +65,41 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  test:
+
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@master
+
+    - name: Pull Fedora image
+      run: docker pull fedora:40
+
+    - name: Download package and run inside Fedora container
+      run: |
+        docker run --rm \
+           -v ${{ github.workspace }}:/workspace \
+           -w /workspace \
+           fedora:40 \
+           bash -c " 
+             dnf install -y xorg-x11-server-Xvfb wget curl
+             export VERSION=$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
+             export RPMNAME=cadabra2-${VERSION}-fedora40.rpm
+             wget https://github.com/kpeeters/cadabra2/releases/download/${VERSION}/${RPMNAME}
+             dnf install ${RPMNAME}
+             printf 'import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n' > tst.cdb
+             cadabra2 tst.cdb
+             
+             xvfg-run -a cadabra2-gtk &
+             APP_PID=$!
+             sleep 10
+             if kill -0 $APP_PID 2>/dev/null; then
+                echo 'cadabra2-gtk started successfully'
+                kill $APP_PID
+                exit 0
+             else
+                echo 'cadabra2-gtk failed to start'
+                exit 1
+             fi
+           "
