@@ -86,11 +86,11 @@ jobs:
         sleep 10
         
         if kill -0 $APP_PID 2>/dev/null; then
-          echo "cadabra2-gtk started successfully"
+          echo "cadabra2-gtk started successfully!"
           kill $APP_PID
           exit 0
         else
-          echo "cadabra2-gtk failed to start"
+          echo "cadabra2-gtk failed to start?"
           exit 1
         fi
 
