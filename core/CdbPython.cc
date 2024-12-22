@@ -8,6 +8,7 @@
 #include "CdbPython.hh"
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
+#include "Exceptions.hh"
 
 #ifndef CDBPYTHON_NO_NOTEBOOK
 #include "DataCell.hh"
@@ -81,23 +82,39 @@ std::string cadabra::cdb2python_string(const std::string& blk, bool display)
 
 		while(true) {
 			// std::cerr << "CHECK:---\n" << tmpblk << "\n---" << std::endl;
-			int ic = is_python_code_complete(tmpblk);
-			if(ic==1) {
+			std::string error;
+			int ic = is_python_code_complete(tmpblk, error);
+			if(ic==1) { // complete
 				newblks.push_back(res.first + tmpblk + "\n");
 				tmpblk = "";
 				break;
 				}
-			if(ic==0) {
+			if(ic==0) { // incomplete
 				tmpblk += "\n";
 				break;
 				}
-			if(ic==-1) {
+			if(ic==-1) { // indentation error
 				if(newblks.size()==0)
 					break;
 				// Grow block by adding previously ok block,
 				// then try compiling again.
 				tmpblk = newblks.back() + tmpblk;
 				newblks.pop_back();
+				}
+			if(ic==-2) { 
+				// This is either a genuine syntax error, or one line
+				// added too many (after a previous 'incomplete' result).
+				// Remove the line from the block, then re-run that line
+				// separately.
+				if(tmpblk != "") {
+					if(size_t pos = tmpblk.rfind('\n'); pos != std::string::npos) {
+						newblks.push_back(tmpblk.substr(0, pos)+"\n");
+						tmpblk = tmpblk.substr(pos+1);
+						// re-run
+						}
+					else throw ParseException(error);
+					}
+				else throw ParseException(error);
 				}
 			}
 		}
@@ -116,8 +133,9 @@ std::string cadabra::cdb2python_string(const std::string& blk, bool display)
 //  1: complete
 //  0: incomplete
 // -1: indentation error, need backtracking
+// -2: syntax error
 
-int cadabra::is_python_code_complete(const std::string& code)
+int cadabra::is_python_code_complete(const std::string& code, std::string& error)
 	{
 	// The following code prints None, <code object> and <code object>.
 	// Make sure that the string you feed here does *not* include the
@@ -150,13 +168,18 @@ int cadabra::is_python_code_complete(const std::string& code)
 		else                   return 1;
 		}
 	catch (pybind11::error_already_set& e) {
-		// std::cerr << "EXCEPTION: " << e.what() << std::endl;
+//		std::cerr << "EXCEPTION: " << e.what() << std::endl;
+		error=e.what();
 		if (std::string(e.what()).find("unexpected EOF") != std::string::npos) {
 			return -1;
 			}
 		if (std::string(e.what()).find("Indentation") != std::string::npos) {
 			return -1;
 			}
+		if (std::string(e.what()).find("SyntaxError") != std::string::npos) {
+			return -2;
+			}
+		
 		throw;
 		}
 	}

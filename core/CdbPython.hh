@@ -23,8 +23,9 @@ namespace cadabra {
 	///     1: complete
    ///     0: incomplete
    ///    -1: indentation error, need backtracking
+	///    -2: overcomplete
 
-	int         is_python_code_complete(const std::string&);
+	int         is_python_code_complete(const std::string&, std::string& error);
 	
 	/// \ingroup files
 	/// Object to store pre-parsing intermediate results. Necessary

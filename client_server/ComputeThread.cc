@@ -427,7 +427,7 @@ void ComputeThread::on_message(const std::string& msg)
 					}
 				else {
 					std::cerr << "cadabra-client: received cell we did not expect: "
-					          << msg_type << std::endl;
+					          << msg_type << ": " << content << std::endl;
 					}
 				}
 			}

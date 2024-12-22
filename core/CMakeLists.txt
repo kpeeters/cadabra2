@@ -337,6 +337,7 @@ endif()
 add_executable(cadabra2-cli
    cadabra2-cli.cc
    CdbPython.cc
+   Exceptions.cc
    InstallPrefix.cc
    pythoncdb/py_helpers.cc
    ${CADABRA_LIBS_DIR}/whereami/whereami.c

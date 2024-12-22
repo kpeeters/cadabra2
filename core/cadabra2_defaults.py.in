@@ -231,6 +231,9 @@ def display(obj, cell_id=0, delay_send=False):
     'display' function call so that the expression is displayed immediately.
     """
 
+    if cell_id==None:
+       cell_id = 0
+       
     if type(obj)==list and len(obj)>0 and (isinstance(obj[0], matplotlib.figure.Figure) or isinstance(obj[0], matplotlib.figure.Artist)):
        # matplotlib has the annoying habit of returning plots as lists of figures.
        # print("list of figures", file=sys.stderr)
