@@ -46,10 +46,16 @@ void websocket_client::connect(const std::string& uri_string)
 	if (is_ssl_) {
 		wss_stream_ = std::make_unique<boost::beast::websocket::stream<
 			boost::beast::ssl_stream<boost::asio::ip::tcp::socket>>>(ioc_, ssl_ctx_);
+		wss_stream_->binary(false);  // Set to text mode
+		wss_stream_->auto_fragment(false);  // Don't fragment messages
+		wss_stream_->read_message_max(64 * 1024 * 1024);  // 64MB max message size
 		}
 	else {
 		ws_stream_ = std::make_unique<boost::beast::websocket::stream<
 			boost::asio::ip::tcp::socket>>(ioc_);
+		ws_stream_->binary(false);  // Set to text mode
+		ws_stream_->auto_fragment(false);  // Don't fragment messages
+		ws_stream_->read_message_max(64 * 1024 * 1024);  // 64MB max message size
 		}
 	
 	// Start the connection process
