@@ -49,10 +49,10 @@ jobs:
            bash -c "
              zypper refresh
              zypper update
-             zypper -n install --no-recommends rpmbuild git cmake python311-devel gcc-c++ \
+             zypper -n install --no-recommends rpmbuild git cmake python313-devel gcc-c++ \
                   gmp-devel libuuid-devel  \
                   gtkmm3-devel sqlite3-devel \
-                  python311-matplotlib libopenssl-devel \
+                  python313-matplotlib libopenssl-devel \
                   libboost_system-devel libboost_filesystem-devel \
                   libboost_date_time-devel libboost_program_options-devel             
              git config --global --add safe.directory /workspace
