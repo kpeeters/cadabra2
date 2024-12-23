@@ -76,7 +76,11 @@ class websocket_server {
 				websocket_server&              server_;
 
 				id_type id_;
-				std::queue<std::string> message_queue_;
+				struct queued_message {
+						std::string data;
+						std::shared_ptr<boost::beast::flat_buffer> buffer;
+				};
+				std::queue<queued_message> message_queue_;
 				bool writing_{false};
 				bool is_websocket_{false};
 		};

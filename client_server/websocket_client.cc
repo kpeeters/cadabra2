@@ -182,7 +182,8 @@ void websocket_client::do_write()
                 [this](boost::beast::error_code ec, std::size_t bytes_transferred) {
 					 on_write(ec, bytes_transferred);
                 });
-		} else {
+		}
+	else {
 		ws_stream_->async_write(
 			msg.buffer->data(),
 			[this](boost::beast::error_code ec, std::size_t bytes_transferred) {

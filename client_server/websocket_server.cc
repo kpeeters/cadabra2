@@ -124,8 +124,12 @@ void websocket_server::connection::send(const std::string& message)
 	{
 	if (!is_websocket_) return;
    
-	message_queue_.push(message);
-   
+	queued_message msg;
+	msg.data   = message;
+	msg.buffer = std::make_shared<boost::beast::flat_buffer>();
+	boost::beast::ostream(*msg.buffer) << msg.data;
+
+	message_queue_.push(msg);
 	if (!writing_) {
 		do_write();
 		}
@@ -140,10 +144,9 @@ void websocket_server::connection::do_write()
 	
 	writing_ = true;
 	auto msg = message_queue_.front();
-	message_queue_.pop();
 	
 	ws_stream_->async_write(
-		boost::asio::buffer(msg),
+		msg.buffer->data(),
 		[self = shared_from_this()](
 			boost::beast::error_code ec, std::size_t bytes_transferred) {
 		self->on_write(ec, bytes_transferred);
@@ -167,7 +170,8 @@ void websocket_server::connection::close()
 
 void websocket_server::connection::on_write(boost::beast::error_code ec, std::size_t)
 	{
-	if (ec) {
+	message_queue_.pop();
+	if(ec) {
 		server_.remove_connection(id_);
 		return;
 		}
