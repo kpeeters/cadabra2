@@ -98,7 +98,7 @@ jobs:
              export VERSION=\$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
              export RPMNAME=cadabra2-\${VERSION}-tumbleweed.rpm
              wget https://github.com/kpeeters/cadabra2/releases/download/\${VERSION}/\${RPMNAME}
-             zypper -n install \${RPMNAME}
+             zypper --no-gpg-checks -n install \${RPMNAME}
              printf 'import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n' > tst.cdb
              cadabra2 tst.cdb
              
