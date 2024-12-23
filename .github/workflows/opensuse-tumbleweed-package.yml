@@ -5,9 +5,12 @@
 
 name: OpenSUSE-Tumbleweed package
 
-on:
-  release:
-    types: [created]
+on: [push]
+
+# on:
+#   release:
+#     types: [created]
+# 
 
 jobs:
   build:
@@ -71,3 +74,43 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  test:
+    needs: build
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@master
+
+    - name: Pull OpenSUSE image
+      run: docker pull opensuse/tumbleweed:latest
+
+    - name: Download package and run inside OpenSUSE container
+      run: |
+        docker run --rm \
+           -v ${{ github.workspace }}:/workspace \
+           -w /workspace \
+           opensuse/tumbleweed:latest \
+           bash -c "
+             zypper refresh
+             zypper update
+             zypper -n install xvfb-run wget curl jq
+             export VERSION=\$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
+             export RPMNAME=cadabra2-\${VERSION}-tumbleweed.rpm
+             wget https://github.com/kpeeters/cadabra2/releases/download/\${VERSION}/\${RPMNAME}
+             zypper -n install \${RPMNAME}
+             printf 'import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n' > tst.cdb
+             cadabra2 tst.cdb
+             
+             xvfb-run -a cadabra2-gtk &
+             APP_PID=\$!
+             sleep 10
+             if kill -0 \$APP_PID 2>/dev/null; then
+                echo 'cadabra2-gtk started successfully'
+                kill \$APP_PID
+                exit 0
+             else
+                echo 'cadabra2-gtk failed to start'
+                exit 1
+             fi
+           "
