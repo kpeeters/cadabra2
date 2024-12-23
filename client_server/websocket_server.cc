@@ -122,14 +122,18 @@ void websocket_server::connection::on_read_websocket(boost::beast::error_code ec
 
 void websocket_server::connection::send(const std::string& message)
 	{
+	static int msg_number=0;
+	
 	if (!is_websocket_) return;
    
 	queued_message msg;
 	msg.data   = message;
 	msg.buffer = std::make_shared<boost::beast::flat_buffer>();
+	msg.seq    = ++msg_number;
 	boost::beast::ostream(*msg.buffer) << msg.data;
 
 	message_queue_.push(msg);
+	// std::cerr << "QUEUE size after push " << message_queue_.size() << std::endl;
 	if (!writing_) {
 		do_write();
 		}
@@ -143,8 +147,9 @@ void websocket_server::connection::do_write()
 		}
 	
 	writing_ = true;
-	auto msg = message_queue_.front();
-	
+	const auto& msg = message_queue_.front();
+
+	// std::cerr << "going to send msg " << msg.seq << std::endl;
 	ws_stream_->async_write(
 		msg.buffer->data(),
 		[self = shared_from_this()](
@@ -170,6 +175,8 @@ void websocket_server::connection::close()
 
 void websocket_server::connection::on_write(boost::beast::error_code ec, std::size_t)
 	{
+	//std::cerr << "sent msg " << message_queue_.front().seq
+//				 << "; queue size on_write " << message_queue_.size() << std::endl;
 	message_queue_.pop();
 	if(ec) {
 		server_.remove_connection(id_);
@@ -279,6 +286,11 @@ void websocket_server::remove_connection(id_type id)
 
 void websocket_server::run()
 	{
+	static int calls=0;
+
+	if(++calls>1)
+		throw std::logic_error("Cannot call websocket_server::run multiple times.");
+	
 	ioc_.run();
 	}
 

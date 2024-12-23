@@ -148,8 +148,9 @@ target_link_libraries(cadabra-server
    ${SQLITE3_LIBRARIES}
    ${Python_LIBRARIES}
    ${GLIBMM3_LIBRARIES} 
-   Threads::Threads
    ${OPENSSL_LIBRARIES}
+   Threads::Threads
+   pthread
    )
 if(WIN32)
    target_link_libraries(cadabra-server ws2_32 mswsock bcrypt)

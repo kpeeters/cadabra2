@@ -10,6 +10,8 @@
 #include <queue>
 #include <optional>
 #include <unordered_map>
+#include <iostream>
+#include <pthread.h>
 
 class websocket_server {
 	public:
@@ -76,9 +78,18 @@ class websocket_server {
 				websocket_server&              server_;
 
 				id_type id_;
-				struct queued_message {
+				class queued_message {
+					public:
+						queued_message() {
+						std::cerr << "Thread " << pthread_self() << " queued_message constructor " << (void*)this << std::endl;
+						}
+						~queued_message() {
+						std::cerr << "Thread " << pthread_self() << " queued_message destructor " << (void*)this << std::endl;
+						}
+						
 						std::string data;
 						std::shared_ptr<boost::beast::flat_buffer> buffer;
+						int seq;
 				};
 				std::queue<queued_message> message_queue_;
 				bool writing_{false};
