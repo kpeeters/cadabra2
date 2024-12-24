@@ -39,8 +39,15 @@ class websocket_server {
 		void set_disconnect_handler(disconnect_handler h);
 		void set_http_handler(http_handler h);
 
+		// You should call `run` on a separate thread to start the
+		// listening process.  All callbacks on the message handlers will
+		// come on this thread. It is safe to call `send` below from a
+		// different thread.
 		void run();
 		void stop();
+
+		// Send a message. This is safe on a thread which is not the
+		// thread which called `run`.
 		void send(id_type id, const std::string& message);
 		void close(id_type id);
 

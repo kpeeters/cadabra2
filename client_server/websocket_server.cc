@@ -126,7 +126,7 @@ void websocket_server::connection::send(const std::string& message)
 	
 	if (!is_websocket_) return;
    
-	std::cerr << "SEND CALLED on thread " << pthread_self() << std::endl;
+	// std::cerr << "SEND CALLED on thread " << pthread_self() << std::endl;
 
 	queued_message msg;
 	msg.data   = message;
@@ -298,7 +298,7 @@ void websocket_server::remove_connection(id_type id)
 void websocket_server::run()
 	{
 	static int calls=0;
-	std::cerr << "RUN CALLED on thread " << pthread_self() << std::endl;
+	// std::cerr << "RUN CALLED on thread " << pthread_self() << std::endl;
 
 	if(++calls>1)
 		throw std::logic_error("Cannot call websocket_server::run multiple times.");
