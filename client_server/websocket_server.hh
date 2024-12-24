@@ -88,10 +88,10 @@ class websocket_server {
 				class queued_message {
 					public:
 						queued_message() {
-						std::cerr << "Thread " << pthread_self() << " queued_message constructor " << (void*)this << std::endl;
+						// std::cerr << "Thread " << pthread_self() << " queued_message constructor " << (void*)this << std::endl;
 						}
 						~queued_message() {
-						std::cerr << "Thread " << pthread_self() << " queued_message destructor " << (void*)this << std::endl;
+						// std::cerr << "Thread " << pthread_self() << " queued_message destructor " << (void*)this << std::endl;
 						}
 						
 						std::string data;
