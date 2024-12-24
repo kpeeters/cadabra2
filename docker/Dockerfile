@@ -18,7 +18,7 @@ USER root
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y \
     git cmake pkgconf libpython3-dev python3-dev g++ \
-    libgmp3-dev libglibmm-2.4-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev  \
+    libgmp3-dev libglibmm-2.4-dev libboost-all-dev libssl-dev libgmp-dev libsqlite3-dev uuid-dev  \
     python3-matplotlib python3-mpmath python3-sympy python3-gmpy2 python3-pip
 RUN pip install jupyter
 RUN git clone -b "master" --depth 1 https://github.com/kpeeters/cadabra2 && \
