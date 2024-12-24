@@ -126,29 +126,37 @@ void websocket_server::connection::send(const std::string& message)
 	
 	if (!is_websocket_) return;
    
+	std::cerr << "SEND CALLED on thread " << pthread_self() << std::endl;
+
 	queued_message msg;
 	msg.data   = message;
 	msg.buffer = std::make_shared<boost::beast::flat_buffer>();
 	msg.seq    = ++msg_number;
 	boost::beast::ostream(*msg.buffer) << msg.data;
 
+	std::unique_lock<std::mutex> lock(queue_mutex_);
 	message_queue_.push(msg);
+
 	// std::cerr << "QUEUE size after push " << message_queue_.size() << std::endl;
-	if (!writing_) {
+	if(!writing_) {
+		lock.unlock();
 		do_write();
 		}
 	}
 
 void websocket_server::connection::do_write()
 	{
-	if (message_queue_.empty() || !is_websocket_) {
+	std::unique_lock<std::mutex> lock(queue_mutex_);
+	if(message_queue_.empty() || !is_websocket_) {
 		writing_ = false;
+		lock.unlock();
 		return;
 		}
 	
 	writing_ = true;
-	const auto& msg = message_queue_.front();
-
+	queued_message msg = message_queue_.front();
+	lock.unlock();
+	
 	// std::cerr << "going to send msg " << msg.seq << std::endl;
 	ws_stream_->async_write(
 		msg.buffer->data(),
@@ -177,7 +185,10 @@ void websocket_server::connection::on_write(boost::beast::error_code ec, std::si
 	{
 	//std::cerr << "sent msg " << message_queue_.front().seq
 //				 << "; queue size on_write " << message_queue_.size() << std::endl;
+	std::unique_lock<std::mutex> lock(queue_mutex_);
 	message_queue_.pop();
+	lock.unlock();
+	
 	if(ec) {
 		server_.remove_connection(id_);
 		return;
@@ -287,6 +298,7 @@ void websocket_server::remove_connection(id_type id)
 void websocket_server::run()
 	{
 	static int calls=0;
+	std::cerr << "RUN CALLED on thread " << pthread_self() << std::endl;
 
 	if(++calls>1)
 		throw std::logic_error("Cannot call websocket_server::run multiple times.");

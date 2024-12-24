@@ -91,9 +91,11 @@ class websocket_server {
 						std::shared_ptr<boost::beast::flat_buffer> buffer;
 						int seq;
 				};
+				bool is_websocket_{false};
+
+				std::mutex queue_mutex_; // lock this for access to the variables below
 				std::queue<queued_message> message_queue_;
 				bool writing_{false};
-				bool is_websocket_{false};
 		};
 
 		void do_accept();
