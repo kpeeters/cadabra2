@@ -8,11 +8,11 @@
 
 name: Docker
 
-# on: [push]
+on: [push]
 
-on:
-  release:
-    types: [released]
+# on:
+#   release:
+#     types: [released]
 
 jobs:
   build:

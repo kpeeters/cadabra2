@@ -5,12 +5,12 @@
 
 name: OpenSUSE-Tumbleweed package
 
-on: [push]
+# on: [push]
 
-# on:
-#   release:
-#     types: [created]
-# 
+on:
+  release:
+    types: [created]
+
 
 jobs:
   build:

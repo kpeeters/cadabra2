@@ -77,7 +77,7 @@ Linux (Debian/Ubuntu/Mint)
 On Debian/Ubuntu you can install all that is needed with::
 
     sudo apt install git cmake libpython3-dev python3-dev g++ libgmp3-dev \
-          libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev  \
+          libgtkmm-3.0-dev libboost-all-dev libssl-dev libgmp-dev libsqlite3-dev uuid-dev  \
           python3-matplotlib python3-mpmath python3-sympy python3-gmpy2
 
 (on Ubuntu 14.04 you need to replace `cmake` with `cmake3` and also
