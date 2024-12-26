@@ -1,108 +1,205 @@
-
 {
-	"cells" : 
-	[
-		
+	"cell_id": 12848684247103127310,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
-				
+			"cell_id": 568579371302751307,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\algorithm{evaluate}{Evaluate components of a tensor expression.}\n\nGiven an abstract tensor expression and a set of rules for the components of tensors occurring in this\nexpression, evaluate the components of the full expression. \n\nThe minimal information needed for this to work is a declaration of the indices used, and a declaration\nof the values that those indices use:"
+					"cell_id": 2629240782162725687,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{evaluate}{Evaluate components of a tensor expression.}\n\nGiven an abstract tensor expression and a set of rules for the components of tensors occurring in this\nexpression, evaluate the components of the full expression. \n\nThe minimal information needed for this to work is a declaration of the indices used, and a declaration\nof the values that those indices use:"
 				}
 			],
-			"hidden" : true,
-			"source" : "\\algorithm{evaluate}{Evaluate components of a tensor expression.}\n\nGiven an abstract tensor expression and a set of rules for the components of tensors occurring in this\nexpression, evaluate the components of the full expression. \n\nThe minimal information needed for this to work is a declaration of the indices used, and a declaration\nof the values that those indices use:"
+			"hidden": true,
+			"source": "\\algorithm{evaluate}{Evaluate components of a tensor expression.}\n\nGiven an abstract tensor expression and a set of rules for the components of tensors occurring in this\nexpression, evaluate the components of the full expression. \n\nThe minimal information needed for this to work is a declaration of the indices used, and a declaration\nof the values that those indices use:"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
+			"cell_id": 2078015025997043999,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A_{n m} B_{m n p} \\left(C_{p s}+D_{s p}\\right)\\end{dmath*}"
+					"cell_id": 8551740331206000060,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10820549822183758119,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{n m} B_{m n p} (C_{p s} + D_{s p})"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{n m} B_{m n p} \\left(C_{p s}\\discretionary{}{}{}+D_{s p}\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "{r,t}::Coordinate.\n{m,n,p,s}::Indices(values={t,r}).\nex:= A_{n m} B_{m n p} ( C_{p s} + D_{s p} );"
+			"source": "{r,t}::Coordinate.\n{m,n,p,s}::Indices(values={t,r}).\nex:= A_{n m} B_{m n p} ( C_{p s} + D_{s p} );"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
-				
+			"cell_id": 17956085546737297170,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "The list of component values should be given just like the list of rules for the \\algo{substitute} algorithm,\nthat is, as equalities"
+					"cell_id": 3763835295602699573,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The list of component values should be given just like the list of rules for the \\algo{substitute} algorithm,\nthat is, as equalities"
 				}
 			],
-			"hidden" : true,
-			"source" : "The list of component values should be given just like the list of rules for the \\algo{substitute} algorithm,\nthat is, as equalities"
+			"hidden": true,
+			"source": "The list of component values should be given just like the list of rules for the \\algo{substitute} algorithm,\nthat is, as equalities"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
+			"cell_id": 11806603033878949925,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}(A_{r t} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{r t} = r^{2} t, D_{t r} = t^{2})\\end{dmath*}"
+					"cell_id": 3686962174179710579,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2147357101072508836,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "{A_{r t} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{r t} = (r)**2 t, D_{t r} = (t)**2}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left[A_{r t} = 3, \\discretionary{}{}{}B_{t r t} = 2, \\discretionary{}{}{}B_{t r r} = 5, \\discretionary{}{}{}C_{t r} = 1, \\discretionary{}{}{}D_{r t} = {r}^{2} t, \\discretionary{}{}{}D_{t r} = {t}^{2}\\right]\\end{dmath*}"
 				}
 			],
-			"source" : "rl:= [ A_{r t} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{r t} = r**2*t, D_{t r}=t**2 ];"
+			"source": "rl:= [ A_{r t} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{r t} = r**2*t, D_{t r}=t**2 ];"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
-				
+			"cell_id": 18162993330426165363,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "The \\algo{evaluate} algorithm then works out the values of the components of the \\verb|ex| expression,\nwhich will be denoted with a $\\square$ in its output,"
+					"cell_id": 6035873025174353872,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The \\algo{evaluate} algorithm then works out the values of the components of the \\verb|ex| expression,\nwhich will be denoted with a 'box' in its output,"
 				}
 			],
-			"hidden" : true,
-			"source" : "The \\algo{evaluate} algorithm then works out the values of the components of the \\verb|ex| expression,\nwhich will be denoted with a $\\square$ in its output,"
+			"hidden": true,
+			"source": "The \\algo{evaluate} algorithm then works out the values of the components of the \\verb|ex| expression,\nwhich will be denoted with a 'box' in its output,"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
+			"cell_id": 3880092560523380842,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\begin{aligned}\\square{}_{r}= & 6r^{2} t+6\\\\\n\\square{}_{t}= & 15t^{2}\\\\\n\\end{aligned}\n\\end{dmath*}"
+					"cell_id": 10250409031929328844,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7649307499791662063,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\components_{s}({{r} = 6(r)**2 t + 6, {t} = 15(t)**2})"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\square{}_{s}\\left\\{\\begin{aligned}\\square{}_{r}& = 6{r}^{2} t\\discretionary{}{}{}+6\\\\[-.5ex]\n\\square{}_{t}& = 15{t}^{2}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
 				}
 			],
-			"source" : "evaluate(ex, rl);"
+			"source": "evaluate(ex, rl);"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 16974789945816146373,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 1244926305717783280,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Note how the composite tensor of the original expression is now replaced with an 'anonymous tensor' represented by a box (which carries the free indices of the original expression), and all the components of the tensor are listed."
+				}
+			],
+			"hidden": true,
+			"source": "Note how the composite tensor of the original expression is now replaced with an 'anonymous tensor' represented by a box (which carries the free indices of the original expression), and all the components of the tensor are listed."
+		},
+		{
+			"cell_id": 13109713213385796712,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 3432929515427556149,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If you have more than one list of rules, first join them together using the \\algo{join} function before passing them into \\algo{evaluate}."
+				}
+			],
+			"hidden": true,
+			"source": "If you have more than one list of rules, first join them together using the \\algo{join} function before passing them into \\algo{evaluate}."
+		},
+		{
+			"cell_id": 41392486041367439,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 495491244615516088,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "It often happens that you want to evaluate the components of a tensor only on the right-hand side of an equality, for instance when you are trying to build substitution or evaluation rules for subsequent steps. To do this, use the \\verb|rhsonly=True| parameter,"
+				}
+			],
+			"hidden": true,
+			"source": "It often happens that you want to evaluate the components of a tensor only on the right-hand side of an equality, for instance when you are trying to build substitution or evaluation rules for subsequent steps. To do this, use the \\verb|rhsonly=True| parameter,"
+		},
+		{
+			"cell_id": 6617057626353331254,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 12047337562312750755,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4274963602832191614,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "T_{m n} = A_{m p} B_{p n}"
+						}
+					],
+					"source": "\\begin{dmath*}{}T_{m n} = A_{m p} B_{p n}\\end{dmath*}"
+				},
+				{
+					"cell_id": 6919442084848449418,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14221208537282556559,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "T_{m n} = \\components_{m n}({{r, t} = 3B_{t t}, {r, r} = 3B_{t r}})"
+						}
+					],
+					"source": "\\begin{dmath*}{}T_{m n} = \\square{}_{m}{}_{n}\\left\\{\\begin{aligned}\\square{}_{r}{}_{t}& = 3B_{t t}\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = 3B_{t r}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+				}
+			],
+			"source": "ex2:= T_{m n} = A_{m p} B_{p n};\nevaluate(ex2, rl, rhsonly=True); "
+		},
+		{
+			"cell_id": 12322892869467590884,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
 }
-
