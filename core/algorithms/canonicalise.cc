@@ -32,13 +32,13 @@ bool canonicalise::can_apply(iterator it)
 	// sums as factors. Products as factors are ok, they do not lead to multiple
 	// identically named free indices.
 
-	auto sum_or_prod = find_in_subtree(tr, it, [this](Ex::iterator tst) {
-		if(*tst->name=="\\sum" && number_of_indices(tst)>0) return true;
+	auto sum_or_prod_or_pow = find_in_subtree(tr, it, [this](Ex::iterator tst) {
+		if((*tst->name=="\\sum" || *tst->name=="\\pow") && number_of_indices(tst)>0) return true;
 		return false;
 		}, false);
-	if(sum_or_prod!=tr.end()) {
+	if(sum_or_prod_or_pow!=tr.end()) {
 #ifdef DEBUG
-		std::cerr << "trying to canonicalise nested product/sum " << Ex(it) << " " << Ex(sum_or_prod) << std::endl;
+		std::cerr << "trying to canonicalise nested product/sum/power " << Ex(it) << " " << Ex(sum_or_prod_or_pow) << std::endl;
 #endif
 		return false;
 		}
