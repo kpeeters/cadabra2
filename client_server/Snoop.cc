@@ -1443,6 +1443,8 @@ void Snoop::on_client_message(const std::string& msg)
 			// server that they have been stored with 'server_status=1', to prevent
 			// us from re-uploading them again. 
 
+			SNOOPDEBUG( std::cerr << "server ack'ed storing log entries " << root["log_stored"] << std::endl; );
+			
 			sqlite3_exec(db, "BEGIN TRANSACTION", NULL, NULL, NULL);
 
 			sqlite3_stmt *statement=0;
@@ -1467,6 +1469,8 @@ void Snoop::on_client_message(const std::string& msg)
 			// Mark all app entries for which we have received confirmation from the 
 			// server that they have been stored with 'server_status=1', to prevent
 			// us from re-uploading them again. 
+
+			SNOOPDEBUG( std::cerr << "server ack'ed storing run entries " << root["app_stored"] << std::endl; );
 
 			sqlite3_exec(db, "BEGIN TRANSACTION", NULL, NULL, NULL);
 

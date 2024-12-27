@@ -43,10 +43,10 @@ int main(int argc, char **argv)
  	snoop::log.init("CadabraServer", CADABRA_VERSION_FULL, "log.cadabra.science");
  	snoop::log.set_sync_immediately(true);
 #endif
-
+	
 #ifdef _WIN32
 	snoop::log("platform") << "windows" << snoop::flush;
-
+	
 // 	// The Anaconda people _really_ do not understand packaging...
 // 	// We are going to find out the installation path for Anaconda/Miniconda
 // 	// by querying a registry key.
@@ -64,12 +64,16 @@ int main(int argc, char **argv)
 // //	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + Glib::get_home_dir()+"/Anaconda3");
 // 	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + s);
 // 	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + s);
-		std::cerr << "Server::init: using PYTHONPATH = " << Glib::getenv("PYTHONPATH")
-					 << " and PYTHONHOME = " << Glib::getenv("PYTHONHOME") << "." << std::endl;
+	std::cerr << "Server::init: using PYTHONPATH = " << Glib::getenv("PYTHONPATH")
+				 << " and PYTHONHOME = " << Glib::getenv("PYTHONHOME") << "." << std::endl;
 #else
-	snoop::log("platform") << "linux/macos" << snoop::flush;
+#ifdef __APPLE__
+	snoop::log("platform") << "macos" << snoop::flush;
+#else
+	snoop::log("platform") << "linux" << snoop::flush;
 #endif
-
+#endif
+	
 	int port=0;
 	bool eod=true;
 	if(argc>1)

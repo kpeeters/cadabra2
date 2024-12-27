@@ -2757,16 +2757,19 @@ void NotebookWindow::on_help_register()
 		set_user_details(name.get_text(), email.get_text(), affiliation.get_text());
 		prefs.is_anonymous = false;
 		prefs.is_registered = true;
+		prefs.save();
 		md.hide();
 		});
 	nothanks.signal_clicked().connect([&]() {
 		prefs.is_anonymous = true;
 		prefs.is_registered = false;
+		prefs.save();
 		md.hide();
 		});
 	alreadyset.signal_clicked().connect([&]() {
 		prefs.is_registered = true;
 		prefs.is_anonymous = false;
+		prefs.save();
 		md.hide();
 		});
 	box->show_all();
