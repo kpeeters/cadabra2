@@ -836,3 +836,18 @@ def test41():
     print("Test 41 passed")
 
 test41()
+
+def test42():
+    __cdbkernel__=create_scope()
+    {k,l,m,n}::Indices(rotation, values={1..3}).
+    \epsilon{#}::EpsilonTensor.
+    ex := (K_{1})_{m n} e_{1}_{n} = \epsilon_{1 m n} e_{1}_{n};
+    evaluate(ex, $e_{1}_{1} = 1, e_{1}_{2} = a, e_{1}_{3} = b$, rhsonly=True);
+    ex = rhs(ex)
+    tst:= \components_{m}{\comma{\comma{2}=b}{\comma{3}=-a}} - @(ex);
+    collect_components(tst)
+    assert(tst==0)
+    print("Test 42 passed")
+
+test42()
+

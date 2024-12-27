@@ -308,8 +308,11 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 
 	// Attempt to apply each component substitution rule on this term.
 	Ex repl("\\components");
-	for(auto& ind: ind_free)
-		repl.append_child(repl.begin(), ind.second);
+	// Add the names of the free indices (if they are truly free, not integers).
+	for(auto& ind: ind_free) {
+		if(ind.second->is_integer()==false)
+			repl.append_child(repl.begin(), ind.second);
+		}
 	// If there are no free indices, add an empty first child anyway,
 	// otherwise we need special cases in various other places.
 	auto vl = repl.append_child(repl.begin(), str_node("\\comma"));
