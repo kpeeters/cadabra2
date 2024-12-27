@@ -104,6 +104,12 @@ namespace cadabra {
 			/// one.
 			void merge_components(iterator it1, iterator it2);
 
+			/// Simplify all components of a 'components' node by
+			/// collecting terms and optionally running sympy's simplify
+			/// on them. Returns a replacement iterator to the
+			/// top. Removes entries for vanishing components.
+			void simplify_components(iterator, bool run_sympy=true);
+
 		private:
 			const Ex& components;
 			bool only_rhs, call_sympy;
@@ -135,10 +141,6 @@ namespace cadabra {
 			/// Cleanup all components in a 'components' node; that is, call the
 			/// cleanup_dispatch function on them.
 			void cleanup_components(iterator it1);
-
-			/// Simplify all components of a 'components' node by running sympy's simplify
-			/// on them. Returns a replacement iterator to the top.
-			void simplify_components(iterator);
 
 			/// Wrap a non-component scalar node in a 'components' node.
 			iterator wrap_scalar_in_components_node(iterator sib);

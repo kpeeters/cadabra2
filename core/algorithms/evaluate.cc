@@ -7,6 +7,7 @@
 #include "algorithms/evaluate.hh"
 #include "algorithms/simplify.hh"
 #include "algorithms/substitute.hh"
+#include "algorithms/collect_terms.hh"
 #include "properties/EpsilonTensor.hh"
 #include "properties/PartialDerivative.hh"
 #include "properties/Coordinate.hh"
@@ -51,6 +52,10 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	// in the rule to an abstract tensor A_{m n} in the expression, storing
 	// the index name -> index value map.
 
+	iterator rit=it;
+	if(only_rhs && *it->name=="\\equals")
+		it = tr.child(rit, 1);
+	
 	it = cadabra::do_subtree(tr, it, [&](Ex::iterator walk) -> Ex::iterator {
 #ifdef DEBUG
 		std::cerr << "evaluate at " << walk << std::endl;
@@ -99,6 +104,9 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	// Final cleanup, e.g. to reduce scalar expressions to proper
 	// scalars instead of 'components' nodes.
 
+	if(only_rhs && *rit->name=="\\equals")
+		it = rit;
+	
 	cleanup_dispatch_deep(kernel, tr);
 
 	return res;
@@ -259,6 +267,11 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 	index_map_t ind_free, ind_dummy;
 	classify_indices(sib, ind_free, ind_dummy);
 
+#ifdef DEBUG
+	for(const auto& i: ind_free)
+		std::cerr << "free index: " << i.first;
+#endif
+	
 	// Pure scalar nodes need to be wrapped in a \component node to make life
 	// easier for the rest of the algorithm.
 	if(ind_free.size()==0 && ind_dummy.size()==0) {
@@ -270,13 +283,14 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 			}
 		return sib;
 		}
-	// If the indices are all Coordinates, this is a scalar, not a tensor.
-	// It then needs simple wrapping just like a 'proper' scalar handed above.
+	// If the indices are all Coordinates, this is a scalar or tensor
+	// component, not a tensor.  It then needs simple wrapping just
+	// like a 'proper' scalar handed above.
 	if(ind_dummy.size()==0 && ind_free.size()!=0) {
 		bool all_coordinates=true;
 		for(auto& ind: ind_free) {
 			const Coordinate *crd = kernel.properties.get<Coordinate>(ind.second, true);
-			if(!crd) {
+			if(!crd && !ind.second->is_integer()) {
 				all_coordinates=false;
 				break;
 				}
@@ -331,7 +345,9 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 				while(fi!=ind_free.end()) {
 					for(auto& r: subs.comparator.index_value_map) {
 						if(fi->first == r.first) {
-							// std::cerr << "adding " << r.second.begin() << std::endl;
+#ifdef DEBUG
+							std::cerr << "adding " << r.second.begin() << std::endl;
+#endif
 							repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none;
 							break;
 							}
@@ -345,6 +361,9 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 				while(fi!=full_ind_free.end()) {
 					for(auto& r: subs.comparator.index_value_map) {
 						if(fi->first == r.first) {
+#ifdef DEBUG
+							std::cerr << "adding2 " << r.second.begin() << std::endl;
+#endif
 							repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none;
 							break;
 							}
@@ -390,6 +409,10 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 	if(ind_dummy.size()!=0)
 		throw RuntimeException("Cannot yet evaluate this expression.");
 
+#ifdef DEBUG
+	std::cerr << "dense_factor " << it << std::endl;
+#endif
+	
 	// For each index we need to iterate over all possible values, and generate a
 	// components node for it. This should be done 'on the fly' eventually, the way
 	// python treats 'map', but that will require wrapping all access to
@@ -404,7 +427,6 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 	//std::cerr << "dense factor with indices: ";
 	MultiIndex<Ex> mi;
 	while(fi!=ind_free.end()) {
-		comp.append_child(comp.begin(), fi->first.begin());
 		// Look up which values this index takes.
 		auto *id = kernel.properties.get<Indices>(fi->second);
 		std::vector<Ex> values;
@@ -419,20 +441,30 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 			for(const auto& ex: id->values)
 				values.push_back(ex);
 			}
-
+		if(fi->second->is_integer()==false)
+			comp.append_child(comp.begin(), fi->first.begin());
+		
 		mi.values.push_back(values);
+
 		++fi;
 		}
-
+	
+#ifdef DEBUG
+	std::cerr << "number of indices taking values " << mi.values.size() << std::endl;
+#endif
+	
 	auto comma=comp.append_child(comp.begin(), str_node("\\comma"));
 
 	// For each set of index values...
 	for(mi.start(); !mi.end(); ++mi) {
 		auto ivs  = comp.append_child(comma, str_node("\\equals"));
 		auto ivsc = comp.append_child(ivs, str_node("\\comma"));
-		// ... add the values of the indices.
+		// ... add the values of the indices
+		auto fi = ind_free.begin();
 		for(std::size_t i=0; i<mi.values.size(); ++i) {
-			comp.append_child(ivsc, mi[i].begin());
+			if(fi->second->is_integer()==false)
+				comp.append_child(ivsc, mi[i].begin());
+			++fi;
 			}
 		// ... then set the value of the tensor component.
 		auto repfac = comp.append_child(ivs, it);
@@ -445,16 +477,21 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 			auto ii = iterator(il);
 			auto parent_rel = il->fl.parent_rel;
 			comp.replace(ii, mi[i].begin())->fl.parent_rel=parent_rel;
-			++fi;
 			++i;
+			++fi;
 			}
 		}
 
 #ifdef DEBUG
-	std::cerr << Ex(it) << std::endl;
+	std::cerr << Ex(it) << "turning to:" << std::endl;
+	std::cerr << comp << std::endl;
 #endif
 
 	it=tr.move_ontop(it, comp.begin());
+
+#ifdef DEBUG
+	std::cerr << it << std::endl;
+#endif
 
 	return it;
 	}
@@ -582,7 +619,7 @@ void evaluate::merge_components(iterator it1, iterator it2)
 
 
 	if(call_sympy)
-		simplify_components(it1);
+		simplify_components(it1, true);
 	}
 
 void evaluate::cleanup_components(iterator it)
@@ -995,7 +1032,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 #endif
 
 	if(call_sympy)
-		simplify_components(it);
+		simplify_components(it, true);
 	// std::cerr << "then " << Ex(it) << std::endl;
 
 	return it;
@@ -1009,16 +1046,22 @@ Ex::iterator evaluate::handle_epsilon(iterator it)
 	// generate permutations of 'r1 ... rn' and signs
 	// fill components
 	auto sib=tr.begin(it);
+	const Indices *ind=0;
 	while(sib!=tr.end(it)) {
-		rep.append_child(rep.begin(), (iterator)sib);
+		if(!sib->is_integer()) {
+			rep.append_child(rep.begin(), (iterator)sib);
+			const Indices *ip = kernel.properties.get<Indices>(sib);
+			if(ip==0)
+				throw ArgumentException("No Indices property known for all indices in EpsilonTensor.");
+			if(ind==0)
+				ind=ip;
+			else if(ind!=ip)
+				throw ArgumentException("Indices property not the same for all indices in EpsilonTensor.");
+			}
+		
 		++sib;
 		}
 	auto cvals = rep.append_child(rep.begin(), str_node("\\comma"));
-
-	sib=tr.begin(it);
-	const Indices *ind = kernel.properties.get<Indices>(sib);
-	if(ind==0)
-		throw ArgumentException("No Indices property known for indices in EpsilonTensor.");
 
 	combin::combinations<Ex> cb;
 	for(auto& val: ind->values)
@@ -1031,12 +1074,28 @@ Ex::iterator evaluate::handle_epsilon(iterator it)
 	for(unsigned int i=0; i<cb.size(); ++i) {
 		auto equals = rep.append_child(cvals, str_node("\\equals"));
 		auto vcomma = rep.append_child(equals, str_node("\\comma"));
+		bool discard=false;
+		
+		auto sib=tr.begin(it);
 		for(unsigned int j=0; j<cb.original.size(); ++j) {
-			//			std::cerr << *(cb[i][j].begin()->multiplier) << " ";
-			rep.append_child(vcomma, cb[i][j].begin());
+			if(sib->is_integer()) {
+				if(cb[i][j].begin()->multiplier != sib->multiplier) {
+					discard=true;
+					break;
+					}
+				}
+			else {
+				rep.append_child(vcomma, cb[i][j].begin());
+				}
+			++sib;
 			}
-		auto one = rep.append_child(equals, str_node("1"));
-		multiply(one->multiplier, cb.ordersign(i));
+		if(!discard) {
+			auto one = rep.append_child(equals, str_node("1"));
+			multiply(one->multiplier, cb.ordersign(i));
+			}
+		else {
+			rep.erase(equals);
+			}
 		//		std::cerr << std::endl;
 		}
 
@@ -1044,7 +1103,7 @@ Ex::iterator evaluate::handle_epsilon(iterator it)
 	return it;
 	}
 
-void evaluate::simplify_components(iterator it)
+void evaluate::simplify_components(iterator it, bool run_sympy)
 	{
 	assert(*it->name=="\\components");
 
@@ -1054,6 +1113,7 @@ void evaluate::simplify_components(iterator it)
 	sibling_iterator lst = tr.end(it);
 	--lst;
 
+	cadabra::collect_terms collect(kernel, tr);
 	cadabra::simplify simp(kernel, tr);
 	simp.set_progress_monitor(pm);
 
@@ -1062,17 +1122,20 @@ void evaluate::simplify_components(iterator it)
 		auto rhs1 = tr.begin(eqs);
 		++rhs1;
 		iterator nd=rhs1;
-			{
+		if(collect.can_apply(nd))
+			collect.apply(nd);
+
+		if(run_sympy && !nd->is_zero()) {
 			ScopedProgressGroup group(pm, "scalar_backend");
 			// std::cerr << "simplify at " << Ex(nd) << std::endl;
 			simp.apply_generic(nd, false, false, 0);
 			}
 		if(nd->is_zero()) {
-			// std::cerr << "component zero " << nd.node << std::endl;
+			// std::cerr << "component zero " << nd << std::endl;
 			tr.erase(eqs);
 			}
 		else {
-			// std::cerr << "component non-zero " << nd.node << std::endl;
+			// std::cerr << "component non-zero " << nd << std::endl;
 			}
 		return true;
 		});
@@ -1263,8 +1326,8 @@ Ex::iterator evaluate::handle_prod(iterator it)
 
 			cadabra::do_list(tr, sib1, [&](Ex::iterator it1) {
 				if(*it1->name!="\\equals")
-					std::cerr << *it->name << std::endl;
-				assert(*it1->name=="\\equals");
+					throw InternalError("evaluate::handle_prod: encountered non-equals node evaluating components.");
+
 				auto lhs1 = tr.begin(it1);
 				auto ivalue1 = tr.begin(lhs1);
 				ivalue1 += num1;
@@ -1484,7 +1547,7 @@ Ex::iterator evaluate::handle_prod(iterator it)
 
 	// Use sympy to simplify components.
 	if(call_sympy)
-		simplify_components(it);
+		simplify_components(it, true);
 	//std::cerr << "simplified:\n" << Ex(it) << std::endl;
 
 	return it;

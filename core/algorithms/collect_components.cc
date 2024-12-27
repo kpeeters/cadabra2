@@ -54,6 +54,7 @@ Algorithm::result_t collect_components::apply(iterator& st)
 #ifdef DEBUG
 		std::cerr << "collect_components::apply: merged components node now " << s1 << std::endl;
 #endif
+		eval.simplify_components(s1, false);
 		auto comma=tr.end(s1);
 		--comma;
 		if(tr.number_of_children(comma)==0)

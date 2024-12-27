@@ -626,16 +626,18 @@ void DisplayTerminal::print_other(std::ostream& str, Ex::iterator it)
 
 	if(needs_extra_brackets) str << "{"; // to prevent double sup/sub script errors
 	std::string sbit=*it->name;
-	if(use_unicode && getenv("CADABRA_NO_UNICODE")==0) {
-		auto rn1 = symmap.find(sbit);
-		if(rn1!=symmap.end())
-			sbit = rn1->second;
-		auto rn = cadabra::symbols::greekmap.find(sbit);
-		if(rn!=cadabra::symbols::greekmap.end())
-			sbit = rn->second;
+	if(sbit!="\\indexbracket") {
+		if(use_unicode && getenv("CADABRA_NO_UNICODE")==0) {
+			auto rn1 = symmap.find(sbit);
+			if(rn1!=symmap.end())
+				sbit = rn1->second;
+			auto rn = cadabra::symbols::greekmap.find(sbit);
+			if(rn!=cadabra::symbols::greekmap.end())
+				sbit = rn->second;
+			}
+		str << sbit;
 		}
-	str << sbit;
-
+	
 	if(needs_extra_brackets) str << "}";
 
 	print_children(str, it);
