@@ -62,9 +62,9 @@ jobs:
         git config user.name "Kasper Peeters"
         git config user.email "info@cadabra.science"
         git add cadabra2-devel.rb
-        git commit -a -m "Update to release ${{ env.VERSION }} commit ${{ env.COMMIT }}."
-        git push        
+        git diff-index --quiet HEAD || (git commit -a -m "Update to release ${{ env.VERSION }} commit ${{ env.COMMIT }}." && git push)
 
+        
   test:
     needs: build
     runs-on: macos-latest
