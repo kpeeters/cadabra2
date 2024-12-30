@@ -134,14 +134,29 @@ void Indices::latex(std::ostream& str) const
 	str << "Indices";
 	switch(position_type) {
 		case free:
-			str << "(position=free)";
+			str << "(position=free";
 			break;
 		case fixed:
-			str << "(position=fixed)";
+			str << "(position=fixed";
 			break;
 		case independent:
-			str << "(position=independent)";
+			str << "(position=independent";
 			break;
+		}
+	if(values.size()>0) {
+		str << ", values=\\{";
+		bool first=true;
+		for(const auto& v: values) {
+			if(first)
+				first=false;
+			else
+				str << ", ";
+			str << v;
+			}
+		str << "\\})";
+		}
+	else {
+		str << ")";
 		}
 	}
 

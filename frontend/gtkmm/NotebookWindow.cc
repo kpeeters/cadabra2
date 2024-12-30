@@ -799,7 +799,7 @@ void NotebookWindow::load_css()
 	data += "#mainbox * { transition-property: opacity; transition-duration: 0.5s; }\n";
 	data += "#mainbox:disabled * { opacity: 0.85; }\n";
 	data += "label { margin-left: 4px; }\n";
-	data += "#TeXArea:selected { background-color: #eee; }\n";
+//	data += "#TeXArea:selected { background-color: #eee; color: #000; }\n";
 	data += "spinner { background: none; opacity: 1; -gtk-icon-source: -gtk-icontheme(\"process-working-symbolic\"); }\n";
 	data += "spinner:checked { opacity: 1; animation: spin 1s linear infinite; }\n";
 
@@ -1822,6 +1822,7 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int )
 ////							w->queue_resize();							
 //							}, 50);
 					(*vis).second.inbox->edit.hide();
+					unselect_output_cell();
 //					auto vis2 = canvasses[i]->visualcells.find(&(*it));
 //					if(vis2==canvasses[i]->visualcells.end()) {
 //						TeXView *w = (*vis2).second.outbox;

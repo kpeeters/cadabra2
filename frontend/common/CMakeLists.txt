@@ -16,7 +16,7 @@ endif(POLICY CMP0042)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../../cmake/modules")
 
 find_package(Threads)
-find_package(Boost 1.45.0 COMPONENTS system)
+find_package(Boost 1.71.0 COMPONENTS system REQUIRED)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)

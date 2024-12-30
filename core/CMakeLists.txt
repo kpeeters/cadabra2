@@ -34,7 +34,7 @@ configure_file(
 #   # so no linking takes place
 #   set(Boost_USE_STATIC_LIBS   ON)
 # endif()
-find_package(Boost 1.53 COMPONENTS system filesystem)
+find_package(Boost 1.71.0 COMPONENTS system filesystem REQUIRED)
 
 # Find glibmm (for base64)
 # Conda will probably go belly-up again...
@@ -207,50 +207,51 @@ set(MODULE_SRC_FILES
 )
 
 set(LOCAL_SRC_FILES
-	NEvaluator.cc
-	NTensor.cc
-    InstallPrefix.cc
-    DataCell.cc
-   CdbPython.cc
-   ExNode.cc
-   ProgressMonitor.cc
-   Bridge.cc
-   Adjform.cc
-   Algorithm.cc
-   Cleanup.cc
-   Combinatorics.cc
-   Compare.cc
-   DisplayBase.cc
-   DisplayMMA.cc
-   DisplayTeX.cc
-   DisplaySympy.cc
-   DisplayTerminal.cc
-   TerminalStream.cc
-   Exceptions.cc
-   Exchange.cc
-   Functional.cc
-   Hash.cc
-   IndexIterator.cc
-   IndexClassifier.cc
-   Kernel.cc
-   Linear.cc
-   Media.cc
-   Parser.cc
-   PreClean.cc
-   PreProcessor.cc
-   Props.cc
-   PythonException.cc
-   Stopwatch.cc
-   Storage.cc
-   Symbols.cc
-   SympyCdb.cc
-   YoungTab.cc
-   modules/xperm_new.cc
-   ${CADABRA_LIBS_DIR}/whereami/whereami.c
-   ${CADABRA_LIBS_DIR}/base64/base64.cc  
-   ${ALGORITHM_SRC_FILES}
-   ${PROPERTY_SRC_FILES}
-   )
+  NDSolver.cc
+  NEvaluator.cc
+  NTensor.cc
+  InstallPrefix.cc
+  DataCell.cc
+  CdbPython.cc
+  ExNode.cc
+  ProgressMonitor.cc
+  Bridge.cc
+  Adjform.cc
+  Algorithm.cc
+  Cleanup.cc
+  Combinatorics.cc
+  Compare.cc
+  DisplayBase.cc
+  DisplayMMA.cc
+  DisplayTeX.cc
+  DisplaySympy.cc
+  DisplayTerminal.cc
+  TerminalStream.cc
+  Exceptions.cc
+  Exchange.cc
+  Functional.cc
+  Hash.cc
+  IndexIterator.cc
+  IndexClassifier.cc
+  Kernel.cc
+  Linear.cc
+  Media.cc
+  Parser.cc
+  PreClean.cc
+  PreProcessor.cc
+  Props.cc
+  PythonException.cc
+  Stopwatch.cc
+  Storage.cc
+  Symbols.cc
+  SympyCdb.cc
+  YoungTab.cc
+  modules/xperm_new.cc
+  ${CADABRA_LIBS_DIR}/whereami/whereami.c
+  ${CADABRA_LIBS_DIR}/base64/base64.cc  
+  ${ALGORITHM_SRC_FILES}
+  ${PROPERTY_SRC_FILES}
+)
 if(MATHEMATICA_FOUND)
    set(LOCAL_SRC_FILES 
       ${LOCAL_SRC_FILES}
