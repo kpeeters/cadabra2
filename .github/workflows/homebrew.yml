@@ -67,7 +67,7 @@ jobs:
     
     steps:
     - name: get dependencies
-      run:  brew tap kpeeters/repo && brew install cadabra2
+      run:  brew update && brew upgrade && brew tap kpeeters/repo && brew install cadabra2
 
     - name: show where cadabra is located
       run:  cat `which cadabra2`
