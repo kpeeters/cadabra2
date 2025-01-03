@@ -788,6 +788,9 @@ void NotebookWindow::load_css()
 	// std::cerr << "(re)loading css" << std::endl;
 	std::string text_colour = prefs.highlight ? "black" : "blue";
 	Glib::ustring data = "";
+
+	// https://stackoverflow.com/questions/35045469/default-gtk-css-color-scheme
+	
 	data += "scrolledwindow { background-color: @theme_base_color; }\n";
 	data += "textview text { color: "+text_colour+"; background-color: @theme_base_color; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
 	data += "textview *:focus { background-color: #eee; }\n";
@@ -799,7 +802,7 @@ void NotebookWindow::load_css()
 	data += "#mainbox * { transition-property: opacity; transition-duration: 0.5s; }\n";
 	data += "#mainbox:disabled * { opacity: 0.85; }\n";
 	data += "label { margin-left: 4px; }\n";
-//	data += "#TeXArea:selected { background-color: #eee; color: #000; }\n";
+	data += "#TeXArea:selected { background-color: #eee; color: #000; }\n";
 	data += "spinner { background: none; opacity: 1; -gtk-icon-source: -gtk-icontheme(\"process-working-symbolic\"); }\n";
 	data += "spinner:checked { opacity: 1; animation: spin 1s linear infinite; }\n";
 
