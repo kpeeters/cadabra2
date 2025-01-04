@@ -110,10 +110,11 @@ namespace cadabra {
 
 			// Keeping track of cells which are running on the server, in
 			// a form which allows us to look them up quickly based only
-			// on the id (which is all that the server knows about).
+			// on the id (which is all that the server knows about). A
+			// cell can be queued multiple times for running; this is the
+			// integer in the map.
 
-			// FIXME: moving this away into documentthread, so that we only need to refer to id's.
-			std::map<DataCell::id_t, DTree::iterator> running_cells;
+			std::map<DataCell::id_t, int> running_cells;
 
 			// WebSocket++ things.
 			websocket_client            wsclient;

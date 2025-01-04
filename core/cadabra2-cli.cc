@@ -241,8 +241,10 @@ void Shell::execute_file(const std::string& filename, bool preprocess)
 		buffer << ifs.rdbuf();
 		code = buffer.str();
 		}
-	if (preprocess)
-		code = "import cadabra2\nfrom cadabra2 import *\nfrom cadabra2_defaults import *\n\n" + cadabra::cdb2python_string(code, display);
+	if (preprocess) {
+		std::string error;
+		code = "import cadabra2\nfrom cadabra2 import *\nfrom cadabra2_defaults import *\n\n" + cadabra::cdb2python_string(code, display, error);
+		}
 
 	try {
 		py::exec(code, globals, globals);
@@ -464,7 +466,8 @@ void Shell::process_ps2(const std::string& line)
 		}
 
 	bool display = !(flags & Flags::IgnoreSemicolons);
-	std::string code = cadabra::cdb2python_string(collect, display);
+	std::string error;
+	std::string code = cadabra::cdb2python_string(collect, display, error);
 	collect.clear();
 	execute(code);
 	}

@@ -101,7 +101,13 @@ namespace cadabra {
 
 			bool                          running;
 
+			/// Return the cell ID. This is essentially a random UUID.
 			id_t                          id() const;
+
+			/// List of all variables referenced in this cell. This gets updated as
+			/// soon as the cell is run by the server and the output comes back.
+
+			std::set<std::string>         variables_referenced;
 
 		private:
 			id_t                          serial_number;

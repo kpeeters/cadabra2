@@ -197,21 +197,15 @@ void DocumentThread::run_cells_referencing_variable(std::string variable, double
 	// First update the variable itself.
 	compute->update_variable_on_server(variable, value);
 
-	// Find all cells referencing this variable.
-	// FIXME: needs caching.
+	// Re-run all cells referencing this variable.
 	DTree::iterator it = doc.begin();
 	while(it!=doc.end()) {
 		if(it->cell_type==DataCell::CellType::python) {
-			if(cadabra::code_contains_variable(it->textbuf, variable)) {
-				// DTree::sibling_iterator sib=doc.begin(it);
-				// while(sib!=doc.end(it)) {
-				// 	auto nxt = sib;
-				// 	++nxt;
-				// 	gui->remove_cell(doc, sib);
-				// 	sib=nxt;
-				// 	}
-
-				compute->execute_cell(it, variable);
+			if(it->variables_referenced.count(variable)==1) {
+				if(it->textbuf.find("slider(")==std::string::npos) {
+					// std::cerr << "re-running " << it->textbuf << std::endl;
+					compute->execute_cell(it, variable);
+					}
 				}
 			}
 		++it;

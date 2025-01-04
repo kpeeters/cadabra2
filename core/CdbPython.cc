@@ -8,6 +8,7 @@
 #include "CdbPython.hh"
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
+#include <pybind11/stl.h>
 #include "Exceptions.hh"
 
 #ifndef CDBPYTHON_NO_NOTEBOOK
@@ -44,7 +45,8 @@ std::string cadabra::cdb2python(const std::string& in_name, bool display)
 	    << "def display(ex):\n"
 	    << "   pass\n\n";
 
-	ofs << cdb2python_string(buffer.str(), display);
+	std::string error;
+	ofs << cdb2python_string(buffer.str(), display, error);
 
 	ofs << '\n'
 	    << "del locals()['display']\n\n"
@@ -56,7 +58,7 @@ std::string cadabra::cdb2python(const std::string& in_name, bool display)
 	return ofs.str();
 	}
 
-std::string cadabra::cdb2python_string(const std::string& blk, bool display)
+std::string cadabra::cdb2python_string(const std::string& blk, bool display, std::string& report_error)
 	{
 	std::stringstream str(blk);
 	std::string line;
@@ -70,8 +72,11 @@ std::string cadabra::cdb2python_string(const std::string& blk, bool display)
 	// validation. If we ever hit an indentation error, we add
 	// previous successful blocks and re-try, successively,
 	// until the block compiles again.
-	
-	while(std::getline(str, line, '\n')) {
+
+	bool early_exit=false;
+	std::string error;
+		
+	while(!early_exit && std::getline(str, line, '\n')) {
 		res = cadabra::convert_line(line, cv, display);
 
 //		if(res.second!="::empty")
@@ -80,10 +85,10 @@ std::string cadabra::cdb2python_string(const std::string& blk, bool display)
 		if(res.second!="::empty")
 			tmpblk += res.second;
 
+		bool previous_step_removed=false; // avoid removing a line, then adding again.
 		while(true) {
-			// std::cerr << "CHECK:---\n" << tmpblk << "\n---" << std::endl;
-			std::string error;
 			int ic = is_python_code_complete(tmpblk, error);
+			// std::cerr << "CHECK:---\n" << tmpblk << "\n---: " << ic << std::endl;
 			if(ic==1) { // complete
 				newblks.push_back(res.first + tmpblk + "\n");
 				tmpblk = "";
@@ -94,12 +99,24 @@ std::string cadabra::cdb2python_string(const std::string& blk, bool display)
 				break;
 				}
 			if(ic==-1) { // indentation error
-				if(newblks.size()==0)
+				if(newblks.size()==0) {
+					early_exit=true;
 					break;
+					}
 				// Grow block by adding previously ok block,
 				// then try compiling again.
+
 				tmpblk = newblks.back() + tmpblk;
 				newblks.pop_back();
+				if(previous_step_removed) {
+					// We are about to add a line which we just removed. This is a genuine
+					// indentation error. Return what we have so far and let the code runner
+					// fail with proper exception info for the user (if we just throw an
+					// exception with the content of 'error' it will refer to 'codeop').
+					early_exit=true;
+					break;
+					}
+				previous_step_removed=false;
 				}
 			if(ic==-2) { 
 				// This is either a genuine syntax error, or one line
@@ -110,11 +127,18 @@ std::string cadabra::cdb2python_string(const std::string& blk, bool display)
 					if(size_t pos = tmpblk.rfind('\n'); pos != std::string::npos) {
 						newblks.push_back(tmpblk.substr(0, pos)+"\n");
 						tmpblk = tmpblk.substr(pos+1);
+						previous_step_removed=true;
 						// re-run
 						}
-					else throw ParseException(error);
+					else {
+						early_exit=true;
+						break;
+						}
 					}
-				else throw ParseException(error);
+				else {
+					early_exit=true;
+					break;
+					}
 				}
 			}
 		}
@@ -126,7 +150,12 @@ std::string cadabra::cdb2python_string(const std::string& blk, bool display)
 
 	// Add anything still left and cross fingers.
 	newblk += tmpblk+"\n";
-	
+
+	if(early_exit) {
+		std::cerr << "** EARLY EXIT: " << error << std::endl;
+		report_error=error;
+		}
+
 	return newblk;
 	}
 
@@ -180,13 +209,13 @@ int cadabra::is_python_code_complete(const std::string& code, std::string& error
 			return -2;
 			}
 		
-		throw;
+		throw; // pass all other exceptions through
 		}
 	}
 
 std::string cadabra::remove_variable_assignments(const std::string& code, const std::string& variable)
 	{
-	pybind11::scoped_interpreter guard{};	
+//	pybind11::scoped_interpreter guard{};	
 
 	static std::string removal_code = R"PYTHON(
 import ast
@@ -280,26 +309,48 @@ bool cadabra::variables_in_code(const std::string& code, std::set<std::string>& 
 	// variable list to the C++ side.
 	
 	static std::string testcode = R"CODE(
-def variable_set(code_str, variable_name):
+def variable_set(code_str):
     """
     Collect all variable names in a piece of Python code.
+    Returns a set of names.
     """
     import ast
 
     class VariableVisitor(ast.NodeVisitor):
         def __init__(self):
-            self.found = False
+            self.names = set()
+        
+        def generic_visit(self, node):
+            # We still need to visit all children even if parent assignment fails
+            for child in ast.iter_child_nodes(node):
+                try:
+                    child.parent = node
+                except (TypeError, AttributeError):
+                    # If we can't set parent, continue without it
+                    pass
+                self.visit(child)
         
         def visit_Name(self, node):
-            if node.id == variable_name:
-                self.found = True
+            # For names, if we can check the context do so, otherwise include the name
+            try:
+                parent = getattr(node, 'parent', None)
+                if parent is not None:
+                    # Only exclude if we're certain it's a function call
+                    if isinstance(parent, ast.Call) and parent.func == node:
+                        return
+
+            except (TypeError, AttributeError):
+                pass
+            
+            # Include the name unless we explicitly determined it's a function call
+            self.names.add(node.id)
 
     try:
         # Parse the code into an AST
         tree = ast.parse(code_str)
         visitor = VariableVisitor()
         visitor.visit(tree)
-        return visitor.found
+        return visitor.names
     except SyntaxError:
         # Handle invalid Python code
         return False
@@ -309,8 +360,13 @@ def variable_set(code_str, variable_name):
 		pybind11::exec(testcode);
 		pybind11::object variable_set = pybind11::globals()["variable_set"];
 		pybind11::object result = variable_set(code);
+
+		variables = result.cast<std::set<std::string>>();
+
+		// Add the variables inside '@(...)' wrappers.
 		
-		return result.cast<bool>();
+		
+		return true;
 		}
 	catch(const pybind11::error_already_set& e) {
 		std::cerr << "Python error: " << e.what() << std::endl;

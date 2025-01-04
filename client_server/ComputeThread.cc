@@ -112,7 +112,7 @@ void ComputeThread::all_cells_nonrunning()
 	{
 	for(auto it: running_cells) {
 		std::shared_ptr<ActionBase> rs_action =
-		   std::make_shared<ActionSetRunStatus>(it.second->id(), false);
+		   std::make_shared<ActionSetRunStatus>(it.first, false);
 		docthread->queue_action(rs_action);
 		}
 	if(gui) {
@@ -265,8 +265,16 @@ void ComputeThread::cell_finished_running(DataCell::id_t id)
 			throw std::logic_error("Cannot find cell with id = "+std::to_string(id.id));
 			}
 		
-		//	DTree::iterator ret = (*it).second;
-		running_cells.erase(it);
+		if(it->second==1) {
+			// Mark this cell as no longer running.
+			std::shared_ptr<ActionBase> rs_action =
+				std::make_shared<ActionSetRunStatus>(id, false);
+			docthread->queue_action(rs_action);
+
+			running_cells.erase(it);
+			}
+		else
+			it->second -= 1;
 		}
 	}
 
@@ -352,9 +360,16 @@ void ComputeThread::on_message(const std::string& msg)
 
 			if (finished) {
 				if(parent_id.id!=0) {
-					std::shared_ptr<ActionBase> rs_action =
-						std::make_shared<ActionSetRunStatus>(parent_id, false);
-					docthread->queue_action(rs_action);
+					// If this cell references variables, store them in the DataCell.
+					if(content.count("variables")>0) {
+						std::set<std::string> vars;
+						for(const auto& var: content["variables"])
+							vars.insert(var);
+						
+						std::shared_ptr<ActionBase> action =
+							std::make_shared<ActionSetVariableList>(parent_id, vars);
+						docthread->queue_action(action);
+						}
 					}
 				cell_finished_running(parent_id);
 				}
@@ -525,7 +540,11 @@ void ComputeThread::execute_cell(DTree::iterator it, std::string no_assign)
 	// For a code cell, construct a server request message and then
 	// send the cell to the server.
 	if(it->cell_type==DataCell::CellType::python) {
-		running_cells[dc.id()]=it;
+		auto rit=running_cells.find(dc.id());
+		if(rit==running_cells.end())
+			running_cells[dc.id()]=1;
+		else
+			rit->second += 1;
 
 		// Schedule an action to update the running status of this cell.
 		std::shared_ptr<ActionBase> rs_action =
@@ -542,10 +561,8 @@ void ComputeThread::execute_cell(DTree::iterator it, std::string no_assign)
 		header["msg_type"]="execute_request";
 		req["auth_token"]=authentication_token;
 		req["header"]=header;
-		if(no_assign!="") 
-			content["code"]=remove_variable_assignments(dc.textbuf, no_assign);
-		else
-			content["code"]=dc.textbuf;
+		content["remove_variable_assignments"]=no_assign;
+		content["code"]=dc.textbuf;
 		req["content"]=content;
 
 		gui->on_kernel_runstatus(true);
@@ -589,7 +606,7 @@ void ComputeThread::update_variable_on_server(std::string variable, double value
 	if(getenv("CADABRA_SHOW_SENT")) {
 		std::cerr << "SEND: " << req.dump(3) << std::endl;
 		}
-	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
+	wsclient.send(str.str());
 	}
 
 

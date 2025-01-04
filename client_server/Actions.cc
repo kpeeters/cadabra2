@@ -334,6 +334,27 @@ void ActionSetRunStatus::revert(DocumentThread&, GUIBase& )
 	{
 	}
 
+ActionSetVariableList::ActionSetVariableList(DataCell::id_t ref_id, std::set<std::string> variables)
+	: ActionBase(ref_id), new_variables_(variables)
+	{
+	}
+
+bool ActionSetVariableList::undoable() const
+	{
+	return false;
+	}
+
+void ActionSetVariableList::execute(DocumentThread& cl, GUIBase& gb)
+	{
+	ActionBase::execute(cl, gb);
+
+	ref->variables_referenced=new_variables_;
+	}
+
+void ActionSetVariableList::revert(DocumentThread&, GUIBase& )
+	{
+	}
+
 
 ActionInsertText::ActionInsertText(DataCell::id_t ref_id, int pos, const std::string& content)
 	: ActionBase(ref_id), insert_pos(pos), text(content)

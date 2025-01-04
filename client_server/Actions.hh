@@ -126,6 +126,24 @@ namespace cadabra {
 			bool            was_running_, new_running_;
 		};
 
+	/// \ingroup clientserver
+	///
+	/// Update the list of referenced variables in this cell.
+
+	class ActionSetVariableList : public ActionBase {
+		public:
+			ActionSetVariableList(DataCell::id_t ref_id_, std::set<std::string>);
+			virtual ~ActionSetVariableList() {};
+
+			virtual void execute(DocumentThread&, GUIBase&) override;
+			virtual void revert(DocumentThread&,  GUIBase&) override;
+
+			virtual bool undoable() const override;
+		private:
+			DTree::iterator this_cell;
+			std::set<std::string> new_variables_;
+		};
+
 
 	/// \ingroup clientserver
 	///

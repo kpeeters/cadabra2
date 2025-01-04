@@ -209,23 +209,40 @@ int InterruptCheck(PyObject* obj, _frame* frame, int what, PyObject* arg)
 	return 0;
 	}
 
-std::string Server::run_string(const std::string& blk, bool handle_output)
+std::string Server::run_string(const std::string& blk, bool handle_output, bool extract_variables,
+										 std::set<std::string> remove_assignments)
 	{
 	//std::cerr << "RUN_STRING" << std::endl;
 	// snoop::log("run") << blk << snoop::flush;
 
-	std::string result;
-
-	// Preparse input block.
-	// std::cerr << "RAW:\n" << blk << std::endl;
-	auto newblk = cadabra::cdb2python_string(blk, true);
-
-	// std::cerr << "PREPARSED:\n" << newblk << std::endl;
-	// snoop::log("preparsed") << newblk << snoop::flush;
-
+	std::string result, newblk;
+	
 	// Run block. Catch output.
 	try {
-		//		pybind11::object ignored = pybind11::eval<pybind11::eval_statements>(newblk.c_str(), main_namespace);
+		// Preparse input block.
+		// std::cerr << "RAW:\n" << blk << std::endl;
+		std::string error;
+		newblk = cadabra::cdb2python_string(blk, true, error);
+		
+		// std::cerr << "PREPARSED:\n" << newblk << std::endl;
+		// snoop::log("preparsed") << newblk << snoop::flush;
+		
+		run_string_variables.clear();
+		if(error.size()==0) {
+			// If the preparsing found an error, do not attempt anything
+			// else; just run it and let Python report the error.
+			if(extract_variables) {
+				cadabra::variables_in_code(newblk, run_string_variables);
+				// std::cerr << "----" << std::endl;
+				// for(const auto& name: run_string_variables)
+				// 	std::cerr << "contains " << name << std::endl;
+				}
+			for(const std::string& var: remove_assignments) {
+				newblk = cadabra::remove_variable_assignments(newblk, var);
+				}
+			// std::cerr << "REMOVED:\n" << newblk << std::endl;
+			}
+		
 #ifdef DEBUG
 		std::cerr << "executing..." << std::endl;
 		std::cerr << newblk << std::endl;
@@ -379,9 +396,10 @@ void Server::wait_for_job()
 			// master thread can push new blocks onto it.
 			// snoop::log(snoop::info) << "Block finished running" << snoop::flush;
 			server_stopwatch.stop();
-			current_ws_id=block.ws_id;
-			current_id =block.cell_id;
-			block.output = run_string(block.input);
+			current_ws_id   = block.ws_id;
+			current_id      = block.cell_id;
+			block.output    = run_string(block.input, true, true, block.remove_variable_assignments);
+			block.variables = run_string_variables;
 			on_block_finished(block);
 			}
 		catch(std::runtime_error& ex) {
@@ -496,6 +514,9 @@ void Server::dispatch_message(websocket_server::id_type ws_id, const std::string
 		uint64_t id = header.value("cell_id", uint64_t(0));
 		std::unique_lock<std::mutex> lock(block_available_mutex);
 		Block block(ws_id, code, id, msg_type);
+		if(content.count("remove_variable_assignments")==1) {
+			block.remove_variable_assignments.insert(content.value("remove_variable_assignments", ""));
+			}
 		block.response["header"]["parent_origin"]="client";
 		block.response["header"]["parent_id"]=id;
 		block_queue.push(block);
@@ -564,6 +585,9 @@ void Server::on_block_finished(Block block)
 		content["output"]=block.output;
 		block.response["msg_type"]="output";
 		}
+
+	// Inform the notebook about the variables referenced in this block.
+	content["variables"]=block.variables;
 
 	std::ostringstream str;
 	str << block.response << std::endl;

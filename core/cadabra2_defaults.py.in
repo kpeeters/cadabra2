@@ -366,7 +366,10 @@ def display(obj, cell_id=0, delay_send=False):
            server.send(unicode(cdb_out), "plain", 0, cell_id, False)
            return None
            # FIXME: send input_form version.
-        
+
+    elif hasattr(obj, "__send_to_server__"):
+        obj.__send_to_server__(server)
+           
     elif hasattr(obj, "__module__") and hasattr(obj.__module__, "find") and obj.__module__.find("sympy")!=-1:
         if delay_send:
            return latex(obj)
