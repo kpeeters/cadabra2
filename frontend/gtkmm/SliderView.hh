@@ -31,7 +31,7 @@ namespace cadabra {
 			Gtk::VBox   vbox;
 			Gtk::Scale  scale;
 
-			double value, min_value, max_value;
+			double value, min_value, max_value, step_size;
 			std::string variable;
 		};
 
