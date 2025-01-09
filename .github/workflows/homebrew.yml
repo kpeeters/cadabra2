@@ -3,11 +3,11 @@
 
 name: Homebrew
 
-on:
-  release:
-    types: [released]
+# on:
+#   release:
+#     types: [released]
 
-# on: [push]
+on: [push]
 
 jobs:
   build:
@@ -58,8 +58,7 @@ jobs:
         git config user.name "Kasper Peeters"
         git config user.email "info@cadabra.science"
         git add cadabra2.rb
-        git commit -a -m "Update to release ${{ env.VERSION }}."
-        git push        
+        git diff-index --quiet HEAD || (git commit -a -m "Update to release ${{ env.VERSION }}." && git push)
 
 
   test:
@@ -68,7 +67,7 @@ jobs:
     
     steps:
     - name: get dependencies
-      run:  brew tap kpeeters/repo && brew install cadabra2
+      run:  brew update && brew upgrade && brew tap kpeeters/repo && brew install cadabra2
 
     - name: show where cadabra is located
       run:  cat `which cadabra2`
