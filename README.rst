@@ -118,7 +118,7 @@ Install the dependencies with::
     sudo dnf install git python3-devel make cmake gcc-c++ \
          gmp-devel libuuid-devel sqlite-devel \
          gtkmm30-devel boost-devel \
-         texlive python3-matplotlib \
+         python3-matplotlib \
          python3-pip
     sudo pip3 install sympy
 
@@ -160,8 +160,8 @@ Now install all build dependencies with::
   
     sudo yum install devtoolset-7 rh-python36 cmake3 \
 	          gmp-devel libuuid-devel sqlite-devel \
-             gtkmm30-devel boost-devel git \
-	          texlive python-matplotlib 
+                  gtkmm30-devel boost-devel git \
+	          python-matplotlib 
 
 You need to enable the Python3 and C++ compiler which you just
 installed with::
@@ -204,12 +204,10 @@ with::
     sudo zypper install --no-recommends git cmake python3-devel gcc-c++ \
                   gmp-devel libuuid-devel sqlite-devel \
                   gtkmm3-devel  \
-                  texlive python3-matplotlib \
+                  python3-matplotlib \
                   python3-sympy \
                   libboost_system1_71_0-devel libboost_filesystem1_71_0-devel \
                   libboost_date_time1_71_0-devel libboost_program_options1_71_0-devel
-
-You can get away with less than the full texlive.
 
 This platform receives less testing so please get in touch if you run
 into any issues. You need to clone the cadabra2 git repository (if you
@@ -259,7 +257,7 @@ Linux, first install the dependencies by doing::
 
     sudo eopkg install -c system.devel
     sudo eopkg install libboost-devel gmp-devel libgtkmm-3-devel 
-    sudo eopkg install sqlite3-devel texlive python3-devel
+    sudo eopkg install sqlite3-devel python3-devel
     sudo eopkg install git cmake make g++
 
 Then configure and build with::
@@ -283,7 +281,7 @@ OpenBSD
 
 Install the dependencies with::
 
-  pkg_add git cmake boost python-3.6.2 gtk3mm gmp gmpxx texlive_texmf-full py3-sympy
+  pkg_add git cmake boost python-3.6.2 gtk3mm gmp gmpxx py3-sympy
 
 We will build using the default clang-4.0.0 compiler; building with
 the alternative g++-4.9.4 leads to trouble when linking against the
@@ -338,17 +336,6 @@ https://brew.sh). Install the required dependencies with::
 
 If the lines above prompt you to install XCode, go ahead and let it do
 that.
-
-You also need a TeX installation such as MacTeX,
-https://tug.org/mactex/ .  *Any* TeX will do, as long as 'latex' and
-'dvipng' are available, so you simply do::
-
-    brew install mactex
-
-Make sure to *install TeX* before attempting to build Cadabra,
-otherwise the Cadabra style files will not be installed in the
-appropriate place. Make sure 'latex' works from the terminal in which
-you will build Cadabra.
 
 You can build against an Anaconda Python installation (in case you
 prefer Anaconda over the Homebrew Python); cmake will automatically
@@ -447,11 +434,17 @@ https://github.com/kpeeters/cadabra2/blob/master/JUPYTER.rst.
 Creating an AppImage
 --------------------
 
-When building Cadabra for bundling as an AppImage, the GUI will be
-configured to use MicroTeX (https://github.com/NanoMichael/MicroTeX)
-for typesetting (this dependency is included in the Cadabra
-source). MicroTeX is a rendering library which does not rely on an
-existing LaTeX installation.  Configure and build with::
+The Cadabra build system can create an AppImage for use on a wide
+variety of Linux distributions (this is used to create the AppImage
+which is available from the `releases` on github). This build process
+has been tested by using Ubuntu 20.04 as base system. Install the
+prerequisites as above,::
+
+    sudo apt install git cmake libpython3-dev python3-dev g++ libgmp3-dev \
+          libgtkmm-3.0-dev libboost-all-dev libssl-dev libgmp-dev libsqlite3-dev uuid-dev  \
+          python3-matplotlib python3-mpmath python3-sympy python3-gmpy2
+
+Now configure and build with::
 
     cmake -DAPPIMAGE_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr ..
     make
