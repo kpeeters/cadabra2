@@ -6,6 +6,7 @@ doxygen
 *~
 *.o
 build
+build-lib
 jbuild
 install
 .ipynb_checkpoints
