@@ -1,0 +1,25 @@
+{
+	"cell_id": 16200933986566133880,
+	"cells": [
+		{
+			"cell_id": 2740829623175894998,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "import json\nclass Slider():\n   \"\"\"\n   Create a slider in the notebook interface, which can be used to \n   update the indicated variable dynamically.\n   \"\"\"\n   def __init__(self, name, value=0, min_value=0, max_value=1, step_size=0.1):\n      self.params = {\n\t      \"value\": value,\n\t      \"variable\": name,\n\t      \"min_value\": min_value,\n\t      \"max_value\": max_value,\n         \"step_size\": step_size\n      }\n      \n   def __send_to_server__(self, server):\n      server.send(json.dumps(self.params), \"slider\", 0, 123, False)"
+		},
+		{
+			"cell_id": 16643530752732994278,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def slider(name, value=0, min_value=0, max_value=1, step_size=0.1):\n   \"\"\"\n   Create a slider object, which can be used to \n   update the indicated variable dynamically.\n   \"\"\"\n   globals()[name] = value\n   return Slider(name, value, min_value, max_value, step_size)\n"
+		},
+		{
+			"cell_id": 11001462995080903250,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}
