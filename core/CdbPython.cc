@@ -261,7 +261,6 @@ def remove_assignments(code: str, var_name: str) -> str:
 		}
 	}
 
-
 bool cadabra::code_contains_variable(const std::string& code, const std::string& variable)
 	{
 	pybind11::scoped_interpreter guard{};	
@@ -298,6 +297,21 @@ def contains_variable(code_str, variable_name):
 		return false;
 		}
 	}
+
+bool cadabra::variables_to_pull_in(const std::string& code, std::set<std::string>& variables)
+	{
+	std::regex pullin_rx(R"(@\(([^\)]*)\))");
+
+	auto it = std::sregex_iterator(code.begin(), code.end(), pullin_rx);
+	while(it != std::sregex_iterator()) {
+		std::smatch m = *it;
+		variables.insert(m[1].str());
+		++it;
+		}
+
+	return true;
+	}
+
 
 bool cadabra::variables_in_code(const std::string& code, std::set<std::string>& variables)
 	{

@@ -233,6 +233,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output, bool 
 			// else; just run it and let Python report the error.
 			if(extract_variables) {
 				cadabra::variables_in_code(newblk, run_string_variables);
+				cadabra::variables_to_pull_in(newblk, run_string_variables);
 				// std::cerr << "----" << std::endl;
 				// for(const auto& name: run_string_variables)
 				// 	std::cerr << "contains " << name << std::endl;

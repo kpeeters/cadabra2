@@ -1944,8 +1944,13 @@ bool NotebookWindow::cell_complete_request(DTree::iterator it, int pos, int canv
 
 bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number, bool )
 	{
-	// This callback runs on the GUI thread. The cell pointed to by 'it' is
-	// guaranteed to be valid.
+	// This callback runs on the GUI thread. The cell pointed to by
+	// 'it' is guaranteed to be valid. This path is *not* used when
+	// re-executing cells in response to a variable change triggered by
+	// the notebook; that follows `on_slider_changed` which then calls
+	// into the DocumentThread::run_cells_referencing_variable, which
+	// in turn is responsible for the ComputeThread::execute_cell
+	// call.
 
 	// First ensure that this cell is not already running, otherwise all hell
 	// will break loose when we try to double-remove the existing output cell etc.

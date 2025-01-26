@@ -33,10 +33,17 @@ namespace cadabra {
 	/// the variable `variable` by parsing it into an AST.
 	bool code_contains_variable(const std::string& code, const std::string& variable);
 
-	/// Fill a set with all variables reference in the given piece of Python code.
+	/// Fill a set with all variables references in the given piece of Python code.
 	/// This needs to be proper Python, not a mixture of Python and Cadabra input which
 	/// still needs to be pre-processed.
 	bool variables_in_code(const std::string& code, std::set<std::string>& variables);
+
+	/// Fill a set with all variables references inside of Cadabra pull-in constructions,
+	/// that is, constructions of the form "@(var)". This just does regex matching, no
+	/// Python AST walking (we cannot, as this pull-in logic only happens when a
+	/// string gets parsed into a Cadabra Ex, but that's all inside Ex, not visible
+	/// to the server that runs the code.
+	bool variables_to_pull_in(const std::string& code, std::set<std::string>& variables);
 
 	/// Given a piece of Python code, remove all lines which assign a value to
 	/// the given variable. Return the modified code.
