@@ -1,0 +1,76 @@
+{
+	"cell_id": 2972420482671957517,
+	"cells": [
+		{
+			"cell_id": 4398375992092886125,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 17777416816273880274,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "This is the harmonic oscillator with friction example of the Boost ODEint manual."
+				}
+			],
+			"hidden": true,
+			"source": "This is the harmonic oscillator with friction example of the Boost ODEint manual."
+		},
+		{
+			"cell_id": 8957379084239617579,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 6392415782904275064,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Coordinate attached to~}\\tau.\\end{dmath*}"
+				},
+				{
+					"cell_id": 6579284847523917568,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Derivative attached to~}\\backslash\\texttt{dot}\\{\\#\\}.\\end{dmath*}"
+				},
+				{
+					"cell_id": 15287741305297559683,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Depends attached to~}\\left[x, \\discretionary{}{}{}y\\right].\\end{dmath*}"
+				}
+			],
+			"source": "\\tau::Coordinate;\n\\dot{#}::Derivative(\\tau);\n{x,y}::Depends(\\tau);"
+		},
+		{
+			"cell_id": 12150018836439156169,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13549759924272255351,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14354533215845025771,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "{\\dot(x) = y, \\dot(y) = -x + \\gamma y}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left[\\dot{x} = y, \\discretionary{}{}{}\\dot{y} = -x\\discretionary{}{}{}+\\gamma y\\right]\\end{dmath*}"
+				}
+			],
+			"source": "ho:= [ \\dot{x} = y, \\dot{y} = -x + \\gamma y ];"
+		},
+		{
+			"cell_id": 278350565049198710,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "ndsolve( ho, ($x$, 1.0), ($y$, 0.0) );"
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}
