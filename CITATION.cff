@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Peeters"
+  given-names: "Kasper"
+  orcid: "https://orcid.org/0000-0002-3077-8193"
+title: "My Research Software"
+version: 2.0.4
+doi: 10.5281/zenodo.2500762
+date-released: 2017-12-18
+url: "https://github.com/kpeeters/cadabra2"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Peeters"
+    given-names: "Kasper"
+    orcid: "https://orcid.org/0000-0002-3077-8193"
+  doi: doi.org/10.21105/joss.01118
+  journal: "The Journal of Open Source Software"
+  start: 1118 # First page number
+  end: 1119 # Last page number
+  title: "Cadabra2: computer algebra for field theory revisited"
+  issue: 3
+  volume: 32
+  year: 2018
