@@ -508,7 +508,7 @@ void ComputeThread::execute_interactive(uint64_t id, const std::string& code)
 	interactive_cells.insert(id);
 	}
 
-void ComputeThread::execute_cell(DTree::iterator it, std::string no_assign)
+void ComputeThread::execute_cell(DTree::iterator it, std::string no_assign, std::vector<uint64_t> output_cell_ids)
 	{
 	// This absolutely has to be run on the main GUI thread.
 	assert(gui_thread_id==std::this_thread::get_id());
@@ -559,6 +559,7 @@ void ComputeThread::execute_cell(DTree::iterator it, std::string no_assign)
 		else
 			header["cell_origin"]="server";
 		header["msg_type"]="execute_request";
+		header["output_cell_ids"]=output_cell_ids;
 		req["auth_token"]=authentication_token;
 		req["header"]=header;
 		content["remove_variable_assignments"]=no_assign;

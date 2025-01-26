@@ -385,7 +385,7 @@ void Server::wait_for_job()
 			block_available.wait(lock);
 			}
 
-		Block block = block_queue.front();
+		current_block = block_queue.front();
 		block_queue.pop();
 		lock.unlock();
 
@@ -397,11 +397,11 @@ void Server::wait_for_job()
 			// master thread can push new blocks onto it.
 			// snoop::log(snoop::info) << "Block finished running" << snoop::flush;
 			server_stopwatch.stop();
-			current_ws_id   = block.ws_id;
-			current_id      = block.cell_id;
-			block.output    = run_string(block.input, true, true, block.remove_variable_assignments);
-			block.variables = run_string_variables;
-			on_block_finished(block);
+			current_ws_id   = current_block.ws_id;
+			current_id      = current_block.cell_id;
+			current_block.output    = run_string(current_block.input, true, true, current_block.remove_variable_assignments);
+			current_block.variables = run_string_variables;
+			on_block_finished(current_block);
 			}
 		catch(std::runtime_error& ex) {
 #ifdef DEBUG
@@ -417,10 +417,10 @@ void Server::wait_for_job()
 			std::queue<Block> empty;
 			std::swap(block_queue, empty);
 			lock.unlock();
-			block.output = catchOut.str();
+			current_block.output = catchOut.str();
 			catchOut.clear();
-			block.error = ex.what();
-			on_block_error(block);
+			current_block.error = ex.what();
+			on_block_error(current_block);
 			}
 		catch(std::exception& ex) {
 			server_stopwatch.stop();
@@ -429,10 +429,10 @@ void Server::wait_for_job()
 			std::queue<Block> empty;
 			std::swap(block_queue, empty);
 			lock.unlock();
-			block.output=catchOut.str();
+			current_block.output=catchOut.str();
 			catchOut.clear();
-			block.error=ex.what();
-			on_kernel_fault(block);
+			current_block.error=ex.what();
+			on_kernel_fault(current_block);
 			// Keep running
 			}
 		}
@@ -453,6 +453,11 @@ void Server::stop_block()
 //	std::cerr << "Server: make thread " << main_thread_id << " raise exception" << std::endl;
 //	PyThreadState_SetAsyncExc(main_thread_id, PyExc_Exception);
 //	PyGILState_Release(state);
+	}
+
+Server::Block::Block()
+	: ws_id(-1), cell_id(0)
+	{
 	}
 
 Server::Block::Block(websocket_server::id_type ws_id_, const std::string& str, uint64_t id_, const std::string& msg_type_)
@@ -517,6 +522,9 @@ void Server::dispatch_message(websocket_server::id_type ws_id, const std::string
 		Block block(ws_id, code, id, msg_type);
 		if(content.count("remove_variable_assignments")==1) {
 			block.remove_variable_assignments.insert(content.value("remove_variable_assignments", ""));
+			}
+		if(header.count("output_cell_ids")==1) {
+			block.reuse_output_cell_ids = header.value("output_cell_ids", std::deque<uint64_t>());
 			}
 		block.response["header"]["parent_origin"]="client";
 		block.response["header"]["parent_id"]=id;
@@ -613,8 +621,16 @@ uint64_t Server::send(const std::string& output, const std::string& msg_type,
 	nlohmann::json json, header, content;
 
 	uint64_t return_cell_id=cell_id;
-	if(return_cell_id==0)
-		return_cell_id=cadabra::generate_uuid<uint64_t>();
+	if(return_cell_id==0) {
+		if(current_block.reuse_output_cell_ids.size()>0) {
+			// std::cerr << "Re-using existing output cell." << std::endl;
+			return_cell_id=current_block.reuse_output_cell_ids.front();
+			current_block.reuse_output_cell_ids.pop_front();
+			}
+		else {
+			return_cell_id=cadabra::generate_uuid<uint64_t>();
+			}
+		}
 	
 	if(parent_id==0)
 		header["parent_id"]=current_id;

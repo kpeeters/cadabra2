@@ -3,6 +3,7 @@
 
 #include <string>
 #include <set>
+#include <deque>
 #include <signal.h>
 #include <boost/uuid/uuid.hpp>
 #include <future>
@@ -154,7 +155,9 @@ class Server {
 		// Data and connection info for a single block of code.
 		class Block {
 			public:
+				Block();
 				Block(websocket_server::id_type, const std::string&, uint64_t id, const std::string& msg_type);
+				
 				websocket_server::id_type   ws_id; // FIXME: decouple from websocket?
 				std::string                 msg_type;
 				std::string                 input;
@@ -164,13 +167,21 @@ class Server {
 				std::set<std::string>       variables;
 				std::set<std::string>       remove_variable_assignments;
 
+				// When a cell is re-run on variable change, we re-use the output cells of the
+				// previous run. The IDs of these cells are sent to us by the frontend. We
+				// store them here, and then pop them off the front for each call to `send`.
+
+				std::deque<uint64_t>        reuse_output_cell_ids; 
+
 				// Response message, partially filled in when the
 				// request comes in.
+
 				nlohmann::json              response;
 			};
 		std::queue<Block>           block_queue;
+		Block                       current_block;
 		websocket_server::id_type   current_ws_id;
-		uint64_t                    current_id;   // id of the block given to us by the client.
+		uint64_t                    current_id;    // id of the block given to us by the client.
 
 		// Run a piece of Python code. This is called from a separate
 		// thread constructed by on_message().

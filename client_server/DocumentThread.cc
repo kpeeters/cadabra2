@@ -203,8 +203,18 @@ void DocumentThread::run_cells_referencing_variable(std::string variable, double
 		if(it->cell_type==DataCell::CellType::python) {
 			if(it->variables_referenced.count(variable)==1) {
 				if(it->textbuf.find("slider(")==std::string::npos) {
-					// std::cerr << "re-running " << it->textbuf << std::endl;
-					compute->execute_cell(it, variable);
+					// We have found a cell which depends on the variable.
+					// Collect the cell_id's of the current output cells,
+					// so that we can re-use these.
+					std::vector<uint64_t> output_cell_ids;
+					DTree::iterator sib = doc.begin(it);
+					while(sib != doc.end(it)) {
+						output_cell_ids.push_back(sib->id().id);
+						++sib;
+						}
+					
+					// Now execute.
+					compute->execute_cell(it, variable, output_cell_ids);
 					}
 				}
 			}
