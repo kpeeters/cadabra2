@@ -44,7 +44,6 @@
 #include "../algorithms/map_sympy.hh"
 #include "../algorithms/meld.hh"
 #include "../algorithms/nevaluate.hh"
-#include "../algorithms/ndsolve.hh"
 #include "../algorithms/order.hh"
 #include "../algorithms/product_rule.hh"
 #include "../algorithms/reduce_delta.hh"
