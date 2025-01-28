@@ -91,7 +91,12 @@ NTensor NEvaluator::evaluate()
 		if(fnd!=subtree_values.end()) {
 #ifdef DEBUG
 			std::cerr << it << " has value " << fnd->second << std::endl;
+			// Note: the above will, for a scalar value, display the
+			// broadcast value for `fullshape` as computed below
+			// in `find_variable_locations`; so [[[1]]] is perfectly
+			// normal if there are three variables defined.
 #endif
+			lastval=fnd->second;
 			}
 		else {
 			bool found_elementary=false;
@@ -217,7 +222,19 @@ NTensor NEvaluator::evaluate()
 
 void NEvaluator::set_variable(const Ex& var, const NTensor& val)
 	{
-	variable_values.push_back( VariableValues({var, val, {} }) );
+	// Ensure that we only store one entry in variable_values for
+	// every variable.
+	
+	auto it = variable_values_locs.find(var);
+	if(it == variable_values_locs.end()) {
+		// Create new entry.
+		variable_values_locs[var] = variable_values.size();
+		variable_values.push_back( VariableValues({var, val, {} }) );
+		}
+	else {
+		// Overwrite if the variable was already present.
+		variable_values[it->second] = VariableValues({var, val, {} });
+		}
 	}
 
 void NEvaluator::find_variable_locations()
@@ -225,6 +242,7 @@ void NEvaluator::find_variable_locations()
 	// FIXME: we don't really need this anymore, as we do everything
 	// with broadcasting.
 	for(auto& var: variable_values) {
+		var.locations.clear();
 		auto it = ex.begin_post();
 		while(it != ex.end_post()) {
 			if(var.variable == *it)
@@ -247,6 +265,7 @@ void NEvaluator::find_variable_locations()
 		}
 	// std::cerr << std::endl;
 
+	subtree_values.clear();
 	for(size_t v=0; v<variable_values.size(); ++v) {
 		const auto& var = variable_values[v];
 		for(const auto& it: var.locations) {

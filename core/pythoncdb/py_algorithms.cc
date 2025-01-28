@@ -4,6 +4,7 @@
 
 #include "../Algorithm.hh"
 #include "../NEvaluator.hh"
+#include "../NDSolver.hh"
 
 #include "../algorithms/canonicalise.hh"
 #include "../algorithms/collect_components.hh"
@@ -43,6 +44,7 @@
 #include "../algorithms/map_sympy.hh"
 #include "../algorithms/meld.hh"
 #include "../algorithms/nevaluate.hh"
+#include "../algorithms/ndsolve.hh"
 #include "../algorithms/order.hh"
 #include "../algorithms/product_rule.hh"
 #include "../algorithms/reduce_delta.hh"
@@ -156,6 +158,31 @@ namespace cadabra {
 					ev.set_variable(py::cast<Ex>(dv.first), py::cast<std::vector<double>>(dv.second));
 					}
 				auto res = ev.evaluate();
+				return res;
+//				nevaluate algo(*get_kernel_from_scope(), *ex, values);
+//				algo.apply
+
+				}
+				);
+		
+		m.def("ndsolve",
+				[](Ex_ptr ex, py::dict initial, py::tuple range) {
+				NDSolver nds(*ex);
+				// initial values
+				for(const auto& iv: initial) 
+					nds.set_initial_value( py::cast<Ex>(iv.first), py::cast<double>(iv.second) );
+
+				if(range.size()!=3)
+					throw ConsistencyException("ndsolve: integration range must have exactly three elements.");
+
+				nds.set_range( py::cast<Ex>(range[0]), py::cast<double>(range[1]), py::cast<double>(range[2]));
+				
+//				for(const auto& dv: d) {
+//					// std::cerr << dv.first << std::endl;
+////					values.push_back(std::make_pair(py::cast<Ex>(dv.first), py::cast<std::vector<double>>(dv.second)));
+//					ev.set_variable(py::cast<Ex>(dv.first), py::cast<std::vector<double>>(dv.second));
+//					}
+				auto res = nds.integrate();
 				return res;
 //				nevaluate algo(*get_kernel_from_scope(), *ex, values);
 //				algo.apply

@@ -3,6 +3,7 @@
 
 #include "Storage.hh"
 #include "NTensor.hh"
+#include "Compare.hh"
 
 namespace cadabra {
 
@@ -46,6 +47,7 @@ namespace cadabra {
 					std::vector<Ex::iterator> locations;
 			};
 			std::vector<VariableValues> variable_values;
+			std::map<Ex, size_t, tree_exact_less_no_wildcards_obj> variable_values_locs;
 
 			/// Set the range of values which we want to insert into the
 			/// indicated variable. Fills the map above.
@@ -60,7 +62,7 @@ namespace cadabra {
 			void find_variable_locations();
 
 		private:
-			const Ex& ex;
+			Ex ex;
 	};
 
 };

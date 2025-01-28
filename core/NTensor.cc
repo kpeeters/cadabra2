@@ -54,6 +54,17 @@ NTensor& NTensor::operator=(const NTensor& other)
 	return *this;
 	}
 
+double NTensor::at() const
+	{
+	if(shape.size()!=1 && shape[0]!=1)
+		throw std::range_error("NTensor::at: cannot convert tensor to single scalar.");
+
+	if(values.size()!=1)
+		throw std::range_error("NTensor::at: inconsistent value array.");
+	
+	return values[0];
+	}
+
 double NTensor::at(const std::vector<size_t>& indices) const
 	{
 	if(indices.size()!=shape.size())

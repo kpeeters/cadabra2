@@ -20,6 +20,7 @@ You should have received a copy of the GNU General Public License
 
 #include "Storage.hh"
 #include "Combinatorics.hh"
+#include "Compare.hh"
 #include "Exceptions.hh"
 #include <iomanip>
 #include <sstream>

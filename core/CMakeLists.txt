@@ -287,22 +287,31 @@ include_directories(
 # Targets.
 #---------------------------------------------------------------------------
 
+# Cadabra2 all functionality, used for both the python module and the tests.
+add_library(cadabra_core
+  OBJECT
+  ${LOCAL_SRC_FILES}
+)
+set_property(TARGET cadabra_core PROPERTY POSITION_INDEPENDENT_CODE ON)
+add_library(cadabra_core_static STATIC $<TARGET_OBJECTS:cadabra_core>)
+
 # Cadabra2 python module
 pybind11_add_module(cadabra2 SHARED
-   ${LOCAL_SRC_FILES}
-   ${MODULE_SRC_FILES}
+  ${MODULE_SRC_FILES}
 )
 set_target_properties(cadabra2 PROPERTIES 
-   SUFFIX ".${Python_MOD_SUFFIX}" 
-   CXX_VISIBILITY_PRESET default)
+  SUFFIX ".${Python_MOD_SUFFIX}" 
+  CXX_VISIBILITY_PRESET default
+)
 
 target_link_libraries(cadabra2 PRIVATE
-   ${GMPXX_LIBRARIES}
-   ${GMP_LIBRARIES}   
-   ${Boost_LIBRARIES}
-#  ${Python_LIBRARIES}
-#  ${GLIBMM3_LIBRARIES}    
-   )
+  cadabra_core_static
+  ${GMPXX_LIBRARIES}
+  ${GMP_LIBRARIES}   
+  ${Boost_LIBRARIES}
+  #  ${Python_LIBRARIES}
+  #  ${GLIBMM3_LIBRARIES}    
+)
 
 if(IPO_SUPPORTED)
   message(STATUS "IPO / LTO for cadabra2 enabled")     
@@ -421,6 +430,20 @@ if(MATHEMATICA_FOUND)
 else()
    message(STATUS "Building without Mathematica support")
 endif()
+
+#---------------------------------------------------------------------------
+# Tests run purely in C++ (no python).
+#---------------------------------------------------------------------------
+
+add_executable(test_internals
+  test_internals.cc
+)
+target_link_libraries(test_internals PRIVATE
+  cadabra_core_static
+  ${GMPXX_LIBRARIES}
+  ${GMP_LIBRARIES}   
+)
+
 
 
 #---------------------------------------------------------------------------

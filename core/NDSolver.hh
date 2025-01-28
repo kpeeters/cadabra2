@@ -1,7 +1,10 @@
 #pragma once
 
 #include "Storage.hh"
+#include "Compare.hh"
 #include "Exceptions.hh"
+#include "NTensor.hh"
+#include "NEvaluator.hh"
 
 namespace cadabra {
 
@@ -21,7 +24,9 @@ namespace cadabra {
 	
 	class NDSolver {
 		public:
-			NDSolver();
+			// Initialise with an Ex containing the ODEs in standard form
+			// (that is, only 1st order derivatives on the lhs).
+			NDSolver(const Ex&);
 
 			typedef std::vector<double> state_type;
 
@@ -33,9 +38,15 @@ namespace cadabra {
 
 			// Set and check ODE(s).
 			void set_ODEs(const Ex&);
+
+			// Set initial values.
+			void set_initial_value(const Ex&, double val);
+
+			// Set integration range for the independent variable.
+			void set_range(const Ex&, double from, double to);
 			
 			// Entry point.
-			void integrate();
+			std::vector<NTensor> integrate();
 			
 		private:
 			// Exception used by the observer function to terminate
@@ -46,10 +57,24 @@ namespace cadabra {
 					EventException(std::string="");
 			};
 			
-			std::vector< state_type > states;
-			std::vector< double >     times;
-
 			Ex ODEs;
-	};
+
+			// Information extracted from `ODEs`.
+			std::vector<Ex>           variables;
+
+			// For each function in the ODEs we have one evaluator.
+			std::vector<NEvaluator>   evaluators;
+
+			// Extract from `ODEs` the right-hand side expressions as
+			// well as the names of the functions to solve for.
+			void extract_from_ODEs();
+
+			// Storage of the result of the integration.
+			std::vector<std::vector<double>> states;
+			std::vector<double>              times;
+			std::map<Ex, double, tree_exact_less_no_wildcards_obj>  initial_values;
+			Ex                               time_variable;
+			double                           range_from, range_to;
+};
 	
 };

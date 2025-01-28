@@ -14,7 +14,7 @@ namespace cadabra {
 	class NTensor {
 		public:
 			/// Initialise by giving the dimension for each index.  Storage
-			/// is generalised row-major.  Dispay follows that convention:
+			/// is generalised row-major.  Display follows that convention:
 			/// we use maths matrix conventions for printing, that is,
 			/// earlier indices are more major, and are iterated over in a
 			/// more outer loop.
@@ -43,6 +43,9 @@ namespace cadabra {
 
 			/// Element-wise pow operator (self**b, or pow(self,b)). Requires the shapes to match.
 			NTensor& pow(const NTensor&);
+
+			/// Get the value of a scalar NTensor.
+			double  at() const;
 			
 			/// Get the value of the tensor at the indicated component.
 			double  at(const std::vector<size_t>& indices) const;
