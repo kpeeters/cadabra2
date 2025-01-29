@@ -427,20 +427,23 @@ endif()
 # Tests run purely in C++ (no python).
 #---------------------------------------------------------------------------
 
-add_executable(test_internals
-  test_internals.cc
-)
-# We are linking the test with the full python module, which is a bit
-# wasteful, but splitting out the ${LOCAL_SRC_FILES} into a separate
-# library turned out to lead to linking errors with the algorithm
-# modules in `packages/` (missing typeinfo things). For now this works.
-target_link_libraries(test_internals PRIVATE
-  cadabra2
-  ${GMPXX_LIBRARIES}
-  ${GMP_LIBRARIES}
-  ${Python_LIBRARIES}
-)
-
+if(WIN32)
+  message(STATUS "Not building C++ tests on Windows")
+else()
+  add_executable(test_internals
+    test_internals.cc
+  )
+  # We are linking the test with the full python module, which is a bit
+  # wasteful, but splitting out the ${LOCAL_SRC_FILES} into a separate
+  # library turned out to lead to linking errors with the algorithm
+  # modules in `packages/` (missing typeinfo things). For now this works.
+  target_link_libraries(test_internals PRIVATE
+    cadabra2
+    ${GMPXX_LIBRARIES}
+    ${GMP_LIBRARIES}
+    ${Python_LIBRARIES}
+  )
+endif()
 
 
 #---------------------------------------------------------------------------
