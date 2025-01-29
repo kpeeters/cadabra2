@@ -287,16 +287,9 @@ include_directories(
 # Targets.
 #---------------------------------------------------------------------------
 
-# Cadabra2 all functionality, used for both the python module and the tests.
-add_library(cadabra_core
-  OBJECT
-  ${LOCAL_SRC_FILES}
-)
-set_property(TARGET cadabra_core PROPERTY POSITION_INDEPENDENT_CODE ON)
-add_library(cadabra_core_static STATIC $<TARGET_OBJECTS:cadabra_core>)
-
 # Cadabra2 python module
 pybind11_add_module(cadabra2 SHARED
+  ${LOCAL_SRC_FILES}
   ${MODULE_SRC_FILES}
 )
 set_target_properties(cadabra2 PROPERTIES 
@@ -305,7 +298,6 @@ set_target_properties(cadabra2 PROPERTIES
 )
 
 target_link_libraries(cadabra2 PRIVATE
-  cadabra_core_static
   ${GMPXX_LIBRARIES}
   ${GMP_LIBRARIES}   
   ${Boost_LIBRARIES}
@@ -438,10 +430,15 @@ endif()
 add_executable(test_internals
   test_internals.cc
 )
+# We are linking the test with the full python module, which is a bit
+# wasteful, but splitting out the ${LOCAL_SRC_FILES} into a separate
+# library turned out to lead to linking errors with the algorithm
+# modules in `packages/` (missing typeinfo things). For now this works.
 target_link_libraries(test_internals PRIVATE
-  cadabra_core_static
+  cadabra2
   ${GMPXX_LIBRARIES}
-  ${GMP_LIBRARIES}   
+  ${GMP_LIBRARIES}
+  ${Python_LIBRARIES}
 )
 
 
