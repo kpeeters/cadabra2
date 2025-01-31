@@ -179,8 +179,13 @@ void ComputeThread::try_spawn_server()
 	// the 'envp' argument in the call below.
 	try {
 		Glib::spawn_async_with_pipes(wd, argv, /* envp, WITH envp, Fedora 27 fails to start python properly */
+#if GLIBMM_MAJOR_VERSION > 2 || (GLIBMM_MAJOR_VERSION == 2 && GLIBMM_MINOR_VERSION >= 68)
+											  Glib::SpawnFlags::DEFAULT | Glib::SpawnFlags::SEARCH_PATH,
+		                             sigc::slot<void()>(),
+#else
 		                             Glib::SPAWN_DEFAULT|Glib::SPAWN_SEARCH_PATH,
 		                             sigc::slot<void>(),
+#endif
 		                             &pid,
 		                             0,
 		                             &server_stdout,

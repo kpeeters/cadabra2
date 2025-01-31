@@ -5,7 +5,9 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/separator.h>
+#ifndef USE_GTK4
 #include <gtkmm/eventbox.h>
+#endif
 #include <glibmm/dispatcher.h>
 
 #include "VisualCell.hh"

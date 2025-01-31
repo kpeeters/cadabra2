@@ -124,6 +124,8 @@ if (BUILD_AS_CPP_LIBRARY)
   return()
 endif()
 
+# Switch between GTK4 and GTK3.
+option(USE_GTK4 "Build for GTK4 (instead of GTK3)" OFF)
 
 # Include packaging logic.
 include(cmake/packaging.cmake)

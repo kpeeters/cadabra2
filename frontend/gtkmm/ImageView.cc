@@ -105,7 +105,7 @@ void ImageArea::set_image_from_svg(const std::string& svg)
 void ImageArea::rerender(int width)
 	{
 	auto str = Gio::MemoryInputStream::create();
-	str->add_data(decoded.c_str(), decoded.size());
+	str->add_data(decoded.c_str(), decoded.size(), nullptr);
 
 	// Widths set here are all logical pixel widths, not device pixel widths.
 	pixbuf = Gdk::Pixbuf::create_from_stream_at_scale(str, width * display_scale, -1, true);

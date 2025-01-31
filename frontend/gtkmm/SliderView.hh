@@ -3,7 +3,9 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/scale.h>
+#ifndef USE_GTK4
 #include <gtkmm/eventbox.h>
+#endif
 #include <gtkmm/adjustment.h>
 
 namespace cadabra {
@@ -18,7 +20,11 @@ namespace cadabra {
 	///   - max_value:  double
 	///   - variable:   string
 
+#ifdef USE_GTK4
+	class SliderView : public Gtk::Box {
+#else
 	class SliderView : public Gtk::EventBox {
+#endif
 		public:
 			SliderView(std::string config);
 			virtual ~SliderView();

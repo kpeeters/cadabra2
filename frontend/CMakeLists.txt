@@ -21,12 +21,12 @@ FILE(GLOB man_properties "${PROJECT_SOURCE_DIR}/../core/properties/*.cnb")
 # Locate libraries.
 #---------------------------------------------------------------------------
 
-find_package(GTKMM3)
-if(GTKMM3_FOUND)
-	add_subdirectory(gtkmm)
-else()
-	message(FATAL_ERROR "ENABLE_FRONTEND is set to ON, but no supported frontend libraries were found")
-endif()
+# find_package(GTKMM3)
+# if(GTKMM_FOUND)
+add_subdirectory(gtkmm)
+# else()
+#   message(FATAL_ERROR "ENABLE_FRONTEND is set to ON, but no supported frontend libraries were found")
+# endif()
 
 # if(APPLE)
 #    subdirs(osx)
