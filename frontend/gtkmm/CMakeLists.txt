@@ -181,7 +181,7 @@ target_compile_options(
   PUBLIC
   ${Boost_CFLAGS_OTHER} 
   ${GLIBMM_CFLAGS_OTHER} 
-  ${GTKMM3_CFLAGS_OTHER} 
+  ${GTKMM_CFLAGS_OTHER} 
   ${SQLITE3_CFLAGS_OTHER} 
   ${Fontconfig_CFLAGS_OTHER}
 )
