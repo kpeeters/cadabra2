@@ -263,7 +263,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 	// Evaluate menu actions.
 	actiongroup->add_action( "EvaluateCell",          sigc::mem_fun(*this, &NotebookWindow::on_run_cell) );
-	actiongroup->add_action( "EvaluateAll",           sigc::mem_fun(*this, &NotebookWindow::on_run_runall) );		
+	actiongroup->add_action( "EvaluateAll",           sigc::mem_fun(*this, &NotebookWindow::run_all_cells) );		
 	actiongroup->add_action( "EvaluateToCursor",      sigc::mem_fun(*this, &NotebookWindow::on_run_runtocursor) );		
 	action_stop = actiongroup->add_action( "EvaluateStop",  sigc::mem_fun(*this, &NotebookWindow::on_run_stop) );
 
@@ -730,7 +730,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	tool_open.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::on_file_open));
 	tool_save.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::on_file_save));
 	tool_save_as.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::on_file_save_as));
-	tool_run.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::on_run_runall));
+	tool_run.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::run_all_cells));
 	tool_stop.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::on_run_stop));
 	tool_restart.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart));
 	
@@ -1415,7 +1415,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_erase), i ) );
 
 				ci->edit.content_execute.connect(
-				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), i, true ) );
+				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), true ) );
 				ci->edit.complete_request.connect(
 				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_complete_request), i ) );
 				ci->edit.cell_got_focus.connect(
@@ -2030,7 +2030,7 @@ bool NotebookWindow::cell_complete_request(DTree::iterator it, int pos, int canv
 	return compute->complete(it, pos, cnum);
 	}
 
-bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number, bool )
+bool NotebookWindow::cell_content_execute(DTree::iterator it, bool shift_pressed)
 	{
 	// This callback runs on the GUI thread. The cell pointed to by
 	// 'it' is guaranteed to be valid. This path is *not* used when
@@ -2040,64 +2040,31 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number,
 	// in turn is responsible for the ComputeThread::execute_cell
 	// call.
 
-	// First ensure that this cell is not already running, otherwise all hell
-	// will break loose when we try to double-remove the existing output cell etc.
 
-	if(it->running) {
-		return true;
-		}
-
-	// Ensure this cell is not empty either.
-
-	if(it->textbuf.size()==0) return true;
-
-	current_canvas=canvas_number;
-
-	// Remove child nodes, if any.
-	// FIXME: Does it make more sense to do this only after the
-	// execution result comes back from the server?
-
-	DTree::sibling_iterator sib=doc.begin(it);
-	dim_output_cells(it);
-	while(sib!=doc.end(it)) {
-		// std::cout << "cadabra-client: scheduling output cell for removal: " << sib->id().id << std::endl;
-		std::shared_ptr<ActionBase> action = std::make_shared<ActionRemoveCell>(sib->id());
-		queue_action(action);
-		++sib;
-		}
-
-	// Execute the cell.
 	set_stop_sensitive(true);
 
 	// Since the user has initiated this cell execution, we can
 	// turn on cell follow mode.
 	follow_cell=it;
 	follow_mode=true;
-	// std::cerr << "Executing cell " << it->id().id << std::endl;
 
-	// If this is a LaTeX input cell, and auto-close is turned on, close
-	// the input cell. Make sure to also feed that into the document
-	// itself!
-	if(it->cell_type==DataCell::CellType::latex) {
-		if(prefs.auto_close_latex) {
-			for(unsigned int i=0; i<canvasses.size(); ++i) {
-				auto vis = canvasses[i]->visualcells.find(&(*it));
-				if(vis==canvasses[i]->visualcells.end()) {
-					throw std::logic_error("Cannot find visual cell.");
-					}
-				else {
-					(*vis).second.inbox->edit.hide();
-					it->hidden=true;
-//					resize_codeinput_texview(it, last_configure_width);
-					}
-				}
+	run_cell(it, shift_pressed);
+	
+	return true;
+	}
+
+void NotebookWindow::hide_visual_cells(DTree::iterator it)
+	{
+	for(unsigned int i=0; i<canvasses.size(); ++i) {
+		auto vis = canvasses[i]->visualcells.find(&(*it));
+		if(vis==canvasses[i]->visualcells.end()) {
+			throw std::logic_error("Cannot find visual cell.");
+			}
+		else {
+			(*vis).second.inbox->edit.hide();
+			it->hidden=true;
 			}
 		}
-
-	// Execute the cell. Make sure this comes after the hiding logic above.
-	compute->execute_cell(it);
-
-	return true;
 	}
 
 bool NotebookWindow::on_copy_as_latex(const DTree::iterator it)
@@ -2761,7 +2728,7 @@ void NotebookWindow::on_run_runtocursor()
 	DTree::sibling_iterator sib=doc.begin(doc.begin());
 	while(sib!=current_cell && sib!=doc.end(doc.begin())) {
 		if(sib->cell_type==DataCell::CellType::python)
-			cell_content_execute(DTree::iterator(sib), current_canvas, false);
+			cell_content_execute(DTree::iterator(sib), false);
 		++sib;
 		}
 	}

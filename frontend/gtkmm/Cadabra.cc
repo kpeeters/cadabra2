@@ -75,8 +75,20 @@ static bool get_arg_value(const Glib::RefPtr<Glib::VariantDict>& options, const 
 
 Cadabra::~Cadabra()
 	{
-	// The app is going away; stop the compute logic and join that
-	// thread waiting for it to complete.
+	// The app is going away. First stop the script thread so external
+	// programs can no longer talk to us.
+
+	if(script)
+		script->terminate();
+	if(script_thread)
+		script_thread->join();
+	if(script)
+		delete script;
+	if(script_thread)
+		delete script_thread;
+
+	// Also stop the compute logic and join that thread waiting for it
+	// to complete.
 
 	if(compute)
 		compute->terminate();
@@ -86,6 +98,7 @@ Cadabra::~Cadabra()
 		delete compute;
 	if(compute_thread)
 		delete compute_thread;
+
 
 	//	for(auto w: windows)
 	//		delete w;
@@ -128,6 +141,13 @@ void Cadabra::on_activate()
 
 	add_window(*nw);
 	nw->show();
+
+	// Start the script handler so external programs can talk to us.
+	script = new cadabra::ScriptThread(nw, nw);
+	script_thread = new std::thread(&cadabra::ScriptThread::run, script);
+
+	std::cerr << "control channel ws://localhost:" << script->get_local_port()
+				 << "/" << script->get_authentication_token() << std::endl;
 
 	std::string version=std::string(CADABRA_VERSION_SEM);
 	snoop::log("start") << version << snoop::flush;

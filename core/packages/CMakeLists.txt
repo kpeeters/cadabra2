@@ -36,6 +36,11 @@ set(PACKAGES
   relativity/schwarzschild
   )
 
+set(PURE_PYTHON_PACKAGES
+  main.py
+  remote/__init__.py
+)
+
 if(WIN32)
   set(COMPILED_PACKAGES
   )
@@ -59,13 +64,18 @@ foreach(PACKAGE ${PACKAGES})
       ${PYTHON_CDB_PACKAGE_PATH}/${PINSTALL}
   )
 endforeach()
-install(
-  FILES
-  "${SOURCE_PACKAGEDIR}/main.py"
-  DESTINATION 
-  "${PYTHON_CDB_PACKAGE_PATH}/"
-)
-# Also add it to the build folder where we 
+
+foreach(PACKAGE ${PURE_PYTHON_PACKAGES})
+  get_filename_component(PINSTALL ${PACKAGE} DIRECTORY)
+  install(
+    FILES
+    "${SOURCE_PACKAGEDIR}/${PACKAGE}"
+    DESTINATION 
+    "${PYTHON_CDB_PACKAGE_PATH}/${PINSTALL}"
+  )
+endforeach()
+
+# Also add main.py to the build folder.
 add_custom_target(
   copy-main ALL
   COMMAND ${CMAKE_COMMAND} -E copy

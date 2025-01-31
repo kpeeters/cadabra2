@@ -51,6 +51,8 @@ namespace cadabra {
 			virtual void   update_cell(const DTree&, DTree::iterator) override;
 			virtual void   position_cursor(const DTree&, DTree::iterator, int pos) override;
 			virtual size_t get_cursor_position(const DTree&, DTree::iterator) override;
+			virtual void   hide_visual_cells(DTree::iterator it) override;
+			virtual void   dim_output_cells(DTree::iterator it) override;
 
 			void           select_range(const DTree&, DTree::iterator, int start, int len);
 
@@ -226,7 +228,6 @@ namespace cadabra {
 			void on_view_close(const Glib::VariantBase&);
 
 			void on_run_cell();
-			void on_run_runall();
 			void on_run_runtocursor();
 			void on_run_stop();
 
@@ -285,13 +286,12 @@ namespace cadabra {
 			bool cell_toggle_visibility(DTree::iterator it, int);
 			bool cell_content_insert(const std::string&, int, DTree::iterator, int);
 			bool cell_content_erase(int, int, DTree::iterator, int);
-			bool cell_content_execute(DTree::iterator, int, bool shift_enter_pressed);
+			bool cell_content_execute(DTree::iterator, bool shift_enter_pressed);
 			bool cell_content_changed(DTree::iterator it, int i);
 			bool cell_complete_request(DTree::iterator it, int pos, int i);
 
 			void interactive_execute();
 
-			void dim_output_cells(DTree::iterator it);
 			void resize_codeinput_texview_all(int width);
 			void resize_codeinput_texview(DTree::iterator, int width);			
 

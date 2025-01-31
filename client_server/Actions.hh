@@ -37,6 +37,10 @@ namespace cadabra {
 			/// tree data structure and the GUI. The latter is updated
 			/// by calling relevant methods on the GUIBase object passed
 			/// in.
+			///
+			/// The base class just looks up the cell given its `id_t`.
+			/// If your action does not refer to a cell at all, you do
+			/// not need to call the base class `execute`.
 
 			virtual void execute(DocumentThread&, GUIBase&);
 
@@ -199,6 +203,28 @@ namespace cadabra {
 		private:
 			DTree::iterator newref; // the newly created cell
 		};
+
+
+	/// \ingroup clientserver
+	///
+	/// Run a cell or run all cells. 
+
+	class ActionRunCell : public ActionBase {
+		public:
+			// Run a particular cell.
+			ActionRunCell(DataCell::id_t ref_id);
+			// Run all cells.
+			ActionRunCell();
+			
+			virtual ~ActionRunCell();
+			
+			virtual void execute(DocumentThread&, GUIBase&) override;
+			virtual void revert(DocumentThread&,  GUIBase&) override;
+			
+			virtual bool undoable() const override;
+		private:
+			bool run_all_cells;
+	};
 
 
 	/// \ingroup clientserver

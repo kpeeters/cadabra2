@@ -192,6 +192,57 @@ void DocumentThread::queue_action(std::shared_ptr<ActionBase> ab)
 	pending_actions.push(ab);
 	}
 
+void DocumentThread::run_all_cells()
+	{
+	DTree::sibling_iterator sib=doc.begin(doc.begin());
+	while(sib!=doc.end(doc.begin())) {
+		if(sib->cell_type==DataCell::CellType::python)
+			run_cell(DTree::iterator(sib), false);
+		++sib;
+		}
+	}
+
+void DocumentThread::run_cell(DTree::iterator it, bool shift_pressed)
+	{
+	// First ensure that this cell is not already running, otherwise all hell
+	// will break loose when we try to double-remove the existing output cell etc.
+
+	if(it->running)
+		return;
+
+	// Ensure this cell is not empty either.
+
+	if(it->textbuf.size()==0)
+		return;
+
+	// Remove child nodes, if any.
+	// FIXME: Does it make more sense to do this only after the
+	// execution result comes back from the server?
+
+	DTree::sibling_iterator sib=doc.begin(it);
+	gui->dim_output_cells(it);
+	while(sib!=doc.end(it)) {
+		// std::cout << "cadabra-client: scheduling output cell for removal: " << sib->id().id << std::endl;
+		std::shared_ptr<ActionBase> action = std::make_shared<ActionRemoveCell>(sib->id());
+		queue_action(action);
+		++sib;
+		}
+
+	// Execute the cell.
+	// std::cerr << "Executing cell " << it->id().id << std::endl;
+
+	// If this is a LaTeX input cell, and auto-close is turned on, close
+	// the input cell. Make sure to also feed that into the document
+	// itself!
+	if(it->cell_type==DataCell::CellType::latex) 
+		if(prefs.auto_close_latex) 
+			gui->hide_visual_cells(it);
+	
+	// Execute the cell. Make sure this comes after the hiding logic above.
+	compute->execute_cell(it);
+	}
+
+
 void DocumentThread::run_cells_referencing_variable(std::string variable, double value)
 	{
 	// First update the variable itself.

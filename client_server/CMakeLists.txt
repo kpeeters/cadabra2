@@ -51,47 +51,49 @@ message(STATUS "OPENSSL_CRYPTO_LIBRARY: ${OPENSSL_CRYPTO_LIBRARY}")
 #---------------------------------------------------------------------------
 
 set(CADABRA_SERVER_SRC
-   cadabra-server.cc
-   Server.cc
-   Snoop.cc
-   websocket_client.cc
-   websocket_server.cc
-   ${CADABRA_CORE_DIR}/InstallPrefix.cc
-   ${CADABRA_CORE_DIR}/DataCell.cc
-   ${CADABRA_CORE_DIR}/Exceptions.cc
-   ${CADABRA_CORE_DIR}/CdbPython.cc 
-   ${CADABRA_CORE_DIR}/Stopwatch.cc 
-   ${CADABRA_CORE_DIR}/pythoncdb/py_helpers.cc
-   ${CADABRA_LIBS_DIR}/whereami/whereami.c
-   ${CADABRA_LIBS_DIR}/base64/base64.cc
-   )
+  cadabra-server.cc
+  Server.cc
+  Snoop.cc
+  websocket_client.cc
+  websocket_server.cc
+  ${CADABRA_CORE_DIR}/InstallPrefix.cc
+  ${CADABRA_CORE_DIR}/DataCell.cc
+  ${CADABRA_CORE_DIR}/Exceptions.cc
+  ${CADABRA_CORE_DIR}/CdbPython.cc 
+  ${CADABRA_CORE_DIR}/Stopwatch.cc 
+  ${CADABRA_CORE_DIR}/pythoncdb/py_helpers.cc
+  ${CADABRA_LIBS_DIR}/whereami/whereami.c
+  ${CADABRA_LIBS_DIR}/base64/base64.cc
+)
 
 set(CADABRA_CLIENT_SRC
-   ComputeThread.cc 
-   DocumentThread.cc 
-   Actions.cc 
-   Snoop.cc
-   websocket_client.cc
-   ${CADABRA_CORE_DIR}/DataCell.cc 
-   ${CADABRA_CORE_DIR}/Exceptions.cc 
-   ${CADABRA_CORE_DIR}/InstallPrefix.cc
-   ${CADABRA_CORE_DIR}/Stopwatch.cc
-   ${CADABRA_LIBS_DIR}/whereami/whereami.c
-   )
-
+  ScriptThread.cc
+  ComputeThread.cc 
+  DocumentThread.cc 
+  Actions.cc 
+  Snoop.cc
+  websocket_client.cc
+  websocket_server.cc
+  ${CADABRA_CORE_DIR}/DataCell.cc 
+  ${CADABRA_CORE_DIR}/Exceptions.cc 
+  ${CADABRA_CORE_DIR}/InstallPrefix.cc
+  ${CADABRA_CORE_DIR}/Stopwatch.cc
+  ${CADABRA_LIBS_DIR}/whereami/whereami.c
+)
+ 
 set(JUPYTER_KERNEL_SRC
-    cadabra-jupyter-kernel.cc
-    cadabra-jupyter-kernel.hh
-    cadabra-jupyter-main.cc
-    Server.cc
-    ${CADABRA_CORE_DIR}/InstallPrefix.cc
-    ${CADABRA_CORE_DIR}/DataCell.cc
-    ${CADABRA_CORE_DIR}/Exceptions.cc 
-    ${CADABRA_CORE_DIR}/CdbPython.cc 
-    ${CADABRA_CORE_DIR}/Stopwatch.cc 
-    ${CADABRA_LIBS_DIR}/whereami/whereami.c
-    ${CADABRA_LIBS_DIR}/base64/base64.cc
-    )
+  cadabra-jupyter-kernel.cc
+  cadabra-jupyter-kernel.hh
+  cadabra-jupyter-main.cc
+  Server.cc
+  ${CADABRA_CORE_DIR}/InstallPrefix.cc
+  ${CADABRA_CORE_DIR}/DataCell.cc
+  ${CADABRA_CORE_DIR}/Exceptions.cc 
+  ${CADABRA_CORE_DIR}/CdbPython.cc 
+  ${CADABRA_CORE_DIR}/Stopwatch.cc 
+  ${CADABRA_LIBS_DIR}/whereami/whereami.c
+  ${CADABRA_LIBS_DIR}/base64/base64.cc
+)
   
 
 # set(CONNECTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/connection.json)

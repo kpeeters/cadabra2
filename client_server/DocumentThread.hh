@@ -69,6 +69,16 @@ namespace cadabra {
 
 			void queue_action(std::shared_ptr<ActionBase>);
 
+			/// Run all cells in the document. Only execute this on the
+			/// main (GUI) thread!
+
+			void run_all_cells();
+			
+			/// Run a single cell in the document. Only execute this on the
+			/// main (GUI) thread!
+
+			void run_cell(DTree::iterator, bool shift_pressed);
+			
 			/// Run all cells containing references to a given variable.
 			/// This will eventually call compute->execute on the
 			/// relevant cells, but is part of DocumentThread because

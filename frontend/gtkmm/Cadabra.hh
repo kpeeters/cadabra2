@@ -5,6 +5,7 @@
 #include <gtkmm/grid.h>
 #include "NotebookWindow.hh"
 #include "ComputeThread.hh"
+#include "ScriptThread.hh"
 
 /// The Cadabra notebook application.
 
@@ -27,6 +28,9 @@ class Cadabra : public Gtk::Application {
 	private:
 		cadabra::ComputeThread                *compute;
 		std::thread                           *compute_thread;
+
+		cadabra::ScriptThread                 *script;
+		std::thread                           *script_thread;
 
 		int server_port;
 		std::string server_token;

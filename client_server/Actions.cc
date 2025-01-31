@@ -334,6 +334,42 @@ void ActionSetRunStatus::revert(DocumentThread&, GUIBase& )
 	{
 	}
 
+
+ActionRunCell::ActionRunCell(DataCell::id_t ref_id)
+	: ActionBase(ref_id), run_all_cells(false)
+	{
+	}
+
+ActionRunCell::ActionRunCell()
+	: ActionBase(DataCell::id_t()), run_all_cells(true)
+	{
+	}
+
+ActionRunCell::~ActionRunCell()
+	{
+	}
+
+bool ActionRunCell::undoable() const
+	{
+	return false;
+	}
+
+void ActionRunCell::execute(DocumentThread& cl, GUIBase& gb)
+	{
+	if(!run_all_cells) {
+		ActionBase::execute(cl, gb);
+		cl.run_cell(ref, false);
+		}
+	else {
+		cl.run_all_cells();
+		}
+	}
+
+void ActionRunCell::revert(DocumentThread&, GUIBase& )
+	{
+	}
+
+
 ActionSetVariableList::ActionSetVariableList(DataCell::id_t ref_id, std::set<std::string> variables)
 	: ActionBase(ref_id), new_variables_(variables)
 	{

@@ -55,6 +55,16 @@ namespace cadabra {
 
 			virtual size_t get_cursor_position(const DTree&, DTree::iterator)=0;
 
+			/// Hide all visual cells (on all canvasses) corresponding to
+			/// a given document cell.
+
+			virtual void hide_visual_cells(DTree::iterator)=0;
+			
+			/// Dim all output cells of the visual cells corresponding to the
+			/// given document cell.
+
+			virtual void dim_output_cells(DTree::iterator)=0;
+			
 			/// Network status is propagated from the ComputeThread to the
 			/// GUI using the following methods. These get called on the
 			/// compute thread (as opposed to the functions above, which get
@@ -74,7 +84,7 @@ namespace cadabra {
 			/// DocumenThread class) and then wakes up the GUI thread
 			/// signalling it to process this action. The following member
 			/// should wake up the GUI thread and make it enter the
-			/// processing part.
+			/// processing part. You can call this from *any* thread.
 
 			virtual void process_data()=0;
 
