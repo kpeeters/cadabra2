@@ -226,6 +226,23 @@ namespace cadabra {
 			bool run_all_cells;
 	};
 
+	/// \ingroup clientserver
+	///
+	/// Open a notebook from a file, in the current window.
+
+	class ActionOpen : public ActionBase {
+		public:
+			ActionOpen(const std::string&);
+			virtual ~ActionOpen();
+			
+			virtual void execute(DocumentThread&, GUIBase&) override;
+			virtual void revert(DocumentThread&,  GUIBase&) override;
+			
+			virtual bool undoable() const override;
+		private:
+			std::string notebook_name;
+	};
+
 
 	/// \ingroup clientserver
 	///

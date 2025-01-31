@@ -189,7 +189,7 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 	nw->set_name(files[0]->get_path());
 	snoop::log("open") << "command-line" << snoop::flush;
 	if(file_exists) {
-		nw->load_file(text);
+		nw->load_from_string(text);
 		Gtk::Application::on_open(files, hint);
 		}
 	}
@@ -207,7 +207,7 @@ bool Cadabra::open_help(const std::string& nm, const std::string& title)
 		add_window(*nw);
 		std::stringstream buffer;
 		buffer << fl.rdbuf();
-		nw->load_file(buffer.str());
+		nw->load_from_string(buffer.str());
 		nw->show();
 		return true;
 		}

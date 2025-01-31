@@ -7,6 +7,7 @@
 
 #include <boost/core/demangle.hpp>
 #include <iostream>
+#include <fstream>
 
 using namespace cadabra;
 
@@ -366,6 +367,36 @@ void ActionRunCell::execute(DocumentThread& cl, GUIBase& gb)
 	}
 
 void ActionRunCell::revert(DocumentThread&, GUIBase& )
+	{
+	}
+
+
+ActionOpen::ActionOpen(const std::string& n)
+	: ActionBase(DataCell::id_t()), notebook_name(n)
+	{
+	}
+
+ActionOpen::~ActionOpen()
+	{
+	}
+
+bool ActionOpen::undoable() const
+	{
+	return false;
+	}
+
+void ActionOpen::execute(DocumentThread& cl, GUIBase& gb)
+	{
+	std::ifstream file(notebook_name);
+	std::string content, line;
+	
+	while(std::getline(file, line))
+		content+=line;
+
+	cl.load_from_string(content);
+	}
+
+void ActionOpen::revert(DocumentThread&, GUIBase& )
 	{
 	}
 

@@ -77,7 +77,7 @@ void DocumentThread::new_document()
 void DocumentThread::load_from_string(const std::string& json)
 	{
 	std::lock_guard<std::mutex> guard(stack_mutex);
-	pending_actions=std::queue<std::shared_ptr<ActionBase> >(); // clear queue
+	pending_actions=std::queue<std::shared_ptr<ActionBase> >();
 	doc.clear();
 	JSON_deserialise(json, doc);
 	gui->remove_all_cells();
@@ -304,7 +304,8 @@ void DocumentThread::process_action_queue()
 		stack_mutex.lock();
 		if(ab->undoable())
 			undo_stack.push(ab);
-		pending_actions.pop();
+		if(pending_actions.size()>0) // some actions clear the queue
+			pending_actions.pop();
 		}
 	stack_mutex.unlock();
 	}

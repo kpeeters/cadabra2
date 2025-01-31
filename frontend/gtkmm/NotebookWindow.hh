@@ -94,7 +94,6 @@ namespace cadabra {
 			void set_name(const std::string&);
 			void set_title_prefix(const std::string&);
 
-			void load_file(const std::string& notebook_contents);
 			void refresh_highlighting();
 			void on_help_register();
 
@@ -109,6 +108,7 @@ namespace cadabra {
 			void compare_git(const std::string& commit_hash);
 			std::string run_git_command(const std::string& args);
 
+			virtual void load_from_string(const std::string& notebook_contents) override;
 			virtual void set_compute_thread(ComputeThread* compute) override;
 
 			virtual void on_interactive_output(const nlohmann::json& msg) override;

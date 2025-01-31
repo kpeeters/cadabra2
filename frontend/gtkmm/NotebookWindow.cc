@@ -2185,7 +2185,7 @@ void NotebookWindow::on_file_open()
 				content+=line;
 
 			compute->restart_kernel();
-			load_file(content);
+			load_from_string(content);
 			break;
 			}
 		}
@@ -2197,17 +2197,19 @@ void NotebookWindow::set_name(const std::string& n)
 	update_title();
 	}
 
-void NotebookWindow::load_file(const std::string& notebook_contents)
+void NotebookWindow::load_from_string(const std::string& notebook_contents)
 	{
 	mainbox.set_sensitive(false);
 
-	load_from_string(notebook_contents);
+	DocumentThread::load_from_string(notebook_contents);
 
 	mainbox.show_all();
 	modified=false;
 	update_title();
+	std::cerr << "updated" << std::endl;
 
 	Glib::signal_idle().connect( sigc::mem_fun(*this, &NotebookWindow::on_first_redraw) );
+	std::cerr << "signalled" << std::endl;
 	}
 
 bool NotebookWindow::on_first_redraw()

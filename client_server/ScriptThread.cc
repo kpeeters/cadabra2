@@ -73,14 +73,16 @@ void ScriptThread::on_message(websocket_server::id_type ws_id, const std::string
 			// because we are not on the main thread. So we queue an
 			// action, to be dispatched later.
 			
-			std::shared_ptr<ActionBase> action =
-				std::make_shared<ActionRunCell>();
+			std::shared_ptr<ActionBase> action = std::make_shared<ActionRunCell>();
 			document->queue_action(action);
 			gui->process_data();
 			}
 		else if(action=="open") {
 			std::string notebook = jmsg.value("notebook", "");
-			// HERE
+			
+			std::shared_ptr<ActionBase> action = std::make_shared<ActionOpen>(notebook);
+			document->queue_action(action);
+			gui->process_data();
 			}
 		}
 	catch(nlohmann::json::exception& ex) {

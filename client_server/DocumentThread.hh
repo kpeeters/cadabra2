@@ -95,7 +95,7 @@ namespace cadabra {
 			/// from the GUI thread. Will cancel any pending operations on the
 			/// existing notebook (if present) first.
 
-			void load_from_string(const std::string&);
+			virtual void load_from_string(const std::string&);
 
 			virtual void on_interactive_output(const nlohmann::json& msg);
 

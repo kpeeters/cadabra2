@@ -19,35 +19,47 @@ class CadabraRemote:
         self.ws_thread = None
 
     def start(self):
-        self.process = subprocess.Popen(["cadabra2-gtk", "../examples/schwarzschild.cnb"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.process = subprocess.Popen(["cadabra2-gtk"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         try:
             info = self.process.stderr.readline()
-            self.url = info[16:-1].decode("utf-8")
+            while not info:
+                info = self.process.stderr.readline()
+            print(f"Socket at {info}")
+            self.url = info[16:-1]
+            print(f"URL {self.url}")
             self.connect()
         except Exception as ex:
             raise CadabraRemoteException(f"Failed to start cadabra2-gtk: {ex}")
 
     def connect(self):
-        # print(f"Connecting to control socket {self.url}...")
+        print(f"Connecting to control socket {self.url}...")
         self.ws = websocket.WebSocketApp(self.url,
                                          on_message = self.on_message,
                                          on_error = self.on_error,
                                          on_close = self.on_close)
         self.ws.on_open = self.on_open
-        self.ws_thread = threading.Thread(target=self.ws.run_forever)
+        self.ws_thread = threading.Thread(target=self.ws_run)
         self.ws_thread.start()
+
+    def ws_run(self):
+        print("Thread started")
+        self.ws.run_forever()
         
     def on_message(self, ws, message):
-        pass
+        print(f"Received {message}")
 
     def on_open(self, ws):
         print("Connection open.")
 
-    def on_close(self, ws):
-        print("Connection closed.")
+    def on_close(self, ws, v1, v2):
+        print(f"Connection closed: {v1}, {v2}")
 
-    def on_error(self, ws):
-        print("Connection error.")
+    def on_error(self, ws, message):
+        print(f"Connection error {message}.")
+        remaining_stdout = self.process.stdout.read()
+        remaining_stderr = self.process.stderr.read()
+        print(remaining_stdout)
+        print(remaining_stderr)
             
     def open(self, notebook):
         msg = { "action": "open",
