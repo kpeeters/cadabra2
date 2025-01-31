@@ -666,15 +666,19 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// Setup the toolbar and buttons in it.
 	if(!read_only) {
 		toolbar.set_size_request(-1, 70/display_scale);
+
 		tool_stop.add(*Gtk::make_managed<ImageArea>(
 							  40/display_scale, display_scale,
 							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-cancel.svg",
 							  false));
-		
-		tool_run.add(*Gtk::make_managed<ImageArea>(
-							  40/display_scale, display_scale,
-							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-run.svg",
-							  false));
+
+		auto img_run = Gtk::make_managed<ImageArea>(40/display_scale, display_scale,
+																  install_prefix()+"/share/cadabra2/cdb-icons/cdb-run.svg",
+																  false);
+		img_run->get_accessible()->set_role(Atk::ROLE_PUSH_BUTTON);
+		tool_run.add(img_run);
+		tool_run.get_accessible()->set_name("Run");
+
 //		tool_run.set_label("run all");
 
 		tool_restart.add(*Gtk::make_managed<ImageArea>(

@@ -31,6 +31,9 @@ CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::Text
 	//	get_buffer()->signal_erase().connect(sigc::mem_fun(this, &exp_input_tv::on_my_erase), false);
 	get_buffer()->signal_changed().connect(sigc::mem_fun(this, &exp_input_tv::on_textbuf_change), false);
 	set_name("CodeInput"); // to be able to style it with CSS
+	auto obj = get_accessible();
+	obj->set_name("CodeInput");
+	obj->set_role(Atk::ROLE_TEXT);
 	}
 
 CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double s, double ds, const Prefs& prefs,

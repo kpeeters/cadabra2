@@ -7,28 +7,28 @@ import websocket
 import threading
 import time
 
+class CadabraRemoteException(Exception):
+    def __init__(self, msg):
+        pass
+        
 class CadabraRemote:
     def __init__(self):
         self.url = ""
         self.process = None
         self.ws = None
         self.ws_thread = None
-        pass
 
     def start(self):
         self.process = subprocess.Popen(["cadabra2-gtk", "../examples/schwarzschild.cnb"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         try:
             info = self.process.stderr.readline()
             self.url = info[16:-1].decode("utf-8")
-            print("Process started.")
+            self.connect()
         except Exception as ex:
-            print(f"Failed to start cadabra2-gtk: {ex}", file=sys.stderr)
-            sys.exit(-1)
-
-        self.connect()
+            raise CadabraRemoteException(f"Failed to start cadabra2-gtk: {ex}")
 
     def connect(self):
-        print(f"Connecting to control socket {self.url}...")
+        # print(f"Connecting to control socket {self.url}...")
         self.ws = websocket.WebSocketApp(self.url,
                                          on_message = self.on_message,
                                          on_error = self.on_error,
@@ -57,7 +57,10 @@ class CadabraRemote:
 
     def run_all_cells(self):
         msg = { "action": "run_all_cells" }
-        self.ws.send( json.dumps(msg) )
+        try:
+            self.ws.send( json.dumps(msg) )
+        except:
+            raise CadabraRemoteException("Connection to Cadabra notebook not open.")
     
 
 if __name__=="__main__":

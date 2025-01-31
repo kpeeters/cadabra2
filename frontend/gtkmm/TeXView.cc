@@ -540,6 +540,9 @@ TeXView::TeXArea::TeXArea(bool use_microtex_, TeXView *owner_)
 	{
 	set_hexpand(true);
 	set_name("TeXArea");
+	auto obj = get_accessible();
+	obj->set_name("TeXArea");
+	obj->set_role(Atk::ROLE_MATH);
 	set_focus_on_click(true);
 	}
 

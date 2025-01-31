@@ -39,6 +39,7 @@ set(PACKAGES
 set(PURE_PYTHON_PACKAGES
   main.py
   remote/__init__.py
+  remote/videos.py
 )
 
 if(WIN32)
