@@ -7,11 +7,11 @@
 #include <gtkmm/progressbar.h>
 #include <gtkmm/spinner.h>
 #include <gtkmm/label.h>
-#include <gtkmm/stock.h>
+// #include <gtkmm/stock.h>
 #include <gtkmm/button.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/cssprovider.h>
-#include <gtkmm/toolbar.h>
+// #include <gtkmm/toolbar.h>
 #include <glibmm/dispatcher.h>
 #include <giomm/settings.h>
 #include <giomm/actiongroup.h>

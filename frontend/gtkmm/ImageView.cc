@@ -89,7 +89,7 @@ void ImageView::set_image_from_svg(const std::string& svg)
 void ImageView::rerender(int override_width)
 	{
 	auto str = Gio::MemoryInputStream::create();
-	str->add_data(decoded.c_str(), decoded.size());
+	str->add_data(decoded.c_str(), decoded.size(), nullptr);
 
 	int curwidth=400*scale;
 	if(pixbuf)

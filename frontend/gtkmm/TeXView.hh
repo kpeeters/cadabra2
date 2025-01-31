@@ -1,7 +1,9 @@
 
 #pragma once
 
+#ifndef USE_GTK4
 #include <gtkmm/eventbox.h>
+#endif
 #include <gtkmm/box.h>
 #include <gtkmm/drawingarea.h>
 #if GTKMM_MINOR_VERSION>=10

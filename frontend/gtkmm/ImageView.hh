@@ -3,7 +3,9 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>
+#ifndef USE_GTK4
 #include <gtkmm/eventbox.h>
+#endif
 
 namespace cadabra {
 
@@ -11,7 +13,11 @@ namespace cadabra {
 	///
 	/// An image viewing widget.
 
+#ifdef USE_GTK4
+	class ImageView : public Gtk::Box {
+#else
 	class ImageView : public Gtk::EventBox {
+#endif
 		public:
 			ImageView(double scale);
 			virtual ~ImageView();

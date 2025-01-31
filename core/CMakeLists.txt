@@ -37,8 +37,11 @@ configure_file(
 find_package(Boost 1.71.0 COMPONENTS system filesystem REQUIRED)
 
 # Find glibmm (for base64)
-# Conda will probably go belly-up again...
-find_package(GLIBMM  REQUIRED)
+if(USE_GTK4)
+  find_package(GLIBMM4  REQUIRED)
+else()
+  find_package(GLIBMM3  REQUIRED)
+endif()
 
 # GMPXX
 # In order to distribute as a PyPl wheel, we need to link
@@ -302,7 +305,7 @@ target_link_libraries(cadabra2 PRIVATE
   ${GMP_LIBRARIES}   
   ${Boost_LIBRARIES}
   #  ${Python_LIBRARIES}
-  #  ${GLIBMM3_LIBRARIES}    
+  #  ${GLIBMM_LIBRARIES}    
 )
 
 if(IPO_SUPPORTED)
@@ -346,7 +349,7 @@ add_executable(cadabra2-cli
 )
 target_compile_definitions(cadabra2-cli PRIVATE CDBPYTHON_NO_NOTEBOOK)
 target_include_directories(cadabra2-cli PRIVATE pybind11::pybind11)
-target_link_libraries(cadabra2-cli PRIVATE pybind11::embed ${GLIBMM3_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(cadabra2-cli PRIVATE pybind11::embed ${GLIBMM_LIBRARIES} ${Boost_LIBRARIES})
 
 # Notebook diff tool
 add_executable(cdb-nbtool
@@ -380,7 +383,7 @@ add_executable(cadabra2python
    )
 target_link_libraries(cadabra2python 
    ${Boost_LIBRARIES}
-   #    ${GLIBMM3_LIBRARIES}     
+   #    ${GLIBMM_LIBRARIES}     
    ${Python_LIBRARIES}
    )
 
@@ -396,7 +399,7 @@ add_executable(cadabra2ipynb
    )
 target_link_libraries(cadabra2ipynb
    ${Boost_LIBRARIES}
-   #    ${GLIBMM3_LIBRARIES}     
+   #    ${GLIBMM_LIBRARIES}     
    ${Python_LIBRARIES}
    )
 

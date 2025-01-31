@@ -18,7 +18,12 @@ set(INSTALL_LATEX_DIR "share/cadabra2")
 # Locate libraries.
 #---------------------------------------------------------------------------
 
-find_package(GLIBMM  REQUIRED)
+if(USE_GTK4)
+  find_package(GLIBMM4  REQUIRED)
+else()
+  find_package(GLIBMM3  REQUIRED)
+endif()
+  
 find_package(SQLITE3 REQUIRED)
 # Don't set pthreads to required. Either we're on a platform where explict
 # linking with -lpthread is the norm (e.g. Linux) and it'll be found, or we're
@@ -147,7 +152,7 @@ target_link_libraries(cadabra-server
    ${Boost_LIBRARIES}
    ${SQLITE3_LIBRARIES}
    ${Python_LIBRARIES}
-   ${GLIBMM3_LIBRARIES} 
+   ${GLIBMM_LIBRARIES} 
    ${OPENSSL_LIBRARIES}
    Threads::Threads
    pthread
@@ -169,7 +174,7 @@ target_link_libraries(cadabra_client
   ${Boost_LIBRARIES}
   ${SQLITE3_LIBRARIES}
   ${Python_LIBRARIES}
-  ${GLIBMM3_LIBRARIES}
+  ${GLIBMM_LIBRARIES}
   Threads::Threads
   ${OPENSSL_LIBRARIES}
   )
@@ -190,22 +195,6 @@ add_executable(cadabra2latex
   ${CADABRA_LIBS_DIR}/base64/base64.cc
   )
 target_link_libraries(cadabra2latex cadabra_client)
-
-# Jupyter kernel
-# if(ENABLE_JUPYTER)
-#   print_header("Configuring Xeus Jupyter kernel")
-#   find_package(xtl REQUIRED)
-#   find_package(nlohmann_json REQUIRED)
-#   find_library(UUID_LIBRARIES uuid REQUIRED)
-#   include_directories(${CMAKE_INSTALL_PREFIX}/include ${XTL_INCLUDE_DIR} ${NLOHMANN_JSON_INCLUDE_DIR})
-#   link_directories(${CMAKE_INSTALL_PREFIX}/lib)
-#   add_executable(cadabra-jupyter-kernel ${JUPYTER_KERNEL_SRC})
-#   target_compile_definitions(cadabra-jupyter-kernel PRIVATE CDB_DONT_ACQUIRE_GIL=1)  
-#   message("-- UUID library at ${UUID_LIBRARIES}")
-#   target_link_libraries(cadabra-jupyter-kernel xeus Threads::Threads uuid ${Boost_LIBRARIES} ${GLIBMM3_LIBRARIES} ${Python_LIBRARIES})
-# else()
-#   message("-- Not building Xeus Jupyter kernel")
-# endif()
 
 # Make sure sqlite3.dll is copied into the build directory on Windows.
 if (WIN32)
