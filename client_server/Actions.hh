@@ -52,6 +52,11 @@ namespace cadabra {
 			virtual bool undoable() const;
 
 			DataCell::id_t  ref_id;
+
+			/// If you want a callback once this action has finished,
+			/// set it here before queuing.
+			std::function<void()> callback;
+			
 		protected:
 			DTree::iterator ref;
 		};

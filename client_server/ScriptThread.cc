@@ -67,20 +67,35 @@ void ScriptThread::on_message(websocket_server::id_type ws_id, const std::string
 	try {
 		auto jmsg = nlohmann::json::parse(msg);
 		std::cerr << "received message: " << jmsg.dump(3) << std::endl;
-		std::string action = jmsg.value("action", "");
-		if(action=="run_all_cells") {
+		std::string msg_action = jmsg.value("action", "");
+		size_t      msg_serial = jmsg.value("serial", 0);
+		if(msg_action=="run_all_cells") {
 			// We cannot call directly into the document methods here,
 			// because we are not on the main thread. So we queue an
 			// action, to be dispatched later.
 			
 			std::shared_ptr<ActionBase> action = std::make_shared<ActionRunCell>();
+			action->callback = [this, ws_id, msg_serial, msg_action]() {
+				nlohmann::json msg;
+				msg["status"]="completed";
+				msg["serial"]=msg_serial;
+				msg["action"]=msg_action;
+				wserver.send(ws_id, msg.dump());
+				};
 			document->queue_action(action);
 			gui->process_data();
 			}
-		else if(action=="open") {
+		else if(msg_action=="open") {
 			std::string notebook = jmsg.value("notebook", "");
 			
 			std::shared_ptr<ActionBase> action = std::make_shared<ActionOpen>(notebook);
+			action->callback = [this, ws_id, msg_serial, msg_action]() {
+				nlohmann::json msg;
+				msg["status"]="completed";
+				msg["serial"]=msg_serial;
+				msg["action"]=msg_action;
+				wserver.send(ws_id, msg.dump());
+				};
 			document->queue_action(action);
 			gui->process_data();
 			}

@@ -304,6 +304,8 @@ void DocumentThread::process_action_queue()
 		stack_mutex.lock();
 		if(ab->undoable())
 			undo_stack.push(ab);
+		if(ab->callback != nullptr)
+			ab->callback();
 		if(pending_actions.size()>0) // some actions clear the queue
 			pending_actions.pop();
 		}
