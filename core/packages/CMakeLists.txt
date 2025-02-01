@@ -39,7 +39,8 @@ set(PACKAGES
 set(PURE_PYTHON_PACKAGES
   main.py
   remote/__init__.py
-  remote/videos.py
+  remote/speech.py
+  remote/highlight.py
 )
 
 if(WIN32)

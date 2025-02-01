@@ -21,9 +21,10 @@ class CadabraRemote:
         self.condition = threading.Condition()
         self.open_condition = threading.Condition()
         self.close_condition = threading.Condition()
+        self.name = "cadabra2-gtk"
 
     def start(self):
-        self.process = subprocess.Popen(["cadabra2-gtk"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        self.process = subprocess.Popen([self.name], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         try:
             info = self.process.stderr.readline()
             while not info:
@@ -119,23 +120,24 @@ class CadabraRemote:
         with self.close_condition:
             try:
                 self.close_condition.wait()
-                if cdb.process:
-                    cdb.process.terminate()
+                if self.process:
+                    self.process.terminate()
             except KeyboardInterrupt:
-                if cdb.process:
-                    cdb.process.terminate()
+                if self.process:
+                    self.process.terminate()
                 
 
 if __name__=="__main__":
+    # This is for testing only; see for more extensive
+    # usage of this module the scripts in the "tutorials"
+    # folder of the Cadabra repository.
     cdb = CadabraRemote()
     cdb.start()
     cdb.open("../examples/schwarzschild.cnb")
     time.sleep(1)
     print("Notebook loaded")
     cdb.run_all_cells()
-    print("Cells ran")    
-    
+    print("Cells ran")
     print("Press ctrl-c to terminate")
-
     cdb.wait()
             
