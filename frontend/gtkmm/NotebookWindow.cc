@@ -667,39 +667,49 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	if(!read_only) {
 		toolbar.set_size_request(-1, 70/display_scale);
 
+		// Stop button.
 		tool_stop.add(*Gtk::make_managed<ImageArea>(
 							  40/display_scale, display_scale,
 							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-cancel.svg",
 							  false));
+		tool_stop.get_accessible()->set_name("Stop");
 
+		// Run button.
 		auto img_run = Gtk::make_managed<ImageArea>(40/display_scale, display_scale,
 																  install_prefix()+"/share/cadabra2/cdb-icons/cdb-run.svg",
 																  false);
 		img_run->get_accessible()->set_role(Atk::ROLE_PUSH_BUTTON);
 		tool_run.add(img_run);
 		tool_run.get_accessible()->set_name("Run");
+		//		tool_run.set_label("run all");
 
-//		tool_run.set_label("run all");
-
+		// Restart button.
 		tool_restart.add(*Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
 								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart.svg",
 								  false));
+		tool_restart.get_accessible()->set_name("Restart kernel");
 
+		// Open button.
 		tool_open.add(*Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
 								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-open.svg",
 								  false));
+		tool_open.get_accessible()->set_name("Open");
 
+		// Save button.
 		tool_save.add(*Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
 								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save.svg",
 								  false));
+		tool_save.get_accessible()->set_name("Save");
 
+		// Save as button.
 		tool_save_as.add(*Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
 								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save-as.svg",
 								  false));
+		tool_save_as.get_accessible()->set_name("Save as");
 
 		tool_stop.set_size_request(70/display_scale, 70/display_scale);
 		tool_run.set_size_request(70/display_scale, 70/display_scale);
@@ -707,6 +717,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		tool_open.set_size_request(70/display_scale, 70/display_scale);
 		tool_save.set_size_request(70/display_scale, 70/display_scale);
 		tool_save_as.set_size_request(70/display_scale, 70/display_scale);
+
 		tool_run.set_tooltip_text("Execute all cells");
 		tool_stop.set_tooltip_text("Stop execution");
 		tool_restart.set_tooltip_text("Restart kernel");

@@ -41,6 +41,7 @@ set(PURE_PYTHON_PACKAGES
   remote/__init__.py
   remote/speech.py
   remote/highlight.py
+  remote/record.py
 )
 
 if(WIN32)

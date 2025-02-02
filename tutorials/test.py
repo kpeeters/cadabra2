@@ -1,15 +1,20 @@
 from cdb.remote           import *
 from cdb.remote.speech    import init, say
-from cdb.remote.highlight import mark
+from cdb.remote.highlight import mark, subtitle
 
 init("../tutorials/en_GB-alba-medium.onnx")
 
 cdb = CadabraRemote()
 cdb.start()
 
+subtitle("Cadabra tutorial 1")
 say("In this tutorial you will learn the basics of the Cadabra computer algebra system.")
+subtitle()
 say("After you start it, you are presented with the notebook interface as you see here.")
-say("We will load a sample notebook now.")
+#mark("Open")
+say("We will use the open button to load a sample notebook now.")
+time.sleep(1)
+#mark()
 
 # FIXME: open does not wait long enough
 cdb.open("../examples/schwarzschild.cnb")
