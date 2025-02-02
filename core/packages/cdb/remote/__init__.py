@@ -23,8 +23,10 @@ class CadabraRemote:
         self.close_condition = threading.Condition()
         self.name = "cadabra2-gtk"
 
-    def start(self):
-        self.process = subprocess.Popen([self.name], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    def start(self, extra_args=[]):
+        args = [self.name]
+        args.extend(extra_args)
+        self.process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         try:
             info = self.process.stderr.readline()
             while not info:

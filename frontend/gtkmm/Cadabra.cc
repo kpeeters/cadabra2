@@ -33,6 +33,7 @@ Glib::RefPtr<Cadabra> Cadabra::create(int argc, char **argv)
 Cadabra::Cadabra(int argc, char **argv)
 	: Gtk::Application(argc, argv, "science.cadabra.cadabra2-gtk",
 	                   Gio::APPLICATION_HANDLES_OPEN |
+							 Gio::APPLICATION_HANDLES_COMMAND_LINE |
 	                   Gio::APPLICATION_NON_UNIQUE),
 	  compute(0), compute_thread(0),
 	  server_port(0), server_ip_address("127.0.0.1")
@@ -45,14 +46,16 @@ Cadabra::Cadabra(int argc, char **argv)
 
 	//https://github.com/GNOME/gtkmm-documentation/blob/master/examples/book/application/command_line_handling/exampleapplication.cc
 
-	signal_handle_local_options().connect(
-	   sigc::mem_fun(*this, &Cadabra::on_handle_local_options), false);
-
 	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_INT,
 	                      "server-port",
 	                      's',
 	                      "Connect to running server on given port.",
 	                      "number");
+	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_STRING,
+	                      "geometry",
+	                      'g',
+	                      "Specify the window size (and optionally the position).",
+	                      "string");
 	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_STRING,
 	                      "server-ip-address",
 	                      'a',
@@ -104,17 +107,24 @@ Cadabra::~Cadabra()
 	//		delete w;
 	}
 
-
-int Cadabra::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& options)
+int Cadabra::on_command_line(const Glib::RefPtr<Gio::ApplicationCommandLine>& cmd)
 	{
-	if(!options)
-		return -1;
+	auto options = cmd->get_options_dict();
 
-	get_arg_value(options, "server-port", server_port);
-	get_arg_value(options, "server-ip-address", server_ip_address);	
-	get_arg_value(options, "token",       server_token);
-//	std::cerr << server_port << ", " << server_token << std::endl;
-	return -1;
+	// The template `get_arg_value` only works if the type matches exactly,
+	// so we need to ask it to store into a `Glib::ustring` and then copy.
+	Glib::ustring tmp;
+	
+	get_arg_value(options, "server-port",       server_port);
+	get_arg_value(options, "server-ip-address", tmp);
+	server_ip_address = tmp;
+	get_arg_value(options, "token",             tmp);
+	server_token = tmp;
+	get_arg_value(options, "geometry",          tmp);
+	window_geometry = tmp;
+
+	activate();
+	return 0;
 	}
 
 void Cadabra::on_startup()
@@ -127,7 +137,7 @@ void Cadabra::on_activate()
 	compute = new cadabra::ComputeThread(server_port, server_token, server_ip_address);
 	compute_thread = new std::thread(&cadabra::ComputeThread::run, compute);
 
-	auto nw = new cadabra::NotebookWindow(this);
+	auto nw = new cadabra::NotebookWindow(this, false, window_geometry);
 	compute->set_master(nw, nw);
 	nw->main_thread_id = std::this_thread::get_id();
 

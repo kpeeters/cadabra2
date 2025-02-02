@@ -22,6 +22,8 @@ class Cadabra : public Gtk::Application {
 		virtual void on_startup() override;
 		virtual void on_activate() override;
 		virtual void on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint) override;
+		virtual int on_command_line(const Glib::RefPtr<Gio::ApplicationCommandLine>& cmd) override;
+
 
 		int on_handle_local_options(const Glib::RefPtr<Glib::VariantDict> &);
 
@@ -35,4 +37,5 @@ class Cadabra : public Gtk::Application {
 		int server_port;
 		std::string server_token;
 		std::string server_ip_address;
+		std::string window_geometry;
 	};

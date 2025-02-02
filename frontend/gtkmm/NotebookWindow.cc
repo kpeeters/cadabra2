@@ -40,7 +40,7 @@ using namespace cadabra;
 
 // #define DEBUG 1
 
-NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
+NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry)
 	: Gtk::ApplicationWindow()
 	, DocumentThread(this)
 	, current_cell(doc.end())
@@ -803,7 +803,14 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 	// Window size and title, and ready to go.
 	if(!ro) {
-		set_default_size(geometry.get_width()/2, geometry.get_height()*0.8);
+		if(geometry!="") {
+			int width = 0, height = 0, x = 0, y = 0;
+			sscanf(geometry.c_str(), "%dx%d", &width, &height);
+			// std::cerr << "GEOMETRY = " << width << " x " << height << std::endl;
+			set_default_size(width, height);
+			}
+		else 
+			set_default_size(screen->get_width()/2, screen->get_height()*0.8);
 		}
 	else {
 		set_default_size(geometry.get_width()/3, geometry.get_height()*0.6);

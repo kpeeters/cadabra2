@@ -5,16 +5,16 @@ from cdb.remote.highlight import mark, subtitle
 init("../tutorials/en_GB-alba-medium.onnx")
 
 cdb = CadabraRemote()
-cdb.start()
+cdb.start(["--geometry", "1920x1080"])
 
 subtitle("Cadabra tutorial 1")
-say("In this tutorial you will learn the basics of the Cadabra computer algebra system.")
+#say("In this tutorial you will learn the basics of the Cadabra computer algebra system.")
 subtitle()
-say("After you start it, you are presented with the notebook interface as you see here.")
-#mark("Open")
+#say("After you start it, you are presented with the notebook interface as you see here.")
+mark("Open")
 say("We will use the open button to load a sample notebook now.")
 time.sleep(1)
-#mark()
+mark()
 
 # FIXME: open does not wait long enough
 cdb.open("../examples/schwarzschild.cnb")

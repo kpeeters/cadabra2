@@ -27,6 +27,7 @@ class WidgetHighlighter:
         win = Gtk.Window(type=Gtk.WindowType.POPUP)
         win.set_app_paintable(True)
         win.set_visual(win.get_screen().get_rgba_visual())
+        print(x,y,width,height)
         win.resize(width + 4, height + 4)
         win.move(x - 2, y - 2)
         
@@ -75,8 +76,10 @@ class WidgetHighlighter:
             return
             
         component = button.queryComponent()
+        print(component)
         x, y = component.getPosition(pyatspi.DESKTOP_COORDS)
         w, h = component.getSize()
+        print(x,y,w,h)
         
         # Create highlight overlay
         self.create_highlight_window(x, y, w, h)
@@ -231,37 +234,15 @@ def mark(label=""):
     else:
         obj = highlighter.find_button_by_label("cadabra2-gtk", label)
         if obj:
+            print("FOUND")
             highlighter.highlight_button(obj)
 
-def subtitle(txt):
+def subtitle(txt=""):
     if txt=="":
         highlighter.remove_subtitle()
     else:
         highlighter.subtitle(txt, "Cadabra")
             
-def main():
-    DBusGMainLoop(set_as_default=True)
-    highlighter = WidgetHighlighter()
-    
-    app_name = "cadabra2-gtk"
-    button_label = "Run"
-    
-    # Find and highlight the button
-    button = highlighter.find_button_by_label(app_name, button_label)
-    if button:
-        highlighter.highlight_button(button)
-        print(f"Button found and highlighted")
-        
-        # Example: Do something else while highlighted
-        time.sleep(2)
-        print("Doing something else...")
-        time.sleep(2)
-        
-        # Remove highlight when done
-        highlighter.remove_highlight()
-        print("Highlight removed")
-    else:
-        print(f"Button '{button_label}' not found in {app_name}")
 
 DBusGMainLoop(set_as_default=True)
         

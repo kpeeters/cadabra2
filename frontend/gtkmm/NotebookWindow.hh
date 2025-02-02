@@ -40,7 +40,7 @@ namespace cadabra {
 
 	class NotebookWindow : public Gtk::ApplicationWindow, public DocumentThread, public GUIBase {
 		public:
-			NotebookWindow(Cadabra *, bool read_only=false);
+			NotebookWindow(Cadabra *, bool read_only=false, std::string geometry="");
 			~NotebookWindow();
 
 			// Virtual functions from GUIBase.
