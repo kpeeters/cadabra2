@@ -9,7 +9,12 @@ cdb.start(["--geometry", "1920x1080"])
 
 subtitle("Tutorial 1: the basics of Cadabra")
 time.sleep(1)
+cdb.add_cell("ex:= A_{m n}+B_{m n};")
+time.sleep(2)
 subtitle()
+cdb.run_all_cells();
+time.sleep(3)
+
 say("In this tutorial you will learn the basics of the Cadabra computer algebra system.")
 say("After you start it, you are presented with the notebook interface as you see here.")
 mark("Open")

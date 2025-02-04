@@ -109,6 +109,10 @@ namespace cadabra {
 
 			/// Find string, return match, or a (doc.end(), std::string::npos).
 			std::pair<DTree::iterator, size_t> find_string(DTree::iterator start_it, size_t start_pos, const std::string& f, bool case_ins) const;
+
+			/// All actions are considered pieces of code which are part of
+			/// DocumentThread, so they should be able to access its private
+			/// variables.
 			
 			friend ActionBase;
 			friend ActionAddCell;
@@ -162,6 +166,11 @@ namespace cadabra {
 			/// access this tree directly.
 
 			DTree          doc;
+
+			/// Iterator to the currently active cell in the notebook, or
+			/// doc.end() if nothing active.
+			
+			DTree::iterator current_cell;
 
 			/// The action undo/redo/todo stacks and logic to execute
 			/// them. These stacks can be accessed from both the

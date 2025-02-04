@@ -43,7 +43,6 @@ using namespace cadabra;
 NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry)
 	: Gtk::ApplicationWindow()
 	, DocumentThread(this)
-	, current_cell(doc.end())
 	, cdbapp(c)
 	, topbox(Gtk::Orientation::ORIENTATION_VERTICAL)
 	, toolbar(Gtk::Orientation::ORIENTATION_HORIZONTAL)

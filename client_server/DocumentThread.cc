@@ -24,7 +24,7 @@
 using namespace cadabra;
 
 DocumentThread::DocumentThread(GUIBase* g)
-	: gui(g), compute(0), disable_stacks(false)
+	: gui(g), compute(0), current_cell(doc.end()), disable_stacks(false)
 	{
 	// Setup logging.
 	std::string version=std::string(CADABRA_VERSION_SEM);

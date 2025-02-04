@@ -27,14 +27,24 @@ bool ActionBase::undoable() const
 
 void ActionBase::execute(DocumentThread& cl, GUIBase& )
 	{
-	auto it=cl.doc.begin();
-	while(it!=cl.doc.end()) {
-		if((*it).id().id==ref_id.id) {
-			ref=it;
-			return;
-			}
-		++it;
+	if(ref_id.id==0) {
+		// A zero ID means the current cell.
+		ref = cl.current_cell;
+		return;
 		}
+	else {
+		// Lookup the cell with the given ID.
+		auto it=cl.doc.begin();
+		while(it!=cl.doc.end()) {
+			if((*it).id().id==ref_id.id) {
+				ref=it;
+				return;
+				}
+			++it;
+			}
+		}
+
+	// Not found, throw exception.
 	std::string class_name = boost::core::demangle(typeid(*this).name());
 	throw std::logic_error(class_name + ": cannot find cell with id "+std::to_string(ref_id.id));
 	}

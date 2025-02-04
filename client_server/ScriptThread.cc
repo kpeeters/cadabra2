@@ -99,6 +99,26 @@ void ScriptThread::on_message(websocket_server::id_type ws_id, const std::string
 			document->queue_action(action);
 			gui->process_data();
 			}
+		else if(msg_action=="add_cell") {
+			std::string content = jmsg.value("content", "");
+
+			DataCell dc(DataCell::CellType::python, content);
+			DataCell::id_t ref_id;
+			ref_id.id=0; // relative to current cell
+			
+			std::shared_ptr<ActionAddCell> action =
+				std::make_shared<ActionAddCell>(dc, ref_id, ActionAddCell::Position::after);
+			
+			action->callback = [this, ws_id, msg_serial, msg_action]() {
+				nlohmann::json msg;
+				msg["status"]="completed";
+				msg["serial"]=msg_serial;
+				msg["action"]=msg_action;
+				wserver.send(ws_id, msg.dump());
+				};
+			document->queue_action(action);
+			gui->process_data();
+			}
 		}
 	catch(nlohmann::json::exception& ex) {
 		std::cerr << "Received unparsable message: " << msg << std::endl;

@@ -118,6 +118,17 @@ class CadabraRemote:
         except:
             raise CadabraRemoteException("Connection to Cadabra notebook not open.")
 
+    def add_cell(self, content, wait=True):
+        self.serial += 1
+        msg = { "action":   "add_cell",
+                "serial":   self.serial,
+                "content":  content
+               }
+        self.ws.send( json.dumps(msg) )
+        if wait:
+            with self.condition:
+                self.condition.wait()
+
     def wait(self):
         with self.close_condition:
             try:
