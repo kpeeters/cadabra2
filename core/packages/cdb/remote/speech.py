@@ -6,6 +6,7 @@ import io
 import wave
 import time
 import tempfile
+import cdb.remote.highlight
 
 initialised=False
 model = None
@@ -15,7 +16,7 @@ def init(voice_file="en_GB-alba-medium.onnx"):
     model = PiperVoice.load(voice_file, voice_file+".json")
     initialised=True
 
-def say(text):
+def say(text, subtitle=True):
     if not initialised:
         raise Exception("First call cdb.videos.init(onnx_filename) to initialise.")
     
@@ -24,7 +25,11 @@ def say(text):
     model.synthesize(text, wave_file)
     wave_file.close()
     audio_data = AudioSegment.from_wav(tmp.name)
+    if subtitle:
+        cdb.remote.highlight.subtitle(text)
     play(audio_data)
+    if subtitle:
+        cdb.remote.highlight.subtitle()
 
 if __name__ == "__main__":
     say("Hello!")

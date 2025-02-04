@@ -14,8 +14,12 @@ import math
 class WidgetHighlighter:
     def __init__(self):
         self.window = None
+        self.window_name = None
         self.current_highlight = None
         self.subtitle_window = None
+        self.subtitle_x = 0
+        self.subtitle_y = 0
+        self.label = None
         self.loop = None
         
     def create_highlight_window(self, x, y, width, height):
@@ -62,8 +66,9 @@ class WidgetHighlighter:
         return None
     
     def _find_button_recursive(self, obj, label):
-        if label.lower() in obj.name.lower():
-            return obj
+        if not obj.getRole() == pyatspi.ROLE_MENU_ITEM:
+            if label.lower() in obj.name.lower():
+                return obj
                 
         for child in obj:
             result = self._find_button_recursive(child, label)
@@ -79,7 +84,7 @@ class WidgetHighlighter:
         print(component)
         x, y = component.getPosition(pyatspi.DESKTOP_COORDS)
         w, h = component.getSize()
-        print(x,y,w,h)
+        # print(x,y,w,h)
         
         # Create highlight overlay
         self.create_highlight_window(x, y, w, h)
@@ -94,7 +99,18 @@ class WidgetHighlighter:
     def _run_loop(self):
         self.loop.run()
 
-    def subtitle(self, text, window_name=None):
+    def find_window(self, name):
+        desktop = pyatspi.Registry.getDesktop(0)
+        target_window = None
+        for app in desktop:
+            if app:
+                for window in app:
+                    if self.window_name.lower() in window.name.lower():
+                        return window
+
+        raise Exception("Window "+self.window_name+" not found")
+        
+    def subtitle(self, text):
         """Display a subtitle at the bottom of the specified window.
         If window_name is None, places it at bottom of screen."""
         if self.subtitle_window:
@@ -108,9 +124,9 @@ class WidgetHighlighter:
         win.set_name("subtitle-window")  # Give the window a name for CSS
         
         # Create label with text
-        label = Gtk.Label()
-        label.set_text(text)
-        label.set_name("subtitle")
+        self.label = Gtk.Label()
+        self.label.set_text(text)
+        self.label.set_name("subtitle")
         
         # Style the label
         css_provider = Gtk.CssProvider()
@@ -120,76 +136,53 @@ class WidgetHighlighter:
             }
             #subtitle {
                 padding: 10px 20px;
-                font-size: 50px;
+                font-size: 45px;
                 color: black;
             }
         """)
         
-        context = label.get_style_context()
+        context = self.label.get_style_context()
         context.add_provider(css_provider, 
                            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         
-        win.add(label)
-        
-        # Size and position the window
-        monitor = Gdk.Display.get_default().get_primary_monitor()
-        geometry = monitor.get_geometry()
-        
-        # Get natural size of label
-        label_width, label_height = label.get_preferred_size()[1].width, \
-                                  label.get_preferred_size()[1].height
-        
-        if window_name:
-            # Find the specified window
-            desktop = pyatspi.Registry.getDesktop(0)
-            target_window = None
-            for app in desktop:
-                if app:
-                    for window in app:
-                        if window_name.lower() in \
-                           window.name.lower():
-                            target_window = window
-                            break
-                    if target_window:
-                        break
-            
-            if target_window:
-                # Get window position and size
-                component = target_window.queryComponent()
-                wx, wy = component.getPosition(pyatspi.DESKTOP_COORDS)
-                ww, wh = component.getSize()
-                
-                # Position subtitle at bottom of window, centered within window width
-                x = wx + (ww - label_width) // 2  # Now using window width (ww) for centering
-                y = wy + wh - label_height - 20
-                print(wx, wy, ww, wh)
-            else:
-                # Fallback to screen bottom if window not found
-                x = (geometry.width - label_width) // 2
-                y = geometry.height - label_height - 50
-
-        else:
-            # Position at bottom of screen
-            x = (geometry.width - label_width) // 2
-            y = geometry.height - label_height - 50
-        
-        win.move(x, y)
-        
-        # Set up background drawing
-        win.connect('draw', self.draw_subtitle_background)
+        win.add(self.label)
+        win.connect('draw', self.draw_subtitle)
         win.show_all()
         self.subtitle_window = win
-        
+
         # Start GTK main loop if not already running
         if not self.loop:
             self.loop = GLib.MainLoop()
             thread = Thread(target=self._run_loop)
             thread.daemon = True
             thread.start()
+
+    def draw_subtitle(self, widget, cr):
+        # Size and position the window
+        monitor = Gdk.Display.get_default().get_primary_monitor()
+        geometry = monitor.get_geometry()
+
+        # Get natural size of label
+        label_width, label_height = self.label.get_preferred_size()[1].width, \
+            self.label.get_preferred_size()[1].height
+        print("LABEL:", label_width, label_height)
+        
+        target_window = self.find_window(self.window_name)
+        component = target_window.queryComponent()
+        wx, wy = component.getPosition(pyatspi.WINDOW_COORDS)
+        ww, wh = component.getSize()
+        self.subtitle_x = wx + (ww - label_width) // 2 
+        self.subtitle_y = wy + wh - label_height - 20
+        print(wx, wy, ww, wh, label_width, label_height, self.subtitle_x, self.subtitle_y)
+        
+        self.subtitle_window.move(self.subtitle_x, self.subtitle_y)
+        self.draw_subtitle_background(widget, cr) #connect('draw', self.draw_subtitle_background)
+        
     
     def draw_subtitle_background(self, widget, cr):
         cr.set_operator(cairo.OPERATOR_SOURCE)
-        cr.set_source_rgba(0.0, 0.0, 0.0, 0.1)  # Semi-transparent black
+        gl=0.9
+        cr.set_source_rgba(gl, gl, gl, 0.6)  # 0=transparent, 1=opaque
         
         # Get the window dimensions
         width = widget.get_allocated_width()
@@ -234,14 +227,15 @@ def mark(label=""):
     else:
         obj = highlighter.find_button_by_label("cadabra2-gtk", label)
         if obj:
-            print("FOUND")
+            print("FOUND", obj)
             highlighter.highlight_button(obj)
 
 def subtitle(txt=""):
     if txt=="":
         highlighter.remove_subtitle()
     else:
-        highlighter.subtitle(txt, "Cadabra")
+        highlighter.window_name = "Cadabra"
+        highlighter.subtitle(txt)
             
 
 DBusGMainLoop(set_as_default=True)
