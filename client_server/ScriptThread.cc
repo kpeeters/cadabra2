@@ -107,7 +107,7 @@ void ScriptThread::on_message(websocket_server::id_type ws_id, const std::string
 			ref_id.id=0; // relative to current cell
 			
 			std::shared_ptr<ActionAddCell> action =
-				std::make_shared<ActionAddCell>(dc, ref_id, ActionAddCell::Position::after);
+				std::make_shared<ActionAddCell>(dc, ref_id, ActionAddCell::Position::before, true);
 			
 			action->callback = [this, ws_id, msg_serial, msg_action]() {
 				nlohmann::json msg;

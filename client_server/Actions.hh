@@ -69,7 +69,7 @@ namespace cadabra {
 		public:
 			enum class Position { before, after, child };
 
-			ActionAddCell(DataCell, DataCell::id_t  ref_, Position pos_);
+			ActionAddCell(DataCell, DataCell::id_t  ref_, Position pos_, bool activate=false);
 			virtual ~ActionAddCell() {};
 
 			virtual void execute(DocumentThread&, GUIBase&) override;
@@ -85,6 +85,7 @@ namespace cadabra {
 			DTree::iterator   newref;
 			Position          pos;
 			int               child_num;
+			bool              activate;
 
 			// If we are replacing a cell, keep track of that so we
 			// report that we are not undoable.

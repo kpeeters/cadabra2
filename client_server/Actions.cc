@@ -49,8 +49,13 @@ void ActionBase::execute(DocumentThread& cl, GUIBase& )
 	throw std::logic_error(class_name + ": cannot find cell with id "+std::to_string(ref_id.id));
 	}
 
-ActionAddCell::ActionAddCell(DataCell cell, DataCell::id_t ref_id, Position pos_)
-	: ActionBase(ref_id), newcell(cell), pos(pos_), is_replacement(false), is_input_form(false)
+ActionAddCell::ActionAddCell(DataCell cell, DataCell::id_t ref_id, Position pos_, bool activate_)
+	: ActionBase(ref_id)
+	, newcell(cell)
+	, pos(pos_)
+	, activate(activate_)
+	, is_replacement(false)
+	, is_input_form(false)
 	{
 	}
 
@@ -96,7 +101,9 @@ void ActionAddCell::execute(DocumentThread& cl, GUIBase& gb)
 	DEBUG( std::cerr << "ActionAddCell::execute: added as child " << child_num <<
 			 ": |" << newcell.textbuf << "|" << std::endl; )
 	gb.add_cell(cl.doc, newref, true);
-
+	if(activate)
+		gb.position_cursor(cl.doc, newref, -1);
+	
 	if(newcell.cell_type == DataCell::CellType::input_form)
 		is_input_form=true;
 	}
