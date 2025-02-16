@@ -672,12 +672,14 @@ namespace cadabra {
 							// evaluate tries to determine if a rule for X^{t}
 							// applies to an expression X^{m}).
 							if(t1!=0 && t2!=t1) {
-								auto ivals = std::find_if(t1->values.begin(), t1->values.end(),
-								[&](const Ex& a) {
-									if(subtree_compare(&properties, a.begin(), two, 0)==0) return true;
-									else return false;
-								});
-								if(ivals!=t1->values.end()) {
+								const auto& values = t1->values(properties, one);
+								auto ivals = std::find_if(values.begin(), values.end(),
+																  [&](const Ex& a) {
+																  if(subtree_compare(&properties, a.begin(), two, 0)==0)
+																	  return true;
+																  else return false;
+																  });
+								if(ivals!=values.end()) {
 									t2=t1;
 									two_is_value=true;
 									}
@@ -838,12 +840,13 @@ namespace cadabra {
 				// Look through values attribute of Indices object to see if the 'two' index
 				// can take the 'one' value.
 
-				auto ivals = std::find_if(t2->values.begin(), t2->values.end(),
-				[&](const Ex& a) {
-					if(subtree_compare(&properties, a.begin(), one, 0)==0) return true;
-					else return false;
-					});
-				if(ivals!=t2->values.end()) {
+				const auto& values = t2->values(properties, two);
+				auto ivals = std::find_if(values.begin(), values.end(),
+												  [&](const Ex& a) {
+												  if(subtree_compare(&properties, a.begin(), one, 0)==0) return true;
+												  else return false;
+												  });
+				if(ivals!=values.end()) {
 					// Verify that the 'two' index has not already been matched to a value
 					// different from 'one'.
 					Ex t1(two), t2(two), o1(one), o2(one);

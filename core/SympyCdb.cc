@@ -169,18 +169,19 @@ Ex sympy::fill_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
 	// Run over all values of Coordinates, construct matrix.
 
 	Ex matrix("\\matrix");
+	const auto& values = prop1->values(kernel.properties, ind1);
 	auto cols=matrix.append_child(matrix.begin(), str_node("\\comma"));
-	for(unsigned c1=0; c1<prop1->values.size(); ++c1) {
+	for(unsigned c1=0; c1<values.size(); ++c1) {
 		auto row=matrix.append_child(cols, str_node("\\comma"));
-		for(unsigned c2=0; c2<prop1->values.size(); ++c2) {
+		for(unsigned c2=0; c2<values.size(); ++c2) {
 			// Generate an expression with this component, apply substitution, then stick
 			// the result into the string that will go to sympy.
 
 			Ex c(ex.begin());
 			Ex::iterator cit1=c.child(c.begin(), 0);
 			Ex::iterator cit2=c.child(c.begin(), 1);
-			cit1=c.replace_index(cit1, prop1->values[c1].begin(), true);
-			cit2=c.replace_index(cit2, prop1->values[c2].begin(), true);
+			cit1=c.replace_index(cit1, values[c1].begin(), true);
+			cit2=c.replace_index(cit2, values[c2].begin(), true);
 
 			Ex::iterator cit=c.begin();
 			substitute subs(kernel, c, rules);
@@ -216,23 +217,25 @@ void sympy::invert_matrix(const Kernel& kernel, Ex& ex, Ex& rules, const Ex& toc
 	const Indices *prop2 = kernel.properties.get<Indices>(ind2);
 
 	Ex::iterator ruleslist=rules.begin();
+	const auto& values1 = prop1->values(kernel.properties, ind1);
+	const auto& values2 = prop2->values(kernel.properties, ind2);	
 
 	// Now we need to iterate over the components again and construct sparse rules.
 	auto cols=matrix.begin(matrix.begin()); // outer comma
 	auto row=matrix.begin(cols); // first inner comma
-	for(unsigned c1=0; c1<prop1->values.size(); ++c1) {
+	for(unsigned c1=0; c1<values1.size(); ++c1) {
 		auto el =matrix.begin(row);  // first element of first inner comma
-		for(unsigned c2=0; c2<prop2->values.size(); ++c2) {
+		for(unsigned c2=0; c2<values2.size(); ++c2) {
 			if(el->is_zero()==false) {
 				Ex rule("\\equals");
 				auto rit  = rule.append_child(rule.begin(), tocompute.begin());
 				/* auto cvit = */ rule.append_child(rule.begin(), Ex::iterator(el));
 				auto i = rule.begin(rit);
 				//std::cerr << c1 << ", " << c2 << std::endl;
-				i = rule.replace_index(i, prop1->values[c1].begin(), true);
+				i = rule.replace_index(i, values1[c1].begin(), true);
 				//				i->fl.parent_rel=ind1->fl.parent_rel;
 				++i;
-				i = rule.replace_index(i, prop1->values[c2].begin(), true);
+				i = rule.replace_index(i, values2[c2].begin(), true);
 				//				i->fl.parent_rel=ind1->fl.parent_rel;
 				rules.append_child(ruleslist, rule.begin());
 				//rule.print_recursive_treeform(std::cerr, rule.begin());

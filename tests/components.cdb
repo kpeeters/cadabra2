@@ -851,3 +851,18 @@ def test42():
 
 test42()
 
+from cdb.core.component import *
+
+def test43():
+    __cdbkernel__=create_scope()
+    \epsilon{#}::EpsilonTensor;
+    {i,j,k}::Indices;
+    {i,j,k}::Integer(1..3);
+    ex:= \epsilon_{i j k} a_{j} v_{k} + a_{i} a_{j} v_{j};
+    rl:= { a_{1}=1, a_{2}=1, a_{3}=1 };
+    evaluate(ex, rl);
+    c = get_component(ex, $1$)
+    tst:= 2 v_{3} + v_{1} - @(c);
+    assert(tst==0)
+
+test43()

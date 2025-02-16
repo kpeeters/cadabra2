@@ -89,7 +89,7 @@ bool Indices::parse(Kernel& kernel, std::shared_ptr<Ex> ex, keyval_t& keyvals)
 					throw ConsistencyException("Value sequence for Indices property spans too many elements.");
 
 				for (int i=prop->from.to_integer(); i<=prop->to.to_integer(); ++i) {
-					values.push_back(Ex(i));
+					values_.push_back(Ex(i));
 					}
 				
 				++ki;
@@ -101,24 +101,24 @@ bool Indices::parse(Kernel& kernel, std::shared_ptr<Ex> ex, keyval_t& keyvals)
 			// listing these integers.
 			bool is_number=true;
 			bool is_continuous=false;
-			for(auto& val: values)
+			for(auto& val: values_)
 				if(!val.begin()->is_integer()) {
 					is_number=false;
 					break;
 					}
 			if(is_number) {
-				std::sort(values.begin(), values.end(), [](Ex a, Ex b) {
+				std::sort(values_.begin(), values_.end(), [](Ex a, Ex b) {
 					return a.to_integer() < b.to_integer();
 					});
-				is_continuous = (int)values.size() == (values[values.size() - 1].to_integer() - values[0].to_integer() + 1);
+				is_continuous = (int)values_.size() == (values_[values_.size() - 1].to_integer() - values_[0].to_integer() + 1);
 				}
 			// Do not apply Integer to a list of integers with gaps as
 			// the former can only deal with continuous ranges.
 			if(is_continuous) {
 //				std::cerr << "Injecting Integer property" << std::endl;
 				kernel.inject_property(new Integer(), ex,
-											  kernel.ex_from_string(std::to_string(values[0].to_integer())+".."
-																			+std::to_string(values[values.size()-1].to_integer())
+											  kernel.ex_from_string(std::to_string(values_[0].to_integer())+".."
+																			+std::to_string(values_[values_.size()-1].to_integer())
 																			));
 				}
 			}
@@ -143,10 +143,14 @@ void Indices::latex(std::ostream& str) const
 			str << "(position=independent";
 			break;
 		}
-	if(values.size()>0) {
+	// FIXME: here we would really need to know for *which*
+	// index we are asking to print the property, otherwise
+	// `values_` may not have been filled (if the value comes
+	// in implicitly through an `Integer` property).
+	if(values_.size()>0) {
 		str << ", values=\\{";
 		bool first=true;
-		for(const auto& v: values) {
+		for(const auto& v: values_) {
 			if(first)
 				first=false;
 			else
@@ -158,6 +162,26 @@ void Indices::latex(std::ostream& str) const
 	else {
 		str << ")";
 		}
+	}
+
+const std::vector<Ex>& Indices::values(const Properties& properties, Ex::iterator sib) const
+	{
+	if(values_.size()!=0)
+		return values_;
+			
+	// Last attempt to get the values from an `Integer` property.
+	const Integer *iv = properties.get<Integer>(sib, true);
+	if(iv==0)
+		return values_; // the user will have to check this for zero size!
+//		throw ArgumentException("No explicit values set for indices, and no Integer property found.");
+		
+	if(!iv->from.is_integer() || !iv->to.is_integer()) 
+		throw ArgumentException("Indicex has integer property, but explicit range needed.");
+	
+	for(int val = iv->from.to_integer(); val <= iv->to.to_integer(); ++val)
+		values_.push_back(Ex(val));
+
+	return values_;
 	}
 
 void Indices::validate(const Kernel& k, const Ex& ex) const
@@ -175,7 +199,7 @@ void Indices::collect_index_values(Ex::iterator ind_values)
 	{
 	Ex tmp;
 	cadabra::do_list(tmp, ind_values, [&](Ex::iterator ind) {
-		values.push_back(Ex(ind));
+		values_.push_back(Ex(ind));
 		//			auto name=ind_values.begin(ind);
 		//			sibling_iterator vals=name;
 		//			++vals;

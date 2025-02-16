@@ -9,6 +9,7 @@
 #include "algorithms/substitute.hh"
 #include "algorithms/collect_terms.hh"
 #include "properties/EpsilonTensor.hh"
+#include "properties/Integer.hh"
 #include "properties/PartialDerivative.hh"
 #include "properties/Coordinate.hh"
 #include "properties/Depends.hh"
@@ -191,7 +192,7 @@ Ex::iterator evaluate::handle_sum(iterator it)
 				                        +" does not have an Indices property.");
 			}
 
-		if(prop!=0 && prop->values.size()==0)
+		if(prop!=0 && prop->values(kernel.properties, i.second).size()==0)
 			throw ArgumentException("evaluate: Do not know values of index "+*(i.second->name)+".");
 		}
 
@@ -433,7 +434,7 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 		// Look up which values this index takes.
 		auto *id = kernel.properties.get<Indices>(fi->second);
 		std::vector<Ex> values;
-		if(!id || id->values.size()==0) {
+		if(!id || id->values(kernel.properties, fi->second).size()==0) {
 			// No index property known, or not known which values the index
 			// takes, so keep this index unexpanded.
 			auto val=Ex(fi->second);
@@ -441,7 +442,7 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 			values.push_back(val);
 			}
 		else {
-			for(const auto& ex: id->values)
+			for(const auto& ex: id->values(kernel.properties, fi->second))
 				values.push_back(ex);
 			}
 		if(fi->second->is_integer()==false)
@@ -682,12 +683,16 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 
 	auto fu = tr.begin(it);
 	const Indices *unique_indices=0;
+	std::vector<Ex> index_values;
+
 	while(fu!=tr.end(it)) {
 		if(fu->is_index()) {
 			const Indices *ind = kernel.properties.get<Indices>(fu);
 			if(ind!=unique_indices) {
-				if(unique_indices==0)
+				if(unique_indices==0) {
 					unique_indices=ind;
+					index_values = ind->values(kernel.properties, fu);
+					}
 				else
 					throw RuntimeException("All indices on a single derivative need to be of the same type.");
 				}
@@ -768,7 +773,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 			if(*(dit->begin()->name)=="\\partial") { // FIXME: do a proper full-tree comparison with '\partial{#}'.
 //			if(comp.equal_subtree("\partial{#}", *dit, Ex_comparator::useprops_t::never, true)==Ex_comparator::match_t::subtree_match) {
 				deps.erase(dit);
-				for(const auto& ival: unique_indices->values)
+				for(const auto& ival: index_values)
 					deps.insert(ival);
 				break;
 				}
@@ -808,7 +813,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 #endif
 			if(unique_indices) {
 //				std::cerr << "checking that deps are in values" << std::endl;
-				for(const auto& allowed: unique_indices->values) {
+				for(const auto& allowed: index_values) {
 					comp.clear();
 					if(comp.equal_subtree(allowed.begin(), obj.begin(), Ex_comparator::useprops_t::never, true)<=Ex_comparator::match_t::subtree_match) {
 						cb.original.push_back(obj);
@@ -1050,6 +1055,7 @@ Ex::iterator evaluate::handle_epsilon(iterator it)
 	// fill components
 	auto sib=tr.begin(it);
 	const Indices *ind=0;
+	std::vector<Ex> values;
 	while(sib!=tr.end(it)) {
 		if(!sib->is_integer()) {
 			rep.append_child(rep.begin(), (iterator)sib);
@@ -1060,6 +1066,8 @@ Ex::iterator evaluate::handle_epsilon(iterator it)
 				ind=ip;
 			else if(ind!=ip)
 				throw ArgumentException("Indices property not the same for all indices in EpsilonTensor.");
+			else
+				values=ip->values(kernel.properties, sib);
 			}
 		
 		++sib;
@@ -1067,8 +1075,12 @@ Ex::iterator evaluate::handle_epsilon(iterator it)
 	auto cvals = rep.append_child(rep.begin(), str_node("\\comma"));
 
 	combin::combinations<Ex> cb;
-	for(auto& val: ind->values)
+	if(ind && values.size()==0)
+		throw ArgumentException("No values known for index.");
+		
+	for(auto& val: values)
 		cb.original.push_back(val);
+
 	cb.multiple_pick=false;
 	cb.block_length=1;
 	cb.set_unit_sublengths();

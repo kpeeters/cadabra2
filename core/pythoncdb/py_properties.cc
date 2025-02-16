@@ -439,8 +439,8 @@ namespace cadabra {
 				  py::arg("include_wildcards") = false)
 			.def("get_dummy", [](const Py_Indices& p, const Ex_ptr& ex) { return indices_get_dummy(p.get_prop(), ex);})
 			.def_property_readonly("set_name", [](const Py_Indices & p) { return p.get_prop()->set_name; })
-			.def_property_readonly("parent_name", [](const Py_Indices & p) { return p.get_prop()->parent_name; })
-			.def_property_readonly("values", [](const Py_Indices & p) { return p.get_prop()->values; });
+			.def_property_readonly("parent_name", [](const Py_Indices & p) { return p.get_prop()->parent_name; });
+//			.def_property_readonly("values", [](const Py_Indices & p) { return p.get_prop()->values(); });
 		def_prop<Py_Integer>(m)
 			.def_property_readonly("from", [](const Py_Integer & p) { return p.get_prop()->from; })
 			.def_property_readonly("to", [](const Py_Integer & p) { return p.get_prop()->to; })

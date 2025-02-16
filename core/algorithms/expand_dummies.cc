@@ -64,14 +64,17 @@ bool expand_dummies::can_apply(iterator it)
 	auto end = index_iterator::end(kernel.properties, it);
 	while (beg != end) {
 		auto prop = kernel.properties.get<Indices>(beg);
-		if (prop && !prop->values.empty()) {
-			for (const auto& candidate : candidates) {
-				comp.clear();
-				auto res = comp.equal_subtree(candidate, beg, Ex_comparator::useprops_t::always, true);
-				if (res == Ex_comparator::match_t::subtree_match)
-					return true;
-				}
+		if(prop) {
+			const auto& index_values = prop->values(kernel.properties, beg);
+			if(!index_values.empty()) {
+				for (const auto& candidate : candidates) {
+					comp.clear();
+					auto res = comp.equal_subtree(candidate, beg, Ex_comparator::useprops_t::always, true);
+					if (res == Ex_comparator::match_t::subtree_match)
+						return true;
+					}
 				candidates.push_back(beg);
+				}
 			}
 		++beg;
 		}
@@ -90,23 +93,26 @@ Algorithm::result_t expand_dummies::apply(iterator& it)
 	classify_indices(pat.begin(), full_ind_free, full_ind_dummy);
 	for (const auto& kv : full_ind_dummy) {
 		auto pos = std::find_if(dummies.begin(), dummies.end(),
-			[this, kv](const std::vector<iterator>& lhs) {
-			comp.clear();
-			auto res = comp.equal_subtree(lhs[0], kv.second, Ex_comparator::useprops_t::always, true);
-			return res == Ex_comparator::match_t::subtree_match;
-		});
-		if (pos == dummies.end()) {
+										[this, kv](const std::vector<iterator>& lhs) {
+										comp.clear();
+										auto res = comp.equal_subtree(lhs[0], kv.second, Ex_comparator::useprops_t::always, true);
+										return res == Ex_comparator::match_t::subtree_match;
+										});
+		if(pos == dummies.end()) {
 			auto prop = kernel.properties.get<Indices>(kv.first.begin(), true);
-			if (prop && !prop->values.empty()) {
-				dummies.emplace_back(1, kv.second);
-				values.push_back(&(prop->values));
+			if (prop) {
+				const auto& index_values = prop->values(kernel.properties, kv.first.begin());
+				if(!index_values.empty()) {
+					dummies.emplace_back(1, kv.second);
+					values.push_back(&(index_values));
+					}
+				}
 			}
-		}
 		else {
 			pos->push_back(kv.second);
+			}
 		}
-	}
-	 
+
 	// Set up 'positions' to hold iterators into the corresponding elements of the
 	// 'values' vector, we will loop through all possible combinations
 	std::vector<std::vector<Ex>::const_iterator> positions;
