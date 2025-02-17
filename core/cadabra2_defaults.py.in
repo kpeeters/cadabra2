@@ -14,6 +14,7 @@ from cadabra2 import *
 from importlib.machinery import PathFinder, ModuleSpec, SourceFileLoader
 from importlib.abc import MetaPathFinder
 from cdb_appdirs import user_config_dir, user_data_dir
+from pathlib import Path
 import datetime
 import atexit
 import rlcompleter
@@ -57,6 +58,11 @@ class PackageCompiler(MetaPathFinder):
                    have_cdb = os.path.isfile(os.path.join(entry, name + ".cdb"))
                    have_ipynb = os.path.isfile(os.path.join(entry, name + ".ipynb"))
                    if have_cnb or have_cdb or have_ipynb:
+                       # Prepend the folder to the `parents`, so that two identically named
+                       # notebooks in different folders will not map to the same cached/converted file.
+                       path_parts = list( Path(entry).resolve().parts[1:] )
+                       parents = path_parts + parents
+                      
                        # Notebook was found. Create a version of it in the temporary directory, then
                        # return a ModuleSpec object to allow Python to load that file
                        pkg_path = os.path.join(user_config_dir(), "cadabra_packages", *parents)
