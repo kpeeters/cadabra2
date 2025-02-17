@@ -644,18 +644,36 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// Setup the toolbar and buttons in it.
 	if(!read_only) {
 		toolbar.set_size_request(-1, 70/display_scale);
-		tool_stop.add(*Gtk::make_managed<Gtk::Image>(
-							  get_icon(install_prefix()+"/share/cadabra2/cdb-icons/cdb-cancel.svg")));
-		tool_run.add(*Gtk::make_managed<Gtk::Image>(
-							 get_icon(install_prefix()+"/share/cadabra2/cdb-icons/cdb-run.svg")));
-		tool_restart.add(*Gtk::make_managed<Gtk::Image>(
-								  get_icon(install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart.svg")));
-		tool_open.add(*Gtk::make_managed<Gtk::Image>(
-							  get_icon(install_prefix()+"/share/cadabra2/cdb-icons/cdb-open.svg")));
-		tool_save.add(*Gtk::make_managed<Gtk::Image>(
-							  get_icon(install_prefix()+"/share/cadabra2/cdb-icons/cdb-save.svg")));
-		tool_save_as.add(*Gtk::make_managed<Gtk::Image>(
-								  get_icon(install_prefix()+"/share/cadabra2/cdb-icons/cdb-save-as.svg")));
+		tool_stop.add(*Gtk::make_managed<ImageArea>(
+							  40/display_scale, display_scale,
+							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-cancel.svg",
+							  false));
+		
+		tool_run.add(*Gtk::make_managed<ImageArea>(
+							  40/display_scale, display_scale,
+							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-run.svg",
+							  false));
+
+		tool_restart.add(*Gtk::make_managed<ImageArea>(
+								  40/display_scale, display_scale,
+								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart.svg",
+								  false));
+
+		tool_open.add(*Gtk::make_managed<ImageArea>(
+								  40/display_scale, display_scale,
+								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-open.svg",
+								  false));
+
+		tool_save.add(*Gtk::make_managed<ImageArea>(
+								  40/display_scale, display_scale,
+								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save.svg",
+								  false));
+
+		tool_save_as.add(*Gtk::make_managed<ImageArea>(
+								  40/display_scale, display_scale,
+								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save-as.svg",
+								  false));
+
 		tool_stop.set_size_request(70/display_scale, 70/display_scale);
 		tool_run.set_size_request(70/display_scale, 70/display_scale);
 		tool_restart.set_size_request(70/display_scale, 70/display_scale);

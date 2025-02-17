@@ -121,13 +121,27 @@ void ImageArea::rerender(int width)
 ImageArea::ImageArea(int logical_width_, double display_scale_)
 	: is_raster(false), logical_width(logical_width_), display_scale(display_scale_)
 	{
+	set_halign(Gtk::ALIGN_CENTER);
+	set_valign(Gtk::ALIGN_CENTER);
+	}
+
+std::string readFile(const std::string& filename)
+	{
+	std::ifstream file(filename, std::ios::binary | std::ios::ate);
+	if (!file) return "";
+   
+	std::string str(file.tellg(), 0);
+	file.seekg(0);
+	file.read(str.data(), str.size());
+	return str;
 	}
 
 ImageArea::ImageArea(int logical_width_, double display_scale_,
 							const std::string& filename, bool raster)
-	: is_raster(raster), logical_width(logical_width_), display_scale(display_scale_)
+	: ImageArea(logical_width_, display_scale_)
 	{
-	decoded=Glib::Base64::decode(filename);
+	is_raster = raster;
+	decoded = readFile(filename);
 	rerender(logical_width);
 	}
 
