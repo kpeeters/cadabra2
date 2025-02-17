@@ -2,17 +2,25 @@
 #include "ImageView.hh"
 #include <giomm/memoryinputstream.h>
 #include <glibmm/base64.h>
+
+#include <gtkmm/image.h>
+#include <gdkmm/pixbuf.h>
+#include <gdkmm/window.h>
+#include <gdkmm/general.h> // set_source_pixbuf()
+#include <cairomm/surface.h>
+#include <cairomm/context.h>
+
 #include <iostream>
 #include <fstream>
 
 using namespace cadabra;
 
-ImageView::ImageView(double scale_)
-	: sizing(false), prev_x(0), prev_y(0), height_at_press(0), width_at_press(0), scale(scale_)
+ImageView::ImageView(double display_scale_)
+	: sizing(false), prev_x(0), prev_y(0), height_at_press(0), width_at_press(0)
 	{
-	add(vbox);
-	vbox.add(image);
-	image.set_halign(Gtk::ALIGN_START);
+	area.display_scale = display_scale_;
+	add(area);
+	
 	set_events(Gdk::ENTER_NOTIFY_MASK
 	           | Gdk::LEAVE_NOTIFY_MASK
 	           | Gdk::BUTTON_PRESS_MASK
@@ -33,9 +41,6 @@ bool ImageView::on_motion_notify_event(GdkEventMotion *event)
 	if(sizing) {
 		auto cw = width_at_press  + (event->x - prev_x);
 		rerender(cw);
-//		auto ratio = pixbuf->get_width() / ((double)pixbuf->get_height());
-//		image.set(pixbuf->scale_simple(cw, cw/ratio, Gdk::INTERP_BILINEAR));
-//		set_size_request( cw, cw/ratio );
 		}
 	return true;
 	}
@@ -46,8 +51,9 @@ bool ImageView::on_button_press_event(GdkEventButton *event)
 		sizing=true;
 		prev_x=event->x;
 		prev_y=event->y;
-		width_at_press=image.get_allocated_width();
-		height_at_press=image.get_allocated_height();
+		width_at_press=area.pixbuf->get_width()/area.display_scale;
+		// std::cerr << "width_at_press = " << width_at_press << std::endl;
+		height_at_press=area.pixbuf->get_height()/area.display_scale;
 		}
 	return true;
 	}
@@ -68,35 +74,42 @@ void ImageView::set_image_from_base64(const std::string& b64)
 	// tst << Glib::Base64::decode(b64);
 	// tst.close();
 
-	decoded=Glib::Base64::decode(b64);
-	is_raster=true;
+	area.decoded=Glib::Base64::decode(b64);
+	area.is_raster=true;
 	rerender();
 	}
 
 void ImageView::set_image_from_svg(const std::string& svg)
 	{
-	decoded=Glib::Base64::decode(svg);
-	is_raster=false;
+	area.decoded=Glib::Base64::decode(svg);
+	area.is_raster=false;
 	rerender();
 	}
 
-void ImageView::rerender(int override_width)
+void ImageView::rerender(int width)
 	{
 	auto str = Gio::MemoryInputStream::create();
-	str->add_data(decoded.c_str(), decoded.size());
+	str->add_data(area.decoded.c_str(), area.decoded.size());
 
-	int curwidth=400*scale;
-	if(pixbuf)
-		curwidth = pixbuf->get_width();
-	if(override_width!=0)
-		curwidth=override_width;
+	// Widths set here are all logical pixel widths, not device pixel widths.
+	area.pixbuf = Gdk::Pixbuf::create_from_stream_at_scale(str, width * area.display_scale, -1, true);
+	// std::cerr << "creating at " << width * area.display_scale << std::endl;
 
-	pixbuf = Gdk::Pixbuf::create_from_stream_at_scale(str, curwidth, -1, true);
-	
-	if(!pixbuf)
+	if(!area.pixbuf) {
 		std::cerr << "cadabra-client: unable to create image from data" << std::endl;
-	else {
-		image.set(pixbuf);
-		image.set_size_request( pixbuf->get_width(), pixbuf->get_height() );
 		}
+
+	set_size_request( area.pixbuf->get_width()/area.display_scale,
+							area.pixbuf->get_height()/area.display_scale );
+	queue_resize();
 	}
+
+bool ImageView::ImageArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
+	{
+	// cr->scale(1.0, 1.0);
+	cr->scale(1.0/display_scale, 1.0/display_scale);
+	Gdk::Cairo::set_source_pixbuf(cr, pixbuf, 0, 0);
+	cr->paint();
+	return true;
+	}
+
