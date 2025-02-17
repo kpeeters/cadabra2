@@ -1373,7 +1373,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				}
 			case DataCell::CellType::image_png: {
 				// FIXME: horribly memory inefficient
-				ImageView *iv=new ImageView(display_scale);
+				ImageView *iv=new ImageView(display_scale, 800/display_scale);
 
 				iv->set_image_from_base64(it->textbuf);
 				newcell.imagebox = manage( iv );
@@ -1382,7 +1382,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				}
 			case DataCell::CellType::image_svg: {
 				// FIXME: horribly memory inefficient
-				ImageView *iv=new ImageView(display_scale);
+				ImageView *iv=new ImageView(display_scale, 800/display_scale);
 
 				iv->set_image_from_svg(it->textbuf);
 				newcell.imagebox = manage( iv );

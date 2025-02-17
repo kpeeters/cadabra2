@@ -14,7 +14,7 @@ namespace cadabra {
 	
 	class ImageView : public Gtk::EventBox {
 		public:
-			ImageView(double scale);
+			ImageView(double display_scale, int logical_width);
 			virtual ~ImageView();
 			
 			void set_image_from_base64(const std::string& b64);
@@ -38,13 +38,14 @@ namespace cadabra {
 			
 			ImageArea area;
 			
+			int       logical_width_at_start;
 			bool      sizing;
 			double    prev_x, prev_y;
 			int       height_at_press, width_at_press;
 			
-			// Re-render the image from the raw bytes at the current
-			// resolution of the image widget.
-			void rerender(int width=800);
+			// Re-render the image from the raw bytes at the indicated
+			// width (in logical pixels, which may be multiple display pixels).
+			void rerender(int width);
 	};
 	
 };

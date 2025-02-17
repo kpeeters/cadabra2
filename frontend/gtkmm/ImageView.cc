@@ -15,8 +15,13 @@
 
 using namespace cadabra;
 
-ImageView::ImageView(double display_scale_)
-	: sizing(false), prev_x(0), prev_y(0), height_at_press(0), width_at_press(0)
+ImageView::ImageView(double display_scale_, int logical_width_)
+	: logical_width_at_start(logical_width_)
+	, sizing(false)
+	, prev_x(0)
+	, prev_y(0)
+	, height_at_press(0)
+	, width_at_press(0)
 	{
 	area.display_scale = display_scale_;
 	add(area);
@@ -76,14 +81,14 @@ void ImageView::set_image_from_base64(const std::string& b64)
 
 	area.decoded=Glib::Base64::decode(b64);
 	area.is_raster=true;
-	rerender();
+	rerender(logical_width_at_start);
 	}
 
 void ImageView::set_image_from_svg(const std::string& svg)
 	{
 	area.decoded=Glib::Base64::decode(svg);
 	area.is_raster=false;
-	rerender();
+	rerender(logical_width_at_start);
 	}
 
 void ImageView::rerender(int width)
@@ -106,7 +111,6 @@ void ImageView::rerender(int width)
 
 bool ImageView::ImageArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	{
-	// cr->scale(1.0, 1.0);
 	cr->scale(1.0/display_scale, 1.0/display_scale);
 	Gdk::Cairo::set_source_pixbuf(cr, pixbuf, 0, 0);
 	cr->paint();
