@@ -23,6 +23,7 @@ ImageView::ImageView(double display_scale_, int logical_width_)
 	, height_at_press(0)
 	, width_at_press(0)
 	{
+	area.set_halign(Gtk::ALIGN_START);
 	add(area);
 	
 	set_events(Gdk::ENTER_NOTIFY_MASK

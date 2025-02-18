@@ -1357,11 +1357,11 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				CodeInput *ci;
 				// Ensure that all CodeInput cells share the same text buffer.
 				if(i==0) {
-					ci = new CodeInput(it, it->textbuf, scale/display_scale, prefs,
+					ci = new CodeInput(it, it->textbuf, scale, display_scale, prefs,
 											 canvasses[i]->scroll.get_vadjustment() );
 					global_buffer=ci->buffer;
 					}
-				else ci = new CodeInput(it, global_buffer, scale/display_scale, prefs,
+				else ci = new CodeInput(it, global_buffer, scale, display_scale, prefs,
 												canvasses[i]->scroll.get_vadjustment());
 
 				using namespace std::placeholders;

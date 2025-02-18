@@ -503,7 +503,7 @@ TeXView::TeXArea::TeXArea(bool use_microtex_, TeXView *owner_)
 	: rendering_width(1), use_microtex(use_microtex_)
 	, owner(owner_)
 	, _render(nullptr), _text_size(5.f)
-	, padding_x(15), padding_y(10)
+	, padding_x(15*1.7), padding_y(10)
 	{
 	set_hexpand(true);
 	set_name("TeXArea");

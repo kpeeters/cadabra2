@@ -23,14 +23,14 @@ namespace cadabra {
 			/// it (e.g. in order to know when to display a 'busy' indicator).
 			/// The scale parameter refers to hdpi scaling.
 
-			CodeInput(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale, const Prefs& prefs,
+			CodeInput(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale, double display_scale, const Prefs& prefs,
 						 Glib::RefPtr<Gtk::Adjustment>);
 
 			/// Initialise with a new TextBuffer (to be created by
 			/// CodeInput), filling it with the content of the given
 			/// string.
 
-			CodeInput(DTree::iterator, const std::string&, double scale, const Prefs& prefs,
+			CodeInput(DTree::iterator, const std::string&, double scale, double display_scale, const Prefs& prefs,
 						 Glib::RefPtr<Gtk::Adjustment>);
 
 
@@ -40,7 +40,9 @@ namespace cadabra {
 
 			class exp_input_tv : public Gtk::TextView {
 				public:
-					exp_input_tv(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale,
+					exp_input_tv(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>,
+									 double scale,
+									 double display_scale,
 									 Glib::RefPtr<Gtk::Adjustment>);
 					virtual bool on_key_press_event(GdkEventKey*) override;
 					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) override;
@@ -67,7 +69,7 @@ namespace cadabra {
 
 					int                           window_width = 100;
 				private:
-					double                        scale_;
+					double                        scale_, display_scale_;
 					DTree::iterator               datacell;
 					Glib::RefPtr<Gtk::Adjustment> vadjustment;
 					double                        previous_value = -99.0;
@@ -119,7 +121,7 @@ namespace cadabra {
 			exp_input_tv                  edit;
 
 		private:
-			void init(const Prefs& prefs);
+			void init(const Prefs& prefs, double display_scale);
 
 			void highlight_python();
 			void highlight_latex();

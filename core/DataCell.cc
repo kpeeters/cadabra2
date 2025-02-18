@@ -608,9 +608,9 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
  		case DataCell::CellType::image_svg:
 			std::size_t pos=image_file_base.rfind('/');
 			std::string fileonly=image_file_base.substr(pos+1);
-			str << "\\begin{center}\n\\includegraphics[width=.6\\textwidth]{"
+			str << "\\begin{minipage}{\\textwidth}\n\\includegraphics[width=.6\\textwidth]{"
 			    << fileonly+std::to_string(image_num)+"}\n"
-			    << "\\end{center}\n";
+			    << "\\end{minipage}\n";
 			break;
 		}
 
@@ -630,7 +630,7 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		out.close();
 		// Convert to pdf, otherwise LaTeX cannot include it.
       //		inkscape t.svg --export-pdf=t.pdf
-		int res = system((std::string("inkscape ")+basename+std::string(".svg --export-pdf=")+basename+std::string(".pdf")).c_str());
+		int res = system((std::string("inkscape ")+basename+std::string(".svg --export-type=pdf --export-filename=")+basename+std::string(".pdf")).c_str());
 		if(res!=0)
 			throw std::logic_error("DataCell::LaTeX_recurse: failed to run 'convert' to convert svg to pdf.");
 		++image_num;

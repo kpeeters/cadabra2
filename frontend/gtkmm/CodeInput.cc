@@ -22,9 +22,9 @@ std::string trim(const std::string& s)
 	return std::string(s, b, e - b + 1);
 	}
 
-CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double scale,
+CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double scale, double display_scale,
 												  Glib::RefPtr<Gtk::Adjustment> vadjustment_)
-	: Gtk::TextView(tb), scale_(scale), datacell(it), vadjustment(vadjustment_)
+	: Gtk::TextView(tb), scale_(scale), display_scale_(display_scale), datacell(it), vadjustment(vadjustment_)
 	{
 	set_events(Gdk::STRUCTURE_MASK);
 	//	get_buffer()->signal_insert().connect(sigc::mem_fun(this, &exp_input_tv::on_my_insert), false);
@@ -33,19 +33,19 @@ CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::Text
 	set_name("CodeInput"); // to be able to style it with CSS
 	}
 
-CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double s, const Prefs& prefs,
+CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double s, double ds, const Prefs& prefs,
 							Glib::RefPtr<Gtk::Adjustment> vadjustment)
-	: buffer(tb), edit(it, tb, s, vadjustment)
+	: buffer(tb), edit(it, tb, s, ds, vadjustment)
 	{
-	init(prefs);
+	init(prefs, ds);
 	}
 
-CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s, const Prefs& prefs,
+CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s, double ds, const Prefs& prefs,
 							Glib::RefPtr<Gtk::Adjustment> vadjustment)
-	: buffer(Gtk::TextBuffer::create()), edit(it, buffer, s, vadjustment)
+	: buffer(Gtk::TextBuffer::create()), edit(it, buffer, s, ds, vadjustment)
 	{
 	buffer->set_text(txt);
-	init(prefs);
+	init(prefs, ds);
 	}
 
 void CodeInput::on_size_allocate(Gtk::Allocation& allocation)
@@ -93,7 +93,7 @@ void CodeInput::exp_input_tv::on_size_allocate(Gtk::Allocation& allocation)
 	Gtk::TextView::on_size_allocate(allocation);
 	}
 
-void CodeInput::init(const Prefs& prefs)
+void CodeInput::init(const Prefs& prefs, double display_scale)
 	{
 	//	scroll_.set_size_request(-1,200);
 	//	scroll_.set_border_width(1);
@@ -113,7 +113,7 @@ void CodeInput::init(const Prefs& prefs)
 	//	edit.set_pixels_inside_wrap(2*Gtk::LINE_SPACING);
 
 	// Padding using CSS does not work on earlier Gtk versions, so we use set_left_margin there.
-	edit.set_left_margin(20);
+	edit.set_left_margin(24/display_scale);
 	//	if(gtk_get_minor_version()<11 || gtk_get_minor_version()>=14)
 
 	// Determine the width of a tab.
@@ -750,10 +750,10 @@ bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 		else
 			cr->set_source_rgba(.2, .2, .7, 1.0);
 		}
-	double line_width=2.0/1.6*scale_;
+	double line_width=2.0/1.6*(scale_/display_scale_);
 	cr->set_line_width(line_width);
 	cr->set_antialias(Cairo::ANTIALIAS_NONE);
-	int hor=5;
+	double hor=5/display_scale_;
 	cr->move_to(5+hor,line_width);
 	cr->line_to(5,line_width);
 	cr->line_to(5,h-line_width);
