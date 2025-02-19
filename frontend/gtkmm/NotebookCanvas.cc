@@ -8,6 +8,7 @@ using namespace cadabra;
 
 NotebookCanvas::NotebookCanvas()
 	: Gtk::Paned(Gtk::Orientation::ORIENTATION_VERTICAL)
+	, scroller(scroll.get_vadjustment())
 	{
 	// Pack the scroll widget with all document cells into the top pane.
 	pack1(ebox, true, true);

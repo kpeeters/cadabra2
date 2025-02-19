@@ -1775,7 +1775,8 @@ void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 //	std::cerr << "position " << should_be_visible << " should be visible" << std::endl;
 //	std::cerr << "shift = " << shift << std::endl;
 	if(shift>0 || (-shift)>va->get_page_size()) {
-		va->set_value( upper_visible + shift);
+//		va->set_value( upper_visible + shift);
+		canvasses[current_canvas]->scroller.scroll_to(upper_visible + shift);
 		}
 	}
 
