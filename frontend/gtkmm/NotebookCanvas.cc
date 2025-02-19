@@ -38,6 +38,7 @@ void NotebookCanvas::refresh_all()
 		auto ct=it->first->cell_type;
 		if(ct==DataCell::CellType::output || ct==DataCell::CellType::verbatim || ct==DataCell::CellType::latex_view) {
 			it->second.outbox->update_image();
+			it->second.outbox->queue_resize();
 			}
 		++it;
 		}

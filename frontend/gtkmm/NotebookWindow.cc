@@ -1611,6 +1611,14 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 
 void NotebookWindow::remove_all_cells()
 	{
+	// std::cerr << "REMOVE all cells" << std::endl;
+	// DTree::iterator it=doc.begin();
+	// ++it;
+	// while(it!=doc.end()) {
+	// 	remove_cell(doc, it);
+	// 	++it;
+	// 	}
+	
 	// Simply removing the document cell should do the trick.
 	for(unsigned int i=0; i<canvasses.size(); ++i) {
 		canvasses[i]->scroll.remove();
@@ -2845,11 +2853,11 @@ void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 		engine.invalidate_all();
 		tex_run_async();
 
-		auto it=canvasses.begin();
-		while(it!=canvasses.end()) {
-			(*it)->refresh_all();
-			++it;
-			}
+		//remove_all_cells();
+		//build_visual_representation();
+		for(unsigned int i=0; i<canvasses.size(); ++i)
+			canvasses[i]->refresh_all();
+		resize_codeinput_texview_all(last_configure_width);
 		}
 	}
 
@@ -3089,8 +3097,11 @@ void NotebookWindow::on_prefs_font_size(int num)
 		//		}
 		//	}
 
+		// remove_all_cells();
+		// build_visual_representation();
 		for(unsigned int i=0; i<canvasses.size(); ++i)
 			canvasses[i]->refresh_all();
+		resize_codeinput_texview_all(last_configure_width);
 		}
 	}
 
