@@ -17,8 +17,7 @@ void NDSolver::operator()(const state_type& x, state_type& dxdt, const double t)
 
 	for(size_t e=0; e<evaluators.size(); ++e) {
 		NEvaluator& evaluator = evaluators[e];
-		// FIXME: set the correct variable name for time.
-		evaluator.set_variable(Ex("t"), NTensor(t));
+		evaluator.set_variable(time_variable, NTensor(t));
 		for(size_t i=0; i<x.size(); ++i) {
 			evaluator.set_variable(variables[i], NTensor(x[i]));
 			}
