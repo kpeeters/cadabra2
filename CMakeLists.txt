@@ -69,7 +69,9 @@ if (MSVC)
 	 set(MSVC_TOOLSET_VERSION 142)
   endif()
   message(STATUS "MSVC_VERSION = ${MSVC_VERSION}, MSVC_TOOLSET_VERSION = ${MSVC_TOOLSET_VERSION}")
+endif()
 
+if(WIN32)
   include(cmake/windows.cmake)
 endif()
 
