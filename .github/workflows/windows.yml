@@ -65,3 +65,24 @@ jobs:
         path: build/cadabra2-${{ env.VERSION }}-win64.exe
         retention-days: 2
 
+  test:
+    needs: Windows 11
+    runs-on: windows-latest
+    
+    steps:
+    - name: Download installer
+      uses: actions/download-artifact@v4
+      with:
+        name: cadabra2-win64.exe
+        path: cadabra2-win64.exe
+
+    - name: Install silently
+      shell: cmd
+      run: |
+        start /wait cadabra2-win64.exe /S
+        if errorlevel 1 exit /b %errorlevel%
+          
+    - name: Verify installation
+      shell: cmd
+      run: |
+        "C:\Program Files\Cadabra2\bin\cadabra2.exe" --version
