@@ -1,4 +1,4 @@
-if(WIN32)
+if(MSVC)
   windows_find_library(GTKMM_LIBRARIES
 	gtk gdk gdk_pixbuf pangocairo pango atk gio gobject
 	gmodule glib cairo-gobject cairo intl atkmm cairomm
