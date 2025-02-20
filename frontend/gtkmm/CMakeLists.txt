@@ -138,7 +138,8 @@ include_directories(
   "${CADABRA_LIBS_DIR}/nlohmann"   
   ${Boost_INCLUDE_DIRS}
   ${Python_INCLUDE_DIRS}
-  ${SQLITE3_INCLUDE_DIR}  
+  ${SQLITE3_INCLUDE_DIR}
+  ${Fontconfig_INCLUDE_DIRS}
 )
 
 if(ENABLE_SYSTEM_JSONCPP)
