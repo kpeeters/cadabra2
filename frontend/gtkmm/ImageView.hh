@@ -5,6 +5,7 @@
 #include <gtkmm/image.h>
 #ifndef USE_GTK4
 #include <gtkmm/eventbox.h>
+#endif
 #include <gtkmm/drawingarea.h>
 
 namespace cadabra {
@@ -44,7 +45,7 @@ namespace cadabra {
 	/// \ingroup frontend
 	///
 	/// An image viewing widget.
-	
+
 #ifdef USE_GTK4
 	class ImageView : public Gtk::Box {
 #else
