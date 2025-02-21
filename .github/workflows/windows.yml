@@ -93,17 +93,42 @@ jobs:
       run: |
         echo "Main folder:"
         dir "C:\Program Files\Cadabra" 
-        echo "Binary folder:"
-        dir "C:\Program Files\Cadabra\bin" 
         
     - name: Test GUI startup
       shell: cmd
       run: |
-        start "Cadabra2" "C:\Program Files\Cadabra\bin\cadabra2-gtk.exe"
+        if not exist "C:\Program Files\Cadabra\cadabra2-gtk.exe" (
+            echo "Executable not found"
+            exit /b 1
+        )
+        start "Cadabra2" "C:\Program Files\Cadabra\cadabra2-gtk.exe"
         timeout /t 30
         tasklist /FI "IMAGENAME eq cadabra2-gtk.exe" | find "cadabra2-gtk.exe" > nul
         if errorlevel 1 (
           echo GUI failed to start
           exit /b 1
         )
-        taskkill /F /IM cadabra2-gtk.exe
+
+    - name: Capture screenshot
+      shell: pwsh
+      run: |
+        Add-Type -AssemblyName System.Windows.Forms
+        Add-Type -AssemblyName System.Drawing
+        
+        $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+        $bitmap = New-Object System.Drawing.Bitmap($screen.Width, $screen.Height)
+        $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+        $graphics.CopyFromScreen($screen.Location, [System.Drawing.Point]::Empty, $screen.Size)
+        $bitmap.Save("screenshot.png")
+        $graphics.Dispose()
+        $bitmap.Dispose()
+      
+    - name: Upload screenshot
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-screenshot
+        path: screenshot.png
+        
+    - name: Cleanup
+      shell: cmd
+      run: taskkill /F /IM cadabra2-gtk.exe
