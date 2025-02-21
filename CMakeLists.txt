@@ -499,7 +499,7 @@ if(WIN32)
   winstall(FILES /ucrt64/bin/libLerc.dll                     DESTINATION .)  
   winstall(FILES /ucrt64/bin/libwebp-7.dll                   DESTINATION .)  
   winstall(FILES /ucrt64/bin/libzstd.dll                     DESTINATION .)  
-#  winstall(FILES /ucrt64/bin/imagequant.dll                  DESTINATION .)  
+  winstall(FILES /ucrt64/bin/libimagequant.dll               DESTINATION .)  
   winstall(FILES /ucrt64/bin/libopenjp2-7.dll                DESTINATION .)  
   
   # We need gdbus to setup the dbus, needed by Glib, otherwise anything
