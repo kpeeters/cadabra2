@@ -81,8 +81,16 @@ jobs:
       run: |
         start /wait cadabra2-win64.exe /S
         if errorlevel 1 exit /b %errorlevel%
+        dir "C:\Program Files\Cadabra2\bin\"
           
-    - name: Verify installation
+    - name: Test GUI startup
       shell: cmd
       run: |
-        "C:\Program Files\Cadabra2\bin\cadabra2.exe" --version
+        start "Cadabra2" "C:\Program Files\Cadabra2\bin\cadabra2-gtk.exe"
+        timeout /t 30
+        tasklist /FI "IMAGENAME eq cadabra2-gtk.exe" | find "cadabra2-gtk.exe" > nul
+        if errorlevel 1 (
+          echo GUI failed to start
+          exit /b 1
+        )
+        taskkill /F /IM cadabra2-gtk.exe
