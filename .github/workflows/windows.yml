@@ -91,17 +91,15 @@ jobs:
     - name: Check installation location
       shell: cmd
       run: |
-        echo "Program Files content:"
-        dir "C:\Program Files\Cadabra2" /s
-        echo "Program Files (x86) content:"
-        dir "C:\Program Files (x86)\Cadabra2" /s
-        echo "User install location:"
-        dir "C:\Users\runneradmin\AppData\Local\Programs\Cadabra2" /s
-          
+        echo "Main folder:"
+        dir "C:\Program Files\Cadabra" 
+        echo "Binary folder:"
+        dir "C:\Program Files\Cadabra\bin" 
+        
     - name: Test GUI startup
       shell: cmd
       run: |
-        start "Cadabra2" "C:\Program Files\Cadabra2\bin\cadabra2-gtk.exe"
+        start "Cadabra2" "C:\Program Files\Cadabra\bin\cadabra2-gtk.exe"
         timeout /t 30
         tasklist /FI "IMAGENAME eq cadabra2-gtk.exe" | find "cadabra2-gtk.exe" > nul
         if errorlevel 1 (
