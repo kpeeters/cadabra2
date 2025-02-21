@@ -103,7 +103,8 @@ jobs:
         )
         start "Cadabra2" "C:\Program Files\Cadabra\cadabra2-gtk.exe"
         timeout /t 30
-        tasklist /FI "IMAGENAME eq cadabra2-gtk.exe" | find "cadabra2-gtk.exe" > nul
+        tasklist /FI "IMAGENAME eq cadabra2-gtk.exe" > tasklist.txt
+        type tasklist.txt | findstr "cadabra2-gtk.exe"
         if errorlevel 1 (
           echo GUI failed to start
           exit /b 1
