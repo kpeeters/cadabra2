@@ -79,7 +79,8 @@ jobs:
       shell: cmd
       run: |
         dir
-        start /wait .\cadabra2-win64.exe /S
+        for %%i in (cadabra*.exe) do .\%%i /S
+        timeout /t 180
         dir "C:\Program Files\Cadabra2\bin\"
           
     - name: Test GUI startup
