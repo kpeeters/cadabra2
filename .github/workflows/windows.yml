@@ -76,11 +76,18 @@ jobs:
         name: cadabra2-win64.exe
 
     - name: Install silently
-      shell: cmd
+      shell: pwsh
       run: |
         dir
-        for %%i in (cadabra*.exe) do .\%%i /S
-        timeout /t 180
+        $installer = Get-ChildItem -Filter "cadabra*.exe" | Select-Object -First 1 -ExpandProperty Name
+        if (-not $installer) {
+            Write-Error "No installer found"
+            exit 1
+        }
+        Write-Host "Installing $installer"
+        Start-Process -FilePath ".\$installer" -ArgumentList "/S" -Wait
+        Write-Host "Installer finished"
+        Start-Sleep -Seconds 180
         dir "C:\Program Files\Cadabra2\bin\"
           
     - name: Test GUI startup
