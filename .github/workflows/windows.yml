@@ -74,14 +74,12 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: cadabra2-win64.exe
-        path: cadabra2-win64.exe
 
     - name: Install silently
       shell: cmd
       run: |
         dir
-        .\cadabra2-win64.exe /S
-        timeout /t 180
+        start /wait .\cadabra2-win64.exe /S
         dir "C:\Program Files\Cadabra2\bin\"
           
     - name: Test GUI startup
