@@ -102,7 +102,7 @@ jobs:
             exit /b 1
         )
         start "Cadabra2" "C:\Program Files\Cadabra\cadabra2-gtk.exe"
-        timeout /t 30
+        ping -n 31 127.0.0.1
         tasklist /FI "IMAGENAME eq cadabra2-gtk.exe"
         if errorlevel 1 (
           echo GUI failed to start
