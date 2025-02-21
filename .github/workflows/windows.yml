@@ -94,24 +94,18 @@ jobs:
         echo "Main folder:"
         dir "C:\Program Files\Cadabra" 
         
-    - name: Test GUI startup
-      shell: cmd
-      run: |
-        if not exist "C:\Program Files\Cadabra\cadabra2-gtk.exe" (
-            echo "Executable not found"
-            exit /b 1
-        )
-        start "Cadabra2" "C:\Program Files\Cadabra\cadabra2-gtk.exe"
-        ping -n 10 127.0.0.1
-        tasklist /FI "IMAGENAME eq cadabra2-gtk.exe"
-        if errorlevel 1 (
-          echo GUI failed to start
-          exit /b 1
-        )
-
-    - name: Capture screenshot
+    - name: Start GUI and take screenshot
       shell: pwsh
       run: |
+        # Attempt to start the notebook
+        if (-not (Test-Path "C:\Program Files\Cadabra\cadabra2-gtk.exe")) {
+        Write-Host "Executable not found"
+        exit 1
+        }
+        $process = Start-Process "C:\Program Files\Cadabra\cadabra2-gtk.exe" -PassThru
+        Start-Sleep -Seconds 10
+
+        # Take screenshot
         Add-Type -AssemblyName System.Windows.Forms
         Add-Type -AssemblyName System.Drawing
         
@@ -122,6 +116,9 @@ jobs:
         $bitmap.Save("screenshot.png")
         $graphics.Dispose()
         $bitmap.Dispose()
+
+        # Cleanup
+        Stop-Process -Id $process.Id -Force
       
     - name: Upload screenshot
       uses: actions/upload-artifact@v4
@@ -129,9 +126,3 @@ jobs:
         name: app-screenshot
         path: screenshot.png
         
-    - name: Cleanup
-      shell: cmd
-      run: |
-        ping -n 10 127.0.0.1
-        tasklist /FI "IMAGENAME eq cadabra2-gtk.exe"
-        taskkill /F /IM cadabra2-gtk.exe
