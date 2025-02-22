@@ -21,7 +21,7 @@ void NDSolver::operator()(const state_type& x, state_type& dxdt, const double t)
 		for(size_t i=0; i<x.size(); ++i) {
 			evaluator.set_variable(variables[i], NTensor(x[i]));
 			}
-		dxdt[e] = evaluator.evaluate().at();
+		dxdt[e] = evaluator.evaluate().at().real(); // FIXME: solve over C?
 		// std::cerr << x[0] << ", " << x[1] << " -> "
 		//			 << dxdt[0] << ", " << dxdt[1] << std::endl;
 		}

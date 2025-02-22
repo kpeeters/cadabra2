@@ -186,7 +186,7 @@ endif()
 # Compiler flags.
 #---------------------------------------------------------------------------
 
-# - Set the C++ standard to C++14
+# - Set the C++ standard to C++17
 # - Turn optimizations on
 # - Turn off warnings we don't need
 

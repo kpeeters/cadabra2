@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <complex>
 
 /// \ingroup numerical
 ///
@@ -18,19 +19,21 @@ namespace cadabra {
 			/// we use maths matrix conventions for printing, that is,
 			/// earlier indices are more major, and are iterated over in a
 			/// more outer loop.
-			NTensor(const std::vector<size_t>& shape, double val);
+			NTensor(const std::vector<size_t>& shape, std::complex<double> val);
 
-			/// Initialise as a vector of doubles; sets shape automatically
+			/// Initialise as a vector of std::complex<double>s; sets shape automatically
+			NTensor(const std::vector<std::complex<double>>& vals);
 			NTensor(const std::vector<double>& vals);
 
 			/// Initialise as a scalar; sets shape automatically.
+			NTensor(std::complex<double>);
 			NTensor(double);
 
 			/// Copy constructor.
 			NTensor(const NTensor&);
 
 			/// Create equally spaced values in a range.
-			static NTensor linspace(double from, double to, size_t steps);
+			static NTensor linspace(std::complex<double> from, std::complex<double> to, size_t steps);
 
 			/// Assignment operator.
 			NTensor& operator=(const NTensor&);
@@ -45,13 +48,13 @@ namespace cadabra {
 			NTensor& pow(const NTensor&);
 
 			/// Get the value of a scalar NTensor.
-			double  at() const;
+			std::complex<double>  at() const;
 			
 			/// Get the value of the tensor at the indicated component.
-			double  at(const std::vector<size_t>& indices) const;
+			std::complex<double>  at(const std::vector<size_t>& indices) const;
 
 			/// Get the value of the tensor at the indicated component.
-			double& at(const std::vector<size_t>& indices);
+			std::complex<double>& at(const std::vector<size_t>& indices);
 
 			/// Expand the shape of the tensor to the specified shape
 			/// by broadcasting to the other dimensions. Effectively,
@@ -78,12 +81,12 @@ namespace cadabra {
 
 			/// Apply a scalar function `fun` to all elements, return
 			/// a reference to itself.
-			NTensor& apply(double (*fun)(double));
+			NTensor& apply(std::complex<double> (*fun)(const std::complex<double>&));
 
 			friend std::ostream& operator<<(std::ostream&, const NTensor&);
 
 			std::vector<size_t> shape;
-			std::vector<double> values;
+			std::vector<std::complex<double>> values;
 	};
 
 	std::ostream& operator<<(std::ostream &, const NTensor &);

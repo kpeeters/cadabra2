@@ -24,54 +24,59 @@ NTensor NEvaluator::evaluate()
 
 	// The vector below pairs LaTeX strings which can appear in the
 	// cadabra input to function names in the C++ standard library.
-	
-	const std::vector<std::pair<nset_t::iterator, double (*)(double) >> elementary
+
+	using complex_func = std::complex<double>(*)(const std::complex<double>&);
+
+	const std::vector<std::pair<nset_t::iterator, complex_func>> elementary
 		= { // Trigonometric functions.
 
-		    { name_set.find("\\sin"), std::sin},
-			 { name_set.find("\\cos"), std::cos},
-			 { name_set.find("\\tan"), std::tan},
+		{ name_set.find("\\sin"), std::sin<double> },
+		{ name_set.find("\\cos"), std::cos<double> },
+		{ name_set.find("\\tan"), std::tan<double> },
 
-			 { name_set.find("\\csc"), [](double x) { return 1.0/std::sin(x); } },
-			 { name_set.find("\\sec"), [](double x) { return 1.0/std::cos(x); } },
-			 { name_set.find("\\cot"), [](double x) { return std::cos(x)/std::sin(x); } },
+		{ name_set.find("\\csc"), [](const std::complex<double>& x) { return 1.0/std::sin<double>(x); } },
+		{ name_set.find("\\sec"), [](const std::complex<double>& x) { return 1.0/std::cos<double>(x); } },
+		{ name_set.find("\\cot"), [](const std::complex<double>& x) { return std::cos<double>(x)/std::sin<double>(x); } }
 
-			 { name_set.find("\\arcsin"), std::asin},
-			 { name_set.find("\\arccos"), std::acos},
-			 { name_set.find("\\arctan"), std::atan},
-			 
-			 // Hyperbolic functions.
-			 
-			 { name_set.find("\\sinh"), std::sinh},
-			 { name_set.find("\\cosh"), std::cosh},
-			 { name_set.find("\\tanh"), std::tanh},
+		}; 
 
-			 { name_set.find("\\csch"), [](double x) { return 1.0/std::sinh(x); } },
-			 { name_set.find("\\sech"), [](double x) { return 1.0/std::cosh(x); } },
-			 { name_set.find("\\coth"), [](double x) { return std::cosh(x)/std::sinh(x); } },
-
-			 { name_set.find("\\arcsinh"), std::asinh},
-			 { name_set.find("\\arccosh"), std::acosh},
-			 { name_set.find("\\arctanh"), std::atanh},
-
-			 // Logarithmic and exponential functions.
-			 
-			 { name_set.find("\\log"),     std::log10},
-			 { name_set.find("\\log2"),    std::log2},
-			 { name_set.find("\\ln"),      std::log},
-			 { name_set.find("\\exp"),     std::exp},
-			 { name_set.find("\\sqrt"),    std::sqrt},
-
-			 // Steps, absolute values and so on.
-
-			 { name_set.find("\\abs"),    std::abs},
+	/*
+		{ name_set.find("\\arcsin"), std::asin},
+		{ name_set.find("\\arccos"), std::acos},
+		{ name_set.find("\\arctan"), std::atan},
+		
+		// Hyperbolic functions.
+		
+		{ name_set.find("\\sinh"), std::sinh},
+		{ name_set.find("\\cosh"), std::cosh},
+		{ name_set.find("\\tanh"), std::tanh},
+		
+		{ name_set.find("\\csch"), [](std::complex<double> x) { return 1.0/std::sinh(x); } },
+		{ name_set.find("\\sech"), [](std::complex<double> x) { return 1.0/std::cosh(x); } },
+		{ name_set.find("\\coth"), [](std::complex<double> x) { return std::cosh(x)/std::sinh(x); } },
+		
+		{ name_set.find("\\arcsinh"), std::asinh},
+		{ name_set.find("\\arccosh"), std::acosh},
+		{ name_set.find("\\arctanh"), std::atanh},
+		
+		// Logarithmic and exponential functions.
+		
+		{ name_set.find("\\log"),     std::log10},
+		{ name_set.find("\\log2"),    std::log2},
+		{ name_set.find("\\ln"),      std::log},
+		{ name_set.find("\\exp"),     std::exp},
+		{ name_set.find("\\sqrt"),    std::sqrt},
+		
+		// Steps, absolute values and so on.
+		
+		{ name_set.find("\\abs"),    std::abs},
 			 { name_set.find("\\floor"),  std::floor},
-			 { name_set.find("\\sign"),   [](double x) {
-				 if(x==0)     return  0.0;
-				 else if(x<0) return -1.0;
-				 else         return  1.0;
+			 { name_set.find("\\sign"),   [](std::complex<double> x) {
+				 if(x.real()==0)     return  std::complex<double>(0.0,  0.0);
+				 else if(x.real()<0) return  std::complex<double>(-1.0, 0.0);
+				 else                return  std::complex<double>(1.0,  0.0);
 				 } }
-	};
+	}; */
 
 	const auto n_pow  = name_set.find("\\pow");
 	const auto n_prod = name_set.find("\\prod");

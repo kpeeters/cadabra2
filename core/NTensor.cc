@@ -6,7 +6,7 @@
 
 using namespace cadabra;
 
-NTensor::NTensor(const std::vector<size_t>& shape_, double val)
+NTensor::NTensor(const std::vector<size_t>& shape_, std::complex<double> val)
 	: shape(shape_)
 	{
 	size_t len=1;
@@ -18,15 +18,28 @@ NTensor::NTensor(const std::vector<size_t>& shape_, double val)
 		v=val;
 	}
 
-NTensor::NTensor(const std::vector<double>& vals)
+NTensor::NTensor(const std::vector<std::complex<double>>& vals)
 	: values(vals)
 	{
 	shape.push_back(values.size());
 	}
 
-NTensor::NTensor(double val)
+NTensor::NTensor(const std::vector<double>& vals)
+	{
+	for(size_t i=0; i<vals.size(); ++i)
+		values.push_back(vals[i]);
+	shape.push_back(values.size());
+	}
+
+NTensor::NTensor(std::complex<double> val)
 	{
 	values.push_back(val);
+	shape.push_back(1);
+	}
+
+NTensor::NTensor(double val)
+	{
+	values.push_back(std::complex<double>(val, 0));
 	shape.push_back(1);
 	}
 
@@ -36,13 +49,13 @@ NTensor::NTensor(const NTensor& other)
 	values=other.values;
 	}
 
-NTensor NTensor::linspace(double from, double to, size_t steps)
+NTensor NTensor::linspace(std::complex<double> from, std::complex<double> to, size_t steps)
 	{
 	NTensor res(std::vector<size_t>({steps}), 0.0);
 	assert(steps>1);
 
 	for(size_t i=0; i<steps; ++i) {
-		res.values[i] = from + i*(to-from)/(steps-1);
+		res.values[i] = from + (double)(i)*(to-from)/(double(steps-1));
 		}
 	return res;
 	}
@@ -54,7 +67,7 @@ NTensor& NTensor::operator=(const NTensor& other)
 	return *this;
 	}
 
-double NTensor::at() const
+std::complex<double> NTensor::at() const
 	{
 	if(shape.size()!=1 && shape[0]!=1)
 		throw std::range_error("NTensor::at: cannot convert tensor to single scalar.");
@@ -65,7 +78,7 @@ double NTensor::at() const
 	return values[0];
 	}
 
-double NTensor::at(const std::vector<size_t>& indices) const
+std::complex<double> NTensor::at(const std::vector<size_t>& indices) const
 	{
 	if(indices.size()!=shape.size())
 		throw std::range_error("NTensor::at: number of indices != shape length.");
@@ -86,7 +99,7 @@ double NTensor::at(const std::vector<size_t>& indices) const
 	return values[idx];
 	}
 
-double& NTensor::at(const std::vector<size_t>& indices)
+std::complex<double>& NTensor::at(const std::vector<size_t>& indices)
 	{
 	if(indices.size()!=shape.size())
 		throw std::range_error("NTensor::at: number of indices != shape length.");
@@ -141,7 +154,7 @@ std::ostream& cadabra::operator<<(std::ostream &str, const NTensor &nt)
 	return str;
 	}
 
-NTensor& NTensor::apply(double (*fun)(double))
+NTensor& NTensor::apply(std::complex<double> (*fun)(const std::complex<double>&))
 	{
 	for(auto& v: values)
 		v = fun(v);
