@@ -31,4 +31,6 @@ jobs:
       run:  cd build && cmake --build .
       
     - name: test
+      env:
+        CTEST_OUTPUT_ON_FAILURE: 1
       run:  cd build && ctest ARGS="-V"

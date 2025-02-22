@@ -1,6 +1,7 @@
 
 #include "Compare.hh"
 #include "NEvaluator.hh"
+#include "Exceptions.hh"
 #include <cmath>
 
 using namespace cadabra;
@@ -26,7 +27,8 @@ NTensor NEvaluator::evaluate()
 	// cadabra input to function names in the C++ standard library.
 
 	using complex_func = std::complex<double>(*)(const std::complex<double>&);
-
+	// const double eps = 1e-10;
+	
 	const std::vector<std::pair<nset_t::iterator, complex_func>> elementary
 		= { // Trigonometric functions.
 
@@ -36,47 +38,48 @@ NTensor NEvaluator::evaluate()
 
 		{ name_set.find("\\csc"), [](const std::complex<double>& x) { return 1.0/std::sin<double>(x); } },
 		{ name_set.find("\\sec"), [](const std::complex<double>& x) { return 1.0/std::cos<double>(x); } },
-		{ name_set.find("\\cot"), [](const std::complex<double>& x) { return std::cos<double>(x)/std::sin<double>(x); } }
+		{ name_set.find("\\cot"), [](const std::complex<double>& x) { return std::cos<double>(x)/std::sin<double>(x); } },
 
-		}; 
-
-	/*
-		{ name_set.find("\\arcsin"), std::asin},
-		{ name_set.find("\\arccos"), std::acos},
-		{ name_set.find("\\arctan"), std::atan},
+		{ name_set.find("\\arcsin"), std::asin<double>},
+		{ name_set.find("\\arccos"), std::acos<double>},
+		{ name_set.find("\\arctan"), std::atan<double>},
 		
 		// Hyperbolic functions.
 		
-		{ name_set.find("\\sinh"), std::sinh},
-		{ name_set.find("\\cosh"), std::cosh},
-		{ name_set.find("\\tanh"), std::tanh},
+		{ name_set.find("\\sinh"), std::sinh<double>},
+		{ name_set.find("\\cosh"), std::cosh<double>},
+		{ name_set.find("\\tanh"), std::tanh<double>},
 		
-		{ name_set.find("\\csch"), [](std::complex<double> x) { return 1.0/std::sinh(x); } },
-		{ name_set.find("\\sech"), [](std::complex<double> x) { return 1.0/std::cosh(x); } },
-		{ name_set.find("\\coth"), [](std::complex<double> x) { return std::cosh(x)/std::sinh(x); } },
+		{ name_set.find("\\csch"), [](const std::complex<double>& x) { return 1.0/std::sinh<double>(x); } },
+		{ name_set.find("\\sech"), [](const std::complex<double>& x) { return 1.0/std::cosh<double>(x); } },
+		{ name_set.find("\\coth"), [](const std::complex<double>& x) { return std::cosh<double>(x)/std::sinh<double>(x); } },
 		
-		{ name_set.find("\\arcsinh"), std::asinh},
-		{ name_set.find("\\arccosh"), std::acosh},
-		{ name_set.find("\\arctanh"), std::atanh},
-		
+		{ name_set.find("\\arcsinh"), std::asinh<double>},
+		{ name_set.find("\\arccosh"), std::acosh<double>},
+		{ name_set.find("\\arctanh"), std::atanh<double>},
+
 		// Logarithmic and exponential functions.
 		
-		{ name_set.find("\\log"),     std::log10},
-		{ name_set.find("\\log2"),    std::log2},
-		{ name_set.find("\\ln"),      std::log},
-		{ name_set.find("\\exp"),     std::exp},
-		{ name_set.find("\\sqrt"),    std::sqrt},
-		
+		{ name_set.find("\\log"),     std::log10<double>},
+		{ name_set.find("\\log2"),    [](const std::complex<double>& x) { return std::log<double>(x) / std::log<double>(2.0); } },
+		{ name_set.find("\\ln"),      std::log<double>  },
+		{ name_set.find("\\exp"),     std::exp<double>  },
+		{ name_set.find("\\sqrt"),    std::sqrt<double> },
+
 		// Steps, absolute values and so on.
 		
-		{ name_set.find("\\abs"),    std::abs},
-			 { name_set.find("\\floor"),  std::floor},
-			 { name_set.find("\\sign"),   [](std::complex<double> x) {
-				 if(x.real()==0)     return  std::complex<double>(0.0,  0.0);
-				 else if(x.real()<0) return  std::complex<double>(-1.0, 0.0);
-				 else                return  std::complex<double>(1.0,  0.0);
-				 } }
-	}; */
+		{ name_set.find("\\abs"),    [](const std::complex<double>& x) { return std::complex<double>(std::abs<double>(x), 0.0); } } ,
+//		{ name_set.find("\\floor"),  [eps](const std::complex<double>& x) {
+//			if(std::abs(x.imag()) > eps)
+//				throw ConsistencyException("Function floor called on complex number.");
+//			return std::complex<double>(std::floor(x.real()), 0.0);
+//			} },
+		{ name_set.find("\\sign"),   [](const std::complex<double>& x) {
+			if(x.real()==0)     return  std::complex<double>(0.0,  0.0);
+			else if(x.real()<0) return  std::complex<double>(-1.0, 0.0);
+			else                return  std::complex<double>(1.0,  0.0);
+			} }
+	}; 
 
 	const auto n_pow  = name_set.find("\\pow");
 	const auto n_prod = name_set.find("\\prod");
