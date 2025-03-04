@@ -79,4 +79,6 @@ int main(int, char **)
 	nt.at({1,2,0}) = 6.2830;
 	nt.at({0,3,2}) = -6.2830;
 	std::cout << nt << std::endl;
+
+	std::cout << "is this real? " << nt.is_real() << std::endl;
 	}

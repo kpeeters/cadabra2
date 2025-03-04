@@ -279,6 +279,14 @@ NTensor NTensor::outer_product(const NTensor& a, const NTensor& b)
 	return res;
 	}
 
+bool NTensor::is_real() const
+	{
+	for(const auto& value: values)
+		if(std::abs(value.imag()) > std::numeric_limits<double>::epsilon())
+			return false;
+	return true;
+	}
+
 NTensor NTensor::broadcast(std::vector<size_t> new_shape, size_t pos) const
 	{
 	// for(auto s: new_shape)

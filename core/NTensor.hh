@@ -88,6 +88,9 @@ namespace cadabra {
 			/// a reference to itself.
 			NTensor& apply(std::complex<double> (*fun)(const std::complex<double>&));
 
+			/// Test if all values of the tensor are real.
+			bool is_real() const;
+			
 			friend std::ostream& operator<<(std::ostream&, const NTensor&);
 
 			std::vector<size_t> shape;
