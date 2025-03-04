@@ -31,6 +31,16 @@ NTensor::NTensor(const std::vector<double>& vals)
 	shape.push_back(values.size());
 	}
 
+NTensor::NTensor(std::initializer_list<std::complex<double>> vals)
+	: NTensor(std::vector<std::complex<double>>(vals.begin(), vals.end()))
+	{
+	}
+
+NTensor::NTensor(std::initializer_list<double> vals)
+	: NTensor(std::vector<double>(vals.begin(), vals.end()))
+	{
+	}
+
 NTensor::NTensor(std::complex<double> val)
 	{
 	values.push_back(val);

@@ -23,7 +23,12 @@ namespace cadabra {
 
 			/// Initialise as a vector of std::complex<double>s; sets shape automatically
 			NTensor(const std::vector<std::complex<double>>& vals);
+			/// As above, but with doubles instead of complex doubles.
 			NTensor(const std::vector<double>& vals);
+
+			/// Helper functions to be able to initialise a tensor with an initialiser list.
+			NTensor(std::initializer_list<std::complex<double>> vals);
+			NTensor(std::initializer_list<double> vals);
 
 			/// Initialise as a scalar; sets shape automatically.
 			NTensor(std::complex<double>);
