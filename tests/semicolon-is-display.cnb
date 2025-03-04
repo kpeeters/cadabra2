@@ -1,0 +1,413 @@
+{
+	"cell_id": 13676201060787162409,
+	"cells": [
+		{
+			"cell_id": 3365546030754312399,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13486784106139061322,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}0\\end{verbatim}"
+				},
+				{
+					"cell_id": 13390342818350060915,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}1\\end{verbatim}"
+				},
+				{
+					"cell_id": 14181760388372354144,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}2\\end{verbatim}"
+				},
+				{
+					"cell_id": 13566449661308298725,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}3\\end{verbatim}"
+				},
+				{
+					"cell_id": 11641129919142346415,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}4\\end{verbatim}"
+				}
+			],
+			"source": "for i in range(5):\n   i;"
+		},
+		{
+			"cell_id": 5507328018153950723,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 2763088547631021006,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 245401456593838818,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0"
+						}
+					],
+					"source": "\\begin{dmath*}{}0\\end{dmath*}"
+				},
+				{
+					"cell_id": 1995969635477801872,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5620480623049908368,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m}\\end{dmath*}"
+				},
+				{
+					"cell_id": 1308278093665708998,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9246712614825963706,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "2A_{m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}2A_{m}\\end{dmath*}"
+				},
+				{
+					"cell_id": 10180185725480085968,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16955994692508884179,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "3A_{m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}3A_{m}\\end{dmath*}"
+				},
+				{
+					"cell_id": 14917983779495832154,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8631749922978581387,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "4A_{m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}4A_{m}\\end{dmath*}"
+				}
+			],
+			"source": "for i in range(5):\n   ex:= @(i) A_{m};"
+		},
+		{
+			"cell_id": 2709367108842624886,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 991548420766733209,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}hello\\end{verbatim}"
+				}
+			],
+			"source": "\"hello\";"
+		},
+		{
+			"cell_id": 9531952093182759138,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14715685231577451918,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}3\\end{verbatim}"
+				}
+			],
+			"source": "a=3;"
+		},
+		{
+			"cell_id": 1003469794776916302,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13314650427008455028,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}3\\end{verbatim}"
+				}
+			],
+			"source": "a;"
+		},
+		{
+			"cell_id": 7344323184728307736,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 5955032504006603414,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}0\\end{verbatim}"
+				},
+				{
+					"cell_id": 5551752701089688736,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}1\\end{verbatim}"
+				},
+				{
+					"cell_id": 3621255758561886641,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}3\\end{verbatim}"
+				},
+				{
+					"cell_id": 13345939733285062586,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}6\\end{verbatim}"
+				},
+				{
+					"cell_id": 10311848031432336392,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}10\\end{verbatim}"
+				}
+			],
+			"source": "k=0\nfor i in range(5):\n   k = k + \\\n         i;"
+		},
+		{
+			"cell_id": 17000456916826804357,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 8639669874106212937,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}0\\end{verbatim}"
+				},
+				{
+					"cell_id": 409035913217772958,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}1\\end{verbatim}"
+				},
+				{
+					"cell_id": 2143506441780659444,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}3\\end{verbatim}"
+				},
+				{
+					"cell_id": 14765554027532246253,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}6\\end{verbatim}"
+				},
+				{
+					"cell_id": 17740545678693912988,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}10\\end{verbatim}"
+				}
+			],
+			"source": "k=0\nfor i in range(5):\n   j = 0\n   k = k + \\\n         i;\n   j = 3"
+		},
+		{
+			"cell_id": 12612305425360331126,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 8694258832895160516,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}0\\end{verbatim}"
+				},
+				{
+					"cell_id": 8446751972143242502,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}0\\end{verbatim}"
+				},
+				{
+					"cell_id": 9542511904054497326,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16055832822636808925,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m}\\end{dmath*}"
+				},
+				{
+					"cell_id": 14810623720671467046,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}0\\end{verbatim}"
+				},
+				{
+					"cell_id": 8453600701020721187,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}1\\end{verbatim}"
+				},
+				{
+					"cell_id": 12653146955963079181,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11958933549239202803,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m}\\end{dmath*}"
+				},
+				{
+					"cell_id": 15300923306790611083,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}0\\end{verbatim}"
+				},
+				{
+					"cell_id": 7097758010575342651,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}3\\end{verbatim}"
+				},
+				{
+					"cell_id": 12110137980363554801,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8530446612060511589,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m}\\end{dmath*}"
+				},
+				{
+					"cell_id": 16745216850334751695,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}0\\end{verbatim}"
+				},
+				{
+					"cell_id": 5611823266073639070,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}6\\end{verbatim}"
+				},
+				{
+					"cell_id": 16409729764063395803,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1710386025033510743,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m}\\end{dmath*}"
+				},
+				{
+					"cell_id": 6247403346351003199,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}0\\end{verbatim}"
+				},
+				{
+					"cell_id": 13692604609052235241,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}10\\end{verbatim}"
+				},
+				{
+					"cell_id": 3249881876588662702,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14799719248347315493,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m}\\end{dmath*}"
+				}
+			],
+			"source": "k=0\nfor i in range(5):\n   j = 0;\n   k = k + \\\n         i;\n   ex:= A_{m};"
+		},
+		{
+			"cell_id": 8699779233906986329,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def test():\n   ex:= A_{m};"
+		},
+		{
+			"cell_id": 7024647649488156255,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9642367199354074488,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9234383094430850768,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m}\\end{dmath*}"
+				}
+			],
+			"source": "test()"
+		},
+		{
+			"cell_id": 14333362801236857588,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

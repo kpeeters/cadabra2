@@ -18,6 +18,9 @@ namespace cadabra {
 
 	std::string cdb2python(const std::string&, bool display);
 
+	/// Helper function to insert a prefix.
+	std::string insert_prefix(const std::string&, const std::string& prefix, size_t prefixloc);
+	
 	std::string cdb2python_string(const std::string&, bool display, std::string& error);	
 
 	/// Test whether a block of Python code is complete or requires

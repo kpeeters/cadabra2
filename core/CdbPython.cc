@@ -15,6 +15,8 @@
 #include "DataCell.hh"
 #endif
 
+// #define DEBUG
+
 std::string cadabra::escape_quotes(const std::string& line)
 	{
 	return "''"+line+"''";
@@ -58,6 +60,37 @@ std::string cadabra::cdb2python(const std::string& in_name, bool display)
 	return ofs.str();
 	}
 
+std::string cadabra::insert_prefix(const std::string& tmpblk, const std::string& tmpprefix, size_t tmpprefixloc)
+	{
+	// Search backwards for "[^\\]\n[\w]+" and insert the
+	// prefix immediately after that.
+	std::regex pattern_rx("([^\\\\])\n[ \t]+");
+	auto last = tmpblk.begin();
+	last += tmpprefixloc;
+	std::sregex_iterator it(tmpblk.begin(), last, pattern_rx);
+	std::sregex_iterator end;
+	size_t lastpos = std::string::npos;
+	while (it != end) {
+		lastpos = it->position() + it->length();
+		++it;
+		}
+	std::string ret;
+	if(lastpos!=std::string::npos) {
+		ret = tmpblk.substr(0, lastpos) + tmpprefix + tmpblk.substr(lastpos);
+#ifdef DEBUG
+		std::cerr << "tmpblk now: " << ret << std::endl;
+#endif
+		}
+	else {
+#ifdef DEBUG
+		std::cerr << "cannot find a place to insert prefix" << std::endl;
+#endif
+		ret = tmpblk;
+		}
+	
+	return ret;
+	}
+
 std::string cadabra::cdb2python_string(const std::string& blk, bool display, std::string& report_error)
 	{
 	std::stringstream str(blk);
@@ -88,13 +121,17 @@ std::string cadabra::cdb2python_string(const std::string& blk, bool display, std
 		bool previous_step_removed=false; // avoid removing a line, then adding again.
 		while(true) {
 			int ic = is_python_code_complete(tmpblk, error);
-			// std::cerr << "CHECK:---\n" << tmpblk << "\n---: " << ic << std::endl;
+#ifdef DEBUG
+			std::cerr << "CHECK:---\n" << tmpblk << "\n---: " << ic << ", " << res.first << std::endl;
+#endif
 			if(ic==1) { // complete
 				newblks.push_back(res.first + tmpblk + "\n");
 				tmpblk = "";
 				break;
 				}
 			if(ic==0) { // incomplete
+				if(res.first.size()>0)
+					tmpblk = insert_prefix(tmpblk, res.first, tmpblk.size());
 				tmpblk += "\n";
 				break;
 				}
@@ -144,6 +181,13 @@ std::string cadabra::cdb2python_string(const std::string& blk, bool display, std
 		}
 
 	// Collect.
+#ifdef DEBUG
+	std::cerr << "** at exit:" << std::endl;
+	for(const auto& blk: newblks)
+		std::cerr << "blk: " << blk << std::endl;
+	std::cerr << "tmpblk    = " << tmpblk << std::endl;
+#endif
+
 	std::string newblk;
 	for(const auto& blk: newblks)
 		newblk += blk;
@@ -504,7 +548,7 @@ std::pair<std::string, std::string> cadabra::convert_line(const std::string& lin
 			      + escape_quotes(line_stripped.substr(found+2)) + "')";
 			std::string objname = line_stripped.substr(0,found);
 			ret = ret + "; _="+objname;
-			if(lastchar==";" && indent_line.size()==0 && display)
+			if(lastchar==";" && /* indent_line.size()==0 && */ display)
 				ret = ret + "; display("+objname+")";
 			}
 		}
