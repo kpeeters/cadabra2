@@ -4,6 +4,7 @@
 #include "Storage.hh"
 #include "NTensor.hh"
 #include "Compare.hh"
+#include <functional>
 
 namespace cadabra {
 
@@ -53,6 +54,12 @@ namespace cadabra {
 			/// indicated variable. Fills the map above.
 			void    set_variable(const Ex&, const NTensor& val);
 
+			/// Set an external function which will be used by `evaluate` to lookup
+			/// values of objects as a last resort, if they do not resolve using
+			/// the `variable_values` list above.
+			typedef std::function<std::complex<double>(const Ex&)> lookup_function_t;
+			void    set_lookup_function(lookup_function_t);
+			
 			/// Evaluate the expression, using the variable values set in
 			/// `set_variable`.
 			NTensor evaluate();
@@ -63,6 +70,7 @@ namespace cadabra {
 
 		private:
 			Ex ex;
+			lookup_function_t lookup_function;
 	};
 
 };

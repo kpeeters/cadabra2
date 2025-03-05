@@ -224,6 +224,10 @@ namespace cadabra {
 						ev.set_variable(py::cast<Ex>(dv.first), py::cast<std::vector<double>>(dv.second));
 						}
 					}
+				ev.set_lookup_function([](const Ex& var) {
+					if(var == Ex("I")) return std::complex<double>(0, 1.0);
+					throw std::logic_error("No value.");
+					});
 				auto res = ev.evaluate();
 				return res;
 				}

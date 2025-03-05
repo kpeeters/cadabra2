@@ -19,6 +19,11 @@ NEvaluator::NEvaluator(const Ex &ex_)
 	{
 	}
 
+void NEvaluator::set_lookup_function(lookup_function_t f)
+	{
+	lookup_function = f;
+	}
+
 NTensor NEvaluator::evaluate()
 	{
 	find_variable_locations();
@@ -211,7 +216,16 @@ NTensor NEvaluator::evaluate()
 							subtree_values.insert(std::make_pair(it, lastval));
 							}
 						catch(const std::invalid_argument& err) {
-							throw std::logic_error("Value unknown for subtree with head "+(*it->name)+".");
+							// Last resort: lookup value using the external lookup function.
+							try {
+								if(lookup_function)
+									lastval = lookup_function(*it);
+								else 
+									throw std::logic_error("Value unknown for subtree with head "+(*it->name)+".");
+								}
+							catch(const std::exception& ex) {
+								throw std::logic_error("Value unknown for subtree with head "+(*it->name)+".");
+								}
 							}
 						catch(const std::out_of_range& err) {
 							throw std::logic_error("Value "+(*it->name)+" does not fit in a float.");
