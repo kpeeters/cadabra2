@@ -66,6 +66,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	dispatch_tex_error.connect(sigc::mem_fun(*this, &NotebookWindow::handle_thread_tex_error));
 	dispatch_update_status.connect(sigc::mem_fun(*this, &NotebookWindow::update_status));
 
+	// Associate with application
+	c->add_window(*this);
 	// Set the window icon.
 	set_default_icon_name("cadabra2-gtk");
 	set_icon_name("cadabra2-gtk");
