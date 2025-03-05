@@ -149,6 +149,45 @@ namespace cadabra {
 		def_algo_preorder<meld, bool>(m, "meld", true, false, 0, py::arg("project_as_sum") = false);
 
 //		def_algo<nevaluate>(m, "nevaluate", true, false, 0);
+
+		m.def("nrange",
+				// Given a dict of variable to value mappings, extract the
+				// single variable for which the value is an explicit or
+				// implicit range, and return a tuple consisting of the
+				// variable and the range. Throws an exception if there is
+				// more than one range, or none.
+				[](py::dict d) {
+				NTensor range(0);
+				Ex      rangevar;
+				bool found=false;
+				for(const auto& dv: d) {
+					py::object type_obj = py::type::of(dv.second);
+					std::string type_name = py::str(type_obj.attr("__name__"));
+					if(!(type_name=="float" || type_name=="complex" || type_name=="int")) {
+						if(found)
+							throw ArgumentException("nrange: found more than one variable with a value range.");
+
+						rangevar = py::cast<Ex>(dv.first);
+						if(type_name=="tuple") {
+							std::vector<double> rvec = py::cast<std::vector<double>>(dv.second);
+							if(rvec.size()!=2)
+								throw ArgumentException("nrange: value tuples must have exactly two elements (start, end); found "+std::to_string(rvec.size())+".");
+							range = NTensor::linspace(rvec[0], rvec[1], 100);
+							found = true;
+							}
+						else {
+							range = NTensor(py::cast<std::vector<double>>(dv.second));
+							found = true;
+							}
+						}
+					}
+				if(!found)
+					throw ArgumentException("nrange: not found any variable with a value range.");
+
+				return std::make_pair(rangevar, range);
+				}
+				);
+		
 		m.def("nevaluate",
 				[](Ex_ptr ex, py::dict d) {
 				std::vector<std::pair<Ex, NTensor>> values;
@@ -162,6 +201,11 @@ namespace cadabra {
 					if(type_name=="float") {
 						std::vector<double> vec;
 						vec.push_back(py::cast<double>(dv.second));
+						ev.set_variable(py::cast<Ex>(dv.first), vec);
+						}
+					else if(type_name=="int") {
+						std::vector<double> vec;
+						vec.push_back(py::cast<int>(dv.second));
 						ev.set_variable(py::cast<Ex>(dv.first), vec);
 						}
 					else if(type_name=="complex") {
