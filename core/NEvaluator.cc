@@ -225,6 +225,10 @@ NTensor NEvaluator::evaluate()
 		++it;
 		}
 
+#ifdef DEBUG
+	std::cerr << "evaluate returns " << lastval << std::endl;
+#endif
+	
 	return lastval;
 	}
 
@@ -247,6 +251,15 @@ void NEvaluator::set_variable(const Ex& var, const NTensor& val)
 
 void NEvaluator::find_variable_locations()
 	{
+#ifdef DEBUG
+	for(auto& var: variable_values) {
+		std::cerr << "variable " << var.variable << std::endl;
+		std::cerr << "values ";
+		for(const auto& val: var.values.values)
+			std::cerr << val << ", ";
+		std::cerr << std::endl;
+		}
+#endif
 	// FIXME: we don't really need this anymore, as we do everything
 	// with broadcasting.
 	for(auto& var: variable_values) {
