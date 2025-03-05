@@ -1,6 +1,8 @@
 #include "py_algorithms.hh"
 
+#include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/complex.h>
 
 #include "../Algorithm.hh"
 #include "../NEvaluator.hh"
@@ -151,8 +153,32 @@ namespace cadabra {
 				[](Ex_ptr ex, py::dict d) {
 				std::vector<std::pair<Ex, NTensor>> values;
 				NEvaluator ev(*ex);
+				// For every variable in the dict, we can take either a numpy.array (or something that
+				// auto-converts to it), a tuple (interpreted as a range) or a single complex/double
+				// value. Figure out what it is, and convert to a vector of doubles.
 				for(const auto& dv: d) {
-					ev.set_variable(py::cast<Ex>(dv.first), py::cast<std::vector<double>>(dv.second));
+					py::object type_obj = py::type::of(dv.second);
+					std::string type_name = py::str(type_obj.attr("__name__"));
+					if(type_name=="float") {
+						std::vector<double> vec;
+						vec.push_back(py::cast<double>(dv.second));
+						ev.set_variable(py::cast<Ex>(dv.first), vec);
+						}
+					else if(type_name=="complex") {
+						std::vector<std::complex<double>> vec;
+						vec.push_back(py::cast<std::complex<double>>(dv.second));
+						ev.set_variable(py::cast<Ex>(dv.first), vec);
+						}
+					else if(type_name=="tuple") {
+						std::vector<double> rvec = py::cast<std::vector<double>>(dv.second);
+						if(rvec.size()!=2)
+							throw ArgumentException("nevaluate: value tuples must have exactly two elements (start, end); found "+std::to_string(rvec.size())+".");
+						auto range = NTensor::linspace(rvec[0], rvec[1], 100);
+						ev.set_variable(py::cast<Ex>(dv.first), range);
+						}
+					else {
+						ev.set_variable(py::cast<Ex>(dv.first), py::cast<std::vector<double>>(dv.second));
+						}
 					}
 				auto res = ev.evaluate();
 				return res;
