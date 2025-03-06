@@ -67,3 +67,12 @@ def test04():
 
 test04()
 
+def test05():
+   import numpy as np
+   i::ImaginaryI.
+   ex := a + b i.
+   q = np.array(nevaluate(ex, {$a$: 2, $b$: 3}))
+   assert( q[0] == 2 + 3j )
+   print("Test 05 passed")
+
+test05()

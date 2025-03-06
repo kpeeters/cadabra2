@@ -71,6 +71,8 @@
 #include "../algorithms/young_project_tensor.hh"
 #include "../algorithms/zoom.hh"
 
+#include "../properties/ImaginaryI.hh"
+
 namespace cadabra {
 	namespace py = pybind11;
 
@@ -225,7 +227,10 @@ namespace cadabra {
 						}
 					}
 				ev.set_lookup_function([](const Ex& var) {
-					if(var == Ex("I")) return std::complex<double>(0, 1.0);
+					Kernel *kernel = get_kernel_from_scope();
+					auto imaginaryI = kernel->properties.get<ImaginaryI>(var.begin());
+					if(imaginaryI) return std::complex<double>(0, 1.0);
+					
 					throw std::logic_error("No value.");
 					});
 				auto res = ev.evaluate();
