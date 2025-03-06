@@ -165,6 +165,7 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 	// Tell the window to open the notebook stored in the string.
 	auto wins = get_windows();
 	auto nw = static_cast<cadabra::NotebookWindow *>(wins[0]);
+	add_window(*nw);
 	nw->set_name(files[0]->get_path());
 	snoop::log("open") << "command-line" << snoop::flush;
 	if(file_exists) {
