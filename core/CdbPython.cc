@@ -490,7 +490,12 @@ std::pair<std::string, std::string> cadabra::convert_line(const std::string& lin
 		if(lhs!="") {
 			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
 			rhs += " "+line_stripped;
-			ret = indent + lhs + " = Ex(r'" + escape_quotes(rhs) + "')";
+			if(lhs.find('(')==std::string::npos) {
+				ret = indent + lhs + " = Ex(r'" + escape_quotes(rhs) + "')";
+				}
+			else {
+				ret = indent + "def " + lhs + ": return Ex(r'" + escape_quotes(rhs) + "')";
+				}
 			if(op==":=") {
 				if(ret[ret.size()-1]!=';')
 					ret+=";";
@@ -544,8 +549,14 @@ std::pair<std::string, std::string> cadabra::convert_line(const std::string& lin
 			}
 		else {
 			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
-			ret = indent_line + line_stripped.substr(0,found) + " = Ex(r'"
+			if(line_stripped.substr(0, found).find('(')==std::string::npos) {
+				ret = indent_line + line_stripped.substr(0,found) + " = Ex(r'"
+					+ escape_quotes(line_stripped.substr(found+2)) + "')";
+				}
+			else {
+				ret = indent_line + "def " + line_stripped.substr(0,found) + ": return Ex(r'"
 			      + escape_quotes(line_stripped.substr(found+2)) + "')";
+				}
 			std::string objname = line_stripped.substr(0,found);
 			ret = ret + "; _="+objname;
 			if(lastchar==";" && /* indent_line.size()==0 && */ display)

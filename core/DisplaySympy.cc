@@ -99,6 +99,9 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 			{"\\dot",     "dot"},
 			{"\\ddot",    "ddot"},
 
+			{"\\Im",      "im"},
+			{"\\Re",      "re"},
+
 		// A few symbols are reserved by sympy.
 			{"N", "sympyN"},
 			{"O", "sympyO"},

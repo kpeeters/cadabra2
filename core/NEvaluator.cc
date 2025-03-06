@@ -71,6 +71,11 @@ NTensor NEvaluator::evaluate()
 		{ name_set.find("\\exp"),     std::exp<double>  },
 		{ name_set.find("\\sqrt"),    std::sqrt<double> },
 
+		// Real and imaginary parts.
+
+		{ name_set.find("\\Re"),      [](const std::complex<double>& x) { return std::complex<double>(x.real(), 0); } },
+		{ name_set.find("\\Im"),      [](const std::complex<double>& x) { return std::complex<double>(x.imag(), 0); } },
+
 		// Steps, absolute values and so on.
 		
 		{ name_set.find("\\abs"),    [](const std::complex<double>& x) { return std::complex<double>(std::abs<double>(x), 0.0); } } ,
