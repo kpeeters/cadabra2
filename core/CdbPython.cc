@@ -443,6 +443,58 @@ cadabra::ConvertData::ConvertData(const std::string& lhs_, const std::string& rh
 	{
 	}
 
+std::string replace_dollar_expressions(const std::string& input, 
+													const std::function<std::string(const std::string&)>& replacer)
+	{
+	std::ostringstream result;
+	bool in_single_quote = false;
+	bool in_double_quote = false;
+	size_t dollar_start = std::string::npos;
+	
+	for (size_t i = 0; i < input.length(); ++i) {
+		char c = input[i];
+      
+		// Toggle quote state
+		if (c == '"' && !in_single_quote) {
+			in_double_quote = !in_double_quote;
+			result << c;
+        }
+		else if (c == '\'' && !in_double_quote) {
+			in_single_quote = !in_single_quote;
+			result << c;
+			}
+		// Handle dollar signs outside of quotes
+		else if (c == '$' && !in_single_quote && !in_double_quote) {
+			if (dollar_start == std::string::npos) {
+				// First dollar sign
+				dollar_start = i;
+				// Don't append the $ yet, wait until we find the matching one
+            }
+			else {
+				// Second dollar sign, found a match
+				std::string content = input.substr(dollar_start + 1, i - dollar_start - 1);
+				result << replacer(content);
+				dollar_start = std::string::npos;
+            }
+        }
+		else {
+			// Regular character
+			if (dollar_start == std::string::npos) {
+				// Not in the middle of a $...$ expression
+				result << c;
+            }
+			// If we're between $...$, don't add anything yet
+			}
+		}
+	
+	// Handle unclosed dollar
+	if (dollar_start != std::string::npos) {
+		result << input.substr(dollar_start);
+		}
+	
+	return result.str();
+	}
+
 std::pair<std::string, std::string> cadabra::convert_line(const std::string& line, ConvertData& cv, bool display)
 	{
 	std::string ret, prefix;
@@ -525,8 +577,14 @@ std::pair<std::string, std::string> cadabra::convert_line(const std::string& lin
 	line_stripped = std::regex_replace(line_stripped, postprocmatch, "def post_process(__cdbkernel__, $1");
 
 	// Replace $...$ with Ex(...).
-	std::regex dollarmatch(R"(\$([^\$]*)\$)");
-	line_stripped = std::regex_replace(line_stripped, dollarmatch, "Ex(r'''$1''', False)", std::regex_constants::match_default | std::regex_constants::format_default );
+	auto replacement = [](const std::string& content) {
+		return "Ex(r'''" + content + "''', False)";
+		};
+    
+	line_stripped = replace_dollar_expressions(line_stripped, replacement);
+	
+// 	std::regex dollarmatch(R"(\$([^\$]*)\$)");
+// 	line_stripped = std::regex_replace(line_stripped, dollarmatch, "Ex(r'''$1''', False)", std::regex_constants::match_default | std::regex_constants::format_default );
 
 	// Replace 'converge(ex):' with 'server.progress('converge'); ex.reset(); while ex.changed(): server.progress(); server.end_progress();' properly indented.
 	std::regex converge_match(R"(([ ]*)converge\(([^\)]*)\):)");

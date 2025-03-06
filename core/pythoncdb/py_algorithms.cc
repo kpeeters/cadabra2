@@ -257,6 +257,22 @@ namespace cadabra {
 
 				}
 				);
+
+		m.def("Re",
+				[](Ex_ptr ex) {
+				Ex ret(ex->begin());
+				ret.wrap(ret.begin(), str_node("\\Re"));
+				return ret;
+				}
+				);
+		
+		m.def("Im",
+				[](Ex_ptr ex) {
+				Ex ret(ex->begin());
+				ret.wrap(ret.begin(), str_node("\\Im"));
+				return ret;
+				}
+				);
 		
 		m.def("get_num_rules", []() {
 			return substitute::cache_size();
