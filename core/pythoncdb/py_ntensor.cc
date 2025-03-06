@@ -3,7 +3,7 @@
 
 namespace py = pybind11;
 
-// #define DEBUG
+// #define DEBUG 1
 
 namespace cadabra {
 	void init_ntensor(py::module& m) {
@@ -14,9 +14,15 @@ namespace cadabra {
 				size_t stride=sizeof(std::complex<double>);
 				std::vector<size_t> strides(nt.shape.size(), 0);
 				for(size_t i=0; i<nt.shape.size(); i++) {
-					strides[i /* nt.shape.size()-1-i */] = stride;
-					stride *= nt.shape[i];
+					strides[nt.shape.size()-1-i] = stride;
+					stride *= nt.shape[nt.shape.size()-1-i];
 					}
+#ifdef DEBUG
+				for(size_t i=0; i<nt.shape.size(); ++i)
+					std::cerr << "shape " << i << " = " << nt.shape[i] << std::endl;
+				for(size_t i=0; i<strides.size(); ++i)
+					std::cerr << "stride " << i << " = " << strides[i] << std::endl;
+#endif
 				return py::buffer_info(
 					nt.values.data(),                         /* Pointer to buffer */
 					sizeof(double),                          /* Size of one scalar */
@@ -27,11 +33,14 @@ namespace cadabra {
 											  );
 				}
 			else {
+#ifdef DEBUG
+				//std::cerr << "at(10,20) = " << nt.at({10,20}) << std::endl;
+#endif
 				size_t stride=sizeof(std::complex<double>);
 				std::vector<size_t> strides(nt.shape.size(), 0);
 				for(size_t i=0; i<nt.shape.size(); i++) {
-					strides[i /*nt.shape.size()-1-i*/] = stride;
-					stride *= nt.shape[i];
+					strides[nt.shape.size()-1-i] = stride;
+					stride *= nt.shape[nt.shape.size()-1-i];
 					}
 #ifdef DEBUG
 				for(size_t i=0; i<nt.shape.size(); ++i)

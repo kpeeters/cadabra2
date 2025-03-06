@@ -245,16 +245,8 @@ namespace cadabra {
 
 				nds.set_range( py::cast<Ex>(range[0]), py::cast<double>(range[1]), py::cast<double>(range[2]));
 				
-//				for(const auto& dv: d) {
-//					// std::cerr << dv.first << std::endl;
-////					values.push_back(std::make_pair(py::cast<Ex>(dv.first), py::cast<std::vector<double>>(dv.second)));
-//					ev.set_variable(py::cast<Ex>(dv.first), py::cast<std::vector<double>>(dv.second));
-//					}
 				auto res = nds.integrate();
 				return res;
-//				nevaluate algo(*get_kernel_from_scope(), *ex, values);
-//				algo.apply
-
 				}
 				);
 
