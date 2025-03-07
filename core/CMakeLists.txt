@@ -211,6 +211,7 @@ set(MODULE_SRC_FILES
 
 set(LOCAL_SRC_FILES
   NDSolver.cc
+  NIntegrator.cc  
   NEvaluator.cc
   NTensor.cc
   InstallPrefix.cc

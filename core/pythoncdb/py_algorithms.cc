@@ -7,6 +7,7 @@
 #include "../Algorithm.hh"
 #include "../NEvaluator.hh"
 #include "../NDSolver.hh"
+#include "../NIntegrator.hh"
 
 #include "../algorithms/canonicalise.hh"
 #include "../algorithms/collect_components.hh"
@@ -251,6 +252,17 @@ namespace cadabra {
 				nds.set_range( py::cast<Ex>(range[0]), py::cast<double>(range[1]), py::cast<double>(range[2]));
 				
 				auto res = nds.integrate();
+				return res;
+				}
+				);
+
+		m.def("nintegrate",
+				[](Ex_ptr ex, py::dict ranges) {
+				NIntegrator ni(*ex);
+				
+				ni.set_range( Ex("x"), 0, 1);
+				
+				auto res = ni.integrate();
 				return res;
 				}
 				);
