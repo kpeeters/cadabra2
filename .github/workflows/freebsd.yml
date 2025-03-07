@@ -20,12 +20,11 @@ jobs:
       with:
         usesh: true
         prepare: |
-          pkg install -y curl
+          pkg install -y curl cmake python311 gettext-runtime pkgconf boost-python-libs@py311 boost-libs
+          pkg install -y fontconfig harfbuzz pcre jsoncpp gmp atkmm cairomm glibmm gtkmm30 pangomm
 
         run: |
           pwd
-          ls -lah
-          whoami
           env
           freebsd-version
           sysctl hw.model
