@@ -1,0 +1,37 @@
+# This is a build which gets triggered on every commit push, to
+# ensure that we get some warnings when we push code that does
+# not build on Linux.
+
+name: FreeBSD
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build and test in FreeBSD
+      id: test
+      uses: vmactions/freebsd-vm@v1
+      with:
+        usesh: true
+        prepare: |
+          pkg install -y curl
+
+        run: |
+          pwd
+          ls -lah
+          whoami
+          env
+          freebsd-version
+          sysctl hw.model
+          sysctl hw.ncpu
+          sysctl hw.physmem
+          sysctl hw.usermem
+          mkdir build && cd build && cmake -DENABLE_MATHEMATICA=OFF ..
+          make
+
