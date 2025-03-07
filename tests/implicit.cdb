@@ -127,7 +127,7 @@ def test10():
     assert(tst==0)
     print("Test 10 passed")
 
-if sys.platform == "darwin" or sys.platform == "freebsd":
+if sys.platform == "darwin" or sys.platform.startswith("freebsd"):
     print("Skipping test 10, segfault on Darwin/FreeBSD.")
 else:
     test10()
