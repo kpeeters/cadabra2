@@ -22,7 +22,7 @@ jobs:
         prepare: |
           pkg install -y curl cmake python311 gettext-runtime pkgconf boost-libs
           pkg install -y fontconfig harfbuzz pcre jsoncpp gmp atkmm cairomm glibmm gtkmm30 pangomm
-          pkg install -y git
+          pkg install -y git py-sympy
 
         run: |
           pwd
@@ -34,4 +34,5 @@ jobs:
           sysctl hw.usermem
           mkdir build && cd build && cmake -DENABLE_MATHEMATICA=OFF ..
           make
-
+          make install
+          make test
