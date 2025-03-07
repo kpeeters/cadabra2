@@ -35,4 +35,4 @@ jobs:
           mkdir build && cd build && cmake -DENABLE_MATHEMATICA=OFF ..
           make
           make install
-          make test
+          make check

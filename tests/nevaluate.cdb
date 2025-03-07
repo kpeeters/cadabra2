@@ -62,6 +62,3 @@ def test04():
 
 test04()
 
-ex:=\cos(v x);
-vv=0.2
-substitute(ex, $v -> @(vv)$);
