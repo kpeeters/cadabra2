@@ -22,6 +22,7 @@ jobs:
         prepare: |
           pkg install -y curl cmake python311 gettext-runtime pkgconf boost-libs
           pkg install -y fontconfig harfbuzz pcre jsoncpp gmp atkmm cairomm glibmm gtkmm30 pangomm
+          pkg install -y git
 
         run: |
           pwd
