@@ -656,30 +656,35 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 	else {
 		if(it->textbuf.size()>0) {
 			if(it->cell_type!=DataCell::CellType::document
-			      && it->cell_type!=DataCell::CellType::latex
-			      && it->cell_type!=DataCell::CellType::input_form) {
-				std::string lr(it->textbuf);
-				// Make sure to sync these with the same in TeXEngine.cc !!!
-				lr=std::regex_replace(lr, std::regex(R"(\\left\()"),            "\\brwrap{(}{");
-				lr=std::regex_replace(lr, std::regex(R"(\\right\))"),           "}{)}");
-				lr=std::regex_replace(lr, std::regex(R"(\\left\[)"),            "\\brwrap{[}{");
-				lr=std::regex_replace(lr, std::regex(R"(\\left\.)"),            "\\brwrap{.}{");
-				lr=std::regex_replace(lr, std::regex(R"(\\right\])"),           "}{]}");
-				lr=std::regex_replace(lr, std::regex(R"(\\left\\\{)"),            "\\brwrap{\\{}{");
-				lr=std::regex_replace(lr, std::regex(R"(\\right\\\})"),           "}{\\}}");
-				lr=std::regex_replace(lr, std::regex(R"(\\right\.)"),            "}{.}");
+				&& it->cell_type!=DataCell::CellType::latex
+				&& it->cell_type!=DataCell::CellType::input_form) {
+
+				if(!doc.hide_input_cells ||
+					(it->cell_type!=DataCell::CellType::python && it->cell_type!=DataCell::CellType::latex)) {
+						
+					std::string lr(it->textbuf);
+					// Make sure to sync these with the same in TeXEngine.cc !!!
+					lr=std::regex_replace(lr, std::regex(R"(\\left\()"),            "\\brwrap{(}{");
+					lr=std::regex_replace(lr, std::regex(R"(\\right\))"),           "}{)}");
+					lr=std::regex_replace(lr, std::regex(R"(\\left\[)"),            "\\brwrap{[}{");
+					lr=std::regex_replace(lr, std::regex(R"(\\left\.)"),            "\\brwrap{.}{");
+					lr=std::regex_replace(lr, std::regex(R"(\\right\])"),           "}{]}");
+					lr=std::regex_replace(lr, std::regex(R"(\\left\\\{)"),            "\\brwrap{\\{}{");
+					lr=std::regex_replace(lr, std::regex(R"(\\right\\\})"),           "}{\\}}");
+					lr=std::regex_replace(lr, std::regex(R"(\\right\.)"),            "}{.}");
 //				lr=std::regex_replace(lr, std::regex(R"(\\begin\{verbatim\})"), "");
 //				lr=std::regex_replace(lr, std::regex(R"(\\end\{verbatim\})"),   "");
-				lr=std::regex_replace(lr, std::regex(R"(\\begin\{dmath\*\})"),  "\\begin{adjustwidth}{1em}{0cm}$");
-				lr=std::regex_replace(lr, std::regex(R"(\\end\{dmath\*\})"),    "$\\end{adjustwidth}");
-				lr=std::regex_replace(lr, std::regex(R"(\\algorithm\{(.*)_(.*)\})"), "\\algorithm{$1\\textunderscore{}$2}");
-				lr=std::regex_replace(lr, std::regex(R"(\\algorithm\{(.*)_(.*)\})"), "\\algorithm{$1\\textunderscore{}$2}");
-				lr=std::regex_replace(lr, std::regex(R"(🍅)"), "*");
-				str << lr << "\n";
+					lr=std::regex_replace(lr, std::regex(R"(\\begin\{dmath\*\})"),  "\\begin{adjustwidth}{1em}{0cm}$");
+					lr=std::regex_replace(lr, std::regex(R"(\\end\{dmath\*\})"),    "$\\end{adjustwidth}");
+					lr=std::regex_replace(lr, std::regex(R"(\\algorithm\{(.*)_(.*)\})"), "\\algorithm{$1\\textunderscore{}$2}");
+					lr=std::regex_replace(lr, std::regex(R"(\\algorithm\{(.*)_(.*)\})"), "\\algorithm{$1\\textunderscore{}$2}");
+					lr=std::regex_replace(lr, std::regex(R"(🍅)"), "*");
+					str << lr << "\n";
+					}
 				}
 			}
 		}
-
+	
 	switch(it->cell_type) {
 		case DataCell::CellType::python:
 		case DataCell::CellType::output:

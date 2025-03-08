@@ -3111,6 +3111,9 @@ void NotebookWindow::on_prefs_hide_input_cells(const Glib::VariantBase& vb)
 	
 	if(doc.hide_input_cells == !state) return;
 
+	modified=true;
+	update_title();
+	
 	doc.hide_input_cells = !state;
 	action_hide_input_cells->set_state(Glib::Variant<bool>::create(doc.hide_input_cells));
 	prefs.save();
