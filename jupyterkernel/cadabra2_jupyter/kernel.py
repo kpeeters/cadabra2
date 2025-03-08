@@ -52,7 +52,8 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
 
         try:
             #  main execution calls
-            pycode = self._parse_cadabra(code, True)
+            errstr = ""
+            pycode = self._parse_cadabra(code, True, errstr)
             self._execute_python(pycode)
 
         except KeyboardInterrupt:
