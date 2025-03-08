@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2001-2024 Kasper Peeters <info@cadabra.science> -->
+<!-- Copyright 2001-2025 Kasper Peeters <info@cadabra.science> -->
 <component type="desktop-application">
   <id>science.cadabra.cadabra2-gtk</id>
   <metadata_license>FSFAP</metadata_license>
