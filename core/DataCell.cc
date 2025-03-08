@@ -28,6 +28,16 @@ static std::string trim(const std::string& s)
 	return std::string(s, b, e - b + 1);
 	}
 
+DTree::DTree()
+	: tree<DataCell>(), hide_input_cells(false)
+	{
+	}
+
+DTree::DTree(const iterator& it)
+	: tree<DataCell>(it), hide_input_cells(false)
+	{
+	}
+
 bool DataCell::id_t::operator<(const DataCell::id_t& other) const
 	{
 	if(created_by_client != other.created_by_client) return created_by_client;
@@ -324,10 +334,14 @@ std::string cadabra::JSON_serialise(const DTree& doc)
 void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, nlohmann::json& json)
 	{
 	switch(it->cell_type) {
-		case DataCell::CellType::document:
+		case DataCell::CellType::document: {
 			json["description"]="Cadabra JSON notebook format";
 			json["version"]=1.0;
+			nlohmann::json flags;
+			flags["hide_input_cells"] = doc.hide_input_cells;
+			json["flags"]=flags;
 			break;
+			}
 		case DataCell::CellType::python:
 			json["cell_type"]="input";
 			break;
@@ -429,6 +443,10 @@ void cadabra::JSON_deserialise(const std::string& cj, DTree& doc)
 	
 	// Scan through json file.
 	const nlohmann::json& cells = root["cells"];
+	if(root.count("flags")>0) {
+		const nlohmann::json& flags = root["flags"];
+		doc.hide_input_cells = flags.value("hide_input_cells", false);
+		}
 	JSON_in_recurse(doc, doc_it, cells);
 	}
 

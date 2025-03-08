@@ -237,6 +237,10 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	action_auto_close_latex->signal_activate().connect( sigc::mem_fun(*this, &NotebookWindow::on_prefs_auto_close_latex) );
 	actiongroup->add_action(action_auto_close_latex);
 
+	action_hide_input_cells = Gio::SimpleAction::create_bool("HideInputCells", doc.hide_input_cells);
+	action_hide_input_cells->signal_activate().connect( sigc::mem_fun(*this, &NotebookWindow::on_prefs_hide_input_cells) );
+	actiongroup->add_action(action_hide_input_cells);
+
 	// View menu actions.
 	actiongroup->add_action( "ViewSplit",             sigc::mem_fun(*this, &NotebookWindow::on_view_split) );
 	action_view_close = Gio::SimpleAction::create("ViewClose");
@@ -406,6 +410,10 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	   "        <item>"
 		"          <attribute name='label'>Auto-close LaTeX cells</attribute>"
 		"          <attribute name='action'>cdb.AutoCloseLaTeX</attribute>"
+		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Hide input cells</attribute>"
+		"          <attribute name='action'>cdb.HideInputCells</attribute>"
 		"        </item>"
 		"      </section>"
 		"    </submenu>"
@@ -1847,6 +1855,7 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int )
 	// the CodeInput widget (but not anything else in its vbox).
 
 	if(read_only) return false;
+	if(doc.hide_input_cells) return false;
 	
 	auto parent=DTree::parent(it);
 	if(parent->cell_type==DataCell::CellType::latex) {
@@ -2188,6 +2197,11 @@ void NotebookWindow::load_file(const std::string& notebook_contents)
 bool NotebookWindow::on_first_redraw()
 	{
 	mainbox.set_sensitive(true);
+	if(doc.hide_input_cells)
+		propagate_global_hide_flag();
+
+	action_hide_input_cells->set_state(Glib::Variant<bool>::create(doc.hide_input_cells));
+
 	return false;
 	}
 
@@ -3088,6 +3102,45 @@ void NotebookWindow::on_prefs_auto_close_latex(const Glib::VariantBase& vb)
 	prefs.auto_close_latex = !state;
 	action_auto_close_latex->set_state(Glib::Variant<bool>::create(prefs.auto_close_latex));
 	prefs.save();
+	}
+
+void NotebookWindow::on_prefs_hide_input_cells(const Glib::VariantBase& vb)
+	{
+	auto state_variant = action_hide_input_cells->get_state_variant(); //.get_bool();
+	bool state = Glib::VariantBase::cast_dynamic<Glib::Variant<bool>>(state_variant).get();
+	
+	if(doc.hide_input_cells == !state) return;
+
+	doc.hide_input_cells = !state;
+	action_hide_input_cells->set_state(Glib::Variant<bool>::create(doc.hide_input_cells));
+	prefs.save();
+
+	propagate_global_hide_flag();
+	}
+
+void NotebookWindow::propagate_global_hide_flag()
+	{
+	auto ch=doc.begin();
+	while(ch!=doc.end()) {
+		if(ch->cell_type==DataCell::CellType::python || ch->cell_type==DataCell::CellType::latex) {
+			for(unsigned int i=0; i<canvasses.size(); ++i) {
+				auto vis = canvasses[i]->visualcells.find(&(*ch));
+				if(vis==canvasses[i]->visualcells.end()) {
+					throw std::logic_error("Cannot find visual cell.");
+					}
+				else {
+					if(doc.hide_input_cells) {
+						(*vis).second.inbox->edit.hide();
+						}
+					else {
+						if(!ch->hidden)
+							(*vis).second.inbox->edit.show();
+						}
+					}
+				}
+			}
+		++ch;
+		}
 	}
 
 void NotebookWindow::on_prefs_font_size(int num)

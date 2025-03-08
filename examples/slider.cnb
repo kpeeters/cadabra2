@@ -208,5 +208,8 @@
 		}
 	],
 	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": true
+	},
 	"version": 1.0
 }

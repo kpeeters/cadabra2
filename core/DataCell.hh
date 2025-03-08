@@ -113,7 +113,13 @@ namespace cadabra {
 			id_t                          serial_number;
 		};
 
-	typedef tree<DataCell> DTree;
+	class DTree : public tree<DataCell> {
+		public:
+			DTree();
+			DTree(const iterator&);
+				
+			bool hide_input_cells;
+	};
 
 	/// Serialise a document into .cj format, which is a JSON version of
 	/// the document tree.

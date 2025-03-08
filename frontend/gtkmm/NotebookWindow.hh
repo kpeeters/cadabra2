@@ -237,6 +237,7 @@ namespace cadabra {
 
 			void on_prefs_set_cv(int vis);
 			void on_prefs_auto_close_latex(const Glib::VariantBase& vb);
+			void on_prefs_hide_input_cells(const Glib::VariantBase& vb);			
 			void on_prefs_font_size(int num);
 			void on_prefs_highlight_syntax(bool on);
 			void on_prefs_microtex(bool on);
@@ -303,6 +304,8 @@ namespace cadabra {
 
 			bool on_tex_error(const std::string&, DTree::iterator);
 
+			void propagate_global_hide_flag();
+			
 			// Styling through CSS
 			void                           load_css();
 			Glib::RefPtr<Gtk::CssProvider> css_provider;
@@ -328,7 +331,7 @@ namespace cadabra {
 			// enable/disable them at runtime.
 			Glib::RefPtr<Gio::SimpleAction> action_copy, action_undo, action_redo,
 				action_paste, action_view_close, action_fontsize, action_highlight,
-				action_auto_close_latex,
+				action_auto_close_latex, action_hide_input_cells,
 				action_stop, action_register, action_console, action_microtex;
 
 			// Transition animations.
