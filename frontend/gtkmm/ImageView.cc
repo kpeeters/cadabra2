@@ -55,6 +55,7 @@ void ImageView::on_save_as() const
 	                              Gtk::FILE_CHOOSER_ACTION_SAVE);
 
 //	dialog.set_transient_for(*this);
+	dialog.set_do_overwrite_confirmation(true);
 	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
 
