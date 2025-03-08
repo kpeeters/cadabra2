@@ -835,6 +835,8 @@ void NotebookWindow::load_css()
 	data += "#TeXArea:selected { background-color: #eee; color: #000; }\n";
 	data += "spinner { background: none; opacity: 1; -gtk-icon-source: -gtk-icontheme(\"process-working-symbolic\"); }\n";
 	data += "spinner:checked { opacity: 1; animation: spin 1s linear infinite; }\n";
+	data += "scale slider { background-color: @selected_bg_color; }\n";
+	data += "scale { margin-bottom: 10px; }\n";
 
 	// Some of the css properties defined in gtk-cadabra.css are overridden, and so are included
 	// here to force them to be used
