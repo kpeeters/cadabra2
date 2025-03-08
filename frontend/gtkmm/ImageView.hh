@@ -3,6 +3,7 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>
+#include <gtkmm/menu.h>
 #ifndef USE_GTK4
 #include <gtkmm/eventbox.h>
 #endif
@@ -58,6 +59,7 @@ namespace cadabra {
 			virtual bool on_motion_notify_event(GdkEventMotion *event) override;
 			virtual bool on_button_press_event(GdkEventButton *event) override;
 			virtual bool on_button_release_event(GdkEventButton *event) override;
+			void on_save_as() const;
 			
 			void set_image_from_base64(const std::string& b64);
 			void set_image_from_svg(const std::string& svg);
@@ -68,6 +70,9 @@ namespace cadabra {
 			bool      sizing;
 			double    prev_x, prev_y;
 			int       height_at_press, width_at_press;
+
+			Gtk::Menu     context_menu;
+			Gtk::MenuItem item_save_as;
 	};
 	
 };

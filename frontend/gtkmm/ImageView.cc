@@ -9,6 +9,7 @@
 #include <gdkmm/general.h> // set_source_pixbuf()
 #include <cairomm/surface.h>
 #include <cairomm/context.h>
+#include <gtkmm/filechooserdialog.h>
 
 #include <iostream>
 #include <fstream>
@@ -35,12 +36,37 @@ ImageView::ImageView(double display_scale_, int logical_width_)
 	           | Gdk::BUTTON_RELEASE_MASK
 	           | Gdk::POINTER_MOTION_MASK);
 
+	context_menu.append(item_save_as);
+	item_save_as.set_label("Save as SVG...");
+	context_menu.show_all();
+	item_save_as.signal_activate().connect(sigc::mem_fun(*this, &ImageView::on_save_as));
+	 
 	set_name("ImageView"); // to be able to style it with CSS
 	show_all();
 	}
 
 ImageView::~ImageView()
 	{
+	}
+
+void ImageView::on_save_as() const
+	{
+	Gtk::FileChooserDialog dialog("Please enter a file name for the SVG image",
+	                              Gtk::FILE_CHOOSER_ACTION_SAVE);
+
+//	dialog.set_transient_for(*this);
+	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+	dialog.add_button("Select", Gtk::RESPONSE_OK);
+
+	int result=dialog.run();
+
+	switch(result) {
+		case(Gtk::RESPONSE_OK): {
+			std::string name = dialog.get_filename();
+			std::ofstream temp(name);
+			temp << area.decoded;
+			}
+		}
 	}
 
 bool ImageView::on_motion_notify_event(GdkEventMotion *event)
@@ -56,12 +82,17 @@ bool ImageView::on_motion_notify_event(GdkEventMotion *event)
 bool ImageView::on_button_press_event(GdkEventButton *event)
 	{
 	if(event->type==GDK_BUTTON_PRESS) {
-		sizing=true;
-		prev_x=event->x;
-		prev_y=event->y;
-		width_at_press=area.pixbuf->get_width()/area.display_scale;
-		// std::cerr << "width_at_press = " << width_at_press << std::endl;
-		height_at_press=area.pixbuf->get_height()/area.display_scale;
+		if(event->button == 1) {
+			sizing=true;
+			prev_x=event->x;
+			prev_y=event->y;
+			width_at_press=area.pixbuf->get_width()/area.display_scale;
+			// std::cerr << "width_at_press = " << width_at_press << std::endl;
+			height_at_press=area.pixbuf->get_height()/area.display_scale;
+			}
+		else if(event->button == 3) {
+			context_menu.popup_at_pointer((GdkEvent*)event);
+			}
 		}
 	return true;
 	}
