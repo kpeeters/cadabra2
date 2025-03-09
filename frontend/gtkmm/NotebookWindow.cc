@@ -63,7 +63,9 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	, read_only(ro)
 	, crash_window_hidden(true)
 	, last_configure_width(0)
+	, follow_mode(false)
 	, follow_cell(doc.end())
+	, follow_last_cell(doc.end())
 	, tex_running(false), tex_need_width(0)
 	, last_find_location(doc.end(), std::string::npos)
 	, is_configured(false)
@@ -780,16 +782,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// FIXME: need to do this for every canvas.
 	canvasses[0]->scroll.signal_size_allocate().connect(
 	   sigc::mem_fun(*this, &NotebookWindow::on_scroll_size_allocate));
-	//	canvasses[0]->scroll.get_vadjustment()->signal_value_changed().connect(
-	//		sigc::mem_fun(*this, &NotebookWindow::on_vscroll_changed));
-	canvasses[0]->scroll.get_vscrollbar()->signal_change_value().connect(
-	   sigc::mem_fun(*this, &NotebookWindow::on_vscroll_changed));
-	//	canvasses[0]->ebox.signal_button_press_event().connect(
-	//		sigc::mem_fun(*this, &NotebookWindow::on_mouse_wheel));
 
-	canvasses[0]->scroll.signal_scroll_event().connect(
-	   sigc::mem_fun(*this, &NotebookWindow::on_scroll), false);
-
+	canvasses[0]->scroll_event.connect(sigc::mem_fun(*this, &NotebookWindow::on_scroll_changed));
 
 	// Window size and title, and ready to go.
 	if(!ro) {
@@ -1142,6 +1136,13 @@ void NotebookWindow::on_kernel_runstatus(bool running)
 	{
 	std::lock_guard<std::mutex> guard(status_mutex);
 	kernel_spinner_status=running;
+	if(!running) {
+		if(follow_mode && follow_last_cell!=doc.end()) {
+			follow_cell=doc.end();
+			scroll_cell_into_view(follow_last_cell);
+			follow_last_cell=doc.end();
+			}
+		}
 	dispatcher.emit();
 	}
 
@@ -1463,6 +1464,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			if(it->cell_type==DataCell::CellType::document) {
 				canvasses[i]->scroll.add(*w);
 				w->show_all(); // FIXME: if you drop this, the whole document remains invisible
+
+				canvasses[i]->connect_scroll_listener();
 				continue;
 				}
 
@@ -1502,6 +1505,14 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			if(visible) {
 				w->show_all();
 				w->show_now();
+				}
+
+			if(follow_mode) {
+				follow_cell=it;
+				// Have to wait for the cell to be realised by GTK, we cannot
+				// scroll there immediately because GTK will not know where to
+				// scroll.
+            // scroll_cell_into_view(it);
 				}
 			}
 
@@ -1704,6 +1715,9 @@ void NotebookWindow::position_cursor(const DTree&, DTree::iterator it, int pos)
 		}
 
 	current_cell=it;
+	if(follow_mode)
+		scroll_cell_into_view(it);
+	
 	update_title();
 	}
 
@@ -1745,12 +1759,14 @@ size_t NotebookWindow::get_cursor_position(const DTree&, DTree::iterator it)
 void NotebookWindow::scroll_current_cell_into_view()
 	{
 	if(current_cell==doc.end()) return;
+	// FIXME: this gets triggered *a lot* on animations
+//	std::cerr << "---- scroll current into view" << std::endl;
 	scroll_cell_into_view(current_cell);
 	}
 
 void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 	{
-//	std::cerr << "-----" << std::endl;
+//	std::cerr << "----- scroll into view" << std::endl;
 //	std::cerr << "cell content to show: " << cell->textbuf << std::endl;
 
 	if(current_canvas>=(int)canvasses.size()) return;
@@ -1759,7 +1775,7 @@ void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 
 	const VisualCell& focusbox = canvasses[current_canvas]->visualcells[&(*cell)];
 
-	if(focusbox.inbox==0) return;
+//	if(focusbox.inbox==0) return;
 
 	Gtk::Allocation               al;
 	if(cell->cell_type==DataCell::CellType::python ||
@@ -1802,11 +1818,10 @@ void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 		}
 	}
 
-bool NotebookWindow::on_vscroll_changed(Gtk::ScrollType, double )
+bool NotebookWindow::on_scroll_changed()
 	{
-	//	std::cerr << "vscroll changed " << std::endl;
-	// FIXME: does not catch scroll wheel events.
 	follow_cell=doc.end();
+	follow_mode=false;
 	return false;
 	}
 
@@ -1814,22 +1829,6 @@ void NotebookWindow::on_slider_changed(std::string variable, double value)
 	{
 	run_cells_referencing_variable(variable, value);
  	// std::cerr << "Variable " << variable << " changed to value " << value << std::endl;
-	}
-
-//bool NotebookWindow::on_mouse_wheel(GdkEventButton *b)
-//	{
-//	if(b->button==2)
-//		follow_cell=doc.end();
-//	return false;
-//	}
-
-bool NotebookWindow::on_scroll(GdkEventScroll *)
-	{
-	// We get here when the user rolls the scroll wheel inside the canvas;
-	// need to disable auto-follow.
-
-	follow_cell=doc.end();
-	return false;
 	}
 
 void NotebookWindow::on_scroll_size_allocate(Gtk::Allocation& )
@@ -1843,9 +1842,11 @@ void NotebookWindow::on_scroll_size_allocate(Gtk::Allocation& )
 	// though that is not of much extra use. Could have a 'follow
 	// current' mode when running an entire notebook, which is again
 	// stopped by scrollbar event.
+	
 	if(follow_cell!=doc.end()) {
-		//		std::cerr << "  scroll" << std::endl;
-		scroll_current_cell_into_view();
+//		std::cerr << "  scroll_size_allocate" << std::endl;
+//		scroll_current_cell_into_view();
+		scroll_cell_into_view(follow_cell);
 		}
 	}
 
@@ -2034,7 +2035,11 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number,
 
 	// Execute the cell.
 	set_stop_sensitive(true);
+
+	// Since the user has initiated this cell execution, we can
+	// turn on cell follow mode.
 	follow_cell=it;
+	follow_mode=true;
 	// std::cerr << "Executing cell " << it->id().id << std::endl;
 
 	// If this is a LaTeX input cell, and auto-close is turned on, close
@@ -2693,10 +2698,14 @@ void NotebookWindow::on_run_runall()
 	{
 	// FIXME: move to DocumentThread
 
+	follow_mode=true;
 	DTree::sibling_iterator sib=doc.begin(doc.begin());
+	follow_last_cell = doc.end();
 	while(sib!=doc.end(doc.begin())) {
-		if(sib->cell_type==DataCell::CellType::python)
+		if(sib->cell_type==DataCell::CellType::python) {
 			cell_content_execute(DTree::iterator(sib), current_canvas, false);
+			follow_last_cell=DTree::iterator(sib);
+			}
 		++sib;
 		}
 	}
@@ -2715,13 +2724,15 @@ void NotebookWindow::on_run_runtocursor()
 
 void NotebookWindow::on_run_stop()
 	{
+	follow_last_cell=doc.end();
 	compute->stop();
 	}
 
 void NotebookWindow::on_kernel_restart()
 	{
 	// FIXME: add warnings
-
+	follow_last_cell=doc.end();
+	
 	compute->restart_kernel();
 
 		{

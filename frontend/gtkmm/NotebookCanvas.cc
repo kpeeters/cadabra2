@@ -11,12 +11,9 @@ NotebookCanvas::NotebookCanvas()
 	, scroller(scroll.get_vadjustment())
 	{
 	// Pack the scroll widget with all document cells into the top pane.
-	pack1(ebox, true, true);
-	ebox.add(scroll);
+	pack1(scroll, true, true);
 	scroll.set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);
 	scroll.set_border_width(1);
-	//	scroll.add(ebox);
-	//	ebox.override_background_color(Gdk::RGBA("white"));
 
 	// Do NOT do the following. This will create areas at the top
 	// and bottom where the content of the scrolledwindow is
@@ -24,8 +21,6 @@ NotebookCanvas::NotebookCanvas()
 	// bottom of the content).
 	// scroll.override_background_color(Gdk::RGBA("white"));
 
-	ebox.set_events(Gdk::SCROLL_MASK | Gdk::SMOOTH_SCROLL_MASK | Gdk::BUTTON_PRESS_MASK);
-	//	scroll.set_overlay_scrolling(false);
 	}
 
 NotebookCanvas::~NotebookCanvas()
@@ -43,4 +38,31 @@ void NotebookCanvas::refresh_all()
 			}
 		++it;
 		}
+	}
+
+void NotebookCanvas::connect_scroll_listener()
+	{
+	// Ensure that if the content of the ScrolledWindow is scrolled, we
+	// immediately stop any scrolling that is still in progress (using
+	// the smooth scroller).
+
+	// Scrollbar drag.
+	scroll.get_vscrollbar()->signal_change_value().connect(
+		[this](Gtk::ScrollType, double) {
+		scroller.stop();
+		scroll_event();
+		return false;
+		});
+
+	// Catch mousewheel / trackpad scrolls.
+	if (auto viewport = dynamic_cast<Gtk::Viewport*>(scroll.get_child())) {
+		viewport->add_events(Gdk::SCROLL_MASK | Gdk::SMOOTH_SCROLL_MASK);
+		viewport->signal_scroll_event().connect(
+			[this](GdkEventScroll* event) -> bool {
+			scroller.stop();
+			scroll_event();
+			return false;
+			});
+		}
+
 	}

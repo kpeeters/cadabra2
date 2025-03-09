@@ -81,7 +81,11 @@ namespace cadabra {
 					FRAME_RATE_MS
 																					  );
 				}
-		
+
+			void stop() {
+			timeout_connection_.disconnect();
+			}
+			
 			void set_duration(double ms) {
 			duration_ms_ = ms;
 			}
@@ -94,13 +98,22 @@ namespace cadabra {
 
 			std::map<DataCell *, VisualCell> visualcells;
 
-			Gtk::EventBox             ebox;
 			Gtk::ScrolledWindow       scroll;
 			Gtk::Separator            bottomline;
 			SmoothScroller            scroller;
 
+			/// Whenever a user-driven scroll happens, this
+			/// event will fire. The canvas will make sure that
+			/// any scroll animation will stop, but NotebookWindow
+			/// may still want to stop any cell following.
+			sigc::signal0<bool>       scroll_event;
+			
 			void refresh_all();
 
+			/// Connect a listener to the scroll event on the viewport; this
+			/// needs to be called after the first (and only) widget has been
+			/// added to the canvas.
+			void connect_scroll_listener();
 		};
 
 	}

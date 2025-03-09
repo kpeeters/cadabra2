@@ -66,18 +66,13 @@ namespace cadabra {
 			double           scale; // total scale factor (hdpi and textscale)
 			double           display_scale; // hdpi scale only
 
-			// Handler for vertical scrollbar changes.
-			bool on_vscroll_changed(Gtk::ScrollType, double);
+			// Handler for vertical scrollbar changes. This gets connected to
+			// all the `NotebookCanvas::scroll_event` signals.
+			bool on_scroll_changed();
 
 			// Handler for SliderView change events.
 			void on_slider_changed(std::string variable, double value);
 			
-			// Handler for mouse wheel events.
-			// bool on_mouse_wheel(GdkEventButton*);
-
-			// Handler for scroll events.
-			bool on_scroll(GdkEventScroll*);
-
 			// When something inside the large notebook canvas changes, we need
 			// to make sure that the current cell stays into view (if we are
 			// editing that cell). We can only do that once all size info is
@@ -313,7 +308,11 @@ namespace cadabra {
 			void on_text_scaling_factor_changed(const std::string& key);
 
 			int             last_configure_width;
-			DTree::iterator follow_cell;
+			// If `follow_mode` is true, the `follow_cell` can be set,
+			// and this will make the canvas view follow the indicated
+			// cell.
+			bool            follow_mode;
+			DTree::iterator follow_cell, follow_last_cell;
 
 			// Mutex to protect the variables below.
 			std::recursive_mutex         tex_need_width_mutex;
