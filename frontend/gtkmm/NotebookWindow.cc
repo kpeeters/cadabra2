@@ -974,7 +974,10 @@ void NotebookWindow::resize_codeinput_texview(DTree::iterator it, int width)
 				}
 			}
 		}
-	else if(it->cell_type==DataCell::CellType::latex_view) {
+	else if(it->cell_type==DataCell::CellType::latex_view
+			  || it->cell_type==DataCell::CellType::output
+			  || it->cell_type==DataCell::CellType::verbatim
+			  || it->cell_type==DataCell::CellType::error) {
 		for(unsigned int i=0; i<canvasses.size(); ++i) {
 			auto fnd = canvasses[i]->visualcells.find(&(*it));
 			if(fnd != canvasses[i]->visualcells.end()) {
@@ -1353,7 +1356,6 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			case DataCell::CellType::output:
 			case DataCell::CellType::error:
 			case DataCell::CellType::verbatim:
-				// std::cerr << "creating verbatim cell for " << it->textbuf << std::endl;
 			case DataCell::CellType::latex_view: {
 				// FIXME: would be good to share the input and output of TeXView too.
 				// Right now nothing is shared...
@@ -1508,7 +1510,23 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				}
 
 			if(follow_mode) {
-				follow_cell=it;
+				// Find the next input cell.
+				auto nxt = it;
+				while(!doc.is_head(doc.parent(nxt)))
+					nxt = doc.parent(nxt);
+				do {
+					nxt.skip_children();
+					++nxt;
+					if(nxt==doc.end())
+						break;
+					} while(nxt->cell_type!=DataCell::CellType::python);
+				
+				if(nxt!=doc.end()) {
+					// std::cerr << "going to " << nxt->textbuf << std::endl;
+					follow_cell=nxt;
+					}
+				else
+					follow_cell=it;
 				// Have to wait for the cell to be realised by GTK, we cannot
 				// scroll there immediately because GTK will not know where to
 				// scroll.
@@ -1672,7 +1690,9 @@ void NotebookWindow::update_cell(const DTree&, DTree::iterator it)
 			vc.inbox->update_buffer();
 			vc.inbox->queue_draw();
 			}
-		else if(it->cell_type==DataCell::CellType::latex_view || it->cell_type==DataCell::CellType::verbatim
+		else if(it->cell_type==DataCell::CellType::latex_view
+				  || it->cell_type==DataCell::CellType::verbatim
+				  || it->cell_type==DataCell::CellType::error
 				  || it->cell_type==DataCell::CellType::output) {
 			vc.outbox->image.set_latex(it->textbuf);
 			vc.outbox->image.layout_latex();
@@ -1783,6 +1803,7 @@ void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 		al=focusbox.inbox->edit.get_allocation();
 	else if(cell->cell_type==DataCell::CellType::latex_view ||
 			  cell->cell_type==DataCell::CellType::output ||
+			  cell->cell_type==DataCell::CellType::error ||
 			  cell->cell_type==DataCell::CellType::verbatim)
 		al=focusbox.outbox->get_allocation();
 	else if(cell->cell_type==DataCell::CellType::image_png)
