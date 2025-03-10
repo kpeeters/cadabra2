@@ -20,6 +20,7 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, bool use_microtex_, int hma
 	, image(use_microtex_, this)
 	, engine(eng)
 	, use_microtex(use_microtex_)
+	, is_error(false)
 	{
 	// Still need to checkin even when using MicroTeX, otherwise
 	// all requests will be empty.
@@ -58,6 +59,11 @@ void TeXView::set_use_microtex(bool use_microtex_)
 	image.use_microtex = use_microtex_;
 	queue_draw();
 //	add(image);
+	}
+
+void TeXView::set_is_error(bool is_error_)
+	{
+	is_error=is_error_;
 	}
 
 float TeXView::text_size() const
@@ -307,7 +313,10 @@ bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 		Gdk::RGBA fg_colour;
 		// Theme colour names can be found at
 		// https://stackoverflow.com/questions/35045469/default-gtk-css-color-scheme
-		style_context->lookup_color("theme_text_color", fg_colour);
+		if(owner->is_error) 
+			style_context->lookup_color("error_color", fg_colour);
+		else
+			style_context->lookup_color("theme_text_color", fg_colour);
 		
 		auto surface = cr->get_target();
 		auto csurface = surface->cobj();

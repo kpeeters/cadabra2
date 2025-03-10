@@ -37,6 +37,8 @@ namespace cadabra {
 			sigc::signal1<bool, DTree::iterator>   show_hide_requested;
 
 			void set_use_microtex(bool);
+
+			void set_is_error(bool);
 					
 			DTree::iterator           datacell;
 			Gtk::Revealer             rbox;
@@ -122,6 +124,7 @@ namespace cadabra {
 		private:
 			TeXEngine& engine;
 			bool use_microtex;
+			bool is_error;
 			
 			float text_size() const;
 		};

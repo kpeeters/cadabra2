@@ -420,10 +420,10 @@ void ComputeThread::on_message(const std::string& msg)
 					docthread->queue_action(action);
 					}
 				else if (msg_type == "error") {
-					std::string error = "{\\color{red}{\\begin{verbatim}" + content["output"].get<std::string>()
-					                    + "\\end{verbatim}}}";
+					std::string error = "\\begin{verbatim}" + content["output"].get<std::string>()
+					                    + "\\end{verbatim}";
 					if (msg_type == "fault") {
-						error = "{\\color{red}{Kernel fault}}\\begin{small}" + error + "\\end{small}";
+						error = "Kernel fault\\begin{small}" + error + "\\end{small}";
 						}
 
 					// Stick an AddCell action onto the stack. We instruct the

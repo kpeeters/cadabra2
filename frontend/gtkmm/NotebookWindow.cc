@@ -1360,6 +1360,9 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				// FIXME: would be good to share the input and output of TeXView too.
 				// Right now nothing is shared...
 				newcell.outbox = manage( new TeXView(engine, it, prefs.microtex) );
+				if(it->cell_type==DataCell::CellType::error)
+					newcell.outbox->set_is_error(true);
+				
 				newcell.outbox->window_width = last_configure_width;
 				// std::cerr << "Add widget " << newcell.outbox << " for cell " << it->id().id << std::endl;
 				newcell.outbox->tex_error.connect(
