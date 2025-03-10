@@ -153,7 +153,7 @@ namespace cadabra {
 			/// Create a single-node Ex representing the given integer.
 			Ex(int);
 			/// Create a single-node Ex representing the given float.
-			Ex(float);
+			Ex(double);
 
 			Ex& operator=(Ex);
 			

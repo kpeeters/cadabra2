@@ -5,7 +5,7 @@
 using namespace cadabra;
 
 NIntegrator::NIntegrator(const Ex& ex)
-	: integrand(ex), evaluator(NEvaluator(ex))
+	: evaluator(NEvaluator(ex)), integrand(ex)
 	{
 	}
 

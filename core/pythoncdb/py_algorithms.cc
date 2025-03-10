@@ -8,6 +8,7 @@
 #include "../NEvaluator.hh"
 #include "../NDSolver.hh"
 #include "../NIntegrator.hh"
+#include "../NTensor.hh"
 
 #include "../algorithms/canonicalise.hh"
 #include "../algorithms/collect_components.hh"
@@ -76,6 +77,9 @@
 
 namespace cadabra {
 	namespace py = pybind11;
+
+	void                                                                set_variables(NEvaluator& evaluator, py::dict d);
+	std::tuple<Ex, NTensor, std::complex<double>, std::complex<double>> extract_var_range(py::dict d);
 
 	void init_algorithms(py::module& m)
 		{
@@ -153,41 +157,10 @@ namespace cadabra {
 
 //		def_algo<nevaluate>(m, "nevaluate", true, false, 0);
 
-		m.def("nrange",
-				// Given a dict of variable to value mappings, extract the
-				// single variable for which the value is an explicit or
-				// implicit range, and return a tuple consisting of the
-				// variable and the range. Throws an exception if there is
-				// more than one range, or none.
+		m.def("nrange", 
 				[](py::dict d) {
-				NTensor range(0);
-				Ex      rangevar;
-				bool found=false;
-				for(const auto& dv: d) {
-					py::object type_obj = py::type::of(dv.second);
-					std::string type_name = py::str(type_obj.attr("__name__"));
-					if(!(type_name=="float" || type_name=="complex" || type_name=="int")) {
-						if(found)
-							throw ArgumentException("nrange: found more than one variable with a value range.");
-
-						rangevar = py::cast<Ex>(dv.first);
-						if(type_name=="tuple") {
-							std::vector<double> rvec = py::cast<std::vector<double>>(dv.second);
-							if(rvec.size()!=2)
-								throw ArgumentException("nrange: value tuples must have exactly two elements (start, end); found "+std::to_string(rvec.size())+".");
-							range = NTensor::linspace(rvec[0], rvec[1], 100);
-							found = true;
-							}
-						else {
-							range = NTensor(py::cast<std::vector<double>>(dv.second));
-							found = true;
-							}
-						}
-					}
-				if(!found)
-					throw ArgumentException("nrange: not found any variable with a value range.");
-
-				return std::make_pair(rangevar, range);
+				auto ret = extract_var_range(d);
+				return std::make_pair(std::get<0>(ret), std::get<1>(ret));
 				}
 				);
 		
@@ -195,45 +168,7 @@ namespace cadabra {
 				[](Ex_ptr ex, py::dict d) {
 				std::vector<std::pair<Ex, NTensor>> values;
 				NEvaluator ev(*ex);
-				// For every variable in the dict, we can take either a numpy.array (or something that
-				// auto-converts to it), a tuple (interpreted as a range) or a single complex/double
-				// value. Figure out what it is, and convert to a vector of doubles.
-				for(const auto& dv: d) {
-					py::object type_obj = py::type::of(dv.second);
-					std::string type_name = py::str(type_obj.attr("__name__"));
-					if(type_name=="float") {
-						std::vector<double> vec;
-						vec.push_back(py::cast<double>(dv.second));
-						ev.set_variable(py::cast<Ex>(dv.first), vec);
-						}
-					else if(type_name=="int") {
-						std::vector<double> vec;
-						vec.push_back(py::cast<int>(dv.second));
-						ev.set_variable(py::cast<Ex>(dv.first), vec);
-						}
-					else if(type_name=="complex") {
-						std::vector<std::complex<double>> vec;
-						vec.push_back(py::cast<std::complex<double>>(dv.second));
-						ev.set_variable(py::cast<Ex>(dv.first), vec);
-						}
-					else if(type_name=="tuple") {
-						std::vector<double> rvec = py::cast<std::vector<double>>(dv.second);
-						if(rvec.size()!=2)
-							throw ArgumentException("nevaluate: value tuples must have exactly two elements (start, end); found "+std::to_string(rvec.size())+".");
-						auto range = NTensor::linspace(rvec[0], rvec[1], 100);
-						ev.set_variable(py::cast<Ex>(dv.first), range);
-						}
-					else {
-						ev.set_variable(py::cast<Ex>(dv.first), py::cast<std::vector<double>>(dv.second));
-						}
-					}
-				ev.set_lookup_function([](const Ex& var) {
-					Kernel *kernel = get_kernel_from_scope();
-					auto imaginaryI = kernel->properties.get<ImaginaryI>(var.begin());
-					if(imaginaryI) return std::complex<double>(0, 1.0);
-					
-					throw std::logic_error("No value.");
-					});
+				set_variables(ev, d);
 				auto res = ev.evaluate();
 				return res;
 				}
@@ -259,11 +194,20 @@ namespace cadabra {
 		m.def("nintegrate",
 				[](Ex_ptr ex, py::dict ranges) {
 				NIntegrator ni(*ex);
-				
-				ni.set_range( Ex("x"), 0, 1);
+
+				// Set all variables from the given dict entries.
+				set_variables(ni.evaluator, ranges);
+
+				// Set the integration range.
+				auto var_range = extract_var_range(ranges);
+				ni.set_range( std::get<0>(var_range), std::get<2>(var_range).real(), std::get<3>(var_range).real() );
 				
 				auto res = ni.integrate();
-				return res;
+				// FIXME: we need to have a better test for real integrands
+				if(std::abs(res.imag()) > 5.0*std::numeric_limits<double>::epsilon())
+					return py::cast(res);
+				else
+					return py::cast(res.real());
 				}
 				);
 
@@ -287,4 +231,91 @@ namespace cadabra {
 			return substitute::cache_size();
 			});
 		}
-	}
+
+	void set_variables(NEvaluator& ev, py::dict d)
+		{
+		// For every variable in the dict, we can take either a numpy.array (or something that
+		// auto-converts to it), a tuple (interpreted as a range) or a single complex/double
+		// value. Figure out what it is, and convert to a vector of doubles.
+		
+		for(const auto& dv: d) {
+			py::object type_obj = py::type::of(dv.second);
+			std::string type_name = py::str(type_obj.attr("__name__"));
+			if(type_name=="float") {
+				std::vector<double> vec;
+				vec.push_back(py::cast<double>(dv.second));
+				ev.set_variable(py::cast<Ex>(dv.first), vec);
+				}
+			else if(type_name=="int") {
+				std::vector<double> vec;
+				vec.push_back(py::cast<int>(dv.second));
+				ev.set_variable(py::cast<Ex>(dv.first), vec);
+				}
+			else if(type_name=="complex") {
+				std::vector<std::complex<double>> vec;
+				vec.push_back(py::cast<std::complex<double>>(dv.second));
+				ev.set_variable(py::cast<Ex>(dv.first), vec);
+				}
+			else if(type_name=="tuple") {
+				std::vector<double> rvec = py::cast<std::vector<double>>(dv.second);
+				if(rvec.size()!=2)
+					throw ArgumentException("nevaluate: value tuples must have exactly two elements (start, end); found "+std::to_string(rvec.size())+".");
+				auto range = NTensor::linspace(rvec[0], rvec[1], 100);
+				ev.set_variable(py::cast<Ex>(dv.first), range);
+				}
+			else {
+				ev.set_variable(py::cast<Ex>(dv.first), py::cast<std::vector<double>>(dv.second));
+				}
+			}
+		ev.set_lookup_function([](const Ex& var) {
+			Kernel *kernel = get_kernel_from_scope();
+			auto imaginaryI = kernel->properties.get<ImaginaryI>(var.begin());
+			if(imaginaryI) return std::complex<double>(0, 1.0);
+			
+			throw std::logic_error("No value.");
+			});
+		}
+
+	std::tuple<Ex, NTensor, std::complex<double>, std::complex<double>> extract_var_range(py::dict d)
+		{
+		// Given a dict of variable to value mappings, extract the
+		// single variable for which the value is an explicit or
+		// implicit range, and return a tuple consisting of the
+		// variable and the range. Throws an exception if there is
+		// more than one range, or none.
+		NTensor range(0);
+		std::complex<double> start, end;
+		Ex      rangevar;
+		bool found=false;
+		for(const auto& dv: d) {
+			py::object type_obj = py::type::of(dv.second);
+			std::string type_name = py::str(type_obj.attr("__name__"));
+			if(!(type_name=="float" || type_name=="complex" || type_name=="int")) {
+				if(found)
+					throw ArgumentException("nrange: found more than one variable with a value range.");
+				
+				rangevar = py::cast<Ex>(dv.first);
+				if(type_name=="tuple") {
+					std::vector<double> rvec = py::cast<std::vector<double>>(dv.second);
+					if(rvec.size()!=2)
+						throw ArgumentException("nrange: value tuples must have exactly two elements (start, end); found "+std::to_string(rvec.size())+".");
+					range = NTensor::linspace(rvec[0], rvec[1], 100);
+					found = true;
+					start = rvec[0];
+					end   = rvec[1];
+					}
+				else {
+					auto manrange = py::cast<std::vector<double>>(dv.second);
+					start = manrange[0];
+					end   = manrange[manrange.size()-1];
+					range = NTensor(manrange);
+					found = true;
+					}
+				}
+			}
+		if(!found)
+			throw ArgumentException("nrange: not found any variable with a value range.");
+
+		return std::make_tuple(rangevar, range, start, end);
+		}
+}

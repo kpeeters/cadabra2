@@ -100,7 +100,7 @@ namespace cadabra {
 		multiply(begin()->multiplier, val);
 		}
 
-	Ex::Ex(float val)
+	Ex::Ex(double val)
 		: state_(result_t::l_no_action)
 		{
 		std::ostringstream str;

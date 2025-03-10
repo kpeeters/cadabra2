@@ -22,10 +22,13 @@ namespace cadabra {
 			
 			// Entry point.
 			std::complex<double> integrate();
+
+			// Object to evaluate the expression. Users of `NIntegrator`
+			// can set values for variables in this evaluator.
+			NEvaluator evaluator;
 			
 		private:
 			Ex         integrand, ivar;
-			NEvaluator evaluator;
 			double     range_from, range_to;
 };
 	

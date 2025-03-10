@@ -126,4 +126,4 @@ namespace cadabra {
 
 
 	void init_algorithms(pybind11::module& m);
-	}
+}

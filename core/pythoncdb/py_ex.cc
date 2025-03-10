@@ -580,6 +580,12 @@ namespace cadabra {
 		return ptr;
 		}
 
+	Ex_ptr Ex_from_float(double num, bool)
+		{
+		auto ptr = std::make_shared<Ex>(num);
+		return ptr;
+		}
+
 	void call_post_process(Kernel& kernel, Ex_ptr ex)
 		{
 		// Find the 'post_process' function, and if found, turn off
@@ -647,6 +653,7 @@ namespace cadabra {
 		pybind11::class_<Ex, Ex_ptr >(m, "Ex")
 		.def(py::init(&Ex_from_string), py::arg("input_form"), py::arg("make_ref") = true, py::arg("kernel") = nullptr)
 		.def(py::init(&Ex_from_int), py::arg("num"), py::arg("make_ref") = true)
+		.def(py::init(&Ex_from_float), py::arg("num"), py::arg("make_ref") = true)
 		.def("__str__", &Ex_as_str)
 		.def("_latex_", &Ex_as_latex)
 		.def("__repr__", &Ex_as_repr)
