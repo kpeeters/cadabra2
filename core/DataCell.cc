@@ -617,6 +617,7 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		case DataCell::CellType::latex_view:
 			break;
 		case DataCell::CellType::error:
+			str << "{\\color{red}";
 			break;
 		case DataCell::CellType::slider:
 			break;
@@ -694,12 +695,20 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 //			str << "\\end{verbatim}\n";
 			break;
 		case DataCell::CellType::document:
+			break;
 		case DataCell::CellType::latex:
+			break;
 		case DataCell::CellType::latex_view:
+			break;
 		case DataCell::CellType::input_form:
+			break;
 		case DataCell::CellType::error:
+			str << "}";
+			break;
 		case DataCell::CellType::image_png:
+			break;
 		case DataCell::CellType::image_svg:
+			break;
 		case DataCell::CellType::slider:
 			break;
 		}

@@ -2332,6 +2332,7 @@ void NotebookWindow::on_file_export_html()
 	Gtk::FileChooserDialog dialog("Please enter a file name for the HTML document",
 	                              Gtk::FILE_CHOOSER_ACTION_SAVE);
 
+	dialog.set_do_overwrite_confirmation(true);
 	dialog.set_transient_for(*this);
 	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
@@ -2352,6 +2353,7 @@ void NotebookWindow::on_file_export_latex()
 	Gtk::FileChooserDialog dialog("Please enter a file name for the LaTeX document",
 	                              Gtk::FILE_CHOOSER_ACTION_SAVE);
 
+	dialog.set_do_overwrite_confirmation(true);	
 	dialog.set_transient_for(*this);
 	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
@@ -2375,6 +2377,7 @@ void NotebookWindow::on_file_export_python()
 	Gtk::FileChooserDialog dialog("Please enter a file name for the Python/Cadabra document",
 	                              Gtk::FILE_CHOOSER_ACTION_SAVE);
 
+	dialog.set_do_overwrite_confirmation(true);
 	dialog.set_transient_for(*this);
 	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
@@ -2396,6 +2399,7 @@ void NotebookWindow::on_file_export_html_segment()
 	Gtk::FileChooserDialog dialog("Please enter a file name for the HTML segment",
 	                              Gtk::FILE_CHOOSER_ACTION_SAVE);
 
+	dialog.set_do_overwrite_confirmation(true);
 	dialog.set_transient_for(*this);
 	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
