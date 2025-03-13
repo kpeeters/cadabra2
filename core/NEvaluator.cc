@@ -190,7 +190,7 @@ NTensor NEvaluator::evaluate()
 #ifdef DEBUG
 					std::cerr << "found \\pi" << std::endl;
 #endif
-					lastval  = 3.141592653589793238463;
+					lastval  = M_PI;
 					lastval *= to_double(*it->multiplier);
 					}
 				else {
@@ -201,6 +201,7 @@ NTensor NEvaluator::evaluate()
 						Ex no_multiplier(it);
 						auto mult = *it->multiplier;
 						one( no_multiplier.begin()->multiplier );
+						no_multiplier.begin()->fl.parent_rel = str_node::p_none;
 						if(var.variable == no_multiplier) {
 #ifdef DEBUG
 							std::cerr << "found " << *(no_multiplier.begin()->name) << std::endl;
