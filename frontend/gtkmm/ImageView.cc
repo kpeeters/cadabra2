@@ -74,8 +74,8 @@ bool ImageView::on_motion_notify_event(GdkEventMotion *event)
 	{
 	//	std::cerr << event->x << ", " << event->y << std::endl;
 	if(sizing) {
-		auto cw = width_at_press  + (event->x - prev_x);
-		area.rerender(cw);
+		area.logical_width = width_at_press  + (event->x - prev_x);
+		area.rerender(area.logical_width);
 		}
 	return true;
 	}
