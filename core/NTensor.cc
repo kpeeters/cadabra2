@@ -3,8 +3,18 @@
 #include "Stopwatch.hh"
 #include <cassert>
 #include <cmath>
+#include <string>
 
 using namespace cadabra;
+
+#define DEBUG 1
+
+static bool debug_stop = false;
+#ifdef DEBUG
+#define DEBUGLN(ln) if(!debug_stop) { ln; }
+#else
+#define DEBUGLN(ln)
+#endif
 
 NTensor::NTensor(const std::vector<size_t>& shape_, std::complex<double> val)
 	: shape(shape_)
@@ -57,6 +67,30 @@ NTensor::NTensor(const NTensor& other)
 	{
 	shape=other.shape;
 	values=other.values;
+	}
+
+NTensor::NTensor(NTensor&& other)
+	: shape(std::move(other.shape))
+	, values(std::move(other.values))
+	{
+	}
+
+NTensor& NTensor::operator=(NTensor&& other) noexcept
+	{
+	if(this != &other) {
+		shape = std::move(other.shape);
+		values = std::move(other.values);
+		}
+	return *this;
+	}
+
+NTensor& NTensor::operator=(const NTensor&& other) noexcept
+	{
+	if(this != &other) {
+		shape = std::move(other.shape);
+		values = std::move(other.values);
+		}
+	return *this;
 	}
 
 NTensor NTensor::linspace(std::complex<double> from, std::complex<double> to, size_t steps)
@@ -135,11 +169,19 @@ std::ostream& cadabra::operator<<(std::ostream &str, const NTensor &nt)
 	// For an {a,b} tensor, we display as a vector of size 'a', each
 	// element of which is a vector of size 'b'. And so on.
 
+	bool isreal = nt.is_real();
+	
 	for(size_t p=0; p<nt.shape.size(); ++p)
 		str << "[";
 
 	for(size_t i=0; i<nt.values.size(); ++i) {
-		str << nt.values[i];
+		if(isreal) str << nt.values[i].real();
+		else       {
+			str << nt.values[i].real();
+			if(nt.values[i].imag()<0) str << " - ";
+			else                      str << " + ";
+			str << std::abs(nt.values[i].imag()) << "i";
+			}
 
 		// Closing/re-opening.
 		size_t mult=1;
@@ -189,7 +231,8 @@ NTensor& NTensor::operator+=(const NTensor& other)
 		}
 	else {
 		if(shape.size() != other.shape.size())
-			throw std::range_error("NTensor::pow: shape lengths do not match.");
+			throw std::range_error("NTensor::operator+=: shape lengths do not match, "+std::to_string(shape.size())
+										  + " versus " + std::to_string(other.shape.size()) + ".");
 		
 		for(size_t p=0; p<shape.size(); ++p)
 			if(shape[p]!=other.shape[p])
@@ -218,8 +261,11 @@ NTensor& NTensor::operator*=(const NTensor& other)
 		shape=other.shape;
 		}
 	else {
-		if(shape.size() != other.shape.size())
-			throw std::range_error("NTensor::pow: shape lengths do not match.");
+		if(shape.size() != other.shape.size()) {
+			DEBUGLN( std::cerr << *this << "\n" << other << std::endl; )
+			throw std::range_error("NTensor::operator*=: shape lengths do not match, "+std::to_string(shape.size())
+										  + " versus " + std::to_string(other.shape.size()) + ".");
+			}
 		
 		for(size_t p=0; p<shape.size(); ++p)
 			if(shape[p]!=other.shape[p])
@@ -232,6 +278,20 @@ NTensor& NTensor::operator*=(const NTensor& other)
 	return *this;
 	}
 
+NTensor& NTensor::operator*=(const std::complex<double>& m)
+	{
+	for(size_t i=0; i<values.size(); ++i)
+		values[i] *= m;
+	return *this;
+	}
+
+NTensor& NTensor::operator*=(double m)
+	{
+	for(size_t i=0; i<values.size(); ++i)
+		values[i] *= m;
+	return *this;
+	}
+
 NTensor& NTensor::pow(const NTensor& other)
 	{
 	if(other.shape.size()==1 && other.shape[0]==1) {
@@ -241,7 +301,8 @@ NTensor& NTensor::pow(const NTensor& other)
 		}
 	else {
 		if(shape.size() != other.shape.size())
-			throw std::range_error("NTensor::pow: shape lengths do not match.");
+			throw std::range_error("NTensor::pow: shape lengths do not match, "+std::to_string(shape.size())
+										  + " versus " + std::to_string(other.shape.size()) + ".");
 
 		for(size_t p=0; p<shape.size(); ++p)
 			if(shape[p]!=other.shape[p])

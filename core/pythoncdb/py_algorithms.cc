@@ -244,17 +244,17 @@ namespace cadabra {
 			if(type_name=="float") {
 				std::vector<double> vec;
 				vec.push_back(py::cast<double>(dv.second));
-				ev.set_variable(py::cast<Ex>(dv.first), vec);
+				ev.set_variable(py::cast<Ex>(dv.first), NTensor(vec));
 				}
 			else if(type_name=="int") {
 				std::vector<double> vec;
 				vec.push_back(py::cast<int>(dv.second));
-				ev.set_variable(py::cast<Ex>(dv.first), vec);
+				ev.set_variable(py::cast<Ex>(dv.first), NTensor(vec));
 				}
 			else if(type_name=="complex") {
 				std::vector<std::complex<double>> vec;
 				vec.push_back(py::cast<std::complex<double>>(dv.second));
-				ev.set_variable(py::cast<Ex>(dv.first), vec);
+				ev.set_variable(py::cast<Ex>(dv.first), NTensor(vec));
 				}
 			else if(type_name=="tuple") {
 				std::vector<double> rvec = py::cast<std::vector<double>>(dv.second);
@@ -264,7 +264,7 @@ namespace cadabra {
 				ev.set_variable(py::cast<Ex>(dv.first), range);
 				}
 			else {
-				ev.set_variable(py::cast<Ex>(dv.first), py::cast<std::vector<double>>(dv.second));
+				ev.set_variable(py::cast<Ex>(dv.first), NTensor(py::cast<std::vector<double>>(dv.second)));
 				}
 			}
 		ev.set_lookup_function([](const Ex& var) {

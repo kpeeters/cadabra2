@@ -1,5 +1,6 @@
 #include <pybind11/pybind11.h>
 #include "NTensor.hh"
+#include <sstream>
 
 namespace py = pybind11;
 
@@ -9,6 +10,11 @@ namespace cadabra {
 	void init_ntensor(py::module& m) {
 	py::class_<NTensor>(m, "NTensor", py::buffer_protocol())
 		.def("is_real", &NTensor::is_real)
+		.def("__str__", [](NTensor& nt) {
+			std::ostringstream str;
+			str << nt;
+			return str.str();
+			})
 		.def_buffer([](NTensor &nt) -> py::buffer_info {
 			if(nt.is_real()) {
 				size_t stride=sizeof(std::complex<double>);

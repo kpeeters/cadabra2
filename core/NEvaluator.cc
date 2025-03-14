@@ -6,7 +6,7 @@
 
 using namespace cadabra;
 
-// #define DEBUG 1
+#define DEBUG 1
 
 // void NEvaluator::find_common_subexpressions(std::vector<Ex *>)
 // 	{
@@ -114,12 +114,12 @@ NTensor NEvaluator::evaluate()
 			// in `find_variable_locations`; so [[[1]]] is perfectly
 			// normal if there are three variables defined.
 #endif
-			lastval=fnd->second;
+			lastval  = fnd->second;
 			}
 		else {
 			bool found_elementary=false;
 			if(it->is_rational()) {
-				lastval = to_double(*it->multiplier);
+				lastval = NTensor(to_double(*it->multiplier));
 				found_elementary=true;
 				}
 			else {
@@ -130,7 +130,7 @@ NTensor NEvaluator::evaluate()
 						std::cerr << "need to apply " << *el.first << " to " << arg << std::endl;
 #endif
 						auto argit  = subtree_values.find(arg);
-						auto argval = argit->second;
+						auto argval = NTensor(argit->second);
 #ifdef DEBUG
 						std::cerr << " argument equals " << argval
 									 << "; stored had multiplier " << *(argit->first->multiplier) << std::endl;
@@ -165,7 +165,8 @@ NTensor NEvaluator::evaluate()
 						auto cfnd = subtree_values.find(Ex::iterator(cit));
 						if(cfnd==subtree_values.end())
 							throw std::logic_error("Inconsistent value tree.");
-						if(cit==ex.begin(it))
+						
+						if(cit==ex.begin(it)) 
 							lastval = cfnd->second;
 						else
 							lastval += cfnd->second;
@@ -190,8 +191,7 @@ NTensor NEvaluator::evaluate()
 #ifdef DEBUG
 					std::cerr << "found \\pi" << std::endl;
 #endif
-					lastval  = M_PI;
-					lastval *= to_double(*it->multiplier);
+					lastval  = NTensor(M_PI * to_double(*it->multiplier));
 					}
 				else {
 					// Try variable substitution rules.
@@ -204,7 +204,8 @@ NTensor NEvaluator::evaluate()
 						no_multiplier.begin()->fl.parent_rel = str_node::p_none;
 						if(var.variable == no_multiplier) {
 #ifdef DEBUG
-							std::cerr << "found " << *(no_multiplier.begin()->name) << std::endl;
+							std::cerr << "found " << *(no_multiplier.begin()->name) << " with multiplier "
+										 << mult << std::endl;
 #endif
 							lastval = var.values;
 							lastval *= to_double(mult);
@@ -218,14 +219,14 @@ NTensor NEvaluator::evaluate()
 					// Is this perhaps a string representing a float?
 					if(!found) {
 						try {
-							lastval = std::stof(*it->name);
+							lastval = NTensor(std::stod(*it->name));
 							subtree_values.insert(std::make_pair(it, lastval));
 							}
 						catch(const std::invalid_argument& err) {
 							// Last resort: lookup value using the external lookup function.
 							try {
 								if(lookup_function)
-									lastval = lookup_function(*it);
+									lastval = NTensor(lookup_function(*it));
 								else 
 									throw std::logic_error("Value unknown for subtree with head "+(*it->name)+".");
 								}
@@ -256,16 +257,19 @@ void NEvaluator::set_variable(const Ex& var, const NTensor& val)
 	{
 	// Ensure that we only store one entry in variable_values for
 	// every variable.
+
+	if(*var.begin()->multiplier != 1)
+		throw ConsistencyException("NEvaluator::set_variable: variables should not have multipliers.");
 	
 	auto it = variable_values_locs.find(var);
 	if(it == variable_values_locs.end()) {
 		// Create new entry.
 		variable_values_locs[var] = variable_values.size();
-		variable_values.push_back( VariableValues({var, val, {} }) );
+		variable_values.push_back( VariableValues({var, NTensor(val), {} }) );
 		}
 	else {
 		// Overwrite if the variable was already present.
-		variable_values[it->second] = VariableValues({var, val, {} });
+		variable_values[it->second] = VariableValues({var, NTensor(val), {} });
 		}
 	}
 
@@ -286,7 +290,11 @@ void NEvaluator::find_variable_locations()
 		var.locations.clear();
 		auto it = ex.begin_post();
 		while(it != ex.end_post()) {
-			if(var.variable == *it)
+			Ex no_multiplier(it);
+			auto mult = *it->multiplier;
+			one( no_multiplier.begin()->multiplier );
+			no_multiplier.begin()->fl.parent_rel = str_node::p_none;
+			if(var.variable == no_multiplier)
 				var.locations.push_back(it);
 			++it;
 			}
@@ -300,7 +308,9 @@ void NEvaluator::find_variable_locations()
 	// std::cerr << "full shape = ";
 	std::vector<size_t> fullshape;
 	for(const auto& var: variable_values) {
-		assert(var.values.shape.size()==1);
+		if(var.values.shape.size()!=1)
+			throw ConsistencyException("NTensor: all variables should be specified as one-dimensional arrays.");
+
 		fullshape.push_back(var.values.shape[0]);
 		// std::cerr << var.values.shape[0] << ", ";
 		}
@@ -310,7 +320,10 @@ void NEvaluator::find_variable_locations()
 	for(size_t v=0; v<variable_values.size(); ++v) {
 		const auto& var = variable_values[v];
 		for(const auto& it: var.locations) {
-			subtree_values.insert(std::make_pair(it, var.values.broadcast( fullshape, v ) ) );
+			auto bc_val = var.values.broadcast( fullshape, v );
+			bc_val *= to_double(*it->multiplier);
+			subtree_values.insert(std::make_pair(it, bc_val ) );
+			std::cerr << bc_val << std::endl;
 			}
 		}
 

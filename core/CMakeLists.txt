@@ -437,11 +437,20 @@ else()
   add_executable(test_internals
     test_internals.cc
   )
+  add_executable(test_benchmark
+    test_benchmark.cc
+  )
   # We are linking the test with the full python module, which is a bit
   # wasteful, but splitting out the ${LOCAL_SRC_FILES} into a separate
   # library turned out to lead to linking errors with the algorithm
   # modules in `packages/` (missing typeinfo things). For now this works.
   target_link_libraries(test_internals PRIVATE
+    cadabra2
+    ${GMPXX_LIBRARIES}
+    ${GMP_LIBRARIES}
+    ${Python_LIBRARIES}
+  )
+  target_link_libraries(test_benchmark PRIVATE
     cadabra2
     ${GMPXX_LIBRARIES}
     ${GMP_LIBRARIES}

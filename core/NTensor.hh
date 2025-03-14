@@ -19,23 +19,26 @@ namespace cadabra {
 			/// we use maths matrix conventions for printing, that is,
 			/// earlier indices are more major, and are iterated over in a
 			/// more outer loop.
-			NTensor(const std::vector<size_t>& shape, std::complex<double> val);
+			explicit NTensor(const std::vector<size_t>& shape, std::complex<double> val);
 
 			/// Initialise as a vector of std::complex<double>s; sets shape automatically
-			NTensor(const std::vector<std::complex<double>>& vals);
+			explicit NTensor(const std::vector<std::complex<double>>& vals);
 			/// As above, but with doubles instead of complex doubles.
-			NTensor(const std::vector<double>& vals);
+			explicit NTensor(const std::vector<double>& vals);
 
 			/// Helper functions to be able to initialise a tensor with an initialiser list.
-			NTensor(std::initializer_list<std::complex<double>> vals);
-			NTensor(std::initializer_list<double> vals);
+			explicit NTensor(std::initializer_list<std::complex<double>> vals);
+			explicit NTensor(std::initializer_list<double> vals);
 
 			/// Initialise as a scalar; sets shape automatically.
-			NTensor(std::complex<double>);
-			NTensor(double);
+			explicit NTensor(std::complex<double>);
+			explicit NTensor(double);
 
 			/// Copy constructor.
-			NTensor(const NTensor&);
+			explicit NTensor(const NTensor&);
+
+			/// Move constructor.
+			NTensor(NTensor&&);
 
 			/// Create equally spaced values in a range.
 			static NTensor linspace(std::complex<double> from, std::complex<double> to, size_t steps);
@@ -43,11 +46,19 @@ namespace cadabra {
 			/// Assignment operator.
 			NTensor& operator=(const NTensor&);
 
+			/// Move assignment operators.
+			NTensor& operator=(NTensor&&) noexcept;
+			NTensor& operator=(const NTensor&&) noexcept;
+
 			/// Addition operator. This requires the shapes to match.
 			NTensor& operator+=(const NTensor&);
 
 			/// Element-wise multiplication operator. This requires the shapes to match.
 			NTensor& operator*=(const NTensor&);
+
+			/// Multiplyall elements with a scalar.
+			NTensor& operator*=(const std::complex<double>&);
+			NTensor& operator*=(double);
 
 			/// Element-wise pow operator (self**b, or pow(self,b)). Requires the shapes to match.
 			NTensor& pow(const NTensor&);

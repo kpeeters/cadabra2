@@ -29,13 +29,19 @@ namespace cadabra {
 			NEvaluator(const Ex&);
 
 			/// If we know the value of a subtree explicitly as a number,
-			/// it is stored in this map. These are computed nodes.
+			/// it is stored in this map. These are computed nodes. Note that
+			/// keys are compared as pointers, so two identical expressions at
+			/// two different locations in the tree will have two entries in
+			/// this map.
 			std::map<Ex::iterator, NTensor, Ex::iterator_base_less> subtree_values;
 
 			/// If we know the value of a subtree is equal to another subtree
 			/// (either in the same expression or another one), it is stored
 			/// in the map below. This then still needs a lookup in the
 			/// `subtree_values` map.
+			/// FIXME: not used right now. The idea was that if we find two subtrees
+			/// which are equal symbolically, we only have to evaluate one, and can
+			/// then read off the value of the other one by referring to the first.
 			std::map<Ex::iterator, Ex::iterator, Ex::iterator_base_less> subtree_equalities;
 
 			/// The expression will get evaluated for a range of values for
