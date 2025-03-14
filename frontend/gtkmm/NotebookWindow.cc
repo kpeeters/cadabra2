@@ -675,6 +675,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 							  40/display_scale, display_scale,
 							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-run.svg",
 							  false));
+//		tool_run.set_label("run all");
 
 		tool_restart.add(*Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
@@ -1269,6 +1270,7 @@ bool NotebookWindow::on_key_press_event(GdkEventKey* event)
 	bool have_current_cell = current_cell != doc.end();
 
 	if(is_ctrl_up && have_current_cell) {
+		follow_mode=true;
 		std::shared_ptr<ActionBase> actionpos =
 		   std::make_shared<ActionPositionCursor>(current_cell->id(), ActionPositionCursor::Position::previous);
 		queue_action(actionpos);
@@ -1276,6 +1278,7 @@ bool NotebookWindow::on_key_press_event(GdkEventKey* event)
 		return true;
 		}
 	else if(is_ctrl_down && have_current_cell) {
+		follow_mode=true;
 		std::shared_ptr<ActionBase> actionpos =
 		   std::make_shared<ActionPositionCursor>(current_cell->id(), ActionPositionCursor::Position::next);
 		queue_action(actionpos);
@@ -1283,6 +1286,7 @@ bool NotebookWindow::on_key_press_event(GdkEventKey* event)
 		return true;
 		}
 	else if(is_ctrl_home) {
+		follow_mode=true;
 //		std::shared_ptr<ActionBase> actionpos =
 //		   std::make_shared<ActionPositionCursor>(current_cell->id(), ActionPositionCursor::Position::in);
 //		queue_action(actionpos);
@@ -1292,6 +1296,7 @@ bool NotebookWindow::on_key_press_event(GdkEventKey* event)
 		return true;
 		}
 	else if(is_ctrl_end) {
+		follow_mode=true;
 //		std::shared_ptr<ActionBase> actionpos =
 //		   std::make_shared<ActionPositionCursor>(current_cell->id(), ActionPositionCursor::Position::in);
 //		queue_action(actionpos);
@@ -1301,11 +1306,13 @@ bool NotebookWindow::on_key_press_event(GdkEventKey* event)
 		return true;
 		}
 	else if(is_pageup) {
+		follow_mode=false;
 		Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
 		va->set_value( va->get_value()-va->get_page_increment() );
 		return true;
 		}
 	else if(is_pagedown) {
+		follow_mode=false;
 		Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
 		va->set_value( va->get_value()+va->get_page_increment() );
 		return true;
