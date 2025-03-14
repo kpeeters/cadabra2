@@ -53,7 +53,7 @@ Algorithm::result_t expand_delta::apply(iterator& st)
 									int indexnum=tmptab(asel,asset);
 									auto oth2=begin_index(oth);
 									oth2+=indexnum;
-									iset.push_back(*oth2);
+									iset.push_back(Ex(oth2));
 									}
 								if(iset.size()>1)
 									implicit_sets.push_back(iset);
@@ -117,12 +117,12 @@ Algorithm::result_t expand_delta::apply(iterator& st)
 	for(unsigned int pairnum=0; pairnum<tr.number_of_children(st); pairnum+=2) {
 		if(permute_second_set)
 			++ind;
-		if(std::find(ci.original.begin(), ci.original.end(), *ind)!=ci.original.end()) {
+		if(std::find(ci.original.begin(), ci.original.end(), Ex(ind))!=ci.original.end()) {
 			zero(st->multiplier);
 			cleanup_dispatch(kernel, tr, st);
 			return result_t::l_applied;
 			}
-		ci.original.push_back(*ind);
+		ci.original.push_back(Ex(ind));
 		++ind;
 		if(!permute_second_set)
 			++ind;

@@ -153,7 +153,7 @@ Algorithm::result_t sort_product::apply(iterator& st)
 						if(ind_free.size()==0 && ind_dummy.size()==0) classify_indices(st, ind_free, ind_dummy);
 						index_iterator ch=begin_index(one);
 						while(ch!=end_index(one)) {
-							auto fnd=ind_free.find((Ex::iterator)ch);
+							auto fnd=ind_free.find(Ex(ch));
 							if(fnd!=ind_free.end()) {
 								free1_names+=*ch->name;
 								++free1;
@@ -162,7 +162,7 @@ Algorithm::result_t sort_product::apply(iterator& st)
 							}
 						ch=begin_index(two);
 						while(ch!=end_index(two)) {
-							auto fnd=ind_free.find((Ex::iterator)ch);
+							auto fnd=ind_free.find(Ex(ch));
 							if(fnd!=ind_free.end()) {
 								free2_names+=*ch->name;
 								++free2;

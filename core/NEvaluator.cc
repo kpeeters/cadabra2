@@ -14,8 +14,8 @@ using namespace cadabra;
 // 	// Then compare subtrees with equal hash to find common subtrees.
 // 	}
 
-NEvaluator::NEvaluator(const Ex &ex_)
-	: ex(ex_)
+NEvaluator::NEvaluator(Ex ex_)
+	: ex(std::move(ex_))
 	{
 	}
 
@@ -127,6 +127,7 @@ NTensor NEvaluator::evaluate()
 					if(it->name == el.first) {
 						auto arg    = ex.begin(it);
 #ifdef DEBUG
+						std::cerr << *el.first << " has " << ex.number_of_children(it) << " child nodes" << std::endl;
 						std::cerr << "need to apply " << *el.first << " to " << arg << std::endl;
 #endif
 						auto argit  = subtree_values.find(arg);
@@ -226,7 +227,7 @@ NTensor NEvaluator::evaluate()
 							// Last resort: lookup value using the external lookup function.
 							try {
 								if(lookup_function)
-									lastval = NTensor(lookup_function(*it));
+									lastval = NTensor(lookup_function(Ex(it)));
 								else 
 									throw std::logic_error("Value unknown for subtree with head "+(*it->name)+".");
 								}

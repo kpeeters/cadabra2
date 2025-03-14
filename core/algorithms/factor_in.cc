@@ -83,7 +83,7 @@ bool factor_in::compare_prod_nonprod(iterator prod, iterator nonprod) const
 			}
 		++it;
 		}
-	if(found || (!found && factnodes.count(nonprod)!=0)) return true;
+	if(found || (!found && factnodes.count(Ex(nonprod))!=0)) return true;
 	return false;
 	}
 

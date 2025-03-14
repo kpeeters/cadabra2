@@ -70,6 +70,10 @@ namespace cadabra {
 	                     const Ex& one, const Ex& two,
 	                     int mod_prel=-2, bool checksets=true, int compare_multiplier=-2,
 	                     bool literal_wildcards=false);
+	bool tree_exact_less(const Properties*,
+	                     Ex::iterator one, Ex::iterator two,
+	                     int mod_prel=-2, bool checksets=true, int compare_multiplier=-2,
+	                     bool literal_wildcards=false);
 	bool tree_exact_equal(const Properties*,
 	                      const Ex& one, const Ex& two,
 	                      int mod_prel=-2, bool checksets=true, int compare_multiplier=-2,
@@ -122,6 +126,7 @@ namespace cadabra {
 		public:
 			tree_exact_less_obj(const Properties*);
 			bool operator()(const Ex& first, const Ex& second) const;
+			bool operator()(Ex::iterator first, Ex::iterator second) const;
 		private:
 			const Properties* properties;
 		};

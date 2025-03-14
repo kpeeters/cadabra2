@@ -158,6 +158,11 @@ namespace cadabra {
 		return subtree_exact_less(properties, one.begin(), two.begin(), mod_prel, checksets, compare_multiplier, literal_wildcards);
 		}
 
+	bool tree_exact_less(const Properties* properties, Ex::iterator one, Ex::iterator two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)
+		{
+		return subtree_exact_less(properties, one, two, mod_prel, checksets, compare_multiplier, literal_wildcards);
+		}
+
 	bool tree_exact_equal(const Properties* properties, const Ex& one, const Ex& two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)
 		{
 		return subtree_exact_equal(properties, one.begin(), two.begin(), mod_prel, checksets, compare_multiplier, literal_wildcards);
@@ -229,6 +234,11 @@ namespace cadabra {
 		}
 
 	bool tree_exact_less_obj::operator()(const Ex& one, const Ex& two) const
+		{
+		return tree_exact_less(properties, one, two);
+		}
+
+	bool tree_exact_less_obj::operator()(Ex::iterator one, Ex::iterator two) const
 		{
 		return tree_exact_less(properties, one, two);
 		}
@@ -593,7 +603,7 @@ namespace cadabra {
 			// triggering a rule for an upper index, we simply store both rules (see
 			// below) so that searching for rules can remain simple.
 
-			replacement_map_t::iterator loc=replacement_map.find(one);
+			replacement_map_t::iterator loc=replacement_map.find(Ex(one));
 
 			bool tested_full=true;
 
@@ -737,7 +747,7 @@ namespace cadabra {
 				// this needs to be added to the replacement map explicitly.
 
 					DEBUGLN( std::cerr << "adding " << one << " -> " << two << " to replacement map " << std::endl; );
-				replacement_map[one]=two;
+					replacement_map[Ex(one)]=Ex(two);
 
 				// if this is an index, also store the pattern with the parent_rel flipped
 
@@ -863,7 +873,7 @@ namespace cadabra {
 						return report(match_t::no_match_less);
 						}
 
-					index_value_map[two]=one;
+					index_value_map[Ex(two)]=Ex(one);
 					return report(match_t::node_match);
 					}
 				else {

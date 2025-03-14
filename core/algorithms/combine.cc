@@ -41,7 +41,7 @@ Algorithm::result_t combine::apply(iterator& it)
 			iterator parent=tr.parent(start->second);
 			sibling_iterator ch=tr.begin(parent), last_part;
 			while(ch!=tr.end(parent)) {
-				auto fnd=ind_dummy.find((Ex::iterator)ch);
+				auto fnd=ind_dummy.find(Ex(ch));
 				if(fnd!=ind_dummy.end()) last_part=ch;
 				++ch;
 				}
@@ -62,7 +62,7 @@ Algorithm::result_t combine::apply(iterator& it)
 			iterator parent=tr.parent(start->second);
 			sibling_iterator ch=tr.begin(parent), last_part;
 			while(ch!=tr.end(parent) && ind_dummy.size()>0) {
-				auto fnd2=ind_dummy.equal_range((Ex::iterator)ch);
+				auto fnd2=ind_dummy.equal_range(Ex(ch));
 				auto fnd1=fnd2.first;
 				if(fnd1->second!=ch) ++fnd1;
 				if(fnd1->second==ch) {
@@ -72,10 +72,10 @@ Algorithm::result_t combine::apply(iterator& it)
 					}
 				++ch;
 				}
-			auto fnd=ind_dummy.find((Ex::iterator)last_part);
+			auto fnd=ind_dummy.find(Ex(last_part));
 			if(fnd==ind_dummy.end()) {
 				last_part->flip_parent_rel();
-				fnd=ind_dummy.find((Ex::iterator)last_part);
+				fnd=ind_dummy.find(Ex(last_part));
 				last_part->flip_parent_rel();
 				}
 			if(fnd==ind_dummy.end()) {
@@ -90,7 +90,7 @@ Algorithm::result_t combine::apply(iterator& it)
 				sibling_iterator ch=tr.begin(parent), first_part;
 				while(check==ind_dummy.end()) {
 					first_part=ch;
-					check=ind_dummy.find((Ex::iterator)ch);
+					check=ind_dummy.find(Ex(ch));
 					++ch;
 					}
 				if(first_part!=start->second) {

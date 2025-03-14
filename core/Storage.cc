@@ -76,6 +76,12 @@ namespace cadabra {
 		//	std::cout << "Ex copy constructor" << std::endl;
 		}
 
+//	Ex::Ex(Ex other)
+//		: std::enable_shared_from_this<Ex>(other), tree<str_node>(other), state_(result_t::l_no_action)
+//		{
+//		//	std::cout << "Ex copy constructor" << std::endl;
+//		}
+
 	Ex& Ex::operator=(Ex other)
 		{
 		std::swap(static_cast<tree<str_node>&>(*this),

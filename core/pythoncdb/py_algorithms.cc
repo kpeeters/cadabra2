@@ -165,12 +165,15 @@ namespace cadabra {
 				);
 		
 		m.def("nevaluate",
+				// We cannot use `def_algo` because we first need to
+				// convert the Python dict into something that `nevaluate`
+				// can handle (you cannot do that with pybind11
+				// automagic).
 				[](Ex_ptr ex, py::dict d) {
 				std::vector<std::pair<Ex, NTensor>> values;
 				NEvaluator ev(*ex);
 				set_variables(ev, d);
-				auto res = ev.evaluate();
-				return res;
+				return apply_algo<nevaluate>(ex, ev, false, false, 0);
 				}
 				);
 		

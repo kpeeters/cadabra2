@@ -1060,7 +1060,7 @@ bool Algorithm::locate_object_set(const Ex& objs,
 		if((*aim->name)=="\\comma") {
 			// Objects can themselves be lists of other objects (for instance
 			// when we want to symmetrise in index pairs).
-			if(locate_object_set(aim, st, nd, store)==false)
+			if(locate_object_set(Ex(aim), st, nd, store)==false)
 				return false;
 			}
 		else {

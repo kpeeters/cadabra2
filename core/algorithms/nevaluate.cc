@@ -3,8 +3,8 @@
 
 using namespace cadabra;
 
-nevaluate::nevaluate(const Kernel& k, Ex& tr, const std::vector<std::pair<Ex, NTensor>>& values_)
-	: Algorithm(k, tr), values(values_)
+nevaluate::nevaluate(const Kernel& k, Ex& tr, NEvaluator& ev)
+	: Algorithm(k, tr), evaluator(ev)
 	{
 	}
 
@@ -15,13 +15,9 @@ bool nevaluate::can_apply(iterator it)
 
 Algorithm::result_t nevaluate::apply(iterator& it)
 	{
-	result_t res = result_t::l_no_action;
+	NTensor ev = evaluator.evaluate();
 
-	NEvaluator evaluator(*it);
-
-	for(const auto& var: values) {
-		evaluator.set_variable(var.first, var.second);
-		}
-
-	return res;
+	// Now we need to insert the NTensor into the tree.
+	
+	return result_t::l_applied;
 	}

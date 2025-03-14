@@ -26,7 +26,7 @@ namespace cadabra {
 
 	class NEvaluator {
 		public:
-			NEvaluator(const Ex&);
+			NEvaluator(Ex);
 
 			/// If we know the value of a subtree explicitly as a number,
 			/// it is stored in this map. These are computed nodes. Note that

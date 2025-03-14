@@ -21,14 +21,14 @@ void join_gamma::regroup_indices_(sibling_iterator gam1, sibling_iterator gam2,
 	unsigned int len2=0;
 	sibling_iterator g1=tr.begin(gam1);
 	while(len1<num1-i) {
-		r1.push_back(*g1);
+		r1.push_back(Ex(g1));
 		++g1;
 		++len1;
 		}
 	sibling_iterator g2=tr.begin(gam2);
 	while(g2!=tr.end(gam2)) {
 		if(len2>=i)
-			r2.push_back(*g2);
+			r2.push_back(Ex(g2));
 		++g2;
 		++len2;
 		}
@@ -38,8 +38,8 @@ void join_gamma::regroup_indices_(sibling_iterator gam1, sibling_iterator gam2,
 		--g1;
 		len1=0;
 		for(len1=0; len1<i; ++len1) {
-			r1.push_back(*g1);
-			r2.push_back(*g2);
+			r1.push_back(Ex(g1));
+			r2.push_back(Ex(g2));
 			--g1;
 			++g2;
 			}

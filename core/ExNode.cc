@@ -457,7 +457,7 @@ std::string ExNode::__str__() const
 	// //		str << "(unchanged)" << std::endl;
 	// 	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
 
-	DisplayTerminal dt(*get_kernel_from_scope(), it, true);
+	DisplayTerminal dt(*get_kernel_from_scope(), Ex(it), true);
 	dt.output(str, it);
 
 	return str.str();
@@ -469,7 +469,7 @@ std::string ExNode::_latex_() const
 		throw ConsistencyException("Cannot print iterator LaTeX form before the first 'next'.");
 
 	std::ostringstream str;
-	DisplayTeX dt(*get_kernel_from_scope(), it);
+	DisplayTeX dt(*get_kernel_from_scope(), Ex(it));
 	dt.output(str, it);
 	return str.str();
 	}

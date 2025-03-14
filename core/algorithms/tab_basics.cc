@@ -11,7 +11,7 @@ tab_basics::tab_basics(const Kernel& k, Ex& tr)
 unsigned int tab_basics::find_obj(const Ex& other)
 	{
 	for(unsigned int i=0; i<num_to_it.size(); ++i) {
-		if(tree_exact_equal(&kernel.properties, num_to_it[i], other))
+		if(tree_exact_equal(&kernel.properties, Ex(num_to_it[i]), other))
 			return i;
 		}
 	throw std::logic_error("internal error in tab_basics::find_obj");

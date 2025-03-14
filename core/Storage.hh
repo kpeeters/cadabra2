@@ -143,17 +143,19 @@ namespace cadabra {
 		public:
 			Ex();
 			/// Create a new Ex with a copy of the subtree at the given iterator.
-			Ex(tree<str_node>::iterator);
+			explicit Ex(tree<str_node>::iterator);
 			/// Create new Ex with single head node being a copy of the given node.
-			Ex(const str_node&);
+			explicit Ex(const str_node&);
 			/// Copy constructor: create a full copy of the given other Ex.
 			Ex(const Ex&);
+			/// Copy constructor: create a full copy of the given other Ex.
+			// explicit Ex(Ex);
 			/// Initialise with given string as head node (does not parse this string).
-			Ex(const std::string&);
+			explicit Ex(const std::string&);
 			/// Create a single-node Ex representing the given integer.
-			Ex(int);
+			explicit Ex(int);
 			/// Create a single-node Ex representing the given float.
-			Ex(double);
+			explicit Ex(double);
 
 			Ex& operator=(Ex);
 			

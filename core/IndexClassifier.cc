@@ -109,10 +109,10 @@ void IndexClassifier::determine_intersection(index_map_t& one, index_map_t& two,
 
 IndexClassifier::index_map_t::iterator IndexClassifier::find_modulo_parent_rel(Ex::iterator it, index_map_t& imap)  const
 	{
-	auto fnd=imap.find(it);
+	auto fnd=imap.find(Ex(it));
 	if(fnd==imap.end()) {
 		it->flip_parent_rel();
-		fnd=imap.find(it);
+		fnd=imap.find(Ex(it));
 		it->flip_parent_rel();
 		return fnd;
 		}
@@ -145,7 +145,7 @@ void IndexClassifier::classify_add_index(Ex::iterator it, index_map_t& ind_free,
 				}
 			else {
 				// std::cerr << "not yet found; after insertion" << std::endl;
-				if(ind_dummy.count(it)>0) {
+				if(ind_dummy.count(Ex(it))>0) {
 					throw ConsistencyException("Triple index occurred.");
 					}
 				ind_free.insert(index_map_t::value_type(Ex(it), it));

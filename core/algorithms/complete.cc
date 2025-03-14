@@ -33,20 +33,20 @@ Algorithm::result_t complete::apply(iterator& )
 		ind1->flip_parent_rel();
 		ind2->flip_parent_rel();
 
-		sympy::invert_matrix(kernel, metric, tr, bg);
+		sympy::invert_matrix(kernel, metric, tr, Ex(bg));
 		res = result_t::l_applied;
 		}
 	const Determinant *det = kernel.properties.get<Determinant>(bg);
 	if(det) {
 		Ex metric(det->obj);
-		sympy::determinant(kernel, metric, tr, bg);
+		sympy::determinant(kernel, metric, tr, Ex(bg));
 		res = result_t::l_applied;
 		}
 	const Trace *trace = kernel.properties.get<Trace>(bg);
 	if(trace) {
 		if(trace->obj.size()>0) {
 			Ex metric(trace->obj);
-			sympy::trace(kernel, metric, tr, bg);
+			sympy::trace(kernel, metric, tr, Ex(bg));
 			res = result_t::l_applied;
 			}
 		}
