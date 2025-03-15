@@ -179,9 +179,9 @@ Algorithm::result_t product_rule::apply(iterator& it)
 			// Add the whole product node to the replacement sum.
 			iterator dummy=rep.append_child(sm);
 			dummy=rep.replace(dummy, prodnode);
-			if(tr.is_head(it))
+//			if(tr.is_head(it))
 				dummy->fl.bracket=str_node::b_none;
-			else dummy->fl.bracket=str_node::b_round;
+//			else dummy->fl.bracket=str_node::b_round;
 
 			sibling_iterator wrap=rep.begin(dummy);
 			// Go to the 'num'th factor in the product.
