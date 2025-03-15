@@ -9,8 +9,10 @@
 
 #pragma once
 
-#include "../attr.h"
-#include "../options.h"
+#include <pybind11/attr.h>
+#include <pybind11/options.h>
+
+#include "exception_translation.h"
 
 PYBIND11_NAMESPACE_BEGIN(PYBIND11_NAMESPACE)
 PYBIND11_NAMESPACE_BEGIN(detail)
@@ -466,9 +468,19 @@ extern "C" inline void pybind11_object_dealloc(PyObject *self) {
 
     type->tp_free(self);
 
+#if PY_VERSION_HEX < 0x03080000
+    // `type->tp_dealloc != pybind11_object_dealloc` means that we're being called
+    // as part of a derived type's dealloc, in which case we're not allowed to decref
+    // the type here. For cross-module compatibility, we shouldn't compare directly
+    // with `pybind11_object_dealloc`, but with the common one stashed in internals.
+    auto pybind11_object_type = (PyTypeObject *) get_internals().instance_base;
+    if (type->tp_dealloc == pybind11_object_type->tp_dealloc)
+        Py_DECREF(type);
+#else
     // This was not needed before Python 3.8 (Python issue 35810)
     // https://github.com/pybind/pybind11/issues/1946
     Py_DECREF(type);
+#endif
 }
 
 std::string error_string();
@@ -581,7 +593,18 @@ extern "C" inline int pybind11_getbuffer(PyObject *obj, Py_buffer *view, int fla
         return -1;
     }
     std::memset(view, 0, sizeof(Py_buffer));
-    buffer_info *info = tinfo->get_buffer(obj, tinfo->get_buffer_data);
+    buffer_info *info = nullptr;
+    try {
+        info = tinfo->get_buffer(obj, tinfo->get_buffer_data);
+    } catch (...) {
+        try_translate_exceptions();
+        raise_from(PyExc_BufferError, "Error getting buffer");
+        return -1;
+    }
+    if (info == nullptr) {
+        pybind11_fail("FATAL UNEXPECTED SITUATION: tinfo->get_buffer() returned nullptr.");
+    }
+
     if ((flags & PyBUF_WRITABLE) == PyBUF_WRITABLE && info->readonly) {
         delete info;
         // view->obj = nullptr;  // Was just memset to 0, so not necessary
