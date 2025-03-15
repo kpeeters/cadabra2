@@ -419,12 +419,12 @@ void ComputeThread::on_message(const std::string& msg)
 					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
 					}
-				else if (msg_type == "error") {
+				else if (msg_type == "error" || msg_type=="fault") {
 					std::string error = "\\begin{verbatim}" + content["output"].get<std::string>()
 					                    + "\\end{verbatim}";
-					if (msg_type == "fault") {
-						error = "Kernel fault\\begin{small}" + error + "\\end{small}";
-						}
+					//if (msg_type == "fault") {
+					//	error = "Kernel fault\\begin{small}" + error + "\\end{small}";
+					//	}
 
 					// Stick an AddCell action onto the stack. We instruct the
 					// action to add this result output cell as a child of the

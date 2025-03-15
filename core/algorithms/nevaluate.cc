@@ -15,9 +15,9 @@ bool nevaluate::can_apply(iterator it)
 
 Algorithm::result_t nevaluate::apply(iterator& it)
 	{
-	NTensor ev = evaluator.evaluate();
-
-	// Now we need to insert the NTensor into the tree.
+	// Evaluate and store the result in the tree.
+	it->content = std::make_shared<NTensor>( evaluator.evaluate() );
+	node_one(it);
 	
 	return result_t::l_applied;
 	}

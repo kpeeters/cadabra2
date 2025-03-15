@@ -22,11 +22,13 @@ namespace cadabra {
 	/// `subtree_values` map; may be extended later to cover values
 	/// of non-elementary subtrees.
 	///
-	/// If the input variables are 'a' NTensors, then at any stage...
+	/// If there are 'n' variables, then at any stage the tree will
+	/// be an n-tensor, with the dimension of each index set by the
+	/// length of the value array for the corresponding variable.
 
 	class NEvaluator {
 		public:
-			NEvaluator(Ex);
+			NEvaluator(Ex::iterator);
 
 			/// If we know the value of a subtree explicitly as a number,
 			/// it is stored in this map. These are computed nodes. Note that
@@ -75,7 +77,7 @@ namespace cadabra {
 			void find_variable_locations();
 
 		private:
-			Ex ex;
+			Ex                ex;
 			lookup_function_t lookup_function;
 	};
 

@@ -18,6 +18,7 @@
 #include "Cleanup.hh"
 #include "Bridge.hh"
 #include "SympyCdb.hh"
+#include "NTensor.hh"
 
 // Includes for display routines
 #include <sstream>
@@ -650,7 +651,7 @@ namespace cadabra {
 			.value("no_match_less", Ex_comparator::match_t::no_match_less)
 			.value("no_match_greater", Ex_comparator::match_t::no_match_greater);
 
-		pybind11::class_<Ex, Ex_ptr >(m, "Ex")
+		pybind11::class_<Ex, Ex_ptr >(m, "Ex", py::buffer_protocol())
 		.def(py::init(&Ex_from_string), py::arg("input_form"), py::arg("make_ref") = true, py::arg("kernel") = nullptr)
 		.def(py::init(&Ex_from_int), py::arg("num"), py::arg("make_ref") = true)
 		.def(py::init(&Ex_from_float), py::arg("num"), py::arg("make_ref") = true)
@@ -682,6 +683,49 @@ namespace cadabra {
 		.def("copy", [](const Ex& ex) { return std::make_shared<Ex>(ex); })
 		.def("changed", &Ex::changed_state)
 		.def("cleanup", &Ex_cleanup)
+		.def_buffer([](Ex &ex) -> py::buffer_info {
+			if(std::holds_alternative<std::shared_ptr<NTensor>>(ex.begin()->content)) {
+				std::shared_ptr<NTensor> ntp = std::get<std::shared_ptr<NTensor>>(ex.begin()->content);
+            py::object py_ntensor = py::cast(*ntp);
+
+				if(!py::isinstance<py::buffer>(py_ntensor)) {
+					throw std::runtime_error("NTensor does not implement buffer protocol");
+					}
+				
+				py::buffer      py_buffer  = py_ntensor.cast<py::buffer>();
+				py::module_ np = py::module_::import("numpy");
+            
+            // Create a numpy array view of the buffer (no copy)
+            py::object array = np.attr("asarray")(py_ntensor);
+            py::buffer buffer = array;
+            return buffer.request();
+
+//            py::buffer_info info       = py_buffer.request();
+//				// Make copies of all non-scalar data in the info, as that
+//				// will go away.
+//				std::vector<ssize_t> shape_copy(info.shape);
+//            std::vector<ssize_t> strides_copy(info.strides);
+//            std::string          format_copy(info.format);
+//
+//				py::capsule py_obj_keeper(py_ntensor);
+//				
+//				auto result = py::buffer_info(
+//					info.ptr,           // Pointer to buffer (same memory)
+//					info.itemsize,      // Size of one scalar
+//					format_copy,        // Format descriptor
+//					info.ndim,          // Number of dimensions
+//					shape_copy,         // Buffer dimensions
+//					strides_copy        // Strides (in bytes)
+//            );
+//				result.internal = py_obj_keeper;
+//
+//				return result;				
+ 				}
+			else {
+				PyErr_SetString(PyExc_RuntimeError, "Expression cannot be converted to numerical array.");
+            throw py::error_already_set();
+				}
+			})
 		.def("__hash__", [](const Ex& ex) { return ex.calc_hash(ex.begin()); })
 		.def("__add__", static_cast<Ex_ptr(*)(const Ex_ptr, const ExNode)>(&Ex_add), py::is_operator{})
 		.def("__add__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_add), py::is_operator{})

@@ -80,7 +80,7 @@ void NDSolver::extract_from_ODEs()
 		// std::cerr << "found variable " << var << std::endl;
 
 		++lhs;
-		evaluators.push_back(NEvaluator(Ex(lhs)));
+		evaluators.push_back(NEvaluator(lhs));
 		// std::cerr << "found rhs " << lhs << std::endl;
 		
 		return true;

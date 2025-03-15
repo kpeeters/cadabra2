@@ -14,8 +14,8 @@ using namespace cadabra;
 // 	// Then compare subtrees with equal hash to find common subtrees.
 // 	}
 
-NEvaluator::NEvaluator(Ex ex_)
-	: ex(std::move(ex_))
+NEvaluator::NEvaluator(Ex::iterator ex_it)
+	: ex(ex_it)
 	{
 	}
 

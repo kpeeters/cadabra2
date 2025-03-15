@@ -14,8 +14,8 @@ namespace cadabra {
 	
 	class NIntegrator {
 		public:
-			// Initialise with an Ex containing the integrand.
-			NIntegrator(const Ex&);
+			// Initialise with an Ex subtree containing the integrand.
+			NIntegrator(Ex::iterator);
 
 			// Set integration range.
 			void set_range(const Ex&, double from, double to);
@@ -28,8 +28,9 @@ namespace cadabra {
 			NEvaluator evaluator;
 			
 		private:
-			Ex         integrand, ivar;
-			double     range_from, range_to;
+			Ex::iterator integrand;
+         Ex           ivar;
+			double       range_from, range_to;
 };
 	
 };

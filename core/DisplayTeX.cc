@@ -10,6 +10,9 @@
 #include "properties/Tableau.hh"
 #include "properties/FilledTableau.hh"
 #include "properties/TableauInherit.hh"
+#include "NTensor.hh"
+
+#include <regex>
 
 #define nbsp   " "
 //(( parent.utf8_output?(unichar(0x00a0)):" "))
@@ -463,6 +466,15 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	{
 	if(handle_unprintable_wildcards(str, it))
 		return;
+
+	if(std::holds_alternative<std::shared_ptr<NTensor>>(it->content)) {
+		std::ostringstream str2;
+		auto nt = std::get<std::shared_ptr<NTensor>>(it->content);
+		str2 << *nt;
+		std::string s = str2.str();
+		str << std::regex_replace(s, std::regex("(\\d+\\.?\\d*|\\.\\d+)e([+-]?\\d+)"), "$1 \\times 10^{$2}");
+		return; // FIXME: always just ignore the subtree?
+		}
 	
 	if(*it->name=="\\prod")                                   print_productlike(str, it, " ");
 	else if(*it->name=="\\sum" || *it->name=="\\oplus")       print_sumlike(str, it);

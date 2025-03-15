@@ -97,7 +97,8 @@ SET(ALGORITHM_SRC_FILES
    algorithms/lr_tensor.cc
    algorithms/map_sympy.cc
    algorithms/meld.cc
-	algorithms/nevaluate.cc
+   algorithms/nevaluate.cc
+   algorithms/nval.cc
    algorithms/order.cc
    algorithms/product_rule.cc
    algorithms/reduce_delta.cc

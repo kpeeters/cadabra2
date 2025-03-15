@@ -48,6 +48,7 @@
 #include "../algorithms/map_sympy.hh"
 #include "../algorithms/meld.hh"
 #include "../algorithms/nevaluate.hh"
+#include "../algorithms/nval.hh"
 #include "../algorithms/order.hh"
 #include "../algorithms/product_rule.hh"
 #include "../algorithms/reduce_delta.hh"
@@ -164,6 +165,19 @@ namespace cadabra {
 				}
 				);
 		
+		m.def("nval",
+				// We cannot use `def_algo` because we first need to
+				// convert the Python dict into something that `nevaluate`
+				// can handle (you cannot do that with pybind11
+				// automagic).
+				[](Ex_ptr ex, py::dict d) {
+				std::vector<std::pair<Ex, NTensor>> values;
+				NEvaluator ev((*ex).begin()); // FIXME: we do not know the entry point, it does not have to be top-level.
+				set_variables(ev, d);
+				return apply_algo<nval>(ex, ev, false, false, 0);
+				}
+				);
+		
 		m.def("nevaluate",
 				// We cannot use `def_algo` because we first need to
 				// convert the Python dict into something that `nevaluate`
@@ -171,7 +185,7 @@ namespace cadabra {
 				// automagic).
 				[](Ex_ptr ex, py::dict d) {
 				std::vector<std::pair<Ex, NTensor>> values;
-				NEvaluator ev(*ex);
+				NEvaluator ev((*ex).begin()); // FIXME: we do not know the entry point, it does not have to be top-level.
 				set_variables(ev, d);
 				return apply_algo<nevaluate>(ex, ev, false, false, 0);
 				}
@@ -196,7 +210,7 @@ namespace cadabra {
 
 		m.def("nintegrate",
 				[](Ex_ptr ex, py::dict ranges) {
-				NIntegrator ni(*ex);
+				NIntegrator ni((*ex).begin());
 
 				// Set all variables from the given dict entries.
 				set_variables(ni.evaluator, ranges);

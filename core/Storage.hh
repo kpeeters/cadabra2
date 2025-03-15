@@ -30,11 +30,14 @@ You should have received a copy of the GNU General Public License
 #include <stdint.h>
 #include <assert.h>
 #include <initializer_list>
+#include <variant>
 
 #include "tree.hh"
 
 namespace cadabra {
 
+	class NTensor;
+	
 	typedef mpq_class               multiplier_t;
 	typedef std::set<std::string>   nset_t;
 	typedef std::set<multiplier_t>  rset_t;
@@ -71,6 +74,12 @@ namespace cadabra {
 
 			nset_t::iterator name;
 			rset_t::iterator multiplier;
+
+			// Special content which does not fit the AST structure, but still needs to
+			// sit in the tree, is stored in the form of a shared pointer to data outside
+			// the tree. If there is nothing, the std::monostate is set.
+			std::variant<std::monostate,
+							 std::shared_ptr<NTensor>> content;
 
 #ifdef _WIN32
 			struct flag_t {

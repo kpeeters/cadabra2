@@ -4,8 +4,8 @@
 
 using namespace cadabra;
 
-NIntegrator::NIntegrator(const Ex& ex)
-	: evaluator(NEvaluator(ex)), integrand(ex)
+NIntegrator::NIntegrator(Ex::iterator ex_it)
+	: evaluator(NEvaluator(ex_it)), integrand(ex_it)
 	{
 	}
 
