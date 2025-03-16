@@ -781,6 +781,7 @@ found:
 		}
 
 	str_node::str_node(void)
+		: content(std::monostate())
 		{
 		multiplier=rat_set.insert(1).first;
 		//	fl.modifier=m_none;
@@ -790,6 +791,7 @@ found:
 		}
 
 	str_node::str_node(nset_t::iterator nm, bracket_t br, parent_rel_t pr)
+		: content(std::monostate())
 		{
 		multiplier=rat_set.insert(1).first;
 		name=nm;
@@ -800,6 +802,7 @@ found:
 		}
 
 	str_node::str_node(const std::u32string& nm, bracket_t br, parent_rel_t pr)
+		: content(std::monostate())
 		{
 #ifdef _MSC_VER
 		std::wstring_convert<std::codecvt_utf8<int32_t>, int32_t> conv;
@@ -821,6 +824,7 @@ found:
 		}
 
 	str_node::str_node(const std::string& nm, bracket_t br, parent_rel_t pr)
+		: content(std::monostate())
 		{
 		multiplier=rat_set.insert(1).first;
 		name=name_set.insert(nm).first;

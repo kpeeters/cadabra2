@@ -472,8 +472,15 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 		auto nt = std::get<std::shared_ptr<NTensor>>(it->content);
 		str2 << *nt;
 		std::string s = str2.str();
-		str << std::regex_replace(s, std::regex("(\\d+\\.?\\d*|\\.\\d+)e([+-]?\\d+)"), "$1 \\times 10^{$2}");
-		return; // FIXME: always just ignore the subtree?
+		std::string s2 = std::regex_replace(s, std::regex("(\\d+\\.?\\d*|\\.\\d+)e([+-]?\\d+)"), "$1 \\times 10^{$2}");
+		if(nt->shape.size()==1 && nt->shape[0]==1)
+			str << s2.substr(1, s2.size()-2);
+		else
+			str << s2;
+
+		if(*it->name=="1" && tree.number_of_children(it)==0)
+			return;
+//		return; // FIXME: always just ignore the subtree?
 		}
 	
 	if(*it->name=="\\prod")                                   print_productlike(str, it, " ");

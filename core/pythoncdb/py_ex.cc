@@ -683,7 +683,7 @@ namespace cadabra {
 		.def("copy", [](const Ex& ex) { return std::make_shared<Ex>(ex); })
 		.def("changed", &Ex::changed_state)
 		.def("cleanup", &Ex_cleanup)
-		.def_buffer([](Ex &ex) -> py::buffer_info {
+		.def("__array__", [](Ex& ex) {
 			if(std::holds_alternative<std::shared_ptr<NTensor>>(ex.begin()->content)) {
 				std::shared_ptr<NTensor> ntp = std::get<std::shared_ptr<NTensor>>(ex.begin()->content);
             py::object py_ntensor = py::cast(*ntp);
@@ -692,40 +692,25 @@ namespace cadabra {
 					throw std::runtime_error("NTensor does not implement buffer protocol");
 					}
 				
-				py::buffer      py_buffer  = py_ntensor.cast<py::buffer>();
+				py::buffer  py_buffer  = py_ntensor.cast<py::buffer>();
 				py::module_ np = py::module_::import("numpy");
             
             // Create a numpy array view of the buffer (no copy)
             py::object array = np.attr("asarray")(py_ntensor);
-            py::buffer buffer = array;
-            return buffer.request();
-
-//            py::buffer_info info       = py_buffer.request();
-//				// Make copies of all non-scalar data in the info, as that
-//				// will go away.
-//				std::vector<ssize_t> shape_copy(info.shape);
-//            std::vector<ssize_t> strides_copy(info.strides);
-//            std::string          format_copy(info.format);
-//
-//				py::capsule py_obj_keeper(py_ntensor);
-//				
-//				auto result = py::buffer_info(
-//					info.ptr,           // Pointer to buffer (same memory)
-//					info.itemsize,      // Size of one scalar
-//					format_copy,        // Format descriptor
-//					info.ndim,          // Number of dimensions
-//					shape_copy,         // Buffer dimensions
-//					strides_copy        // Strides (in bytes)
-//            );
-//				result.internal = py_obj_keeper;
-//
-//				return result;				
+				return array;
  				}
 			else {
-				PyErr_SetString(PyExc_RuntimeError, "Expression cannot be converted to numerical array.");
-            throw py::error_already_set();
+				throw ConsistencyException("Expression cannot be converted to numerical array.");
 				}
 			})
+//		.def_buffer([](Ex &ex) -> py::buffer_info {
+//			throw std::runtime_error("Help?");
+//			})
+//		.def("__floordiv__", [](const Ex& self, py::function func) {
+//			   Ex expr_copy(self);
+//            py::object result = func(expr_copy);
+//            return result.cast<Ex>();
+//			})
 		.def("__hash__", [](const Ex& ex) { return ex.calc_hash(ex.begin()); })
 		.def("__add__", static_cast<Ex_ptr(*)(const Ex_ptr, const ExNode)>(&Ex_add), py::is_operator{})
 		.def("__add__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_add), py::is_operator{})
@@ -737,7 +722,7 @@ namespace cadabra {
 			[](py::tuple t) { return Ex_from_string(t[0].cast<std::string>(), true, get_kernel_from_scope()); }
 		));
 
-		pybind11::class_<ExNode>(m, "ExNode", "Iterator over elements of an Ex mathematical expression.")
+		pybind11::class_<ExNode>(m, "ExNode", "Iterator over elements of an Ex mathematical expression.", py::buffer_protocol())
 			.def("__iter__", &ExNode::iter)
 			.def("__next__", &ExNode::next, pybind11::return_value_policy::reference_internal)
 			.def("input_form",  &ExNode::input_form)
@@ -767,6 +752,9 @@ namespace cadabra {
 			.def_property("name", &ExNode::get_name, &ExNode::set_name, "Set the name property of the node pointed to by the ExNode.")
 			.def_property("parent_rel", &ExNode::get_parent_rel, &ExNode::set_parent_rel)
 			.def_property("multiplier", &ExNode::get_multiplier, &ExNode::set_multiplier)
+			.def_buffer([](ExNode &exnode) -> py::buffer_info {
+				throw std::range_error("Do not call this on ExNode");
+				})
 			.def("__add__", [](ExNode a, Ex_ptr b) {
 								 return a.add_ex(b);
 								 }, pybind11::is_operator{});

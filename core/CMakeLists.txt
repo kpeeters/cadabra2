@@ -441,6 +441,10 @@ else()
   add_executable(test_benchmark
     test_benchmark.cc
   )
+  add_executable(test_multiplier
+    test_multiplier.cc
+    Multiplier.cc
+  )
   # We are linking the test with the full python module, which is a bit
   # wasteful, but splitting out the ${LOCAL_SRC_FILES} into a separate
   # library turned out to lead to linking errors with the algorithm
@@ -456,6 +460,10 @@ else()
     ${GMPXX_LIBRARIES}
     ${GMP_LIBRARIES}
     ${Python_LIBRARIES}
+  )
+  target_link_libraries(test_multiplier PRIVATE
+    ${GMPXX_LIBRARIES}
+    ${GMP_LIBRARIES}
   )
 endif()
 

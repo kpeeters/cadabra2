@@ -172,9 +172,9 @@ namespace cadabra {
 				// automagic).
 				[](Ex_ptr ex, py::dict d) {
 				std::vector<std::pair<Ex, NTensor>> values;
-				NEvaluator ev((*ex).begin()); // FIXME: we do not know the entry point, it does not have to be top-level.
+				NEvaluator ev;
 				set_variables(ev, d);
-				return apply_algo<nval>(ex, ev, false, false, 0);
+				return apply_algo_preorder<nval>(ex, ev, true, false, 0);
 				}
 				);
 		
@@ -187,7 +187,8 @@ namespace cadabra {
 				std::vector<std::pair<Ex, NTensor>> values;
 				NEvaluator ev((*ex).begin()); // FIXME: we do not know the entry point, it does not have to be top-level.
 				set_variables(ev, d);
-				return apply_algo<nevaluate>(ex, ev, false, false, 0);
+				return ev.evaluate();
+//				return apply_algo<nevaluate>(ex, ev, false, false, 0);
 				}
 				);
 		

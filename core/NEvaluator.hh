@@ -28,6 +28,7 @@ namespace cadabra {
 
 	class NEvaluator {
 		public:
+			NEvaluator();
 			NEvaluator(Ex::iterator);
 
 			/// If we know the value of a subtree explicitly as a number,
@@ -58,6 +59,9 @@ namespace cadabra {
 			std::vector<VariableValues> variable_values;
 			std::map<Ex, size_t, tree_exact_less_no_wildcards_obj> variable_values_locs;
 
+			/// Set function to evaluate. Can also be passed in the constructor.
+			void    set_function(Ex::iterator);
+			
 			/// Set the range of values which we want to insert into the
 			/// indicated variable. Fills the map above.
 			void    set_variable(const Ex&, const NTensor& val);

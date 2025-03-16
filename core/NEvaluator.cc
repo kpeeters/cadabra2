@@ -6,7 +6,7 @@
 
 using namespace cadabra;
 
-#define DEBUG 1
+// #define DEBUG 1
 
 // void NEvaluator::find_common_subexpressions(std::vector<Ex *>)
 // 	{
@@ -14,9 +14,22 @@ using namespace cadabra;
 // 	// Then compare subtrees with equal hash to find common subtrees.
 // 	}
 
+#ifdef DEBUG
+#warning "DEBUG enabled for NEvaluator.cc"
+#endif
+
+NEvaluator::NEvaluator()
+	{
+	}
+
 NEvaluator::NEvaluator(Ex::iterator ex_it)
 	: ex(ex_it)
 	{
+	}
+
+void NEvaluator::set_function(Ex::iterator ex_it)
+	{
+	ex = Ex(ex_it);
 	}
 
 void NEvaluator::set_lookup_function(lookup_function_t f)
@@ -324,7 +337,7 @@ void NEvaluator::find_variable_locations()
 			auto bc_val = var.values.broadcast( fullshape, v );
 			bc_val *= to_double(*it->multiplier);
 			subtree_values.insert(std::make_pair(it, bc_val ) );
-			std::cerr << bc_val << std::endl;
+			// std::cerr << bc_val << std::endl;
 			}
 		}
 

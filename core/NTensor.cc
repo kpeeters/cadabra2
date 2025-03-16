@@ -7,10 +7,11 @@
 
 using namespace cadabra;
 
-#define DEBUG 1
+// #define DEBUG 1
 
-static bool debug_stop = false;
 #ifdef DEBUG
+#warning "DEBUG enabled for NTensor.cc"
+static bool debug_stop = false;
 #define DEBUGLN(ln) if(!debug_stop) { ln; }
 #else
 #define DEBUGLN(ln)
@@ -170,7 +171,7 @@ std::ostream& cadabra::operator<<(std::ostream &str, const NTensor &nt)
 	// element of which is a vector of size 'b'. And so on.
 
 	bool isreal = nt.is_real();
-	
+
 	for(size_t p=0; p<nt.shape.size(); ++p)
 		str << "[";
 

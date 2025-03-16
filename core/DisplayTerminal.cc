@@ -3,6 +3,8 @@
 #include "DisplayTerminal.hh"
 #include "Symbols.hh"
 #include "properties/Accent.hh"
+#include "NTensor.hh"
+#include <variant>
 
 using namespace cadabra;
 
@@ -291,6 +293,14 @@ void DisplayTerminal::dispatch(std::ostream& str, Ex::iterator it)
 	{
 	if(handle_unprintable_wildcards(str, it))
 		return;
+	
+	if(std::holds_alternative<std::shared_ptr<NTensor>>(it->content)) {
+		auto nt = std::get<std::shared_ptr<NTensor>>(it->content);
+		str << (*nt);
+//		std::string s = str2.str();
+//		str << std::regex_replace(s, std::regex("(\\d+\\.?\\d*|\\.\\d+)e([+-]?\\d+)"), "$1 \\times 10^{$2}");
+		return; // FIXME: always just ignore the subtree?
+		}
 	
 	if(*it->name=="\\prod")            print_productlike(str, it, " ");
 	else if(*it->name=="\\sum")        print_sumlike(str, it);

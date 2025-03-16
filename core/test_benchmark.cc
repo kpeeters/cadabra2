@@ -11,4 +11,5 @@ int main(int, char **)
 	std::cerr << "sizeof(nset_t::iterator)         = " << sizeof(cadabra::nset_t::iterator) << std::endl;
 	std::cerr << "sizeof(multiplier_t)             = " << sizeof(cadabra::multiplier_t) << std::endl;
 	std::cerr << "sizeof(tree_node_<str_node>)     = " << sizeof(tree_node_<cadabra::str_node>) << std::endl;
+	std::cerr << "sizeof(variant<double, multiplier> = " << sizeof(std::variant<double, cadabra::multiplier_t>) << std::endl;
 	}
