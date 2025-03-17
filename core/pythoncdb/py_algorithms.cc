@@ -175,7 +175,9 @@ namespace cadabra {
 				NEvaluator ev;
 				set_variables(ev, d);
 				return apply_algo_preorder<nval>(ex, ev, true, false, 0);
-				}
+				},
+				py::arg("ex"),
+				py::arg("values")=py::dict()
 				);
 		
 		m.def("nevaluate",
