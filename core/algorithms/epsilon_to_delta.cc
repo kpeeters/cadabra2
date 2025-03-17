@@ -74,7 +74,7 @@ Algorithm::result_t epsilon_to_delta::apply(iterator& st)
 	tr.erase(epsilons[0]);
 	//	std::cerr << tr.number_of_children(epsilons[1]) << std::endl;
 	//	std::cerr << " -> " << *st->multiplier << " * " << combin::fact(multiplier_t(tr.number_of_children(epsilons[1]))) << std::endl;
-	multiply(st->multiplier, combin::fact(multiplier_t(tr.number_of_children(epsilons[1]))));
+	multiply(st->multiplier, combin::fact(mpq_class(tr.number_of_children(epsilons[1]))));
 	//	std::cerr << "A:" << *st->multiplier << std::endl;
 	multiply(st->multiplier, signature);
 	//	std::cerr << "B:" << *st->multiplier << std::endl;

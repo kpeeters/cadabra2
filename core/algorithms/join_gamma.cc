@@ -230,8 +230,8 @@ Algorithm::result_t join_gamma::apply(iterator& st)
 		std::vector<Ex> r1, r2;
 		regroup_indices_(gam1, gam2, i, r1, r2);
 
-		multiplier_t mult=(combin::fact(multiplier_t(num1))*combin::fact(multiplier_t(num2)))/
-		                  (combin::fact(multiplier_t(num1-i))*combin::fact(multiplier_t(num2-i))*combin::fact(multiplier_t(i)));
+		multiplier_t mult=multiplier_t( (combin::fact(mpz_class(num1))*combin::fact(mpz_class(num2))), 
+												  (combin::fact(mpz_class(num1-i))*combin::fact(mpz_class(num2-i))*combin::fact(mpz_class(i))) );
 
 		//		debugout << "join: contracting " << i << " indices..." << std::endl;
 		if(!expand) {

@@ -73,13 +73,14 @@ if (MSVC)
 endif()
 
 # Make sure the build type is non-empty.
-if (NOT DEFINED CMAKE_BUILD_TYPE)
-	set(CMAKE_BUILD_TYPE "Debug")
+if(NOT DEFINED CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE STREQUAL "")
+  set(CMAKE_BUILD_TYPE "Release")
 endif()
 set(CADABRA_BUILD_TYPE "${CMAKE_BUILD_TYPE}")
 if (CMAKE_BUILD_TYPE MATCHES "^Debug$")
-	set(CADABRA_DEBUG_BUILD TRUE)
+  set(CADABRA_DEBUG_BUILD TRUE)
 endif()
+message(STATUS "Build type = ${CMAKE_BUILD_TYPE}")
 
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")

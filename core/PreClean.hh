@@ -28,6 +28,7 @@ namespace cadabra {
 
 	void cleanup_updown(const Kernel& k, Ex&, Ex::iterator& it);
 	void cleanup_rational(const Kernel& k, Ex&, Ex::iterator& it);
+	void cleanup_double(const Kernel& k, Ex&, Ex::iterator& it);
 	void cleanup_frac(const Kernel& k, Ex&, Ex::iterator& it);
 	void cleanup_sqrt(const Kernel& k, Ex&, Ex::iterator& it);
 	void cleanup_prod(const Kernel& k, Ex&, Ex::iterator& it);

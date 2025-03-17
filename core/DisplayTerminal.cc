@@ -156,63 +156,29 @@ void DisplayTerminal::print_children(std::ostream& str, Ex::iterator it, int ski
 
 void DisplayTerminal::print_multiplier(std::ostream& str, Ex::iterator it, int mult)
 	{
-	mpz_class denom=it->multiplier->get_den();
-
-	if(denom!=1) {
-		if(mult*it->multiplier->get_num()<0) {
-			str << " - ";
-			mult *= -1;
+	if(it->multiplier->is_rational()) {
+		mpq_class q = it->multiplier->get_rational();
+		mpz_class denom=q.get_den();
+		mpz_class numer=q.get_num();
+		
+		if(denom!=1) {
+			if(mult*numer<0) {
+				str << " - ";
+				mult *= -1;
+				}
+			str << " " << mult * numer << "/" << denom << " ";
 			}
-		str << " " << mult * it->multiplier->get_num() << "/" << it->multiplier->get_den() << " ";
-		}
-	else if(mult * (*it->multiplier)==-1) {
-		str << "-";
+		else if(mult * it->multiplier->get_rational()==-1) {
+			str << "-";
+			}
+		else {
+			str << mult * (it->multiplier->get_rational());
+			}
 		}
 	else {
-		str << mult * (*it->multiplier);
+		str << *it->multiplier;
 		}
-
-	/*	bool turned_one=false;
-		mpz_class denom=it->multiplier->get_den();
-
-		if(*it->multiplier<0) {
-			if(*tree.parent(it)->name=="\\sum") { // sum takes care of minus sign
-				if(*it->multiplier!=-1) {
-					if(denom!=1) {
-						str << "\\frac{" << -(it->multiplier->get_num()) << "}{"
-						 << it->multiplier->get_den() << "}";
-								}
-					else {
-						str << -(*it->multiplier);
-								}
-							}
-				else                    turned_one=true;
-						}
-			else	{
-				if(denom!=1) {
-					str << "(\\frac{" << it->multiplier->get_num() << "}{"
-					 << it->multiplier->get_den() << "})";
-							}
-				else if(*it->multiplier==-1) {
-					str << "-";
-				turned_one=true;
-							}
-				else {
-					str << "(" << *it->multiplier << ")";
-							}
-						}
-					}
-		else {
-			if(denom!=1) {
-				str << "\\frac{" << it->multiplier->get_num() << "}{"
-				 << it->multiplier->get_den() << "}";
-						}
-			else
-				str << *it->multiplier;
-					}
-
-		if(!turned_one && !(*it->name=="1"))
-		str << "*"; */
+	str << " ";
 	}
 
 void DisplayTerminal::print_opening_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)

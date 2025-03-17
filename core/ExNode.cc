@@ -314,10 +314,15 @@ pybind11::object ExNode::get_multiplier() const
 	if(!ex->is_valid(it))
 		throw ConsistencyException("Cannot get the multiplier of an iterator before the first 'next'.");
 
-	pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
-	auto m = *it->multiplier;
-	pybind11::object mult = mpq(m.get_num().get_si(), m.get_den().get_si());
-	return mult;
+	if(it->multiplier->is_rational()) {
+		pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
+		auto m = it->multiplier->get_rational();
+		pybind11::object mult = mpq(m.get_num().get_si(), m.get_den().get_si());
+		return mult;
+		}
+	else {
+		return pybind11::cast(it->multiplier->get_double());
+		}
 	}
 
 void ExNode::set_multiplier(pybind11::object mult)

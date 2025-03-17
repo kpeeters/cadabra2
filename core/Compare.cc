@@ -1686,7 +1686,7 @@ namespace cadabra {
 					++it;
 					}
 				//			txtout << countpairs << " pairs" << std::endl;
-				if(countpairs!=*(cond.begin()->multiplier))
+				if(countpairs!=cond.begin()->multiplier->get_rational())
 					return false;
 				}
 			else if(*cond->name=="\\regex") {

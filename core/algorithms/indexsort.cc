@@ -56,11 +56,11 @@ Algorithm::result_t indexsort::apply(iterator& st)
 			++it2;
 			}
 		if(*(tr.parent(st)->name)=="\\prod") {
-			multiply(tr.parent(st)->multiplier, tmptab.multiplicity*origtab.multiplicity);
+			multiply(tr.parent(st)->multiplier, multiplier_t(tmptab.multiplicity*origtab.multiplicity));
 			pushup_multiplier(tr.parent(st));
 			}
 		else {
-			multiply(st->multiplier, tmptab.multiplicity*origtab.multiplicity);
+			multiply(st->multiplier, multiplier_t(tmptab.multiplicity*origtab.multiplicity));
 			pushup_multiplier(st);
 			}
 		}

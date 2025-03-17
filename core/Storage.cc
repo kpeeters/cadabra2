@@ -38,12 +38,18 @@ namespace cadabra {
 
 	long to_long(multiplier_t mul)
 		{
-		return mul.get_num().get_si();
+		if(!mul.is_rational())
+			throw ConsistencyException("Cannot convert double to long.");
+		
+		return mul.get_rational().get_num().get_si();
 		}
 
 	double to_double(multiplier_t mul)
 		{
-		return mul.get_d();
+		if(mul.is_rational())
+			return mul.get_rational().get_d();
+		else
+			return mul.get_double();
 		}
 
 	std::string to_string(long num)
@@ -503,111 +509,111 @@ namespace cadabra {
 		return *nod->multiplier;
 		}
 
-	unsigned int Ex::equation_number(Ex::iterator it) const
-		{
-		iterator historynode=named_parent(it, "\\history");
-		unsigned int num=0;
-		iterator sit=begin();
-		//	long totravel=0;
-		while(sit!=end()) {
-			//		++totravel;
-			if(*sit->name=="\\history") {
-				++num;
-				if(historynode==sit) {
-					//				txtout << "had to travel " << totravel << std::endl;
-					return num;
-					}
-				}
-			sit.skip_children();
-			++sit;
-			}
-		return 0;
-		}
-
-	nset_t::iterator Ex::equation_label(Ex::iterator it) const
-		{
-		nset_t::iterator ret=name_set.end();
-
-		iterator sit=begin();
-		while(sit!=end()) {
-			if(*sit->name=="\\history") {
-				if(it==sit)
-					goto found;
-				iterator eit=begin(sit);
-				iterator endit=sit;
-				endit.skip_children();
-				++endit;
-				while(eit!=endit) {
-					if(it==eit)
-						goto found;
-					++eit;
-					}
-				sit.skip_children();
-				}
-			++sit;
-			}
-found:
-		if(sit!=end()) {
-			sibling_iterator lit=begin(sit);
-			while(lit!=end(sit)) {
-				if(*lit->name=="\\label") {
-					ret=begin(lit)->name;
-					break;
-					}
-				++lit;
-				}
-			}
-		return ret;
-		}
-
-	// Always returns the \\history node of the equation (i.e. the top node).
-	Ex::iterator Ex::equation_by_number(unsigned int i) const
-		{
-		iterator it=begin();
-		unsigned int num=1;
-		while(it!=end()) {
-			if(*it->name=="\\history") {
-				if(num==i) return it;
-				else       ++num;
-				}
-			it.skip_children();
-			++it;
-			}
-		return it;
-		//	if(num==number_of_siblings(begin()))
-		//		return end();
-		//	return it;
-		}
-
-	Ex::iterator Ex::equation_by_name(nset_t::iterator nit) const
-		{
-		unsigned int tmp;
-		return equation_by_name(nit, tmp);
-		}
-
-	Ex::iterator Ex::equation_by_name(nset_t::iterator nit, unsigned int& tmp) const
-		{
-		unsigned int num=0;
-		iterator it=begin();
-		while(it!=end()) {
-			if(*it->name=="\\history") {
-				++num;
-				sibling_iterator lit=begin(it);
-				while(lit!=end(it)) {
-					if(*lit->name=="\\label") {
-						if(begin(lit)->name==nit) {
-							tmp=num;
-							return it;
-							}
-						}
-					++lit;
-					}
-				}
-			it.skip_children();
-			++it;
-			}
-		return end();
-		}
+//	unsigned int Ex::equation_number(Ex::iterator it) const
+//		{
+//		iterator historynode=named_parent(it, "\\history");
+//		unsigned int num=0;
+//		iterator sit=begin();
+//		//	long totravel=0;
+//		while(sit!=end()) {
+//			//		++totravel;
+//			if(*sit->name=="\\history") {
+//				++num;
+//				if(historynode==sit) {
+//					//				txtout << "had to travel " << totravel << std::endl;
+//					return num;
+//					}
+//				}
+//			sit.skip_children();
+//			++sit;
+//			}
+//		return 0;
+//		}
+//
+//	nset_t::iterator Ex::equation_label(Ex::iterator it) const
+//		{
+//		nset_t::iterator ret=name_set.end();
+//
+//		iterator sit=begin();
+//		while(sit!=end()) {
+//			if(*sit->name=="\\history") {
+//				if(it==sit)
+//					goto found;
+//				iterator eit=begin(sit);
+//				iterator endit=sit;
+//				endit.skip_children();
+//				++endit;
+//				while(eit!=endit) {
+//					if(it==eit)
+//						goto found;
+//					++eit;
+//					}
+//				sit.skip_children();
+//				}
+//			++sit;
+//			}
+//found:
+//		if(sit!=end()) {
+//			sibling_iterator lit=begin(sit);
+//			while(lit!=end(sit)) {
+//				if(*lit->name=="\\label") {
+//					ret=begin(lit)->name;
+//					break;
+//					}
+//				++lit;
+//				}
+//			}
+//		return ret;
+//		}
+//
+//	// Always returns the \\history node of the equation (i.e. the top node).
+//	Ex::iterator Ex::equation_by_number(unsigned int i) const
+//		{
+//		iterator it=begin();
+//		unsigned int num=1;
+//		while(it!=end()) {
+//			if(*it->name=="\\history") {
+//				if(num==i) return it;
+//				else       ++num;
+//				}
+//			it.skip_children();
+//			++it;
+//			}
+//		return it;
+//		//	if(num==number_of_siblings(begin()))
+//		//		return end();
+//		//	return it;
+//		}
+//
+//	Ex::iterator Ex::equation_by_name(nset_t::iterator nit) const
+//		{
+//		unsigned int tmp;
+//		return equation_by_name(nit, tmp);
+//		}
+//
+//	Ex::iterator Ex::equation_by_name(nset_t::iterator nit, unsigned int& tmp) const
+//		{
+//		unsigned int num=0;
+//		iterator it=begin();
+//		while(it!=end()) {
+//			if(*it->name=="\\history") {
+//				++num;
+//				sibling_iterator lit=begin(it);
+//				while(lit!=end(it)) {
+//					if(*lit->name=="\\label") {
+//						if(begin(lit)->name==nit) {
+//							tmp=num;
+//							return it;
+//							}
+//						}
+//					++lit;
+//					}
+//				}
+//			it.skip_children();
+//			++it;
+//			}
+//		return end();
+//		}
 
 	bool Ex::is_hidden(iterator it) const
 		{
@@ -620,25 +626,25 @@ found:
 		return false;
 		}
 
-	Ex::iterator Ex::procedure_by_name(nset_t::iterator nit) const
-		{
-		iterator it=begin();
-		while(it!=end()) {
-			if(*it->name=="\\procedure") {
-				sibling_iterator lit=begin(it);
-				while(lit!=end(it)) {
-					if(*lit->name=="\\label") {
-						if(begin(lit)->name==nit)
-							return it;
-						}
-					++lit;
-					}
-				}
-			it.skip_children();
-			++it;
-			}
-		return end();
-		}
+//	Ex::iterator Ex::procedure_by_name(nset_t::iterator nit) const
+//		{
+//		iterator it=begin();
+//		while(it!=end()) {
+//			if(*it->name=="\\procedure") {
+//				sibling_iterator lit=begin(it);
+//				while(lit!=end(it)) {
+//					if(*lit->name=="\\label") {
+//						if(begin(lit)->name==nit)
+//							return it;
+//						}
+//					++lit;
+//					}
+//				}
+//			it.skip_children();
+//			++it;
+//			}
+//		return end();
+//		}
 
 	Ex::iterator Ex::replace_index(iterator pos, const iterator& from, bool keep_parent_rel)
 		{
@@ -695,59 +701,59 @@ found:
 		return pos;
 		}
 
-	unsigned int Ex::number_of_equations() const
-		{
-		unsigned int last_eq=0;
-		iterator eq=begin();
-		while(eq!=end()) {
-			if(*eq->name=="\\history")
-				++last_eq;
-			eq.skip_children();
-			++eq;
-			}
-		return last_eq;
-		}
+//	unsigned int Ex::number_of_equations() const
+//		{
+//		unsigned int last_eq=0;
+//		iterator eq=begin();
+//		while(eq!=end()) {
+//			if(*eq->name=="\\history")
+//				++last_eq;
+//			eq.skip_children();
+//			++eq;
+//			}
+//		return last_eq;
+//		}
 
-	Ex::iterator Ex::equation_by_number_or_name(iterator it, unsigned int last_used_equation,
-	      unsigned int& real_eqno) const
-		{
-		iterator ret;
-		if(it->is_rational()) {
-			int eqno=static_cast<int>(it->multiplier->get_d());
-			real_eqno=eqno;
-			ret=equation_by_number(eqno);
-			}
-		else {
-			if(*it->name=="%") {
-				ret=equation_by_number(last_used_equation);
-				real_eqno=last_used_equation;
-				}
-			else {
-				ret=equation_by_name(it->name, real_eqno);
-				}
-			}
-		return ret;
-		}
+//	Ex::iterator Ex::equation_by_number_or_name(iterator it, unsigned int last_used_equation,
+//	      unsigned int& real_eqno) const
+//		{
+//		iterator ret;
+//		if(it->is_rational()) {
+//			int eqno=static_cast<int>(it->multiplier->get_d());
+//			real_eqno=eqno;
+//			ret=equation_by_number(eqno);
+//			}
+//		else {
+//			if(*it->name=="%") {
+//				ret=equation_by_number(last_used_equation);
+//				real_eqno=last_used_equation;
+//				}
+//			else {
+//				ret=equation_by_name(it->name, real_eqno);
+//				}
+//			}
+//		return ret;
+//		}
 
-	Ex::iterator Ex::equation_by_number_or_name(iterator it, unsigned int last_used_equation) const
-		{
-		unsigned int tmp;
-		return equation_by_number_or_name(it, last_used_equation, tmp);
-		}
-
-	std::string Ex::equation_number_or_name(iterator it, unsigned int last_used_equation) const
-		{
-		std::stringstream ss;
-		if(it->is_rational()) {
-			int eqno=static_cast<int>(it->multiplier->get_d());
-			ss << eqno;
-			}
-		else {
-			if(*it->name=="%") ss << last_used_equation;
-			else               ss << *it->name;
-			}
-		return ss.str();
-		}
+//	Ex::iterator Ex::equation_by_number_or_name(iterator it, unsigned int last_used_equation) const
+//		{
+//		unsigned int tmp;
+//		return equation_by_number_or_name(it, last_used_equation, tmp);
+//		}
+//
+//	std::string Ex::equation_number_or_name(iterator it, unsigned int last_used_equation) const
+//		{
+//		std::stringstream ss;
+//		if(it->is_rational()) {
+//			int eqno=static_cast<int>(it->multiplier->get_d());
+//			ss << eqno;
+//			}
+//		else {
+//			if(*it->name=="%") ss << last_used_equation;
+//			else               ss << *it->name;
+//			}
+//		return ss.str();
+//		}
 
 	bool Ex::operator==(const Ex& other) const
 		{
@@ -855,14 +861,17 @@ found:
 
 	bool str_node::is_rational() const
 		{
-		return (*name=="1");
+		return (*name=="1" && multiplier->is_rational());
 		}
 
 	bool str_node::is_integer() const
 		{
 		if(*name=="1") {
-			if(multiplier->get_den()==1)
-				return true;
+			if(multiplier->is_rational()) {
+				auto r = multiplier->get_rational();
+				if(r.get_den()==1)
+					return true;
+				}
 			}
 		return false;
 		}
@@ -875,6 +884,18 @@ found:
 				return false;
 			}
 		return true;
+		}
+
+	bool str_node::is_unsimplified_double() const
+		{
+		if((*name).size()==0) return false;
+		bool founddot=false;
+		for(unsigned int i=0; i<(*name).size(); ++i) {
+			if(!isdigit((*name)[i]) && (*name)[i]!='.' && (*name)[i]!='e' && (*name)[i]!='-')
+				return false;
+			if((*name)[i]=='.') founddot=true;
+			}
+		return founddot;
 		}
 
 	bool str_node::is_unsimplified_integer() const
@@ -1071,6 +1092,14 @@ found:
 		num=rat_set.insert(fac).first;
 		}
 
+	void divide(rset_t::iterator& num, multiplier_t fac)
+		{
+		multiplier_t tmp(*num);
+		tmp /= fac;
+		tmp.canonicalize();
+		num=rat_set.insert(tmp).first;
+		}
+
 	void set(rset_t::iterator& num, multiplier_t fac)
 		{
 		fac.canonicalize();
@@ -1096,7 +1125,7 @@ found:
 
 	void flip_sign(rset_t::iterator& num)
 		{
-		multiplier_t fac=-(*num);
+		multiplier_t fac = multiplier_t(-1)*(*num);
 		fac.canonicalize();
 		num=rat_set.insert(fac).first;
 		}

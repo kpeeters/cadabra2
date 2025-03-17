@@ -225,7 +225,7 @@ Algorithm::result_t sym::doit(iterator& it, bool sign)
 
 		// Some final multiplier stuff and cleanup
 
-		multiply(copytree.begin()->multiplier, 1/multiplier_t(raw_ints.total_permutations()));
+		divide(copytree.begin()->multiplier, multiplier_t(raw_ints.total_permutations()));
 		//		multiply(copytree.begin()->multiplier, *st->multiplier);
 		if(sign)
 			multiply(copytree.begin()->multiplier, raw_ints.ordersign(i));

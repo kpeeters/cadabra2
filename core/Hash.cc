@@ -45,8 +45,12 @@ namespace cadabra
 		// Hash the underlying str_node
 		if (!flag_set(HASH_IGNORE_NAMES))
 			hash_combine(seed, do_hash(*it->name));
-		if (!flag_set(HASH_IGNORE_MULTIPLIER) && !(toplevel && flag_set(HASH_IGNORE_TOP_MULTIPLIER)))
-			hash_combine(seed, do_hash(it->multiplier->get_str()));
+		if (!flag_set(HASH_IGNORE_MULTIPLIER) && !(toplevel && flag_set(HASH_IGNORE_TOP_MULTIPLIER))) {
+			if(it->multiplier->is_rational())
+				hash_combine(seed, do_hash(it->multiplier->get_rational().get_str()));
+			else
+				hash_combine(seed, do_hash(it->multiplier->get_double()));
+			}
 		// Offset the flags by different amounts to reduce collisions
 		if (!flag_set(HASH_IGNORE_BRACKET_TYPE))
 			hash_combine(seed, do_hash((it->fl.bracket + 1) << 4));

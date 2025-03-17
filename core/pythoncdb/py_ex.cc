@@ -503,12 +503,15 @@ namespace cadabra {
 		{
 		if (ex->begin() == ex->end())
 			throw ArgumentException("Expression is empty, no head.");
-		pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
 		auto m = *ex->begin()->multiplier;
 		//	return mpq(2,3);
 
-		pybind11::object mult = mpq(m.get_num().get_si(), m.get_den().get_si());
-		return mult;
+		if(m.is_rational()) {
+			pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
+			pybind11::object mult = mpq(m.get_rational().get_num().get_si(), m.get_rational().get_den().get_si());
+			return mult;
+			}
+		else return pybind11::cast(m.get_double());
 		}
 
 	pybind11::list terms(Ex_ptr ex)

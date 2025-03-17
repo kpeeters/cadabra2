@@ -71,7 +71,7 @@ Algorithm::result_t expand_power::apply(iterator& it)
 		}
 	one(argument->multiplier);
 	if(num<1)
-		multiply(prodn->multiplier, 1/tot);
+		divide(prodn->multiplier, tot);
 	else
 		multiply(prodn->multiplier, tot);
 

@@ -7,6 +7,7 @@ namespace cadabra {
 	void pre_clean_dispatch(const Kernel& kernel, Ex& ex, Ex::iterator& it)
 		{
 		if(*it->name!="1" && it->is_unsimplified_rational()) cleanup_rational(kernel, ex, it);
+		if(*it->name!="1" && it->is_unsimplified_double())   cleanup_double(kernel, ex, it);
 
 		if(*it->name=="\\frac")                      cleanup_frac(kernel, ex, it);
 		else if(*it->name=="\\sub")                  cleanup_sub(kernel, ex, it);
@@ -40,10 +41,19 @@ namespace cadabra {
 
 	void cleanup_rational(const Kernel&, Ex&, Ex::iterator& st)
 		{
-		multiplier_t num(*st->name);
+		// This is guaranteed to be a string rational, not a float.
+		mpq_class num(*st->name);
 		num.canonicalize();
 		st->name=name_set.insert("1").first;
-		multiply(st->multiplier,num);
+		multiply(st->multiplier, num);
+		}
+
+	void cleanup_double(const Kernel&, Ex&, Ex::iterator& st)
+		{
+		// This is guaranteed to be a float, not an integer or rational.
+		double num = std::stod(*st->name);
+		st->name=name_set.insert("1").first;
+		multiply(st->multiplier, num);
 		}
 
 	void cleanup_frac(const Kernel&, Ex& tr, Ex::iterator& st)

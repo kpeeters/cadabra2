@@ -57,6 +57,7 @@ message(STATUS "Linking to GMPXX library ${GMPXX_LIBRARIES}")
 # Dependency of TinyProcessLib
 find_package(Threads)
 
+
 #---------------------------------------------------------------------------
 # Enumerate input files and directories.
 #---------------------------------------------------------------------------
@@ -241,6 +242,7 @@ set(LOCAL_SRC_FILES
   Kernel.cc
   Linear.cc
   Media.cc
+  Multiplier.cc
   Parser.cc
   PreClean.cc
   PreProcessor.cc
@@ -467,6 +469,14 @@ else()
   )
 endif()
 
+
+# Profiling mode
+if(CMAKE_BUILD_TYPE STREQUAL "Profile")
+  find_library(GPERFTOOLS_PROFILER profiler REQUIRED)
+  message(STATUS "Building with profiling enabled: ${GPERFTOOLS_PROFILER}")
+  set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_RELEASE} -g")
+  target_link_libraries(cadabra2 PRIVATE -Wl,--no-as-needed ${GPERFTOOLS_PROFILER})
+endif()
 
 #---------------------------------------------------------------------------
 # Packages.

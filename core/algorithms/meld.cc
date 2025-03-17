@@ -400,7 +400,7 @@ bool meld::apply_tableaux(iterator it)
 							Ex::iterator scalar_head = term.scalar.begin();
 							for (Ex::sibling_iterator beg = scalar_head.begin(), end = scalar_head.end(); beg != end; ++beg) {
 								auto new_term = terms[i].scalar.append_child(terms[i].scalar.begin(), (Ex::iterator)beg);
-								multiply(new_term->multiplier, x(i) * (*scalar_head->multiplier));
+								multiply(new_term->multiplier, multiplier_t(x(i)) * (*scalar_head->multiplier));
 								}
 							}
 						}

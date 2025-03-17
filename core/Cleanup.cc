@@ -171,16 +171,17 @@ namespace cadabra {
 			}
 
 		// Turn \pow{mA A}{B} with mA the multiplier for A into mA^B \pow{A}{B}
-		if(exp->is_integer() && *arg->multiplier!=1 && *arg->name!="1") {
+		if(exp->is_integer() && exp->multiplier->is_rational()
+			&& arg->multiplier->is_rational() && *arg->multiplier!=1 && *arg->name!="1") {
 			mpz_class nw_n, nw_d;
 			// std::cerr << "also doing " << arg << ", " << *arg->multiplier << "**" << *exp->multiplier << "***" << std::endl;
-			long Cexp=to_long(*exp->multiplier);
-			mpz_pow_ui(nw_n.get_mpz_t(), arg->multiplier->get_num().get_mpz_t(), std::abs(Cexp));
-			mpz_pow_ui(nw_d.get_mpz_t(), arg->multiplier->get_den().get_mpz_t(), std::abs(Cexp));
+			long Cexp=to_long(exp->multiplier->get_rational());
+			mpz_pow_ui(nw_n.get_mpz_t(), arg->multiplier->get_rational().get_num().get_mpz_t(), std::abs(Cexp));
+			mpz_pow_ui(nw_d.get_mpz_t(), arg->multiplier->get_rational().get_den().get_mpz_t(), std::abs(Cexp));
 			// std::cerr << nw_n << ", " << nw_d << std::endl;
 			if(Cexp<0)
 				std::swap(nw_n, nw_d);
-			multiplier_t newmult=multiplier_t(nw_n, nw_d);
+			mpq_class newmult=mpq_class(nw_n, nw_d);
 			newmult.canonicalize();
 			// std::cerr << newmult << std::endl;
 			multiply(it->multiplier, *rat_set.insert(newmult).first);
@@ -202,16 +203,16 @@ namespace cadabra {
 			auto iC=ipow;
 			++iC;
 			// std::cerr << it << std::endl;
-			if(iC->is_integer() || k.properties.get<Integer>(iC)) {
-				if(iC->is_integer()) { // newmult = (mult)^C;
+			if(ipow->multiplier->is_rational() && (iC->is_integer() || k.properties.get<Integer>(iC))) {
+				if(iC->is_integer() && iC->multiplier->is_rational()) { // newmult = (mult)^C;
 					mpz_class nw_n, nw_d;
 					// std::cerr << "doing " << *ipow->multiplier << "**" << *iC->multiplier << std::endl;
-					long Cexp=to_long(*iC->multiplier);
-					mpz_pow_ui(nw_n.get_mpz_t(), ipow->multiplier->get_num().get_mpz_t(), std::abs(Cexp));
-					mpz_pow_ui(nw_d.get_mpz_t(), ipow->multiplier->get_den().get_mpz_t(), std::abs(Cexp));
+					long Cexp=to_long(iC->multiplier->get_rational());
+					mpz_pow_ui(nw_n.get_mpz_t(), ipow->multiplier->get_rational().get_num().get_mpz_t(), std::abs(Cexp));
+					mpz_pow_ui(nw_d.get_mpz_t(), ipow->multiplier->get_rational().get_den().get_mpz_t(), std::abs(Cexp));
 					if(Cexp<0)
 						std::swap(nw_n, nw_d);
-					multiplier_t newmult=multiplier_t(nw_n, nw_d);
+					mpq_class newmult(nw_n, nw_d);
 					newmult.canonicalize();
 					// std::cerr << "new multiplier " << newmult << std::endl;
 					ipow->multiplier=rat_set.insert(newmult).first;
@@ -781,7 +782,7 @@ namespace cadabra {
 				factor*=*facs->multiplier;
 				if(facs->is_rational()) {
 					multiplier_t tmp; // FIXME: there is a bug in gmp which means we have to put init on next line.
-					tmp=(*facs->name).c_str();
+					tmp=mpq_class((*facs->name).c_str());
 					ret=true;
 					factor*=tmp;
 					facs=tr.erase(facs);

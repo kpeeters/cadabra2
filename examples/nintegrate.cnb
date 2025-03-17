@@ -1,0 +1,821 @@
+{
+	"cell_id": 8051754127212445684,
+	"cells": [
+		{
+			"cell_id": 2931391241472840946,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "from cdb.graphics.plot import plot"
+		},
+		{
+			"cell_id": 13975185716264529983,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 10317714603287939294,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5857136816522861185,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A + \\int{\\sin(x)}{{x, 0 , 6.28 }} + B"
+						}
+					],
+					"source": "\\begin{dmath*}{}A\\discretionary{}{}{}+\\int_{0\\,}^{6.28\\,} \\sin{x}\\,\\,{\\rm d}x\\discretionary{}{}{}+B\\end{dmath*}"
+				}
+			],
+			"source": "ex:=A + \\int{\\sin(x)}{x,0,6.28} + B;"
+		},
+		{
+			"cell_id": 14546848392773906838,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 490153679122261829,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4476489600935279096,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A + [5.07309e-06] + B"
+						}
+					],
+					"source": "\\begin{dmath*}{}A\\discretionary{}{}{}+5.07309 \\times 10^{-06}\\discretionary{}{}{}+B\\end{dmath*}"
+				}
+			],
+			"source": "nval(ex, {});"
+		},
+		{
+			"cell_id": 9997685735238993835,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 11842435957364553702,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}{\\sum}\n  1:{A}\n  2:{q}\n  3:{B}\n\n\\end{verbatim}"
+				}
+			],
+			"source": "print(tree(ex))"
+		},
+		{
+			"cell_id": 1675088285994927682,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 12990242103392446979,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}2.3463563791336464\\end{verbatim}"
+				}
+			],
+			"source": "nintegrate($\\abs(\\sin(x))$, {$x$: (0, 4)});"
+		},
+		{
+			"cell_id": 1610547645856147127,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14821253287264413530,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4274972599410763782,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "858**( 1/2 ) x (x-1)**5"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\sqrt{858} x {\\left(x\\discretionary{}{}{}-1\\right)}^{5}\\end{dmath*}"
+				}
+			],
+			"source": "phi(n):= \\sqrt{2} \\sin(x @(n) \\pi));\nex    := \\sqrt{858} x (x-1)**5;"
+		},
+		{
+			"cell_id": 11321697640771047903,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 11832341841629579330,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "$\\big[$$\\verb|-0.6224866550154421|$,\\discretionary{}{}{} $\\verb|-0.6547656078293627|$,\\discretionary{}{}{} $\\verb|-0.3701537588217539|$,\\discretionary{}{}{} $\\verb|-0.17702485011865277|$$\\big]$"
+				}
+			],
+			"source": "cn = [nintegrate(phi(n) * ex, {$x$: (0, 1)}) for n in range(1,5)];"
+		},
+		{
+			"cell_id": 14374908308221553272,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 5885452926597642491,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}0.9845592395978734\\end{verbatim}"
+				}
+			],
+			"source": "sum(c**2 for c in cn);"
+		},
+		{
+			"cell_id": 15876348162803326487,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 2775031966494451194,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "$\\big[$$-0.622487 \\sqrt{2} \\sin\\left(x \\pi\\right)$,\\discretionary{}{}{} $-0.654766 \\sqrt{2} \\sin\\left(2x \\pi\\right)$,\\discretionary{}{}{} $-0.370154 \\sqrt{2} \\sin\\left(3x \\pi\\right)$,\\discretionary{}{}{} $-0.177025 \\sqrt{2} \\sin\\left(4x \\pi\\right)$$\\big]$"
+				}
+			],
+			"source": "[Ex(cn[i-1]) * phi(i) for i in range(1,5)];"
+		},
+		{
+			"cell_id": 6126845228435655555,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "approx = Ex(0)"
+		},
+		{
+			"cell_id": 17831969859550202078,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 10071197381946077556,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16554206365373409724,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "-0.622487 2**( 1/2 ) \\sin(x \\pi) + -0.654766 2**( 1/2 ) \\sin(2x \\pi) + -0.370154 2**( 1/2 ) \\sin(3x \\pi) + -0.177025 2**( 1/2 ) \\sin(4x \\pi)"
+						}
+					],
+					"source": "\\begin{dmath*}{}-0.622487 \\sqrt{2} \\sin\\left(x \\pi\\right)\\discretionary{}{}{}+-0.654766 \\sqrt{2} \\sin\\left(2x \\pi\\right)\\discretionary{}{}{}+-0.370154 \\sqrt{2} \\sin\\left(3x \\pi\\right)\\discretionary{}{}{}+-0.177025 \\sqrt{2} \\sin\\left(4x \\pi\\right)\\end{dmath*}"
+				}
+			],
+			"source": "for i in range(1,5):\n   approx += Ex(cn[i-1]) * phi(i)\napprox;"
+		},
+		{
+			"cell_id": 5759033717931581555,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 16412685053038420359,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Basic evaluate}"
+				}
+			],
+			"hidden": true,
+			"source": "\\section*{Basic evaluate}"
+		},
+		{
+			"cell_id": 5492019440282277894,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16539683725511946601,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14520806591865121796,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(-x)**( 1/2 )"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\sqrt{-x}\\end{dmath*}"
+				},
+				{
+					"cell_id": 2648626369669508240,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5914944422784917035,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "1"
+						}
+					],
+					"source": "\\begin{dmath*}{}[1.93634e-17 - 0.316228i, 2.73839e-17 - 0.447214i, 3.35383e-17 - 0.547723i]\\end{dmath*}"
+				}
+			],
+			"source": "ex:= \\sqrt(-x);\nnevaluate(ex, {$x$: [0.1, 0.2, 0.3]});"
+		},
+		{
+			"cell_id": 17450870577901381309,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3843471659787676211,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6290463412817069437,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "1"
+						}
+					],
+					"source": "\\begin{dmath*}{}[1.93634e-17 - 0.316228i, 2.73839e-17 - 0.447214i, 3.35383e-17 - 0.547723i]\\end{dmath*}"
+				}
+			],
+			"source": "ex;"
+		},
+		{
+			"cell_id": 2038738571753114116,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3777555118990169184,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}{1}\n\n\\end{verbatim}"
+				}
+			],
+			"source": "print(tree(ex))"
+		},
+		{
+			"cell_id": 18054555599642648051,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3442092987853239677,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7489206703373326878,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "1"
+						}
+					],
+					"source": "\\begin{dmath*}{}1\\end{dmath*}"
+				}
+			],
+			"source": "ex.copy();"
+		},
+		{
+			"cell_id": 6854314875014069650,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9714453434200925488,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}{1}\n\n\\end{verbatim}"
+				}
+			],
+			"source": "print(tree(ex))"
+		},
+		{
+			"cell_id": 9094128843997226060,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15897755206676774417,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13830739368032708840,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\sin(x) (-y)**( 1/2 )"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\sin{x} \\sqrt{-y}\\end{dmath*}"
+				},
+				{
+					"cell_id": 12823481624565641501,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 15542552330907628331,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "1"
+						}
+					],
+					"source": "\\begin{dmath*}{}1\\end{dmath*}"
+				}
+			],
+			"source": "ex:= \\sin(x) \\sqrt(-y);\nnevaluate(ex, {$x$: [0.1, 0.2, 0.3], $y$: [-0.2, -0.4]});"
+		},
+		{
+			"cell_id": 9564013552617521835,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 4218581402320880132,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13334898660421544104,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(-y)**( 1/2 )"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\sqrt{-y}\\end{dmath*}"
+				},
+				{
+					"cell_id": 15237353373470505432,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}[[2.73839e-17 - 0.447214i, 3.87267e-17 - 0.632456i], [2.73839e-17 - 0.447214i, 3.87267e-17 - 0.632456i], [2.73839e-17 - 0.447214i, 3.87267e-17 - 0.632456i]]\\end{verbatim}"
+				}
+			],
+			"source": "ex:= \\sqrt(-y);\nnevaluate(ex, {$x$: [0.1, 0.2, 0.3], $y$: [0.2, 0.4]});"
+		},
+		{
+			"cell_id": 8999525424784193788,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 15059727915456861206,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The above should display the values."
+				}
+			],
+			"hidden": true,
+			"source": "The above should display the values."
+		},
+		{
+			"cell_id": 5449713691475908791,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 10262884598638735702,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Basic integral}"
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{Basic integral}"
+		},
+		{
+			"cell_id": 5162087654464530656,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 10979637231354350328,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16044464667978039478,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "D E F + \\int{(\\sin(x))**2}{{x, 0, a}} + A B C"
+						}
+					],
+					"source": "\\begin{dmath*}{}D E F\\discretionary{}{}{}+\\int_{0}^{a} {\\left(\\sin{x}\\right)}^{2}\\,\\,{\\rm d}x\\discretionary{}{}{}+A B C\\end{dmath*}"
+				}
+			],
+			"source": "ex:= D E F + \\int{ \\sin(x)**2 }{x, 0, a} + A B C;"
+		},
+		{
+			"cell_id": 12014490083622660223,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 17418234012875626772,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 15105335754397677590,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " ...  + \\int{(\\sin(x))**2}{{x, 0, a}} +  ... "
+						}
+					],
+					"source": "\\begin{dmath*}{} \\ldots \\discretionary{}{}{}+\\int_{0}^{a} {\\left(\\sin{x}\\right)}^{2}\\,\\,{\\rm d}x\\discretionary{}{}{}+ \\ldots \\end{dmath*}"
+				}
+			],
+			"source": "zoom(ex, $\\int{#}$);"
+		},
+		{
+			"cell_id": 1384911713275376326,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 11154618271273819641,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Should the call below turn the expression into \\verb|DEF + NTensor(a) + ABC|? "
+				}
+			],
+			"hidden": true,
+			"source": "Should the call below turn the expression into \\verb|DEF + NTensor(a) + ABC|? "
+		},
+		{
+			"cell_id": 18326899318170345646,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13227009998421462577,
+					"cell_origin": "server",
+					"cell_type": "error",
+					"source": "\\begin{verbatim}RuntimeError: Value unknown for subtree with head D.\n\nAt:\n  Notebook Cell (Line 1): _ = nevaluate(ex, {Ex('a', False): [1, 2, 3]})\n\\end{verbatim}"
+				}
+			],
+			"source": "nevaluate(ex, {$a$: [1,2,3]});"
+		},
+		{
+			"cell_id": 9873173291472633947,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16125733197646685804,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1055904793355604851,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "c_{a} + \\int{(\\sin(x))**2}{{x, 0, a}} + d_{a}"
+						}
+					],
+					"source": "\\begin{dmath*}{}c_{a}\\discretionary{}{}{}+\\int_{0}^{a} {\\left(\\sin{x}\\right)}^{2}\\,\\,{\\rm d}x\\discretionary{}{}{}+d_{a}\\end{dmath*}"
+				}
+			],
+			"source": "a::Symbol.\nex:= c_{a} + \\int{ \\sin(x)**2 }{x, 0, a} + d_{a};"
+		},
+		{
+			"cell_id": 4717554382451427067,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 4836667551544584392,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3952429860820889302,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " ...  + \\int{(\\sin(x))**2}{{x, 0, a}} +  ... "
+						}
+					],
+					"source": "\\begin{dmath*}{} \\ldots \\discretionary{}{}{}+\\int_{0}^{a} {\\left(\\sin{x}\\right)}^{2}\\,\\,{\\rm d}x\\discretionary{}{}{}+ \\ldots \\end{dmath*}"
+				}
+			],
+			"source": "zoom(ex, $\\int{#}$);"
+		},
+		{
+			"cell_id": 9963184012515097042,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13521403040521131803,
+					"cell_origin": "server",
+					"cell_type": "error",
+					"source": "\\begin{verbatim}AttributeError: 'cadabra2.Ex' object has no attribute 'eval'\n\nAt:\n  Notebook Cell (Line 1): _ = ex.eval()\n\\end{verbatim}"
+				}
+			],
+			"source": "ex.eval();"
+		},
+		{
+			"cell_id": 3113154890928877587,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9216572187257208273,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2185256517892902042,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(A)**2 + (B)**2"
+						}
+					],
+					"source": "\\begin{dmath*}{}{A}^{2}\\discretionary{}{}{}+{B}^{2}\\end{dmath*}"
+				},
+				{
+					"cell_id": 4234060308304748590,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17499194072528103119,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "1 + (B)**2"
+						}
+					],
+					"source": "\\begin{dmath*}{}1\\discretionary{}{}{}+{B}^{2}\\end{dmath*}"
+				},
+				{
+					"cell_id": 9301435958211735584,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7233973149586856348,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "1 + 2**2"
+						}
+					],
+					"source": "\\begin{dmath*}{}1\\discretionary{}{}{}+{2}^{2}\\end{dmath*}"
+				}
+			],
+			"source": "$A**2+B**2$;\nsubstitute(_, $A=1$);\nsubstitute(_, $B=2$);"
+		},
+		{
+			"cell_id": 6471804076682425243,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		},
+		{
+			"cell_id": 8021868355304705738,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 13905799246688778147,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{QM example}"
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{QM example}"
+		},
+		{
+			"cell_id": 16863211061719007360,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 17461057121402084476,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Symbol attached to~}n.\\end{dmath*}"
+				}
+			],
+			"source": "n::Symbol;"
+		},
+		{
+			"cell_id": 17475731012768243081,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16771919674326249710,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6391961395064285996,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "c_{n} = \\int{\\phi_{n}(x) f(x)}{{x, 0, 1}}"
+						}
+					],
+					"source": "\\begin{dmath*}{}c_{n} = \\int_{0}^{1} \\phi_{n}\\left(x\\right) f\\left(x\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source": "coeffs:= c_{n} = \\int{ \\phi_{n}(x) f(x) }{x, 0, 1};"
+		},
+		{
+			"cell_id": 9430347704188686098,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 2281167506639451332,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 12893098501408169382,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\phi_{n}(x) = 2**( 1/2 ) \\sin(x n \\pi)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\phi_{n}\\left(x\\right) = \\sqrt{2} \\sin\\left(x n \\pi\\right)\\end{dmath*}"
+				}
+			],
+			"source": "phin:= \\phi_{n}(x) = \\sqrt{2} \\sin( x n \\pi );"
+		},
+		{
+			"cell_id": 6799162622394040722,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14327559026871542416,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3687748694878978970,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "f(x) = 858**( 1/2 ) x (x-1)**5"
+						}
+					],
+					"source": "\\begin{dmath*}{}f\\left(x\\right) = \\sqrt{858} x {\\left(x\\discretionary{}{}{}-1\\right)}^{5}\\end{dmath*}"
+				}
+			],
+			"source": "f:= f(x) = \\sqrt{858} x (x-1)**5;"
+		},
+		{
+			"cell_id": 7239102288921320512,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 11373146995440795078,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10159052215331007727,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "c_{n} = \\int{2**( 1/2 ) \\sin(x n \\pi) 858**( 1/2 ) x (x-1)**5}{{x, 0, 1}}"
+						}
+					],
+					"source": "\\begin{dmath*}{}c_{n} = \\int_{0}^{1} \\sqrt{2} \\sin\\left(x n \\pi\\right) \\sqrt{858} x {\\left(x\\discretionary{}{}{}-1\\right)}^{5}\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source": "substitute(coeffs, join(phin, f));"
+		},
+		{
+			"cell_id": 8837338001769706655,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 6302857636652200869,
+					"cell_origin": "server",
+					"cell_type": "error",
+					"source": "\\begin{verbatim}RuntimeError: Value unknown for subtree with head c.\n\nAt:\n  Notebook Cell (Line 1): _ = nevaluate(coeffs, {Ex('n', False): [1, 2, 3, 4]})\n\\end{verbatim}"
+				}
+			],
+			"source": "nevaluate(coeffs, {$n$: [1,2,3,4]});"
+		},
+		{
+			"cell_id": 17763727930545963907,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 18141212906619915356,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14280011189545088095,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\int{0}{1}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\int\\int\\int 0\\,\\,{\\rm d}1\\,{\\rm d}\\sin{x}\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source": "ex:=\\int_{0}^{1}{\\sin(x)}{x};"
+		},
+		{
+			"cell_id": 12231632011440604227,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 6833058964756040602,
+					"cell_origin": "server",
+					"cell_type": "error",
+					"source": "{\\color{red}{\\begin{verbatim}RuntimeError: Found equals node with only one child node.\n\nAt:\n  cadabra2_defaults.py(293): display\n  Notebook Cell (Line 3): display(approx)\n\\end{verbatim}}}"
+				}
+			],
+			"source": "approx := \\sum_{i=1}^{4} c_{i} \\phi_{i};"
+		},
+		{
+			"cell_id": 11902034280760350495,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15106911912947859857,
+					"cell_origin": "server",
+					"cell_type": "image_svg",
+					"source": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIKICAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPHN2ZyB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgd2lkdGg9IjQ2MC44cHQiIGhlaWdodD0iMzQ1LjZwdCIgdmlld0JveD0iMCAwIDQ2MC44IDM0NS42IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSI+CiA8bWV0YWRhdGE+CiAgPHJkZjpSREYgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICA8Y2M6V29yaz4KICAgIDxkYzp0eXBlIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiLz4KICAgIDxkYzpkYXRlPjIwMjUtMDMtMTBUMTk6NDM6NDkuODQ1OTc4PC9kYzpkYXRlPgogICAgPGRjOmZvcm1hdD5pbWFnZS9zdmcreG1sPC9kYzpmb3JtYXQ+CiAgICA8ZGM6Y3JlYXRvcj4KICAgICA8Y2M6QWdlbnQ+CiAgICAgIDxkYzp0aXRsZT5NYXRwbG90bGliIHYzLjYuMywgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy88L2RjOnRpdGxlPgogICAgIDwvY2M6QWdlbnQ+CiAgICA8L2RjOmNyZWF0b3I+CiAgIDwvY2M6V29yaz4KICA8L3JkZjpSREY+CiA8L21ldGFkYXRhPgogPGRlZnM+CiAgPHN0eWxlIHR5cGU9InRleHQvY3NzIj4qe3N0cm9rZS1saW5lam9pbjogcm91bmQ7IHN0cm9rZS1saW5lY2FwOiBidXR0fTwvc3R5bGU+CiA8L2RlZnM+CiA8ZyBpZD0iZmlndXJlXzEiPgogIDxnIGlkPSJwYXRjaF8xIj4KICAgPHBhdGggZD0iTSAwIDM0NS42IApMIDQ2MC44IDM0NS42IApMIDQ2MC44IDAgCkwgMCAwIAp6CiIgc3R5bGU9ImZpbGw6ICNmZmZmZmYiLz4KICA8L2c+CiAgPGcgaWQ9ImF4ZXNfMSI+CiAgIDxnIGlkPSJwYXRjaF8yIj4KICAgIDxwYXRoIGQ9Ik0gNTcuNiAzMDcuNTg0IApMIDQxNC43MiAzMDcuNTg0IApMIDQxNC43MiA0MS40NzIgCkwgNTcuNiA0MS40NzIgCnoKIiBzdHlsZT0iZmlsbDogI2ZmZmZmZiIvPgogICA8L2c+CiAgIDxnIGlkPSJtYXRwbG90bGliLmF4aXNfMSI+CiAgICA8ZyBpZD0ieHRpY2tfMSI+CiAgICAgPGcgaWQ9ImxpbmUyZF8xIj4KICAgICAgPGRlZnM+CiAgICAgICA8cGF0aCBpZD0ibWY3YTlhY2U2ZjYiIGQ9Ik0gMCAwIApMIDAgMy41IAoiIHN0eWxlPSJzdHJva2U6ICMwMDAwMDA7IHN0cm9rZS13aWR0aDogMC44Ii8+CiAgICAgIDwvZGVmcz4KICAgICAgPGc+CiAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNtZjdhOWFjZTZmNiIgeD0iNzMuODMyNzI3IiB5PSIzMDcuNTg0IiBzdHlsZT0ic3Ryb2tlOiAjMDAwMDAwOyBzdHJva2Utd2lkdGg6IDAuOCIvPgogICAgICA8L2c+CiAgICAgPC9nPgogICAgIDxnIGlkPSJ0ZXh0XzEiPgogICAgICA8IS0tIDAuMCAtLT4KICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjUuODgxMTY1IDMyMi4xODI0MzcpIHNjYWxlKDAuMSAtMC4xKSI+CiAgICAgICA8ZGVmcz4KICAgICAgICA8cGF0aCBpZD0iRGVqYVZ1U2Fucy0zMCIgZD0iTSAyMDM0IDQyNTAgClEgMTU0NyA0MjUwIDEzMDEgMzc3MCAKUSAxMDU2IDMyOTEgMTA1NiAyMzI4IApRIDEwNTYgMTM2OSAxMzAxIDg4OSAKUSAxNTQ3IDQwOSAyMDM0IDQwOSAKUSAyNTI1IDQwOSAyNzcwIDg4OSAKUSAzMDE2IDEzNjkgMzAxNiAyMzI4IApRIDMwMTYgMzI5MSAyNzcwIDM3NzAgClEgMjUyNSA0MjUwIDIwMzQgNDI1MCAKegpNIDIwMzQgNDc1MCAKUSAyODE5IDQ3NTAgMzIzMyA0MTI5IApRIDM2NDcgMzUwOSAzNjQ3IDIzMjggClEgMzY0NyAxMTUwIDMyMzMgNTI5IApRIDI4MTkgLTkxIDIwMzQgLTkxIApRIDEyNTAgLTkxIDgzNiA1MjkgClEgNDIyIDExNTAgNDIyIDIzMjggClEgNDIyIDM1MDkgODM2IDQxMjkgClEgMTI1MCA0NzUwIDIwMzQgNDc1MCAKegoiIHRyYW5zZm9ybT0ic2NhbGUoMC4wMTU2MjUpIi8+CiAgICAgICAgPHBhdGggaWQ9IkRlamFWdVNhbnMtMmUiIGQ9Ik0gNjg0IDc5NCAKTCAxMzQ0IDc5NCAKTCAxMzQ0IDAgCkwgNjg0IDAgCkwgNjg0IDc5NCAKegoiIHRyYW5zZm9ybT0ic2NhbGUoMC4wMTU2MjUpIi8+CiAgICAgICA8L2RlZnM+CiAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNEZWphVnVTYW5zLTMwIi8+CiAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNEZWphVnVTYW5zLTJlIiB4PSI2My42MjMwNDciLz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtMzAiIHg9Ijk1LjQxMDE1NiIvPgogICAgICA8L2c+CiAgICAgPC9nPgogICAgPC9nPgogICAgPGcgaWQ9Inh0aWNrXzIiPgogICAgIDxnIGlkPSJsaW5lMmRfMiI+CiAgICAgIDxnPgogICAgICAgPHVzZSB4bGluazpocmVmPSIjbWY3YTlhY2U2ZjYiIHg9IjEzOC43NjM2MzYiIHk9IjMwNy41ODQiIHN0eWxlPSJzdHJva2U6ICMwMDAwMDA7IHN0cm9rZS13aWR0aDogMC44Ii8+CiAgICAgIDwvZz4KICAgICA8L2c+CiAgICAgPGcgaWQ9InRleHRfMiI+CiAgICAgIDwhLS0gMC4yIC0tPgogICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMzAuODEyMDc0IDMyMi4xODI0MzcpIHNjYWxlKDAuMSAtMC4xKSI+CiAgICAgICA8ZGVmcz4KICAgICAgICA8cGF0aCBpZD0iRGVqYVZ1U2Fucy0zMiIgZD0iTSAxMjI4IDUzMSAKTCAzNDMxIDUzMSAKTCAzNDMxIDAgCkwgNDY5IDAgCkwgNDY5IDUzMSAKUSA4MjggOTAzIDE0NDggMTUyOSAKUSAyMDY5IDIxNTYgMjIyOCAyMzM4IApRIDI1MzEgMjY3OCAyNjUxIDI5MTQgClEgMjc3MiAzMTUwIDI3NzIgMzM3OCAKUSAyNzcyIDM3NTAgMjUxMSAzOTg0IApRIDIyNTAgNDIxOSAxODMxIDQyMTkgClEgMTUzNCA0MjE5IDEyMDQgNDExNiAKUSA4NzUgNDAxMyA1MDAgMzgwMyAKTCA1MDAgNDQ0MSAKUSA4ODEgNDU5NCAxMjEyIDQ2NzIgClEgMTU0NCA0NzUwIDE4MTkgNDc1MCAKUSAyNTQ0IDQ3NTAgMjk3NSA0Mzg3IApRIDM0MDYgNDAyNSAzNDA2IDM0MTkgClEgMzQwNiAzMTMxIDMyOTggMjg3MyAKUSAzMTkxIDI2MTYgMjkwNiAyMjY2IApRIDI4MjggMjE3NSAyNDA5IDE3NDIgClEgMTk5MSAxMzA5IDEyMjggNTMxIAp6CiIgdHJhbnNmb3JtPSJzY2FsZSgwLjAxNTYyNSkiLz4KICAgICAgIDwvZGVmcz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtMzAiLz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtMmUiIHg9IjYzLjYyMzA0NyIvPgogICAgICAgPHVzZSB4bGluazpocmVmPSIjRGVqYVZ1U2Fucy0zMiIgeD0iOTUuNDEwMTU2Ii8+CiAgICAgIDwvZz4KICAgICA8L2c+CiAgICA8L2c+CiAgICA8ZyBpZD0ieHRpY2tfMyI+CiAgICAgPGcgaWQ9ImxpbmUyZF8zIj4KICAgICAgPGc+CiAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNtZjdhOWFjZTZmNiIgeD0iMjAzLjY5NDU0NSIgeT0iMzA3LjU4NCIgc3R5bGU9InN0cm9rZTogIzAwMDAwMDsgc3Ryb2tlLXdpZHRoOiAwLjgiLz4KICAgICAgPC9nPgogICAgIDwvZz4KICAgICA8ZyBpZD0idGV4dF8zIj4KICAgICAgPCEtLSAwLjQgLS0+CiAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE5NS43NDI5ODMgMzIyLjE4MjQzNykgc2NhbGUoMC4xIC0wLjEpIj4KICAgICAgIDxkZWZzPgogICAgICAgIDxwYXRoIGlkPSJEZWphVnVTYW5zLTM0IiBkPSJNIDI0MTkgNDExNiAKTCA4MjUgMTYyNSAKTCAyNDE5IDE2MjUgCkwgMjQxOSA0MTE2IAp6Ck0gMjI1MyA0NjY2IApMIDMwNDcgNDY2NiAKTCAzMDQ3IDE2MjUgCkwgMzcxMyAxNjI1IApMIDM3MTMgMTEwMCAKTCAzMDQ3IDExMDAgCkwgMzA0NyAwIApMIDI0MTkgMCAKTCAyNDE5IDExMDAgCkwgMzEzIDExMDAgCkwgMzEzIDE3MDkgCkwgMjI1MyA0NjY2IAp6CiIgdHJhbnNmb3JtPSJzY2FsZSgwLjAxNTYyNSkiLz4KICAgICAgIDwvZGVmcz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtMzAiLz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtMmUiIHg9IjYzLjYyMzA0NyIvPgogICAgICAgPHVzZSB4bGluazpocmVmPSIjRGVqYVZ1U2Fucy0zNCIgeD0iOTUuNDEwMTU2Ii8+CiAgICAgIDwvZz4KICAgICA8L2c+CiAgICA8L2c+CiAgICA8ZyBpZD0ieHRpY2tfNCI+CiAgICAgPGcgaWQ9ImxpbmUyZF80Ij4KICAgICAgPGc+CiAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNtZjdhOWFjZTZmNiIgeD0iMjY4LjYyNTQ1NSIgeT0iMzA3LjU4NCIgc3R5bGU9InN0cm9rZTogIzAwMDAwMDsgc3Ryb2tlLXdpZHRoOiAwLjgiLz4KICAgICAgPC9nPgogICAgIDwvZz4KICAgICA8ZyBpZD0idGV4dF80Ij4KICAgICAgPCEtLSAwLjYgLS0+CiAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI2MC42NzM4OTIgMzIyLjE4MjQzNykgc2NhbGUoMC4xIC0wLjEpIj4KICAgICAgIDxkZWZzPgogICAgICAgIDxwYXRoIGlkPSJEZWphVnVTYW5zLTM2IiBkPSJNIDIxMTMgMjU4NCAKUSAxNjg4IDI1ODQgMTQzOSAyMjkzIApRIDExOTEgMjAwMyAxMTkxIDE0OTcgClEgMTE5MSA5OTQgMTQzOSA3MDEgClEgMTY4OCA0MDkgMjExMyA0MDkgClEgMjUzOCA0MDkgMjc4NiA3MDEgClEgMzAzNCA5OTQgMzAzNCAxNDk3IApRIDMwMzQgMjAwMyAyNzg2IDIyOTMgClEgMjUzOCAyNTg0IDIxMTMgMjU4NCAKegpNIDMzNjYgNDU2MyAKTCAzMzY2IDM5ODggClEgMzEyOCA0MTAwIDI4ODYgNDE1OSAKUSAyNjQ0IDQyMTkgMjQwNiA0MjE5IApRIDE3ODEgNDIxOSAxNDUxIDM3OTcgClEgMTEyMiAzMzc1IDEwNzUgMjUyMiAKUSAxMjU5IDI3OTQgMTUzNyAyOTM5IApRIDE4MTYgMzA4NCAyMTUwIDMwODQgClEgMjg1MyAzMDg0IDMyNjEgMjY1NyAKUSAzNjY5IDIyMzEgMzY2OSAxNDk3IApRIDM2NjkgNzc4IDMyNDQgMzQzIApRIDI4MTkgLTkxIDIxMTMgLTkxIApRIDEzMDMgLTkxIDg3NSA1MjkgClEgNDQ3IDExNTAgNDQ3IDIzMjggClEgNDQ3IDM0MzQgOTcyIDQwOTIgClEgMTQ5NyA0NzUwIDIzODEgNDc1MCAKUSAyNjE5IDQ3NTAgMjg2MSA0NzAzIApRIDMxMDMgNDY1NiAzMzY2IDQ1NjMgCnoKIiB0cmFuc2Zvcm09InNjYWxlKDAuMDE1NjI1KSIvPgogICAgICAgPC9kZWZzPgogICAgICAgPHVzZSB4bGluazpocmVmPSIjRGVqYVZ1U2Fucy0zMCIvPgogICAgICAgPHVzZSB4bGluazpocmVmPSIjRGVqYVZ1U2Fucy0yZSIgeD0iNjMuNjIzMDQ3Ii8+CiAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNEZWphVnVTYW5zLTM2IiB4PSI5NS40MTAxNTYiLz4KICAgICAgPC9nPgogICAgIDwvZz4KICAgIDwvZz4KICAgIDxnIGlkPSJ4dGlja181Ij4KICAgICA8ZyBpZD0ibGluZTJkXzUiPgogICAgICA8Zz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI21mN2E5YWNlNmY2IiB4PSIzMzMuNTU2MzY0IiB5PSIzMDcuNTg0IiBzdHlsZT0ic3Ryb2tlOiAjMDAwMDAwOyBzdHJva2Utd2lkdGg6IDAuOCIvPgogICAgICA8L2c+CiAgICAgPC9nPgogICAgIDxnIGlkPSJ0ZXh0XzUiPgogICAgICA8IS0tIDAuOCAtLT4KICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzI1LjYwNDgwMSAzMjIuMTgyNDM3KSBzY2FsZSgwLjEgLTAuMSkiPgogICAgICAgPGRlZnM+CiAgICAgICAgPHBhdGggaWQ9IkRlamFWdVNhbnMtMzgiIGQ9Ik0gMjAzNCAyMjE2IApRIDE1ODQgMjIxNiAxMzI2IDE5NzUgClEgMTA2OSAxNzM0IDEwNjkgMTMxMyAKUSAxMDY5IDg5MSAxMzI2IDY1MCAKUSAxNTg0IDQwOSAyMDM0IDQwOSAKUSAyNDg0IDQwOSAyNzQzIDY1MSAKUSAzMDAzIDg5NCAzMDAzIDEzMTMgClEgMzAwMyAxNzM0IDI3NDUgMTk3NSAKUSAyNDg4IDIyMTYgMjAzNCAyMjE2IAp6Ck0gMTQwMyAyNDg0IApRIDk5NyAyNTg0IDc3MCAyODYyIApRIDU0NCAzMTQxIDU0NCAzNTQxIApRIDU0NCA0MTAwIDk0MiA0NDI1IApRIDEzNDEgNDc1MCAyMDM0IDQ3NTAgClEgMjczMSA0NzUwIDMxMjggNDQyNSAKUSAzNTI1IDQxMDAgMzUyNSAzNTQxIApRIDM1MjUgMzE0MSAzMjk4IDI4NjIgClEgMzA3MiAyNTg0IDI2NjkgMjQ4NCAKUSAzMTI1IDIzNzggMzM3OSAyMDY4IApRIDM2MzQgMTc1OSAzNjM0IDEzMTMgClEgMzYzNCA2MzQgMzIyMCAyNzEgClEgMjgwNiAtOTEgMjAzNCAtOTEgClEgMTI2MyAtOTEgODQ4IDI3MSAKUSA0MzQgNjM0IDQzNCAxMzEzIApRIDQzNCAxNzU5IDY5MCAyMDY4IApRIDk0NyAyMzc4IDE0MDMgMjQ4NCAKegpNIDExNzIgMzQ4MSAKUSAxMTcyIDMxMTkgMTM5OCAyOTE2IApRIDE2MjUgMjcxMyAyMDM0IDI3MTMgClEgMjQ0MSAyNzEzIDI2NzAgMjkxNiAKUSAyOTAwIDMxMTkgMjkwMCAzNDgxIApRIDI5MDAgMzg0NCAyNjcwIDQwNDcgClEgMjQ0MSA0MjUwIDIwMzQgNDI1MCAKUSAxNjI1IDQyNTAgMTM5OCA0MDQ3IApRIDExNzIgMzg0NCAxMTcyIDM0ODEgCnoKIiB0cmFuc2Zvcm09InNjYWxlKDAuMDE1NjI1KSIvPgogICAgICAgPC9kZWZzPgogICAgICAgPHVzZSB4bGluazpocmVmPSIjRGVqYVZ1U2Fucy0zMCIvPgogICAgICAgPHVzZSB4bGluazpocmVmPSIjRGVqYVZ1U2Fucy0yZSIgeD0iNjMuNjIzMDQ3Ii8+CiAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNEZWphVnVTYW5zLTM4IiB4PSI5NS40MTAxNTYiLz4KICAgICAgPC9nPgogICAgIDwvZz4KICAgIDwvZz4KICAgIDxnIGlkPSJ4dGlja182Ij4KICAgICA8ZyBpZD0ibGluZTJkXzYiPgogICAgICA8Zz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI21mN2E5YWNlNmY2IiB4PSIzOTguNDg3MjczIiB5PSIzMDcuNTg0IiBzdHlsZT0ic3Ryb2tlOiAjMDAwMDAwOyBzdHJva2Utd2lkdGg6IDAuOCIvPgogICAgICA8L2c+CiAgICAgPC9nPgogICAgIDxnIGlkPSJ0ZXh0XzYiPgogICAgICA8IS0tIDEuMCAtLT4KICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzkwLjUzNTcxIDMyMi4xODI0MzcpIHNjYWxlKDAuMSAtMC4xKSI+CiAgICAgICA8ZGVmcz4KICAgICAgICA8cGF0aCBpZD0iRGVqYVZ1U2Fucy0zMSIgZD0iTSA3OTQgNTMxIApMIDE4MjUgNTMxIApMIDE4MjUgNDA5MSAKTCA3MDMgMzg2NiAKTCA3MDMgNDQ0MSAKTCAxODE5IDQ2NjYgCkwgMjQ1MCA0NjY2IApMIDI0NTAgNTMxIApMIDM0ODEgNTMxIApMIDM0ODEgMCAKTCA3OTQgMCAKTCA3OTQgNTMxIAp6CiIgdHJhbnNmb3JtPSJzY2FsZSgwLjAxNTYyNSkiLz4KICAgICAgIDwvZGVmcz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtMzEiLz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtMmUiIHg9IjYzLjYyMzA0NyIvPgogICAgICAgPHVzZSB4bGluazpocmVmPSIjRGVqYVZ1U2Fucy0zMCIgeD0iOTUuNDEwMTU2Ii8+CiAgICAgIDwvZz4KICAgICA8L2c+CiAgICA8L2c+CiAgIDwvZz4KICAgPGcgaWQ9Im1hdHBsb3RsaWIuYXhpc18yIj4KICAgIDxnIGlkPSJ5dGlja18xIj4KICAgICA8ZyBpZD0ibGluZTJkXzciPgogICAgICA8ZGVmcz4KICAgICAgIDxwYXRoIGlkPSJtY2ViYjc5YWMwYSIgZD0iTSAwIDAgCkwgLTMuNSAwIAoiIHN0eWxlPSJzdHJva2U6ICMwMDAwMDA7IHN0cm9rZS13aWR0aDogMC44Ii8+CiAgICAgIDwvZGVmcz4KICAgICAgPGc+CiAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNtY2ViYjc5YWMwYSIgeD0iNTcuNiIgeT0iMjkwLjYyNDUwMSIgc3R5bGU9InN0cm9rZTogIzAwMDAwMDsgc3Ryb2tlLXdpZHRoOiAwLjgiLz4KICAgICAgPC9nPgogICAgIDwvZz4KICAgICA8ZyBpZD0idGV4dF83Ij4KICAgICAgPCEtLSDiiJIyLjAgLS0+CiAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI2LjMxNzE4NyAyOTQuNDIzNzIpIHNjYWxlKDAuMSAtMC4xKSI+CiAgICAgICA8ZGVmcz4KICAgICAgICA8cGF0aCBpZD0iRGVqYVZ1U2Fucy0yMjEyIiBkPSJNIDY3OCAyMjcyIApMIDQ2ODQgMjI3MiAKTCA0Njg0IDE3NDEgCkwgNjc4IDE3NDEgCkwgNjc4IDIyNzIgCnoKIiB0cmFuc2Zvcm09InNjYWxlKDAuMDE1NjI1KSIvPgogICAgICAgPC9kZWZzPgogICAgICAgPHVzZSB4bGluazpocmVmPSIjRGVqYVZ1U2Fucy0yMjEyIi8+CiAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNEZWphVnVTYW5zLTMyIiB4PSI4My43ODkwNjIiLz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtMmUiIHg9IjE0Ny40MTIxMDkiLz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtMzAiIHg9IjE3OS4xOTkyMTkiLz4KICAgICAgPC9nPgogICAgIDwvZz4KICAgIDwvZz4KICAgIDxnIGlkPSJ5dGlja18yIj4KICAgICA8ZyBpZD0ibGluZTJkXzgiPgogICAgICA8Zz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI21jZWJiNzlhYzBhIiB4PSI1Ny42IiB5PSIyMzMuODM5NjMiIHN0eWxlPSJzdHJva2U6ICMwMDAwMDA7IHN0cm9rZS13aWR0aDogMC44Ii8+CiAgICAgIDwvZz4KICAgICA8L2c+CiAgICAgPGcgaWQ9InRleHRfOCI+CiAgICAgIDwhLS0g4oiSMS41IC0tPgogICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNi4zMTcxODcgMjM3LjYzODg0OSkgc2NhbGUoMC4xIC0wLjEpIj4KICAgICAgIDxkZWZzPgogICAgICAgIDxwYXRoIGlkPSJEZWphVnVTYW5zLTM1IiBkPSJNIDY5MSA0NjY2IApMIDMxNjkgNDY2NiAKTCAzMTY5IDQxMzQgCkwgMTI2OSA0MTM0IApMIDEyNjkgMjk5MSAKUSAxNDA2IDMwMzggMTU0MyAzMDYxIApRIDE2ODEgMzA4NCAxODE5IDMwODQgClEgMjYwMCAzMDg0IDMwNTYgMjY1NiAKUSAzNTEzIDIyMjggMzUxMyAxNDk3IApRIDM1MTMgNzQ0IDMwNDQgMzI2IApRIDI1NzUgLTkxIDE3MjIgLTkxIApRIDE0MjggLTkxIDExMjMgLTQxIApRIDgxOSA5IDQ5NCAxMDkgCkwgNDk0IDc0NCAKUSA3NzUgNTkxIDEwNzUgNTE2IApRIDEzNzUgNDQxIDE3MDkgNDQxIApRIDIyNTAgNDQxIDI1NjUgNzI1IApRIDI4ODEgMTAwOSAyODgxIDE0OTcgClEgMjg4MSAxOTg0IDI1NjUgMjI2OCAKUSAyMjUwIDI1NTMgMTcwOSAyNTUzIApRIDE0NTYgMjU1MyAxMjA0IDI0OTcgClEgOTUzIDI0NDEgNjkxIDIzMjIgCkwgNjkxIDQ2NjYgCnoKIiB0cmFuc2Zvcm09InNjYWxlKDAuMDE1NjI1KSIvPgogICAgICAgPC9kZWZzPgogICAgICAgPHVzZSB4bGluazpocmVmPSIjRGVqYVZ1U2Fucy0yMjEyIi8+CiAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNEZWphVnVTYW5zLTMxIiB4PSI4My43ODkwNjIiLz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtMmUiIHg9IjE0Ny40MTIxMDkiLz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtMzUiIHg9IjE3OS4xOTkyMTkiLz4KICAgICAgPC9nPgogICAgIDwvZz4KICAgIDwvZz4KICAgIDxnIGlkPSJ5dGlja18zIj4KICAgICA8ZyBpZD0ibGluZTJkXzkiPgogICAgICA8Zz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI21jZWJiNzlhYzBhIiB4PSI1Ny42IiB5PSIxNzcuMDU0NzU5IiBzdHlsZT0ic3Ryb2tlOiAjMDAwMDAwOyBzdHJva2Utd2lkdGg6IDAuOCIvPgogICAgICA8L2c+CiAgICAgPC9nPgogICAgIDxnIGlkPSJ0ZXh0XzkiPgogICAgICA8IS0tIOKIkjEuMCAtLT4KICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjYuMzE3MTg3IDE4MC44NTM5NzgpIHNjYWxlKDAuMSAtMC4xKSI+CiAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNEZWphVnVTYW5zLTIyMTIiLz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtMzEiIHg9IjgzLjc4OTA2MiIvPgogICAgICAgPHVzZSB4bGluazpocmVmPSIjRGVqYVZ1U2Fucy0yZSIgeD0iMTQ3LjQxMjEwOSIvPgogICAgICAgPHVzZSB4bGluazpocmVmPSIjRGVqYVZ1U2Fucy0zMCIgeD0iMTc5LjE5OTIxOSIvPgogICAgICA8L2c+CiAgICAgPC9nPgogICAgPC9nPgogICAgPGcgaWQ9Inl0aWNrXzQiPgogICAgIDxnIGlkPSJsaW5lMmRfMTAiPgogICAgICA8Zz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI21jZWJiNzlhYzBhIiB4PSI1Ny42IiB5PSIxMjAuMjY5ODg4IiBzdHlsZT0ic3Ryb2tlOiAjMDAwMDAwOyBzdHJva2Utd2lkdGg6IDAuOCIvPgogICAgICA8L2c+CiAgICAgPC9nPgogICAgIDxnIGlkPSJ0ZXh0XzEwIj4KICAgICAgPCEtLSDiiJIwLjUgLS0+CiAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI2LjMxNzE4NyAxMjQuMDY5MTA2KSBzY2FsZSgwLjEgLTAuMSkiPgogICAgICAgPHVzZSB4bGluazpocmVmPSIjRGVqYVZ1U2Fucy0yMjEyIi8+CiAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNEZWphVnVTYW5zLTMwIiB4PSI4My43ODkwNjIiLz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtMmUiIHg9IjE0Ny40MTIxMDkiLz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtMzUiIHg9IjE3OS4xOTkyMTkiLz4KICAgICAgPC9nPgogICAgIDwvZz4KICAgIDwvZz4KICAgIDxnIGlkPSJ5dGlja181Ij4KICAgICA8ZyBpZD0ibGluZTJkXzExIj4KICAgICAgPGc+CiAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNtY2ViYjc5YWMwYSIgeD0iNTcuNiIgeT0iNjMuNDg1MDE2IiBzdHlsZT0ic3Ryb2tlOiAjMDAwMDAwOyBzdHJva2Utd2lkdGg6IDAuOCIvPgogICAgICA8L2c+CiAgICAgPC9nPgogICAgIDxnIGlkPSJ0ZXh0XzExIj4KICAgICAgPCEtLSAwLjAgLS0+CiAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM0LjY5Njg3NSA2Ny4yODQyMzUpIHNjYWxlKDAuMSAtMC4xKSI+CiAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNEZWphVnVTYW5zLTMwIi8+CiAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNEZWphVnVTYW5zLTJlIiB4PSI2My42MjMwNDciLz4KICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtMzAiIHg9Ijk1LjQxMDE1NiIvPgogICAgICA8L2c+CiAgICAgPC9nPgogICAgPC9nPgogICA8L2c+CiAgIDxnIGlkPSJsaW5lMmRfMTIiPgogICAgPHBhdGggZD0iTSA3My44MzI3MjcgNjMuNDg1MDE2IApMIDc3LjExMjA2NiA5NS40MjQzMjQgCkwgODAuMzkxNDA1IDEyNC4xNzAzNTYgCkwgODMuNjcwNzQ0IDE0OS45MTY2MTMgCkwgODYuOTUwMDgzIDE3Mi44NDg3MDEgCkwgOTAuMjI5NDIxIDE5My4xNDQ1MyAKTCA5My41MDg3NiAyMTAuOTc0NTE5IApMIDk2Ljc4ODA5OSAyMjYuNTAxNzkgCkwgMTAwLjA2NzQzOCAyMzkuODgyMzcgCkwgMTAzLjM0Njc3NyAyNTEuMjY1Mzc5IApMIDEwNi42MjYxMTYgMjYwLjc5MzIyNCAKTCAxMDkuOTA1NDU1IDI2OC42MDE3ODQgCkwgMTEzLjE4NDc5MyAyNzQuODIwNiAKTCAxMTYuNDY0MTMyIDI3OS41NzMwNTQgCkwgMTE5Ljc0MzQ3MSAyODIuOTc2NTU0IApMIDEyMy4wMjI4MSAyODUuMTQyNzA4IApMIDEyNi4zMDIxNDkgMjg2LjE3NzUwMiAKTCAxMjkuNTgxNDg4IDI4Ni4xODE0NyAKTCAxMzIuODYwODI2IDI4NS4yNDk4NjkgCkwgMTM2LjE0MDE2NSAyODMuNDcyODQ1IApMIDEzOS40MTk1MDQgMjgwLjkzNTU5NiAKTCAxNDIuNjk4ODQzIDI3Ny43MTg1MzcgCkwgMTQ1Ljk3ODE4MiAyNzMuODk3NDYyIApMIDE0OS4yNTc1MjEgMjY5LjU0MzY5NyAKTCAxNTIuNTM2ODYgMjY0LjcyNDI2IApMIDE1NS44MTYxOTggMjU5LjUwMjAxIApMIDE1OS4wOTU1MzcgMjUzLjkzNTgwMSAKTCAxNjIuMzc0ODc2IDI0OC4wODA2MjQgCkwgMTY1LjY1NDIxNSAyNDEuOTg3NzU5IApMIDE2OC45MzM1NTQgMjM1LjcwNDkwOSAKTCAxNzIuMjEyODkzIDIyOS4yNzYzNSAKTCAxNzUuNDkyMjMxIDIyMi43NDMwNTkgCkwgMTc4Ljc3MTU3IDIxNi4xNDI4NTUgCkwgMTgyLjA1MDkwOSAyMDkuNTEwNTI3IApMIDE4NS4zMzAyNDggMjAyLjg3Nzk2OSAKTCAxODguNjA5NTg3IDE5Ni4yNzQzMDEgCkwgMTkxLjg4ODkyNiAxODkuNzI1OTk5IApMIDE5NS4xNjgyNjQgMTgzLjI1NzAxMyAKTCAxOTguNDQ3NjAzIDE3Ni44ODg4OSAKTCAyMDEuNzI2OTQyIDE3MC42NDA4ODkgCkwgMjA1LjAwNjI4MSAxNjQuNTMwMDk1IApMIDIwOC4yODU2MiAxNTguNTcxNTM0IApMIDIxMS41NjQ5NTkgMTUyLjc3ODI3OCAKTCAyMTQuODQ0Mjk4IDE0Ny4xNjE1NTUgCkwgMjE4LjEyMzYzNiAxNDEuNzMwODU0IApMIDIyMS40MDI5NzUgMTM2LjQ5NDAyMSAKTCAyMjQuNjgyMzE0IDEzMS40NTczNjggCkwgMjI3Ljk2MTY1MyAxMjYuNjI1NzYgCkwgMjMxLjI0MDk5MiAxMjIuMDAyNzE1IApMIDIzNC41MjAzMzEgMTE3LjU5MDQ5MiAKTCAyMzcuNzk5NjY5IDExMy4zOTAxODQgCkwgMjQxLjA3OTAwOCAxMDkuNDAxODAyIApMIDI0NC4zNTgzNDcgMTA1LjYyNDM1OCAKTCAyNDcuNjM3Njg2IDEwMi4wNTU5NDkgCkwgMjUwLjkxNzAyNSA5OC42OTM4MzQgCkwgMjU0LjE5NjM2NCA5NS41MzQ1MTEgCkwgMjU3LjQ3NTcwMiA5Mi41NzM3OTEgCkwgMjYwLjc1NTA0MSA4OS44MDY4NjcgCkwgMjY0LjAzNDM4IDg3LjIyODM4OCAKTCAyNjcuMzEzNzE5IDg0LjgzMjUyIApMIDI3MC41OTMwNTggODIuNjEzMDA5IApMIDI3My44NzIzOTcgODAuNTYzMjQ5IApMIDI3Ny4xNTE3MzYgNzguNjc2MzMzIApMIDI4MC40MzEwNzQgNzYuOTQ1MTEzIApMIDI4My43MTA0MTMgNzUuMzYyMjUgCkwgMjg2Ljk4OTc1MiA3My45MjAyNzEgCkwgMjkwLjI2OTA5MSA3Mi42MTE2MTEgCkwgMjkzLjU0ODQzIDcxLjQyODY2MSAKTCAyOTYuODI3NzY5IDcwLjM2MzgxMyAKTCAzMDAuMTA3MTA3IDY5LjQwOTUgCkwgMzAzLjM4NjQ0NiA2OC41NTgyMyAKTCAzMDYuNjY1Nzg1IDY3LjgwMjYyOCAKTCAzMDkuOTQ1MTI0IDY3LjEzNTQ2NyAKTCAzMTMuMjI0NDYzIDY2LjU0OTY5MyAKTCAzMTYuNTAzODAyIDY2LjAzODQ2NCAKTCAzMTkuNzgzMTQgNjUuNTk1MTYzIApMIDMyMy4wNjI0NzkgNjUuMjEzNDMxIApMIDMyNi4zNDE4MTggNjQuODg3MTgyIApMIDMyOS42MjExNTcgNjQuNjEwNjIyIApMIDMzMi45MDA0OTYgNjQuMzc4MjY1IApMIDMzNi4xNzk4MzUgNjQuMTg0OTQ0IApMIDMzOS40NTkxNzQgNjQuMDI1ODI0IApMIDM0Mi43Mzg1MTIgNjMuODk2NDA2IApMIDM0Ni4wMTc4NTEgNjMuNzkyNTM2IApMIDM0OS4yOTcxOSA2My43MTA0MDQgCkwgMzUyLjU3NjUyOSA2My42NDY1NDcgCkwgMzU1Ljg1NTg2OCA2My41OTc4NDMgCkwgMzU5LjEzNTIwNyA2My41NjE1MDkgCkwgMzYyLjQxNDU0NSA2My41MzUwOTQgCkwgMzY1LjY5Mzg4NCA2My41MTY0NjQgCkwgMzY4Ljk3MzIyMyA2My41MDM3OTQgCkwgMzcyLjI1MjU2MiA2My40OTU1NTMgCkwgMzc1LjUzMTkwMSA2My40OTA0OCAKTCAzNzguODExMjQgNjMuNDg3NTcyIApMIDM4Mi4wOTA1NzkgNjMuNDg2MDU0IApMIDM4NS4zNjk5MTcgNjMuNDg1MzYgCkwgMzg4LjY0OTI1NiA2My40ODUwOTkgCkwgMzkxLjkyODU5NSA2My40ODUwMjcgCkwgMzk1LjIwNzkzNCA2My40ODUwMTcgCkwgMzk4LjQ4NzI3MyA2My40ODUwMTYgCiIgY2xpcC1wYXRoPSJ1cmwoI3BjNGViNDBmYjg2KSIgc3R5bGU9ImZpbGw6IG5vbmU7IHN0cm9rZTogIzFmNzdiNDsgc3Ryb2tlLXdpZHRoOiAxLjU7IHN0cm9rZS1saW5lY2FwOiBzcXVhcmUiLz4KICAgPC9nPgogICA8ZyBpZD0ibGluZTJkXzEzIj4KICAgIDxwYXRoIGQ9Ik0gNzMuODMyNzI3IDYzLjQ4NTAxNiAKTCA3Ny4xMTIwNjYgODIuNTc3NTA1IApMIDgwLjM5MTQwNSAxMDEuNTMwODQ5IApMIDgzLjY3MDc0NCAxMjAuMjA3NDE0IApMIDg2Ljk1MDA4MyAxMzguNDcyNTU0IApMIDkwLjIyOTQyMSAxNTYuMTk2MDcgCkwgOTMuNTA4NzYgMTczLjI1MzU5MSAKTCA5Ni43ODgwOTkgMTg5LjUyNzg5NiAKTCAxMDAuMDY3NDM4IDIwNC45MTAxMyAKTCAxMDMuMzQ2Nzc3IDIxOS4zMDA5MjQgCkwgMTA2LjYyNjExNiAyMzIuNjExMzc5IApMIDEwOS45MDU0NTUgMjQ0Ljc2MzkzMSAKTCAxMTMuMTg0NzkzIDI1NS42OTMwNTYgCkwgMTE2LjQ2NDEzMiAyNjUuMzQ1ODM2IApMIDExOS43NDM0NzEgMjczLjY4MjM1MiAKTCAxMjMuMDIyODEgMjgwLjY3NTkyNyAKTCAxMjYuMzAyMTQ5IDI4Ni4zMTMxOTIgCkwgMTI5LjU4MTQ4OCAyOTAuNTkzOTk3IApMIDEzMi44NjA4MjYgMjkzLjUzMTE1NSAKTCAxMzYuMTQwMTY1IDI5NS4xNTAwMzUgCkwgMTM5LjQxOTUwNCAyOTUuNDg4IApMIDE0Mi42OTg4NDMgMjk0LjU5MzcwOSAKTCAxNDUuOTc4MTgyIDI5Mi41MjYyOTIgCkwgMTQ5LjI1NzUyMSAyODkuMzU0NDA3IApMIDE1Mi41MzY4NiAyODUuMTU1MTk3IApMIDE1NS44MTYxOTggMjgwLjAxMzE2IApMIDE1OS4wOTU1MzcgMjc0LjAxODk1MSAKTCAxNjIuMzc0ODc2IDI2Ny4yNjgxMzUgCkwgMTY1LjY1NDIxNSAyNTkuODU5OTAyIApMIDE2OC45MzM1NTQgMjUxLjg5NTc2NiAKTCAxNzIuMjEyODkzIDI0My40NzgyNzYgCkwgMTc1LjQ5MjIzMSAyMzQuNzA5NzMxIApMIDE3OC43NzE1NyAyMjUuNjkwOTUxIApMIDE4Mi4wNTA5MDkgMjE2LjUyMDA4OSAKTCAxODUuMzMwMjQ4IDIwNy4yOTE1MTYgCkwgMTg4LjYwOTU4NyAxOTguMDk0Nzk0IApMIDE5MS44ODg5MjYgMTg5LjAxMzc0IApMIDE5NS4xNjgyNjQgMTgwLjEyNTYwMSAKTCAxOTguNDQ3NjAzIDE3MS41MDAzNDcgCkwgMjAxLjcyNjk0MiAxNjMuMjAwMDgxIApMIDIwNS4wMDYyODEgMTU1LjI3ODU5MSAKTCAyMDguMjg1NjIgMTQ3Ljc4MTAyMiAKTCAyMTEuNTY0OTU5IDE0MC43NDM2OTQgCkwgMjE0Ljg0NDI5OCAxMzQuMTk0MDQ4IApMIDIxOC4xMjM2MzYgMTI4LjE1MDcyMiAKTCAyMjEuNDAyOTc1IDEyMi42MjM3NTggCkwgMjI0LjY4MjMxNCAxMTcuNjE0OTI4IApMIDIyNy45NjE2NTMgMTEzLjExODE3IApMIDIzMS4yNDA5OTIgMTA5LjEyMDEyNCAKTCAyMzQuNTIwMzMxIDEwNS42MDA3NjkgCkwgMjM3Ljc5OTY2OSAxMDIuNTM0MTI1IApMIDI0MS4wNzkwMDggOTkuODg5MDMzIApMIDI0NC4zNTgzNDcgOTcuNjI5OTc0IApMIDI0Ny42Mzc2ODYgOTUuNzE3OTQgCkwgMjUwLjkxNzAyNSA5NC4xMTEzMDkgCkwgMjU0LjE5NjM2NCA5Mi43NjY3NDIgCkwgMjU3LjQ3NTcwMiA5MS42NDAwNjQgCkwgMjYwLjc1NTA0MSA5MC42ODcxMjcgCkwgMjY0LjAzNDM4IDg5Ljg2NDYzMyAKTCAyNjcuMzEzNzE5IDg5LjEzMDkxMyAKTCAyNzAuNTkzMDU4IDg4LjQ0NjY0MiAKTCAyNzMuODcyMzk3IDg3Ljc3NTQ5IApMIDI3Ny4xNTE3MzYgODcuMDg0Njg1IApMIDI4MC40MzEwNzQgODYuMzQ1NDk0IApMIDI4My43MTA0MTMgODUuNTMzNjEgCkwgMjg2Ljk4OTc1MiA4NC42Mjk0NDMgCkwgMjkwLjI2OTA5MSA4My42MTgzMDkgCkwgMjkzLjU0ODQzIDgyLjQ5MDUyMSAKTCAyOTYuODI3NzY5IDgxLjI0MTM3NSAKTCAzMDAuMTA3MTA3IDc5Ljg3MTA0OSAKTCAzMDMuMzg2NDQ2IDc4LjM4NDQwMSAKTCAzMDYuNjY1Nzg1IDc2Ljc5MDY4NCAKTCAzMDkuOTQ1MTI0IDc1LjEwMzE4MiAKTCAzMTMuMjI0NDYzIDczLjMzODc3NSAKTCAzMTYuNTAzODAyIDcxLjUxNzQ0IApMIDMxOS43ODMxNCA2OS42NjE3MDcgCkwgMzIzLjA2MjQ3OSA2Ny43OTYwNzIgCkwgMzI2LjM0MTgxOCA2NS45NDYzODEgCkwgMzI5LjYyMTE1NyA2NC4xMzkyMDUgCkwgMzMyLjkwMDQ5NiA2Mi40MDEyMDYgCkwgMzM2LjE3OTgzNSA2MC43NTg1MTIgCkwgMzM5LjQ1OTE3NCA1OS4yMzYxMTcgCkwgMzQyLjczODUxMiA1Ny44NTczMTIgCkwgMzQ2LjAxNzg1MSA1Ni42NDMxNSAKTCAzNDkuMjk3MTkgNTUuNjExOTgxIApMIDM1Mi41NzY1MjkgNTQuNzc5MDI0IApMIDM1NS44NTU4NjggNTQuMTU2MDMxIApMIDM1OS4xMzUyMDcgNTMuNzUxMDAyIApMIDM2Mi40MTQ1NDUgNTMuNTY4IApMIDM2NS42OTM4ODQgNTMuNjA3MDI4IApMIDM2OC45NzMyMjMgNTMuODY0MDAxIApMIDM3Mi4yNTI1NjIgNTQuMzMwOCAKTCAzNzUuNTMxOTAxIDU0Ljk5NTM5OCAKTCAzNzguODExMjQgNTUuODQyMDc3IApMIDM4Mi4wOTA1NzkgNTYuODUxNzA5IApMIDM4NS4zNjk5MTcgNTguMDAyMTA1IApMIDM4OC42NDkyNTYgNTkuMjY4NDMzIApMIDM5MS45Mjg1OTUgNjAuNjIzNjc3IApMIDM5NS4yMDc5MzQgNjIuMDM5MTQ3IApMIDM5OC40ODcyNzMgNjMuNDg1MDE2IAoiIGNsaXAtcGF0aD0idXJsKCNwYzRlYjQwZmI4NikiIHN0eWxlPSJmaWxsOiBub25lOyBzdHJva2U6ICNmZjdmMGU7IHN0cm9rZS13aWR0aDogMS41OyBzdHJva2UtbGluZWNhcDogc3F1YXJlIi8+CiAgIDwvZz4KICAgPGcgaWQ9InBhdGNoXzMiPgogICAgPHBhdGggZD0iTSA1Ny42IDMwNy41ODQgCkwgNTcuNiA0MS40NzIgCiIgc3R5bGU9ImZpbGw6IG5vbmU7IHN0cm9rZTogIzAwMDAwMDsgc3Ryb2tlLXdpZHRoOiAwLjg7IHN0cm9rZS1saW5lam9pbjogbWl0ZXI7IHN0cm9rZS1saW5lY2FwOiBzcXVhcmUiLz4KICAgPC9nPgogICA8ZyBpZD0icGF0Y2hfNCI+CiAgICA8cGF0aCBkPSJNIDQxNC43MiAzMDcuNTg0IApMIDQxNC43MiA0MS40NzIgCiIgc3R5bGU9ImZpbGw6IG5vbmU7IHN0cm9rZTogIzAwMDAwMDsgc3Ryb2tlLXdpZHRoOiAwLjg7IHN0cm9rZS1saW5lam9pbjogbWl0ZXI7IHN0cm9rZS1saW5lY2FwOiBzcXVhcmUiLz4KICAgPC9nPgogICA8ZyBpZD0icGF0Y2hfNSI+CiAgICA8cGF0aCBkPSJNIDU3LjYgMzA3LjU4NCAKTCA0MTQuNzIgMzA3LjU4NCAKIiBzdHlsZT0iZmlsbDogbm9uZTsgc3Ryb2tlOiAjMDAwMDAwOyBzdHJva2Utd2lkdGg6IDAuODsgc3Ryb2tlLWxpbmVqb2luOiBtaXRlcjsgc3Ryb2tlLWxpbmVjYXA6IHNxdWFyZSIvPgogICA8L2c+CiAgIDxnIGlkPSJwYXRjaF82Ij4KICAgIDxwYXRoIGQ9Ik0gNTcuNiA0MS40NzIgCkwgNDE0LjcyIDQxLjQ3MiAKIiBzdHlsZT0iZmlsbDogbm9uZTsgc3Ryb2tlOiAjMDAwMDAwOyBzdHJva2Utd2lkdGg6IDAuODsgc3Ryb2tlLWxpbmVqb2luOiBtaXRlcjsgc3Ryb2tlLWxpbmVjYXA6IHNxdWFyZSIvPgogICA8L2c+CiAgPC9nPgogPC9nPgogPGRlZnM+CiAgPGNsaXBQYXRoIGlkPSJwYzRlYjQwZmI4NiI+CiAgIDxyZWN0IHg9IjU3LjYiIHk9IjQxLjQ3MiIgd2lkdGg9IjM1Ny4xMiIgaGVpZ2h0PSIyNjYuMTEyIi8+CiAgPC9jbGlwUGF0aD4KIDwvZGVmcz4KPC9zdmc+Cg=="
+				}
+			],
+			"source": "plot([Re(ex), Re(approx)], {$x$: (0,1)});"
+		},
+		{
+			"cell_id": 6638988550985815943,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 6417084589674135123,
+					"cell_origin": "server",
+					"cell_type": "error",
+					"source": "{\\color{red}{\\begin{verbatim}TypeError: unsupported operand type(s) for +: 'int' and 'cadabra2.Ex'\n\nAt:\n  Notebook Cell (Line 1): approx = sum((Ex(cn[i - 1]) * ex for i in range(1, 4)))\n\\end{verbatim}}}"
+				}
+			],
+			"source": "approx = sum(Ex(cn[i-1]) * ex for i in range(1,4))"
+		},
+		{
+			"cell_id": 15386486392948455785,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9365916491336435565,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6825797584138565871,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "-0.622487 2**( 1/2 ) \\sin(x \\pi) 858**( 1/2 ) x (x-1)**5"
+						}
+					],
+					"source": "\\begin{dmath*}{}-0.622487 \\sqrt{2} \\sin\\left(x \\pi\\right) \\sqrt{858} x {\\left(x\\discretionary{}{}{}-1\\right)}^{5}\\end{dmath*}"
+				}
+			],
+			"source": "sol = Ex(cn[0]) * ex(1);"
+		},
+		{
+			"cell_id": 3298289353320551968,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 5524457616137074309,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}4.5\\end{verbatim}"
+				}
+			],
+			"source": "nintegrate($x**2 y$, {$y$: 1/2, $x$: (0, 3)});"
+		},
+		{
+			"cell_id": 13275781745521193411,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
+	"version": 1.0
+}

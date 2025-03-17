@@ -367,21 +367,29 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 
 void DisplayTeX::print_multiplier(std::ostream& str, Ex::iterator it, int mult)
 	{
-	mpz_class denom=it->multiplier->get_den();
-
-	if(denom!=1) {
-		if(mult*it->multiplier->get_num()<0) {
-			str << " - ";
-			mult *= -1;
+	if(it->multiplier->is_rational()) {
+		mpq_class q = it->multiplier->get_rational();
+		mpz_class denom=q.get_den();
+		mpz_class numer=q.get_num();
+		
+		if(denom!=1) {
+			if(mult*numer<0) {
+				str << " - ";
+				mult *= -1;
+				}
+			str << "\\frac{" << mult * numer << "}{" << denom << "}";
 			}
-		str << "\\frac{" << mult * it->multiplier->get_num() << "}{" << it->multiplier->get_den() << "}";
-		}
-	else if(mult * (*it->multiplier)==-1) {
-		str << "-";
+		else if(mult * q==-1) {
+			str << "-";
+			}
+		else {
+			str << mult * q;
+			}
 		}
 	else {
-		str << mult * (*it->multiplier);
+		str << it->multiplier->get_double();
 		}
+	str << "\\,";
 	}
 
 void DisplayTeX::print_opening_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
@@ -573,10 +581,16 @@ void DisplayTeX::print_fraclike(std::ostream& str, Ex::iterator it)
 		}
 
 	str << "\\frac{";
-	if(mult * (*it->multiplier)!=1) {
+	if(it->multiplier->is_rational()) {
+		if(mult * (it->multiplier->get_rational())!=1) {
+			print_multiplier(str, it, mult);
+			}
+		}
+	else {
 		print_multiplier(str, it, mult);
 		}
-	if(num->is_rational()==false || (mult * (*it->multiplier))==1)
+	
+	if(num->is_rational()==false || (mult * (it->multiplier->get_rational()))==1)
 		dispatch(str, num);
 	str << "}{";
 	dispatch(str, den);
@@ -621,13 +635,20 @@ void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std
 				str << "-";
 				mult *= -1;
 			}
-			if (mult.get_den() == 1) {
-				multiply(pos.begin()->multiplier, mult);
-			}
+			if (mult.is_rational()) {
+				auto rmult = mult.get_rational();
+				if(mult.get_rational().get_den() == 1) {
+					multiply(pos.begin()->multiplier, rmult);
+					}
+				else {
+					multiply(pos.begin()->multiplier, rmult.get_num());
+					multiply(neg.begin()->multiplier, rmult.get_den());
+					}
+				}
 			else {
-				multiply(pos.begin()->multiplier, mult.get_num());
-				multiply(neg.begin()->multiplier, mult.get_den());
-			}
+				multiply(pos.begin()->multiplier, mult);
+				}
+			
 			str << "\\frac{";
 			if (pos.begin().begin() == pos.begin().end()) {
 				pos.begin()->name = name_set.insert("1").first;
@@ -789,7 +810,7 @@ void DisplayTeX::print_powlike(std::ostream& str, Ex::iterator it)
 
 	if (kernel.display_fractions && exp->is_rational() && *exp->multiplier < 0) {
 		auto mult = *it->multiplier;
-		bool mult_is_int = mult.get_den() == 1;
+		bool mult_is_int = mult.is_rational() && (mult.get_rational().get_den() == 1);
 		if (mult < 0) {
 			str << "-";
 			mult *= -1;
@@ -797,13 +818,22 @@ void DisplayTeX::print_powlike(std::ostream& str, Ex::iterator it)
 		str << "\\frac{";
 		if (mult_is_int)
 			str << mult;
-		else
-			str << mult.get_num();
+		else {
+			if(mult.is_rational())
+				str << mult.get_rational().get_num();
+			else
+				str << mult;
+			}
 		str << "}{";
 		if (*exp->multiplier == -1) {
 			Ex copy(arg);
-			if (!mult_is_int)
-				multiply(copy.begin()->multiplier, mult.get_den());
+			if(mult.is_rational()) {
+				if (!mult_is_int) {
+					multiply(copy.begin()->multiplier, mult.get_rational().get_den());
+					}
+				}
+			else multiply(copy.begin()->multiplier, mult);
+			
 			dispatch(str, copy.begin());
 		}
 		else {
@@ -811,8 +841,12 @@ void DisplayTeX::print_powlike(std::ostream& str, Ex::iterator it)
 			exp = copy.begin().begin();
 			++exp;
 			multiply(exp->multiplier, -1);
-			if (!mult_is_int)
-				copy.begin()->multiplier = rat_set.insert(mult.get_den()).first;
+			if(mult.is_rational()) {
+				if (!mult_is_int)
+					copy.begin()->multiplier = rat_set.insert(mult.get_rational().get_den()).first;
+				}
+			else copy.begin()->multiplier = rat_set.insert(mult).first;
+			
 			print_powlike(str, copy.begin());
 		}
 		str << "}";

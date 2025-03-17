@@ -39,7 +39,7 @@ namespace cadabra {
 
 	class NTensor;
 	
-	typedef mpq_class               multiplier_t;
+	typedef Multiplier              multiplier_t;
 	typedef std::set<std::string>   nset_t;
 	typedef std::set<multiplier_t>  rset_t;
 	typedef uintptr_t               hashval_t;
@@ -108,6 +108,7 @@ namespace cadabra {
 			bool is_identity() const;
 			bool is_rational() const;
 			bool is_unsimplified_rational() const;
+			bool is_unsimplified_double() const;
 			bool is_integer() const;
 			bool is_unsimplified_integer() const;
 			bool is_index() const;            // _ or ^ parent_rel (does not query properties)
@@ -134,6 +135,7 @@ namespace cadabra {
 	///
 	/// Helper functions for manipulation of multipliers.
 	void     multiply(rset_t::iterator&, multiplier_t);
+	void     divide(rset_t::iterator&, multiplier_t);
 	void     add(rset_t::iterator&, multiplier_t);
 	void     zero(rset_t::iterator&);
 	void     one(rset_t::iterator&);
@@ -250,17 +252,17 @@ namespace cadabra {
 			unsigned int     number_of_steps(iterator it) const;
 			// Given an iterator pointing to any node in the tree, figure
 			// out to which equation number it belongs.
-			unsigned int     number_of_equations() const;
-			unsigned int     equation_number(iterator it) const;
-			nset_t::iterator equation_label(iterator it) const;
-			iterator         equation_by_number(unsigned int i) const;
-			iterator         equation_by_name(nset_t::iterator it) const;
-			iterator         equation_by_name(nset_t::iterator it, unsigned int& ) const;
-			iterator         equation_by_number_or_name(iterator it, unsigned int last_used_equation) const;
-			iterator         equation_by_number_or_name(iterator it, unsigned int last_used_equation,
-			      unsigned int&) const;
-			std::string      equation_number_or_name(iterator it, unsigned int last_used_equation) const;
-			iterator         procedure_by_name(nset_t::iterator it) const;
+//			unsigned int     number_of_equations() const;
+//			unsigned int     equation_number(iterator it) const;
+//			nset_t::iterator equation_label(iterator it) const;
+//			iterator         equation_by_number(unsigned int i) const;
+//			iterator         equation_by_name(nset_t::iterator it) const;
+//			iterator         equation_by_name(nset_t::iterator it, unsigned int& ) const;
+//			iterator         equation_by_number_or_name(iterator it, unsigned int last_used_equation) const;
+//			iterator         equation_by_number_or_name(iterator it, unsigned int last_used_equation,
+//			      unsigned int&) const;
+//			std::string      equation_number_or_name(iterator it, unsigned int last_used_equation) const;
+//			iterator         procedure_by_name(nset_t::iterator it) const;
 
 			// Determine whether a node has an '\ldots' parent (not necessarily direct).
 			bool is_hidden(iterator) const;

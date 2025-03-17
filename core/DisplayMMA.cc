@@ -279,23 +279,29 @@ void DisplayMMA::print_children(std::ostream& str, Ex::iterator it, int )
 void DisplayMMA::print_multiplier(std::ostream& str, Ex::iterator it)
 	{
 	bool suppress_star=false;
-	mpz_class denom=it->multiplier->get_den();
-
-	if(denom!=1) {
-		if(false && it->multiplier->get_num()<0)
-			str << "(" << it->multiplier->get_num() << ")";
-		else
-			str << it->multiplier->get_num();
-		str << "/" << it->multiplier->get_den();
-		}
-	else if(*it->multiplier==-1) {
-		str << "-";
-		suppress_star=true;
+	if(it->multiplier->is_rational()) {
+		mpz_class denom=it->multiplier->get_rational().get_den();
+		mpz_class numer=it->multiplier->get_rational().get_num();
+		
+		if(denom!=1) {
+			if(false && numer<0)
+				str << "(" << numer << ")";
+			else
+				str << numer;
+			str << "/" << denom;
+			}
+		else if(*it->multiplier==-1) {
+			str << "-";
+			suppress_star=true;
+			}
+		else {
+			str << *it->multiplier;
+			}
 		}
 	else {
-		str << *it->multiplier;
+		str << it->multiplier->get_double();
 		}
-
+	
 	if(!suppress_star && !(*it->name=="1"))
 		str << "*";
 	}

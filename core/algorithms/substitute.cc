@@ -394,7 +394,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 		for(unsigned int i=1; i<comparator.factor_locations.size(); ++i)
 			tr.erase(comparator.factor_locations[i]);
 
-		multiply(repl.begin()->multiplier, 1/comparator.term_ratio);
+		divide(repl.begin()->multiplier, comparator.term_ratio);
 
 		// no need to keep repl
 		iterator newtr=tr.move_ontop(iterator(comparator.factor_locations[0]),repl.begin());
