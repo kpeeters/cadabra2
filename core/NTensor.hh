@@ -27,8 +27,8 @@ namespace cadabra {
 			explicit NTensor(const std::vector<double>& vals);
 
 			/// Helper functions to be able to initialise a tensor with an initialiser list.
-			explicit NTensor(std::initializer_list<std::complex<double>> vals);
-			explicit NTensor(std::initializer_list<double> vals);
+			NTensor(std::initializer_list<std::complex<double>> vals);
+			NTensor(std::initializer_list<double> vals);
 
 			/// Initialise as a scalar; sets shape automatically.
 			explicit NTensor(std::complex<double>);

@@ -28,7 +28,7 @@ int main(int, char **)
 	// an array of values leads to an outer product.
 
 	auto ex1b = "B*A + A"_ex(k);
-	NEvaluator ev1b(*ex1b);
+	NEvaluator ev1b(ex1b->begin());
 	ev1b.set_variable(Ex("A"), NTensor({1.0, 2.0, 3.0}));
 	ev1b.set_variable(Ex("B"), NTensor({0.5, 1.0, 5.0, 10.0}));
 	// This should give a {3, 4} tensor.
@@ -36,7 +36,7 @@ int main(int, char **)
 	std::cout << "B*A + A = " << res1b << "\n\n";
 
 	auto ex1 = "B*A + C"_ex(k);
-	NEvaluator ev1(*ex1);
+	NEvaluator ev1(ex1->begin());
 	ev1.set_variable(Ex("A"), NTensor({1.0, 2.0, 3.0}));
 	ev1.set_variable(Ex("B"), NTensor({0.5, 1.0, 5.0, 10.0}));
 	ev1.set_variable(Ex("C"), NTensor({1.0, -1.0}));
@@ -55,7 +55,7 @@ int main(int, char **)
 	std::cout << "\n\n";
 	std::cout << nt2 << std::endl;
 
-	NEvaluator ev(*ex2);
+	NEvaluator ev(ex2->begin());
 	ev.set_variable(Ex("C"), { 3.0 });
 	ev.set_variable(Ex("B"), { 2.3 });
 	ev.set_variable(Ex("A"), { 1.2 });
@@ -65,7 +65,7 @@ int main(int, char **)
 	// Double trig.
 	Stopwatch sw;
 	auto ex3 = R"( \cos(x) \sin(y) )"_ex(k);
-	NEvaluator ev3(*ex3);
+	NEvaluator ev3(ex3->begin());
 	ev3.set_variable(Ex("x"), NTensor::linspace(0.0, 3.14, 1000));
 	ev3.set_variable(Ex("y"), NTensor::linspace(0.0, 3.14, 1000));
 	sw.start();
