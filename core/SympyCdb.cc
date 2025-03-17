@@ -9,6 +9,10 @@
 #include "Kernel.hh"
 #include "DisplaySympy.hh"
 #include "algorithms/substitute.hh"
+#include "properties/AntiCommuting.hh"
+#include "properties/NonCommuting.hh"
+#include "properties/SelfAntiCommuting.hh"
+#include "properties/SelfNonCommuting.hh"
 
 using namespace cadabra;
 
@@ -19,6 +23,22 @@ using namespace cadabra;
 sympy::SympyBridge::SympyBridge(const Kernel& k, std::shared_ptr<Ex> ex)
 	: DisplaySympy(k, *ex), ex(ex)
 	{
+	Ex::iterator it=(*ex).begin();
+	while(it != (*ex).end()) {
+		auto nc = k.properties.get<NonCommuting>(it);
+		if(nc) throw RuntimeException("Cannot handle NonCommuting objects in the SymPy bridge.");
+		
+		auto ac = k.properties.get<AntiCommuting>(it);
+		if(ac) throw RuntimeException("Cannot handle AntiCommuting objects in the SymPy bridge.");
+		
+		auto snc = kernel.properties.get<SelfNonCommuting>(it);
+		if(snc) throw RuntimeException("Cannot handle SelfNonCommuting objects in the SymPy bridge.");
+		
+		auto sac = kernel.properties.get<SelfAntiCommuting>(it);
+		if(sac) throw RuntimeException("Cannot handle SelfAntiCommuting objects in the SymPy bridge.");
+
+		++it;
+		}
 	}
 
 sympy::SympyBridge::~SympyBridge()
@@ -69,6 +89,26 @@ void sympy::SympyBridge::import_ex(const std::string& s)
 Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap, std::vector<std::string> args,
                           const std::string& method)
 	{
+	// Safeguard against using noncommuting/anticommuting objects.
+	Ex::iterator cpy = it, nxt = it;
+	nxt.skip_children();
+	++nxt;
+	while(cpy != nxt) {
+		auto nc = kernel.properties.get<NonCommuting>(cpy);
+		if(nc) throw RuntimeException("Cannot handle NonCommuting objects in the SymPy bridge.");
+		
+		auto ac = kernel.properties.get<AntiCommuting>(cpy);
+		if(ac) throw RuntimeException("Cannot handle AntiCommuting objects in the SymPy bridge.");
+		
+		auto snc = kernel.properties.get<SelfNonCommuting>(cpy);
+		if(snc) throw RuntimeException("Cannot handle SelfNonCommuting objects in the SymPy bridge.");
+		
+		auto sac = kernel.properties.get<SelfAntiCommuting>(cpy);
+		if(sac) throw RuntimeException("Cannot handle SelfAntiCommuting objects in the SymPy bridge.");
+		
+		++cpy;
+		}
+
 	// We first need to print the sub-expression using DisplaySympy,
 	// optionally with the head wrapped around it and the args added
 	// (if present).

@@ -13,21 +13,21 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 13317311565857025180,
+					"cell_id": 18118323855584737614,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 11494284494660297919,
+							"cell_id": 6043849711601370921,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": "A + \\int{\\sin(x)}{{x, 0, 2\\pi}} + B"
+							"source": "A + \\int{(\\sin(x))**2 \\cos(\\pi x)}{{x, 0,  2/3 \\pi}} + B"
 						}
 					],
-					"source": "\\begin{dmath*}{}A\\discretionary{}{}{}+\\int_{0\\,}^{2\\,\\pi} \\sin{x}\\,\\,{\\rm d}x\\discretionary{}{}{}+B\\end{dmath*}"
+					"source": "\\begin{dmath*}{}A\\discretionary{}{}{}+\\int_{0\\,}^{\\frac{2}{3}\\,\\pi} {\\left(\\sin{x}\\right)}^{2\\,} \\cos\\left(\\pi x\\right)\\,\\,{\\rm d}x\\discretionary{}{}{}+B\\end{dmath*}"
 				}
 			],
-			"source": "ex:=A + \\int{\\sin(x)}{x,0,2\\pi} + B;"
+			"source": "ex:=A + \\int{\\sin(x)**2 \\cos(\\pi x)}{x,0,2/3\\pi} + B;"
 		},
 		{
 			"cell_id": 14546848392773906838,
@@ -35,21 +35,43 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 10454205381911099029,
+					"cell_id": 17342733029827741368,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 17547144199001925795,
+							"cell_id": 12709660310964246116,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": "A + B"
+							"source": "A-0.0554932 + B"
 						}
 					],
-					"source": "\\begin{dmath*}{}A\\discretionary{}{}{}+B\\end{dmath*}"
+					"source": "\\begin{dmath*}{}A\\discretionary{}{}{}-0.0554932\\,\\discretionary{}{}{}+B\\end{dmath*}"
 				}
 			],
-			"source": "nval(ex, {});"
+			"source": "nval(ex.copy());"
+		},
+		{
+			"cell_id": 16440894535807297616,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 2740567749694519304,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17803805087820925012,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(\\pi (4-(\\pi)**2) (A + B) -  3/4 (\\pi)**2 \\sin( 2/3 (\\pi)**2) + 2\\sin( 2/3 (\\pi)**2) +  1/2 \\sqrt(3) \\pi \\cos( 2/3 (\\pi)**2)) (\\pi (4-(\\pi)**2))**(-1)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(\\pi \\left(4\\,\\discretionary{}{}{}-\\,{\\pi}^{2\\,}\\right) \\left(A\\discretionary{}{}{}+B\\right)\\discretionary{}{}{} - \\frac{3}{4}\\,{\\pi}^{2\\,} \\sin\\left(\\frac{2}{3}\\,{\\pi}^{2\\,}\\right)\\discretionary{}{}{}+2\\,\\sin\\left(\\frac{2}{3}\\,{\\pi}^{2\\,}\\right)\\discretionary{}{}{}+\\frac{1}{2}\\,\\sqrt{3\\,} \\pi \\cos\\left(\\frac{2}{3}\\,{\\pi}^{2\\,}\\right)\\right) {\\left(\\pi \\left(4\\,\\discretionary{}{}{}-\\,{\\pi}^{2\\,}\\right)\\right)}^{-\\,1}\\end{dmath*}"
+				}
+			],
+			"source": "simplify(ex.copy());"
 		},
 		{
 			"cell_id": 1675088285994927682,
@@ -64,6 +86,12 @@
 				}
 			],
 			"source": "nintegrate($\\abs(\\sin(x))$, {$x$: (0, 4)});"
+		},
+		{
+			"cell_id": 4936177558051148034,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		},
 		{
 			"cell_id": 1610547645856147127,

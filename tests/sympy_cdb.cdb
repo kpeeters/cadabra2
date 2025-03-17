@@ -103,3 +103,15 @@ def test07():
    print("Test 07 passed")
 
 test07()
+
+def test08():
+   __cdbkernel__=create_scope()
+   {M,N}::AntiCommuting;
+   ex:= M N - N M:
+   try:
+      simplify(ex)
+      assert(1==0)
+   except RuntimeError as e:
+      print("Test08 passed")
+
+test08()
