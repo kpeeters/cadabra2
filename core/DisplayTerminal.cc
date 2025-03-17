@@ -178,7 +178,6 @@ void DisplayTerminal::print_multiplier(std::ostream& str, Ex::iterator it, int m
 	else {
 		str << *it->multiplier;
 		}
-	str << " ";
 	}
 
 void DisplayTerminal::print_opening_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
