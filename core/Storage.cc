@@ -228,7 +228,8 @@ namespace cadabra {
 			//		else if(name[i]=='\\') res+="\\backslash{}";
 			else                   res+=name[i];
 			}
-		str << res;
+		if(res!="1")
+			str << res;
 
 		Ex::sibling_iterator beg=it.begin();
 		Ex::sibling_iterator fin=it.end();

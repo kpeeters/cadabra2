@@ -127,8 +127,8 @@ test07()
 
 def test08():
     import numpy as np
-    ex:= x**2;
     try:
+       ex:= x**2;
        q = np.array(ex)
        assert(1==0)
     except RuntimeError as err:
