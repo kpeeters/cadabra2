@@ -6,6 +6,7 @@
 #endif
 #include <gtkmm/box.h>
 #include <gtkmm/drawingarea.h>
+#include <gtkmm/menu.h>
 #if GTKMM_MINOR_VERSION>=10
 #include <gtkmm/revealer.h>
 #endif
@@ -114,18 +115,25 @@ namespace cadabra {
 			void dim(bool);
 
 			sigc::signal1<bool, std::string> tex_error;
-
+			sigc::signal0<bool>              signal_on_copy_as_latex;
+			
 		protected:
 			virtual bool on_button_release_event(GdkEventButton *) override;
+			virtual bool on_button_press_event(GdkEventButton *event) override;
 			virtual void on_show() override;
 
 			void convert();
+
+			void on_copy_as_latex() const;
 
 		private:
 			TeXEngine& engine;
 			bool use_microtex;
 			bool is_error;
 			
+			Gtk::Menu     context_menu;
+			Gtk::MenuItem item_copy_as_latex;
+
 			float text_size() const;
 		};
 

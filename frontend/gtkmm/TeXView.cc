@@ -45,11 +45,21 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, bool use_microtex_, int hma
 
 	add_events( Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK );
 	set_can_focus(true);
+
+	context_menu.append(item_copy_as_latex);
+	item_copy_as_latex.set_label("Copy as LaTeX");
+	context_menu.show_all();
+	item_copy_as_latex.signal_activate().connect(sigc::mem_fun(*this, &TeXView::on_copy_as_latex));
 	}
 
 TeXView::~TeXView()
 	{
 	engine.checkout(content);
+	}
+
+void TeXView::on_copy_as_latex() const
+	{
+	signal_on_copy_as_latex.emit();
 	}
 
 void TeXView::set_use_microtex(bool use_microtex_)
@@ -213,10 +223,24 @@ void TeXView::dim(bool d)
 	else  image.set_opacity(1.0);
 	}
 
-bool TeXView::on_button_release_event(GdkEventButton *)
+bool TeXView::on_button_release_event(GdkEventButton *event)
 	{
-	show_hide_requested.emit(datacell);
-	return true;
+	if(event->button == 1) {
+		show_hide_requested.emit(datacell);
+		return true;
+		}
+	return false;
+	}
+
+bool TeXView::on_button_press_event(GdkEventButton *event)
+	{
+	if(event->type==GDK_BUTTON_PRESS) {
+		if(event->button == 3) {
+			context_menu.popup_at_pointer((GdkEvent*)event);
+			return true;
+			}
+		}
+	return false;
 	}
 
 void TeXView::update_image()

@@ -298,7 +298,8 @@ namespace cadabra {
 			// Handler for callbacks from TeXView cells.
 
 			bool on_tex_error(const std::string&, DTree::iterator);
-
+			bool on_copy_as_latex(const DTree::iterator it);
+	
 			void propagate_global_hide_flag();
 			
 			// Styling through CSS

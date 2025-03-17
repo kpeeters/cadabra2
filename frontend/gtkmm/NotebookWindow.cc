@@ -1374,6 +1374,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				// std::cerr << "Add widget " << newcell.outbox << " for cell " << it->id().id << std::endl;
 				newcell.outbox->tex_error.connect(
 				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_tex_error), it ) );
+				newcell.outbox->signal_on_copy_as_latex.connect(
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_copy_as_latex), it ) );
 
 				newcell.outbox->show_hide_requested.connect(
 				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_toggle_visibility), i ) );
@@ -2095,6 +2097,13 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number,
 	// Execute the cell. Make sure this comes after the hiding logic above.
 	compute->execute_cell(it);
 
+	return true;
+	}
+
+bool NotebookWindow::on_copy_as_latex(const DTree::iterator it)
+	{
+	Glib::RefPtr<Gtk::Clipboard> clipboard = Gtk::Clipboard::get(GDK_SELECTION_CLIPBOARD);
+	on_outbox_copy(clipboard, it);
 	return true;
 	}
 
@@ -3483,6 +3492,8 @@ bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
 void NotebookWindow::on_outbox_copy(Glib::RefPtr<Gtk::Clipboard> refClipboard, DTree::iterator it)
 	{
 	std::string cpystring=(*it).textbuf;
+	std::regex begin_dmath(R"(\\begin\{dmath\*\}\{\})");
+	std::regex end_dmath(R"(\\end\{dmath\*\})");
 
 	// Find the child cell which contains the input_form data.
 	auto sib=doc.begin(it);
@@ -3490,7 +3501,8 @@ void NotebookWindow::on_outbox_copy(Glib::RefPtr<Gtk::Clipboard> refClipboard, D
 	while(sib!=doc.end(it)) {
 		if(sib->cell_type==DataCell::CellType::input_form) {
 			clipboard_cdb = sib->textbuf;
-//			std::cerr << "found input form " << clipboard_cdb << std::endl;
+			clipboard_cdb = std::regex_replace(clipboard_cdb, begin_dmath, "");
+			clipboard_cdb = std::regex_replace(clipboard_cdb, end_dmath, "");
 			break;
 			}
 		++sib;
@@ -3498,6 +3510,8 @@ void NotebookWindow::on_outbox_copy(Glib::RefPtr<Gtk::Clipboard> refClipboard, D
 
 	// Setup clipboard handling
 	clipboard_txt = cpystring;
+	clipboard_txt = std::regex_replace(clipboard_txt, begin_dmath, "");
+	clipboard_txt = std::regex_replace(clipboard_txt, end_dmath, "");
 	std::vector<Gtk::TargetEntry> listTargets;
 	if(clipboard_cdb.size()>0) {
 //		std::cerr << "let them know we have cadabra format" << std::endl;
