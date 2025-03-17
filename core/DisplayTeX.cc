@@ -337,11 +337,14 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 		if(current_bracket_!=str_node::b_none || previous_bracket_!=current_bracket_ || previous_parent_rel_!=current_parent_rel_) {
 			print_parent_rel(str, current_parent_rel_, ch==tree.begin(it));
 
-			if(is_accent==0 && function_bracket_needed)
+			if(is_accent==0 && function_bracket_needed) {
+				if(previous_parent_rel_==str_node::p_sub || previous_parent_rel_==str_node::p_super)
+					str << "\\!";
 				print_opening_bracket(str, (number_of_nonindex_children>1 /* &&number_of_index_children>0 */ &&
 				                            current_parent_rel_!=str_node::p_sub &&
 				                            current_parent_rel_!=str_node::p_super ? str_node::b_round:current_bracket_),
 				                      current_parent_rel_);
+				}
 			else str << "{";
 			}
 

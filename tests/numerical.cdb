@@ -124,3 +124,18 @@ def test07():
        print("Test 07c passed")
 
 test07()
+
+def test08():
+    import numpy as np
+    ex:= x**2;
+    try:
+       q = np.array(ex)
+       assert(1==0)
+    except RuntimeError as err:
+       print("Test 08a passed")
+    v = nevaluate($x**2$, {$x$: [0,1,2,3]})
+    q = np.array(v)
+    assert(q[2]==4)
+    print("Test 08b passed")
+
+test08()

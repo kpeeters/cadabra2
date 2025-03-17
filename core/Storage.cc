@@ -26,6 +26,7 @@ You should have received a copy of the GNU General Public License
 #include <sstream>
 #include <locale>
 #include <codecvt>
+#include "NTensor.hh"
 
 #include <boost/functional/hash.hpp>
 
@@ -389,6 +390,9 @@ namespace cadabra {
 				str << "#" << *it->multiplier;
 			else
 				str << "  " << *it->multiplier;
+			}
+		if(std::holds_alternative<std::shared_ptr<NTensor>>(it->content)) {
+			str << " " << *std::get<std::shared_ptr<NTensor>>(it->content);
 			}
 		//	str << "  (" << calc_hash(it) << ")";
 		//	str << "  (" << depth(it) << ")";

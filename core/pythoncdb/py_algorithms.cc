@@ -277,12 +277,16 @@ namespace cadabra {
 			else if(type_name=="tuple") {
 				std::vector<double> rvec = py::cast<std::vector<double>>(dv.second);
 				if(rvec.size()!=2)
-					throw ArgumentException("nevaluate: value tuples must have exactly two elements (start, end); found "+std::to_string(rvec.size())+".");
+					throw ArgumentException("Range: value tuples must have exactly two elements (start, end); found "+std::to_string(rvec.size())+".");
 				auto range = NTensor::linspace(rvec[0], rvec[1], 100);
 				ev.set_variable(py::cast<Ex>(dv.first), range);
 				}
 			else {
-				ev.set_variable(py::cast<Ex>(dv.first), NTensor(py::cast<std::vector<double>>(dv.second)));
+				auto nt = NTensor(py::cast<std::vector<double>>(dv.second));
+				if(nt.shape.size()==0 || nt.shape[0]==0)
+					throw ArgumentException("Range: value cannot be converted to a numerical range.");
+				
+				ev.set_variable(py::cast<Ex>(dv.first), nt);
 				}
 			}
 		ev.set_lookup_function([](const Ex& var) {

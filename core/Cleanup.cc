@@ -14,6 +14,7 @@
 #include "properties/NumericalFlat.hh"
 #include "properties/PartialDerivative.hh"
 #include "properties/ImaginaryI.hh"
+#include "NTensor.hh"
 
 // #define DEBUG 1
 
@@ -31,6 +32,15 @@ namespace cadabra {
 		do {
 			changed=false;
 			bool res=false;
+
+			if(std::holds_alternative<std::shared_ptr<NTensor>>(it->content)) {
+				auto ntp = std::get<std::shared_ptr<NTensor>>(it->content);
+				if(ntp->shape.size()==1 && ntp->shape[0]==1 && ntp->is_real()) {
+					multiply(it->multiplier, ntp->at().real());
+					it->content = std::monostate();
+					}
+				}
+			
 			if(it->is_zero() && (tr.number_of_children(it)!=0 || *it->name!="1")) {
 				cadabra::zero(it->multiplier);
 				tr.erase_children(it);
