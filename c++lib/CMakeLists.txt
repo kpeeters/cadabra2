@@ -112,6 +112,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplaySympy.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayTerminal.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/TerminalStream.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Multiplier.cc  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/NEvaluator.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/NTensor.cc  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Exceptions.cc
@@ -249,6 +250,7 @@ set(MAIN_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Kernel.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/lru_cache.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Hash.hh
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Multiplier.hh  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/NTensor.hh  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Parser.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/ProgressMonitor.hh
