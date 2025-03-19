@@ -40,7 +40,7 @@ def say_async(fname, delay):
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
 
-def say(text, subtitle=True, subtext="", delay=0):
+def say(text, subtitle=True, subtext="", delay=0, block=False):
     """
     Say a text. This will do the text-to-speech, then play the audio
     async. So it returns immediately after the playing starts.
@@ -56,7 +56,7 @@ def say(text, subtitle=True, subtext="", delay=0):
 
     if not warping:
         say_num += 1
-        fname = f"output_{say_num}.mp3"
+        fname = f"/tmp/output_{say_num}.mp3"
         tts(text, fname)
         if say_proc != None:
             say_proc.wait()
@@ -68,6 +68,9 @@ def say(text, subtitle=True, subtext="", delay=0):
         else:
             cdb.remote.highlight.subtitle(text)
 
+    if block:
+        say_proc.wait()
+        
 #    if subtitle:
 #        cdb.remote.highlight.subtitle()
 

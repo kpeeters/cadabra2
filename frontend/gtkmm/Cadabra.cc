@@ -57,6 +57,11 @@ Cadabra::Cadabra(int argc, char **argv)
 	                      "Specify the window size (and optionally the position).",
 	                      "string");
 	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_STRING,
+	                      "title",
+	                      't',
+	                      "Specify the window title.",
+	                      "string");
+	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_STRING,
 	                      "server-ip-address",
 	                      'a',
 	                      "Connect to running server on given ip address.",
@@ -122,6 +127,9 @@ int Cadabra::on_command_line(const Glib::RefPtr<Gio::ApplicationCommandLine>& cm
 	server_token = tmp;
 	get_arg_value(options, "geometry",          tmp);
 	window_geometry = tmp;
+	get_arg_value(options, "title",          tmp);
+	if(tmp=="") tmp="Cadabra";
+	window_title = tmp;
 
 	activate();
 	return 0;
@@ -137,7 +145,7 @@ void Cadabra::on_activate()
 	compute = new cadabra::ComputeThread(server_port, server_token, server_ip_address);
 	compute_thread = new std::thread(&cadabra::ComputeThread::run, compute);
 
-	auto nw = new cadabra::NotebookWindow(this, false, window_geometry);
+	auto nw = new cadabra::NotebookWindow(this, false, window_geometry, window_title);
 	compute->set_master(nw, nw);
 	nw->main_thread_id = std::this_thread::get_id();
 

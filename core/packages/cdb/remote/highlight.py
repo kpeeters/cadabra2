@@ -10,18 +10,21 @@ import sys
 from threading import Thread
 import time
 import math
+import textwrap
 
 class WidgetHighlighter:
-    def __init__(self):
+    def __init__(self, window_name):
         self.window = None
-        self.window_name = None
+        self.window_name = window_name
         self.current_highlight = None
         self.subtitle_window = None
         self.subtitle_x = 0
         self.subtitle_y = 0
+        self.subtitle_large = False
         self.label = None
         self.loop = None
-        
+        self.target_window = self.find_window(self.window_name)
+
     def create_highlight_window(self, x, y, width, height):
         # from gi.repository import Gtk, Gdk
         
@@ -101,7 +104,7 @@ class WidgetHighlighter:
 
     def find_window(self, name):
         desktop = pyatspi.Registry.getDesktop(0)
-        target_window = None
+        self.target_window = None
         for app in desktop:
             if app:
                 for window in app:
@@ -110,11 +113,12 @@ class WidgetHighlighter:
 
         raise Exception("Window "+self.window_name+" not found")
         
-    def subtitle(self, text):
+    def subtitle(self, text, large=False):
         """Display a subtitle at the bottom of the specified window.
         If window_name is None, places it at bottom of screen."""
         if self.subtitle_window:
             self.remove_subtitle()
+        self.subtitle_large = large
             
         # Create subtitle window
         win = Gtk.Window(type=Gtk.WindowType.POPUP)
@@ -125,31 +129,45 @@ class WidgetHighlighter:
         
         # Create label with text
         self.label = Gtk.Label()
-        self.label.set_text(text)
+        self.label.set_text("\n".join(textwrap.wrap(text)))
         self.label.set_name("subtitle")
         
         # Style the label
         css_provider = Gtk.CssProvider()
-        css_provider.load_from_data(b"""
-            #subtitle-window {
-                border-radius: 5px;
-            }
-            #subtitle {
-                padding: 10px 20px;
-                font-size: 45px;
-                color: black;
-            }
-        """)
-        
+        if large:
+            css_provider.load_from_data(b"""
+                #subtitle-window {
+                    border-radius: 5px;
+                }
+                #subtitle {
+                    padding: 10px 40px;
+                    font-size: 90px;
+                    color: black;
+                }
+            """)
+        else:
+            css_provider.load_from_data(b"""
+                #subtitle-window {
+                    border-radius: 5px;
+                }
+                #subtitle {
+                    padding: 10px 20px;
+                    font-size: 45px;
+                    color: black;
+                }
+            """)
+
         context = self.label.get_style_context()
         context.add_provider(css_provider, 
                            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-        
+
         win.add(self.label)
         win.connect('draw', self.draw_subtitle)
         win.show_all()
         self.subtitle_window = win
+        self.startloop()
 
+    def startloop(self):
         # Start GTK main loop if not already running
         if not self.loop:
             self.loop = GLib.MainLoop()
@@ -165,15 +183,14 @@ class WidgetHighlighter:
         # Get natural size of label
         label_width, label_height = self.label.get_preferred_size()[1].width, \
             self.label.get_preferred_size()[1].height
-        print("LABEL:", label_width, label_height)
+        # print("LABEL:", label_width, label_height)
         
-        target_window = self.find_window(self.window_name)
-        component = target_window.queryComponent()
+        component = self.target_window.queryComponent()
         wx, wy = component.getPosition(pyatspi.WINDOW_COORDS)
         ww, wh = component.getSize()
         self.subtitle_x = wx + (ww - label_width) // 2 
         self.subtitle_y = wy + wh - label_height - 20
-        print(wx, wy, ww, wh, label_width, label_height, self.subtitle_x, self.subtitle_y)
+        # print(wx, wy, ww, wh, label_width, label_height, self.subtitle_x, self.subtitle_y)
         
         self.subtitle_window.move(self.subtitle_x, self.subtitle_y)
         self.draw_subtitle_background(widget, cr) #connect('draw', self.draw_subtitle_background)
@@ -202,9 +219,20 @@ class WidgetHighlighter:
         cr.arc(width - radius, height - radius, radius, 0, 90 * (math.pi/180))
         # Bottom left corner
         cr.arc(radius, height - radius, radius, 90 * (math.pi/180), 180 * (math.pi/180))
-        
         cr.close_path()
         cr.fill()
+
+        if self.subtitle_large:
+            radius = 18
+            # Marker left #209020;
+            cr.set_source_rgba(0.125, 0.565, 0.125, 1)  # 0=transparent, 1=opaque
+            cr.new_path()
+            # Top left corner
+            cr.arc(radius, radius, radius, 180 * (math.pi/180), 270 * (math.pi/180))
+            # Bottom left corner
+            cr.arc(radius, height - radius, radius, 90 * (math.pi/180), 180 * (math.pi/180))
+            cr.close_path()
+            cr.fill()
         
         return False
     
@@ -219,9 +247,17 @@ class WidgetHighlighter:
         self.remove_highlight()
         self.remove_subtitle()
 
-highlighter = WidgetHighlighter()
+highlighter = None
+
+def init_highlight(title="Cadabra"):
+    global highlighter
+    if highlighter == None:
+        highlighter = WidgetHighlighter(title)
+    
 
 def mark(label=""):
+    global highlighter
+
     if label=="":
         highlighter.remove_highlight()
     else:
@@ -230,12 +266,13 @@ def mark(label=""):
             print("FOUND", obj)
             highlighter.highlight_button(obj)
 
-def subtitle(txt=""):
+def subtitle(txt="", large=False):
+    global highlighter
+        
     if txt=="":
         highlighter.remove_subtitle()
     else:
-        highlighter.window_name = "Cadabra"
-        highlighter.subtitle(txt)
+        highlighter.subtitle(txt, large)
             
 
 DBusGMainLoop(set_as_default=True)

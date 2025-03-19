@@ -38,4 +38,5 @@ class Cadabra : public Gtk::Application {
 		std::string server_token;
 		std::string server_ip_address;
 		std::string window_geometry;
+		std::string window_title;
 	};

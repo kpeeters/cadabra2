@@ -40,7 +40,7 @@ using namespace cadabra;
 
 // #define DEBUG 1
 
-NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry)
+NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry, std::string window_title)
 	: Gtk::ApplicationWindow()
 	, DocumentThread(this)
 	, cdbapp(c)
@@ -57,7 +57,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry)
 	, progress_frac(0)
 	, status_line(-1)
 	, status_col(-1)
-	, title_prefix("Cadabra: ")
+	, title_prefix(window_title)
 	, modified(false)
 	, read_only(ro)
 	, crash_window_hidden(true)
@@ -1083,15 +1083,15 @@ void NotebookWindow::update_title()
 	{
 	if(name.size()>0) {
 		if(modified)
-			set_title(title_prefix+name+"*");
+			set_title(title_prefix+": "+name+"*");
 		else
-			set_title(title_prefix+name);
+			set_title(title_prefix+": "+name);
 		}
 	else {
 		if(modified)
-			set_title("Cadabra*");
+			set_title(title_prefix+"*");
 		else
-			set_title("Cadabra");
+			set_title(title_prefix);
 		}
 	
 	// std::cerr << "undo_stack.size() = " << undo_stack.size() << std::endl;
