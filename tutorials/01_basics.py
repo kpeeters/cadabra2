@@ -1,12 +1,25 @@
+#!/usr/bin/env python3
+
 from cdb.remote           import *
 from cdb.remote.speech    import init, say, warp
 from cdb.remote.highlight import init_highlight, mark, subtitle
+from cdb.remote.record    import *
+import sys
+
+if len(sys.argv)<2:
+    print("Usage: 01_basics.py [OBS password]", file=sys.stderr)
+    sys.exit(-1)
+
+password = sys.argv[1]    
 
 init()
 
 cdb = CadabraRemote()
 cdb.start(["--geometry", "1920x1080", "--title", "Cadabra tutorial 1"])
 time.sleep(1)
+
+setup_region_capture("Cadabra tutorial 1", password)
+start_record()
 
 init_highlight("Cadabra tutorial 1")
 
@@ -77,6 +90,7 @@ time.sleep(2)
 subtitle()
 mark()
 
+stop_record()
 
 
 cdb.wait()
