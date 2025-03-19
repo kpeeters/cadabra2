@@ -35,6 +35,7 @@ configure_file(
 #   set(Boost_USE_STATIC_LIBS   ON)
 # endif()
 find_package(Boost 1.71.0 COMPONENTS system filesystem REQUIRED)
+message(STATUS "Boost version ${Boost_VERSION}")
 
 # Find glibmm (for base64)
 if(USE_GTK4)

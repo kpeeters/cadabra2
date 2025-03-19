@@ -40,22 +40,19 @@ def say_async(fname, delay):
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
 
-def say(text, subtitle=True, subtext="", sleep=1):
+def say(text, subtitle=True, subtext="", delay=0):
     """
     Say a text. This will do the text-to-speech, then play the audio
     async. So it returns immediately after the playing starts.
     The async task will play silence for the indicated delay first.
+
+    If another text is still being spoken, this function always
+    blocks until that previous text is finished.
     """
     global model, warping, say_num, say_proc
     
     if client == None:
         init()
-
-    if subtitle:
-        if subtext!="":
-            cdb.remote.highlight.subtitle(subtext)
-        else:
-            cdb.remote.highlight.subtitle(text)
 
     if not warping:
         say_num += 1
@@ -63,10 +60,16 @@ def say(text, subtitle=True, subtext="", sleep=1):
         tts(text, fname)
         if say_proc != None:
             say_proc.wait()
-        say_async(fname, sleep)
+        say_async(fname, delay)
        
     if subtitle:
-        cdb.remote.highlight.subtitle()
+        if subtext!="":
+            cdb.remote.highlight.subtitle(subtext)
+        else:
+            cdb.remote.highlight.subtitle(text)
+
+#    if subtitle:
+#        cdb.remote.highlight.subtitle()
 
 if __name__ == "__main__":
     say("Hello!", subtitle=False)
