@@ -214,6 +214,7 @@ if(USE_MICROTEX)
       ${CairoMM_LIBRARIES}
       ${PangoMM_LIBRARIES}
       ${Fontconfig_LIBRARIES}
+      -lws2_32 -lwsock32
     )
   else()
     target_link_libraries(
