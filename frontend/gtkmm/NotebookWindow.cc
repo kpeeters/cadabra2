@@ -88,8 +88,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry)
 	auto gdk_window = get_window();
 	auto screen = Gdk::Screen::get_default();
 	auto monitor = display->get_primary_monitor();
-	Gdk::Rectangle geometry;
-	monitor->get_geometry(geometry);
+	Gdk::Rectangle monitor_geometry;
+	monitor->get_geometry(monitor_geometry);
 	
 	scale = gdk_window->get_scale_factor();
 	display_scale = scale;
@@ -678,7 +678,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry)
 																  install_prefix()+"/share/cadabra2/cdb-icons/cdb-run.svg",
 																  false);
 		img_run->get_accessible()->set_role(Atk::ROLE_PUSH_BUTTON);
-		tool_run.add(img_run);
+		tool_run.add(*img_run);
 		tool_run.get_accessible()->set_name("Run");
 		//		tool_run.set_label("run all");
 
@@ -809,10 +809,10 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry)
 			set_default_size(width, height);
 			}
 		else 
-			set_default_size(screen->get_width()/2, screen->get_height()*0.8);
+			set_default_size(monitor_geometry.get_width()/2, monitor_geometry.get_height()*0.8);
 		}
 	else {
-		set_default_size(geometry.get_width()/3, geometry.get_height()*0.6);
+		set_default_size(monitor_geometry.get_width()/3, monitor_geometry.get_height()*0.6);
 		}
 	// FIXME: the subtraction for the margin and scrollbar made below
 	// is estimated but should be computed.
@@ -2726,22 +2726,6 @@ void NotebookWindow::on_run_cell()
 	actual.inbox->edit.shift_enter_pressed();
 
 	//	cell_content_execute(current_cell, current_canvas);
-	}
-
-void NotebookWindow::on_run_runall()
-	{
-	// FIXME: move to DocumentThread
-
-	follow_mode=true;
-	DTree::sibling_iterator sib=doc.begin(doc.begin());
-	follow_last_cell = doc.end();
-	while(sib!=doc.end(doc.begin())) {
-		if(sib->cell_type==DataCell::CellType::python) {
-			cell_content_execute(DTree::iterator(sib), current_canvas, false);
-			follow_last_cell=DTree::iterator(sib);
-			}
-		++sib;
-		}
 	}
 
 void NotebookWindow::on_run_runtocursor()
