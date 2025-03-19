@@ -58,7 +58,7 @@ Cadabra::Cadabra(int argc, char **argv)
 	                      "string");
 	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_STRING,
 	                      "title",
-	                      't',
+	                      'w',
 	                      "Specify the window title.",
 	                      "string");
 	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_STRING,
@@ -66,7 +66,7 @@ Cadabra::Cadabra(int argc, char **argv)
 	                      'a',
 	                      "Connect to running server on given ip address.",
 	                      "string");
-	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_FILENAME,
+	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_STRING,
 	                      "token",
 	                      't',
 	                      "Use the given authentication token to connect to the server.",
@@ -114,7 +114,17 @@ Cadabra::~Cadabra()
 
 int Cadabra::on_command_line(const Glib::RefPtr<Gio::ApplicationCommandLine>& cmd)
 	{
-	auto options = cmd->get_options_dict();
+	int argc;
+	char** argv = cmd->get_arguments(argc);
+	std::vector<Glib::RefPtr<Gio::File>> files;
+	for(int i = 1; i < argc; i++) {
+		if(argv[i][0] != '-') {
+			auto file = Gio::File::create_for_path(argv[i]);
+			files.push_back(file);
+			}
+		}
+	
+	 auto options = cmd->get_options_dict();
 
 	// The template `get_arg_value` only works if the type matches exactly,
 	// so we need to ask it to store into a `Glib::ustring` and then copy.
@@ -127,11 +137,15 @@ int Cadabra::on_command_line(const Glib::RefPtr<Gio::ApplicationCommandLine>& cm
 	server_token = tmp;
 	get_arg_value(options, "geometry",          tmp);
 	window_geometry = tmp;
-	get_arg_value(options, "title",          tmp);
+	get_arg_value(options, "title",             tmp);
 	if(tmp=="") tmp="Cadabra";
 	window_title = tmp;
 
-	activate();
+	if(files.size()>0)
+		open(files, "");
+	else
+		activate();
+
 	return 0;
 	}
 
@@ -142,6 +156,8 @@ void Cadabra::on_startup()
 
 void Cadabra::on_activate()
 	{
+	Gtk::Application::on_activate();
+	
 	compute = new cadabra::ComputeThread(server_port, server_token, server_ip_address);
 	compute_thread = new std::thread(&cadabra::ComputeThread::run, compute);
 
@@ -183,7 +199,6 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 	gsize length = 0;
 	std::string text;
 	bool file_exists=false;
-	
 	try {
 		if(files[0]->load_contents(contents, length)) {
 			if(contents && length) {
