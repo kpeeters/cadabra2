@@ -24,7 +24,13 @@
 using namespace cadabra;
 
 DocumentThread::DocumentThread(GUIBase* g)
-	: gui(g), compute(0), current_cell(doc.end()), disable_stacks(false)
+	: gui(g)
+	, compute(0)
+	, current_cell(doc.end())
+	, follow_mode(false)
+	, follow_cell(doc.end())
+	, follow_last_cell(doc.end())
+	, disable_stacks(false)
 	{
 	// Setup logging.
 	std::string version=std::string(CADABRA_VERSION_SEM);
@@ -194,10 +200,13 @@ void DocumentThread::queue_action(std::shared_ptr<ActionBase> ab)
 
 void DocumentThread::run_all_cells()
 	{
+	follow_mode=true;
 	DTree::sibling_iterator sib=doc.begin(doc.begin());
 	while(sib!=doc.end(doc.begin())) {
-		if(sib->cell_type==DataCell::CellType::python)
+		if(sib->cell_type==DataCell::CellType::python) {
 			run_cell(DTree::iterator(sib), false);
+			follow_last_cell=DTree::iterator(sib);
+			}			
 		++sib;
 		}
 	}
@@ -227,6 +236,11 @@ void DocumentThread::run_cell(DTree::iterator it, bool shift_pressed)
 		queue_action(action);
 		++sib;
 		}
+
+	// Since the user has initiated this cell execution, we can
+	// turn on cell follow mode.
+	follow_cell=it;
+	follow_mode=true;
 
 	// Execute the cell.
 	// std::cerr << "Executing cell " << it->id().id << std::endl;

@@ -307,11 +307,6 @@ namespace cadabra {
 			void on_text_scaling_factor_changed(const std::string& key);
 
 			int             last_configure_width;
-			// If `follow_mode` is true, the `follow_cell` can be set,
-			// and this will make the canvas view follow the indicated
-			// cell.
-			bool            follow_mode;
-			DTree::iterator follow_cell, follow_last_cell;
 
 			// Mutex to protect the variables below.
 			std::recursive_mutex         tex_need_width_mutex;

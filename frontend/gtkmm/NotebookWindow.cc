@@ -62,9 +62,6 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry, std::s
 	, read_only(ro)
 	, crash_window_hidden(true)
 	, last_configure_width(0)
-	, follow_mode(false)
-	, follow_cell(doc.end())
-	, follow_last_cell(doc.end())
 	, tex_running(false), tex_need_width(0)
 	, last_find_location(doc.end(), std::string::npos)
 	, is_configured(false)
@@ -1898,8 +1895,6 @@ void NotebookWindow::on_scroll_size_allocate(Gtk::Allocation& )
 	// stopped by scrollbar event.
 	
 	if(follow_cell!=doc.end()) {
-//		std::cerr << "  scroll_size_allocate" << std::endl;
-//		scroll_current_cell_into_view();
 		scroll_cell_into_view(follow_cell);
 		}
 	}
@@ -2223,10 +2218,8 @@ void NotebookWindow::load_from_string(const std::string& notebook_contents)
 	mainbox.show_all();
 	modified=false;
 	update_title();
-	std::cerr << "updated" << std::endl;
 
 	Glib::signal_idle().connect( sigc::mem_fun(*this, &NotebookWindow::on_first_redraw) );
-	std::cerr << "signalled" << std::endl;
 	}
 
 bool NotebookWindow::on_first_redraw()

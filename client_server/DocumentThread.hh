@@ -172,6 +172,12 @@ namespace cadabra {
 			
 			DTree::iterator current_cell;
 
+			/// If `follow_mode` is true, the `follow_cell` can be set,
+			/// and this will make the canvas view follow the indicated
+			/// cell.
+			bool            follow_mode;
+			DTree::iterator follow_cell, follow_last_cell;
+			
 			/// The action undo/redo/todo stacks and logic to execute
 			/// them. These stacks can be accessed from both the
 			/// DocumentThread as well as the ComputeThread (the latter
