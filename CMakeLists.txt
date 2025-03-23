@@ -404,6 +404,16 @@ message(STATUS "Python module extension ${Python_MOD_SUFFIX}")
 # Add subdirectories to project.
 #---------------------------------------------------------------------------
 
+print_header("Build tools and options")
+# Mimalloc makes the cadabra2 module crash when run
+# as jupyter kernel, so disable for now.
+#find_package(mimalloc 2.0 QUIET)
+if(mimalloc_FOUND)
+  message(STATUS "Using mimalloc allocator")
+else()
+  message(STATUS "Using glibc allocator")
+endif()
+
 # Jupyter kernel
 print_header("Configuring Jupyter kernel")
 if(ENABLE_JUPYTER)
