@@ -18,13 +18,13 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
         "name": "cadabra2",
         "codemirror_mode": "cadabra",
         "pygments_lexer": "cadabra",
-        "mimetype": "text/cadabra",
+        "mimetype": "text/cadabra2",
         "file_extension": ".ipynb",
     }
 
     @property
     def banner(self):
-        return "Cadabra (C) 2001-2023 Kasper Peeters\nJupyter kernel by Fergus Baker and Kasper Peeters\nMore info at https://cadabra.science/\nAvailable under the terms of the GNU General Public License v3"
+        return "Cadabra (C) 2001-2025 Kasper Peeters\nJupyter kernel by Fergus Baker and Kasper Peeters\nMore info at https://cadabra.science/\nAvailable under the terms of the GNU General Public License v3"
 
     def __init__(self, **kwargs):
         ipykernel.kernelbase.Kernel.__init__(self, **kwargs)
