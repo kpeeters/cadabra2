@@ -112,6 +112,7 @@ namespace cadabra {
 			bool is_zero() const;
 			bool is_identity() const;
 			bool is_rational() const;
+			bool is_double() const;
 			bool is_unsimplified_rational() const;
 			bool is_unsimplified_double() const;
 			bool is_integer() const;

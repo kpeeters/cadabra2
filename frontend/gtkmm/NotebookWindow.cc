@@ -1161,6 +1161,7 @@ void NotebookWindow::on_kernel_runstatus(bool running)
 	if(!running) {
 		if(follow_mode && follow_last_cell!=doc.end()) {
 			follow_cell=doc.end();
+			// std::cerr << "RUNSTATUS scroll" << std::endl;
 			scroll_cell_into_view(follow_last_cell);
 			follow_last_cell=doc.end();
 			}
@@ -1304,7 +1305,7 @@ bool NotebookWindow::on_key_press_event(GdkEventKey* event)
 		return true;
 		}
 	else if(is_ctrl_home) {
-		follow_mode=true;
+		follow_mode=false;
 //		std::shared_ptr<ActionBase> actionpos =
 //		   std::make_shared<ActionPositionCursor>(current_cell->id(), ActionPositionCursor::Position::in);
 //		queue_action(actionpos);
@@ -1314,7 +1315,7 @@ bool NotebookWindow::on_key_press_event(GdkEventKey* event)
 		return true;
 		}
 	else if(is_ctrl_end) {
-		follow_mode=true;
+		follow_mode=false;
 //		std::shared_ptr<ActionBase> actionpos =
 //		   std::make_shared<ActionPositionCursor>(current_cell->id(), ActionPositionCursor::Position::in);
 //		queue_action(actionpos);
@@ -1765,8 +1766,10 @@ void NotebookWindow::position_cursor(const DTree&, DTree::iterator it, int pos)
 		}
 
 	current_cell=it;
-	if(follow_mode)
+	if(follow_mode) {
+		// std::cerr << "POSITION follow cell" << std::endl;
 		scroll_cell_into_view(it);
+		}
 	
 	update_title();
 	}
@@ -1816,6 +1819,9 @@ void NotebookWindow::scroll_current_cell_into_view()
 
 void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 	{
+	if(!follow_mode)
+		return;
+	
 //	std::cerr << "----- scroll into view" << std::endl;
 //	std::cerr << "cell content to show: " << cell->textbuf << std::endl;
 
@@ -1865,6 +1871,7 @@ void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 //	std::cerr << "shift = " << shift << std::endl;
 	if(shift>0 || (-shift)>va->get_page_size()) {
 //		va->set_value( upper_visible + shift);
+		// std::cerr << "SCROLLING " << follow_mode << " " << upper_visible + shift << std::endl;
 		canvasses[current_canvas]->scroller.scroll_to(upper_visible + shift);
 		}
 	}

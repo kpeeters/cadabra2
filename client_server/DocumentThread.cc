@@ -263,6 +263,7 @@ void DocumentThread::run_cells_referencing_variable(std::string variable, double
 	compute->update_variable_on_server(variable, value);
 
 	// Re-run all cells referencing this variable.
+	follow_mode=false;
 	DTree::iterator it = doc.begin();
 	while(it!=doc.end()) {
 		if(it->cell_type==DataCell::CellType::python) {

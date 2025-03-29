@@ -69,6 +69,9 @@ namespace cadabra {
 		
 			void scroll_to(double target)
 				{
+				if(target_value_==target && timeout_connection_.connected())
+					return;
+				
 				timeout_connection_.disconnect(); // Stop any existing animation
 			
 				target_value_ = target;

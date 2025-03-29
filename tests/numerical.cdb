@@ -138,4 +138,17 @@ def test08():
     assert(q[2]==4)
     print("Test 08b passed")
 
-# test08() FIXME: something weird happening on linux/macos with np.array above.
+# test08() # FIXME: something weird happening on linux/macos with np.array above.
+
+def test09():
+    __cdbkernel__=create_scope()
+    import numpy as np
+    a = 0.1
+    q = np.array( nevaluate($x+@(a)$, {$x$: [0,1]}) )
+    assert(q[0]==0.1)
+    assert(q[1]==1.1)
+    print("Test 09 passed")
+
+test09()
+
+    

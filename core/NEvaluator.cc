@@ -153,7 +153,7 @@ NTensor NEvaluator::evaluate()
 			}
 		else {
 			bool found_elementary=false;
-			if(it->is_rational()) {
+			if(it->is_rational() || it->is_double()) {
 				lastval = NTensor(to_double(*it->multiplier));
 				found_elementary=true;
 				}

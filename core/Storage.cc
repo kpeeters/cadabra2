@@ -893,6 +893,11 @@ namespace cadabra {
 		return (*name=="1" && multiplier->is_rational());
 		}
 
+	bool str_node::is_double() const
+		{
+		return (*name=="1" && multiplier->is_double());
+		}
+
 	bool str_node::is_integer() const
 		{
 		if(*name=="1") {
