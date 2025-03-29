@@ -11,6 +11,7 @@
 #include "properties/FilledTableau.hh"
 #include "properties/TableauInherit.hh"
 #include "NTensor.hh"
+#include "NInterpolatingFunction.hh"
 
 #include <regex>
 
@@ -479,6 +480,7 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 		return;
 
 	if(std::holds_alternative<std::shared_ptr<NTensor>>(it->content)) {
+		std::cerr << "PRINTING NTENSOR" << std::endl;
 		std::ostringstream str2;
 		auto nt = std::get<std::shared_ptr<NTensor>>(it->content);
 		str2 << *nt;
@@ -492,6 +494,14 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 		if(*it->name=="1" && tree.number_of_children(it)==0)
 			return;
 //		return; // FIXME: always just ignore the subtree?
+		}
+	else if(std::holds_alternative<std::shared_ptr<NInterpolatingFunction>>(it->content)) {
+		str << "\\square{}" << std::endl;
+		auto ni = std::get<std::shared_ptr<NInterpolatingFunction>>(it->content);
+		str << "(";
+		dispatch(str, ni->var.begin());
+		str << ")";
+		return;
 		}
 	
 	if(*it->name=="\\prod")                                   print_productlike(str, it, " ");

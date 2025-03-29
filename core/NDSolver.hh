@@ -47,6 +47,9 @@ namespace cadabra {
 			
 			// Entry point.
 			std::vector<NTensor> integrate();
+
+			// Functions.
+			const std::vector<Ex>& functions() const;
 			
 		private:
 			// Exception used by the observer function to terminate

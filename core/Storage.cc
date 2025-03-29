@@ -18,6 +18,11 @@ You should have received a copy of the GNU General Public License
 
 */
 
+#include "Config.hh"
+#ifdef mimalloc_FOUND
+  #include "mimalloc-new-delete.h"
+#endif
+
 #include "Storage.hh"
 #include "Combinatorics.hh"
 #include "Compare.hh"
@@ -394,6 +399,9 @@ namespace cadabra {
 			}
 		if(std::holds_alternative<std::shared_ptr<NTensor>>(it->content)) {
 			str << " " << *std::get<std::shared_ptr<NTensor>>(it->content);
+			}
+		else if(std::holds_alternative<std::shared_ptr<NInterpolatingFunction>>(it->content)) {
+			str << " (NInterpolatingFunction)";
 			}
 		//	str << "  (" << calc_hash(it) << ")";
 		//	str << "  (" << depth(it) << ")";

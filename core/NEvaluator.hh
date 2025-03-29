@@ -83,6 +83,9 @@ namespace cadabra {
 		private:
 			Ex                ex;
 			lookup_function_t lookup_function;
+
+			// The shape of the tensor that we will produce.
+			std::vector<size_t> fullshape;
 	};
 
 };

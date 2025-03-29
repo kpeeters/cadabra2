@@ -217,6 +217,7 @@ set(LOCAL_SRC_FILES
   NIntegrator.cc  
   NEvaluator.cc
   NTensor.cc
+  NInterpolatingFunction.cc  
   InstallPrefix.cc
   DataCell.cc
   CdbPython.cc
@@ -312,6 +313,9 @@ target_link_libraries(cadabra2 PRIVATE
   #  ${Python_LIBRARIES}
   #  ${GLIBMM_LIBRARIES}    
 )
+if(mimalloc_FOUND)
+  target_link_libraries(cadabra2 PUBLIC mimalloc)
+endif()
 
 if(IPO_SUPPORTED)
   message(STATUS "IPO / LTO for cadabra2 enabled")     

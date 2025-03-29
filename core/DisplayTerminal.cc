@@ -266,6 +266,10 @@ void DisplayTerminal::dispatch(std::ostream& str, Ex::iterator it)
 //		str << std::regex_replace(s, std::regex("(\\d+\\.?\\d*|\\.\\d+)e([+-]?\\d+)"), "$1 \\times 10^{$2}");
 		return; // FIXME: always just ignore the subtree?
 		}
+	else if(std::holds_alternative<std::shared_ptr<NInterpolatingFunction>>(it->content)) {
+		str << " (NInterpolatingFunction)";
+		return;
+		}
 	
 	if(*it->name=="\\prod")            print_productlike(str, it, " ");
 	else if(*it->name=="\\sum")        print_sumlike(str, it);

@@ -82,6 +82,9 @@ void sympy::SympyBridge::import_ex(const std::string& s)
 	Ex::iterator first=parser.tree->begin();
 	Ex::iterator orig=tree.begin();
 	ex->move_ontop(orig, first);
+#ifdef DEBUG
+	std::cerr << "result " << ex->begin() << std::endl;
+#endif
 	}
 
 #endif

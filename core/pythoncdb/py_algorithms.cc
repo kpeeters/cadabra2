@@ -9,6 +9,7 @@
 #include "../NDSolver.hh"
 #include "../NIntegrator.hh"
 #include "../NTensor.hh"
+#include "../NInterpolatingFunction.hh"
 
 #include "../algorithms/canonicalise.hh"
 #include "../algorithms/collect_components.hh"
@@ -207,7 +208,27 @@ namespace cadabra {
 				nds.set_range( py::cast<Ex>(range[0]), py::cast<double>(range[1]), py::cast<double>(range[2]));
 				
 				auto res = nds.integrate();
-				return res;
+				auto rexv = std::make_shared<Ex>("\\comma");
+
+				for(size_t n=1; n<res.size(); ++n) {
+					Ex rex("\\equals");
+
+					// Create interpolating function.
+					auto rif = std::make_shared<NInterpolatingFunction>();
+					rif->var = py::cast<Ex>(range[0]);
+					rif->var_values = res[0];
+					rif->fun_values = res[n];
+
+					// Fill equality lhs and rhs;
+					rex.append_child(rex.begin(), nds.functions()[n-1].begin());
+					auto rf = rex.append_child(rex.begin(), Ex("1").begin());
+					rf->content = rif;
+
+					// Add to list.
+					rexv->move_in_below(rexv->begin(), rex);
+					}
+				
+				return rexv;
 				}
 				);
 

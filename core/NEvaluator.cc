@@ -1,6 +1,7 @@
 
 #include "Compare.hh"
 #include "NEvaluator.hh"
+#include "NInterpolatingFunction.hh"
 #include "Exceptions.hh"
 #include <cmath>
 
@@ -17,6 +18,8 @@ using namespace cadabra;
 #ifdef DEBUG
 #warning "DEBUG enabled for NEvaluator.cc"
 #endif
+
+constexpr double const_pi = 3.14159265358979323846;
 
 NEvaluator::NEvaluator()
 	{
@@ -113,10 +116,29 @@ NTensor NEvaluator::evaluate()
 
 	auto it = ex.begin_post();
 	while(it != ex.end_post()) {
+
+		// First check 
+		
+		if(std::holds_alternative<std::shared_ptr<NInterpolatingFunction>>(it->content)) {
+			auto nif = std::get<std::shared_ptr<NInterpolatingFunction>>(it->content);
+			if(lastval.is_real()==false)
+				throw ConsistencyException("NEvaluator: cannot feed complex number to NInterpolatingFunction.");
+
+			lastval = variable_values[0].values.broadcast(fullshape, 0);
+#ifdef DEBUG
+			std::cerr << "Evaluating interpolating function for " << lastval.values.size() << " values" << std::endl;
+#endif
+			// Feed all values in the NTensor lastval through the interpolating function.
+			for(size_t i=0; i<lastval.values.size(); ++i) {
+				lastval.values[i] = nif->evaluate(lastval.values[i].real());
+				}
+			++it;
+			continue;
+			}
+
 		// Either this node is known in the subtree value map,
 		// or this node is a function which combines the values
 		// of child nodes.
-
 
 		auto fnd = subtree_values.find(Ex::iterator(it));
 		if(fnd!=subtree_values.end()) {
@@ -204,8 +226,8 @@ NTensor NEvaluator::evaluate()
 				else if(it->name==n_pi) {
 #ifdef DEBUG
 					std::cerr << "found \\pi" << std::endl;
-#endif
-					lastval  = NTensor(M_PI * to_double(*it->multiplier));
+#endif 
+					lastval  = NTensor(const_pi * to_double(*it->multiplier));
 					}
 				else {
 					// Try variable substitution rules.
@@ -299,11 +321,15 @@ void NEvaluator::find_variable_locations()
 		}
 #endif
 	// FIXME: we don't really need this anymore, as we do everything
-	// with broadcasting.
+	// with broadcasting. Well, not quite true. We do use the
+	// subtree_values below to fetch the value of variables, as
+	// subtree_values is the place where these have been broadcast
+	// to the full shape. 
 	for(auto& var: variable_values) {
 		var.locations.clear();
 		auto it = ex.begin_post();
 		while(it != ex.end_post()) {
+			// FIXME: also find variables in NInterpolatingFunctions.
 			Ex no_multiplier(it);
 			auto mult = *it->multiplier;
 			one( no_multiplier.begin()->multiplier );
@@ -319,8 +345,7 @@ void NEvaluator::find_variable_locations()
 	// variable node we have an NTensor which is broadcast to the
 	// shape of the full variable set NTensor.
 
-	// std::cerr << "full shape = ";
-	std::vector<size_t> fullshape;
+	fullshape.clear();
 	for(const auto& var: variable_values) {
 		if(var.values.shape.size()!=1)
 			throw ConsistencyException("NTensor: all variables should be specified as one-dimensional arrays.");

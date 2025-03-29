@@ -87,6 +87,11 @@ void NDSolver::extract_from_ODEs()
 		});
 	}
 
+const std::vector<Ex>& NDSolver::functions() const
+	{
+	return variables;
+	}
+
 std::vector<NTensor> NDSolver::integrate()
 	{
 	extract_from_ODEs();

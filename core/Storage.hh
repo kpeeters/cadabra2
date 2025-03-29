@@ -38,6 +38,7 @@ You should have received a copy of the GNU General Public License
 namespace cadabra {
 
 	class NTensor;
+	class NInterpolatingFunction;
 	
 	typedef Multiplier              multiplier_t;
 	typedef std::set<std::string>   nset_t;
@@ -80,7 +81,9 @@ namespace cadabra {
 			// sit in the tree, is stored in the form of a shared pointer to data outside
 			// the tree. If there is nothing, the std::monostate is set.
 			std::variant<std::monostate,
-							 std::shared_ptr<NTensor>> content;
+							 std::shared_ptr<NTensor>,
+							 std::shared_ptr<NInterpolatingFunction>
+							 > content;
 
 #ifdef _WIN32
 			struct flag_t {

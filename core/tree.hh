@@ -1814,7 +1814,10 @@ template <typename iter> iter tree<T, tree_node_allocator>::move_ontop(iter targ
 	assert(dst);
 	assert(src);
 
-	if(dst==src) return source;
+	if(dst==src) {
+//		std::cerr << "MOVE ONTOP!" << std::endl;
+		return source;
+		}
 
 //	if(dst==src->prev_sibling) {
 //

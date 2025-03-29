@@ -145,7 +145,7 @@ if(WIN32)
   # https://martin-fieber.de/blog/cmake-cpack-cross-platform-distributables/
   set(CPACK_GENERATOR NSIS)
   set(CPACK_PACKAGE_INSTALL_DIRECTORY "Cadabra")
-  set(CPACK_NSIS_MODIFY_PATH ON)
+  set(CPACK_NSIS_MODIFY_PATH OFF)
   set(CPACK_NSIS_EXECUTABLES_DIRECTORY .)
   set(CPACK_NSIS_URL_INFO_ABOUT "https://cadabra.science/")
   set(CPACK_NSIS_CONTACT "Kasper Peeters <info@cadabra.science>")

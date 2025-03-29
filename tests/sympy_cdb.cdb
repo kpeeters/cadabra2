@@ -115,3 +115,13 @@ def test08():
       print("Test08 passed")
 
 test08()
+
+def test09():
+   __cdbkernel__=create_scope()
+   ex:= \sin(x);
+   ex2 = integrate(ex, $x$);
+   tst:= -\cos(x) - @(ex2);
+   assert(tst==0)
+   print("Test 09 passed")
+
+test09()
