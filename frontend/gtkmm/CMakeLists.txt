@@ -312,10 +312,20 @@ if (NOT INSTALL_TARGETS_ONLY)
     # Logic to get a start menu icon.
     # https://crascit.com/2015/08/07/cmake_cpack_nsis_shortcuts_with_parameters/
     # Does not work.
+    set(CPACK_NSIS_STARTMENU_REG_KEY "Software\\\\${CMAKE_PROJECT_NAME}")
+    set(CPACK_NSIS_STARTMENU_REG_VALUENAME "Start Menu Folder")
+    
+    set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
+      "MessageBox MB_OK 'Creating shortcuts in $SMPROGRAMS\\\\$STARTMENU_FOLDER'
+     ${CPACK_NSIS_CREATE_ICONS_EXTRA}")
+  
     set(CPACK_NSIS_CREATE_ICONS_EXTRA
-      "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${CMAKE_PROJECT_NAME}.lnk' '$INSTDIR\\\\cadabra2-gtk.exe'")
+      "CreateDirectory '$SMPROGRAMS\\\\$STARTMENU_FOLDER'
+       CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${CMAKE_PROJECT_NAME}.lnk' '$INSTDIR\\\\cadabra2-gtk.exe'")
+    
     set(CPACK_NSIS_DELETE_ICONS_EXTRA
-      "Delete '$SMPROGRAMS\\\\$START_MENU\\\\${CMAKE_PROJECT_NAME}.lnk'")
+      "Delete '$SMPROGRAMS\\\\$START_MENU\\\\${CMAKE_PROJECT_NAME}.lnk'
+       RMDir '$SMPROGRAMS\\\\$STARTMENU_FOLDER'")
 
     set(CPACK_PACKAGE_EXECUTABLES "cadabra2-gtk" "Cadabra2")
     set(CPACK_NSIS_MENU_LINKS "cadabra2-gtk" "Cadabra2.lnk")
