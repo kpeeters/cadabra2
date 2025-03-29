@@ -102,7 +102,7 @@
 			"cell_id": 15467993639628642890,
 			"cell_origin": "client",
 			"cell_type": "input",
-			"source": "def integrate(ex1, *args):\n   ret = $@(ex1)$\n   sb = SympyBridge(ret)\n   iranges = []\n   for arg in args:\n      if isinstance(arg, tuple):\n          # print(arg)\n          tmp0 = SympyBridge(arg[0]).to_sympy()\n          tmp1 = SympyBridge(arg[1]).to_sympy() if isinstance(arg[1], Ex) else arg[1]\n          tmp2 = SympyBridge(arg[2]).to_sympy() if isinstance(arg[2], Ex) else arg[2]\n          tpl = ( tmp0, tmp1, tmp2 )\n          iranges.append(tpl)\n      else:\n         tmp = SympyBridge(arg).to_sympy()\n         iranges.append( tmp )\n      \n   # print(sb.to_sympy())\n   # print(iranges)\n   sb.from_sympy( str(sympy.integrate( sb.to_sympy(), *iranges) ) )\n   return ret"
+			"source": "def integrate(ex1, *args):\n   ret = ex1.copy()\n   sb = SympyBridge(ret)\n   iranges = []\n   for arg in args:\n      if isinstance(arg, tuple):\n          # print(arg)\n          tmp0 = SympyBridge(arg[0]).to_sympy()\n          tmp1 = SympyBridge(arg[1]).to_sympy() if isinstance(arg[1], Ex) else arg[1]\n          tmp2 = SympyBridge(arg[2]).to_sympy() if isinstance(arg[2], Ex) else arg[2]\n          tpl = ( tmp0, tmp1, tmp2 )\n          iranges.append(tpl)\n      else:\n         tmp = SympyBridge(arg).to_sympy()\n         iranges.append( tmp )\n      \n   # print(sb.to_sympy())\n   # print(iranges)\n   sb.from_sympy( str(sympy.integrate( sb.to_sympy(), *iranges) ) )\n   return ret"
 		},
 		{
 			"cell_id": 3801120048138997797,
@@ -392,6 +392,7 @@
 					"source": "\\begin{dmath*}{}x \\left(x+1\\right)\\end{dmath*}"
 				}
 			],
+			"ignore_on_import": true,
 			"source": "ex = factor($ x**2 + x $);"
 		},
 		{
@@ -402,5 +403,8 @@
 		}
 	],
 	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
 	"version": 1.0
 }
