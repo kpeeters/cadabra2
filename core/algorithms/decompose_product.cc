@@ -214,7 +214,8 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 		// Apply the product projector.
 		iterator rr=rep.append_child(rep.begin(), it);
 		auto res=yp.can_apply(rr);
-		assert(res);
+		if(!res)
+			throw InternalError("decompose_product: internal error, projector refused to apply, please report a bug.");
 		yp.apply(rr);
 
 		// We cannot use any algorithms which re-order indices, as the
@@ -326,7 +327,8 @@ void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, yo
 
 				// Now apply the projector.
 				auto res=ypinitial.can_apply(tmp);
-				assert(res);
+				if(!res)
+					throw InternalError("project_onto_initial_symmetries: internal error, projector refused to apply, please report a bug.");
 				ypinitial.apply(tmp);
 				trmit=nxt2;
 			}

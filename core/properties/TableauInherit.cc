@@ -88,7 +88,9 @@ TableauBase::tab_t TableauInherit::get_tab(const Properties& properties, Ex& tr,
 		}
 	assert(tb);
 	unsigned int othertabs=tb->size(properties, tr, argnode);
-	assert(num<othertabs);
+	if(num>=othertabs)
+		throw InternalError("TableauInherit::get_tab: inconsistent tableau size.");
+
 	TableauBase::tab_t rettab=tb->get_tab(properties, tr, argnode, num);
 	if(indices_first) { // have to renumber the tableau
 		for(unsigned int rows=0; rows<rettab.number_of_rows(); ++rows)

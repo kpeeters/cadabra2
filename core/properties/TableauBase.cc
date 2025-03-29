@@ -1,5 +1,6 @@
 
 #include "properties/TableauBase.hh"
+#include "Exceptions.hh"
 
 using namespace cadabra;
 
@@ -24,7 +25,9 @@ int TableauBase::get_indexgroup(const Properties& pr, Ex& tr, Ex::iterator it, i
 	//	std::cout << "now at " << *it->name << std::endl;
 
 	unsigned int siz=size(pr, tr, it);
-	assert(siz==1); // FIXME: does not work yet for multi-tab symmetries
+	if(siz!=1)
+		throw InternalError("TableauBase::get_indexgroup: does not yet work for multi-tab symmetries.");
+
 	tab_t tmptab=get_tab(pr, tr, it, 0);
 	//	debugout << "searching indexgroup for " << *it->name <<  std::endl;
 	if(tmptab.number_of_rows()==1) return 0;

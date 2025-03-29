@@ -67,6 +67,8 @@ namespace cadabra {
 			enum parent_rel_t  { p_sub=0, p_super=1, p_none=2, p_property=3, p_exponent=4, p_components=5, p_invalid=7 };
 
 			str_node(void);
+//			str_node(const str_node&);
+//			str_node(str_node&&);
 			str_node(nset_t::iterator name, bracket_t btype=b_none, parent_rel_t ptype=p_none);
 			str_node(const std::string& name, bracket_t btype=b_none, parent_rel_t ptype=p_none);
 			str_node(const std::u32string& name, bracket_t btype=b_none, parent_rel_t ptype=p_none);

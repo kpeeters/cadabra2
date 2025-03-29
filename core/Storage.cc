@@ -809,6 +809,22 @@ namespace cadabra {
 		//	fl.mark=0;
 		}
 
+//	str_node::str_node(const str_node& other)
+//		: name(other.name)
+//		, multiplier(other.multiplier)
+//		, content(other.content)
+//		, fl(other.fl)
+//		{
+//		}
+//	
+//	str_node::str_node(str_node&& other)
+//		: name(std::move(other.name))
+//		, multiplier(std::move(other.multiplier))
+//		, content(std::move(other.content))
+//		, fl(std::move(other.fl))
+//		{
+//		}
+	
 	str_node::str_node(nset_t::iterator nm, bracket_t br, parent_rel_t pr)
 		: content(std::monostate())
 		{

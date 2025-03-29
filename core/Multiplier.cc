@@ -1,4 +1,5 @@
 #include "Multiplier.hh"
+#include <exception>
 
 namespace cadabra {
 
@@ -69,9 +70,7 @@ namespace cadabra {
 		if (is_rational()) {
 			return std::get<mpq_class>(value);
 			}
-		else {
-			return mpq_class(std::get<double>(value));
-			}
+		else throw std::logic_error("Multiplier::get_rational: cannot convert double to rational.");
 		}
 
 	double Multiplier::get_double() const

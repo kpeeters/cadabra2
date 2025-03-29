@@ -1136,8 +1136,9 @@ iter tree<T, tree_node_allocator>::append_child(iter position, T&& x)
 
 	tree_node *tmp=std::allocator_traits<decltype(alloc_)>::allocate(alloc_, 1, 0);
 	std::allocator_traits<decltype(alloc_)>::construct(alloc_, tmp); // Here is where the move semantics kick in
-	std::swap(tmp->data, x);
 
+	std::swap(tmp->data, x);
+	
 	tmp->first_child=0;
 	tmp->last_child=0;
 

@@ -113,8 +113,10 @@ set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayTerminal.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/TerminalStream.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Multiplier.cc  
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/NDSolver.cc  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/NEvaluator.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/NTensor.cc  
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/NInterpolatingFunction.cc  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Exceptions.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Exchange.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Functional.cc
