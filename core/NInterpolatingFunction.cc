@@ -2,6 +2,17 @@
 #include "NInterpolatingFunction.hh"
 #include "Exceptions.hh"
 
+// #define DEBUG 1
+
+#ifdef DEBUG
+#warning "DEBUG enabled for NInterpolatingFunction.cc"
+static bool debug_stop = false;
+#define DEBUGLN(ln) if(!debug_stop) { ln; }
+#else
+#define DEBUGLN(ln)
+#endif
+
+
 using namespace cadabra;
 
 NInterpolatingFunction::NInterpolatingFunction()
@@ -55,5 +66,8 @@ std::complex<double> NInterpolatingFunction::evaluate(double v) const
 		throw ArgumentException("NInterpolatingFunction: evaluated outside domain.");
 
 	size_t i = find_interval(v);
-	return fun_values.values[i] + (v - var_values.values[i].real()) * slope_values.values[i];
+	auto ret = fun_values.values[i] + (v - var_values.values[i].real()) * slope_values.values[i];
+
+	DEBUGLN( std::cerr << "InterpolatingFunction::evaluate: returning " << ret << std::endl; );
+	return ret;
 	}

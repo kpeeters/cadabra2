@@ -199,7 +199,7 @@ namespace cadabra {
 				[](Ex_ptr ex, py::dict initial, py::tuple range) {
 				NDSolver nds(*ex);
 				// initial values
-				for(const auto& iv: initial) 
+				for(const auto& iv: initial)
 					nds.set_initial_value( py::cast<Ex>(iv.first), py::cast<double>(iv.second) );
 
 				if(range.size()!=3)

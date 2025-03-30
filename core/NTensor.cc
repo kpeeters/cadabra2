@@ -66,6 +66,8 @@ NTensor::NTensor(double val)
 
 NTensor::NTensor(const NTensor& other)
 	{
+	DEBUGLN( std::cerr << "NTensor(const NTensor&): " << other.shape.size()
+				<< ", " << other.values.size() << std::endl; );
 	shape=other.shape;
 	values=other.values;
 	}

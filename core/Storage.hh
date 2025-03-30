@@ -109,6 +109,11 @@ namespace cadabra {
 			/// when this is not an index).
 			void flip_parent_rel();
 
+			/// Standard nodes are nodes which do not hold special
+			/// content in the `content` variable. Typical tree
+			/// simplifications cannot apply to non-standard nodes.
+			bool is_standard() const;
+				
 			bool is_zero() const;
 			bool is_identity() const;
 			bool is_rational() const;

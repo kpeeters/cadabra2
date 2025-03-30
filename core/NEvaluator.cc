@@ -7,7 +7,6 @@
 
 using namespace cadabra;
 
-// #define DEBUG 1
 
 // void NEvaluator::find_common_subexpressions(std::vector<Ex *>)
 // 	{
@@ -15,8 +14,14 @@ using namespace cadabra;
 // 	// Then compare subtrees with equal hash to find common subtrees.
 // 	}
 
+// #define DEBUG 1
+
 #ifdef DEBUG
 #warning "DEBUG enabled for NEvaluator.cc"
+static bool debug_stop = false;
+#define DEBUGLN(ln) if(!debug_stop) { ln; }
+#else
+#define DEBUGLN(ln)
 #endif
 
 constexpr double const_pi = 3.14159265358979323846;
@@ -117,7 +122,7 @@ NTensor NEvaluator::evaluate()
 	auto it = ex.begin_post();
 	while(it != ex.end_post()) {
 
-		// First check 
+		// First check interpolating functions.
 		
 		if(std::holds_alternative<std::shared_ptr<NInterpolatingFunction>>(it->content)) {
 			auto nif = std::get<std::shared_ptr<NInterpolatingFunction>>(it->content);
@@ -132,6 +137,7 @@ NTensor NEvaluator::evaluate()
 			for(size_t i=0; i<lastval.values.size(); ++i) {
 				lastval.values[i] = nif->evaluate(lastval.values[i].real());
 				}
+			subtree_values.insert(std::make_pair(it, lastval) );
 			++it;
 			continue;
 			}
@@ -282,9 +288,7 @@ NTensor NEvaluator::evaluate()
 		++it;
 		}
 
-#ifdef DEBUG
-	std::cerr << "evaluate returns " << lastval << std::endl;
-#endif
+	DEBUGLN( std::cerr << "evaluate returns " << lastval << std::endl; );
 	
 	return lastval;
 	}

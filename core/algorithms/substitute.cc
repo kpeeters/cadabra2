@@ -9,7 +9,16 @@
 #define DBG_MACRO_DISABLE
 #include "dbg.h"
 
-//#define DEBUG 1
+// #define DEBUG 1
+
+#ifdef DEBUG
+#warning "DEBUG enabled for substitute.cc"
+static bool debug_stop = false;
+#define DEBUGLN(ln) if(!debug_stop) { ln; }
+#else
+#define DEBUGLN(ln)
+#endif
+
 
 using namespace cadabra;
 
@@ -142,9 +151,7 @@ bool substitute::can_apply(iterator st)
 		if(*lhs->name=="\\prod")     ret=comparator.match_subproduct(tr, lhs, tr.begin(lhs), st, conditions);
 		else if(*lhs->name=="\\sum") ret=comparator.match_subsum(tr, lhs, tr.begin(lhs), st, conditions);
 		else {
-#ifdef DEBUG
-			std::cerr << "substitute::can_apply: testing " << *lhs << " against " << *st << std::endl;
-#endif
+			DEBUGLN( std::cerr << "substitute::can_apply: testing " << lhs << " against " << st << std::endl; );
 			ret=comparator.match_subtree(tr, lhs, st, conditions);
 			}
 
@@ -160,12 +167,10 @@ bool substitute::can_apply(iterator st)
 					if(*st->name!="\\prod")
 						return args.end();
 					
-#ifdef DEBUG
-					std::cerr << "substitute::can_apply: partial=false, so " 
-								 << comparator.factor_locations.size()
-								 << " has to equal "
-								 << tr.number_of_children(st) << std::endl;
-#endif
+					DEBUGLN(std::cerr << "substitute::can_apply: partial=false, so " 
+							  << comparator.factor_locations.size()
+							  << " has to equal "
+							  << tr.number_of_children(st) << std::endl;)
 					if(comparator.factor_locations.size()!=tr.number_of_children(st))
 						return args.end();
 					}
@@ -195,9 +200,7 @@ bool substitute::can_apply(iterator st)
 
 Algorithm::result_t substitute::apply(iterator& st)
 	{
-#ifdef DEBUG
-	std::cerr << "substitute::apply at " << Ex(st) << std::endl;
-#endif
+	DEBUGLN( std::cerr << "substitute::apply at " << Ex(st) << std::endl; )
 
 //	dbg(comparator.replacement_map);
 //	for(auto& rule: comparator.replacement_map)
@@ -249,9 +252,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 		//std::cerr << "consider element of repl " << Ex(it) << std::endl;
 
 		if(loc!=comparator.replacement_map.end()) { // name wildcards
-#ifdef DEBUG
-			std::cerr << "wildcard replaced: " << loc->first << " -> " << loc->second << std::endl;
-#endif
+			DEBUGLN( std::cerr << "wildcard replaced: " << loc->first << " -> " << loc->second << std::endl; )
 
 			// When a replacement is made here, and the index is actually
 			// a dummy in the replacement, we screw up the ind_dummy
@@ -291,16 +292,16 @@ Algorithm::result_t substitute::apply(iterator& st)
 			//std::cerr << "srule : " << Ex(it) << std::endl;
 			multiplier_t tmpmult=*it->multiplier; // remember target multiplier
 			iterator tmp= tr.insert_subtree(it, (*sloc).second);
-#ifdef DEBUG
-			std::cerr << "subtree replaced: " << repl << std::endl;
-#endif
+
+			DEBUGLN( std::cerr << "subtree replaced: " << repl << std::endl; );
+			
 			tmp->fl.bracket=it->fl.bracket;
 			tmp->fl.parent_rel=it->fl.parent_rel; // ok?
 			it=tr.erase(it);
 			multiply(tmp->multiplier, tmpmult);
-#ifdef DEBUG
-			std::cerr << "subtree replaced 2: " << repl << std::endl;
-#endif
+			
+			DEBUGLN( std::cerr << "subtree replaced 2: " << repl << std::endl; );
+
 			subtree_insertion_points.push_back(tmp);
 			index_map_t ind_subtree_free, ind_subtree_dummy;
 			// FIXME: as in the name wildcard case above, we only need these
@@ -320,9 +321,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// not replaced here, but rather in the next step.
 	// std::cerr << ind_dummy.size() << std::endl;
 	if(ind_dummy.size()>0) {
-#ifdef DEBUG
-		std::cerr << "avoid dummy clashes" << std::endl;
-#endif
+
+		DEBUGLN( std::cerr << "avoid dummy clashes" << std::endl; );
+
 		index_map_t must_be_empty;
 		determine_intersection(ind_forced, ind_dummy, must_be_empty);
 		index_map_t::iterator indit=must_be_empty.begin();
@@ -351,15 +352,11 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// After all replacements have been done, we need to cleanup the
 	// replacement tree.
 
-#ifdef DEBUG
-	std::cerr << repl << std::endl;
-#endif
+	DEBUGLN( std::cerr << repl << std::endl; );
 	
 	cleanup_dispatch_deep(kernel, repl);
 
-#ifdef DEBUG
-	std::cerr << "after cleanup:\n" << repl << std::endl;
-#endif
+	DEBUGLN( std::cerr << "after cleanup:\n" << repl << std::endl; );
 
 	repl.begin()->fl.bracket=st->fl.bracket;
 	bool rename_replacement_dummies_called=false;
@@ -407,9 +404,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 
 		}
 	else {
-#ifdef DEBUG
-		std::cerr << "move " << repl << " on top of " << st << std::endl;
-#endif
+		DEBUGLN( std::cerr << "move " << repl << " on top of " << st << std::endl; );
+
 		multiply(repl.begin()->multiplier, *st->multiplier);
 		auto keep_parent_rel=st->fl.parent_rel;
 		st=tr.move_ontop(st, repl.begin()); // no need to keep the original repl tree
@@ -436,9 +432,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 	//	// FIXME: still needed?
 	//	cleanup_dispatch(kernel, tr, st);
 
-#ifdef DEBUG
-	std::cerr << tr << std::endl;
-#endif
+	DEBUGLN( std::cerr << tr << std::endl; );
 
 	dbg(tr.begin());
 	dbg(subtree_insertion_points.size());

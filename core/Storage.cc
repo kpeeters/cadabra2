@@ -876,6 +876,11 @@ namespace cadabra {
 		else throw std::logic_error("flip_parent_rel called on non-index");
 		}
 
+	bool str_node::is_standard() const
+		{
+		return std::holds_alternative<std::monostate>(content);
+		}
+
 	bool str_node::is_zero() const
 		{
 		if(*multiplier==0) return true;
@@ -884,24 +889,24 @@ namespace cadabra {
 
 	bool str_node::is_identity() const
 		{
-		if(*name=="1" && *multiplier==1) return true;
+		if(*name=="1" && *multiplier==1 && is_standard()) return true;
 		return false;
 		}
 
 	bool str_node::is_rational() const
 		{
-		return (*name=="1" && multiplier->is_rational());
+		return (*name=="1" && multiplier->is_rational() && is_standard());
 		}
 
 	bool str_node::is_double() const
 		{
-		return (*name=="1" && multiplier->is_double());
+		return (*name=="1" && multiplier->is_double() && is_standard());
 		}
 
 	bool str_node::is_integer() const
 		{
 		if(*name=="1") {
-			if(multiplier->is_rational()) {
+			if(multiplier->is_rational() && is_standard()) {
 				auto r = multiplier->get_rational();
 				if(r.get_den()==1)
 					return true;
@@ -947,8 +952,6 @@ namespace cadabra {
 		if(fl.parent_rel==p_sub || fl.parent_rel==p_super) return true;
 		return false;
 		}
-
-
 
 	bool str_node::is_quoted_string() const
 		{
