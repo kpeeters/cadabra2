@@ -196,7 +196,7 @@ namespace cadabra {
 				);
 		
 		m.def("ndsolve",
-				[](Ex_ptr ex, py::dict initial, py::tuple range) {
+				[](Ex_ptr ex, py::dict initial, py::tuple range, Ex_ptr stop) {
 				NDSolver nds(*ex);
 				// initial values
 				for(const auto& iv: initial)
@@ -206,7 +206,8 @@ namespace cadabra {
 					throw ConsistencyException("ndsolve: integration range must have exactly three elements.");
 
 				nds.set_range( py::cast<Ex>(range[0]), py::cast<double>(range[1]), py::cast<double>(range[2]));
-				
+				nds.set_stop(*stop);
+					
 				auto res = nds.integrate();
 				auto rexv = std::make_shared<Ex>("\\comma");
 
@@ -229,7 +230,11 @@ namespace cadabra {
 					}
 				
 				return rexv;
-				}
+				},
+				py::arg("ex"),
+				py::arg("initial"),
+				py::arg("range"),
+				py::arg("stop") = Ex{}
 				);
 
 		m.def("nintegrate",

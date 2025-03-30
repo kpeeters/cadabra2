@@ -44,6 +44,9 @@ namespace cadabra {
 
 			// Set integration range for the independent variable.
 			void set_range(const Ex&, double from, double to);
+
+			// Set a condition which, when satisfied, will stop the integration.
+			void set_stop(const Ex&);
 			
 			// Entry point.
 			std::vector<NTensor> integrate();
@@ -60,7 +63,7 @@ namespace cadabra {
 					EventException(std::string="");
 			};
 			
-			Ex ODEs;
+			Ex ODEs, stop;
 
 			// Information extracted from `ODEs`.
 			std::vector<Ex>           variables;

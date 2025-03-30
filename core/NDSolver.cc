@@ -63,6 +63,11 @@ void NDSolver::set_range(const Ex& var, double f, double t)
 	range_to   = t;
 	}
 
+void NDSolver::set_stop(const Ex& stop_)
+	{
+	stop = stop_;
+	}
+
 void NDSolver::extract_from_ODEs()
 	{
 	evaluators.clear();

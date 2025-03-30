@@ -59,8 +59,15 @@ void NInterpolatingFunction::compute_slopes() const
 
 std::complex<double> NInterpolatingFunction::evaluate(double v) const
 	{
-	if(!precomputed)
+	if(!precomputed) {
 		compute_slopes();
+//		spline = boost::math::cubic_b_spline<std::complex<double>>(
+//			fun_values.values.begin(), fun_values.values.end(),
+//			var_values.values.front(),
+//			[&x](size_t i) {
+//			return var_values.values[i+1].real() - var_values.values[i].real();
+//			});
+		}
 	
 	if(v < var_values.values.front().real() || v > var_values.values.back().real())
 		throw ArgumentException("NInterpolatingFunction: evaluated outside domain.");
