@@ -614,7 +614,7 @@ if(WIN32)
     COMMAND cpack
 #    COMMAND osslsigncode sign -pkcs12 "/mnt/c/path/to/certificate.p12" -pass "certificate password" -n "Cadabra2" -i "https://cadabra.science" -t "http://timestamp.comodoca.com/authenticode" -in "cadabra2-${CADABRA_VERSION_SEM}-win64.exe" -out "cadabra2-${CADABRA_VERSION_SEM}-win64-installer.exe"
     COMMAND gh auth setup-git
-    COMMAND release upload "${CADABRA_VERSION_SEM}" cadabra2-${CADABRA_VERSION_SEM}-win64.exe --clobber
+    COMMAND release upload "${CADABRA_VERSION_SEM}" cadabra2-${CADABRA_VERSION_SEM}-win64-x86_64.exe --clobber
   )
 endif()
 

@@ -1,11 +1,6 @@
 # Logic to build packages (RPM/DEB) using CPack; see https://cmake.org/Wiki/CMake:Packaging_With_CPack
 # 
 
-if(MSVC)
-  set(CPACK_GENERATOR "NSIS")
-  message("-- This is a Windows system")
-endif()
-
 set(LINUX_NAME "")
 set(IS_DEBIAN_PACKAGE FALSE)
 if(EXISTS "/etc/redhat-release")
@@ -140,15 +135,22 @@ else()
 endif()
 
 if(WIN32)
-  message("-- This is a Windows system")
+  message("-- This is a Windows system, creating WIX installer")
   # A good resource (though not complete) for CPack on various platforms is
   # https://martin-fieber.de/blog/cmake-cpack-cross-platform-distributables/
-  set(CPACK_GENERATOR NSIS)
+  #   set(CPACK_GENERATOR NSIS)
+  #   set(CPACK_PACKAGE_INSTALL_DIRECTORY "Cadabra")
+  #   set(CPACK_NSIS_MODIFY_PATH OFF)
+  #   set(CPACK_NSIS_EXECUTABLES_DIRECTORY .)
+  #   set(CPACK_NSIS_URL_INFO_ABOUT "https://cadabra.science/")
+  #   set(CPACK_NSIS_CONTACT "Kasper Peeters <info@cadabra.science>")
+  set(CPACK_GENERATOR WIX)
+  set(CPACK_WIX_LIGHT_EXTRA_FLAGS "-sw1076")
+  set(CPACK_WIX_DESKTOP_SHORTCUTS TRUE)
+  set(CPACK_WIX_PROGRAM_MENU_FOLDER "Cadabra")
   set(CPACK_PACKAGE_INSTALL_DIRECTORY "Cadabra")
-  set(CPACK_NSIS_MODIFY_PATH OFF)
-  set(CPACK_NSIS_EXECUTABLES_DIRECTORY .)
-  set(CPACK_NSIS_URL_INFO_ABOUT "https://cadabra.science/")
-  set(CPACK_NSIS_CONTACT "Kasper Peeters <info@cadabra.science>")
+  set(CPACK_WIX_PROPERTY_ARPURLINFOABOUT "https://cadabra.science/")
+  set(CPACK_WIX_PROPERTY_ARPCONTACT "Kasper Peeters <info@cadabra.science>")
 endif()
 
 # Ensure that on Windows we also install the libraries provided
