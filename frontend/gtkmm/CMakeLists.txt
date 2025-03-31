@@ -195,6 +195,11 @@ target_compile_options(
   ${SQLITE3_CFLAGS_OTHER} 
   ${Fontconfig_CFLAGS_OTHER}
 )
+# if(WIN32)
+#   # Try disabling the terminal window.
+#   target_link_options(cadabra-gtk PRIVATE "-mwindows")
+#   target_compile_options(cadabra-gtk PRIVATE "-mwindows")
+# endif()
 target_link_libraries(
   cadabra2-gtk
   PUBLIC

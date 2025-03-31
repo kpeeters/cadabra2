@@ -178,12 +178,17 @@ void ComputeThread::try_spawn_server()
 	// See https://bugs.launchpad.net/inkscape/+bug/1662531 for things related to
 	// the 'envp' argument in the call below.
 	try {
+#ifdef _WIN32
+		Glib::SpawnFlags flags = Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH | Glib::SpawnFlags::SPAWN_STDERR_TO_DEV_NULL;
+#else
+		Glib::SpawnFlags flags = Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH;
+#endif		
 		Glib::spawn_async_with_pipes(wd, argv, /* envp, WITH envp, Fedora 27 fails to start python properly */
 #if GLIBMM_MAJOR_VERSION > 2 || (GLIBMM_MAJOR_VERSION == 2 && GLIBMM_MINOR_VERSION >= 68)
 											  Glib::SpawnFlags::DEFAULT | Glib::SpawnFlags::SEARCH_PATH,
 		                             sigc::slot<void()>(),
 #else
-		                             Glib::SPAWN_DEFAULT|Glib::SPAWN_SEARCH_PATH,
+		                             flags,
 		                             sigc::slot<void>(),
 #endif
 		                             &pid,
