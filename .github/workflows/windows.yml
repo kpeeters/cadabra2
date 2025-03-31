@@ -61,8 +61,8 @@ jobs:
     - name: Upload installer
       uses: actions/upload-artifact@v4
       with:
-        name: cadabra2-win64.exe
-        path: build/cadabra2-${{ env.VERSION }}-win64.exe
+        name: cadabra2-win64.msi
+        path: build/cadabra2-${{ env.VERSION }}-win64.msi
         retention-days: 2
 
   test:
@@ -73,26 +73,26 @@ jobs:
     - name: Download installer
       uses: actions/download-artifact@v4
       with:
-        name: cadabra2-win64.exe
+        name: cadabra2-win64.msi
 
     - name: Install silently
       shell: pwsh
       run: |
         dir
-        $installer = Get-ChildItem -Filter "cadabra*.exe" | Select-Object -First 1 -ExpandProperty Name
+        $installer = Get-ChildItem -Filter "cadabra*.msi" | Select-Object -First 1 -ExpandProperty Name
         if (-not $installer) {
             Write-Error "No installer found"
             exit 1
         }
         Write-Host "Installing $installer"
-        Start-Process -FilePath ".\$installer" -ArgumentList "/S", "/LOG=C:\Windows\Temp\install.log" -Wait
+        Start-Process -FilePath "msiexec" -ArgumentList "/i", ".\$installer", "/qn", "/l*v", "install.log" -Wait
         Write-Host "Installer finished"
 
     - name: Upload installation log
       uses: actions/upload-artifact@v4
       with:
         name: install.log
-        path: C:\Windows\Temp\install.log
+        path: install.log
 
     - name: Check installation location
       shell: cmd

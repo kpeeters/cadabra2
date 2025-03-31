@@ -151,6 +151,7 @@ if(WIN32)
   set(CPACK_PACKAGE_INSTALL_DIRECTORY "Cadabra")
   set(CPACK_WIX_PROPERTY_ARPURLINFOABOUT "https://cadabra.science/")
   set(CPACK_WIX_PROPERTY_ARPCONTACT "Kasper Peeters <info@cadabra.science>")
+  set(CPACK_WIX_UPGRADE_GUID "7CD938BA-C9E0-4CF0-8649-B44F292C01B5")
 endif()
 
 # Ensure that on Windows we also install the libraries provided
