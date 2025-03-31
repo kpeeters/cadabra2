@@ -36,7 +36,8 @@ Cadabra::Cadabra(int argc, char **argv)
 							 Gio::APPLICATION_HANDLES_COMMAND_LINE |
 	                   Gio::APPLICATION_NON_UNIQUE),
 	  compute(0), compute_thread(0),
-	  server_port(0), server_ip_address("127.0.0.1")
+	  server_port(0), server_ip_address("127.0.0.1"),
+	  no_registration(false)
 	{
 	// https://stackoverflow.com/questions/43886686/how-does-one-make-gtk3-look-native-on-windows-7
 	//	https://github.com/shoes/shoes3/wiki/Changing-Gtk-theme-on-Windows
@@ -70,6 +71,11 @@ Cadabra::Cadabra(int argc, char **argv)
 	                      "token",
 	                      't',
 	                      "Use the given authentication token to connect to the server.",
+	                      "string");
+	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_BOOL,
+	                      "no-registration",
+	                      'n',
+	                      "Do not show the registration dialog.",
 	                      "string");
 	}
 
@@ -129,12 +135,15 @@ int Cadabra::on_command_line(const Glib::RefPtr<Gio::ApplicationCommandLine>& cm
 	// The template `get_arg_value` only works if the type matches exactly,
 	// so we need to ask it to store into a `Glib::ustring` and then copy.
 	Glib::ustring tmp;
+	bool btmp;
 	
 	get_arg_value(options, "server-port",       server_port);
 	get_arg_value(options, "server-ip-address", tmp);
 	server_ip_address = tmp;
 	get_arg_value(options, "token",             tmp);
 	server_token = tmp;
+	get_arg_value(options, "no-registration",   btmp);
+	no_registration = btmp;
 	get_arg_value(options, "geometry",          tmp);
 	window_geometry = tmp;
 	get_arg_value(options, "title",             tmp);
@@ -186,7 +195,7 @@ void Cadabra::on_activate()
 	std::string version=std::string(CADABRA_VERSION_SEM);
 	snoop::log("start") << version << snoop::flush;
 
-	if(!nw->prefs.is_registered && !nw->prefs.is_anonymous) {
+	if(!no_registration && !nw->prefs.is_registered && !nw->prefs.is_anonymous) {
 		nw->on_help_register();
 		}
 	}

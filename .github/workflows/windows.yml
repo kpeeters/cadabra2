@@ -85,8 +85,14 @@ jobs:
             exit 1
         }
         Write-Host "Installing $installer"
-        Start-Process -FilePath ".\$installer" -ArgumentList "/S" -Wait
+        Start-Process -FilePath ".\$installer" -ArgumentList "/S", "/LOG=install.log" -Wait
         Write-Host "Installer finished"
+
+    - name: Upload installation log
+      uses: actions/upload-artifact@v4
+      with:
+        name: install.log
+        path: install.log
 
     - name: Check installation location
       shell: cmd
@@ -102,7 +108,7 @@ jobs:
         Write-Host "Executable not found"
         exit 1
         }
-        $process = Start-Process "C:\Program Files\Cadabra\cadabra2-gtk.exe" -WorkingDirectory "C:\Program Files\Cadabra" -PassThru
+        $process = Start-Process "C:\Program Files\Cadabra\cadabra2-gtk.exe" -ArgumentList "-n", "\"C:\Program Files\Cadabra\Examples\schwarzschild.cnb\"" -WorkingDirectory "C:\Program Files\Cadabra" -PassThru
         Start-Sleep -Seconds 120
 
         # Take screenshot
