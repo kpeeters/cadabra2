@@ -84,8 +84,9 @@ jobs:
             Write-Error "No installer found"
             exit 1
         }
-        Write-Host "Installing $installer"
-        Start-Process -FilePath "msiexec" -ArgumentList "/i", ".\$installer", "/qn", "/l*v", "install.log" -Wait
+        $installerPath = (Get-Item -Path ".\$installer").FullName        
+        Write-Host "Installing $installerPath"
+        Start-Process -FilePath "msiexec" -ArgumentList "/i", "$installerPath", "/qn", "/l*v", "install.log" -Wait
         Write-Host "Installer finished"
 
     - name: Upload installation log
