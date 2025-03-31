@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <DirectoryRef Id="PROGRAM_MENU_FOLDER">
+      <Component Id="CadabraShortcuts" Guid="*">
+        <Shortcut Id="CadabraStartMenuShortcut" 
+                  Name="Cadabra" 
+                  Description="Computer algebra system for field theory"
+                  Target="[#cadabra2-gtk.exe]"
+                  WorkingDirectory="INSTALLDIR"/>
+        <RemoveFolder Id="CleanupShortcut" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\Cadabra" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

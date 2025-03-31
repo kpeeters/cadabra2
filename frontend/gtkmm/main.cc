@@ -20,6 +20,11 @@
 
 int main(int argc, char **argv)
 	{
+#ifdef _WIN32
+// Disable console creation
+	FreeConsole();
+#endif
+	
 	try {
 		auto application = Cadabra::create(argc, argv);
 		const int status = application->run();
