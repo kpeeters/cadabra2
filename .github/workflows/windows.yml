@@ -103,7 +103,7 @@ jobs:
         exit 1
         }
         $process = Start-Process "C:\Program Files\Cadabra\cadabra2-gtk.exe" -WorkingDirectory "C:\Program Files\Cadabra" -PassThru
-        Start-Sleep -Seconds 10
+        Start-Sleep -Seconds 120
 
         # Take screenshot
         Add-Type -AssemblyName System.Windows.Forms
