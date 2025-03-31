@@ -152,6 +152,11 @@ if(WIN32)
   set(CPACK_WIX_PROPERTY_ARPURLINFOABOUT "https://cadabra.science/")
   set(CPACK_WIX_PROPERTY_ARPCONTACT "Kasper Peeters <info@cadabra.science>")
   set(CPACK_WIX_UPGRADE_GUID "7CD938BA-C9E0-4CF0-8649-B44F292C01B5")
+  set(CPACK_WIX_UI_BANNER "${CMAKE_SOURCE_DIR}/doc/msi_banner.png")
+  set(CPACK_WIX_UI_DIALOG "${CMAKE_SOURCE_DIR}/doc/msi_dialog.png")
+  set(CPACK_WIX_PRODUCT_ICON "${CMAKE_SOURCE_DIR}/config/cadabra2.ico") 
+  set(CPACK_PACKAGE_EXECUTABLES "cadabra2-gtk" "Cadabra") 
+  set(CPACK_CREATE_DESKTOP_LINKS "cadabra2-gtk")
 endif()
 
 # Ensure that on Windows we also install the libraries provided
