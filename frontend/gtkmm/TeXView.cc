@@ -418,7 +418,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 											"");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\square)"),
-											"\\square~\\!");
+											"□");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\bigO)"),
 											"\\mathcal{O}");
