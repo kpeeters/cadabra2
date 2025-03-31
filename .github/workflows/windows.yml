@@ -102,7 +102,7 @@ jobs:
         Write-Host "Executable not found"
         exit 1
         }
-        $process = Start-Process "C:\Program Files\Cadabra\cadabra2-gtk.exe" -PassThru
+        $process = Start-Process "C:\Program Files\Cadabra\cadabra2-gtk.exe" -WorkingDirectory "C:\Program Files\Cadabra" -PassThru
         Start-Sleep -Seconds 10
 
         # Take screenshot
