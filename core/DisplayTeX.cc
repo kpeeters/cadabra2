@@ -391,7 +391,11 @@ void DisplayTeX::print_multiplier(std::ostream& str, Ex::iterator it, int mult)
 			}
 		}
 	else {
-		str << it->multiplier->get_double();
+		std::ostringstream str2;
+		str2 << it->multiplier->get_double();
+		std::string s = str2.str();
+		std::string s2 = std::regex_replace(s, std::regex("(\\d+\\.?\\d*|\\.\\d+)e([+-]?\\d+)"), "$1 \\times 10^{$2}");
+		str << s2;
 		}
 	str << "\\,";
 	}
@@ -480,7 +484,6 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 		return;
 
 	if(std::holds_alternative<std::shared_ptr<NTensor>>(it->content)) {
-		std::cerr << "PRINTING NTENSOR" << std::endl;
 		std::ostringstream str2;
 		auto nt = std::get<std::shared_ptr<NTensor>>(it->content);
 		str2 << *nt;

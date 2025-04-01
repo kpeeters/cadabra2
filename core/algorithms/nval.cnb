@@ -1,0 +1,356 @@
+{
+	"cell_id": 3727501436159002512,
+	"cells": [
+		{
+			"cell_id": 4784819847101530838,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 17824719808299684344,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{nval}{Numerically evaluate expressions}\n\\available{2.5.12}\n\nBy default Cadabra does not evaluate integrals, neither symbolically nor numerically. If you want to replace an integral with its numerical value, use \\algo{nval} (for symbolic evaluation, consult \\algo{integrate} instead).\n\nThis function will in future versions be extended to handle other numerical evaluations (e.g.~sums) as well."
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{nval}{Numerically evaluate expressions}\n\\available{2.5.12}\n\nBy default Cadabra does not evaluate integrals, neither symbolically nor numerically. If you want to replace an integral with its numerical value, use \\algo{nval} (for symbolic evaluation, consult \\algo{integrate} instead).\n\nThis function will in future versions be extended to handle other numerical evaluations (e.g.~sums) as well."
+		},
+		{
+			"cell_id": 16885271034272663252,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 15341348911764094688,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The example below shows the basic usage of \\algo{nval}:"
+				}
+			],
+			"hidden": true,
+			"source": "The example below shows the basic usage of \\algo{nval}:"
+		},
+		{
+			"cell_id": 8200378717852774649,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16316296686794774834,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16571987704878116452,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\int{\\sin(x) (x + 3)**( -  1/2 )}{{x, 0, 1}}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\int_{0\\,}^{1} \\sin{x} {\\left(x\\discretionary{}{}{}+3\\,\\right)}^{ - \\frac{1}{2}\\,}\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source": "ex:= \\int{ \\sin(x)/\\sqrt{x+3} }{x, 0, 1};"
+		},
+		{
+			"cell_id": 3175130663067913368,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 6741586603258412245,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 504619274123144884,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0.240842"
+						}
+					],
+					"source": "\\begin{dmath*}{}0.240842\\,\\end{dmath*}"
+				}
+			],
+			"source": "nval(_);"
+		},
+		{
+			"cell_id": 13713495055462043320,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 7469151042879232966,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Note how this has change the original expression:"
+				}
+			],
+			"hidden": true,
+			"source": "Note how this has change the original expression:"
+		},
+		{
+			"cell_id": 10057106055578097114,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 17337315644736004785,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10521423291990612155,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0.240842"
+						}
+					],
+					"source": "\\begin{dmath*}{}0.240842\\,\\end{dmath*}"
+				}
+			],
+			"source": "ex;"
+		},
+		{
+			"cell_id": 5301092461037266292,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 17975472720885149527,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "You can pass an optional dict of values for parameters in the expression. The values passed here must be numerical (so if you want to use e.g.~$\\pi$, use \\verb|np.pi| for now). In the following example we have an integral which depends on a parameter~$a$,"
+				}
+			],
+			"hidden": true,
+			"source": "You can pass an optional dict of values for parameters in the expression. The values passed here must be numerical (so if you want to use e.g.~$\\pi$, use \\verb|np.pi| for now). In the following example we have an integral which depends on a parameter~$a$,"
+		},
+		{
+			"cell_id": 18339386030332043574,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 1119752775661119862,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2641388767671269607,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\int{\\sin(x)}{{x, 0, a}}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\int_{0\\,}^{a} \\sin{x}\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source": "ex:= \\int{ \\sin(x) }{x, 0, a};"
+		},
+		{
+			"cell_id": 713608360128686673,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 14912885148494620121,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "We can evaluate this for $a=2$ by passing that value into \\algo{nval},"
+				}
+			],
+			"hidden": true,
+			"source": "We can evaluate this for $a=2$ by passing that value into \\algo{nval},"
+		},
+		{
+			"cell_id": 8813303992966376073,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 8858560042190640155,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6933617649108786327,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "1.41615"
+						}
+					],
+					"source": "\\begin{dmath*}{}1.41615\\,\\end{dmath*}"
+				}
+			],
+			"source": "nval(ex, {$a$: 2} );"
+		},
+		{
+			"cell_id": 15591246746432587564,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 5762584324112817536,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If you want to evaluate only a certain part of your expression numerically, first zoom in to that part before you call \\algo{nval}. In the example below, we initially want to evaluate the integral containing the sine, but not the one containing the cosine."
+				}
+			],
+			"hidden": true,
+			"source": "If you want to evaluate only a certain part of your expression numerically, first zoom in to that part before you call \\algo{nval}. In the example below, we initially want to evaluate the integral containing the sine, but not the one containing the cosine."
+		},
+		{
+			"cell_id": 17377712600830363840,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13904124956940548149,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13377100612769348594,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\int{\\sin(x)}{{x, 0, \\pi}} + \\int{(\\cos(x))**2}{{x, 0, \\pi}}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\int_{0\\,}^{\\pi} \\sin{x}\\,\\,{\\rm d}x\\discretionary{}{}{}+\\int_{0\\,}^{\\pi} {\\left(\\cos{x}\\right)}^{2\\,}\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source": "ex:= \\int{\\sin(x)}{x,0,\\pi} + \\int{\\cos(x)**2}{x,0,\\pi};"
+		},
+		{
+			"cell_id": 9069530760613241717,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 10398718852102296679,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17464744525266734230,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\int{\\sin(x)}{{x, 0, \\pi}} +  ... "
+						}
+					],
+					"source": "\\begin{dmath*}{}\\int_{0\\,}^{\\pi} \\sin{x}\\,\\,{\\rm d}x\\discretionary{}{}{}+ \\ldots \\end{dmath*}"
+				}
+			],
+			"source": "zoom(_, $\\int{\\sin{A??}}{B??}$);"
+		},
+		{
+			"cell_id": 1671145987561998956,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 6746369443998143815,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16743511995547134131,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "2 +  ... "
+						}
+					],
+					"source": "\\begin{dmath*}{}2\\,\\discretionary{}{}{}+ \\ldots \\end{dmath*}"
+				}
+			],
+			"source": "nval(_);"
+		},
+		{
+			"cell_id": 5095242746938654645,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 5311055194625327416,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1630048626783410932,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "2 + \\int{(\\cos(x))**2}{{x, 0, \\pi}}"
+						}
+					],
+					"source": "\\begin{dmath*}{}2\\,\\discretionary{}{}{}+\\int_{0\\,}^{\\pi} {\\left(\\cos{x}\\right)}^{2\\,}\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source": "unzoom(_);"
+		},
+		{
+			"cell_id": 6655203699757759082,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 10790235354729473770,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If you now still want to evaluate the cosine integral too, you can call \\algo{nval} on the full, unzoomed expression,"
+				}
+			],
+			"hidden": true,
+			"source": "If you now still want to evaluate the cosine integral too, you can call \\algo{nval} on the full, unzoomed expression,"
+		},
+		{
+			"cell_id": 12818430237452113697,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 11816992663016848683,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3142977150515540002,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "3.5708"
+						}
+					],
+					"source": "\\begin{dmath*}{}3.5708\\,\\end{dmath*}"
+				}
+			],
+			"source": "nval(_);"
+		},
+		{
+			"cell_id": 2494128600755150446,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 14128870615555357155,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Under the hood, the numerical integration method used is Gauss-Kronrod, which does not (yet) deal with infinite or semi-infinite integration ranges. "
+				}
+			],
+			"hidden": true,
+			"source": "Under the hood, the numerical integration method used is Gauss-Kronrod, which does not (yet) deal with infinite or semi-infinite integration ranges. "
+		},
+		{
+			"cell_id": 2642172041483479399,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
+	"version": 1.0
+}

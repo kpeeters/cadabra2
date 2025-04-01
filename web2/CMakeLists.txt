@@ -126,6 +126,7 @@ set(ALGOS
   map_sympy
   meld
   nevaluate
+  nval
   product_rule
   raise_free_indices
   reduce_delta

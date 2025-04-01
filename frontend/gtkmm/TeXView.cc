@@ -494,6 +494,9 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 											std::regex(R"(\\algorithm\{([^\}]*)\}\{([^\}]*)\}[ ]*)"),
 											"\\text{\\large\\texttt{$1}}\\\\\\vspace{2.5ex}\\text{\\textit{$2}}\\\\\\vspace{2.5ex}");
 		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\available\{([^\}]*)\}[ ]*)"),
+											"{\\!\\small available since: $1}\\\\\\vspace{3.5ex}");
+		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\property\{([^\}]*)\}\{([^\}]*)\}[ ]*)"),
 											"\\text{\\large\\texttt{$1}}\\\\\\vspace{2.5ex}\\text{\\textit{$2}}\\\\\\vspace{2.5ex}");
 		fixed = std::regex_replace(fixed,
