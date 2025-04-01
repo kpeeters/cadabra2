@@ -141,11 +141,11 @@ include_directories(
 #  )
 
 # Server executable
-if ((NOT MSVC) OR (MSVC AND CADABRA_DEBUG_BUILD) OR (MSVC AND MSVC_TARGET_CONSOLE))
-   add_executable(cadabra-server ${CADABRA_SERVER_SRC})
-else()
-   message(STATUS "Using the win32 subsystem")
+if(WIN32)
+   message(STATUS "Using the win32 subsystem for cadabra-server")
    add_executable(cadabra-server WIN32 ${CADABRA_SERVER_SRC}) 
+else()
+   add_executable(cadabra-server ${CADABRA_SERVER_SRC})
 endif()
 
 # target_link_libraries(cadabra-server cadabra_server)

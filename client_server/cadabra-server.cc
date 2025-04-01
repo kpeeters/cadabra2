@@ -4,6 +4,8 @@
 #include "Server.hh"
 #include <glibmm/miscutils.h>
 
+#define NDEBUG 1
+
 #ifdef _WIN32
 #include <Windows.h>
 #endif
@@ -39,10 +41,6 @@ std::string getRegKey(const std::string& location, const std::string& name, bool
 
 int main(int argc, char **argv)
 	{
-#ifdef _WIN32
-	FreeConsole();
-#endif
-	
 #ifndef ENABLE_JUPYTER
  	snoop::log.init("CadabraServer", CADABRA_VERSION_FULL, "log.cadabra.science");
  	snoop::log.set_sync_immediately(true);
@@ -50,26 +48,6 @@ int main(int argc, char **argv)
 	
 #ifdef _WIN32
 	snoop::log("platform") << "windows" << snoop::flush;
-	
-// 	// The Anaconda people _really_ do not understand packaging...
-// 	// We are going to find out the installation path for Anaconda/Miniconda
-// 	// by querying a registry key.
-// 	std::string pythonhome=Glib::getenv("PYTHONHOME");
-// 	std::string pythonpath=Glib::getenv("PYTHONPATH");
-// 
-// 	std::string s = getRegKey(std::string("SOFTWARE\\Python\\PythonCore\\")+Python_VERSION_MAJOR+"."+Python_VERSION_MINOR+"\\InstallPath", "", false);
-// 	snoop::log("key1") << s << snoop::flush;
-// 	if(s=="") {
-// 		s = getRegKey(std::string("SOFTWARE\\Python\\PythonCore\\")+Python_VERSION_MAJOR+"."+Python_VERSION_MINOR, "", true);
-// 		snoop::log("key2") << s << snoop::flush;
-// 		}
-// 
-// //	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + Glib::get_home_dir()+"/Anaconda3");
-// //	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + Glib::get_home_dir()+"/Anaconda3");
-// 	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + s);
-// 	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + s);
-//	std::cerr << "Server::init: using PYTHONPATH = " << Glib::getenv("PYTHONPATH")
-//				 << " and PYTHONHOME = " << Glib::getenv("PYTHONHOME") << "." << std::endl;
 #else
 #ifdef __APPLE__
 	snoop::log("platform") << "macos" << snoop::flush;
@@ -88,11 +66,6 @@ int main(int argc, char **argv)
 	Server server;
 	server.run(port, eod);
 
-//	snoop::log(snoop::info) << "Terminating" << snoop::flush;
-// #ifndef ENABLE_JUPYTER
-// 	snoop::log.sync_with_server();
-// #endif
-
 	return 0;
 	}
 
@@ -100,6 +73,7 @@ int main(int argc, char **argv)
 #if defined(_WIN32) && defined(NDEBUG)
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 	{
+	FreeConsole();
 	return main(__argc, __argv);
 	}
 #endif
