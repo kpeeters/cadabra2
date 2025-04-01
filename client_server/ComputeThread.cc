@@ -181,10 +181,15 @@ void ComputeThread::try_spawn_server()
 #ifdef _WIN32
 		Glib::SpawnFlags flags = Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH | Glib::SpawnFlags::SPAWN_STDERR_TO_DEV_NULL;
 #else
+  #if GLIBMM_MAJOR_VERSION > 2 || (GLIBMM_MAJOR_VERSION == 2 && GLIBMM_MINOR_VERSION >= 68)
+		Glib::SpawnFlags flags = Glib::SpawnFlags::DEFAULT | Glib::SpawnFlags::SEARCH_PATH,
+  #else
 		Glib::SpawnFlags flags = Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH;
-#endif		
+  #endif
+#endif
+		
 		Glib::spawn_async_with_pipes(wd, argv, /* envp, WITH envp, Fedora 27 fails to start python properly */
-											  Glib::SpawnFlags::DEFAULT | Glib::SpawnFlags::SEARCH_PATH,
+											  flags,
 #ifdef _WIN32
 		                             sigc::slot<void()>([](){ FreeConsole(); } ),
 #else

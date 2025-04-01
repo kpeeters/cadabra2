@@ -41,7 +41,7 @@
 			"cell_id": 5493679695024414274,
 			"cell_origin": "client",
 			"cell_type": "input",
-			"source": "def exlist_to_list(fn):\n   \"\"\" Convert a cadabra list to a python list, and ensure that single items sit in lists too. \"\"\"\n   if isinstance(fn, Ex):\n      if fn.top().name==r\"\\comma\":\n         tmp = []\n         for t in fn.top().args():\n             tmp.append(t.ex())\n      else:\n         tmp = [fn]\n   return tmp"
+			"source": "def exlist_to_list(fn):\n   \"\"\" Convert a cadabra list to a python list, and ensure that single items sit in lists too. \"\"\"\n   if isinstance(fn, Ex):\n      if fn.top().name==r\"\\comma\":\n         tmp = []\n         for t in fn.top().args():\n             tmp.append(t.ex())\n      else:\n         tmp = [fn]\n   else:\n      tmp = fn\n   return tmp"
 		},
 		{
 			"cell_id": 15037727445318550071,
