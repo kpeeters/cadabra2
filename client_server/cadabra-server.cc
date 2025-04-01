@@ -39,7 +39,7 @@ std::string getRegKey(const std::string& location, const std::string& name, bool
 
 int main(int argc, char **argv)
 	{
-#ifdef(_WIN32)
+#ifdef _WIN32
 	FreeConsole();
 #endif
 	
