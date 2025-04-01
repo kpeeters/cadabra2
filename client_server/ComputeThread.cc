@@ -179,7 +179,7 @@ void ComputeThread::try_spawn_server()
 	// the 'envp' argument in the call below.
 	try {
 #ifdef _WIN32
-		Glib::SpawnFlags flags = Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH | Glib::SpawnFlags::SPAWN_STDERR_TO_DEV_NULL | G_SPAWN_FLAGS_WINDOWS_HIDE_CONSOLE;
+		Glib::SpawnFlags flags = Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH | Glib::SpawnFlags::SPAWN_STDERR_TO_DEV_NULL;
 #else
   #if GLIBMM_MAJOR_VERSION > 2 || (GLIBMM_MAJOR_VERSION == 2 && GLIBMM_MINOR_VERSION >= 68)
 		Glib::SpawnFlags flags = Glib::SpawnFlags::DEFAULT | Glib::SpawnFlags::SEARCH_PATH,
