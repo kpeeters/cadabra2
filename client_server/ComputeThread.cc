@@ -179,7 +179,7 @@ void ComputeThread::try_spawn_server()
 	// the 'envp' argument in the call below.
 	try {
 #ifdef _WIN32
-		Glib::SpawnFlags flags = Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH | Glib::SpawnFlags::SPAWN_STDERR_TO_DEV_NULL;
+		Glib::SpawnFlags flags = Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH | Glib::SpawnFlags::SPAWN_STDERR_TO_DEV_NULL | Glib::SPAWN_HIDE_CONSOLE;
 #else
   #if GLIBMM_MAJOR_VERSION > 2 || (GLIBMM_MAJOR_VERSION == 2 && GLIBMM_MINOR_VERSION >= 68)
 		Glib::SpawnFlags flags = Glib::SpawnFlags::DEFAULT | Glib::SpawnFlags::SEARCH_PATH,
@@ -190,11 +190,7 @@ void ComputeThread::try_spawn_server()
 		
 		Glib::spawn_async_with_pipes(wd, argv, /* envp, WITH envp, Fedora 27 fails to start python properly */
 											  flags,
-#ifdef _WIN32
-		                             sigc::slot<void()>([](){ FreeConsole(); } ),
-#else
 		                             sigc::slot<void()>(),
-#endif
 		                             &pid,
 		                             0,
 		                             &server_stdout,

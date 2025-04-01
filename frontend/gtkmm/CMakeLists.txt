@@ -316,6 +316,9 @@ if (NOT INSTALL_TARGETS_ONLY)
         file(INSTALL ${WINGLIB} DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
     ]])
 
+    set_property(INSTALL "${CDB_BIN_PATH}/cadabra2-gtk"
+      PROPERTY CPACK_START_MENU_SHORTCUTS "Cadabra"
+    )
   endif()
 endif()
 

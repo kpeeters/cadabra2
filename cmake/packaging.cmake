@@ -157,7 +157,8 @@ if(WIN32)
   set(CPACK_WIX_PRODUCT_ICON "${CMAKE_SOURCE_DIR}/config/cadabra2.ico") 
   set(CPACK_PACKAGE_EXECUTABLES "cadabra2-gtk" "Cadabra") 
   set(CPACK_CREATE_DESKTOP_LINKS "cadabra2-gtk")
-  set(CPACK_WIX_EXTRA_SOURCES "${CMAKE_SOURCE_DIR}/config/shortcuts.wxs")
+#  set(CPACK_WIX_EXTRA_SOURCES "${CMAKE_SOURCE_DIR}/config/shortcuts.wxs")
+  set(CPACK_START_MENU_SHORTCUTS "Cadabra")
 endif()
 
 # Ensure that on Windows we also install the libraries provided
