@@ -230,6 +230,7 @@
 					"source": "\\algorithm{limit}{Take the limit of an expression.}\n\nThis function mimics the SymPy \\verb|limit| function, except that all\nmathematical expressions need to be Cadabra expressions."
 				}
 			],
+			"hidden": true,
 			"source": "\\algorithm{limit}{Take the limit of an expression.}\n\nThis function mimics the SymPy \\verb|limit| function, except that all\nmathematical expressions need to be Cadabra expressions."
 		},
 		{

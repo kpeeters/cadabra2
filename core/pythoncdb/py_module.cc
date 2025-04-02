@@ -29,6 +29,7 @@ namespace cadabra {
 		py::options options;
 		options.disable_function_signatures();
 
+//		m.doc() = "Cadabra symbolic computer algebra";
 		m.def("init_ipython", &init_ipython);
 
 		// These must be initialized in the order of which

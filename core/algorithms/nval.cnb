@@ -327,6 +327,54 @@
 			"source": "nval(_);"
 		},
 		{
+			"cell_id": 7062595186920898441,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"source": "While the integration variable has to be real, \\algo{nval} function can deal with complex-valued integrands"
+		},
+		{
+			"cell_id": 7160907691233309035,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 11929487896157463962,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property ImaginaryI attached to~}i.\\end{dmath*}"
+				},
+				{
+					"cell_id": 5381501152817545418,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7245863370580040533,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A \\int{\\exp(i x)}{{x, 0, \\pi}}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A \\int_{0\\,}^{\\pi} \\exp\\left(i x\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				},
+				{
+					"cell_id": 2339098002887347228,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2328464668007335859,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A [1.1847e-16 + 2i]"
+						}
+					],
+					"source": "\\begin{dmath*}{}A (1.1847 \\times 10^{-16} + 2i)\\end{dmath*}"
+				}
+			],
+			"source": "i::ImaginaryI;\nex:= A \\int{ \\exp{i x} }{x, 0, \\pi};\nnval(_);"
+		},
+		{
 			"cell_id": 2494128600755150446,
 			"cell_origin": "client",
 			"cell_type": "latex",

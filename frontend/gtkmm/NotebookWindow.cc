@@ -1768,6 +1768,7 @@ void NotebookWindow::position_cursor(const DTree&, DTree::iterator it, int pos)
 	current_cell=it;
 	if(follow_mode) {
 		// std::cerr << "POSITION follow cell" << std::endl;
+		follow_cell=it;
 		scroll_cell_into_view(it);
 		}
 	

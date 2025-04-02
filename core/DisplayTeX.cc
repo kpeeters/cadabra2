@@ -489,8 +489,12 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 		str2 << *nt;
 		std::string s = str2.str();
 		std::string s2 = std::regex_replace(s, std::regex("(\\d+\\.?\\d*|\\.\\d+)e([+-]?\\d+)"), "$1 \\times 10^{$2}");
-		if(nt->shape.size()==1 && nt->shape[0]==1)
-			str << s2.substr(1, s2.size()-2);
+		if(nt->shape.size()==1 && nt->shape[0]==1) {
+			if(!nt->is_real())
+				str << "(" << s2.substr(1, s2.size()-2) << ")";
+			else
+				str << s2.substr(1, s2.size()-2);
+			}
 		else
 			str << s2;
 

@@ -342,7 +342,14 @@ void DisplaySympy::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr
 
 void DisplaySympy::dispatch(std::ostream& str, Ex::iterator it)
 	{
-	// The node names below should only be reserved node names; all others
+	if(std::holds_alternative<std::shared_ptr<NTensor>>(it->content)) {
+		throw ArgumentException("Cannot yet convert NTensor to SymPy expression.");
+		}
+	else if(std::holds_alternative<std::shared_ptr<NInterpolatingFunction>>(it->content)) {
+		throw ArgumentException("Cannot yet convert NInterpolatingFunction to SymPy expression.");
+		}
+	
+   // The node names below should only be reserved node names; all others
 	// should be looked up using properties. FIXME
 	if(*it->name=="\\prod")        print_productlike(str, it, "*");
 	else if(*it->name=="\\sum")    print_sumlike(str, it);

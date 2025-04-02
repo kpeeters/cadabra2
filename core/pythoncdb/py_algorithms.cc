@@ -165,7 +165,7 @@ namespace cadabra {
 				return std::make_pair(std::get<0>(ret), std::get<1>(ret));
 				}
 				);
-		
+
 		m.def("nval",
 				// We cannot use `def_algo` because we first need to
 				// convert the Python dict into something that `nevaluate`
@@ -178,7 +178,8 @@ namespace cadabra {
 				return apply_algo_preorder<nval>(ex, ev, true, false, 0);
 				},
 				py::arg("ex"),
-				py::arg("values")=py::dict()
+				py::arg("values")=py::dict(),
+				pybind11::doc(read_manual(m, "algorithms", "nval").c_str())
 				);
 		
 		m.def("nevaluate",

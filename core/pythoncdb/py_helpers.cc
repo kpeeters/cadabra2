@@ -88,6 +88,7 @@ namespace cadabra {
 			ret = std::regex_replace(ret, std::regex(R"(\\property\{(.*)\}\{(.*)\})"), "$2");
 			ret = std::regex_replace(ret, std::regex(R"(\\algo\{([^\}]*)\})"), "$1");
 			ret = std::regex_replace(ret, std::regex(R"(\\prop\{([^\}]*)\})"), "$1");
+			ret = std::regex_replace(ret, std::regex(R"(\\available\{(.*)\})"), "(available since: $1)");
 			ret += "\n\nFor more information see https://cadabra.science/manual/"+std::string(name)+".html";
 			return ret;
 			}
