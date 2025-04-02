@@ -112,7 +112,7 @@ namespace cadabra {
 			bare = std::regex_replace(bare, std::regex(R"(#)"), "\\#");
 			bare = std::regex_replace(bare, std::regex(R"(\{)"), "\\{");
 			bare = std::regex_replace(bare, std::regex(R"(\})"), "\\}");
-			bare = std::regex_replace(bare, std::regex(R"(\\)"), "\\textbackslash{}");
+			bare = std::regex_replace(bare, std::regex(R"(\\)"), "\\backslash{}");
 			str << " attached to {\\texttt{" + bare + "}}.}";
 		}
 		else {

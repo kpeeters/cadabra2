@@ -423,7 +423,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 											std::regex(R"(\\bigO)"),
 											"\\mathcal{O}");
 		fixed = std::regex_replace(fixed, std::regex(R"(\{\}_)"), "{\\,\\!}_");
-		fixed = std::regex_replace(fixed, std::regex(R"(\{\}^)"), "{\\,\\!}^");
+		fixed = std::regex_replace(fixed, std::regex(R"(\{\}\^)"), "{\\,\\!}^");
 		fixed = "\\text{$\\displaystyle{}"+fixed+"$}";
 		}
 	else {
@@ -481,6 +481,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 											std::regex(R"(\\color)"),
 											"\\textcolor");
 		fixed = std::regex_replace(fixed, discretionary, "\\-{}");
+		fixed = std::regex_replace(fixed, std::regex(R"(\\textbackslash)"), "\\backslash");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\section\*\{([^\}]*)\}[ ]*)"),
 											"\\text{\\Large\\textbf{$1}}\\\\\\vspace{2.5ex}");
@@ -535,7 +536,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		}
 
    //	fixed = "\\text{$A_{m n}$}";
-	// std::cout << "**** fixed to " << fixed << std::endl;
+	std::cout << "**** fixed to " << fixed << std::endl;
 	}
 
 TeXView::TeXArea::TeXArea(bool use_microtex_, TeXView *owner_)

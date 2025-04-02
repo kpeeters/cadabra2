@@ -1,165 +1,278 @@
 {
-	"cells" : 
-	[
+	"cell_id": 6102482626991130957,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 6577700479364638575,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}B A+C A+D B\\end{dmath*}"
+					"cell_id": 3171107741548752808,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2466075911107495190,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "B A + C A + D B"
+						}
+					],
+					"source": "\\begin{dmath*}{}B A\\discretionary{}{}{}+C A\\discretionary{}{}{}+D B\\end{dmath*}"
 				}
 			],
-			"source" : "ex:=B*A+C*A+D*B;"
+			"source": "ex:=B*A+C*A+D*B;"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 9062355444764525002,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}B D\\end{dmath*}"
+					"cell_id": 17526409358088580338,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1992012689652851717,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "B D"
+						}
+					],
+					"source": "\\begin{dmath*}{}B D\\end{dmath*}"
 				}
 			],
-			"source" : "ex[2]=sort_product(ex[2]);"
+			"source": "ex[2]=sort_product(ex[2]);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 11492451290551663363,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}B A+C A+B D\\end{dmath*}"
+					"cell_id": 6860723093135118091,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 18265426190443569502,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "B A + C A + B D"
+						}
+					],
+					"source": "\\begin{dmath*}{}B A\\discretionary{}{}{}+C A\\discretionary{}{}{}+B D\\end{dmath*}"
 				}
 			],
-			"source" : "ex;"
+			"source": "ex;"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 3806815117901505855,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\int{}\\left(A+B+C+D\\right)\\, {\\rm d}x\\end{dmath*}"
+					"cell_id": 5981219590368000673,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2500060301239934324,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\int{A + B + C + D}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\int \\left(A\\discretionary{}{}{}+B\\discretionary{}{}{}+C\\discretionary{}{}{}+D\\right)\\,\\,{\\rm d}x\\end{dmath*}"
 				}
 			],
-			"source" : "ex:=\\int{ A + B + C + D}{x};"
+			"source": "ex:=\\int{ A + B + C + D}{x};"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 4732494028466308286,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}C\\end{dmath*}"
+					"cell_id": 7759897485750795908,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11505880187291561388,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "C"
+						}
+					],
+					"source": "\\begin{dmath*}{}C\\end{dmath*}"
 				}
 			],
-			"source" : "ex[0][2];"
+			"source": "ex[0][2];"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 9135295628618278121,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}Q\\end{dmath*}"
+					"cell_id": 13702029404215408146,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2582319247121309960,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "Q"
+						}
+					],
+					"source": "\\begin{dmath*}{}Q\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\int{}\\left(A+B+C+D\\right)\\, {\\rm d}x\\end{dmath*}"
+					"cell_id": 16475775774377124278,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 18098087045568801557,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\int{A + B + C + D}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\int \\left(A\\discretionary{}{}{}+B\\discretionary{}{}{}+C\\discretionary{}{}{}+D\\right)\\,\\,{\\rm d}x\\end{dmath*}"
 				}
 			],
-			"source" : "ex[0][2]=substitute(ex[0][2], $C->Q$);\nex;"
+			"source": "ex[0][2]=substitute(ex[0][2], $C->Q$);\nex;"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 16415187349600585453,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A\\end{dmath*}"
+					"cell_id": 12929615604662702514,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9072927387460019282,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A"
+						}
+					],
+					"source": "\\begin{dmath*}{}A\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A+A_{0}+A_{1}+A_{2}+A_{3}+A_{4}+A_{5}+A_{6}+A_{7}+A_{8}+A_{9}\\end{dmath*}"
+					"cell_id": 16681211654891441967,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1232829287611183041,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A + A_{0} + A_{1} + A_{2} + A_{3} + A_{4} + A_{5} + A_{6} + A_{7} + A_{8} + A_{9}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A\\discretionary{}{}{}+A_{0\\,}\\discretionary{}{}{}+A_{1}\\discretionary{}{}{}+A_{2\\,}\\discretionary{}{}{}+A_{3\\,}\\discretionary{}{}{}+A_{4\\,}\\discretionary{}{}{}+A_{5\\,}\\discretionary{}{}{}+A_{6\\,}\\discretionary{}{}{}+A_{7\\,}\\discretionary{}{}{}+A_{8\\,}\\discretionary{}{}{}+A_{9\\,}\\end{dmath*}"
 				}
 			],
-			"source" : "ex3:=A;\nfor i in range(10):\n\tex3 = ex3 + Ex('A_{'+str(i)+'}')\nex3;"
+			"source": "ex3:=A;\nfor i in range(10):\n\tex3 = ex3 + Ex('A_{'+str(i)+'}')\nex3;"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 7306560746347034792,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}C-D\\end{dmath*}"
+					"cell_id": 7730748263181081632,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3041551120754941543,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "C-D"
+						}
+					],
+					"source": "\\begin{dmath*}{}C\\discretionary{}{}{}-\\,D\\end{dmath*}"
 				}
 			],
-			"source" : "ex4:=C - D;"
+			"source": "ex4:=C - D;"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 7379252608352902607,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A+A_{0}+A_{1}+A_{2}+A_{3}+A_{4}+A_{5}+A_{6}+A_{7}+A_{8}+A_{9}-C+D\\end{dmath*}"
+					"cell_id": 199127150708909635,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11345401835432704654,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A + A_{0} + A_{1} + A_{2} + A_{3} + A_{4} + A_{5} + A_{6} + A_{7} + A_{8} + A_{9}-C + D"
+						}
+					],
+					"source": "\\begin{dmath*}{}A\\discretionary{}{}{}+A_{0\\,}\\discretionary{}{}{}+A_{1}\\discretionary{}{}{}+A_{2\\,}\\discretionary{}{}{}+A_{3\\,}\\discretionary{}{}{}+A_{4\\,}\\discretionary{}{}{}+A_{5\\,}\\discretionary{}{}{}+A_{6\\,}\\discretionary{}{}{}+A_{7\\,}\\discretionary{}{}{}+A_{8\\,}\\discretionary{}{}{}+A_{9\\,}\\discretionary{}{}{}-\\,C\\discretionary{}{}{}+D\\end{dmath*}"
 				}
 			],
-			"source" : "ex5=ex3-ex4;"
+			"source": "ex5=ex3-ex4;"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 855278985929013194,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A+B_{0}+B_{1}+B_{2}+B_{3}\\end{dmath*}"
+					"cell_id": 620138231639540893,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 95419599768450119,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A + B_{0} + B_{1} + B_{2} + B_{3}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A\\discretionary{}{}{}+B_{0\\,}\\discretionary{}{}{}+B_{1}\\discretionary{}{}{}+B_{2\\,}\\discretionary{}{}{}+B_{3\\,}\\end{dmath*}"
 				}
 			],
-			"source" : "substitute(ex5[:5], $A_{a?}->B_{a?}$);"
+			"source": "substitute(ex5[:5], $A_{a?}->B_{a?}$);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 9349378173800162609,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "error",
-					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\ncadabra2.ArgumentException: index 15 out of range, must be smaller than 13\n\\end{verbatim}}}"
+					"cell_id": 17382437692800678210,
+					"cell_origin": "server",
+					"cell_type": "error",
+					"source": "\\begin{verbatim}RuntimeError: index 15 out of range, must be smaller than 13\n\nAt:\n  Notebook Cell (Line 1): _ = ex5[15]\n\\end{verbatim}"
 				}
 			],
-			"source" : "ex5[15];"
+			"source": "ex5[15];"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 1206876666605987021,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
+	"version": 1.0
 }
