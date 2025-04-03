@@ -1,35 +1,56 @@
 {
-	"cells" : 
-	[
+	"cell_id": 3064264301093080805,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "s=\"Q(\"\nfor i in range(20):\n\ts=s+\"+a_{\"+str(i)+\"} \\\\frac{A+B}{C+D}\"\ns=s+\")+R(\"\nfor i in range(20):\n\ts=s+\"a_{\"+str(i)+\"} \\\\frac{A+B}{C+D},\"\ns=s+\"M)\""
+			"cell_id": 7973304362094483791,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "s=\"Q(\"\nfor i in range(20):\n\ts=s+\"+a_{\"+str(i)+\"} \\\\frac{A+B}{C+D}\"\ns=s+\")+R(\"\nfor i in range(20):\n\ts=s+\"a_{\"+str(i)+\"} \\\\frac{A+B}{C+D},\"\ns=s+\"M)\""
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "ex=Ex(s)"
+			"cell_id": 7014098435245050672,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "ex=Ex(s)"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 10945821061026520332,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "__cdbkernel__.display_fractions=True"
+		},
+		{
+			"cell_id": 14780273387048122396,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}Q\\left(a_{0} \\frac{A+B}{C+D}+a_{1} \\frac{A+B}{C+D}+a_{2} \\frac{A+B}{C+D}+a_{3} \\frac{A+B}{C+D}+a_{4} \\frac{A+B}{C+D}+a_{5} \\frac{A+B}{C+D}+a_{6} \\frac{A+B}{C+D}+a_{7} \\frac{A+B}{C+D}+a_{8} \\frac{A+B}{C+D}+a_{9} \\frac{A+B}{C+D}+a_{10} \\frac{A+B}{C+D}+a_{11} \\frac{A+B}{C+D}+a_{12} \\frac{A+B}{C+D}+a_{13} \\frac{A+B}{C+D}+a_{14} \\frac{A+B}{C+D}+a_{15} \\frac{A+B}{C+D}+a_{16} \\frac{A+B}{C+D}+a_{17} \\frac{A+B}{C+D}+a_{18} \\frac{A+B}{C+D}%\n+a_{19} \\frac{A+B}{C+D}\\right)+R\\left(\\left(a_{0} \\frac{A+B}{C+D}, \\linebreak[0] a_{1} \\frac{A+B}{C+D}, \\linebreak[0] a_{2} \\frac{A+B}{C+D}, \\linebreak[0] a_{3} \\frac{A+B}{C+D}, \\linebreak[0] a_{4} \\frac{A+B}{C+D}, \\linebreak[0] a_{5} \\frac{A+B}{C+D}, \\linebreak[0] a_{6} \\frac{A+B}{C+D}, \\linebreak[0] a_{7} \\frac{A+B}{C+D}, \\linebreak[0] a_{8} \\frac{A+B}{C+D}, \\linebreak[0] a_{9} \\frac{A+B}{C+D}, \\linebreak[0] a_{10} \\frac{A+B}{C+D}, \\linebreak[0] a_{11} \\frac{A+B}{C+D}, \\linebreak[0] a_{12} \\frac{A+B}{C+D}, \\linebreak[0] a_{13} \\frac{A+B}{C+D}, \\linebreak[0] a_{14} \\frac{A+B}{C+D}, \\linebreak[0] a_{15} \\frac{A+B}{C+D}, \\linebreak[0] a_{16} \\frac{A+B}{C+D}, \\linebreak[0] a_{17} \\frac{A+B}{C+D}, \\linebreak[0] a_{18} \\frac{A+B}{C+D}, \\linebreak[0] a_{19} \\frac{A+B}{C+D}, \\linebreak[0] M\\right)\\right)\\end{dmath*}"
+					"cell_id": 9535298439136269407,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7911376744072660052,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "Q(a_{0} (A + B) (C + D)**(-1) + a_{1} (A + B) (C + D)**(-1) + a_{2} (A + B) (C + D)**(-1) + a_{3} (A + B) (C + D)**(-1) + a_{4} (A + B) (C + D)**(-1) + a_{5} (A + B) (C + D)**(-1) + a_{6} (A + B) (C + D)**(-1) + a_{7} (A + B) (C + D)**(-1) + a_{8} (A + B) (C + D)**(-1) + a_{9} (A + B) (C + D)**(-1) + a_{10} (A + B) (C + D)**(-1) + a_{11} (A + B) (C + D)**(-1) + a_{12} (A + B) (C + D)**(-1) + a_{13} (A + B) (C + D)**(-1) + a_{14} (A + B) (C + D)**(-1) + a_{15} (A + B) (C + D)**(-1) + a_{16} (A + B) (C + D)**(-1) + a_{17} (A + B) (C + D)**(-1) + a_{18} (A + B) (C + D)**(-1) + a_{19} (A + B) (C + D)**(-1)) + R(a_{0} (A + B) (C + D)**(-1) , a_{1} (A + B) (C + D)**(-1) , a_{2} (A + B) (C + D)**(-1) , a_{3} (A + B) (C + D)**(-1) , a_{4} (A + B) (C + D)**(-1) , a_{5} (A + B) (C + D)**(-1) , a_{6} (A + B) (C + D)**(-1) , a_{7} (A + B) (C + D)**(-1) , a_{8} (A + B) (C + D)**(-1) , a_{9} (A + B) (C + D)**(-1) , a_{10} (A + B) (C + D)**(-1) , a_{11} (A + B) (C + D)**(-1) , a_{12} (A + B) (C + D)**(-1) , a_{13} (A + B) (C + D)**(-1) , a_{14} (A + B) (C + D)**(-1) , a_{15} (A + B) (C + D)**(-1) , a_{16} (A + B) (C + D)**(-1) , a_{17} (A + B) (C + D)**(-1) , a_{18} (A + B) (C + D)**(-1) , a_{19} (A + B) (C + D)**(-1) , M)"
+						}
+					],
+					"source": "\\begin{dmath*}{}Q\\left(\\frac{a_{0\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{1} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{2\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{3\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{4\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{5\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{6\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{7\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{8\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{9\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{10\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{11\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{12\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{13\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{14\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{15\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{16\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{17\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}+\\frac{a_{18\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\discretionary{}{}{}%\n+\\frac{a_{19\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)}\\right)\\discretionary{}{}{}+R\\left(\\frac{a_{0\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{1} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{2\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{3\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{4\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{5\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{6\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{7\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{8\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{9\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{10\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{11\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{12\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{13\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{14\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{15\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{16\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{17\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{18\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}\\frac{a_{19\\,} \\left(A\\discretionary{}{}{}+B\\right)}{\\left(C\\discretionary{}{}{}+D\\right)} , \\discretionary{}{}{}M\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "ex;"
+			"source": "ex;"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 2345481487958191505,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
+	"version": 1.0
 }

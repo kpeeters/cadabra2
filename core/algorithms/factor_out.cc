@@ -5,6 +5,9 @@
 #include "algorithms/sort_product.hh"
 #include <map>
 
+//#define DEBUG __FILE__
+#include "Debug.hh"
+
 using namespace cadabra;
 
 factor_out::factor_out(const Kernel& k, Ex& e, Ex& args, bool right)
@@ -108,7 +111,7 @@ Algorithm::result_t factor_out::apply(iterator& it)
 		if(tr.number_of_children(prod)==0)
 			tr.append_child(prod, str_node("1"));
 
-		// std::cerr << "product after factoring out " << Ex(prod) << std::endl;
+		DEBUGLN( std::cerr << "product after factoring out " << Ex(prod) << std::endl; );
 
 		if(collector.number_of_children(collector.begin())!=0) {
 			// The stuff factored out of this term is in 'collector'. See if we have
@@ -125,6 +128,8 @@ Algorithm::result_t factor_out::apply(iterator& it)
 			multiply(prod->multiplier, *coltop->multiplier);
 			one(coltop->multiplier);
 
+			DEBUGLN( std::cerr << "collector for this term " << collector << std::endl; );
+			
 			// Scan through the things factored out so far.
 			bool found=false;
 			for(auto& nt: new_terms) {
@@ -136,6 +141,7 @@ Algorithm::result_t factor_out::apply(iterator& it)
 				}
 			// We hadn't factored this bit out before, make a new term.
 			if(!found) {
+				DEBUGLN( std::cerr << "found new term " << prod << std::endl; );
 				std::vector<Ex> v;
 				v.push_back(Ex(prod));
 				new_term_t nt(collector, v);

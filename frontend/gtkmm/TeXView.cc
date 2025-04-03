@@ -397,7 +397,7 @@ std::string TeXView::TeXArea::verbatimise(const std::string& inp) const
 
 void TeXView::TeXArea::set_latex(const std::string& latex)
 	{
-	// std::cout << "**** fixing latex " << latex << std::endl;
+	//std::cout << "**** fixing latex " << latex << std::endl;
 	std::regex discretionary(R"(\\discretionary\{\}\{\}\{\})");
 	std::regex begin_dmath(R"(\\begin\{dmath\*\})");
 	std::regex end_dmath(R"(\\end\{dmath\*\})");
@@ -536,7 +536,7 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		}
 
    //	fixed = "\\text{$A_{m n}$}";
-	std::cout << "**** fixed to " << fixed << std::endl;
+	// std::cout << "**** fixed to " << fixed << std::endl;
 	}
 
 TeXView::TeXArea::TeXArea(bool use_microtex_, TeXView *owner_)

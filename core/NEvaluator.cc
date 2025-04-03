@@ -14,15 +14,8 @@ using namespace cadabra;
 // 	// Then compare subtrees with equal hash to find common subtrees.
 // 	}
 
-// #define DEBUG 1
-
-#ifdef DEBUG
-#warning "DEBUG enabled for NEvaluator.cc"
-static bool debug_stop = false;
-#define DEBUGLN(ln) if(!debug_stop) { ln; }
-#else
-#define DEBUGLN(ln)
-#endif
+// #define DEBUG __FILE__
+#include "Debug.hh"
 
 constexpr double const_pi = 3.14159265358979323846;
 

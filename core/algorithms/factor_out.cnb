@@ -1,185 +1,250 @@
 {
-	"cells" : 
-	[
+	"cell_id": 16631768661980820700,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 15110587217203656507,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\algorithm{factor_out}{Isolate common factors in a sum of products}\n\nGiven a list of symbols, this algorithm tries to factor those symbols\nout of terms. As an example,"
+					"cell_id": 2442514580917179909,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{factor_out}{Isolate common factors in a sum of products}\n\nGiven a list of symbols, this algorithm tries to factor those symbols\nout of terms. As an example,"
 				}
 			],
-			"hidden" : true,
-			"source" : "\\algorithm{factor_out}{Isolate common factors in a sum of products}\n\nGiven a list of symbols, this algorithm tries to factor those symbols\nout of terms. As an example,"
+			"hidden": true,
+			"source": "\\algorithm{factor_out}{Isolate common factors in a sum of products}\n\nGiven a list of symbols, this algorithm tries to factor those symbols\nout of terms. As an example,"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 5326350575773906895,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}a b%\n+a c e%\n+a d\\end{dmath*}"
-				}
-			],
-			"source" : "ex:= a b + a c e + a d;"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}a \\left(b%\n+c e%\n+d\\right)\\end{dmath*}"
-				}
-			],
-			"source" : "factor_out(_, $a$);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "If you have non-commuting objects and want to factor out to the right, use the \\verb|right=True| option, as in"
-				}
-			],
-			"hidden" : true,
-			"source" : "If you have non-commuting objects and want to factor out to the right, use the \\verb|right=True| option, as in"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property NonCommuting to~}\\left[A,~\\discretionary{}{}{} B,~\\discretionary{}{}{} C,~\\discretionary{}{}{} D\\right].\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 12393491783316939441,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "A B C D + B A C D"
+							"cell_id": 7753338784577544398,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "a b + 3a c e + a d"
 						}
 					],
-					"source" : "\\begin{dmath*}{}A B C D+B A C D\\end{dmath*}"
-				},
+					"source": "\\begin{dmath*}{}a b\\discretionary{}{}{}+3\\,a c e\\discretionary{}{}{}+a d\\end{dmath*}"
+				}
+			],
+			"source": "ex:= a b + 3 a c e + a d;"
+		},
+		{
+			"cell_id": 8526452968883721051,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 14695698502576205301,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "(A B C + B A C) D"
+							"cell_id": 4442340611833814025,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "a (b + 3c e + d)"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\left(A B C+B A C\\right) D\\end{dmath*}"
+					"source": "\\begin{dmath*}{}a \\left(b\\discretionary{}{}{}+3\\,c e\\discretionary{}{}{}+d\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "{A,B,C,D}::NonCommuting;\nex:= A B C D + B A C D;\nfactor_out(ex, $D$, right=True);"
+			"source": "factor_out(_, $a$);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 8168015960473753308,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "In case you are familiar with FORM, \\algo{factor_out} is like its \\verb|bracket| statement. \nIf you add more factors to factor out, it works as in the following example."
+					"cell_id": 6969777224887872393,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "If you have non-commuting objects and want to factor out to the right, use the \\verb|right=True| option, as in"
 				}
 			],
-			"hidden" : true,
-			"source" : "In case you are familiar with FORM, \\algo{factor_out} is like its \\verb|bracket| statement. \nIf you add more factors to factor out, it works as in the following example."
+			"hidden": true,
+			"source": "If you have non-commuting objects and want to factor out to the right, use the \\verb|right=True| option, as in"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 4328956871078085908,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}a b%\n+a c e%\n+a c%\n+c e%\n+c d%\n+a d\\end{dmath*}"
-				}
-			],
-			"source" : "ex:= a b + a c e + a c + c e + c d + a d;"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+					"cell_id": 17779677811794871151,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property NonCommuting attached to~}\\left[A, \\discretionary{}{}{}B, \\discretionary{}{}{}C, \\discretionary{}{}{}D\\right].\\end{dmath*}"
+				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}a \\left(b%\n+d\\right)%\n+a c \\left(e%\n+1\\right)%\n+c \\left(e%\n+d\\right)\\end{dmath*}"
-				}
-			],
-			"source" : "factor_out(_, $a, c$);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+					"cell_id": 7428455874108183042,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2681337086457739526,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A B C D + 2B A C D"
+						}
+					],
+					"source": "\\begin{dmath*}{}A B C D\\discretionary{}{}{}+2\\,B A C D\\end{dmath*}"
+				},
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "That is, separate terms will be generated for terms which differ by\npowers of the factors to be factored out.\n\nThe algorithm of course also works with indexed objects, as in"
+					"cell_id": 11623263169543829254,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2686784791333189033,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(A B C + 2B A C) D"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(A B C\\discretionary{}{}{}+2\\,B A C\\right) D\\end{dmath*}"
 				}
 			],
-			"hidden" : true,
-			"source" : "That is, separate terms will be generated for terms which differ by\npowers of the factors to be factored out.\n\nThe algorithm of course also works with indexed objects, as in"
+			"source": "{A,B,C,D}::NonCommuting;\nex:= A B C D + 2 B A C D;\nfactor_out(ex, $D$, right=True);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 1035209040436501181,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A_{m} B_{m}%\n+C_{m} A_{m}\\end{dmath*}"
+					"cell_id": 11849596451828232828,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "In case you are familiar with FORM, \\algo{factor_out} is like its \\verb|bracket| statement. \nIf you add more factors to factor out, it works as in the following example."
 				}
 			],
-			"source" : "ex:= A_{m} B_{m} + C_{m} A_{m};"
+			"hidden": true,
+			"source": "In case you are familiar with FORM, \\algo{factor_out} is like its \\verb|bracket| statement. \nIf you add more factors to factor out, it works as in the following example."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 4287461539531373554,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A_{m} \\left(B_{m}%\n+C_{m}\\right)\\end{dmath*}"
+					"cell_id": 7584698066549537904,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1522186259200143136,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "a b + a c e + a c + c e + c d + a d"
+						}
+					],
+					"source": "\\begin{dmath*}{}a b\\discretionary{}{}{}+a c e\\discretionary{}{}{}+a c\\discretionary{}{}{}+c e\\discretionary{}{}{}+c d\\discretionary{}{}{}+a d\\end{dmath*}"
 				}
 			],
-			"source" : "factor_out(_, $A_{m}$);"
+			"source": "ex:= a b + a c e + a c + c e + c d + a d;"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 3486320937648814737,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 1301258625577700972,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6006025610129981929,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "a (b + d) + a c (e + 1) + c (e + d)"
+						}
+					],
+					"source": "\\begin{dmath*}{}a \\left(b\\discretionary{}{}{}+d\\right)\\discretionary{}{}{}+a c \\left(e\\discretionary{}{}{}+1\\right)\\discretionary{}{}{}+c \\left(e\\discretionary{}{}{}+d\\right)\\end{dmath*}"
+				}
+			],
+			"source": "factor_out(_, $a, c$);"
+		},
+		{
+			"cell_id": 15121932675043815974,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 16608972969483160360,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "That is, separate terms will be generated for terms which differ by\npowers of the factors to be factored out.\n\nThe algorithm of course also works with indexed objects, as in"
+				}
+			],
+			"hidden": true,
+			"source": "That is, separate terms will be generated for terms which differ by\npowers of the factors to be factored out.\n\nThe algorithm of course also works with indexed objects, as in"
+		},
+		{
+			"cell_id": 3932854604912589951,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 6388461315274603657,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9194744312555876804,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m} B_{m} + C_{m} A_{m}"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m} B_{m}\\discretionary{}{}{}+C_{m} A_{m}\\end{dmath*}"
+				}
+			],
+			"source": "ex:= A_{m} B_{m} + C_{m} A_{m};"
+		},
+		{
+			"cell_id": 7492206986106571139,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 5561508064053721308,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4353108678157183737,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "A_{m} (B_{m} + C_{m})"
+						}
+					],
+					"source": "\\begin{dmath*}{}A_{m} \\left(B_{m}\\discretionary{}{}{}+C_{m}\\right)\\end{dmath*}"
+				}
+			],
+			"source": "factor_out(_, $A_{m}$);"
+		},
+		{
+			"cell_id": 7869881142525470487,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
+	"version": 1.0
 }
