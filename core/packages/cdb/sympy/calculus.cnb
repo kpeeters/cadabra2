@@ -7,14 +7,29 @@
 			"cell_type": "latex",
 			"cells": [
 				{
-					"cell_id": 9687610247019435570,
+					"cell_id": 15168816901646088639,
 					"cell_origin": "client",
 					"cell_type": "latex_view",
-					"source": "\\package{cdb.sympy.calculus}{Use SymPy calculus functionality on Cadabra expressions.}\n\nA lot of functionality in SymPy can be used on Cadabra expressions, but in order to correctly\nconvert from and to the SymPy expression form, we need a bridge. This package contains such\nbridging fuctions, which will ensure that e.g. tensor indices are handled correctly when\nfed through SymPy's scalar algebra algorithms.\n\n\\algorithm{diff}{Differentiate an expression with respect to one or more variables.}\n\nThis function mimics the SymPy \\verb|diff| function, except that all expressions need\nto be Cadabra expressions. The function takes an expression and an arbitrary number\nof variables with respect to which to differentiate it."
+					"source": "\\package{cdb.sympy.calculus}{Use SymPy calculus functionality on Cadabra expressions.}\n\nA lot of functionality in SymPy can be used on Cadabra expressions, but in order to correctly\nconvert from and to the SymPy expression form, we need a bridge. This package contains such\nbridging fuctions, which will ensure that e.g. tensor indices are handled correctly when\nfed through SymPy's scalar algebra algorithms."
 				}
 			],
 			"hidden": true,
-			"source": "\\package{cdb.sympy.calculus}{Use SymPy calculus functionality on Cadabra expressions.}\n\nA lot of functionality in SymPy can be used on Cadabra expressions, but in order to correctly\nconvert from and to the SymPy expression form, we need a bridge. This package contains such\nbridging fuctions, which will ensure that e.g. tensor indices are handled correctly when\nfed through SymPy's scalar algebra algorithms.\n\n\\algorithm{diff}{Differentiate an expression with respect to one or more variables.}\n\nThis function mimics the SymPy \\verb|diff| function, except that all expressions need\nto be Cadabra expressions. The function takes an expression and an arbitrary number\nof variables with respect to which to differentiate it."
+			"source": "\\package{cdb.sympy.calculus}{Use SymPy calculus functionality on Cadabra expressions.}\n\nA lot of functionality in SymPy can be used on Cadabra expressions, but in order to correctly\nconvert from and to the SymPy expression form, we need a bridge. This package contains such\nbridging fuctions, which will ensure that e.g. tensor indices are handled correctly when\nfed through SymPy's scalar algebra algorithms."
+		},
+		{
+			"cell_id": 13465434077161054101,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 11839947054515140372,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{diff}{Differentiate an expression with respect to one or more variables.}\n\nThis function mimics the SymPy \\verb|diff| function, except that all expressions need\nto be Cadabra expressions. The function takes an expression and an arbitrary number\nof variables with respect to which to differentiate it."
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{diff}{Differentiate an expression with respect to one or more variables.}\n\nThis function mimics the SymPy \\verb|diff| function, except that all expressions need\nto be Cadabra expressions. The function takes an expression and an arbitrary number\nof variables with respect to which to differentiate it."
 		},
 		{
 			"cell_id": 3804610120254550473,
@@ -43,18 +58,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 1348085833411850626,
+					"cell_id": 8512802577480661279,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 16874039423838371410,
+							"cell_id": 5588755137394255634,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "A_{\\mu}(x) \\cos(x) + \\sin(x) \\partial_{x}(A_{\\mu}(x))"
 						}
 					],
-					"source": "\\begin{dmath*}{}A_{\\mu}\\left(x\\right) \\cos{x}+\\sin{x} \\partial_{x}\\left(A_{\\mu}\\left(x\\right)\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}A_{\\mu}\\!\\left(x\\right) \\cos{x}\\discretionary{}{}{}+\\sin{x} \\partial_{x}\\!\\left(A_{\\mu}\\!\\left(x\\right)\\right)\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
@@ -66,18 +81,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 8841772239434008615,
+					"cell_id": 4878078306094891537,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 4066297813555277329,
+							"cell_id": 8350059715546261372,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "-\\sin(y) \\cos(x)"
 						}
 					],
-					"source": "\\begin{dmath*}{}-\\sin{y} \\cos{x}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}-\\,\\sin{y} \\cos{x}\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
