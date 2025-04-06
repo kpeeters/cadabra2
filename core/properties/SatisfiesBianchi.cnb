@@ -1,82 +1,97 @@
-
 {
-	"cells" : 
-	[
-		
+	"cell_id": 8333782182685695692,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
-				
+			"cell_id": 13023289047659747782,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\property{SatisfiesBianchi}{Make an object satisfy the generalised Bianchi identity.}\n\nIndicates that an object satisfies a (generalised) Bianchi\nidentity. This is often used to link a derivative operator to a\ncurvature tensor, as in"
+					"cell_id": 2993145575969842933,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\property{SatisfiesBianchi}{Make an object satisfy the generalised Bianchi identity.}\n\nIndicates that an object satisfies a (generalised) Bianchi\nidentity. This is often used to link a derivative operator to a\ncurvature tensor, as in"
 				}
 			],
-			"hidden" : true,
-			"source" : "\\property{SatisfiesBianchi}{Make an object satisfy the generalised Bianchi identity.}\n\nIndicates that an object satisfies a (generalised) Bianchi\nidentity. This is often used to link a derivative operator to a\ncurvature tensor, as in"
+			"hidden": true,
+			"source": "\\property{SatisfiesBianchi}{Make an object satisfy the generalised Bianchi identity.}\n\nIndicates that an object satisfies a (generalised) Bianchi\nidentity. This is often used to link a derivative operator to a\ncurvature tensor, as in"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
+			"cell_id": 600502675255901832,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}D_{m}(R_{n p q r}) A^{m n p q}\\end{dmath*}"
+					"cell_id": 7278336446640073669,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 12533235753225063125,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "D_{m}(R_{n p q r}) A^{m n p q}"
+						}
+					],
+					"source": "\\begin{dmath*}{}D_{m}\\!{R_{n p q r}} A^{m n p q}\\end{dmath*}"
 				}
 			],
-			"source" : "R_{m n p q}::RiemannTensor.\nD{#}::Derivative.\nD_{m}{ R_{n p q r} }::SatisfiesBianchi.\nA^{m n p q}::AntiSymmetric.\nex:= D_{m}{ R_{n p q r} } A^{m n p q};"
+			"source": "R_{m n p q}::RiemannTensor.\nD{#}::Derivative.\nD_{m}{ R_{n p q r} }::SatisfiesBianchi.\nA^{m n p q}::AntiSymmetric.\nex:= D_{m}{ R_{n p q r} } A^{m n p q};"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
+			"cell_id": 14138636317103115824,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-D^{m}(R_{r}\\,^{n p q}) A_{m n p q}\\end{dmath*}"
+					"cell_id": 13508237173211391630,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17690598400943458767,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "D_{m}( 1/12 R_{n p q r} +  1/12 R_{q p n r} +  1/12 R_{n r q p} +  1/12 R_{q r n p} -  1/12 R_{p n q r} -  1/12 R_{q n p r} -  1/12 R_{p r q n} -  1/12 R_{q r p n} -  1/12 R_{n p r q} -  1/12 R_{r p n q} -  1/12 R_{n q r p} -  1/12 R_{r q n p} +  1/12 R_{p n r q} +  1/12 R_{r n p q} +  1/12 R_{p q r n} +  1/12 R_{r q p n}) ( 1/24 A^{m n p q} -  1/24 A^{m n q p} -  1/24 A^{m p n q} +  1/24 A^{m p q n} +  1/24 A^{m q n p} -  1/24 A^{m q p n} -  1/24 A^{n m p q} +  1/24 A^{n m q p} +  1/24 A^{n p m q} -  1/24 A^{n p q m} -  1/24 A^{n q m p} +  1/24 A^{n q p m} +  1/24 A^{p m n q} -  1/24 A^{p m q n} -  1/24 A^{p n m q} +  1/24 A^{p n q m} +  1/24 A^{p q m n} -  1/24 A^{p q n m} -  1/24 A^{q m n p} +  1/24 A^{q m p n} +  1/24 A^{q n m p} -  1/24 A^{q n p m} -  1/24 A^{q p m n} +  1/24 A^{q p n m})"
+						}
+					],
+					"source": "\\begin{dmath*}{}D_{m}\\!\\left(\\frac{1}{12}\\,R_{n p q r}\\discretionary{}{}{}+\\frac{1}{12}\\,R_{q p n r}\\discretionary{}{}{}+\\frac{1}{12}\\,R_{n r q p}\\discretionary{}{}{}+\\frac{1}{12}\\,R_{q r n p}\\discretionary{}{}{} - \\frac{1}{12}\\,R_{p n q r}\\discretionary{}{}{} - \\frac{1}{12}\\,R_{q n p r}\\discretionary{}{}{} - \\frac{1}{12}\\,R_{p r q n}\\discretionary{}{}{} - \\frac{1}{12}\\,R_{q r p n}\\discretionary{}{}{} - \\frac{1}{12}\\,R_{n p r q}\\discretionary{}{}{} - \\frac{1}{12}\\,R_{r p n q}\\discretionary{}{}{} - \\frac{1}{12}\\,R_{n q r p}\\discretionary{}{}{} - \\frac{1}{12}\\,R_{r q n p}\\discretionary{}{}{}+\\frac{1}{12}\\,R_{p n r q}\\discretionary{}{}{}+\\frac{1}{12}\\,R_{r n p q}\\discretionary{}{}{}+\\frac{1}{12}\\,R_{p q r n}\\discretionary{}{}{}+\\frac{1}{12}\\,R_{r q p n}\\right) \\left(\\frac{1}{24}\\,A^{m n p q}\\discretionary{}{}{} - \\frac{1}{24}\\,A^{m n q p}\\discretionary{}{}{} - \\frac{1}{24}\\,A^{m p n q}\\discretionary{}{}{}+\\frac{1}{24}\\,A^{m p q n}\\discretionary{}{}{}+\\frac{1}{24}\\,A^{m q n p}\\discretionary{}{}{} - \\frac{1}{24}\\,A^{m q p n}\\discretionary{}{}{} - \\frac{1}{24}\\,A^{n m p q}\\discretionary{}{}{}+\\frac{1}{24}\\,A^{n m q p}\\discretionary{}{}{}+\\frac{1}{24}\\,A^{n p m q}\\discretionary{}{}{} - \\frac{1}{24}\\,A^{n p q m}\\discretionary{}{}{} - \\frac{1}{24}\\,A^{n q m p}\\discretionary{}{}{}+\\frac{1}{24}\\,A^{n q p m}\\discretionary{}{}{}+\\frac{1}{24}\\,A^{p m n q}\\discretionary{}{}{} - \\frac{1}{24}\\,A^{p m q n}\\discretionary{}{}{} - \\frac{1}{24}\\,A^{p n m q}\\discretionary{}{}{}+\\frac{1}{24}\\,A^{p n q m}\\discretionary{}{}{}+\\frac{1}{24}\\,A^{p q m n}\\discretionary{}{}{} - \\frac{1}{24}\\,A^{p q n m}\\discretionary{}{}{} - \\frac{1}{24}\\,A^{q m n p}\\discretionary{}{}{}%\n+\\frac{1}{24}\\,A^{q m p n}\\discretionary{}{}{}+\\frac{1}{24}\\,A^{q n m p}\\discretionary{}{}{} - \\frac{1}{24}\\,A^{q n p m}\\discretionary{}{}{} - \\frac{1}{24}\\,A^{q p m n}\\discretionary{}{}{}+\\frac{1}{24}\\,A^{q p n m}\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "canonicalise(_);"
+			"source": "young_project_tensor(_);"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
+			"cell_id": 1546185059476091385,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "error",
-					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nNameError: name 'impose_bianchi' is not defined\n\\end{verbatim}}}"
+					"cell_id": 7518520068568561488,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 12384204868021245284,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0"
+						}
+					],
+					"source": "\\begin{dmath*}{}0\\,\\end{dmath*}"
 				}
 			],
-			"source" : "impose_bianchi(_);"
+			"source": "distribute(_)\ncanonicalise(_);"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "young_project_tensor(_);"
-		},
-		
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 8290034210843708580,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
+	"version": 1.0
 }
-

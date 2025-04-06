@@ -1,253 +1,388 @@
 {
-	"cells" : 
-	[
+	"cell_id": 11106613021756569334,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 9315766075641420399,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\section*{Commutator algebra}\n\nAn often asked question is how to handle commutator algebra with Cadabra. This requires a\nfew steps which are perhaps not entirely transparent to a new user, hence the following\nsimple example. \n\nIn this notebook, we will verify the invariance of the two quadratic Casimirs of the \nPoincar\\'e algebra. That is, we will verify that \n\\begin{equation}\n[ J_{\\mu\\nu}, P^2 ] = 0\\,,\\quad{\\rm and}\\quad\n[ J_{\\mu\\nu}, W^2 ] = 0\\,,\n\\end{equation}\nwhere~$P^2 = P_\\mu P_\\mu$ is the momentum squared and $W^2 = W_\\mu W_\\mu$ is the square of \n\\begin{equation}\nW_\\mu = \\epsilon_{\\mu\\nu\\rho\\sigma} P_{\\nu} J_{\\rho\\sigma}\\,.\n\\end{equation}\n\nWe first make some straightforward property assignments: declaration of indices, declaration \nof the operators~$P_\\mu$ and $J_{\\mu\\nu}$ and the fact that they do not commute, and so on."
+					"cell_id": 17343772776960357109,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Commutator algebra}\n\nAn often asked question is how to handle commutator algebra with Cadabra. This requires a few steps which are perhaps not entirely transparent to a new user, hence the following simple example. "
 				}
 			],
-			"hidden" : true,
-			"source" : "\\section*{Commutator algebra}\n\nAn often asked question is how to handle commutator algebra with Cadabra. This requires a\nfew steps which are perhaps not entirely transparent to a new user, hence the following\nsimple example. \n\nIn this notebook, we will verify the invariance of the two quadratic Casimirs of the \nPoincar\\'e algebra. That is, we will verify that \n\\begin{equat|ion}\n[ J_{\\mu\\nu}, P^2 ] = 0\\,,\\quad{\\rm and}\\quad\n[ J_{\\mu\\nu}, W^2 ] = 0\\,,\n\\end{equation}\nwhere~$P^2 = P_\\mu P_\\mu$ is the momentum squared and $W^2 = W_\\mu W_\\mu$ is the square of \n\\begin{equation}\nW_\\mu = \\epsilon_{\\mu\\nu\\rho\\sigma} P_{\\nu} J_{\\rho\\sigma}\\,.\n\\end{equation}\n\nWe first make some straightforward property assignments: declaration of indices, declaration \nof the operators~$P_\\mu$ and $J_{\\mu\\nu}$ and the fact that they do not commute, and so on."
+			"hidden": true,
+			"source": "\\section*{Commutator algebra}\n\nAn often asked question is how to handle commutator algebra with Cadabra. This requires a few steps which are perhaps not entirely transparent to a new user, hence the following simple example. "
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "{\\mu,\\nu,\\rho,\\sigma,\\lambda,\\kappa,\\alpha,\\beta,\\gamma,\\xi}::Indices.\n{\\mu,\\nu,\\rho,\\sigma,\\lambda,\\kappa,\\alpha,\\beta,\\gamma,\\xi}::Integer(0..3).\n\\eta_{\\mu\\nu}::KroneckerDelta.\n\\delta{#}::KroneckerDelta.\ne_{\\mu\\nu\\lambda\\rho}::EpsilonTensor(delta=\\delta).\nJ_{\\mu\\nu}::AntiSymmetric.\nJ_{\\mu\\nu}::SelfNonCommuting.\n{ J_{\\mu\\nu}, P_{\\mu}, W_{\\mu} }::NonCommuting."
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "{J_{\\mu\\nu}, P_{\\mu}, W_{\\mu} }::Depends(\\commutator{#})."
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 7023131363295410827,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "For computations involving algebras like the one in this notebook, the following set of post processing\nrules is useful. They move all objects out of commutators and anti-commutators which commute with\neverything else, and then reorder and relabel indices to obtain a simple form."
+					"cell_id": 7396292867082315560,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "In this notebook, we will verify the invariance of the two quadratic Casimirs of the  Poincar\\'e algebra. That is, we will verify that \n\\begin{equation}\n[ J_{\\mu\\nu}, P^2 ] = 0\\,,\\quad{\\rm and}\\quad\n[ J_{\\mu\\nu}, W^2 ] = 0\\,,\n\\end{equation}\nwhere~$P^2 = P_\\mu P_\\mu$ is the momentum squared and $W^2 = W_\\mu W_\\mu$ is the square of \n\\begin{equation}\nW_\\mu = \\epsilon_{\\mu\\nu\\rho\\sigma} P_{\\nu} J_{\\rho\\sigma}\\,.\n\\end{equation}\n\nWe first make some straightforward property assignments: declaration of indices, declaration \nof the operators~$P_\\mu$ and $J_{\\mu\\nu}$ and the fact that they do not commute, and so on."
 				}
 			],
-			"hidden" : true,
-			"source" : "For computations involving algebras like the one in this notebook, the following set of post processing\nrules is useful. They move all objects out of commutators and anti-commutators which commute with\neverything else, and then reorder and relabel indices to obtain a simple form."
+			"hidden": true,
+			"source": "In this notebook, we will verify the invariance of the two quadratic Casimirs of the  Poincar\\'e algebra. That is, we will verify that \n\\begin{equation}\n[ J_{\\mu\\nu}, P^2 ] = 0\\,,\\quad{\\rm and}\\quad\n[ J_{\\mu\\nu}, W^2 ] = 0\\,,\n\\end{equation}\nwhere~$P^2 = P_\\mu P_\\mu$ is the momentum squared and $W^2 = W_\\mu W_\\mu$ is the square of \n\\begin{equation}\nW_\\mu = \\epsilon_{\\mu\\nu\\rho\\sigma} P_{\\nu} J_{\\rho\\sigma}\\,.\n\\end{equation}\n\nWe first make some straightforward property assignments: declaration of indices, declaration \nof the operators~$P_\\mu$ and $J_{\\mu\\nu}$ and the fact that they do not commute, and so on."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "def post_process(ex):\n   unwrap(ex)\n   eliminate_kronecker(ex)\n   canonicalise(ex)\n   rename_dummies(ex)\n   collect_terms(ex)"
+			"cell_id": 9370404668174603973,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "{\\mu,\\nu,\\rho,\\sigma,\\lambda,\\kappa,\\alpha,\\beta,\\gamma,\\xi}::Indices.\n{\\mu,\\nu,\\rho,\\sigma,\\lambda,\\kappa,\\alpha,\\beta,\\gamma,\\xi}::Integer(0..3).\n\\eta_{\\mu\\nu}::KroneckerDelta.\n\\delta{#}::KroneckerDelta.\ne_{\\mu\\nu\\lambda\\rho}::EpsilonTensor(delta=\\delta).\nJ_{\\mu\\nu}::AntiSymmetric.\nJ_{\\mu\\nu}::SelfNonCommuting.\n{ J_{\\mu\\nu}, P_{\\mu}, W_{\\mu} }::NonCommuting."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 14191442662655080844,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "{J_{\\mu\\nu}, P_{\\mu}, W_{\\mu} }::Depends(\\commutator{#})."
+		},
+		{
+			"cell_id": 18322109326161563221,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\subsection*{The Poincar\\'e algebra}\n\nWe now input the rules which define the Poincar\\'e algebra. These are simply substitution rules,\nto be used later in explicit substition commands."
+					"cell_id": 4515515517754441930,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "For computations involving algebras like the one in this notebook, the following set of post processing\nrules is useful. They move all objects out of commutators and anti-commutators which commute with\neverything else, and then reorder and relabel indices to obtain a simple form."
 				}
 			],
-			"hidden" : true,
-			"source" : "\\subsection*{The Poincar\\'e algebra}\n\nWe now input the rules which define the Poincar\\'e algebra. These are simply substitution rules,\nto be used later in explicit substition commands."
+			"hidden": true,
+			"source": "For computations involving algebras like the one in this notebook, the following set of post processing\nrules is useful. They move all objects out of commutators and anti-commutators which commute with\neverything else, and then reorder and relabel indices to obtain a simple form."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 7703209800365975813,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def post_process(ex):\n   unwrap(ex)\n   eliminate_kronecker(ex)\n   canonicalise(ex)\n   rename_dummies(ex)\n   collect_terms(ex)"
+		},
+		{
+			"cell_id": 721481446680713510,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left\\{{}\\left[J_{\\mu \\nu}, P_{\\rho}\\right]{} \\rightarrow \\eta_{\\mu \\rho} P_{\\nu}-\\eta_{\\nu \\rho} P_{\\mu}, \\linebreak[0] {}\\left[J_{\\mu \\nu}, J_{\\rho \\sigma}\\right]{} \\rightarrow \\eta_{\\mu \\rho} J_{\\nu \\sigma}-\\eta_{\\mu \\sigma} J_{\\nu \\rho}-\\eta_{\\nu \\rho} J_{\\mu \\sigma}+\\eta_{\\nu \\sigma} J_{\\mu \\rho}\\right\\}\\end{dmath*}"
+					"cell_id": 13750334956568318436,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{The Poincar\\'e algebra}\n\nWe now input the rules which define the Poincar\\'e algebra. These are simply substitution rules,\nto be used later in explicit substition commands."
 				}
 			],
-			"source" : "poincare:= { \\commutator{J_{\\mu\\nu}}{P_{\\rho}} -> \\eta_{\\mu\\rho} P_{\\nu} - \\eta_{\\nu\\rho} P_{\\mu},\n             \\commutator{J_{\\mu\\nu}}{J_{\\rho\\sigma}} -> \\eta_{\\mu\\rho} J_{\\nu\\sigma} \n                                                      - \\eta_{\\mu\\sigma} J_{\\nu\\rho}\n                                                      - \\eta_{\\nu\\rho} J_{\\mu\\sigma}\n                                                      + \\eta_{\\nu\\sigma} J_{\\mu\\rho} };"
+			"hidden": true,
+			"source": "\\subsection*{The Poincar\\'e algebra}\n\nWe now input the rules which define the Poincar\\'e algebra. These are simply substitution rules,\nto be used later in explicit substition commands."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 14678525790528458483,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\subsection*{The $P^2$ Casimir}\n\nWe know that $P^2$ is a Casimir, so the following should vanish:"
+					"cell_id": 7515470650463038223,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14718562114636147143,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "{[J_{\\mu \\nu}, P_{\\rho}] -> \\eta_{\\mu \\rho} P_{\\nu}-\\eta_{\\nu \\rho} P_{\\mu}, [J_{\\mu \\nu}, J_{\\rho \\sigma}] -> \\eta_{\\mu \\rho} J_{\\nu \\sigma}-\\eta_{\\mu \\sigma} J_{\\nu \\rho}-\\eta_{\\nu \\rho} J_{\\mu \\sigma} + \\eta_{\\nu \\sigma} J_{\\mu \\rho}}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left[{}\\left[J_{\\mu \\nu}, \\discretionary{}{}{}P_{\\rho}\\right]{} \\rightarrow \\eta_{\\mu \\rho} P_{\\nu}\\discretionary{}{}{}-\\,\\eta_{\\nu \\rho} P_{\\mu}, \\discretionary{}{}{}{}\\left[J_{\\mu \\nu}, \\discretionary{}{}{}J_{\\rho \\sigma}\\right]{} \\rightarrow \\eta_{\\mu \\rho} J_{\\nu \\sigma}\\discretionary{}{}{}-\\,\\eta_{\\mu \\sigma} J_{\\nu \\rho}\\discretionary{}{}{}-\\,\\eta_{\\nu \\rho} J_{\\mu \\sigma}\\discretionary{}{}{}+\\eta_{\\nu \\sigma} J_{\\mu \\rho}\\right]\\end{dmath*}"
 				}
 			],
-			"hidden" : true,
-			"source" : "\\subsection*{The $P^2$ Casimir}\n\nWe know that $P^2$ is a Casimir, so the following should vanish:"
+			"source": "poincare:= { \\commutator{J_{\\mu\\nu}}{P_{\\rho}} -> \\eta_{\\mu\\rho} P_{\\nu} - \\eta_{\\nu\\rho} P_{\\mu},\n             \\commutator{J_{\\mu\\nu}}{J_{\\rho\\sigma}} -> \\eta_{\\mu\\rho} J_{\\nu\\sigma} \n                                                      - \\eta_{\\mu\\sigma} J_{\\nu\\rho}\n                                                      - \\eta_{\\nu\\rho} J_{\\mu\\sigma}\n                                                      + \\eta_{\\nu\\sigma} J_{\\mu\\rho} };"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 6528359529597968728,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{}\\left[J_{\\mu \\nu}, P_{\\rho} P_{\\rho}\\right]{}\\end{dmath*}"
+					"cell_id": 6400228875885604255,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{The $P^2$ Casimir}\n\nWe know that $P^2$ is a Casimir, so the following should vanish:"
 				}
 			],
-			"source" : "Psq:= \\commutator{J_{\\mu\\nu}}{ P_{\\rho}P_{\\rho} };"
+			"hidden": true,
+			"source": "\\subsection*{The $P^2$ Casimir}\n\nWe know that $P^2$ is a Casimir, so the following should vanish:"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 14173868040898864651,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{}\\left[J_{\\mu \\nu}, P_{\\rho}\\right]{} P_{\\rho}+P_{\\rho} {}\\left[J_{\\mu \\nu}, P_{\\rho}\\right]{}\\end{dmath*}"
+					"cell_id": 9994139315106144986,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14062550396190429241,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "[J_{\\mu \\nu}, P_{\\rho} P_{\\rho}]"
+						}
+					],
+					"source": "\\begin{dmath*}{}{}\\left[J_{\\mu \\nu}, \\discretionary{}{}{}P_{\\rho} P_{\\rho}\\right]{}\\end{dmath*}"
 				}
 			],
-			"source" : "product_rule(_);"
+			"source": "Psq:= \\commutator{J_{\\mu\\nu}}{ P_{\\rho}P_{\\rho} };"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 18192389058298689521,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(\\eta_{\\mu \\rho} P_{\\nu}-\\eta_{\\nu \\rho} P_{\\mu}\\right) P_{\\rho}+P_{\\rho} \\left(\\eta_{\\mu \\rho} P_{\\nu}-\\eta_{\\nu \\rho} P_{\\mu}\\right)\\end{dmath*}"
+					"cell_id": 9681807010676353903,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10427584475320492806,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "[J_{\\mu \\nu}, P_{\\rho}] P_{\\rho} + P_{\\rho} [J_{\\mu \\nu}, P_{\\rho}]"
+						}
+					],
+					"source": "\\begin{dmath*}{}{}\\left[J_{\\mu \\nu}, \\discretionary{}{}{}P_{\\rho}\\right]{} P_{\\rho}\\discretionary{}{}{}+P_{\\rho} {}\\left[J_{\\mu \\nu}, \\discretionary{}{}{}P_{\\rho}\\right]{}\\end{dmath*}"
 				}
 			],
-			"source" : "substitute(_, poincare);"
+			"source": "product_rule(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 9743743344113656599,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+					"cell_id": 18257736613168707616,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2761812607044190089,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(\\eta_{\\mu \\rho} P_{\\nu}-\\eta_{\\nu \\rho} P_{\\mu}) P_{\\rho} + P_{\\rho} (\\eta_{\\mu \\rho} P_{\\nu}-\\eta_{\\nu \\rho} P_{\\mu})"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(\\eta_{\\mu \\rho} P_{\\nu}\\discretionary{}{}{}-\\,\\eta_{\\nu \\rho} P_{\\mu}\\right) P_{\\rho}\\discretionary{}{}{}+P_{\\rho} \\left(\\eta_{\\mu \\rho} P_{\\nu}\\discretionary{}{}{}-\\,\\eta_{\\nu \\rho} P_{\\mu}\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "distribute(_);"
+			"source": "substitute(_, poincare);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 7283064845850749409,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\subsection*{The $W^2$ Casimir}\n\nNext we do the same thing with $W^2$, the other Poincar\\'e Casimir..."
+					"cell_id": 15115716107954714884,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3084005768199014968,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0"
+						}
+					],
+					"source": "\\begin{dmath*}{}0\\,\\end{dmath*}"
 				}
 			],
-			"hidden" : true,
-			"source" : "\\subsection*{The $W^2$ Casimir}\n\nNext we do the same thing with $W^2$, the other Poincar\\'e Casimir..."
+			"source": "distribute(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 5886591640803187846,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{}\\left[J_{\\mu \\nu}, W_{\\rho} W_{\\rho}\\right]{}\\end{dmath*}"
+					"cell_id": 2221975938778038510,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{The $W^2$ Casimir}\n\nNext we do the same thing with $W^2$, the other Poincar\\'e Casimir..."
 				}
 			],
-			"source" : "Wsq:=\\commutator{J_{\\mu\\nu}}{W_\\mu W_\\mu};"
+			"hidden": true,
+			"source": "\\subsection*{The $W^2$ Casimir}\n\nNext we do the same thing with $W^2$, the other Poincar\\'e Casimir..."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 1128160442213401089,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}e_{\\gamma \\alpha \\lambda \\kappa} e_{\\gamma \\rho \\sigma \\beta} {}\\left[J_{\\mu \\nu}, P_{\\alpha} J_{\\rho \\sigma} P_{\\beta} J_{\\lambda \\kappa}\\right]{}\\end{dmath*}"
+					"cell_id": 11404982420601735035,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8691224832353392546,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "[J_{\\mu \\nu}, W_{\\rho} W_{\\rho}]"
+						}
+					],
+					"source": "\\begin{dmath*}{}{}\\left[J_{\\mu \\nu}, \\discretionary{}{}{}W_{\\rho} W_{\\rho}\\right]{}\\end{dmath*}"
 				}
 			],
-			"source" : "substitute(_, $W_\\mu -> e_{\\mu\\nu\\lambda\\rho} P_\\nu J_{\\lambda\\rho}$);"
+			"source": "Wsq:=\\commutator{J_{\\mu\\nu}}{W_\\mu W_\\mu};"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 4673163097987323507,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}6\\delta_{\\alpha \\rho \\lambda \\sigma \\kappa \\beta} {}\\left[J_{\\mu \\nu}, P_{\\alpha} J_{\\rho \\sigma} P_{\\beta} J_{\\lambda \\kappa}\\right]{}\\end{dmath*}"
+					"cell_id": 5646178958541389047,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7420054074567340915,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "e_{\\gamma \\alpha \\lambda \\kappa} e_{\\gamma \\rho \\sigma \\beta} [J_{\\mu \\nu}, P_{\\alpha} J_{\\rho \\sigma} P_{\\beta} J_{\\lambda \\kappa}]"
+						}
+					],
+					"source": "\\begin{dmath*}{}e_{\\gamma \\alpha \\lambda \\kappa} e_{\\gamma \\rho \\sigma \\beta} {}\\left[J_{\\mu \\nu}, \\discretionary{}{}{}P_{\\alpha} J_{\\rho \\sigma} P_{\\beta} J_{\\lambda \\kappa}\\right]{}\\end{dmath*}"
 				}
 			],
-			"source" : "epsilon_to_delta(_);"
+			"source": "substitute(_, $W_\\mu -> e_{\\mu\\nu\\lambda\\rho} P_\\nu J_{\\lambda\\rho}$);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 14540991334474653221,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-6\\left(\\frac{1}{6}\\delta_{\\alpha \\rho} \\delta_{\\beta \\lambda} \\delta_{\\kappa \\sigma} - \\frac{1}{6}\\delta_{\\alpha \\rho} \\delta_{\\beta \\kappa} \\delta_{\\lambda \\sigma} - \\frac{1}{6}\\delta_{\\alpha \\sigma} \\delta_{\\beta \\lambda} \\delta_{\\kappa \\rho}+\\frac{1}{6}\\delta_{\\alpha \\beta} \\delta_{\\lambda \\sigma} \\delta_{\\kappa \\rho}+\\frac{1}{6}\\delta_{\\alpha \\sigma} \\delta_{\\beta \\kappa} \\delta_{\\lambda \\rho} - \\frac{1}{6}\\delta_{\\alpha \\beta} \\delta_{\\lambda \\rho} \\delta_{\\kappa \\sigma}\\right) {}\\left[J_{\\mu \\nu}, P_{\\alpha} J_{\\rho \\sigma} P_{\\beta} J_{\\lambda \\kappa}\\right]{}\\end{dmath*}"
+					"cell_id": 6644535209949996862,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13940562148982541503,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "6\\delta_{\\alpha \\rho \\lambda \\sigma \\kappa \\beta} [J_{\\mu \\nu}, P_{\\alpha} J_{\\rho \\sigma} P_{\\beta} J_{\\lambda \\kappa}]"
+						}
+					],
+					"source": "\\begin{dmath*}{}6\\,\\delta_{\\alpha \\rho \\lambda \\sigma \\kappa \\beta} {}\\left[J_{\\mu \\nu}, \\discretionary{}{}{}P_{\\alpha} J_{\\rho \\sigma} P_{\\beta} J_{\\lambda \\kappa}\\right]{}\\end{dmath*}"
 				}
 			],
-			"source" : "expand_delta(_);"
+			"source": "epsilon_to_delta(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 18197240252079900808,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-6\\left(\\frac{1}{6}\\delta_{\\alpha \\rho} \\delta_{\\beta \\kappa} \\delta_{\\lambda \\sigma} - \\frac{1}{6}\\delta_{\\alpha \\rho} \\delta_{\\beta \\lambda} \\delta_{\\kappa \\sigma} - \\frac{1}{6}\\delta_{\\alpha \\sigma} \\delta_{\\beta \\kappa} \\delta_{\\lambda \\rho}+\\frac{1}{6}\\delta_{\\alpha \\beta} \\delta_{\\lambda \\rho} \\delta_{\\kappa \\sigma}+\\frac{1}{6}\\delta_{\\alpha \\sigma} \\delta_{\\beta \\lambda} \\delta_{\\kappa \\rho} - \\frac{1}{6}\\delta_{\\alpha \\beta} \\delta_{\\lambda \\sigma} \\delta_{\\kappa \\rho}\\right) \\left(-{}\\left[J_{\\mu \\nu}, P_{\\alpha}\\right]{} J_{\\rho \\sigma} P_{\\beta} J_{\\lambda \\kappa}-P_{\\alpha} {}\\left[J_{\\mu \\nu}, J_{\\rho \\sigma}\\right]{} P_{\\beta} J_{\\lambda \\kappa}-P_{\\alpha} J_{\\rho \\sigma} {}\\left[J_{\\mu \\nu}, P_{\\beta}\\right]{} J_{\\lambda \\kappa}+P_{\\alpha} J_{\\rho \\sigma} P_{\\beta} {}\\left[J_{\\mu \\nu}, J_{\\kappa \\lambda}\\right]{}\\right)\\end{dmath*}"
+					"cell_id": 10809178207384550003,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4056238156539035162,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "-6( 1/6 \\delta_{\\alpha \\rho} \\delta_{\\beta \\lambda} \\delta_{\\kappa \\sigma} -  1/6 \\delta_{\\alpha \\rho} \\delta_{\\beta \\kappa} \\delta_{\\lambda \\sigma} -  1/6 \\delta_{\\alpha \\sigma} \\delta_{\\beta \\lambda} \\delta_{\\kappa \\rho} +  1/6 \\delta_{\\alpha \\beta} \\delta_{\\lambda \\sigma} \\delta_{\\kappa \\rho} +  1/6 \\delta_{\\alpha \\sigma} \\delta_{\\beta \\kappa} \\delta_{\\lambda \\rho} -  1/6 \\delta_{\\alpha \\beta} \\delta_{\\lambda \\rho} \\delta_{\\kappa \\sigma}) [J_{\\mu \\nu}, P_{\\alpha} J_{\\rho \\sigma} P_{\\beta} J_{\\lambda \\kappa}]"
+						}
+					],
+					"source": "\\begin{dmath*}{}-6\\,\\left(\\frac{1}{6}\\,\\delta_{\\alpha \\rho} \\delta_{\\beta \\lambda} \\delta_{\\kappa \\sigma}\\discretionary{}{}{} - \\frac{1}{6}\\,\\delta_{\\alpha \\rho} \\delta_{\\beta \\kappa} \\delta_{\\lambda \\sigma}\\discretionary{}{}{} - \\frac{1}{6}\\,\\delta_{\\alpha \\sigma} \\delta_{\\beta \\lambda} \\delta_{\\kappa \\rho}\\discretionary{}{}{}+\\frac{1}{6}\\,\\delta_{\\alpha \\beta} \\delta_{\\lambda \\sigma} \\delta_{\\kappa \\rho}\\discretionary{}{}{}+\\frac{1}{6}\\,\\delta_{\\alpha \\sigma} \\delta_{\\beta \\kappa} \\delta_{\\lambda \\rho}\\discretionary{}{}{} - \\frac{1}{6}\\,\\delta_{\\alpha \\beta} \\delta_{\\lambda \\rho} \\delta_{\\kappa \\sigma}\\right) {}\\left[J_{\\mu \\nu}, \\discretionary{}{}{}P_{\\alpha} J_{\\rho \\sigma} P_{\\beta} J_{\\lambda \\kappa}\\right]{}\\end{dmath*}"
 				}
 			],
-			"source" : "product_rule(_);"
+			"source": "expand_delta(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 12879772976132515189,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-6\\left(\\frac{1}{6}\\delta_{\\beta \\rho} \\delta_{\\alpha \\kappa} \\delta_{\\lambda \\sigma} - \\frac{1}{6}\\delta_{\\beta \\rho} \\delta_{\\alpha \\lambda} \\delta_{\\kappa \\sigma} - \\frac{1}{6}\\delta_{\\beta \\sigma} \\delta_{\\alpha \\kappa} \\delta_{\\lambda \\rho}+\\frac{1}{6}\\delta_{\\beta \\alpha} \\delta_{\\kappa \\sigma} \\delta_{\\lambda \\rho}+\\frac{1}{6}\\delta_{\\beta \\sigma} \\delta_{\\alpha \\lambda} \\delta_{\\kappa \\rho} - \\frac{1}{6}\\delta_{\\beta \\alpha} \\delta_{\\kappa \\rho} \\delta_{\\lambda \\sigma}\\right) \\left(-\\left(\\eta_{\\beta \\mu} P_{\\nu}-\\eta_{\\beta \\nu} P_{\\mu}\\right) J_{\\rho \\sigma} P_{\\alpha} J_{\\lambda \\kappa}-P_{\\beta} \\left(\\eta_{\\mu \\rho} J_{\\nu \\sigma}-\\eta_{\\mu \\sigma} J_{\\nu \\rho}-\\eta_{\\nu \\rho} J_{\\mu \\sigma}+\\eta_{\\nu \\sigma} J_{\\mu \\rho}\\right) P_{\\alpha} J_{\\lambda \\kappa}-P_{\\beta} J_{\\rho \\sigma} \\left(\\eta_{\\alpha \\mu} P_{\\nu}-\\eta_{\\alpha \\nu} P_{\\mu}\\right) J_{\\lambda \\kappa}+P_{\\beta} J_{\\rho \\sigma} P_{\\alpha} \\left(-\\eta_{\\kappa \\mu} J_{\\lambda \\nu}+\\eta_{\\lambda \\mu} J_{\\kappa \\nu}+\\eta_{\\kappa \\nu} J_{\\lambda \\mu}-\\eta_{\\lambda \\nu} J_{\\kappa \\mu}\\right)\\right)\\end{dmath*}"
+					"cell_id": 9667107681200747915,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10879618064370296532,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "-6( 1/6 \\delta_{\\alpha \\rho} \\delta_{\\beta \\kappa} \\delta_{\\lambda \\sigma} -  1/6 \\delta_{\\alpha \\rho} \\delta_{\\beta \\lambda} \\delta_{\\kappa \\sigma} -  1/6 \\delta_{\\alpha \\sigma} \\delta_{\\beta \\kappa} \\delta_{\\lambda \\rho} +  1/6 \\delta_{\\alpha \\beta} \\delta_{\\lambda \\rho} \\delta_{\\kappa \\sigma} +  1/6 \\delta_{\\alpha \\sigma} \\delta_{\\beta \\lambda} \\delta_{\\kappa \\rho} -  1/6 \\delta_{\\alpha \\beta} \\delta_{\\lambda \\sigma} \\delta_{\\kappa \\rho}) (-[J_{\\mu \\nu}, P_{\\alpha}] J_{\\rho \\sigma} P_{\\beta} J_{\\lambda \\kappa}-P_{\\alpha} [J_{\\mu \\nu}, J_{\\rho \\sigma}] P_{\\beta} J_{\\lambda \\kappa}-P_{\\alpha} J_{\\rho \\sigma} [J_{\\mu \\nu}, P_{\\beta}] J_{\\lambda \\kappa}-P_{\\alpha} J_{\\rho \\sigma} P_{\\beta} [J_{\\mu \\nu}, J_{\\lambda \\kappa}])"
+						}
+					],
+					"source": "\\begin{dmath*}{}-6\\,\\left(\\frac{1}{6}\\,\\delta_{\\alpha \\rho} \\delta_{\\beta \\kappa} \\delta_{\\lambda \\sigma}\\discretionary{}{}{} - \\frac{1}{6}\\,\\delta_{\\alpha \\rho} \\delta_{\\beta \\lambda} \\delta_{\\kappa \\sigma}\\discretionary{}{}{} - \\frac{1}{6}\\,\\delta_{\\alpha \\sigma} \\delta_{\\beta \\kappa} \\delta_{\\lambda \\rho}\\discretionary{}{}{}+\\frac{1}{6}\\,\\delta_{\\alpha \\beta} \\delta_{\\lambda \\rho} \\delta_{\\kappa \\sigma}\\discretionary{}{}{}+\\frac{1}{6}\\,\\delta_{\\alpha \\sigma} \\delta_{\\beta \\lambda} \\delta_{\\kappa \\rho}\\discretionary{}{}{} - \\frac{1}{6}\\,\\delta_{\\alpha \\beta} \\delta_{\\lambda \\sigma} \\delta_{\\kappa \\rho}\\right) \\left(-\\,{}\\left[J_{\\mu \\nu}, \\discretionary{}{}{}P_{\\alpha}\\right]{} J_{\\rho \\sigma} P_{\\beta} J_{\\lambda \\kappa}\\discretionary{}{}{}-\\,P_{\\alpha} {}\\left[J_{\\mu \\nu}, \\discretionary{}{}{}J_{\\rho \\sigma}\\right]{} P_{\\beta} J_{\\lambda \\kappa}\\discretionary{}{}{}-\\,P_{\\alpha} J_{\\rho \\sigma} {}\\left[J_{\\mu \\nu}, \\discretionary{}{}{}P_{\\beta}\\right]{} J_{\\lambda \\kappa}\\discretionary{}{}{}-\\,P_{\\alpha} J_{\\rho \\sigma} P_{\\beta} {}\\left[J_{\\mu \\nu}, \\discretionary{}{}{}J_{\\lambda \\kappa}\\right]{}\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "substitute(_, poincare);"
+			"source": "product_rule(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 12517975367971533918,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+					"cell_id": 1974543218799396855,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13611940801069841760,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "-6( 1/6 \\delta_{\\beta \\rho} \\delta_{\\alpha \\kappa} \\delta_{\\lambda \\sigma} -  1/6 \\delta_{\\beta \\rho} \\delta_{\\alpha \\lambda} \\delta_{\\kappa \\sigma} -  1/6 \\delta_{\\beta \\sigma} \\delta_{\\alpha \\kappa} \\delta_{\\lambda \\rho} +  1/6 \\delta_{\\beta \\alpha} \\delta_{\\kappa \\sigma} \\delta_{\\lambda \\rho} +  1/6 \\delta_{\\beta \\sigma} \\delta_{\\alpha \\lambda} \\delta_{\\kappa \\rho} -  1/6 \\delta_{\\beta \\alpha} \\delta_{\\kappa \\rho} \\delta_{\\lambda \\sigma}) (-(\\eta_{\\beta \\mu} P_{\\nu}-\\eta_{\\beta \\nu} P_{\\mu}) J_{\\rho \\sigma} P_{\\alpha} J_{\\lambda \\kappa}-P_{\\beta} (\\eta_{\\mu \\rho} J_{\\nu \\sigma}-\\eta_{\\mu \\sigma} J_{\\nu \\rho}-\\eta_{\\nu \\rho} J_{\\mu \\sigma} + \\eta_{\\nu \\sigma} J_{\\mu \\rho}) P_{\\alpha} J_{\\lambda \\kappa}-P_{\\beta} J_{\\rho \\sigma} (\\eta_{\\alpha \\mu} P_{\\nu}-\\eta_{\\alpha \\nu} P_{\\mu}) J_{\\lambda \\kappa}-P_{\\beta} J_{\\rho \\sigma} P_{\\alpha} (-\\eta_{\\lambda \\mu} J_{\\kappa \\nu} + \\eta_{\\kappa \\mu} J_{\\lambda \\nu} + \\eta_{\\lambda \\nu} J_{\\kappa \\mu}-\\eta_{\\kappa \\nu} J_{\\lambda \\mu}))"
+						}
+					],
+					"source": "\\begin{dmath*}{}-6\\,\\left(\\frac{1}{6}\\,\\delta_{\\beta \\rho} \\delta_{\\alpha \\kappa} \\delta_{\\lambda \\sigma}\\discretionary{}{}{} - \\frac{1}{6}\\,\\delta_{\\beta \\rho} \\delta_{\\alpha \\lambda} \\delta_{\\kappa \\sigma}\\discretionary{}{}{} - \\frac{1}{6}\\,\\delta_{\\beta \\sigma} \\delta_{\\alpha \\kappa} \\delta_{\\lambda \\rho}\\discretionary{}{}{}+\\frac{1}{6}\\,\\delta_{\\beta \\alpha} \\delta_{\\kappa \\sigma} \\delta_{\\lambda \\rho}\\discretionary{}{}{}+\\frac{1}{6}\\,\\delta_{\\beta \\sigma} \\delta_{\\alpha \\lambda} \\delta_{\\kappa \\rho}\\discretionary{}{}{} - \\frac{1}{6}\\,\\delta_{\\beta \\alpha} \\delta_{\\kappa \\rho} \\delta_{\\lambda \\sigma}\\right) \\left(-\\,\\left(\\eta_{\\beta \\mu} P_{\\nu}\\discretionary{}{}{}-\\,\\eta_{\\beta \\nu} P_{\\mu}\\right) J_{\\rho \\sigma} P_{\\alpha} J_{\\lambda \\kappa}\\discretionary{}{}{}-\\,P_{\\beta} \\left(\\eta_{\\mu \\rho} J_{\\nu \\sigma}\\discretionary{}{}{}-\\,\\eta_{\\mu \\sigma} J_{\\nu \\rho}\\discretionary{}{}{}-\\,\\eta_{\\nu \\rho} J_{\\mu \\sigma}\\discretionary{}{}{}+\\eta_{\\nu \\sigma} J_{\\mu \\rho}\\right) P_{\\alpha} J_{\\lambda \\kappa}\\discretionary{}{}{}-\\,P_{\\beta} J_{\\rho \\sigma} \\left(\\eta_{\\alpha \\mu} P_{\\nu}\\discretionary{}{}{}-\\,\\eta_{\\alpha \\nu} P_{\\mu}\\right) J_{\\lambda \\kappa}\\discretionary{}{}{}-\\,P_{\\beta} J_{\\rho \\sigma} P_{\\alpha} \\left(-\\,\\eta_{\\lambda \\mu} J_{\\kappa \\nu}\\discretionary{}{}{}+\\eta_{\\kappa \\mu} J_{\\lambda \\nu}\\discretionary{}{}{}+\\eta_{\\lambda \\nu} J_{\\kappa \\mu}\\discretionary{}{}{}-\\,\\eta_{\\kappa \\nu} J_{\\lambda \\mu}\\right)\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "distribute(_);"
+			"source": "substitute(_, poincare);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 6318297901614041256,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 17408127201849635253,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10783874335149056130,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0"
+						}
+					],
+					"source": "\\begin{dmath*}{}0\\,\\end{dmath*}"
+				}
+			],
+			"source": "distribute(_);"
+		},
+		{
+			"cell_id": 11573777653020638176,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
+	"version": 1.0
 }

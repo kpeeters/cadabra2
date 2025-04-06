@@ -1,81 +1,102 @@
-
 {
-	"cells" : 
-	[
-		
+	"cell_id": 15955037036217990901,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
+			"cell_id": 15821029921019724773,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}(t, r).\\end{dmath*}"
+					"cell_id": 13581146124792910087,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Coordinate attached to~}\\left[t, \\discretionary{}{}{}r\\right].\\end{dmath*}"
 				},
-				
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(\\mu, \\nu).\\end{dmath*}"
+					"cell_id": 7213587043865807769,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Indices(position=free, values=\\{{r}\n, {t}\n\\}) attached to~}\\left[\\mu, \\discretionary{}{}{}\\nu\\right].\\end{dmath*}"
 				}
 			],
-			"source" : "\\dot{#}::Accent.\n{t,r}::Coordinate;\n{\\mu,\\nu}::Indices(values={r,t});"
+			"source": "\\dot{#}::Accent.\n{t,r}::Coordinate;\n{\\mu,\\nu}::Indices(values={r,t});"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
+			"cell_id": 14507815146891810201,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\dot{X^{\\mu}}+A^{\\mu}\\end{dmath*}"
+					"cell_id": 3386410755258289437,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11458273571150299319,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\dot{X^{\\mu}} + A^{\\mu}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\dot{X^{\\mu}}\\discretionary{}{}{}+A^{\\mu}\\end{dmath*}"
 				}
 			],
-			"source" : "ex:= \\dot{X^\\mu} + A^{\\mu} ;"
+			"source": "ex:= \\dot{X^\\mu} + A^{\\mu} ;"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
+			"cell_id": 7521066877325165882,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}(X^{t} = T, X^{r} = R, A^{r} = 3, A^{t} = 2)\\end{dmath*}"
+					"cell_id": 4255052784837468787,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 12398809585298354188,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "{X^{t} = T, X^{r} = R, A^{r} = 3, A^{t} = 2}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left[X^{t} = T, \\discretionary{}{}{}X^{r} = R, \\discretionary{}{}{}A^{r} = 3\\,, \\discretionary{}{}{}A^{t} = 2\\,\\right]\\end{dmath*}"
 				}
 			],
-			"source" : "rl:= { X^{t} = T, X^{r} = R, A^{r} = 3, A^{t} = 2 };"
+			"source": "rl:= { X^{t} = T, X^{r} = R, A^{r} = 3, A^{t} = 2 };"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
+			"cell_id": 4490208082992345645,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\begin{aligned}\\square{}^{t}= & \\dot{T}+2\\\\\n\\square{}^{r}= & \\dot{R}+3\\\\\n\\end{aligned}\n\\end{dmath*}"
+					"cell_id": 16839994021621720773,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7769025253073063830,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\components^{\\mu}({{t} = \\dot{T} + 2, {r} = \\dot{R} + 3})"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\square{}^{\\mu}\\left\\{\\begin{aligned}\\square{}^{t}& = \\dot{T}\\discretionary{}{}{}+2\\,\\\\[-.5ex]\n\\square{}^{r}& = \\dot{R}\\discretionary{}{}{}+3\\,\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
 				}
 			],
-			"source" : "evaluate(ex, rl);"
+			"source": "evaluate(ex, rl);"
 		},
-		
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 14467008753384234490,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
+	"version": 1.0
 }
-
