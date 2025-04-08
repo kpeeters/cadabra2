@@ -5,6 +5,8 @@
 #include <iostream>
 #include <CdbPython.hh>
 #include <fstream>
+#include <pybind11/pybind11.h>
+#include <pybind11/embed.h>
 
 int main(int argc, char **argv)
 	{
@@ -42,6 +44,10 @@ int main(int argc, char **argv)
 		content+=line+"\n";
 
 	std::string error;
+	// Because cdb2python_string now runs some python code to
+	// parse the input (and imports `codeop` for that), we need
+	// to make sure that pybind11 is initialised.
+	pybind11::scoped_interpreter guard{}; 
 	auto python = cadabra::cdb2python_string(content, true, error);
 
 	if(python_file!="") {
