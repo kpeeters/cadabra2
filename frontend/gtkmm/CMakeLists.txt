@@ -68,6 +68,7 @@ set(INSTALL_MICROTEX_DIR "share/cadabra2/microtex")
 #---------------------------------------------------------------------------
 
 find_package(Threads)
+find_package(GMPXX REQUIRED STATIC)
 find_package(SQLITE3)
 if(USE_GTK4)
   message(STATUS "Building for GTK4 (instead of GTK3)")
@@ -138,6 +139,8 @@ include_directories(
   "${CADABRA_LIBS_DIR}/websocketpp"
   "${CADABRA_LIBS_DIR}/tiny-process-library"
   "${CADABRA_LIBS_DIR}/nlohmann"   
+  ${GMP_INCLUDE_DIRS}
+  ${OPENSSL_INCLUDE_DIR}
   ${Boost_INCLUDE_DIRS}
   ${Python_INCLUDE_DIRS}
   ${SQLITE3_INCLUDE_DIR}

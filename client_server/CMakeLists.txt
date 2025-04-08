@@ -39,12 +39,15 @@ find_package(Threads)
 find_package(Boost 1.71.0 COMPONENTS system program_options date_time filesystem REQUIRED)
 
 # OpenSSL needs to be linked in explicitly (probably because the boost
-# material referring to it is all in headers?).
+# material referring to it is all in headers?). If you use a cmake module,
+# you will run into issues on MSYS2, so do *not* be tempted to do that
+# unless you test on MSYS2 first.
 set(OpenSSL_USE_STATIC_LIBS OFF)
 find_package(OpenSSL REQUIRED)
 message(STATUS "OPENSSL_LIBRARIES:      ${OPENSSL_LIBRARIES}")
 message(STATUS "OPENSSL_SSL_LIBRARY:    ${OPENSSL_SSL_LIBRARY}")
 message(STATUS "OPENSSL_CRYPTO_LIBRARY: ${OPENSSL_CRYPTO_LIBRARY}")
+message(STATUS "OPENSSL_INCLUDE_DIR:    ${OPENSSL_INCLUDE_DIR}")
 
 #---------------------------------------------------------------------------
 # Enumerate input files.
@@ -118,7 +121,8 @@ include_directories(
    "${CADABRA_LIBS_DIR}/internal/include"
    "${CADABRA_LIBS_DIR}/whereami"
    "${CADABRA_LIBS_DIR}/base64"
-   "${CADABRA_LIBS_DIR}/nlohmann"      
+   "${CADABRA_LIBS_DIR}/nlohmann"
+   ${OPENSSL_INCLUDE_DIR}
    ${Boost_INCLUDE_DIRS}
    ${Python_INCLUDE_DIRS}
    ${SQLITE3_INCLUDE_DIR}

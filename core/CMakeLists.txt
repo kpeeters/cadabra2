@@ -50,10 +50,12 @@ endif()
 # but then things fail because gmp/gmpxx are not built
 # with -fPIC. Postponed for now.
 # set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+#find_package(GMPXX REQUIRED STATIC)
 find_package(GMPXX REQUIRED STATIC)
 
 message(STATUS "Linking to GMP   library ${GMP_LIBRARIES}")
 message(STATUS "Linking to GMPXX library ${GMPXX_LIBRARIES}")
+message(STATUS "Include dir for GMP/GMPXX ${GMP_INCLUDE_DIRS}")
 
 # Dependency of TinyProcessLib
 find_package(Threads)
@@ -286,7 +288,8 @@ include_directories(
    "${CADABRA_LIBS_DIR}/base64"   
    "${CADABRA_LIBS_DIR}/dbg"   
    "${CADABRA_LIBS_DIR}/linenoise"
-   "${CADABRA_LIBS_DIR}/nlohmann"     
+   "${CADABRA_LIBS_DIR}/nlohmann"
+   ${GMP_INCLUDE_DIRS}
    ${Boost_INCLUDE_DIRS}
    ${Python_INCLUDE_DIRS}
    )
