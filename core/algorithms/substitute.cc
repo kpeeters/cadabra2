@@ -221,10 +221,13 @@ Algorithm::result_t substitute::apply(iterator& st)
 		//std::cerr << "rhs does not contain dummies" << std::endl;
 		}
 
-	// Replace all patterns on the rhs of the rule with the objects they matched.
+	// Stage 1: Replace all patterns on the rhs of the rule with the
+	// objects they matched.
+	
 	// Keep track of all indices which _have_ to stay what they are, in ind_forced.
 	// Keep track of insertion points of subtrees.
 	// NOTE: this does not yet insert the replacement into the main tree!
+
 	iterator it=repl.begin();
 	Ex_comparator::replacement_map_t::iterator loc;
 	Ex_comparator::subtree_replacement_map_t::iterator sloc;
@@ -265,13 +268,15 @@ Algorithm::result_t substitute::apply(iterator& st)
 				DEBUGLN( std::cerr << "stripped replacing " << it
 							<< " with " << (*loc).second.begin() << " * " << *it->multiplier << std::endl; );
 				it->name=(*loc).second.begin()->name;
+				// See the comment below about multipliers.
 				multiply(it->multiplier, *(*loc).second.begin()->multiplier);
 				it->fl=(*loc).second.begin()->fl;
 				}
 			else {
-				// Careful with the multiplier: the object has been matched to the pattern
-				// without taking into account the top-level multiplier. So keep the multiplier
-				// of the thing we are replacing.
+				// Consider "A? -> 3 A?". If "A?" matches "2 C", then the replacement
+				// map will contain "A? mapsto 2 C". The rhs of the rule contains
+				// "3 A?" which should be changed to "3*2 C". After that, this "6 C"
+				// will get inserted into the tree in Stage 2 below.
 				multiplier_t mt=*it->multiplier;
 				DEBUGLN( std::cerr << "replacing " << it
 							<< " with " << (*loc).second.begin() << " * " << mt << std::endl; );
@@ -355,7 +360,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 
 	DEBUGLN( std::cerr << "after cleanup:\n" << repl << std::endl; );
 
-	// At this stage
+
+	// Stage 2: Now we can insert the right-hand side of the rule into
+	// the original tree.
 
 	repl.begin()->fl.bracket=st->fl.bracket;
 	bool rename_replacement_dummies_called=false;

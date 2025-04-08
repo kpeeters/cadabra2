@@ -739,8 +739,12 @@ namespace cadabra {
 				// this needs to be added to the replacement map explicitly.
 				
 				DEBUGLN( std::cerr << "adding " << one << " -> " << two << " to replacement map " << std::endl; );
+
+				// We absolutely need to keep the multiplier here. If we don't, then it
+				// becomes very messy to restore multipliers of child nodes in the pattern,
+				// e.g A?_{m n} matching Q_{1 -1}. Do not set the multiplier to one!
 				Ex tmp(two);
-//				cadabra::one(tmp.begin()->multiplier);
+            // cadabra::one(tmp.begin()->multiplier);
 				replacement_map[Ex(one)]=tmp;
 
 				// if this is an index, also store the pattern with the parent_rel flipped
