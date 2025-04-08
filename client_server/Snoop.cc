@@ -674,7 +674,9 @@ std::string Snoop::get_local_ticket()
 	std::ostringstream ss;
 	ss << "select ticket_uuid from tickets where user_id=0 and valid=1";
 	int res = sqlite3_prepare(auth_db, ss.str().c_str(), -1, &statement, NULL);
-	assert(res==SQLITE_OK);
+	if(res!=SQLITE_OK)
+		return "";
+
 	int ret = sqlite3_step(statement);
 	std::string ticket_uuid;
 	if(ret==SQLITE_ROW) {
@@ -720,17 +722,21 @@ Snoop::Ticket Snoop::is_ticket_valid(std::string ticket_uuid)
 
 	// Prepare the query for the ticket_uuid.
 
+	Ticket tret;
+	tret.ticket_uuid=ticket_uuid;
+	tret.valid = false;
+	
 	sqlite3_stmt *statement=0;
 	std::ostringstream ss;
 	ss << "select valid, users.enabled, ifnull(groups.enabled,1) as groupsenabled, tickets.id, users.id from tickets join users on tickets.user_id=users.id left join groups on users.\"group\"=groups.id where ticket_uuid=?";
 	int res = sqlite3_prepare(auth_db, ss.str().c_str(), -1, &statement, NULL);
-	assert(res==SQLITE_OK);
+	if(res != SQLITE_OK) 
+		return tret;
+
 	sqlite3_bind_text(statement, 1, ticket_uuid.c_str(), ticket_uuid.size(), 0);
 
 	// Query database.
 
-	Ticket tret;
-	tret.ticket_uuid=ticket_uuid;
 	int valid=0;
 	int enabled=0;
 	int groupsenabled=0;

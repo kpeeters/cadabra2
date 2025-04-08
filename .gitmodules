@@ -1,4 +1,4 @@
 [submodule "submodules/microtex"]
 	path = submodules/microtex
-	url = git@github.com:kpeeters/MicroTeX
+	url = https://github.com/kpeeters/MicroTeX
 	branch = kpeeters/cadabra
