@@ -9,15 +9,8 @@
 #define DBG_MACRO_DISABLE
 #include "dbg.h"
 
-// #define DEBUG 1
-
-#ifdef DEBUG
-#warning "DEBUG enabled for substitute.cc"
-static bool debug_stop = false;
-#define DEBUGLN(ln) if(!debug_stop) { ln; }
-#else
-#define DEBUGLN(ln)
-#endif
+// #define DEBUG "substitute.cc"
+#include "Debug.hh"
 
 
 using namespace cadabra;
@@ -231,6 +224,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// Replace all patterns on the rhs of the rule with the objects they matched.
 	// Keep track of all indices which _have_ to stay what they are, in ind_forced.
 	// Keep track of insertion points of subtrees.
+	// NOTE: this does not yet insert the replacement into the main tree!
 	iterator it=repl.begin();
 	Ex_comparator::replacement_map_t::iterator loc;
 	Ex_comparator::subtree_replacement_map_t::iterator sloc;
@@ -268,16 +262,19 @@ Algorithm::result_t substitute::apply(iterator& st)
 			if(is_stripped || (it->is_name_wildcard() && !it->is_index()) ) {
 				// a?_{i j k} type patterns should only replace the head
 				// TODO: should we replace brackets here too?
+				DEBUGLN( std::cerr << "stripped replacing " << it
+							<< " with " << (*loc).second.begin() << " * " << *it->multiplier << std::endl; );
 				it->name=(*loc).second.begin()->name;
 				multiply(it->multiplier, *(*loc).second.begin()->multiplier);
 				it->fl=(*loc).second.begin()->fl;
-				// std::cerr << "replaced: \n" << it << std::endl;
 				}
 			else {
 				// Careful with the multiplier: the object has been matched to the pattern
 				// without taking into account the top-level multiplier. So keep the multiplier
 				// of the thing we are replacing.
 				multiplier_t mt=*it->multiplier;
+				DEBUGLN( std::cerr << "replacing " << it
+							<< " with " << (*loc).second.begin() << " * " << mt << std::endl; );
 				it=tr.replace_index(it, (*loc).second.begin()); //, true);
 				multiply(it->multiplier, mt);
 				}
@@ -352,11 +349,13 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// After all replacements have been done, we need to cleanup the
 	// replacement tree.
 
-	DEBUGLN( std::cerr << repl << std::endl; );
+	DEBUGLN( std::cerr << "replacement before cleanup:\n" << repl << std::endl; );
 	
 	cleanup_dispatch_deep(kernel, repl);
 
 	DEBUGLN( std::cerr << "after cleanup:\n" << repl << std::endl; );
+
+	// At this stage
 
 	repl.begin()->fl.bracket=st->fl.bracket;
 	bool rename_replacement_dummies_called=false;
@@ -406,7 +405,13 @@ Algorithm::result_t substitute::apply(iterator& st)
 	else {
 		DEBUGLN( std::cerr << "move " << repl << " on top of " << st << std::endl; );
 
-		multiply(repl.begin()->multiplier, *st->multiplier);
+		if(!lhs->is_name_wildcard()
+			&& !lhs->is_range_wildcard()
+			&& !lhs->is_siblings_wildcard()
+			&& !lhs->is_autodeclare_wildcard()
+			&& !lhs->is_object_wildcard())
+			multiply(repl.begin()->multiplier, *st->multiplier);
+		
 		auto keep_parent_rel=st->fl.parent_rel;
 		st=tr.move_ontop(st, repl.begin()); // no need to keep the original repl tree
 		st->fl.parent_rel=keep_parent_rel;

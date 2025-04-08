@@ -22,25 +22,19 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 3118678465319261249,
-					"cell_origin": "server",
-					"cell_type": "latex_view",
-					"source": "\\begin{dmath*}{}\\text{Property SelfNonCommuting attached to~}\\alpha_{n}\\!\\,^{\\mu}.\\end{dmath*}"
-				},
-				{
-					"cell_id": 3761334944075205817,
+					"cell_id": 17459842851096438457,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property LaTeXForm attached to {\\texttt{\\backslash{}vac}}.}\\end{dmath*}"
 				},
 				{
-					"cell_id": 7028002058024846645,
+					"cell_id": 2326358633043535571,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property LaTeXForm attached to {\\texttt{\\backslash{}state}}.}\\end{dmath*}"
 				}
 			],
-			"source": "\\alpha_{n}^{\\mu}::SelfNonCommuting;\n\\vac::LaTeXForm(\"|k\\rangle\");\n\\state{A??}::LaTeXForm(\"|\", A??, \"\\rangle\");"
+			"source": "\\vac::LaTeXForm(\"|k\\rangle\");\n\\state{A??}::LaTeXForm(\"|\", A??, \"\\rangle\");"
 		},
 		{
 			"cell_id": 1164197569130214523,
@@ -69,13 +63,19 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 11581051958941834702,
+					"cell_id": 5362613492025069767,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property SelfNonCommuting attached to~}\\alpha_{n}\\!\\,^{\\mu}.\\end{dmath*}"
+				},
+				{
+					"cell_id": 9067400034152918656,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property NonCommuting attached to~}\\left[\\alpha_{n}\\!\\,^{\\mu}, \\discretionary{}{}{}|k\\rangle\\right].\\end{dmath*}"
 				}
 			],
-			"source": "{\\alpha_{n}^{\\mu}, \\vac}::NonCommuting;\n{\\mu,\\nu,\\rho}::Integer(0..d-1).\n{\\mu,\\nu,\\rho}::Indices.\n{m,n}::Integer.\n{m,n}::Symbol.\n\\delta{#}::KroneckerDelta.\n\\delta{#}::Diagonal."
+			"source": "\\alpha_{n}^{\\mu}::SelfNonCommuting;\n{\\alpha_{n}^{\\mu}, \\vac}::NonCommuting;\n{\\mu,\\nu,\\rho}::Integer(0..d-1).\n{\\mu,\\nu,\\rho}::Indices.\n{m,n}::Integer.\n{m,n}::Symbol.\n\\delta{#}::KroneckerDelta.\n\\delta{#}::Diagonal."
 		},
 		{
 			"cell_id": 6412040814128610434,
@@ -98,21 +98,49 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 3387045310667347428,
+					"cell_id": 6618914548712676167,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 18078733837863013651,
+							"cell_id": 4561521846099422645,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": "\\state(\\chi) = \\alpha_{-1}^{\\mu} \\alpha_{-1}^{\\mu} \\vac + A \\alpha_{0}^{\\mu} \\alpha_{-2}^{\\mu} \\vac + B \\alpha_{0}^{\\mu} \\alpha_{-1}^{\\mu} \\alpha_{0}^{\\nu} \\alpha_{-1}^{\\nu} \\vac"
+							"source": "\\alpha_{-1}^{\\mu} \\alpha_{-1}^{\\mu} \\vac"
 						}
 					],
-					"source": "\\begin{dmath*}{}|\\chi\\rangle = \\alpha_{-\\,1}\\!\\,^{\\mu} \\alpha_{-\\,1}\\!\\,^{\\mu} |k\\rangle\\discretionary{}{}{}+A \\alpha_{0\\,}\\!\\,^{\\mu} \\alpha_{-2\\,}\\!\\,^{\\mu} |k\\rangle\\discretionary{}{}{}+B \\alpha_{0\\,}\\!\\,^{\\mu} \\alpha_{-\\,1}\\!\\,^{\\mu} \\alpha_{0\\,}\\!\\,^{\\nu} \\alpha_{-\\,1}\\!\\,^{\\nu} |k\\rangle\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\alpha_{-\\,1}\\!\\,^{\\mu} \\alpha_{-\\,1}\\!\\,^{\\mu} |k\\rangle\\end{dmath*}"
+				},
+				{
+					"cell_id": 924603262268266279,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9747213784145017342,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\alpha_{0}^{\\mu} \\alpha_{-2}^{\\mu} \\vac"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\alpha_{0\\,}\\!\\,^{\\mu} \\alpha_{-2\\,}\\!\\,^{\\mu} |k\\rangle\\end{dmath*}"
+				},
+				{
+					"cell_id": 8586928482437960823,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 15666153001103670010,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\alpha_{0}^{\\mu} \\alpha_{-1}^{\\mu} \\alpha_{0}^{\\nu} \\alpha_{-1}^{\\nu} \\vac"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\alpha_{0\\,}\\!\\,^{\\mu} \\alpha_{-\\,1}\\!\\,^{\\mu} \\alpha_{0\\,}\\!\\,^{\\nu} \\alpha_{-\\,1}\\!\\,^{\\nu} |k\\rangle\\end{dmath*}"
 				}
 			],
-			"source": "chi1:= \\alpha_{-1}^{\\mu} \\alpha_{-1}^{\\mu} \\vac:\nchi2:= \\alpha_{0}^\\mu \\alpha_{-2}^\\mu \\vac:\nchi3:= \\alpha_{0}^{\\mu} \\alpha_{-1}^{\\mu} \\alpha_{0}^{\\nu} \\alpha_{-1}^{\\nu})\\vac:\nchi := \\state{\\chi} = @(chi1) + A @(chi2) + B @(chi3);"
+			"source": "chi1:= \\alpha_{-1}^{\\mu} \\alpha_{-1}^{\\mu} \\vac;\nchi2:= \\alpha_{0}^\\mu \\alpha_{-2}^\\mu \\vac;\nchi3:= \\alpha_{0}^{\\mu} \\alpha_{-1}^{\\mu} \\alpha_{0}^{\\nu} \\alpha_{-1}^{\\nu})\\vac;"
 		},
 		{
 			"cell_id": 11041561750698255632,
@@ -135,12 +163,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 3816043099701674980,
+					"cell_id": 9168676123674203811,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 13688727571617717534,
+							"cell_id": 5730817777691307809,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "{\\alpha_{m}^{\\mu} \\alpha_{n}^{\\nu} with m > n -> \\alpha_{n}^{\\nu} \\alpha_{m}^{\\mu} + m \\delta_{m -n} \\delta^{\\mu \\nu}, \\alpha_{m}^{\\mu} \\vac with m > 0 -> 0, \\alpha_{0}^{\\mu} \\vac -> 2**( 1/2 ) k^{\\mu} \\vac, k^{\\mu} k^{\\mu} -> -1}"
@@ -208,12 +236,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 13035392772884305765,
+					"cell_id": 14173337516324918388,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 16165740941506903352,
+							"cell_id": 3703952586724784627,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": " 1/2 \\alpha_{10}^{\\mu} \\alpha_{-10}^{\\mu} +  1/2 \\alpha_{9}^{\\mu} \\alpha_{-9}^{\\mu} +  1/2 \\alpha_{8}^{\\mu} \\alpha_{-8}^{\\mu} +  1/2 \\alpha_{7}^{\\mu} \\alpha_{-7}^{\\mu} +  1/2 \\alpha_{6}^{\\mu} \\alpha_{-6}^{\\mu} +  1/2 \\alpha_{5}^{\\mu} \\alpha_{-5}^{\\mu} +  1/2 \\alpha_{4}^{\\mu} \\alpha_{-4}^{\\mu} +  1/2 \\alpha_{3}^{\\mu} \\alpha_{-3}^{\\mu} +  1/2 \\alpha_{2}^{\\mu} \\alpha_{-2}^{\\mu} +  1/2 \\alpha_{1}^{\\mu} \\alpha_{-1}^{\\mu} +  1/2 \\alpha_{0}^{\\mu} \\alpha_{0}^{\\mu} +  1/2 \\alpha_{-1}^{\\mu} \\alpha_{1}^{\\mu} +  1/2 \\alpha_{-2}^{\\mu} \\alpha_{2}^{\\mu} +  1/2 \\alpha_{-3}^{\\mu} \\alpha_{3}^{\\mu} +  1/2 \\alpha_{-4}^{\\mu} \\alpha_{4}^{\\mu} +  1/2 \\alpha_{-5}^{\\mu} \\alpha_{5}^{\\mu} +  1/2 \\alpha_{-6}^{\\mu} \\alpha_{6}^{\\mu} +  1/2 \\alpha_{-7}^{\\mu} \\alpha_{7}^{\\mu} +  1/2 \\alpha_{-8}^{\\mu} \\alpha_{8}^{\\mu} +  1/2 \\alpha_{-9}^{\\mu} \\alpha_{9}^{\\mu}"
@@ -245,12 +273,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 9836721400775700581,
+					"cell_id": 2022464440954079799,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 12299567256028830203,
+							"cell_id": 10060937019647914664,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "( 1/2 \\alpha_{11}^{\\mu} \\alpha_{-10}^{\\mu} +  1/2 \\alpha_{10}^{\\mu} \\alpha_{-9}^{\\mu} +  1/2 \\alpha_{9}^{\\mu} \\alpha_{-8}^{\\mu} +  1/2 \\alpha_{8}^{\\mu} \\alpha_{-7}^{\\mu} +  1/2 \\alpha_{7}^{\\mu} \\alpha_{-6}^{\\mu} +  1/2 \\alpha_{6}^{\\mu} \\alpha_{-5}^{\\mu} +  1/2 \\alpha_{5}^{\\mu} \\alpha_{-4}^{\\mu} +  1/2 \\alpha_{4}^{\\mu} \\alpha_{-3}^{\\mu} +  1/2 \\alpha_{3}^{\\mu} \\alpha_{-2}^{\\mu} +  1/2 \\alpha_{2}^{\\mu} \\alpha_{-1}^{\\mu} +  1/2 \\alpha_{1}^{\\mu} \\alpha_{0}^{\\mu} +  1/2 \\alpha_{0}^{\\mu} \\alpha_{1}^{\\mu} +  1/2 \\alpha_{-1}^{\\mu} \\alpha_{2}^{\\mu} +  1/2 \\alpha_{-2}^{\\mu} \\alpha_{3}^{\\mu} +  1/2 \\alpha_{-3}^{\\mu} \\alpha_{4}^{\\mu} +  1/2 \\alpha_{-4}^{\\mu} \\alpha_{5}^{\\mu} +  1/2 \\alpha_{-5}^{\\mu} \\alpha_{6}^{\\mu} +  1/2 \\alpha_{-6}^{\\mu} \\alpha_{7}^{\\mu} +  1/2 \\alpha_{-7}^{\\mu} \\alpha_{8}^{\\mu} +  1/2 \\alpha_{-8}^{\\mu} \\alpha_{9}^{\\mu}) \\alpha_{-1}^{\\nu} \\alpha_{-1}^{\\nu} \\vac"
@@ -303,12 +331,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 3255930362658726756,
+					"cell_id": 17198388042182760043,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 17437485669658773998,
+							"cell_id": 10565969662805330463,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "2\\alpha_{-1}^{\\mu} 2**( 1/2 ) k^{\\mu} \\vac"
@@ -325,12 +353,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 15039156233200580713,
+					"cell_id": 12241043922059915674,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 9340736985588481061,
+							"cell_id": 4248673021074050225,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "2\\alpha_{-1}^{\\mu} 2**( 1/2 ) k^{\\mu} \\vac"
@@ -347,12 +375,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 15501129427192674855,
+					"cell_id": 4410946154011998020,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 6226374576339697671,
+							"cell_id": 2689499022261651208,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "-4\\alpha_{-1}^{\\mu} 2**( 1/2 ) \\vac k^{\\mu}"
@@ -390,12 +418,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 14070820097425215306,
+					"cell_id": 15834454827825811798,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 6304673547290137410,
+							"cell_id": 16722240417600047761,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "d \\vac"
@@ -412,12 +440,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 10312998182031537031,
+					"cell_id": 7882029043639400659,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 17591617784617099246,
+							"cell_id": 18010148635206813042,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "-4\\vac"
@@ -434,12 +462,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 13211734979054390442,
+					"cell_id": 17994533131016820162,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 14136152479138303223,
+							"cell_id": 938194989573903584,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "-2\\vac"
@@ -471,12 +499,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 17503869843796900854,
+					"cell_id": 15360390438951738313,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 850585183938986598,
+							"cell_id": 4556570839770677432,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "2\\alpha_{-1}^{\\mu} 2**( 1/2 ) \\vac k^{\\mu} + 2A \\alpha_{-1}^{\\mu} 2**( 1/2 ) \\vac k^{\\mu}-4B \\alpha_{-1}^{\\mu} 2**( 1/2 ) \\vac k^{\\mu} = 0"
@@ -493,12 +521,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 12621273717033695991,
+					"cell_id": 3769240763439313985,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 6408402993218470706,
+							"cell_id": 9351595465503225355,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "d \\vac-4A \\vac-2B \\vac = 0"
@@ -515,12 +543,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 16497783504713167034,
+					"cell_id": 18038967194803388301,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 15263268194888150535,
+							"cell_id": 16863990392247577039,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "(2 + 2A-4B) \\alpha_{-1}^{\\mu} 2**( 1/2 ) \\vac k^{\\mu} = 0"
@@ -537,12 +565,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 12029871467017881048,
+					"cell_id": 1139151432683509914,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 9451545783220046317,
+							"cell_id": 14203504485473513135,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "(d-4A-2B) \\vac = 0"
@@ -586,12 +614,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 6608955175430427236,
+					"cell_id": 4908847808083377204,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 17349533302715161282,
+							"cell_id": 16837415695050452478,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "{{A ->  1/5 d -  1/5 , B ->  1/10 d +  2/5 }}"

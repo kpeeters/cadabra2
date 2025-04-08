@@ -616,3 +616,49 @@ def test130():
     print("Test 130 passed")
 
 test130()
+
+def test131():
+    __cdbkernel__=create_scope()
+    ex := 2 A + 3 B + 4 C.
+    substitute(ex, $A? -> 5 A?$)
+    tst:= 10 A + 15 B + 20 C - @(ex):
+    assert(tst==0)
+    print("Test 131a passed")
+    ex := 2 A + 3 B + 4 C.
+    substitute(ex, $A? -> \theta A?$)
+    tst:= 2 \theta A + 3 \theta B + 4 \theta C - @(ex):
+    assert(tst==0)
+    print("Test 131b passed")
+    ex := 2 A Q + 3 B R + 4 C S.
+    substitute(ex, $A? -> \theta A?$)
+    tst:= 2 \theta A \theta Q + 3 \theta B \theta R + 4 \theta C \theta S - @(ex):
+    assert(tst==0)
+    print("Test 131c passed")
+    {i,j,k,l}::Indices;    
+    ex:= 2 A_{i j} + 3 B_{i j};
+    substitute(ex, $A_{k l} -> C_{k l}$)
+    tst:= 2 C_{i j} + 3 B_{i j} - @(ex):
+    assert(tst==0)
+    print("Test 131d passed")
+    {m,n}::Symbol;    
+    {m,n}::Integer;
+    ex:= 2 A_{0} A_{1};
+    substitute(ex, $A_{m} A_{n} -> A_{n} A_{m}$);
+
+test131()
+
+def test132():
+    __cdbkernel__=create_scope()
+    \alpha_{n}::SelfNonCommuting;
+    {m,n}::Integer.
+    {m,n}::Symbol.
+    \delta{#}::KroneckerDelta.
+    \delta{#}::Diagonal.
+    rl:= \alpha_{m} \alpha_{n} -> \delta_{m}_{-n} \delta^{\mu\nu};
+    ex:= \alpha_{1} \alpha_{-1} \vac;
+    substitute(ex, rl)
+    tmp:= \delta^{\mu\nu}\vac - @(ex);
+    assert(tmp==0)
+    print("Test 132 passed")
+
+test132()

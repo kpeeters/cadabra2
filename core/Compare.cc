@@ -17,15 +17,8 @@
 #include "properties/Integer.hh"
 #include "properties/SortOrder.hh"
 
-// #define DEBUG 1
-
-static bool debug_stop = false;
-
-#ifdef DEBUG
-#define DEBUGLN(ln) if(!debug_stop) { ln; }
-#else
-#define DEBUGLN(ln)
-#endif
+// #define DEBUG "Compare.cc"
+#include "Debug.hh"
 
 namespace cadabra {
 
@@ -464,7 +457,7 @@ namespace cadabra {
 #endif
 
 		DEBUGLN( std::cerr << tab() << "result = "; );
-		if(!debug_stop) {
+		DEBUGLN( 
 			switch(r) {
 				case match_t::node_match:
 					std::cerr << "node_match";
@@ -491,8 +484,7 @@ namespace cadabra {
 					std::cerr << "no_match_greater";
 					break;
 				}
-			std::cerr << std::endl;
-			}
+			std::cerr << std::endl; );
 		
 		--offset;
 		return r;
@@ -661,15 +653,15 @@ namespace cadabra {
 					const Indices *t2=0;
 					if(use_props==useprops_t::always) {
 						DEBUGLN( std::cerr << tab() << "is " << *one->name << " an index?" << std::endl; );
-						debug_stop=true;
+						DEBUGSTOP(true);
 						t1=properties.get<Indices>(one, false);
-						debug_stop=false;						
+						DEBUGSTOP(false);
 						DEBUGLN( std::cerr << tab() << "found index property for one: " << t1 << std::endl; );
 						if(two->is_rational()==false) {
 							DEBUGLN( std::cerr << tab() << "is " << *two->name << " an index?" << std::endl; );
-							debug_stop=true;
+							DEBUGSTOP(true);
 							t2=properties.get<Indices>(two, false);
-							debug_stop=false;
+							DEBUGSTOP(false);
 							DEBUGLN( std::cerr << tab() << "found index property for two: " << t2 << std::endl; );
 							// It is still possible that t2 is a Coordinate and
 							// t1 an Index which can take the value of the
@@ -745,9 +737,11 @@ namespace cadabra {
 				// that e.g a found _{z} also leads to a replacement rule for (z), or
 				// if we want that a found _{z} also leads to a replacement for ^{z},
 				// this needs to be added to the replacement map explicitly.
-
-					DEBUGLN( std::cerr << "adding " << one << " -> " << two << " to replacement map " << std::endl; );
-					replacement_map[Ex(one)]=Ex(two);
+				
+				DEBUGLN( std::cerr << "adding " << one << " -> " << two << " to replacement map " << std::endl; );
+				Ex tmp(two);
+//				cadabra::one(tmp.begin()->multiplier);
+				replacement_map[Ex(one)]=tmp;
 
 				// if this is an index, also store the pattern with the parent_rel flipped
 
@@ -811,6 +805,7 @@ namespace cadabra {
 			else return report(match_t::node_match);
 			}
 		else if(objectpattern) {
+			DEBUGLN( std::cerr << "object pattern " << one << std::endl; );
 			// Even for object patterns, if we do not ignore the parent rel, we need to test them.
 			if(!ignore_parent_rel)
 				if( one->fl.parent_rel != two->fl.parent_rel )
@@ -821,7 +816,11 @@ namespace cadabra {
 			if(loc!=subtree_replacement_map.end()) {
 				return report(equal_subtree((*loc).second,two,use_props));
 				}
-			else subtree_replacement_map[one->name]=two;
+			else {
+				DEBUGLN( std::cerr << "storing subtree replacement " << one
+							<< " -> " << two << std::endl; );
+				subtree_replacement_map[one->name]=two;
+				}
 
 			return report(match_t::subtree_match);
 			}
