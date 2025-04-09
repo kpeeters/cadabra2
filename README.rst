@@ -73,6 +73,10 @@ in a C++ program.
 See `Building a Jupyter kernel`_ for information on the Jupyter kernel
 for Cadabra sessions.
 
+See `Notes on Python paths`_ for some remarks on where Cadabra
+installs its Python modules and how this plays with various types of
+Python installations.
+
 
 Linux (Debian/Ubuntu/Mint)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -492,6 +496,35 @@ programs, you can build Cadabra as a shared library. To do this::
 There is a sample program `simple.cc
 <https://github.com/kpeeters/cadabra2/blob/master/c%2B%2Blib/simple.cc>`_
 in the `c++lib` directory which shows how to use the Cadabra library.
+
+
+Notes on Python paths
+---------------------
+
+Cadabra tries to play nice with a large variety of Python
+installations, which is not an easy task. In general, it will try to
+install in such a way that the Python interpreter which is specified
+at build time will be able to import the `cadabra2` Python module
+without any change to its path.  This is necessary so that e.g. a
+Jupyter notebook will be able to find this module.  Cadabra will
+therefore install its Python module in
+`site.getsitepackages()[0]`. Since this module constructs its
+docstrings dynamically on load, the manual pages are also stored
+relative to this module.
+
+However, Cadabra will install its binaries according to standard
+CMake logic in `$CMAKE_INSTALL_PREFIX/bin/`. On systems that have
+Python installed in subtree which is not below `$CMAKE_INSTALL_PREFIX`,
+this means that the Cadabra binaries and the Cadabra Python module
+will not be in the same subtree. This typically happens on systems
+with Python coming from Homebrew, as these will have Python somewhere
+below `/opt/homebrew` even when `$CMAKE_INSTALL_PREFIX` is `/usr/local/`.
+
+On some systems, users or package managers prefer that
+`site.getsitepackages()[0]` remains under control of the package
+manager (Homebrew is the typical example). In this case, if you do not
+want to write there, your only option is to first create a virtual
+environment before you run Cadabra's `cmake`.
 
 
 Special thanks
