@@ -10,8 +10,11 @@ defaults:
 
 jobs:
   msys2-ucrt64:
-    runs-on: windows-2022
-    name: Windows 11
+    strategy:
+      matrix:
+        os: [windows-2019, windows-2022]
+    runs-on: ${{ matrix.os }}
+    name: Windows build
     defaults:
       run:
         shell: msys2 {0}
@@ -61,7 +64,7 @@ jobs:
     - name: Upload installer
       uses: actions/upload-artifact@v4
       with:
-        name: cadabra2-win64.msi
+        name: cadabra2-win64-${{ matrix.os }}.msi
         path: build/cadabra2-${{ env.VERSION }}-win64.msi
         retention-days: 2
 
@@ -76,7 +79,7 @@ jobs:
     - name: Download installer
       uses: actions/download-artifact@v4
       with:
-        name: cadabra2-win64.msi
+        name: cadabra2-win64-$${ matrix.os }}.msi
 
     - name: Install silently
       shell: pwsh
