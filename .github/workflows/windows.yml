@@ -95,7 +95,7 @@ jobs:
     - name: Upload installation log
       uses: actions/upload-artifact@v4
       with:
-        name: install.log
+        name: install-${{ matrix.os }}.log
         path: install.log
 
     - name: Check installation location
@@ -112,7 +112,7 @@ jobs:
         Write-Host "Executable not found"
         exit 1
         }
-        $process = Start-Process "C:\Program Files\Cadabra\cadabra2-gtk.exe" -ArgumentList "-n", "C:\Program Files\Cadabra\Examples\schwarzschild.cnb" -WorkingDirectory "C:\Program Files\Cadabra" -PassThru
+        $process = Start-Process "C:\Program Files\Cadabra\cadabra2-gtk.exe" -ArgumentList "-n", "Examples\schwarzschild.cnb" -WorkingDirectory "C:\Program Files\Cadabra" -PassThru
         Start-Sleep -Seconds 120
 
         # Take screenshot
@@ -133,6 +133,6 @@ jobs:
     - name: Upload screenshot
       uses: actions/upload-artifact@v4
       with:
-        name: app-screenshot
+        name: app-screenshot-${{ matrix.os }}
         path: screenshot.png
         
