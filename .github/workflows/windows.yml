@@ -10,7 +10,7 @@ defaults:
 
 jobs:
   msys2-ucrt64:
-    runs-on: windows-latest
+    runs-on: windows-2022
     name: Windows 11
     defaults:
       run:
@@ -67,7 +67,10 @@ jobs:
 
   test:
     needs: msys2-ucrt64
-    runs-on: windows-latest
+    strategy:
+      matrix:
+        os: [windows-2019, windows-2022]
+    runs-on: ${{ matrix.os }}
     
     steps:
     - name: Download installer
