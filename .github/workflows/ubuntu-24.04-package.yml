@@ -51,10 +51,18 @@ jobs:
         echo "VERSION=$VER" >> $GITHUB_ENV
 
     - name: Upload Release Assets
+      if:   github.event_name == 'release'
       run: |
         gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-ubuntu-24.04-noble.deb --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Store package as build artifact
+      uses: actions/upload-artifact@v4
+      if:   github.event_name == 'push'
+      with:
+        name: cadabra2-ubuntu-24.04-noble.deb
+        path: build/cadabra2-${{ env.VERSION }}-ubuntu-24.04-noble.deb
 
 
   test:
@@ -62,15 +70,32 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    - name: Get and install package
+    - name: Install prerequisites for testing
       run: |
-        sudo apt install xvfb
+        sudo apt install xvfb imagemagick
+        
+    - name: Get and install package (release mode)
+      if:   github.event_name == 'release'
+      run: |
         export VERSION=$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
         export DEBNAME=cadabra2-${VERSION}-ubuntu-24.04-noble.deb
         wget https://github.com/kpeeters/cadabra2/releases/download/${VERSION}/${DEBNAME}
         sudo apt -y update
         sudo apt -y upgrade
         sudo apt -y install ./${DEBNAME}
+
+    - name: Download package (push mode)
+      uses: actions/download-artifact@v4
+      if:   github.event_name == 'push'
+      with:
+        name: cadabra2-ubuntu-24.04-noble.deb
+
+    - name: Install package (push mode)
+      if:   github.event_name == 'push'
+      run: |
+        sudo apt -y update
+        sudo apt -y upgrade
+        sudo apt -y install cadabra2-ubuntu-24.04-noble.deb
 
     - name: Test simple cli run
       run:  printf "import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n" > tst.cdb && cadabra2 tst.cdb
