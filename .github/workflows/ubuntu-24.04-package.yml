@@ -96,7 +96,7 @@ jobs:
         ls -la 
         sudo apt -y update
         sudo apt -y upgrade
-        sudo apt -y install cadabra2-ubuntu-24.04-noble.deb
+        sudo apt -y install cadabra2*.deb
 
     - name: Test simple cli run
       run:  printf "import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n" > tst.cdb && cadabra2 tst.cdb
