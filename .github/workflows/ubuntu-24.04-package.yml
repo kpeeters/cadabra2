@@ -5,11 +5,11 @@
 
 name: Ubuntu-24.04 package
 
-# on: [push]
+on: [push]
 
-on:
-  release:
-    types: [created]
+#on:
+#  release:
+#    types: [created]
 
 jobs:
   build:
@@ -75,7 +75,7 @@ jobs:
     - name: Test simple cli run
       run:  printf "import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n" > tst.cdb && cadabra2 tst.cdb
 
-    - name: Test gtk app launch
+    - name: Test gtk app launch and take screenshot
       run: |
         MESA_LOADER_DRIVER_OVERRIDE=llvmpipe LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a cadabra2-gtk &
         APP_PID=$!
@@ -83,9 +83,16 @@ jobs:
         
         if kill -0 $APP_PID 2>/dev/null; then
           echo "Application started successfully"
+          import -window root screenshot.png
           kill $APP_PID
           exit 0
         else
           echo "Application failed to start"
           exit 1
         fi
+
+    - name: Upload screenshot
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-screenshot-ubuntu-24.04
+        path: screenshot.png

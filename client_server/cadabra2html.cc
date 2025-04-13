@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 		std::cerr << "Usage: cadabra2html [--segment] [--strip-code] [cadabra notebook] [html file]\n\n";
 		std::cerr << "Convert a Cadabra v2 notebook to an HTML segment or standalone HTML file.\n"
 					 << "The '--segment' flag is used to generate output for the cadabra web site.\n"
-					 << "With '--strip-code' all Python cells will be suppressed.\n"
+					 << "With '--strip-code' all Python cells with 'def' or 'from' lines will be suppressed.\n"
 		          << "If the HTML file name is not given, output goes to standard out.\n";
 		return -1;
 		}
