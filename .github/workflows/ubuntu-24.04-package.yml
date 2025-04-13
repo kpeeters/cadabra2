@@ -93,6 +93,7 @@ jobs:
     - name: Install package (push mode)
       if:   github.event_name == 'push'
       run: |
+        ls -la 
         sudo apt -y update
         sudo apt -y upgrade
         sudo apt -y install cadabra2-ubuntu-24.04-noble.deb
