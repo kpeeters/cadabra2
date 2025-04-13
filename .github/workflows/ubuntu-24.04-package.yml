@@ -95,7 +95,6 @@ jobs:
       if:   github.event_name == 'push'
       run: |
         ls -la
-        sudo snap remove --purge firefox
         sudo apt -y update
         sudo apt -y upgrade
         sudo apt -y install ./cadabra2*.deb
@@ -111,7 +110,7 @@ jobs:
         
         if kill -0 $APP_PID 2>/dev/null; then
           echo "Application started successfully"
-          import -window root screenshot.png
+          DISPLAY=:99 import -window root screenshot.png
           kill $APP_PID
           exit 0
         else
