@@ -73,6 +73,7 @@ jobs:
     - name: Install prerequisites for testing
       run: |
         sudo apt install xvfb imagemagick
+        sudo apt-mark hold firefox
         
     - name: Get and install package (release mode)
       if:   github.event_name == 'release'
