@@ -87,18 +87,18 @@ void NotebookWindow::on_realize()
 	// Query high-dpi settings. For all systems we can probe the
 	// HiDPI scale, and for some window managers we also probe the
 	// text scale factor.
+	auto gdk_window = get_window();
 	auto display = Gdk::Display::get_default();
 	if(!display)
 		throw std::logic_error("NotebookWindow::on_realize: cannot get default display.");
 	
-	auto gdk_window = get_window();
 	auto screen = Gdk::Screen::get_default();
 	if(!screen)
 		throw std::logic_error("NotebookWindow::on_realize: cannot get default screen.");
 	
-	auto monitor = display->get_primary_monitor();
+	auto monitor = display->get_monitor_at_window(gdk_window);
 	if(!monitor)
-		throw std::logic_error("NotebookWindow::on_realize: cannot get primary monitor.");
+		throw std::logic_error("NotebookWindow::on_realize: cannot get monitor at window.");
 	
 	Gdk::Rectangle monitor_geometry;
 	monitor->get_geometry(monitor_geometry);
