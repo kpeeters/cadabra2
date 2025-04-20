@@ -58,6 +58,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry, std::s
 	, status_line(-1)
 	, status_col(-1)
 	, title_prefix(window_title)
+	, geometry_string(geometry)
 	, modified(false)
 	, read_only(ro)
 	, crash_window_hidden(true)
@@ -67,6 +68,12 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry, std::s
 	, is_configured(false)
 
 	{
+	}
+
+void NotebookWindow::on_realize()
+	{
+	Gtk::ApplicationWindow::on_realize();
+	 
 	// Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 	dispatch_refresh.connect(sigc::mem_fun(*this, &NotebookWindow::refresh_after_tex_engine_run));
@@ -798,10 +805,10 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry, std::s
 	canvasses[0]->scroll_event.connect(sigc::mem_fun(*this, &NotebookWindow::on_scroll_changed));
 
 	// Window size and title, and ready to go.
-	if(!ro) {
-		if(geometry!="") {
+	if(!read_only) {
+		if(geometry_string!="") {
 			int width = 0, height = 0, x = 0, y = 0;
-			sscanf(geometry.c_str(), "%dx%d", &width, &height);
+			sscanf(geometry_string.c_str(), "%dx%d", &width, &height);
 			// std::cerr << "GEOMETRY = " << width << " x " << height << std::endl;
 			set_default_size(width, height);
 			}

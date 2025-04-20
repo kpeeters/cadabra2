@@ -68,6 +68,9 @@ namespace cadabra {
 			double           scale; // total scale factor (hdpi and textscale)
 			double           display_scale; // hdpi scale only
 
+			// General setup.
+			void on_realize() override;
+			
 			// Handler for vertical scrollbar changes. This gets connected to
 			// all the `NotebookCanvas::scroll_event` signals.
 			bool on_scroll_changed();
@@ -191,7 +194,7 @@ namespace cadabra {
 			// Name and modification data.
 			void             update_title();
 			void             set_stop_sensitive(bool);
-			std::string      name, title_prefix;
+			std::string      name, title_prefix, geometry_string;
 			bool             modified, read_only;
 
 			// Menu and button callbacks.

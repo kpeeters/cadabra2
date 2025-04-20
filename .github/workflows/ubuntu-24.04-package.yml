@@ -104,7 +104,7 @@ jobs:
 
     - name: Test gtk app launch and take screenshot
       run: |
-        MESA_LOADER_DRIVER_OVERRIDE=llvmpipe LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a -s "-screen 0 1920x1080x24 -ac" cadabra2-gtk &
+        MESA_LOADER_DRIVER_OVERRIDE=llvmpipe LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a -s "-screen 0 1920x1080x24 -ac" cadabra2-gtk -n &
         APP_PID=$!
         sleep 10
         
