@@ -101,6 +101,7 @@ std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding, bool s
 
 std::string cadabra::latex_to_html(const std::string& str)
 	{
+	// std::cerr << "converting " << str << std::endl;
 	std::regex section(R"(\\section\*\{([^\}]*)\})");
 	std::regex author(R"(\\author\{([^\}]*)\})");
 	std::regex email(R"(\\email\{([^\}]*)\})");
@@ -137,11 +138,14 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex begin_tabular(R"(\\begin\{tabular\}\{[^\}]*\})");
 	std::regex end_tabular(R"(\\end\{tabular\})");
 	std::regex hash_in_math(R"((\\begin\{dmath\*\}.*)\\#(\\end\{dmath\*\}))");
+	std::regex verbatim_symbol(R"(\{\\texttt\{\\backslash\{\}([^\}]*)\}\})");
+//	std::regex verbatim_symbol(R"(\\texttt\{([^\}]*)\})");
 	std::string res;
 
 	try {
-		res = std::regex_replace(res, hash_in_math, "$1#$2");
-		res = std::regex_replace(str, begin_dmath, R"(\(\displaystyle)");
+		res = std::regex_replace(str, hash_in_math, "$1#$2");
+      res = std::regex_replace(res, verbatim_symbol, "$\\setminus\\texttt{$1}$");
+		res = std::regex_replace(res, begin_dmath, R"(\(\displaystyle)");
 		res = std::regex_replace(res, discretionary, " ");
 		res = std::regex_replace(res, end_dmath, R"(\))");
 		res = std::regex_replace(res, tilde, " ");
@@ -182,6 +186,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 		std::cerr << "regex error on " << str << std::endl;
 		}
 
+	// std::cerr << "to " << res << std::endl;
 	return res;
 	}
 
@@ -234,7 +239,8 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 		case DataCell::CellType::slider:
 			break;
 		case DataCell::CellType::input_form:
-			str << "<div class='input_form'>";
+			// str << "<div class='input_form'>";
+			strip_this=true;
 			break;
 		}
 
@@ -316,7 +322,8 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 		case DataCell::CellType::slider:
 			break;
 		case DataCell::CellType::input_form:
-			str << "</div>\n";
+			// str << "</div>\n";
+			break;
 		}
 	}
 
