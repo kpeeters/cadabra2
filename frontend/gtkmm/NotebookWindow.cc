@@ -73,7 +73,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry, std::s
 void NotebookWindow::on_realize()
 	{
 	Gtk::ApplicationWindow::on_realize();
-	 
+
 	// Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 	dispatch_refresh.connect(sigc::mem_fun(*this, &NotebookWindow::refresh_after_tex_engine_run));
@@ -1093,6 +1093,9 @@ void NotebookWindow::set_title_prefix(const std::string& pf)
 
 void NotebookWindow::update_title()
 	{
+	if(get_realized()==false)
+		return;
+	
 	if(name.size()>0) {
 		if(modified)
 			set_title(title_prefix+": "+name+"*");
@@ -2234,6 +2237,14 @@ void NotebookWindow::set_name(const std::string& n)
 
 void NotebookWindow::load_from_string(const std::string& notebook_contents)
 	{
+	if(get_realized()==false) {
+		// Loading new notebooks will only work if the main
+		// UI elements, in particular the `mainbox`, have been
+		// added to the window. This happens in `on_realize`,
+		// and so we have to ensure that this has run.
+		realize();
+		}
+
 	mainbox.set_sensitive(false);
 
 	DocumentThread::load_from_string(notebook_contents);
