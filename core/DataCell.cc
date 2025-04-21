@@ -196,6 +196,11 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
                            std::string title)
 	{
 	bool strip_this=false;
+
+	if(doc.hide_input_cells)
+		if(it->cell_type==DataCell::CellType::python || it->cell_type==DataCell::CellType::latex)
+			strip_this=true;
+
 	switch(it->cell_type) {
 		case DataCell::CellType::document:
 			if(!for_embedding) {

@@ -6,9 +6,10 @@ int main(int argc, char **argv)
 	{
 	if(argc<2) {
 		std::cerr << "Usage: cadabra2html [--segment] [--strip-code] [cadabra notebook] [html file]\n\n";
-		std::cerr << "Convert a Cadabra v2 notebook to an HTML segment or standalone HTML file.\n"
-					 << "The '--segment' flag is used to generate output for the cadabra web site.\n"
-					 << "With '--strip-code' all Python cells with 'def' or 'from' lines will be suppressed.\n"
+		std::cerr << "Convert a Cadabra notebook to an HTML segment or standalone HTML file.\n"
+					 << "  --segment:          generate output for the cadabra web site.\n"
+					 << "  --strip-code:       suppress Python cells with 'def' or 'from' lines.\n"
+					 << "  --hide-input-cells: suppress all input cells (overrides notebook setting).\n"
 		          << "If the HTML file name is not given, output goes to standard out.\n";
 		return -1;
 		}
@@ -16,12 +17,15 @@ int main(int argc, char **argv)
 	std::string cdb_file, html_file;
 	bool segment_only=false;
 	bool strip_code=false;
+	bool hide_input_cells=false;
 	int n=1;
 	while(n<argc) {
 		if(std::string(argv[n])=="--segment")
 			segment_only=true;
 		else if(std::string(argv[n])=="--strip-code")
 			strip_code=true;
+		else if(std::string(argv[n])=="--hide-input-cells")
+			hide_input_cells=true;
 		else if(cdb_file=="")
 			cdb_file=argv[n];
 		else
@@ -49,6 +53,8 @@ int main(int argc, char **argv)
 
 	cadabra::DTree doc;
 	JSON_deserialise(content, doc);
+	if(hide_input_cells)
+		doc.hide_input_cells=hide_input_cells;
 	std::string html = export_as_HTML(doc, segment_only, strip_code, title);
 
 	if(html_file!="") {
