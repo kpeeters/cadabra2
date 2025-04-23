@@ -31,6 +31,7 @@ set(TUTORIALS
   kaluza_klein
   plotting
   scalar_manipulations
+  ndsolve
 
   input_format
   ref_printing
@@ -352,3 +353,20 @@ add_custom_command(
    WORKING_DIRECTORY ${BOOKOUTDIR}
    COMMENT  "Creating writing_algorithms.pdf")
 add_custom_target(writing ALL echo -n DEPENDS ${BOOKOUTDIR}/writing_algorithms.pdf)
+
+add_custom_command(
+   OUTPUT   ${BOOKOUTDIR}/cadabra2_hep.pdf
+   DEPENDS  ${CMAKE_SOURCE_DIR}/doc/cadabra2_hep.tex
+   COMMAND  cp
+   ARGS     ${CMAKE_SOURCE_DIR}/doc/cadabra2_hep.tex
+            ${CMAKE_SOURCE_DIR}/doc/tableaux.sty
+            ${BOOKOUTDIR}/
+   COMMAND  pdflatex
+   ARGS     cadabra2_hep.tex
+   COMMAND  pdflatex
+   ARGS     cadabra2_hep.tex
+   COMMAND  cp
+   ARGS     cadabra2_hep.pdf ${CMAKE_SOURCE_DIR}/web2/cadabra2/source
+   WORKING_DIRECTORY ${BOOKOUTDIR}
+   COMMENT  "Creating cadabra2_hep.pdf")
+add_custom_target(hep_paper ALL echo -n DEPENDS ${BOOKOUTDIR}/cadabra2_hep.pdf)
