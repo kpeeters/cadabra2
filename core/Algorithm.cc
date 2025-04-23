@@ -37,6 +37,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "properties/Symbol.hh"
 #include "properties/Trace.hh"
 #include "properties/DependsBase.hh"
+#include "properties/NonCommuting.hh"
+#include "properties/AntiCommuting.hh"
+#include "properties/SelfNonCommuting.hh"
+#include "properties/SelfAntiCommuting.hh"
 
 #include <sstream>
 
@@ -873,6 +877,23 @@ bool Algorithm::is_nonprod_factor_in_prod(iterator it)
 			}
 		//		else return true;
 		}
+	return false;
+	}
+
+bool Algorithm::is_noncommuting(const Properties& properties, iterator it)
+	{
+	auto nc = properties.get<NonCommuting>(it);
+	if(nc) return true;
+
+	auto ac = properties.get<AntiCommuting>(it);
+	if(ac) return true;
+	
+	auto snc = properties.get<SelfNonCommuting>(it);
+	if(snc) return true;
+	
+	auto sac = properties.get<SelfAntiCommuting>(it);
+	if(sac) return true;
+
 	return false;
 	}
 

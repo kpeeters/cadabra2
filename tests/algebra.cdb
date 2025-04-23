@@ -723,4 +723,30 @@ def test36():
 
 test36()
         
-        
+def test37():
+    __cdbkernel__=create_scope()  
+    {A,X,Y}::AntiCommuting.
+    ex := X A X;
+    collect_factors(ex)
+    tst:= - X**2 A - @(ex);
+    assert(tst==0)
+    print("Test 37a passed")
+    ex := X A Y X;
+    collect_factors(ex);
+    tst:= X**2 A Y - @(ex);
+    assert(tst==0)
+    print("Test 37b passed")
+    ex := X A Y X Y;
+    collect_factors(ex);
+    tst:= X**2 A Y**2 - @(ex);
+    assert(tst==0)
+    print("Test 37c passed")
+
+# The following does *not* yet work.
+# ex:= X A**3 X;
+# collect_factors(ex);
+# tst:= - X**2 A**3 - @(ex);
+# assert(tst==0)
+# print("Test 37d passed")
+
+test37()

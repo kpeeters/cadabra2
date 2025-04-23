@@ -100,7 +100,8 @@ Algorithm::result_t collect_factors::apply(iterator& st)
 					iterator objnode2=(*thisbin2).second;
 					if(*tr.parent(objnode1)->name=="\\pow") objnode1=tr.parent(objnode1);
 					if(*tr.parent(objnode2)->name=="\\pow") objnode2=tr.parent(objnode2);
-					if(comp.can_move_adjacent(st, objnode1, objnode2)) {
+					int sign = comp.can_move_adjacent(st, objnode1, objnode2);
+					if(sign!=0) {
 						// all clear
 						assert(*((*thisbin2).second->multiplier)==1);
 						res=result_t::l_applied;
@@ -121,6 +122,10 @@ Algorithm::result_t collect_factors::apply(iterator& st)
 							tr.erase((*thisbin2).second);
 						factor_hash.erase(thisbin2);
 						thisbin2=tmp;
+
+						// Take care of any sign flips.
+						multiply(st->multiplier, sign);
+						
 						res=result_t::l_applied;
 						}
 					else ++thisbin2;

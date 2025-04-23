@@ -25,18 +25,9 @@ sympy::SympyBridge::SympyBridge(const Kernel& k, std::shared_ptr<Ex> ex)
 	{
 	Ex::iterator it=(*ex).begin();
 	while(it != (*ex).end()) {
-		auto nc = k.properties.get<NonCommuting>(it);
-		if(nc) throw RuntimeException("Cannot handle NonCommuting objects in the SymPy bridge.");
+		if(Algorithm::is_noncommuting(kernel.properties, it))
+			throw RuntimeException("Cannot handle NonCommuting/AntiCommuting objects in the SymPy bridge.");
 		
-		auto ac = k.properties.get<AntiCommuting>(it);
-		if(ac) throw RuntimeException("Cannot handle AntiCommuting objects in the SymPy bridge.");
-		
-		auto snc = kernel.properties.get<SelfNonCommuting>(it);
-		if(snc) throw RuntimeException("Cannot handle SelfNonCommuting objects in the SymPy bridge.");
-		
-		auto sac = kernel.properties.get<SelfAntiCommuting>(it);
-		if(sac) throw RuntimeException("Cannot handle SelfAntiCommuting objects in the SymPy bridge.");
-
 		++it;
 		}
 	}
@@ -97,17 +88,8 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	nxt.skip_children();
 	++nxt;
 	while(cpy != nxt) {
-		auto nc = kernel.properties.get<NonCommuting>(cpy);
-		if(nc) throw RuntimeException("Cannot handle NonCommuting objects in the SymPy bridge.");
-		
-		auto ac = kernel.properties.get<AntiCommuting>(cpy);
-		if(ac) throw RuntimeException("Cannot handle AntiCommuting objects in the SymPy bridge.");
-		
-		auto snc = kernel.properties.get<SelfNonCommuting>(cpy);
-		if(snc) throw RuntimeException("Cannot handle SelfNonCommuting objects in the SymPy bridge.");
-		
-		auto sac = kernel.properties.get<SelfAntiCommuting>(cpy);
-		if(sac) throw RuntimeException("Cannot handle SelfAntiCommuting objects in the SymPy bridge.");
+		if(Algorithm::is_noncommuting(kernel.properties, cpy))
+			throw RuntimeException("Cannot handle NonCommuting/AntiCommuting objects in the SymPy bridge.");
 		
 		++cpy;
 		}

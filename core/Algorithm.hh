@@ -146,6 +146,10 @@ namespace cadabra {
 			/// This requires that the parent is a `\prod' node.
 			static bool     is_factorlike(iterator);
 
+			/// Generic function to determine if there is any kind of non-commutativity
+			/// associated to the given object. Useful as quick check for algorithms that
+			/// do not (yet) handle non-commuting behaviour.
+			static bool is_noncommuting(const Properties&, iterator);
 
 		protected:
 			Ex& tr;
