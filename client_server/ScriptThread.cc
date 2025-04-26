@@ -109,12 +109,13 @@ void ScriptThread::on_message(websocket_server::id_type ws_id, const std::string
 			std::shared_ptr<ActionAddCell> action =
 				std::make_shared<ActionAddCell>(dc, ref_id, ActionAddCell::Position::before, true);
 			
-			action->callback = [this, ws_id, msg_serial, msg_action]() {
-				nlohmann::json msg;
-				msg["status"]="completed";
-				msg["serial"]=msg_serial;
-				msg["action"]=msg_action;
-				wserver.send(ws_id, msg.dump());
+			nlohmann::json reply_msg;
+			reply_msg["status"]="completed";
+			reply_msg["serial"]=msg_serial;
+			reply_msg["action"]=msg_action;
+			reply_msg["cell_id"]=dc.id().id;
+			action->callback = [this, ws_id, reply_msg]() {
+				wserver.send(ws_id, reply_msg.dump());
 				};
 			document->queue_action(action);
 			gui->process_data();

@@ -6,7 +6,9 @@
 
 namespace cadabra {
 
-	/// Class containing all functionality which allows users to
+	/// \ingroup scripting
+	///
+   /// Class containing all functionality which allows users to
 	/// control a running notebook client by sending it commands
 	/// via a websocket port. This can be used to script its
 	/// operations.

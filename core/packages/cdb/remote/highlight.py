@@ -20,6 +20,7 @@ class WidgetHighlighter:
         self.subtitle_window = None
         self.subtitle_x = 0
         self.subtitle_y = 0
+        self.subtitle_bottom = 20
         self.subtitle_large = False
         self.label = None
         self.loop = None
@@ -122,6 +123,7 @@ class WidgetHighlighter:
             
         # Create subtitle window
         win = Gtk.Window(type=Gtk.WindowType.POPUP)
+        self.subtitle_window = win
         win.set_app_paintable(True)
         win.set_visual(win.get_screen().get_rgba_visual())
         win.set_type_hint(Gdk.WindowTypeHint.POPUP_MENU)
@@ -164,7 +166,6 @@ class WidgetHighlighter:
         win.add(self.label)
         win.connect('draw', self.draw_subtitle)
         win.show_all()
-        self.subtitle_window = win
         self.startloop()
 
     def startloop(self):
@@ -189,7 +190,7 @@ class WidgetHighlighter:
         wx, wy = component.getPosition(pyatspi.WINDOW_COORDS)
         ww, wh = component.getSize()
         self.subtitle_x = wx + (ww - label_width) // 2 
-        self.subtitle_y = wy + wh - label_height - 20
+        self.subtitle_y = wy + wh - label_height - self.subtitle_bottom
         # print(wx, wy, ww, wh, label_width, label_height, self.subtitle_x, self.subtitle_y)
         
         self.subtitle_window.move(self.subtitle_x, self.subtitle_y)
@@ -266,14 +267,14 @@ def mark(label=""):
             print("FOUND", obj)
             highlighter.highlight_button(obj)
 
-def subtitle(txt="", large=False):
+def subtitle(txt="", large=False, bottom=20):
     global highlighter
-        
+
+    highlighter.subtitle_bottom = bottom
     if txt=="":
         highlighter.remove_subtitle()
     else:
         highlighter.subtitle(txt, large)
-            
 
 DBusGMainLoop(set_as_default=True)
         

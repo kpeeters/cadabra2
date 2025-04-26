@@ -40,7 +40,7 @@ def say_async(fname, delay):
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
 
-def say(text, subtitle=True, subtext="", delay=0, block=False):
+def say(text, subtitle=True, subtext="", delay=0, block=False, bottom=20):
     """
     Say a text. This will do the text-to-speech, then play the audio
     async. So it returns immediately after the playing starts.
@@ -64,9 +64,9 @@ def say(text, subtitle=True, subtext="", delay=0, block=False):
        
     if subtitle:
         if subtext!="":
-            cdb.remote.highlight.subtitle(subtext)
+            cdb.remote.highlight.subtitle(subtext, bottom=bottom)
         else:
-            cdb.remote.highlight.subtitle(text)
+            cdb.remote.highlight.subtitle(text, bottom=bottom)
 
     if block:
         say_proc.wait()

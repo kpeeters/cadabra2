@@ -310,8 +310,15 @@ void CodeInput::highlight_python()
 			}
 		else if (wordtype == 9) {   // End on $
 			if (cur == '$') {
-				++it;
+				// ++it;
+				auto tmp=start;
+				++tmp;
+				buf->apply_tag_by_name("comment", start, tmp);
+				++start;
 				buf->apply_tag_by_name("maths", start, it);
+				tmp = it;
+				++tmp;
+				buf->apply_tag_by_name("comment", it, tmp);
 				wordtype = 0;
 				}
 			}

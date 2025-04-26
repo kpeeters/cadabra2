@@ -22,6 +22,7 @@ class CadabraRemote:
         self.open_condition = threading.Condition()
         self.close_condition = threading.Condition()
         self.name = "cadabra2-gtk"
+        self.received_msg = {} # FIXME: need to keep a stack of messages?
 
     def start(self, extra_args=[]):
         args = [self.name]
@@ -67,8 +68,8 @@ class CadabraRemote:
     def on_message(self, ws, message):
         try:
             with self.condition:
-                msg = json.loads(message)
-                print(f"Received completion message {msg}")
+                self.received_msg = json.loads(message)
+                print(f"Received completion message {self.received_msg}")
                 self.condition.notify()
         except Exception as ex:
             print(f"Cannot parse message {message}: {ex}")
@@ -128,6 +129,8 @@ class CadabraRemote:
         if wait:
             with self.condition:
                 self.condition.wait()
+            return self.received_msg["cell_id"]
+        return 0
 
     def wait(self):
         with self.close_condition:
