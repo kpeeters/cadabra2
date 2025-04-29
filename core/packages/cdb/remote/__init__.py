@@ -119,9 +119,27 @@ class CadabraRemote:
         except:
             raise CadabraRemoteException("Connection to Cadabra notebook not open.")
 
-    def add_cell(self, content, wait=True):
+    def run_cell(self, cell_id, wait=True):
+        self.serial += 1
+        msg = { "action":   "run_cell",
+                "cell_id":  cell_id,
+                "serial":   self.serial
+               }
+        try:
+            print(f"Running cell {cell_id}")
+            self.ws.send( json.dumps(msg) )
+            if wait:
+                with self.condition:
+                    self.condition.wait()
+        except:
+            raise CadabraRemoteException("Connection to Cadabra notebook not open.")
+
+    def add_cell(self, content, cell_id=0, wait=True):
+        """ Add a cell to the notebook. If `cell_id` is non-zero,
+        and a cell with that id already exists, just update the content."""
         self.serial += 1
         msg = { "action":   "add_cell",
+                "cell_id":  cell_id,
                 "serial":   self.serial,
                 "content":  content
                }

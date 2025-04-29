@@ -85,6 +85,21 @@ void ScriptThread::on_message(websocket_server::id_type ws_id, const std::string
 			document->queue_action(action);
 			gui->process_data();
 			}
+		else if(msg_action=="run_cell") {
+			uint64_t msg_cell_id = jmsg.value("cell_id", uint64_t(0));
+			DataCell::id_t id;
+			id.id=msg_cell_id;
+			std::shared_ptr<ActionBase> action = std::make_shared<ActionRunCell>(id);
+			action->callback = [this, ws_id, msg_serial, msg_action]() {
+				nlohmann::json msg;
+				msg["status"]="completed";
+				msg["serial"]=msg_serial;
+				msg["action"]=msg_action;
+				wserver.send(ws_id, msg.dump());
+				};
+			document->queue_action(action);
+			gui->process_data();
+			}
 		else if(msg_action=="open") {
 			std::string notebook = jmsg.value("notebook", "");
 			
@@ -101,8 +116,12 @@ void ScriptThread::on_message(websocket_server::id_type ws_id, const std::string
 			}
 		else if(msg_action=="add_cell") {
 			std::string content = jmsg.value("content", "");
+			uint64_t cell_id = jmsg.value("cell_id", uint64_t(0));
 
-			DataCell dc(DataCell::CellType::python, content);
+			DataCell::id_t this_id;
+			if(cell_id!=0)
+				this_id.id=cell_id;
+			DataCell dc(this_id, DataCell::CellType::python, content);
 			DataCell::id_t ref_id;
 			ref_id.id=0; // relative to current cell
 			
