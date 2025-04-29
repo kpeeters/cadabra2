@@ -71,10 +71,12 @@ jobs:
       run: |
         VER=$(cat build/VERSION)
         echo "VERSION=$VER" >> $GITHUB_ENV
+        GITVER=$(cat build/GIT_TAG_VERSION)
+        echo "GIT_TAG_VERSION=$GITVER" >> $GITHUB_ENV
 
     - name: Upload release assets
       run: |
-        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-win64.msi --clobber
+        gh release upload "${{ env.GIT_TAG_VERSION }}" build/cadabra2-${{ env.VERSION }}-win64.msi --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

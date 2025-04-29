@@ -103,7 +103,8 @@ message(STATUS "Architecture is '${CMAKE_SYSTEM_PROCESSOR}' (package names will 
 
 # Store the version number in a build/VERSION file (so that e.g. github
 # actions can pick it up).
-file(WRITE build/VERSION       "${CADABRA_VERSION_SEM}")
+file(WRITE build/VERSION         "${CADABRA_VERSION_SEM}")
+file(WRITE build/GIT_TAG_VERSION "${CADABRA_VERSION_GITHUB_TAG}")
 
 # Notify about install directory
 if ("${CMAKE_INSTALL_PREFIX}" STREQUAL "")
