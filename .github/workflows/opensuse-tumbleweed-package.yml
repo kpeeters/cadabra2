@@ -15,7 +15,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     
     steps:
     - uses: actions/checkout@v3
@@ -76,7 +76,7 @@ jobs:
 
   test:
     needs: build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     
     steps:
     - name: Set up Docker Buildx
@@ -92,8 +92,10 @@ jobs:
            -w /workspace \
            opensuse/tumbleweed:latest \
            bash -c "
+             zypper clean --all
              zypper refresh
              zypper update
+             zypper se -s libboost_filesystem
              zypper -n install xvfb-run wget curl jq
              export VERSION=\$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
              export RPMNAME=cadabra2-\${VERSION}-tumbleweed.rpm
