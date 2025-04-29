@@ -14,7 +14,7 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v3
@@ -58,14 +58,23 @@ jobs:
         echo "VERSION=$VER" >> $GITHUB_ENV
 
     - name: Upload Release Assets
+      if:   github.event_name == 'release'
       run: |
-        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-fedora42.rpm --clobber
+        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-fedora42-${{ matrix.name }}.deb --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Store package as build artifact
+      uses: actions/upload-artifact@v4
+      if:   github.event_name == 'push'
+      with:
+        name: cadabra2-fedora42-${{ matrix.name }}.deb
+        path: build/cadabra2-${{ env.VERSION }}-fedora42.rpm
+
   test:
     needs: build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    if:   github.event_name == 'release' # only test release builds
     
     steps:
     - name: Set up Docker Buildx
@@ -83,7 +92,7 @@ jobs:
            bash -c " 
              dnf install -y xorg-x11-server-Xvfb wget curl jq
              export VERSION=\$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
-             export RPMNAME=cadabra2-\${VERSION}-fedora42.rpm
+             export RPMNAME=cadabra2-\${VERSION}-fedora42-x86_64.rpm
              wget https://github.com/kpeeters/cadabra2/releases/download/\${VERSION}/\${RPMNAME}
              dnf install -y \${RPMNAME}
              printf 'import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n' > tst.cdb
