@@ -66,7 +66,7 @@ jobs:
 
     - name: Upload release assets
       run: |
-        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-win64.exe --clobber
+        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-win64.msi --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
