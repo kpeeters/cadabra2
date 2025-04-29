@@ -14,7 +14,16 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            name: x86_64
+            display-name: "Ubuntu 24.04 x86_64"
+          - os: ubuntu-24.04-arm
+            name: arm64
+            display-name: "Ubuntu 24.04 arm64"
+    runs-on: ${{ matrix.os }}
     
     steps:
     - uses: actions/checkout@v3
@@ -53,7 +62,7 @@ jobs:
     - name: Upload Release Assets
       if:   github.event_name == 'release'
       run: |
-        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-ubuntu-24.04-noble.deb --clobber
+        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-ubuntu-24.04-noble-${{ matrix.name }}.deb --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -61,7 +70,7 @@ jobs:
       uses: actions/upload-artifact@v4
       if:   github.event_name == 'push'
       with:
-        name: cadabra2-ubuntu-24.04-noble.deb
+        name: cadabra2-ubuntu-24.04-noble-${{ matrix.name }}.deb
         path: build/cadabra2-${{ env.VERSION }}-ubuntu-24.04-noble.deb
 
 
@@ -79,7 +88,7 @@ jobs:
       if:   github.event_name == 'release'
       run: |
         export VERSION=$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
-        export DEBNAME=cadabra2-${VERSION}-ubuntu-24.04-noble.deb
+        export DEBNAME=cadabra2-${VERSION}-ubuntu-24.04-noble-x86_64.deb
         wget https://github.com/kpeeters/cadabra2/releases/download/${VERSION}/${DEBNAME}
         sudo apt -y update
         sudo apt -y upgrade
@@ -89,7 +98,7 @@ jobs:
       uses: actions/download-artifact@v4
       if:   github.event_name == 'push'
       with:
-        name: cadabra2-ubuntu-24.04-noble.deb
+        name: cadabra2-ubuntu-24.04-noble-x86_64.deb
 
     - name: Install package (push mode)
       if:   github.event_name == 'push'
