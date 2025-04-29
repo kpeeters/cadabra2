@@ -95,11 +95,11 @@ include(cmake/version.cmake)
 print_header("Building Cadabra version ${CADABRA_VERSION_SEM} (${SYSTEM_BITS}-bit)")
 message(STATUS "Build id '${CADABRA_VERSION_BUILD}' dated ${CADABRA_VERSION_DATE}")
 message(STATUS "Build mode is set to '${CMAKE_BUILD_TYPE}'")
-message(STATUS "Architecture is '${CMAKE_SYSTEM_PROCESSOR}'")
 set(STANDARD_ARCH_NAME ${CMAKE_SYSTEM_PROCESSOR})
-if(CMAKE_SYSTEM_PROCESSOR STREQUAL STREQUAL "aarch64")
+if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
   set(STANDARD_ARCH_NAME "arm64")
 endif()
+message(STATUS "Architecture is '${CMAKE_SYSTEM_PROCESSOR}' (package names will use '${STANDARD_ARCH_NAME}')")
 
 # Store the version number in a build/VERSION file (so that e.g. github
 # actions can pick it up).
