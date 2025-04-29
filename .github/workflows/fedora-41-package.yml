@@ -14,15 +14,20 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            name: x86_64
+            display-name: "Fedora 41 x86_64"
+          - os: ubuntu-24.04-arm
+            name: arm64
+            display-name: "Fedora 41 arm64"
+    runs-on: ${{ matrix.os }}
     
     steps:
     - uses: actions/checkout@v3
 
-#    - name: Exit if not on devel branch
-#      if: github.ref != 'refs/heads/devel'
-#      run: exit 1
-      
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@master
 
@@ -63,13 +68,13 @@ jobs:
 
     - name: Upload Release Assets
       run: |
-        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-fedora41.rpm --clobber
+        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-fedora41-${{ matrix.name }}.rpm --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   test:
     needs: build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     
     steps:
     - name: Set up Docker Buildx
@@ -87,7 +92,7 @@ jobs:
            bash -c " 
              dnf install -y xorg-x11-server-Xvfb wget curl jq
              export VERSION=\$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
-             export RPMNAME=cadabra2-\${VERSION}-fedora41.rpm
+             export RPMNAME=cadabra2-\${VERSION}-fedora41-x86_64.rpm
              wget https://github.com/kpeeters/cadabra2/releases/download/\${VERSION}/\${RPMNAME}
              dnf install -y \${RPMNAME}
              printf 'import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n' > tst.cdb

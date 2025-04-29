@@ -14,7 +14,16 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            name: x86_64
+            display-name: "Fedora 42 x86_64"
+          - os: ubuntu-24.04-arm
+            name: arm64
+            display-name: "Fedora 42 arm64"
+    runs-on: ${{ matrix.os }}
     
     steps:
     - uses: actions/checkout@v3
@@ -69,7 +78,7 @@ jobs:
       if:   github.event_name == 'push'
       with:
         name: cadabra2-fedora42-${{ matrix.name }}.deb
-        path: build/cadabra2-${{ env.VERSION }}-fedora42.rpm
+        path: build/cadabra2-${{ env.VERSION }}-fedora42-${{ matrix.name }}.rpm
 
   test:
     needs: build
