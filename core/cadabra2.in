@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!${Python_CDB_EXECUTABLE}
 #
 # \ingroup pythoncore
 #

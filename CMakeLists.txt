@@ -385,7 +385,18 @@ endif()
 message(STATUS "Installing binaries in ${CMAKE_INSTALL_PREFIX}/bin/")
 message(STATUS "Installing manual pages in ${CMAKE_INSTALL_PREFIX}/share/man/")
 message(STATUS "Installing fonts/icons in ${CMAKE_INSTALL_PREFIX}/share/cadabra2/")
+if("${Python_CDB_EXECUTABLE}" STREQUAL "")
+  # We start the cadabra2 python script by using the current environment,
+  # so that e.g. Fedora 42 does not hard-code the python path as a
+  # dependency. However, on macOS with Homebrew, we need to be able
+  # to override this because otherwise we will not be running in the
+  # venv which homebrew created for our package. See cadabra2.rb and
+  # cadabra2-devel.rb where this is used.
+  set(Python_CDB_EXECUTABLE "/usr/bin/env python3")
+endif()
+message(STATUS "Starting cadabra2 using '${Python_CDB_EXECUTABLE}'")
 message(STATUS "For reference:")
+message(STATUS "  Python executable (Python_EXECUTABLE)                                          ${Python_EXECUTABLE}")
 message(STATUS "  Python standard  platform-independent installation directory (Python_STDLIB)   ${Python_STDLIB}")
 message(STATUS "  Python standard  platform-dependent   installation directory (Python_STDARCH)  ${Python_STDARCH}")
 message(STATUS "  Python 3rd-party platform-independent installation directory (Python_SITELIB)  ${Python_SITELIB}")
