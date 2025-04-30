@@ -1,4 +1,4 @@
-#!${Python_EXECUTABLE}
+#!/usr/bin/env python3
 #
 # \ingroup pythoncore
 #
