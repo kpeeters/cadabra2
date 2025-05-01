@@ -990,7 +990,11 @@ inline int win32read(int *c) {
                     case 'E': /* ctrl+e, go to the end of the line */
                         *c = 5;
                         return 1;
+						 case '\\':
+							 *c = 28;
+							 return 1;
                 }
+					 printf("code = %d", (int)c);
 
                 /* Other Ctrl+KEYs ignored */
             } else {
@@ -1111,6 +1115,7 @@ enum KEY_ACTION {
     CTRL_T = 20,        /* Ctrl-t */
     CTRL_U = 21,        /* Ctrl+u */
     CTRL_W = 23,        /* Ctrl+w */
+	 CTRL_BACKSLASH = 28,/* Ctrl-backslash */
     ESC = 27,           /* Escape */
     BACKSPACE =  127    /* Backspace */
 };
@@ -2089,6 +2094,11 @@ inline void linenoiseEditDeletePrevWord(struct linenoiseState *l) {
     refreshLine(l);
 }
 
+void debug_key(int code) {
+    fprintf(stderr, "Key pressed: %d (0x%x)\n", code, code);
+    fflush(stderr);
+}
+
 /* This function is the core of the line editing capability of linenoise.
  * It expects 'fd' to be already in "raw mode" so that every key pressed
  * will be returned ASAP to read().
@@ -2150,6 +2160,7 @@ inline int linenoiseEdit(int stdin_fd, int stdout_fd, char *buf, int buflen, con
             if (c == 0) continue;
         }
 
+		  // debug_key(c);
         switch(c) {
         case ENTER:    /* enter */
             if (!history.empty()) history.pop_back();
@@ -2273,6 +2284,8 @@ inline int linenoiseEdit(int stdin_fd, int stdout_fd, char *buf, int buflen, con
         case CTRL_W: /* ctrl+w, delete previous word */
             linenoiseEditDeletePrevWord(&l);
             break;
+		  case CTRL_BACKSLASH:
+				  throw std::logic_error("SIGQUIT: program terminated.");
         }
     }
     return l.len;

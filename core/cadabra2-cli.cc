@@ -683,6 +683,10 @@ int main(int argc, char* argv[])
 		try {
 			shell.interact();
 			}
+		catch (const std::logic_error& err) {
+			shell.write_stderr("\nTerminated by user interrupt.\n");
+			return 0;
+			}
 		catch (const ExitRequest& err) {
 			if (err.code != 0) {
 				if (!err.message.empty())
