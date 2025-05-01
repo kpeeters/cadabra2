@@ -994,7 +994,6 @@ inline int win32read(int *c) {
 							 *c = 28;
 							 return 1;
                 }
-					 printf("code = %d", (int)c);
 
                 /* Other Ctrl+KEYs ignored */
             } else {
