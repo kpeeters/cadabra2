@@ -24,33 +24,6 @@
 #include <locale>
 #include <codecvt>
 
-#ifdef _WIN32
-
-std::string getRegKey(const std::string& location, const std::string& name, bool system)
-	{
-	HKEY key;
-	TCHAR value[1024]; 
-	DWORD bufLen = 1024*sizeof(TCHAR);
-	long ret;
-	ret = RegOpenKeyExA(system?HKEY_LOCAL_MACHINE:HKEY_CURRENT_USER, location.c_str(), 0, KEY_QUERY_VALUE, &key);
-	if( ret != ERROR_SUCCESS ){
-		return std::string();
-		}
-	ret = RegQueryValueExA(key, name.c_str(), 0, 0, (LPBYTE) value, &bufLen);
-	RegCloseKey(key);
-	if ( (ret != ERROR_SUCCESS) || (bufLen > 1024*sizeof(TCHAR)) ){
-		return std::string();
-		}
-	std::string stringValue = std::string(value, (size_t)bufLen - 1);
-	size_t i = stringValue.length();
-	while( i > 0 && stringValue[i-1] == '\0' ){
-		--i;
-		}
-	return stringValue.substr(0,i); 
-	}
-
-#endif
-
 using namespace linenoise;
 namespace py = pybind11;
 
@@ -102,17 +75,6 @@ void Shell::restart()
 	if (Py_IsInitialized())
 		py::finalize_interpreter();
 
-	// We need to set the PYTHONHOME on windows, otherwise you will get errors
-	// about "Could not find..."
-	// https://github.com/pybind/pybind11/issues/2369
-// #ifdef _WIN32
-// 	static auto pythonHome = boost::dll::symbol_location(Py_Initialize).parent_path().string() + "/lib/python3.11";
-// 	std::cerr << "setting PYTHONHOME = " << pythonHome << std::endl;
-// 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-// 	std::wstring wide_pythonHome = converter.from_bytes(pythonHome);
-// 	Py_SetPythonHome(wide_pythonHome.data());
-// #endif
-	
 	py::initialize_interpreter();
 	site_path = cadabra::install_prefix_of_module();
 	globals = py::globals();
@@ -614,26 +576,7 @@ void version()
 
 int main(int argc, char* argv[])
 	{
-
-#ifdef _WIN32
-//    // FIXME: duplicate of code in cadabra-server.cc
-// 	// The Anaconda people _really_ do not understand packaging...
-// 	// We are going to find out the installation path for Anaconda/Miniconda
-// 	// by querying a registry key.
-// 	std::string pythonhome=Glib::getenv("PYTHONHOME");
-// 	std::string pythonpath=Glib::getenv("PYTHONPATH");
-// 
-// 	std::string s = getRegKey(std::string("SOFTWARE\\Python\\PythonCore\\")+Python_VERSION_MAJOR+"."+Python_VERSION_MINOR+"\\InstallPath", "", false);
-// 	if(s=="") {
-// 		s = getRegKey(std::string("SOFTWARE\\Python\\PythonCore\\")+Python_VERSION_MAJOR+"."+Python_VERSION_MINOR, "", true);
-// 		}
-// 	
-// 	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + s);
-// 	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + s);
-#endif
-
-
-// Collect arguments
+   // Collect arguments
 	std::vector<std::string> opts, scripts;
 	bool accept_opts = true;
 	for (int i = 1; i < argc; ++i) {
