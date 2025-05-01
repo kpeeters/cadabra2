@@ -179,6 +179,11 @@ void Shell::execute(const std::string& code, const std::string& filename)
 
 void Shell::execute_file(const std::string& filename, bool preprocess)
 	{
+	boost::filesystem::path abs_path = boost::filesystem::absolute(filename);
+	std::string abs_path_str = abs_path.parent_path().string();
+	py::list py_path = sys.attr("path");
+	py_path.append(abs_path_str);
+	
 	bool display = !(flags & Flags::IgnoreSemicolons);
 	std::string code;
 	std::ifstream ifs(filename);
