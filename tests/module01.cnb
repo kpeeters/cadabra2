@@ -1,46 +1,52 @@
 {
-	"cells" : 
-	[
+	"cell_id": 11133545823733131797,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 9393063997868488130,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+					"cell_id": 2958649168197266717,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property PartialDerivative attached to~}\\backslash\\texttt{partial}\\{\\#\\}.\\end{dmath*}"
 				}
 			],
-			"source" : "\\partial{#}::PartialDerivative;"
+			"source": "\\partial{#}::PartialDerivative;"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 10618251854465000699,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
+					"cell_id": 7560854228305782685,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
 						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\partial_{m}(A_{n p})"
+							"cell_id": 3839881997668378415,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\partial_{m}(A_{n p})"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\partial_{m}{A_{n p}}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\partial_{m}\\!{A_{n p}}\\end{dmath*}"
 				}
 			],
-			"source" : "ex:=\\partial_{m}{A_{n p}};"
+			"source": "ex:=\\partial_{m}{A_{n p}};"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 11150854340261852790,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
+	"version": 1.0
 }

@@ -56,6 +56,10 @@ class Shell : public pybind11::scoped_interpreter {
 		void handle_error();
 		void handle_error(pybind11::error_already_set& err);
 
+		// These mimic what we do in Server.cc
+		pybind11::module             main_module;
+		pybind11::object             main_namespace;
+		// FIXME: Do we need globals?
 		pybind11::dict   globals;
 		pybind11::object sys;
 		pybind11::object py_stdout, py_stderr;

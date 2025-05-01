@@ -66,6 +66,8 @@ Shell::Shell(Flags flags)
 		throw std::runtime_error("Could not fetch globals");
 		}
 	sys = py::module::import("sys");
+	main_module = pybind11::module::import("__main__");
+	main_namespace = main_module.attr("__dict__");
 
 	// // Get sys module and append site path
 	// py::list py_path = sys.attr("path");
@@ -199,16 +201,25 @@ void Shell::execute_file(const std::string& filename, bool preprocess)
 		code = buffer.str();
 		}
 	if (preprocess) {
+		// FIXME: this duplicates code in Server.cc; separate out so we always stay consistent.
+		auto python_path = cadabra::install_prefix_of_module();
+		std::string startup =
+			"f=open(r'" + python_path + "/cadabra2_defaults.py'); "
+			"code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); "
+			"exec(code); f.close() ";
+		py::exec(startup, main_namespace);
+
 		std::string error;
-		code = "import cadabra2\nfrom cadabra2 import *\nfrom cadabra2_defaults import *\n\n" + cadabra::cdb2python_string(code, display, error);
+//		code = "import cadabra2\nfrom cadabra2 import *\nfrom cadabra2_defaults import *\n\n" + cadabra::cdb2python_string(code, display, error);
+		code = cadabra::cdb2python_string(code, display, error);
 		}
 
 	try {
-		py::exec(code, globals, globals);
+		py::exec(code, main_namespace); // globals, globals);
 		}
 	catch (py::error_already_set& err) {
 		handle_error(err);
-		throw ExitRequest("Script ended execution due to an uncaught exception");
+		throw ExitRequest("Script ended execution due to an uncaught exception: "+code);
 		}
 	}
 
