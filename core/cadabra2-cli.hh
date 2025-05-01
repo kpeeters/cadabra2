@@ -14,74 +14,71 @@
 #undef CADABRA_CLI_DEBUG_MARKER
 #endif
 
-class Shell
-{
-public:
-	enum class Flags : unsigned int
-	{
-		None             = 0x00,
-		NoBanner         = 0x01,
-		IgnoreSemicolons = 0x02,
-		NoColour         = 0x04,
-		NoReadline       = 0x08,
-	};
+class Shell : public pybind11::scoped_interpreter {
+	public:
+		enum class Flags : unsigned int {
+			None             = 0x00,
+			NoBanner         = 0x01,
+			IgnoreSemicolons = 0x02,
+			NoColour         = 0x04,
+			NoReadline       = 0x08,
+		};
+		
+		Shell(Flags flags);
+		~Shell();
+		
+		void start();
+		void interact();
+		pybind11::object evaluate(const std::string& code, const std::string& filename = "<stdin>");
+		void execute(const std::string& code, const std::string& filename = "<stdin>");
+		void execute_file(const std::string& filename, bool preprocess = true);
+		void interact_file(const std::string& filename, bool preprocess = true);
+		
+		void write_stdout(const std::string& text, const std::string& end = "\n", bool flush = false);
+		void write_stderr(const std::string& text, const std::string& end = "\n", bool flush = false);
+		
+	private:
+		void set_histfile();
+		std::string histfile;
+		std::string site_path;
 
-	Shell(Flags flags);
-	~Shell();
+		std::string str(const pybind11::handle& obj);
+		std::string repr(const pybind11::handle& obj);
+		std::string sanitize(std::string s);
 
-	void restart();
-	void interact();
-	pybind11::object evaluate(const std::string& code, const std::string& filename = "<stdin>");
-	void execute(const std::string& code, const std::string& filename = "<stdin>");
-	void execute_file(const std::string& filename, bool preprocess = true);
-	void interact_file(const std::string& filename, bool preprocess = true);
+		void process_ps1(const std::string& line);
+		void process_ps2(const std::string& line);
+		void set_completion_callback(const char* buffer, std::vector<std::string>& completions);
 
-	void write_stdout(const std::string& text, const std::string& end = "\n", bool flush = false);
-	void write_stderr(const std::string& text, const std::string& end = "\n", bool flush = false);
+		std::string get_ps1();
+		std::string get_ps2();
 
-private:
-	void set_histfile();
-	std::string histfile;
-	std::string site_path;
+		void handle_error();
+		void handle_error(pybind11::error_already_set& err);
 
-	std::string str(const pybind11::handle& obj);
-	std::string repr(const pybind11::handle& obj);
-	std::string sanitize(std::string s);
+		pybind11::dict   globals;
+		pybind11::object sys;
+		pybind11::object py_stdout, py_stderr;
+		std::string      collect;
 
-	void process_ps1(const std::string& line);
-	void process_ps2(const std::string& line);
-	void set_completion_callback(const char* buffer, std::vector<std::string>& completions);
+		const char* colour_error;
+		const char* colour_warning;
+		const char* colour_info;
+		const char* colour_success;
+		const char* colour_reset;
+		Flags flags;
+};
 
-	std::string get_ps1();
-	std::string get_ps2();
+class ExitRequest : public std::exception {
+	public:
+		ExitRequest();
+		ExitRequest(int code);
+		ExitRequest(const std::string& message);
 
-	void handle_error();
-	void handle_error(pybind11::error_already_set& err);
+		virtual const char* what() const noexcept override;
 
-	pybind11::dict globals;
-	pybind11::object sys;
-	pybind11::object py_stdout, py_stderr;
-	std::string collect;
-
-	const char* colour_error;
-	const char* colour_warning;
-	const char* colour_info;
-	const char* colour_success;
-	const char* colour_reset;
-	Flags flags;
-	};
-
-class ExitRequest : public std::exception
-{
-public:
-	ExitRequest();
-	ExitRequest(int code);
-	ExitRequest(const std::string& message);
-
-	virtual const char* what() const noexcept override;
-
-	int code;
-	std::string message;
+		int code;
+		std::string message;
 };
 
 

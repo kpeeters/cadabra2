@@ -60,34 +60,24 @@ Shell::Shell(Flags flags)
 		SetMultiLine(true);
 		}
 
-	restart();
+	site_path = cadabra::install_prefix_of_module();
+	globals = py::globals();
+	if (!globals) {
+		throw std::runtime_error("Could not fetch globals");
+		}
+	sys = py::module::import("sys");
+
+	// // Get sys module and append site path
+	// py::list py_path = sys.attr("path");
+	// py_path.append(site_path);
+	py_stdout = sys.attr("stdout");
+	py_stderr = sys.attr("stderr");
 	}
 
 Shell::~Shell()
 	{
 	if (!(flags & Flags::NoReadline))
 		SaveHistory(histfile.c_str());
-	}
-
-void Shell::restart()
-	{
-	// Cleanup previous session
-	if (Py_IsInitialized())
-		py::finalize_interpreter();
-
-	py::initialize_interpreter();
-	site_path = cadabra::install_prefix_of_module();
-	globals = py::globals();
-	if (!globals) {
-		throw std::runtime_error("Could not fetch globals");
-		}
-
-	// Get sys module and append site path
-	sys = py::module::import("sys");
-	py::list py_path = sys.attr("path");
-	py_path.append(site_path);
-	py_stdout = sys.attr("stdout");
-	py_stderr = sys.attr("stderr");
 	}
 
 void Shell::interact()
@@ -561,8 +551,6 @@ void help()
 		"  -q      --quiet               Do not display startup banner\n"
 		"  -n      --ignore-semicolons   Do not replace semicolons with calls to\n"
 		"                                display(...)\n"
-		"  -c      --chain               Share the same Python context between\n"
-		"                                scripts and interactive mode\n"
 		"  -r      --noreadline          Do not use readline libraries for input\n"
 		"  -w      --nocolor             Do not colourize output\n"
 		"          --nocolour\n"
@@ -605,7 +593,6 @@ int main(int argc, char* argv[])
 	bool force_interactive = false;
 	bool line_by_line = false;
 	bool fatal = false;
-	bool chain_scripts = false;
 	bool verbose = false;
 
 	for (const auto& opt : opts) {
@@ -632,9 +619,6 @@ int main(int argc, char* argv[])
 			version();
 			return 0;
 			}
-		else if (opt == "c" || opt == "chain") {
-			chain_scripts = true;
-			}
 		else if (opt == "V" || opt == "verbose") {
 			verbose = true;
 			}
@@ -658,8 +642,6 @@ int main(int argc, char* argv[])
 	int last_exit_code = 0;
 
 	for (const auto& script : scripts) {
-		if (!chain_scripts)
-			shell.restart();
 		try {
 			if (line_by_line)
 				shell.interact_file(script, true);
