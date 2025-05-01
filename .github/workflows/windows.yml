@@ -62,6 +62,7 @@ jobs:
         echo "VERSION=$VER" >> $GITHUB_ENV
 
     - name: Upload installer
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: cadabra2-win64-${{ matrix.os }}.msi
