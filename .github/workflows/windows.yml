@@ -12,7 +12,13 @@ jobs:
   msys2-ucrt64:
     strategy:
       matrix:
-        os: [windows-2022]
+        include:
+          - os: windows-11
+            name: x86_64
+            display-name: "Windows x86_64"
+          - os: ubuntu-24.04-arm
+            name: arm64
+            display-name: "Windows 11 arm64"
     runs-on: ${{ matrix.os }}
     name: Windows build
     defaults:
@@ -60,7 +66,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: wix.log
+        name: wix-${{ matrix.name }}.log
         path: build/_CPack_Packages/win64/WIX/wix.log
         retention-days: 2
 
@@ -72,7 +78,7 @@ jobs:
     - name: Upload installer
       uses: actions/upload-artifact@v4
       with:
-        name: cadabra2-win64-${{ matrix.os }}.msi
+        name: cadabra2-windows-${{ matrix.name }}.msi
         path: build/cadabra2-${{ env.VERSION }}-win64.msi
         retention-days: 2
 
@@ -87,7 +93,7 @@ jobs:
     - name: Download installer
       uses: actions/download-artifact@v4
       with:
-        name: cadabra2-win64-windows-2022.msi
+        name: cadabra2-windows-x86_64.msi
 #        name: cadabra2-win64-${{ matrix.os }}.msi
 
     - name: Install silently
