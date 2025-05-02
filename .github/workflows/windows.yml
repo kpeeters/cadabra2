@@ -36,6 +36,20 @@ jobs:
         c:\WiX\wix extension add --global WixToolset.UI.wixext/5.0.2
       shell: pwsh
 
+    - name: Add WiX toolkit to PATH
+      shell: bash
+      run: |
+        echo "WiX installed at ${WIX}, hopefully..."
+        echo "Listing C:/WiX/"
+        ls "C:/WiX/"
+        echo "Listing C:/WiX/bin"
+        ls "C:/WiX/bin"
+        echo "Listing Program Files (x86):"
+        ls "C:/Program Files (x86)/"
+        echo "Listing Program Files:"        
+        ls "C:/Program Files/"
+        echo "${WIX}bin" >> $GITHUB_PATH
+
     - uses: msys2/setup-msys2@v2
       with:
         msystem: ${{ matrix.msystem }}
@@ -61,32 +75,6 @@ jobs:
     - uses: actions/checkout@master
       name: Checkout source
       
-#     - name: Setup .NET (needed to install WiX tool)
-#       uses: actions/setup-dotnet@v4
-#       with:
-#         dotnet-version: '8.0.x' # Or your required SDK version
-# 
-#     - name: Verify dotnet installation and PATH
-#       run: |
-#         echo "--- Checking dotnet location ---"
-#         where dotnet
-#         echo "--- Checking dotnet version ---"
-#         dotnet --version
-#         echo "--- Checking PATH environment variable ---"
-#         echo "$env:PATH"
-#       shell: pwsh # Use powershell to match typical Windows steps
-#       continue-on-error: true # Allow workflow to continue to see PATH even if dotnet fails
-      
-    - name: Add WiX toolkit to PATH
-      shell: bash
-      run: |
-        echo "WiX installed at ${WIX}, hopefully..."
-        echo "Listing Program Files (x86):"
-        ls "C:/Program Files (x86)/"
-        echo "Listing Program Files:"        
-        ls "C:/Program Files/"
-        echo "${WIX}bin" >> $GITHUB_PATH
-
     - name: Build
       run: |
         mkdir build
