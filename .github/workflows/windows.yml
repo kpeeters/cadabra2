@@ -32,7 +32,7 @@ jobs:
     steps:
     - name: Install WiX v4/v5 Tool
       run: |
-        dotnet tool install --tool-path c:\WiX wix --version 5.0.2
+        dotnet tool install --tool-path c:\WiX\bin wix --version 5.0.2
         c:\WiX\wix extension add --global WixToolset.UI.wixext/5.0.2
       shell: pwsh
 
@@ -40,8 +40,6 @@ jobs:
       shell: bash
       run: |
         echo "WiX installed at ${WIX}, hopefully..."
-        echo "Listing C:/WiX/"
-        ls "C:/WiX/"
         echo "Listing C:/WiX/bin"
         ls "C:/WiX/bin"
         echo "Listing Program Files (x86):"
