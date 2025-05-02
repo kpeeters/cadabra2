@@ -66,6 +66,14 @@ jobs:
         ninja install
         cpack
 
+    - name: Upload cmake_install.cmake file
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: cmake_install-${{ matrix.name }}.cmake
+        path: build/cmake_install.cmake
+        retention-days: 2
+
     - name: Upload WiX log file
       if: always()
       uses: actions/upload-artifact@v4
