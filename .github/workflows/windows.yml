@@ -73,6 +73,7 @@ jobs:
       
     - name: Install WiX v4/v5 Tool
       run: dotnet tool install --global wix --version 5.x # Installs latest v5. Use 4.x for v4.
+      shell: pwsh
 
     - name: Add WiX toolkit to PATH
       shell: bash
