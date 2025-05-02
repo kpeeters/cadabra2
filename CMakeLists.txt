@@ -537,7 +537,7 @@ if(WIN32)
   install(DIRECTORY deps/ DESTINATION . FILES_MATCHING PATTERN "*.dll")      
 
   # And install a few more which, for reasons unknown, are not reported by dll.
-  install(CODE "ls /${MSYS_ENV}/bin")
+  install(CODE [[ execute_process(COMMAND ls "/${MSYS_ENV}/bin") ]] )
   winstall(FILES /${MSYS_ENV}/bin/libcharset-1.dll                DESTINATION .)
   winstall(FILES /${MSYS_ENV}/bin/librsvg-2-2.dll                 DESTINATION .)  
   winstall(FILES /${MSYS_ENV}/bin/libxml2-2.dll                   DESTINATION .)  
