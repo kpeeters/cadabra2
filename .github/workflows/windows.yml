@@ -16,8 +16,12 @@ jobs:
           - os: windows-11
             name: x86_64
             display-name: "Windows 11 x86_64"
+            msystem: ucrt64
+            midfix: ucrt-x86_64
           - os: windows-11-arm
             name: arm64
+            msystem: clangarm64
+            midfix: clang-aarch64
             display-name: "Windows 11 arm64"
     runs-on: ${{ matrix.os }}
     name: Windows build
@@ -28,20 +32,20 @@ jobs:
     steps:
     - uses: msys2/setup-msys2@v2
       with:
-        msystem: UCRT64
+        msystem: ${{ matrix.system }}
         update: true
         install: >-
           curl
           git
-          mingw-w64-ucrt-x86_64-gcc
-          mingw-w64-ucrt-x86_64-python
-          mingw-w64-ucrt-x86_64-gtkmm3
-          mingw-w64-ucrt-x86_64-boost    
-          mingw-w64-ucrt-x86_64-sqlite3
-          mingw-w64-ucrt-x86_64-cmake
-          mingw-w64-ucrt-x86_64-python-matplotlib
-          mingw-w64-ucrt-x86_64-python-sympy
-          mingw-w64-ucrt-x86_64-github-cli
+          mingw-w64-${{ env.midfix }}-gcc
+          mingw-w64-${{ env.midfix }}-python
+          mingw-w64-${{ env.midfix }}-gtkmm3
+          mingw-w64-${{ env.midfix }}-boost    
+          mingw-w64-${{ env.midfix }}-sqlite3
+          mingw-w64-${{ env.midfix }}-cmake
+          mingw-w64-${{ env.midfix }}-python-matplotlib
+          mingw-w64-${{ env.midfix }}-python-sympy
+          mingw-w64-${{ env.midfix }}-github-cli
           
     - name: Authenticate GitHub CLI
       run: gh auth setup-git
