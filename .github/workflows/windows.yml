@@ -55,6 +55,12 @@ jobs:
     - uses: actions/checkout@master
       name: Checkout source
       
+    - name: Add WiX toolkit to PATH
+      shell: bash
+      run: |
+        echo "WiX installed at ${WIX}, hopefully..."
+        echo "${WIX}bin" >> $GITHUB_PATH
+
     - name: Build
       run: |
         mkdir build
