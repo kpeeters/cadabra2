@@ -533,7 +533,9 @@ endif()
 install(TARGETS cadabra2-cli DESTINATION ${CDB_BIN_PATH})
 install(TARGETS cdb-nbtool DESTINATION ${CDB_BIN_PATH})
 message(STATUS "Triple-check binary install path ${CMAKE_INSTALL_PREFIX}/${CDB_BIN_PATH}")
-install(CODE "
+if(NOT WIN32)
+  # Windows cmake followed by wix leads to symbolic link issues, so don't.
+  install(CODE "
     set(CDB_BIN_PATH \"${CDB_BIN_PATH}\")
 
     # Remove old binary if it exists
@@ -544,7 +546,8 @@ install(CODE "
         COMMAND ${CMAKE_COMMAND} -E create_symlink cadabra2-cli cadabra2
         WORKING_DIRECTORY \"\${CMAKE_INSTALL_PREFIX}/\${CDB_BIN_PATH}\"
     )
-")
+   ")
+endif()
 install(
    FILES 
       "${PROJECT_BINARY_DIR}/packages/cadabra2_defaults.py" 
