@@ -315,11 +315,11 @@ if (NOT INSTALL_TARGETS_ONLY)
     install(DIRECTORY icons/hicolor            DESTINATION share/icons)
     install(CODE "
         execute_process(COMMAND cygpath -m \"/${MSYS_ENV}/lib/gdk-pixbuf-2.0\" OUTPUT_VARIABLE WINGDK OUTPUT_STRIP_TRAILING_WHITESPACE)
-        file(INSTALL ${WINGDK} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+        file(INSTALL ${WINGDK} DESTINATION \"${CMAKE_INSTALL_PREFIX}/lib\")
     ")
     install(CODE "
         execute_process(COMMAND touch \"/${MSYS_ENV}/share/glib-2.0\" OUTPUT_VARIABLE WINGLIB OUTPUT_STRIP_TRAILING_WHITESPACE)
-        file(INSTALL ${WINGLIB} DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
+        file(INSTALL ${WINGLIB} DESTINATION \"${CMAKE_INSTALL_PREFIX}/share\")
     ")
 
     set_property(INSTALL "${CDB_BIN_PATH}/cadabra2-gtk"
