@@ -15,8 +15,8 @@ jobs:
         include:
           - os: windows-11
             name: x86_64
-            display-name: "Windows x86_64"
-          - os: ubuntu-24.04-arm
+            display-name: "Windows 11 x86_64"
+          - os: windows-11-arm
             name: arm64
             display-name: "Windows 11 arm64"
     runs-on: ${{ matrix.os }}
