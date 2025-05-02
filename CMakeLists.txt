@@ -1,5 +1,10 @@
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
-set(CADABRA_CMAKE_VERSION 3.12)
+if(WIN32)
+  # We want to use WiX 4.x but cpack only supports that from 3.30.
+  set(CADABRA_CMAKE_VERSION 3.30)
+else()
+  set(CADABRA_CMAKE_VERSION 3.12)
+endif()
 
 # Policy settings for CMake to resolve ambiguities.
 
