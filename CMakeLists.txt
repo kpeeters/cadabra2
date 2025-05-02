@@ -39,6 +39,10 @@ if(POLICY CMP0177)
   cmake_policy(SET CMP0177 NEW)
   message(STATUS "Set CMake policy CMP0177 to NEW (destination paths are normalised)")
 endif()
+if(POLICY CMP0087)
+  cmake_policy(SET CMP0087 NEW)
+  message(STATUS "Set CMake policy CMP0089 to NEW (evaluate generator expressions in install(CODE))")
+endif()
 
 cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
 set(CMAKE_CXX_STANDARD 17)
@@ -517,7 +521,7 @@ if(WIN32)
   add_custom_command(
     OUTPUT  dummy1
     COMMAND cp core/cadabra2.pyd core/cadabra2.dll
-    COMMAND ${CMAKE_COMMAND} -E env bash -c "ldd /${MSYS_ENV}/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll core/cadabra2.dll ${LEXECUTABLES} | sed -e '/not found/d' -e '/Windows/d' -e '/System32/d' -e '/SysWOW64/d' | grep '=>' | sed -e 's/^[^=]*=>[ ]*\\([^ ]*\\).*/\\1/' | sort | uniq > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt"
+    COMMAND ${CMAKE_COMMAND} -E env "MSYS_ENV=${MSYS_ENV}" bash -c "ldd /$ENV{MSYS_ENV}/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll core/cadabra2.dll ${LEXECUTABLES} | sed -e '/not found/d' -e '/Windows/d' -e '/System32/d' -e '/SysWOW64/d' | grep '=>' | sed -e 's/^[^=]*=>[ ]*\\([^ ]*\\).*/\\1/' | sort | uniq > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt"
     COMMAND touch dummy1
     VERBATIM
     DEPENDS  core/cadabra2.pyd ${EXECUTABLES}
@@ -537,7 +541,7 @@ if(WIN32)
   install(DIRECTORY deps/ DESTINATION . FILES_MATCHING PATTERN "*.dll")      
 
   # And install a few more which, for reasons unknown, are not reported by dll.
-  install(CODE [[ execute_process(COMMAND ls "/${MSYS_ENV}/bin") ]] )
+  install(CODE "execute_process(COMMAND ls \"/${MSYS_ENV}/bin\") " )
   winstall(FILES /${MSYS_ENV}/bin/libcharset-1.dll                DESTINATION .)
   winstall(FILES /${MSYS_ENV}/bin/librsvg-2-2.dll                 DESTINATION .)  
   winstall(FILES /${MSYS_ENV}/bin/libxml2-2.dll                   DESTINATION .)  
