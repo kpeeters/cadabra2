@@ -95,11 +95,21 @@ include(cmake/version.cmake)
 print_header("Building Cadabra version ${CADABRA_VERSION_SEM} (${SYSTEM_BITS}-bit)")
 message(STATUS "Build id '${CADABRA_VERSION_BUILD}' dated ${CADABRA_VERSION_DATE}")
 message(STATUS "Build mode is set to '${CMAKE_BUILD_TYPE}'")
-set(STANDARD_ARCH_NAME ${CMAKE_SYSTEM_PROCESSOR})
+string(TOLOWER ${CMAKE_SYSTEM_PROCESSOR} STANDARD_ARCH_NAME)
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
   set(STANDARD_ARCH_NAME "arm64")
 endif()
 message(STATUS "Architecture is '${CMAKE_SYSTEM_PROCESSOR}' (package names will use '${STANDARD_ARCH_NAME}')")
+if(WIN32)
+  if("${STANDARD_ARCH_NAME}" STREQUAL "x86_64")
+    set(MSYS_ENV "ucrt64")
+    set(WIX_SHORT_ARCH "x64")
+  else()
+    set(MSYS_ENV "clangarm64")
+    set(WIX_SHORT_ARCH "arm64")
+  endif()
+  message(STATUS "MSYS environment set to ${MSYS_ENV}")
+endif()
 
 # Store the version number in a build/VERSION file (so that e.g. github
 # actions can pick it up).
@@ -507,7 +517,7 @@ if(WIN32)
   add_custom_command(
     OUTPUT  dummy1
     COMMAND cp core/cadabra2.pyd core/cadabra2.dll
-    COMMAND ${CMAKE_COMMAND} -E env bash -c "ldd /ucrt64/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll core/cadabra2.dll ${LEXECUTABLES} | sed -e '/not found/d' -e '/Windows/d' -e '/System32/d' -e '/SysWOW64/d' | grep '=>' | sed -e 's/^[^=]*=>[ ]*\\([^ ]*\\).*/\\1/' | sort | uniq > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt"
+    COMMAND ${CMAKE_COMMAND} -E env bash -c "ldd /${MSYS_ENV}/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll core/cadabra2.dll ${LEXECUTABLES} | sed -e '/not found/d' -e '/Windows/d' -e '/System32/d' -e '/SysWOW64/d' | grep '=>' | sed -e 's/^[^=]*=>[ ]*\\([^ ]*\\).*/\\1/' | sort | uniq > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt"
     COMMAND touch dummy1
     VERBATIM
     DEPENDS  core/cadabra2.pyd ${EXECUTABLES}
@@ -527,33 +537,33 @@ if(WIN32)
   install(DIRECTORY deps/ DESTINATION . FILES_MATCHING PATTERN "*.dll")      
 
   # And install a few more which, for reasons unknown, are not reported by dll.
-  winstall(FILES /ucrt64/bin/libcharset-1.dll                DESTINATION .)
-  winstall(FILES /ucrt64/bin/librsvg-2-2.dll                 DESTINATION .)  
-  winstall(FILES /ucrt64/bin/libxml2-2.dll                   DESTINATION .)  
-  winstall(FILES /ucrt64/bin/liblzma-5.dll                   DESTINATION .)
+  winstall(FILES /${MSYS_ENV}/bin/libcharset-1.dll                DESTINATION .)
+  winstall(FILES /${MSYS_ENV}/bin/librsvg-2-2.dll                 DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libxml2-2.dll                   DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/liblzma-5.dll                   DESTINATION .)
   # FIXME: these can be found by running ldd on numpy and matplotlib dlls.
-  winstall(FILES /ucrt64/bin/libopenblas.dll                 DESTINATION .)  
-  winstall(FILES /ucrt64/bin/libgomp-1.dll                   DESTINATION .)  
-  winstall(FILES /ucrt64/bin/libgfortran-5.dll               DESTINATION .)  
-  winstall(FILES /ucrt64/bin/libquadmath-0.dll               DESTINATION .)  
-  winstall(FILES /ucrt64/bin/libsharpyuv-0.dll               DESTINATION .)  
-  winstall(FILES /ucrt64/bin/libjpeg-8.dll                   DESTINATION .)  
-  winstall(FILES /ucrt64/bin/libtiff-6.dll                   DESTINATION .)  
-  winstall(FILES /ucrt64/bin/libdeflate.dll                  DESTINATION .)  
-  winstall(FILES /ucrt64/bin/libjbig-0.dll                   DESTINATION .)  
-  winstall(FILES /ucrt64/bin/libLerc.dll                     DESTINATION .)  
-  winstall(FILES /ucrt64/bin/libwebp-7.dll                   DESTINATION .)  
-  winstall(FILES /ucrt64/bin/libzstd.dll                     DESTINATION .)  
-  winstall(FILES /ucrt64/bin/libimagequant.dll               DESTINATION .)  
-  winstall(FILES /ucrt64/bin/libopenjp2-7.dll                DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libopenblas.dll                 DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libgomp-1.dll                   DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libgfortran-5.dll               DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libquadmath-0.dll               DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libsharpyuv-0.dll               DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libjpeg-8.dll                   DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libtiff-6.dll                   DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libdeflate.dll                  DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libjbig-0.dll                   DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libLerc.dll                     DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libwebp-7.dll                   DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libzstd.dll                     DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libimagequant.dll               DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libopenjp2-7.dll                DESTINATION .)  
   
   # We need gdbus to setup the dbus, needed by Glib, otherwise anything
   # gtk-related will just bail out at start. We also need the helper
   # program to spawn programs using Glib.
-  winstall(FILES /ucrt64/bin/gdbus.exe                       DESTINATION .)
-  winstall(FILES /ucrt64/bin/gspawn-win64-helper.exe         DESTINATION .)
-  winstall(FILES /ucrt64/bin/gspawn-win64-helper-console.exe DESTINATION .)
-  winstall(FILES /ucrt64/bin/gdk-pixbuf-query-loaders.exe    DESTINATION .)
+  winstall(FILES /${MSYS_ENV}/bin/gdbus.exe                       DESTINATION .)
+  winstall(FILES /${MSYS_ENV}/bin/gspawn-win64-helper.exe         DESTINATION .)
+  winstall(FILES /${MSYS_ENV}/bin/gspawn-win64-helper-console.exe DESTINATION .)
+  winstall(FILES /${MSYS_ENV}/bin/gdk-pixbuf-query-loaders.exe    DESTINATION .)
 endif()
     
 #---------------------------------------------------------------------------

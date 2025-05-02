@@ -521,7 +521,7 @@ endif()
 
 if(WIN32)
   # Install the Python runtime packages.
-  set(PYLIBDIR "/ucrt64/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}")
+  set(PYLIBDIR "/${MSYS_ENV}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}")
   execute_process(
     COMMAND         cygpath -m ${PYLIBDIR}
     OUTPUT_VARIABLE WINPYTHON
