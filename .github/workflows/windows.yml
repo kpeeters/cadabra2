@@ -32,20 +32,20 @@ jobs:
     steps:
     - uses: msys2/setup-msys2@v2
       with:
-        msystem: ${{ matrix.system }}
+        msystem: ${{ matrix.msystem }}
         update: true
         install: >-
           curl
           git
-          mingw-w64-${{ env.midfix }}-gcc
-          mingw-w64-${{ env.midfix }}-python
-          mingw-w64-${{ env.midfix }}-gtkmm3
-          mingw-w64-${{ env.midfix }}-boost    
-          mingw-w64-${{ env.midfix }}-sqlite3
-          mingw-w64-${{ env.midfix }}-cmake
-          mingw-w64-${{ env.midfix }}-python-matplotlib
-          mingw-w64-${{ env.midfix }}-python-sympy
-          mingw-w64-${{ env.midfix }}-github-cli
+          mingw-w64-${{ matrix.midfix }}-gcc
+          mingw-w64-${{ matrix.midfix }}-python
+          mingw-w64-${{ matrix.midfix }}-gtkmm3
+          mingw-w64-${{ matrix.midfix }}-boost    
+          mingw-w64-${{ matrix.midfix }}-sqlite3
+          mingw-w64-${{ matrix.midfix }}-cmake
+          mingw-w64-${{ matrix.midfix }}-python-matplotlib
+          mingw-w64-${{ matrix.midfix }}-python-sympy
+          mingw-w64-${{ matrix.midfix }}-github-cli
           
     - name: Authenticate GitHub CLI
       run: gh auth setup-git
