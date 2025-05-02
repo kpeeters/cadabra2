@@ -59,7 +59,7 @@ jobs:
       shell: bash
       run: |
         echo "WiX installed at ${WIX}, hopefully..."
-        ls "C:\Program Files (x86)\"
+        ls "C:/Program Files (x86)/"
         echo "${WIX}bin" >> $GITHUB_PATH
 
     - name: Build
