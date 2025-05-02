@@ -59,6 +59,9 @@ jobs:
       shell: bash
       run: |
         echo "WiX installed at ${WIX}, hopefully..."
+        echo "Listing Program Files (x86):"
+        ls "C:/Program Files (x86)/"
+        echo "Listing Program Files:"        
         ls "C:/Program Files (x86)/"
         echo "${WIX}bin" >> $GITHUB_PATH
 
