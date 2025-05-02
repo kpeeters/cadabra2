@@ -55,6 +55,11 @@ jobs:
     - uses: actions/checkout@master
       name: Checkout source
       
+    - name: Setup WiX Toolset v3
+      uses: wixtoolset/setup-wixtoolset@v1
+      with:
+        wix-version: '3.x' # Or '3.x' for latest v3
+
     - name: Add WiX toolkit to PATH
       shell: bash
       run: |
