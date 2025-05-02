@@ -55,21 +55,21 @@ jobs:
     - uses: actions/checkout@master
       name: Checkout source
       
-    - name: Setup .NET (needed to install WiX tool)
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x' # Or your required SDK version
-
-    - name: Verify dotnet installation and PATH
-      run: |
-        echo "--- Checking dotnet location ---"
-        where dotnet
-        echo "--- Checking dotnet version ---"
-        dotnet --version
-        echo "--- Checking PATH environment variable ---"
-        echo "$env:PATH"
-      shell: pwsh # Use powershell to match typical Windows steps
-      continue-on-error: true # Allow workflow to continue to see PATH even if dotnet fails
+#     - name: Setup .NET (needed to install WiX tool)
+#       uses: actions/setup-dotnet@v4
+#       with:
+#         dotnet-version: '8.0.x' # Or your required SDK version
+# 
+#     - name: Verify dotnet installation and PATH
+#       run: |
+#         echo "--- Checking dotnet location ---"
+#         where dotnet
+#         echo "--- Checking dotnet version ---"
+#         dotnet --version
+#         echo "--- Checking PATH environment variable ---"
+#         echo "$env:PATH"
+#       shell: pwsh # Use powershell to match typical Windows steps
+#       continue-on-error: true # Allow workflow to continue to see PATH even if dotnet fails
       
     - name: Install WiX v4/v5 Tool
       run: dotnet tool install --global wix --version 5.x # Installs latest v5. Use 4.x for v4.
