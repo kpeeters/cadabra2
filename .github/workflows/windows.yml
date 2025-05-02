@@ -33,7 +33,7 @@ jobs:
     - name: Install WiX v4/v5 Tool
       run: |
         dotnet tool install --tool-path c:\WiX\bin wix --version 5.0.2
-        c:\WiX\wix extension add --global WixToolset.UI.wixext/5.0.2
+        c:\WiX\bin\wix extension add --global WixToolset.UI.wixext/5.0.2
       shell: pwsh
 
     - name: Add WiX toolkit to PATH
