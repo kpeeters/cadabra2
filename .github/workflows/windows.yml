@@ -74,6 +74,22 @@ jobs:
         path: build/cmake_install.cmake
         retention-days: 2
 
+    - name: Upload frontend/cmake_install.cmake file
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: frontend-cmake_install-${{ matrix.name }}.cmake
+        path: build/frontend/cmake_install.cmake
+        retention-days: 2
+        
+    - name: Upload frontend/gtkmm/cmake_install.cmake file
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: frontend-gtkmm-cmake_install-${{ matrix.name }}.cmake
+        path: build/frontend/gtkmm/cmake_install.cmake
+        retention-days: 2
+        
     - name: Upload WiX log file
       if: always()
       uses: actions/upload-artifact@v4
