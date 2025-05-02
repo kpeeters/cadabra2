@@ -62,7 +62,7 @@ jobs:
         echo "Listing Program Files (x86):"
         ls "C:/Program Files (x86)/"
         echo "Listing Program Files:"        
-        ls "C:/Program Files (x86)/"
+        ls "C:/Program Files/"
         echo "${WIX}bin" >> $GITHUB_PATH
 
     - name: Build
