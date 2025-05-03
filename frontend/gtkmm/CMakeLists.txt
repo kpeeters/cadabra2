@@ -313,14 +313,16 @@ if (NOT INSTALL_TARGETS_ONLY)
     install(DIRECTORY theme/Windows10          DESTINATION share/themes)
     install(DIRECTORY icons/Adwaita            DESTINATION share/icons)
     install(DIRECTORY icons/hicolor            DESTINATION share/icons)
-    install(CODE "
-        execute_process(COMMAND cygpath -m \"/${MSYS_ENV}/lib/gdk-pixbuf-2.0\" OUTPUT_VARIABLE WINGDK OUTPUT_STRIP_TRAILING_WHITESPACE)
-        file(INSTALL ${WINGDK} DESTINATION \"${CMAKE_INSTALL_PREFIX}/lib\")
-    ")
-    install(CODE "
-        execute_process(COMMAND touch \"/${MSYS_ENV}/share/glib-2.0\" OUTPUT_VARIABLE WINGLIB OUTPUT_STRIP_TRAILING_WHITESPACE)
-        file(INSTALL ${WINGLIB} DESTINATION \"${CMAKE_INSTALL_PREFIX}/share\")
-    ")
+    winstall(DIRECTORY /${MSYS_ENV}/lib/gdk-pixbuf-2.0  DESTINATION  lib)
+    winstall(DIRECTORY /${MSYS_ENV}/share/glib-2.0      DESTINATION  share)
+#     install(CODE "
+#         execute_process(COMMAND cygpath -m \"/${MSYS_ENV}/lib/gdk-pixbuf-2.0\" OUTPUT_VARIABLE WINGDK OUTPUT_STRIP_TRAILING_WHITESPACE)
+#         file(INSTALL ${WINGDK} DESTINATION \"${CMAKE_INSTALL_PREFIX}/lib\")
+#     ")
+#     install(CODE "
+#         execute_process(COMMAND touch \"/${MSYS_ENV}/share/glib-2.0\" OUTPUT_VARIABLE WINGLIB OUTPUT_STRIP_TRAILING_WHITESPACE)
+#         file(INSTALL ${WINGLIB} DESTINATION \"${CMAKE_INSTALL_PREFIX}/share\")
+#     ")
 
     set_property(INSTALL "${CDB_BIN_PATH}/cadabra2-gtk"
       PROPERTY CPACK_START_MENU_SHORTCUTS "Cadabra"

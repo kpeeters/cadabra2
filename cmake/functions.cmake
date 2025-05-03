@@ -23,11 +23,11 @@ endmacro()
 
 # Macro just like `install`, but converting the path from a unix
 # path to a windows path using `cygpath`.
-macro(winstall TMP1 FILE TMP2 DEST)
+macro(winstall TYPE FILE TMP2 DEST)
   execute_process(COMMAND cygpath -m ${FILE} OUTPUT_VARIABLE WFILE OUTPUT_STRIP_TRAILING_WHITESPACE)
   if(EXISTS ${WFILE})
-    install(FILES ${WFILE} DESTINATION ${DEST})
+    install(TYPE ${WFILE} DESTINATION ${DEST})
   else()
-    message(STATUS "WARNING: file ${WFILE} not present, skipping installation")
+    message(STATUS "WARNING: file/dir ${WFILE} not present, skipping installation")
   endif()
 endmacro()
