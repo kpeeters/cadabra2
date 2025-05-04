@@ -148,7 +148,7 @@ jobs:
     - name: Download installer
       uses: actions/download-artifact@v4
       with:
-        name: cadabra2-windows-${{ matrix.os }}.msi
+        name: cadabra2-windows-${{ matrix.name }}.msi
 
     - name: Install silently
       shell: pwsh

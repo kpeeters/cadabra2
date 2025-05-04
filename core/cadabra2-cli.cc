@@ -97,7 +97,9 @@ void Shell::interact()
 		write_stdout("Cadabra " CADABRA_VERSION_FULL " (build " CADABRA_VERSION_BUILD
 						 " dated " CADABRA_VERSION_DATE ")");
 		write_stdout("Copyright (C) " COPYRIGHT_YEARS "  Kasper Peeters <info@cadabra.science>");
-		write_stdout("Using SymPy version " + str(evaluate("sympy.__version__")));
+		write_stdout("Info at https://cadabra.science/");
+		write_stdout("Available under the terms of the GNU GPL v3.");
+		write_stdout("Using SymPy version " + str(evaluate("sympy.__version__"))+".");
 		}
 
 	// Input-output loop
