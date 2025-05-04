@@ -486,7 +486,8 @@ void Shell::handle_error()
 
 void Shell::handle_error(py::error_already_set& err)
 	{
-	if (err.matches(PyExc_SystemExit)) {
+	if(err.matches(PyExc_SystemExit)) {
+		std::cerr << "SystemExit" << std::endl;
 		auto value = err.value();
 		if (PyExceptionInstance_Check(value.ptr())) {
 			_Py_Identifier PyId_code;
