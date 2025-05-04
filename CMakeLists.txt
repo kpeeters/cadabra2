@@ -526,10 +526,12 @@ if(WIN32)
   # folder ready to be processed by `install`. The 'ldd' command does not
   # run on the '*.pyd' file, but if we rename or copy it to have extension '.dll'
   # all goes through fine...
+  set(LDDSTR "ldd /${MSYS_ENV}/lib/gdk-pixbuf-2.0/2.10.0/loaders/pixbufloader_svg.dll core/cadabra2.dll ${LEXECUTABLES} | sed -e '/not found/d' -e '/Windows/d' -e '/System32/d' -e '/SysWOW64/d' | grep '=>' | sed -e 's/^[^=]*=>[ ]*\\([^ ]*\\).*/\\1/' | sort | uniq > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt")
+  message(STATUS "Determining dependencies using command ${LDDSTR}")
   add_custom_command(
     OUTPUT  dummy1
     COMMAND cp core/cadabra2.pyd core/cadabra2.dll
-    COMMAND ${CMAKE_COMMAND} -E env bash -c "ldd /${MSYS_ENV}/lib/gdk-pixbuf-2.0/2.10.0/loaders/pixbufloader_svg.dll core/cadabra2.dll ${LEXECUTABLES} | sed -e '/not found/d' -e '/Windows/d' -e '/System32/d' -e '/SysWOW64/d' | grep '=>' | sed -e 's/^[^=]*=>[ ]*\\([^ ]*\\).*/\\1/' | sort | uniq > ${CMAKE_BINARY_DIR}/ldd_dependencies.txt"
+    COMMAND ${CMAKE_COMMAND} -E env bash -c "${LDDSTR}"
     COMMAND touch dummy1
     VERBATIM
     DEPENDS  core/cadabra2.pyd ${EXECUTABLES}
@@ -569,6 +571,10 @@ if(WIN32)
   winstall(FILES /${MSYS_ENV}/bin/libzstd.dll                     DESTINATION .)  
   winstall(FILES /${MSYS_ENV}/bin/libimagequant.dll               DESTINATION .)  
   winstall(FILES /${MSYS_ENV}/bin/libopenjp2-7.dll                DESTINATION .)  
+
+  # These are necessary only on ARM64.
+  winstall(FILES /${MSYS_ENV}/bin/libgmp-10.dll                   DESTINATION .)  
+  winstall(FILES /${MSYS_ENV}/bin/libgmpxx-4.dll                  DESTINATION .)  
   
   # We need gdbus to setup the dbus, needed by Glib, otherwise anything
   # gtk-related will just bail out at start. We also need the helper
