@@ -487,25 +487,22 @@ void Shell::handle_error()
 void Shell::handle_error(py::error_already_set& err)
 	{
 	if(err.matches(PyExc_SystemExit)) {
-		std::cerr << "SystemExit" << std::endl;
 		auto value = err.value();
-		if (PyExceptionInstance_Check(value.ptr())) {
-			_Py_Identifier PyId_code;
-			PyId_code.string = "code";
-#if PY_VERSION_HEX < 0x030a0000
-			PyId_code.object = 0;
-			PyId_code.next = 0;
-#endif
-			PyObject* code = _PyObject_GetAttrId(value.ptr(), &PyId_code);
-			if (code)
+		if(PyExceptionInstance_Check(value.ptr())) {
+			py::object code = py::reinterpret_borrow<py::object>(value.ptr()).attr("code");
+			if (code) {
 				value = py::reinterpret_borrow<py::object>(code);
+				}
 			}
-		if (!value || value.is_none())
+		if (!value || value.is_none()) {
 			throw ExitRequest{};
-		else if (PyLong_Check(value.ptr()))
+			}
+		else if(PyLong_Check(value.ptr())) {
 			throw ExitRequest{ static_cast<int>(PyLong_AsLong(value.ptr())) };
-		else
+			}
+		else {
 			throw ExitRequest{ str(value) };
+			}
 		}
 	else {
 		err.restore();
