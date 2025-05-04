@@ -9,6 +9,8 @@
 #ifdef _WIN32
 #include <Windows.h>
 #include <stdlib.h>
+#include <fstream>
+#include <streambuf>
 #endif
 
 #include <iostream>
