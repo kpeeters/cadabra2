@@ -131,6 +131,7 @@ jobs:
   test:
     needs: msys2-ucrt64
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: windows-2022
@@ -202,6 +203,13 @@ jobs:
         # Cleanup
         Stop-Process -Id $process.Id -Force
       
+    - name: Upload cadabra_log.txt
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: cadabra_log-${{ matrix.os }}.txt
+        path: C:\Windows\Temp\cadabra_log.txt
+
     - name: Upload screenshot
       uses: actions/upload-artifact@v4
       with:

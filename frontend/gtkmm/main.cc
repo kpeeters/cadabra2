@@ -21,7 +21,14 @@
 int main(int argc, char **argv)
 	{
 #ifdef _WIN32
-// Disable console creation
+   // We are going to disable console creation. However,
+	// that also kills any output to stdout or stderr, which may
+	// have been useful in case of missing dlls or other errors.
+	// Write them to a log file.
+	std::ofstream logFile("C:\\Windows\\Temp\\cadabra_log.txt");
+	std::streambuf* oldCout = std::cout.rdbuf(logFile.rdbuf());
+	std::streambuf* oldCerr = std::cerr.rdbuf(logFile.rdbuf());
+	
 	FreeConsole();
 #endif
 	
@@ -37,6 +44,11 @@ int main(int argc, char **argv)
 	catch (std::exception& ex) {
 		std::cerr << ex.what() << std::endl;
 		}
+
+#ifdef _WIN32
+	std::cout.rdbuf(oldCout);
+	std::cerr.rdbuf(oldCerr);
+#endif
 	}
 
 // #if defined(_WIN32) && defined(NDEBUG)
