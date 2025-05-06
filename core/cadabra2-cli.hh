@@ -70,6 +70,7 @@ class Shell : public pybind11::scoped_interpreter {
 		const char* colour_info;
 		const char* colour_success;
 		const char* colour_reset;
+		const char* colour_bold;
 		Flags flags;
 };
 
