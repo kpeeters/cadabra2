@@ -16,29 +16,60 @@ defaults:
 
 jobs:
   msys2-ucrt64:
-    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - os: windows-2022
+            name: x86_64
+            display-name: "Windows 11 x86_64"
+            msystem: ucrt64
+            midfix: ucrt-x86_64
+          - os: windows-11-arm
+            name: arm64
+            msystem: clangarm64
+            midfix: clang-aarch64
+            display-name: "Windows 11 arm64"
+    runs-on: ${{ matrix.os }}
     name: Windows 11
     defaults:
       run:
         shell: msys2 {0}
 
     steps:
+    - name: Install WiX v4/v5 Tool
+      run: |
+        dotnet tool install --tool-path c:\WiX\bin wix --version 5.0.2
+        c:\WiX\bin\wix extension add --global WixToolset.UI.wixext/5.0.2
+      shell: pwsh
+
+    - name: Add WiX toolkit to PATH
+      shell: bash
+      run: |
+        echo "WiX installed at ${WIX}, hopefully..."
+        echo "Listing C:/WiX/bin"
+        ls "C:/WiX/bin"
+        echo "Listing Program Files (x86):"
+        ls "C:/Program Files (x86)/"
+        echo "Listing Program Files:"        
+        ls "C:/Program Files/"
+        echo "${WIX}bin" >> $GITHUB_PATH
+
     - uses: msys2/setup-msys2@v2
       with:
-        msystem: UCRT64
+        msystem: ${{ matrix.msystem }}
         update: true
         install: >-
           curl
           git
-          mingw-w64-ucrt-x86_64-gcc
-          mingw-w64-ucrt-x86_64-python
-          mingw-w64-ucrt-x86_64-gtkmm3
-          mingw-w64-ucrt-x86_64-boost    
-          mingw-w64-ucrt-x86_64-sqlite3
-          mingw-w64-ucrt-x86_64-cmake
-          mingw-w64-ucrt-x86_64-python-matplotlib
-          mingw-w64-ucrt-x86_64-python-sympy
-          mingw-w64-ucrt-x86_64-github-cli
+          mingw-w64-${{ matrix.midfix }}-gcc
+          mingw-w64-${{ matrix.midfix }}-python
+          mingw-w64-${{ matrix.midfix }}-gtkmm3
+          mingw-w64-${{ matrix.midfix }}-boost    
+          mingw-w64-${{ matrix.midfix }}-sqlite3
+          mingw-w64-${{ matrix.midfix }}-cmake
+          mingw-w64-${{ matrix.midfix }}-python-matplotlib
+          mingw-w64-${{ matrix.midfix }}-python-sympy
+          mingw-w64-${{ matrix.midfix }}-github-cli
           
     - name: Authenticate GitHub CLI
       run: gh auth setup-git

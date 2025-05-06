@@ -1,8 +1,12 @@
-# Test the build on Windows; does not create any assets.
+# Create Windows installer on a github push or release event
+# (upload to the release assets in the latter case).
 
 name: Windows 11
 
-on: [push]
+on:
+  push:
+  release:
+    types: [created]
 
 defaults:
     run:
@@ -121,12 +125,20 @@ jobs:
         VER=$(cat build/VERSION)
         echo "VERSION=$VER" >> $GITHUB_ENV
 
-    - name: Upload installer
+    - name: Upload installer as build artifact
       uses: actions/upload-artifact@v4
       with:
         name: cadabra2-windows-${{ matrix.name }}.msi
         path: build/cadabra2-${{ env.VERSION }}-win64.msi
         retention-days: 2
+
+    - name: Upload release assets
+      if:   github.event_name == 'release'
+      run: |
+        mv build/cadabra2-${{ env.VERSION }}-win64.msi build/cadabra2-${{ env.VERSION }}-windows-${{ matrix.name }}.msi
+        gh release upload "${{ env.GIT_TAG_VERSION }}" build/cadabra2-${{ env.VERSION }}-windows-${{ matrix.name }}.msi --clobber
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   test:
     needs: msys2-ucrt64

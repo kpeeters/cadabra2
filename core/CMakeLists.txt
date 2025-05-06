@@ -539,12 +539,12 @@ if(NOT WIN32)
     set(CDB_BIN_PATH \"${CDB_BIN_PATH}\")
 
     # Remove old binary if it exists
-    file(REMOVE \"\${CMAKE_INSTALL_PREFIX}/\${CDB_BIN_PATH}/cadabra2\")
+    file(REMOVE \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/\${CDB_BIN_PATH}/cadabra2\")
     
     # Create symbolic link
     execute_process(
         COMMAND ${CMAKE_COMMAND} -E create_symlink cadabra2-cli cadabra2
-        WORKING_DIRECTORY \"\${CMAKE_INSTALL_PREFIX}/\${CDB_BIN_PATH}\"
+        WORKING_DIRECTORY \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/\${CDB_BIN_PATH}\"
     )
    ")
 endif()
