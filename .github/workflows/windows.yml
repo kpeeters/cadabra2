@@ -124,6 +124,8 @@ jobs:
       run: |
         VER=$(cat build/VERSION)
         echo "VERSION=$VER" >> $GITHUB_ENV
+        GITVER=$(cat build/GIT_TAG_VERSION)
+        echo "GIT_TAG_VERSION=$GITVER" >> $GITHUB_ENV
 
     - name: Upload installer as build artifact
       uses: actions/upload-artifact@v4
@@ -135,8 +137,8 @@ jobs:
     - name: Upload release assets
       if:   github.event_name == 'release'
       run: |
-        mv build/cadabra2-${{ env.VERSION }}-win64.msi build/cadabra2-${{ env.VERSION }}-windows-${{ matrix.name }}.msi
-        gh release upload "${{ env.GIT_TAG_VERSION }}" build/cadabra2-${{ env.VERSION }}-windows-${{ matrix.name }}.msi --clobber
+        mv build/cadabra2-${{ env.VERSION }}-win64.msi build/cadabra2-${{ env.GIT_TAG_VERSION }}-windows-${{ matrix.name }}.msi
+        gh release upload "${{ env.GIT_TAG_VERSION }}" build/cadabra2-${{ env.GIT_TAG_VERSION }}-windows-${{ matrix.name }}.msi --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
