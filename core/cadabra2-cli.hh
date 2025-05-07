@@ -22,6 +22,7 @@ class Shell : public pybind11::scoped_interpreter {
 			IgnoreSemicolons = 0x02,
 			NoColour         = 0x04,
 			NoReadline       = 0x08,
+			TeXmacs          = 0x10
 		};
 		
 		Shell(Flags flags);

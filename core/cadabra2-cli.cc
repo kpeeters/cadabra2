@@ -104,6 +104,10 @@ void Shell::interact()
 		write_stdout("Using SymPy version " + str(evaluate("sympy.__version__"))+".");
 		}
 
+	if( flags & Flags::TeXmacs ) {
+		globals["server"].attr("texmacs")=true;
+		}
+
 	// Input-output loop
 	bool(*get_input)(const std::string&, std::string&);
 	if (flags & Flags::NoReadline)
@@ -457,6 +461,9 @@ void Shell::set_completion_callback(const char* buffer, std::vector<std::string>
 
 std::string Shell::get_ps1()
 	{
+	if( flags & Flags::TeXmacs )
+		return "";
+	
 	if(py::hasattr(sys, "ps1")==false)
 		sys.attr("ps1") = "> ";
 	auto ps1 = sys.attr("ps1");
@@ -465,6 +472,9 @@ std::string Shell::get_ps1()
 
 std::string Shell::get_ps2()
 	{
+	if( flags & Flags::TeXmacs )
+		return "";
+
 	if(pybind11::hasattr(sys, "ps2")==false)
 		sys.attr("ps2") = ". ";
 	auto ps2 = sys.attr("ps2");
@@ -637,6 +647,10 @@ int main(int argc, char* argv[])
 			}
 		else if (opt == "r" || opt == "noreadline") {
 			flags |= Shell::Flags::NoReadline;
+			}
+		else if (opt == "t" || opt == "texmacs") {
+			flags |= Shell::Flags::TeXmacs;
+			flags |= Shell::Flags::NoBanner;
 			}
 		else {
 			std::cerr << "Unrecognised option \"" << opt << "\"\n";
