@@ -285,7 +285,7 @@ void Shell::execute_file(const std::string& filename, bool preprocess)
 		}
 	catch (py::error_already_set& err) {
 		handle_error(err);
-		throw ExitRequest("Script ended execution due to an uncaught exception: "+code);
+		throw ExitRequest("Script ended execution due to an uncaught exception.");
 		}
 	}
 
