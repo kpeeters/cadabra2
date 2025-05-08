@@ -1,5 +1,6 @@
 #include <string>
 #include <memory>
+#include <fstream>
 
 // Work around MSVC linking problem
 #ifdef _DEBUG
@@ -30,11 +31,13 @@ class Shell : public pybind11::scoped_interpreter {
 		
 		void start();
 		void interact();
-		pybind11::object evaluate(const std::string& code, const std::string& filename = "<stdin>");
+		void interact_texmacs();
+		pybind11::object evaluate(const std::string& code, const std::string& filename = "<stdin>") const;
 		void execute(const std::string& code, const std::string& filename = "<stdin>");
 		void execute_file(const std::string& filename, bool preprocess = true);
 		void interact_file(const std::string& filename, bool preprocess = true);
-		
+
+		void show_banner() const;
 		void write_stdout(const std::string& text, const std::string& end = "\n", bool flush = false);
 		void write_stderr(const std::string& text, const std::string& end = "\n", bool flush = false);
 		
@@ -42,8 +45,9 @@ class Shell : public pybind11::scoped_interpreter {
 		void set_histfile();
 		std::string histfile;
 		std::string site_path;
+		std::ofstream logf;
 
-		std::string str(const pybind11::handle& obj);
+		std::string str(const pybind11::handle& obj) const;
 		std::string repr(const pybind11::handle& obj);
 		std::string sanitize(std::string s);
 

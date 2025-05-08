@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <sstream>
 #include <linenoise.hpp>
 #ifndef _WIN32
@@ -26,6 +25,11 @@
 
 using namespace linenoise;
 namespace py = pybind11;
+
+#define DATA_BEGIN   ((char) 2)
+#define DATA_END     ((char) 5)
+#define DATA_COMMAND ((char) 16)
+#define DATA_ESCAPE  ((char) 27)
 
 std::string replace_all(std::string const& original, std::string const& from, std::string const& to )
 	{
@@ -83,6 +87,67 @@ Shell::~Shell()
 		SaveHistory(histfile.c_str());
 	}
 
+void Shell::interact_texmacs()
+	{
+//	logf.open("cdb.log");
+
+	// Run cadabra2_defaults.py
+	try {
+		execute_file(site_path + "/cadabra2_defaults.py", false);
+		}
+	catch (const ExitRequest& err) {
+		throw ExitRequest("Error encountered while initializing the interpreter");
+		}
+
+	std::cout << DATA_BEGIN << "prompt#> " << DATA_END;
+	std::cout << DATA_BEGIN << "verbatim:";
+	show_banner();
+	std::cout << DATA_END;
+	std::cout.flush();
+
+	globals["server"].attr("texmacs")=true;
+
+	std::string line;
+	bool use_ps1=true;
+
+	while(true) {
+		collect.clear();
+		while(std::getline(std::cin, line)) {
+			if(line=="<EOF>")
+				break;
+			collect += line+"\n";
+			}
+		logf << "received block for execution: |" << collect << "|" << std::endl;
+		logf.flush();
+//		if( globals["server"].attr("output_sent").cast<bool>()==false ) 
+			std::cout << DATA_BEGIN << "verbatim:" << DATA_END << std::flush;
+//		else
+//			globals["server"].attr("output_sent")=false;
+		try {
+			bool display = !(flags & Flags::IgnoreSemicolons);
+			std::string error;
+			std::string code = cadabra::cdb2python_string(collect, display, error);
+			execute(code);
+			}
+		catch (py::error_already_set& err) {
+			logf << "error: " << err.what() << std::endl;
+			logf.flush();
+			handle_error(err);
+			}
+		}		
+	}
+
+void Shell::show_banner() const
+	{
+	std::cout << colour_bold + std::string("Cadabra ") + std::string(CADABRA_VERSION_FULL) + colour_reset
+				 << " (build " + std::string(CADABRA_VERSION_BUILD) + " dated "
+				 << std::string(CADABRA_VERSION_DATE) + ")" << std::endl;
+	std::cout << "Copyright (C) " COPYRIGHT_YEARS "  Kasper Peeters <info@cadabra.science>" << std::endl;
+	std::cout << "Info at https://cadabra.science/" << std::endl;
+	std::cout << "Available under the terms of the GNU GPL v3." << std::endl;
+	std::cout << "Using SymPy version " + str(evaluate("sympy.__version__"))+"." << std::endl;
+	}
+
 void Shell::interact()
 	{
 	// Run cadabra2_defaults.py
@@ -94,25 +159,14 @@ void Shell::interact()
 		}
 
 	// Print startup info banner
-	if (!(flags & Flags::NoBanner)) {
-		write_stdout(colour_bold + std::string("Cadabra ") + std::string(CADABRA_VERSION_FULL) + colour_reset
-						 + " (build " + std::string(CADABRA_VERSION_BUILD) +
-						 " dated " + std::string(CADABRA_VERSION_DATE) + ")");
-		write_stdout("Copyright (C) " COPYRIGHT_YEARS "  Kasper Peeters <info@cadabra.science>");
-		write_stdout("Info at https://cadabra.science/");
-		write_stdout("Available under the terms of the GNU GPL v3.");
-		write_stdout("Using SymPy version " + str(evaluate("sympy.__version__"))+".");
-		}
+	if (!(flags & Flags::NoBanner)) 
+		show_banner();
 
-	if( flags & Flags::TeXmacs ) {
-		globals["server"].attr("texmacs")=true;
-		}
-
-	// Input-output loop
-	bool(*get_input)(const std::string&, std::string&);
+	// Line input function (either use plain std::cin or Readline).
+	std::function<bool(const std::string&, std::string&)> get_input;
 	if (flags & Flags::NoReadline)
 		get_input = [](const std::string& prompt, std::string& line) {
-			std::cout << prompt;
+			std::cout << prompt << std::flush;
 			std::getline(std::cin, line);
 			if (std::cin.eof()) {
 				std::cin.clear();
@@ -122,10 +176,11 @@ void Shell::interact()
 				return false;
 				}
 			};
-	else
+	else {
 		get_input = [](const std::string& prompt, std::string& line) {
 			return Readline(prompt.c_str(), line);
 			};
+		}
 
 	std::string curline;
 	while (true) {
@@ -165,7 +220,7 @@ void Shell::interact()
 		}
 	}
 
-pybind11::object Shell::evaluate(const std::string& code, const std::string& filename)
+pybind11::object Shell::evaluate(const std::string& code, const std::string& filename) const
 	{
 	auto co = py::reinterpret_steal<py::object>(
 		Py_CompileString(code.c_str(), filename.c_str(), Py_eval_input));
@@ -254,6 +309,7 @@ void Shell::interact_file(const std::string& filename, bool preprocess)
 
 	std::string curline;
 	while (std::getline(ifs, curline)) {
+		// Continuation line handling.
 		if (!collect.empty() && curline.find_first_not_of(" \t") == 0) {
 			try {
 				process_ps2("");
@@ -263,8 +319,10 @@ void Shell::interact_file(const std::string& filename, bool preprocess)
 				throw ExitRequest("Script ended execution due to an uncaught exception");
 				}
 			}
+
+		// We don't yet have input for this 'cell'.
 		if (collect.empty()) {
-			write_stdout(get_ps1() + curline);
+			write_stdout(get_ps1() + curline, "", true);
 			try {
 				process_ps1(curline);
 				}
@@ -355,7 +413,7 @@ void Shell::set_histfile()
 		histfile = homedir + "/.cadabra2_history";
 	}
 
-std::string Shell::str(const py::handle& obj)
+std::string Shell::str(const py::handle& obj) const
 	{
 	return py::str(obj); //.str().cast<std::string>();
 	}
@@ -426,15 +484,24 @@ void Shell::process_ps1(const std::string& line)
 
 void Shell::process_ps2(const std::string& line)
 	{
-	if(!line.empty()) {
-		collect += line + "\n";
-		return;
+	std::string code;
+	
+	if(line[0]!=DATA_END) {
+		if(!line.empty()) {
+			std::cerr << "received another line" << std::endl;
+			collect += line + "\n";
+			return;
+			}
+		
+		bool display = !(flags & Flags::IgnoreSemicolons);
+		std::string error;
+		code = cadabra::cdb2python_string(collect, display, error);
+		collect.clear();
 		}
-
-	bool display = !(flags & Flags::IgnoreSemicolons);
-	std::string error;
-	std::string code = cadabra::cdb2python_string(collect, display, error);
-	collect.clear();
+	else {
+		code=collect;
+		std::cerr << "received |" << code << "|" << std::endl;
+		}
 	// std::cerr << "executing ps2\n|" << code << "|" << std::endl;
 	execute(code);
 	}
@@ -461,8 +528,9 @@ void Shell::set_completion_callback(const char* buffer, std::vector<std::string>
 
 std::string Shell::get_ps1()
 	{
-	if( flags & Flags::TeXmacs )
+	if( flags & Flags::TeXmacs ) {
 		return "";
+		}
 	
 	if(py::hasattr(sys, "ps1")==false)
 		sys.attr("ps1") = "> ";
@@ -511,10 +579,18 @@ void Shell::handle_error(py::error_already_set& err)
 			}
 		}
 	else {
-		err.restore();
-		PySys_WriteStderr("%.1000s", colour_error);
-		PyErr_Print();
-		write_stderr(colour_reset, "", true);
+		logf << "sending error message" << std::endl;
+		if(flags & Flags::TeXmacs) {
+			std::cout << DATA_BEGIN << "verbatim:" << err.what() << DATA_END;
+			std::cout.flush();
+			globals["server"].attr("output_sent")=true;
+			}
+		else {
+			err.restore(); // restore the exception so that python sees it again
+			PySys_WriteStderr("%.1000s", colour_error);
+			PyErr_Print();
+			write_stderr(colour_reset, "", true);
+			}
 		}
 
 	collect.clear();
@@ -650,7 +726,8 @@ int main(int argc, char* argv[])
 			}
 		else if (opt == "t" || opt == "texmacs") {
 			flags |= Shell::Flags::TeXmacs;
-			flags |= Shell::Flags::NoBanner;
+			flags |= Shell::Flags::NoReadline;
+			flags |= Shell::Flags::NoColour;
 			}
 		else {
 			std::cerr << "Unrecognised option \"" << opt << "\"\n";
@@ -687,7 +764,8 @@ int main(int argc, char* argv[])
 		}
 	if (scripts.empty() || force_interactive) {
 		try {
-			shell.interact();
+			if(flags & Shell::Flags::TeXmacs) shell.interact_texmacs();
+			else                              shell.interact();
 			}
 		catch (const std::logic_error& err) {
 			shell.write_stderr("\nTerminated by user interrupt.\n");

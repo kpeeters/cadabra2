@@ -141,18 +141,24 @@ else:
             self.texmacs = False
             self.DATA_START = chr(2)
             self.DATA_END   = chr(5)
+            self.output_sent = False
         
         def send(self, data, typestr, parent_id, cell_id, last_in_sequence):
             """ Send a message to the client; 'typestr' indicates the cell type,
             'parent_id', if non-null, indicates the serial number of the parent
             cell. If 'cell_id' is not 0, put the output in the cell with that id.
             """
+            if self.texmacs and typestr=='input_form':
+               return 0
             if self.texmacs:
-               print(self.DATA_START)
-               print("latex:")
-            print(data)
-            if self.texmacs:
-               print(self.DATA_END)
+               self.output_sent=True
+               print(self.DATA_START, end='')
+               print("latex:$", end='')
+               print(data, end='')
+               print("$", end='')
+               print(self.DATA_END, flush=True)
+            else:
+               print(data)
             return 0
 
         def architecture(self):
@@ -162,11 +168,12 @@ else:
             print("hello there!")
 
         def handles(self, otype):
-            if self.texmacs and otype=="latex":
+            if self.texmacs and otype=="latex_view":
                 return True
-            if otype=="plain":
-                return True
-            return False
+            elif otype=="plain" or otype=="verbatim":
+                return True #not self.texmacs
+            else:
+                return False
 
         def totals(self):
             return __cdb_progress_monitor__.totals()
