@@ -154,6 +154,7 @@ else:
                self.output_sent=True
                print(self.DATA_START, end='')
                print("latex:$", end='')
+               data = data.replace(r"\discretionary{}{}{}", "")
                print(data, end='')
                print("$", end='')
                print(self.DATA_END, flush=True)
