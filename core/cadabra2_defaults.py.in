@@ -109,22 +109,45 @@ except:
     sympy = Sympy()
 
 if sympy.__version__ != "unavailable":
-#    from sympy import factor
-#    from sympy import integrate
-#    from sympy import diff
     from sympy import symbols
     from sympy import latex
-#    from sympy import sin, cos, tan, sqrt, trigsimp
     from sympy import Matrix as sMatrix
 
 
-try:
-   import PIL
-   import term_image.image
-except:
-   pass
+def detect_terminal():
+    """Detect which terminal emulator is being used."""
+    term = os.environ.get('TERM', '').lower()
+    term_program = os.environ.get('TERM_PROGRAM', '').lower()
+    
+    if 'kitty' in term:
+        return 'kitty'
+    elif 'iterm' in term_program:
+        return 'iterm2'
+    else:
+        return 'unknown'      
 
+def kitty_serialize_gr_command(**cmd):
+    payload = cmd.pop('payload', None)
+    cmd = ','.join(f'{k}={v}' for k, v in cmd.items())
+    ans = []
+    w = ans.append
+    w(b'\033_G'), w(cmd.encode('ascii'))
+    if payload:
+        w(b';')
+        w(payload)
+    w(b'\033\\')
+    return b''.join(ans)
 
+def kitty_write_chunked(**cmd):
+    data = base64.standard_b64encode(cmd.pop('data'))
+    while data:
+        chunk, data = data[:4096], data[4096:]
+        m = 1 if data else 0
+        sys.stdout.buffer.write(kitty_serialize_gr_command(payload=chunk, m=m, **cmd))
+        sys.stdout.flush()
+        cmd.clear()
+    print('')
+        
 # Whether running in command-line mode or as client-server, there always
 # needs to be a Server object known as 'server' through which interaction
 # with the display routines is handled. The 'display' function will
@@ -147,7 +170,7 @@ else:
 
         def __init__(self):
             self.texmacs = False
-            #self.logf    = open("cdb_out.log", "w")
+            # self.logf    = open("cdb_out.log", "w")
             self.DATA_START = chr(2)
             self.DATA_END   = chr(5)
             self.output_sent = False
@@ -184,10 +207,15 @@ else:
                   print(self.DATA_END, flush=True)
             else:
                if typestr=="image_png":
-                  image_buffer = io.BytesIO(base64.b64decode(data))
-                  pil_image = PIL.Image.open(image_buffer)
-                  terminal_image = term_image.image.AutoImage(pil_image)
-                  terminal_image.draw()
+                  term = detect_terminal()
+                  if term=="kitty":
+                     kitty_write_chunked(a='T', f=100, data=base64.b64decode(data))
+                  elif term=="iterm2":
+                     payload = f"\033]1337;File=inline=1;:{data}\007"
+                     sys.stdout.write(payload)
+                     sys.stdout.flush()
+                  else:
+                     print("<image>")
                else:
                   print(data)
             return 0
@@ -204,7 +232,7 @@ else:
                   return True
             elif otype=="plain" or otype=="verbatim":
                 return True
-            elif otype=="image_png" and term_image.image:
+            elif otype=="image_png":
                 return True
             else:
                 return False
