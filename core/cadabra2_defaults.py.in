@@ -139,6 +139,7 @@ else:
 
         def __init__(self):
             self.texmacs = False
+            # self.logf    = open("cdb_out.log", "w")
             self.DATA_START = chr(2)
             self.DATA_END   = chr(5)
             self.output_sent = False
@@ -153,10 +154,11 @@ else:
             if self.texmacs:
                self.output_sent=True
                print(self.DATA_START, end='')
-               print("latex:$", end='')
+               print(r"latex:\begin{equation*}", end='')
                data = data.replace(r"\discretionary{}{}{}", "")
+               # print(data, file=self.logf, flush=True)
                print(data, end='')
-               print("$", end='')
+               print(r"\end{equation*}", end='')
                print(self.DATA_END, flush=True)
             else:
                print(data)

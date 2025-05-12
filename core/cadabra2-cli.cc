@@ -87,10 +87,33 @@ Shell::~Shell()
 		SaveHistory(histfile.c_str());
 	}
 
-void Shell::interact_texmacs()
+void Shell::open_texmacs_logfile()
 	{
 //	logf.open("cdb.log");
+	
+//	// Get the file descriptor (so we can propagate it to the python side).
+//	int fd=-1;
+//	
+//#if defined(__unix__) || defined(__APPLE__)
+//	FILE* file = (FILE*)(*((class std::basic_filebuf<char>*)fs.rdbuf())).
+//		__get_file().file();
+//	fd = fileno(file);
+//#elif defined(_WIN32)
+//	fd = _fileno(((class std::basic_filebuf<char>*)fs.rdbuf())->_M_file.file());
+//#else
+//	throw std::runtime_error("cadabra2-cli: TeXmacs not supported on this platform");
+//#endif
+//
+//	// Make this log file available to python.
+//	py::module io = py::module::import("io");
+//	py::object py_file = io.attr("open")(fd, "w");
+//	globals["server"].attr("logf") = py_file;
+	}
 
+void Shell::interact_texmacs()
+	{
+	open_texmacs_logfile();
+	
 	// Run cadabra2_defaults.py
 	try {
 		execute_file(site_path + "/cadabra2_defaults.py", false);
@@ -109,9 +132,18 @@ void Shell::interact_texmacs()
 
 	std::string line;
 	bool use_ps1=true;
+	bool first=true;
 
 	while(true) {
 		collect.clear();
+		if(!first) {
+			if( globals["server"].attr("output_sent").cast<bool>()==false ) 
+				std::cout << DATA_BEGIN << "verbatim:" << DATA_END << std::flush;
+			else
+				globals["server"].attr("output_sent")=false;
+			}
+		else first=false;
+		
 		while(std::getline(std::cin, line)) {
 			if(line=="<EOF>")
 				break;
@@ -119,10 +151,6 @@ void Shell::interact_texmacs()
 			}
 		logf << "received block for execution: |" << collect << "|" << std::endl;
 		logf.flush();
-//		if( globals["server"].attr("output_sent").cast<bool>()==false ) 
-			std::cout << DATA_BEGIN << "verbatim:" << DATA_END << std::flush;
-//		else
-//			globals["server"].attr("output_sent")=false;
 		try {
 			bool display = !(flags & Flags::IgnoreSemicolons);
 			std::string error;

@@ -61,6 +61,8 @@ class Shell : public pybind11::scoped_interpreter {
 		void handle_error();
 		void handle_error(pybind11::error_already_set& err);
 
+		void open_texmacs_logfile();
+		
 		// These mimic what we do in Server.cc
 		pybind11::module             main_module;
 		pybind11::object             main_namespace;
