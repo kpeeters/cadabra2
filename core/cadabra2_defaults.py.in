@@ -211,9 +211,10 @@ else:
                   if term=="kitty":
                      kitty_write_chunked(a='T', f=100, data=base64.b64decode(data))
                   elif term=="iterm2":
-                     payload = f"\033]1337;File=inline=1;:{data}\007"
+                     payload = f"\033]1337;File=inline=1;size={len(data)}:{data.decode('utf-8')}\007"
                      sys.stdout.write(payload)
                      sys.stdout.flush()
+                     print('', flush=True)
                   else:
                      print("<image>")
                else:
