@@ -131,7 +131,6 @@ void Shell::interact_texmacs()
 	globals["server"].attr("texmacs")=true;
 
 	std::string line;
-	bool use_ps1=true;
 	bool first=true;
 
 	while(true) {
@@ -678,7 +677,7 @@ void help()
 		"  -r      --noreadline          Do not use readline libraries for input\n"
 		"  -w      --nocolor             Do not colourize output\n"
 		"          --nocolour\n"
-		"  -V      --verbose             Print extra debugging information";
+		"  -V      --verbose             Print extra debugging information" << std::endl;
 	}
 
 void version()
