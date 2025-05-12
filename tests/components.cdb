@@ -536,7 +536,7 @@ import cdb.relativity as rel
 # the line below does not work on Travis, so we state the metric here explicitly.
 #import cdb.relativity.schwarzschild as ss
 
-def test28():
+def test28pre():
     g:={g_{t t} = -1+2M/r, g_{r r} = 1/(1-2M/r), g_{\theta\theta} = r**2, g_{\phi\phi} = r**2*sin(\theta)**2};
     complete(g,$g^{\mu\nu}$);
     ch=rel.christoffel_from_metric();
@@ -550,7 +550,7 @@ def test28():
     substitute(geodesic, ch);
     evaluate(geodesic);
 
-#test27()
+#test28pre()
         
     
 def test28():
