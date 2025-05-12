@@ -139,7 +139,7 @@ else:
 
         def __init__(self):
             self.texmacs = False
-            # self.logf    = open("cdb_out.log", "w")
+            #self.logf    = open("cdb_out.log", "w")
             self.DATA_START = chr(2)
             self.DATA_END   = chr(5)
             self.output_sent = False
@@ -152,14 +152,28 @@ else:
             if self.texmacs and typestr=='input_form':
                return 0
             if self.texmacs:
-               self.output_sent=True
-               print(self.DATA_START, end='')
-               print(r"latex:\begin{equation*}", end='')
-               data = data.replace(r"\discretionary{}{}{}", "")
-               # print(data, file=self.logf, flush=True)
-               print(data, end='')
-               print(r"\end{equation*}", end='')
-               print(self.DATA_END, flush=True)
+               if typestr=="image_ps":
+                  self.output_sent=True
+                  print(self.DATA_START, end='')
+                  print(r"ps:", end='')
+                  #print(base64.b64decode(data), file=self.logf, flush=True)
+                  print(base64.b64decode(data).decode('utf-8'), end='')
+                  print(self.DATA_END, flush=True)
+               elif typestr=='latex_view':
+                  self.output_sent=True
+                  print(self.DATA_START, end='')
+                  print(r"latex:\begin{equation*}", end='')
+                  data = data.replace(r"\discretionary{}{}{}", "")
+                  # print(data, file=self.logf, flush=True)
+                  print(data, end='')
+                  print(r"\end{equation*}", end='')
+                  print(self.DATA_END, flush=True)
+               else:
+                  self.output_sent=True
+                  print(self.DATA_START, end='')
+                  print(r"verbatim:", end='')
+                  print(data, end='')
+                  print(self.DATA_END, flush=True)
             else:
                print(data)
             return 0
@@ -175,6 +189,8 @@ else:
                 return True
             elif otype=="plain" or otype=="verbatim":
                 return True #not self.texmacs
+            elif otype=="image_ps":
+                return True
             else:
                 return False
 
@@ -244,6 +260,7 @@ import base64
 # - "latex_view": text-mode LaTeX string.
 # - "image_png":  base64 encoded png image.
 # - "image_svg":  svg image.
+# - "image_ps":   ps image
 # - "verbatim":   ascii string to be displayed verbatim.
 
 def display(obj, cell_id=0, delay_send=False):
@@ -268,22 +285,38 @@ def display(obj, cell_id=0, delay_send=False):
        return display(obj[0], cell_id, delay_send)
     
     if 'matplotlib' in sys.modules and isinstance(obj, matplotlib.figure.Figure):
-        imgstring = io.BytesIO()
-        obj.savefig(imgstring,format='svg')
-        imgstring.seek(0)
-        b64 = base64.b64encode(imgstring.getvalue())
-        return server.send(b64, "image_svg", 0, cell_id, False)
-        # FIXME: Use the 'handles' query method on the Server object
-        # to figure out whether it can do something useful
-        # with a particular data type.
+        if server.handles('image_svg'):
+            imgstring = io.BytesIO()
+            obj.savefig(imgstring,format='svg')
+            imgstring.seek(0)
+            b64 = base64.b64encode(imgstring.getvalue())
+            return server.send(b64, "image_svg", 0, cell_id, False)
+        elif server.handles('image_ps'):
+            imgstring = io.BytesIO()
+            obj.savefig(imgstring,format='eps', bbox_inches='tight', pad_inches=0.1)
+            imgstring.seek(0)
+            b64 = base64.b64encode(imgstring.getvalue())
+            return server.send(b64, "image_ps", 0, cell_id, False)
+        else:
+            return None
 
     elif 'matplotlib' in sys.modules and isinstance(obj, matplotlib.artist.Artist):
-        f = obj.get_figure()
-        imgstring = io.BytesIO()
-        f.savefig(imgstring,format='svg')
-        imgstring.seek(0)
-        b64 = base64.b64encode(imgstring.getvalue())
-        return server.send(b64, "image_svg", 0, cell_id, False)
+        if server.handles('image_svg'):
+            f = obj.get_figure()
+            imgstring = io.BytesIO()
+            f.savefig(imgstring,format='svg')
+            imgstring.seek(0)
+            b64 = base64.b64encode(imgstring.getvalue())
+            return server.send(b64, "image_svg", 0, cell_id, False)
+        elif server.handles('image_ps'):
+            f = obj.get_figure()
+            imgstring = io.BytesIO()
+            f.savefig(imgstring,format='ps')
+            imgstring.seek(0)
+            b64 = base64.b64encode(imgstring.getvalue())
+            return server.send(b64, "image_svg", 0, cell_id, False)
+        else:
+            return None
 
     elif have_plotly and isinstance(obj, plotly.graph_objs._figure.Figure):
         imgstring = obj.to_image(format="svg")
