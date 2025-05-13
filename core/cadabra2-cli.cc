@@ -474,9 +474,16 @@ void Shell::process_ps1(const std::string& line)
 	// So we don't really do anything with ConvertData nor with
 	// the result of `convert_line`.
 	cadabra::ConvertData cv;
+
+	// `converge` lines are *never* complete by themselves
+	if(line.find("converge(")!=std::string::npos) {
+		collect = line + "\n";
+		return;
+		}
+	
 	std::pair<std::string, std::string> res = cadabra::convert_line(line, cv, display);
 	const std::string& output = res.second;
-	if (output == "::empty") {
+	if(output == "::empty") {
 		// Cadabra continuation line, add the unprocessed line to collect
 		collect = line + "\n";
 		return;
@@ -484,12 +491,13 @@ void Shell::process_ps1(const std::string& line)
 
 	std::string error;
 	int status = cadabra::is_python_code_complete(output, error);
+	// std::cerr << "code=" << status << ", " << res.second << std::endl;
 	switch(status) {
-		case 0:
+		case 0: // incomplete
 			// std::cerr << "seting collect to\n|" << res.first + res.second << "|" << std::endl;
 			collect = res.first + res.second + "\n";
 			break;
-		case 1: {
+		case 1: { // complete
 			std::string tmp = res.first + res.second;
 			collect.clear();
 			if(tmp.size()>0) {
@@ -498,10 +506,10 @@ void Shell::process_ps1(const std::string& line)
 				}
 			break;
 			}
-		case -1:
+		case -1: // indentation error
 			collect.clear();
 			throw ParseException(error);
-		case -2:
+		case -2: // syntax error
 			collect.clear();
 			throw ParseException(error);
 		default:
@@ -515,7 +523,7 @@ void Shell::process_ps2(const std::string& line)
 	
 	if(line[0]!=DATA_END) {
 		if(!line.empty()) {
-			std::cerr << "received another line" << std::endl;
+			// std::cerr << "received another line" << std::endl;
 			collect += line + "\n";
 			return;
 			}
@@ -527,7 +535,7 @@ void Shell::process_ps2(const std::string& line)
 		}
 	else {
 		code=collect;
-		std::cerr << "received |" << code << "|" << std::endl;
+		// std::cerr << "received |" << code << "|" << std::endl;
 		}
 	// std::cerr << "executing ps2\n|" << code << "|" << std::endl;
 	execute(code);

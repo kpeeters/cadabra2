@@ -243,6 +243,9 @@ int cadabra::is_python_code_complete(const std::string& code, std::string& error
 	catch (pybind11::error_already_set& e) {
 //		std::cerr << "EXCEPTION: " << e.what() << std::endl;
 		error=e.what();
+		// if (std::string(e.what()).find("multiple statements found while compiling a single") != std::string::npos) {
+		// 	return 0;
+		// 	}
 		if (std::string(e.what()).find("unexpected EOF") != std::string::npos) {
 			return -1;
 			}
@@ -250,6 +253,7 @@ int cadabra::is_python_code_complete(const std::string& code, std::string& error
 			return -1;
 			}
 		if (std::string(e.what()).find("SyntaxError") != std::string::npos) {
+			// std::cerr << e.what() << std::endl;
 			return -2;
 			}
 		
