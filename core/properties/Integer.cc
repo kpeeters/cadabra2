@@ -1,6 +1,6 @@
 
 #include "properties/Integer.hh"
-#include "Cleanup.hh"
+#include "Exceptions.hh"
 #include "Kernel.hh"
 #include "algorithms/collect_terms.hh"
 

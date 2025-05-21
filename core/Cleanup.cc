@@ -1,6 +1,7 @@
 
 #include "Cleanup.hh"
 #include "Functional.hh"
+#include "Exceptions.hh"
 #include "Algorithm.hh"
 #include "algorithms/collect_terms.hh"
 #include "properties/Coordinate.hh"

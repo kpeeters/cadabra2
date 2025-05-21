@@ -61,6 +61,8 @@ endif()
 # Preamble
 #---------------------------------------------------------------------------
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Aliases for directories
 set(CADABRA_ROOT_DIR ${CMAKE_SOURCE_DIR})
 set(CADABRA_CLIENT_SERVER_DIR ${CADABRA_ROOT_DIR}/client_server)

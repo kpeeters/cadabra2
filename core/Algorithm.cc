@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Storage.hh"
 #include "Props.hh"
 #include "Cleanup.hh"
+#include "Exceptions.hh"
 #include <typeinfo>
 #include <boost/version.hpp>
 #if BOOST_VERSION > 105500
@@ -33,16 +34,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "properties/Accent.hh"
 #include "properties/Derivative.hh"
 #include "properties/Indices.hh"
-#include "properties/Coordinate.hh"
-#include "properties/Symbol.hh"
 #include "properties/Trace.hh"
 #include "properties/DependsBase.hh"
 #include "properties/NonCommuting.hh"
 #include "properties/AntiCommuting.hh"
 #include "properties/SelfNonCommuting.hh"
 #include "properties/SelfAntiCommuting.hh"
-
-#include <sstream>
 
 //#define DEBUG
 
@@ -72,9 +69,9 @@ void Algorithm::set_progress_monitor(ProgressMonitor *pm_)
 Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
 	{
 #if BOOST_VERSION > 105500
-	ScopedProgressGroup(pm, boost::core::demangle(typeid(*this).name()));
+	ScopedProgressGroup sp(pm, boost::core::demangle(typeid(*this).name()));
 #else
-	ScopedProgressGroup(typeid(*this).name());
+	ScopedProgressGroup sp(typeid(*this).name());
 #endif
 	
 	result_t ret=result_t::l_no_action;
@@ -115,9 +112,9 @@ Algorithm::result_t Algorithm::apply_generic(bool deep, bool repeat, unsigned in
 Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool repeat, unsigned int depth)
 	{
 #if BOOST_VERSION > 105500
-	ScopedProgressGroup(pm, boost::core::demangle(typeid(*this).name()));
+	ScopedProgressGroup sp(pm, boost::core::demangle(typeid(*this).name()));
 #else
-	ScopedProgressGroup(typeid(*this).name());
+	ScopedProgressGroup sp(typeid(*this).name());
 #endif
 
 	result_t ret=result_t::l_no_action;

@@ -7,6 +7,7 @@
 #include "DisplayTerminal.hh"
 #include "Functional.hh"
 #include "Linear.hh"
+#include "Exceptions.hh"
 
 #include "algorithms/meld.hh"
 

@@ -1,5 +1,6 @@
 
 #include "Cleanup.hh"
+#include "Exceptions.hh"
 #include "algorithms/rewrite_indices.hh"
 #include "properties/Derivative.hh"
 #include "properties/Indices.hh"

@@ -1,5 +1,6 @@
 
 #include "Cleanup.hh"
+#include "Exceptions.hh"
 #include "algorithms/combine.hh"
 #include "properties/Matrix.hh"
 

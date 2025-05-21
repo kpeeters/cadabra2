@@ -3,6 +3,7 @@
 
 #include "Compare.hh"
 #include "Algorithm.hh" // FIXME: only needed because index_iterator is in there
+#include "Exceptions.hh"
 #include <sstream>
 #include <regex>
 #include "properties/Indices.hh"

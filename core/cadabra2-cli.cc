@@ -9,13 +9,11 @@
 #include <Windows.h>
 #include <glibmm/miscutils.h>
 #endif
-#include <regex>
 #include <internal/string_tools.h>
 #include "cadabra2-cli.hh"
 #include "CdbPython.hh"
 #include "Config.hh"
-#include "InstallPrefix.hh"
-#include "PreClean.hh"
+#include "Exceptions.hh"
 #include "Config.hh"
 #include "pythoncdb/py_helpers.hh"
 
@@ -703,16 +701,21 @@ int main(int argc, char* argv[])
 		int len = strlen(arg);
 		if (len == 0)
 			continue;
-		if (arg[0] == '-') {
-			if (len == 1) {
-				accept_opts = false;
-				}
-			else if (arg[1] == '-') {
-				opts.emplace_back(arg + 2);
+		if(accept_opts) {
+			if (arg[0] == '-') {
+				if (len == 1) {
+					accept_opts = false;
+					}
+				else if (arg[1] == '-') {
+					opts.emplace_back(arg + 2);
+					}
+				else {
+					for (int j = 1; j < len; ++j)
+						opts.emplace_back(1, arg[j]);
+					}
 				}
 			else {
-				for (int j = 1; j < len; ++j)
-					opts.emplace_back(1, arg[j]);
+				scripts.emplace_back(arg);
 				}
 			}
 		else {

@@ -1,6 +1,7 @@
 
 #include <sstream>
 #include "Cleanup.hh"
+#include "Exceptions.hh"
 #include "Functional.hh"
 #include "algorithms/substitute.hh"
 #include "properties/Indices.hh"

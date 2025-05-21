@@ -1,7 +1,7 @@
 
 #include "distribute.hh"
 #include "Cleanup.hh"
-
+#include "Exceptions.hh"
 #include "properties/Distributable.hh"
 
 #include "algorithms/flatten_product.hh"

@@ -4,6 +4,7 @@
 #include "DisplaySympy.hh"
 #include "properties/Depends.hh"
 #include "properties/Accent.hh"
+#include "Exceptions.hh"
 #include "properties/Derivative.hh"
 #include <regex>
 

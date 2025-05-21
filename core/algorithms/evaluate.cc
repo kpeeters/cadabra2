@@ -3,6 +3,7 @@
 #include "Cleanup.hh"
 #include "Permutations.hh"
 #include "MultiIndex.hh"
+#include "Exceptions.hh"
 //#include "SympyCdb.hh"
 #include "algorithms/evaluate.hh"
 #include "algorithms/simplify.hh"

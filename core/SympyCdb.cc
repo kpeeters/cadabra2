@@ -3,6 +3,7 @@
 #include <sstream>
 #include "Functional.hh"
 #include "SympyCdb.hh"
+#include "Exceptions.hh"
 #include "PreClean.hh"
 #include "Cleanup.hh"
 #include "Parser.hh"

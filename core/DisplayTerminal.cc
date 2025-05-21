@@ -2,6 +2,7 @@
 #include "Algorithm.hh"
 #include "DisplayTerminal.hh"
 #include "Symbols.hh"
+#include "Exceptions.hh"
 #include "properties/Accent.hh"
 #include "NTensor.hh"
 #include <variant>

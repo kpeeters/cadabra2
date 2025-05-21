@@ -2,7 +2,7 @@
 #include "explicit_indices.hh"
 
 #include "Cleanup.hh"
-
+#include "Exceptions.hh"
 #include "algorithms/substitute.hh"
 #include "properties/ImplicitIndex.hh"
 #include "properties/PartialDerivative.hh"

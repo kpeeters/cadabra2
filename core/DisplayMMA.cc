@@ -1,12 +1,10 @@
 
 #include "Storage.hh"
-#include "Algorithm.hh"
+#include "Exceptions.hh"
 #include "Functional.hh"
 #include "DisplayMMA.hh"
 #include "PreClean.hh"
 #include "properties/Depends.hh"
-#include "properties/Accent.hh"
-#include <regex>
 
 using namespace cadabra;
 

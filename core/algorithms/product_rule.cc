@@ -1,6 +1,7 @@
 
 #include "Compare.hh"
 #include "Cleanup.hh"
+#include "Exceptions.hh"
 #include "algorithms/product_rule.hh"
 #include "properties/Derivative.hh"
 #include "properties/DerivativeOp.hh"

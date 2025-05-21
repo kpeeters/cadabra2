@@ -1,5 +1,6 @@
 
 #include "Config.hh"
+#include "Exceptions.hh"
 #include "Symbols.hh"
 #include "DisplayTeX.hh"
 #include "Algorithm.hh"

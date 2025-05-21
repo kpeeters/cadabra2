@@ -1,4 +1,5 @@
 
+#include "Exceptions.hh"
 #include "algorithms/split_index.hh"
 
 // #define DEBUG 1

@@ -22,17 +22,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Stopwatch.hh"
 #include "Storage.hh"
-#include "Compare.hh"
 #include "Props.hh"
-#include "Exceptions.hh"
 #include "Kernel.hh"
 #include "IndexIterator.hh"
 #include "ProgressMonitor.hh"
 #include "IndexClassifier.hh"
-
-#include <map>
-#include <fstream>
-#include <cstddef>
 
 namespace cadabra {
 
