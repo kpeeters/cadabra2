@@ -45,6 +45,35 @@ std::string replace_all(std::string const& original, std::string const& from, st
 	return results;
 	}
 
+Shell::CatchOutput::CatchOutput()
+	{
+	}
+
+Shell::CatchOutput::CatchOutput(const CatchOutput&)
+	{
+	}
+
+void Shell::CatchOutput::write(const std::string& str)
+	{
+	// std::cerr << "Python wrote: " << str << std::endl;
+	collect+=str;
+	}
+
+void Shell::CatchOutput::clear()
+	{
+	// std::cerr << "Python clear" << std::endl;
+	collect="";
+	}
+
+void Shell::CatchOutput::flush()
+	{
+	}
+
+std::string Shell::CatchOutput::str() const
+	{
+	return collect;
+	}
+
 Shell::Shell(Flags flags)
 	: globals(py::reinterpret_steal<py::dict>(nullptr))
 	, flags(flags)
@@ -119,6 +148,21 @@ void Shell::interact_texmacs()
 	catch (const ExitRequest& err) {
 		throw ExitRequest("Error encountered while initializing the interpreter");
 		}
+	std::string stdOutErr =
+	   "import sys\n"
+
+	   "from cadabra2_cli import CatchOutput\n"
+	   "def setup_catch(cO, cE, sE):\n"
+	   "   global server\n"
+	   "   sys.stdout=cO\n"
+	   "   sys.stderr=cE\n";
+	execute(stdOutErr);
+
+	// Setup the C++ output catching objects and setup the Python side to
+	// use these as stdout and stderr streams.
+
+	pybind11::object setup_catch = main_module.attr("setup_catch");
+	setup_catch(std::ref(catchOut), std::ref(catchErr), std::ref(*this));
 
 	std::cout << DATA_BEGIN << "prompt#> " << DATA_END;
 	std::cout << DATA_BEGIN << "verbatim:";
@@ -154,6 +198,11 @@ void Shell::interact_texmacs()
 			std::string error;
 			std::string code = cadabra::cdb2python_string(collect, display, error);
 			execute(code);
+			std::string stdout_result = catchOut.str();
+			catchOut.clear();
+			if(stdout_result.size()>0)
+				std::cout << DATA_BEGIN << "verbatim:" << stdout_result << DATA_END << std::flush;
+			
 			std::cout << DATA_END << std::flush;
 			}
 		catch (py::error_already_set& err) {
@@ -825,4 +874,17 @@ int main(int argc, char* argv[])
 		}
 
 	return last_exit_code;
+	}
+
+PYBIND11_EMBEDDED_MODULE(cadabra2_cli, m)
+	{
+	//   auto cadabra_module = pybind11::module::import("cadabra2");
+
+	pybind11::class_<Shell::CatchOutput>(m, "CatchOutput")
+	.def("write", &Shell::CatchOutput::write)
+	.def("clear", &Shell::CatchOutput::clear)
+	.def("flush", &Shell::CatchOutput::flush)		
+	;
+
+	pybind11::class_<Shell>(m, "Shell");
 	}

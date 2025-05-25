@@ -41,6 +41,21 @@ class Shell : public pybind11::scoped_interpreter {
 		void write_stdout(const std::string& text, const std::string& end = "\n", bool flush = false);
 		void write_stderr(const std::string& text, const std::string& end = "\n", bool flush = false);
 		
+		class CatchOutput {
+			public:
+				CatchOutput();
+				CatchOutput(const CatchOutput&);
+
+				void        write(const std::string& txt);
+				void        clear();
+				void        flush();
+				std::string str() const;
+			private:
+				std::string collect;
+			};
+
+		CatchOutput catchOut, catchErr;
+
 	private:
 		void set_histfile();
 		std::string histfile;
