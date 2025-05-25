@@ -351,6 +351,11 @@ bool NTensor::is_real() const
 	return true;
 	}
 
+bool NTensor::is_scalar() const
+	{
+	return (shape.size()==1 && shape[0]==1);
+	}
+
 NTensor NTensor::broadcast(std::vector<size_t> new_shape, size_t pos) const
 	{
 	// for(auto s: new_shape)

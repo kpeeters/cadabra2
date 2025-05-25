@@ -1,6 +1,8 @@
 
 #include "Config.hh"
 
+#include <pybind11/stl.h>
+
 #include "py_ex.hh"
 #include "py_helpers.hh"
 #include "py_globals.hh"
@@ -19,6 +21,7 @@
 #include "Bridge.hh"
 #include "SympyCdb.hh"
 #include "NTensor.hh"
+#include "NInterpolatingFunction.hh"
 
 // Includes for display routines
 #include <sstream>
@@ -778,6 +781,8 @@ namespace cadabra {
 
 		m.def("tree", &print_tree);
 
+		m.def("function_domain", &cadabra::function_domain);
+		
 		m.def("map_sympy", &map_sympy_wrapper,
 		      pybind11::arg("ex"),
 		      pybind11::arg("function") = "",

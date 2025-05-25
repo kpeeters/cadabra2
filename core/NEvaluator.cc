@@ -281,8 +281,18 @@ NTensor NEvaluator::evaluate()
 		++it;
 		}
 
+	DEBUGLN( if(lastval.shape.size()==1 && lastval.shape[0]==1)
+					std::cerr << "lastval needs broadcasting, shape[0] = " << lastval.shape[0] << std::endl; );
+
+	if(lastval.is_scalar()) {
+		// The evaluation code above never pulled in any of the variables,
+		// so the numerical value was never broadcast to the shape of the
+		// output that we want. Do that now.
+		lastval = NTensor(fullshape, lastval.at());
+		}
+		
 	DEBUGLN( std::cerr << "evaluate returns " << lastval << std::endl; );
-	
+
 	return lastval;
 	}
 

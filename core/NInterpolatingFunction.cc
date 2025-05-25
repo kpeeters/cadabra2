@@ -57,6 +57,12 @@ void NInterpolatingFunction::compute_slopes() const
 	precomputed=true;
 	}
 
+std::pair<double, double> NInterpolatingFunction::range() const
+	{
+	return std::make_pair( var_values.values.front().real(),
+								  var_values.values.back().real() );
+	}
+
 std::complex<double> NInterpolatingFunction::evaluate(double v) const
 	{
 	if(!precomputed) {
@@ -76,5 +82,37 @@ std::complex<double> NInterpolatingFunction::evaluate(double v) const
 	auto ret = fun_values.values[i] + (v - var_values.values[i].real()) * slope_values.values[i];
 
 	DEBUGLN( std::cerr << "InterpolatingFunction::evaluate: returning " << ret << std::endl; );
+	return ret;
+	}
+
+variable_ranges_t cadabra::function_domain(const Ex& ex)
+	{
+	variable_ranges_t ret;
+
+	// Walk the whole tree, collecting ranges from
+	// NInterpolatingFunctions (and possibly others
+	// at some later stage).
+
+	auto it = ex.begin();
+	while(it!=ex.end()) {
+		if(std::holds_alternative<std::shared_ptr<NInterpolatingFunction>>(it->content)) {
+			auto nif = std::get<std::shared_ptr<NInterpolatingFunction>>(it->content);
+			auto rit = ret.find(nif->var);
+			if(rit!=ret.end()) {
+				std::pair<double, double> oldrange = rit->second;
+				oldrange.first  = std::max(nif->range().first, oldrange.first);
+				oldrange.second = std::min(nif->range().second, oldrange.second);
+				if(oldrange.first > oldrange.second)
+					throw ArgumentException("NInterpolatingFunction: domain intersection is empty.");
+				rit->second = oldrange;
+				}
+			else {
+				ret[nif->var] = nif->range();
+				}
+		}
+		
+		++it;
+		}
+	
 	return ret;
 	}

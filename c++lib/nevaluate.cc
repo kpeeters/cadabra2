@@ -18,10 +18,23 @@ int main(int, char **)
 //	inject_property<SelfNonCommuting>(k, "{A,B,C,D }");
 //	inject_property<Trace>(k, "tr{#}");
 
+	// Scalar broadcast
+	NTensor t3a( { 2.0 } );
+	std::cerr << "t3a.shape.size() = " << t3a.shape.size() << std::endl;
+	std::cerr << "t3a.shape[0]     = " << t3a.shape[0] << std::endl;	
+	NTensor t432a=t3a.broadcast( {4, 1}, 1 );
+	std::cerr << t432a << std::endl;
+
 	// NTensor broadcast
 	NTensor t3( { 1.0, 2.0, 3.0 } );
 	NTensor t432=t3.broadcast( {4,3,2}, 1 );
 	std::cerr << t432 << std::endl;
+
+	NTensor t3c( { 1.0, 2.0, 3.0 } );
+	NTensor t432c1=t3c.broadcast( {3,3,2}, 1 );
+	std::cerr << t432c1 << std::endl;
+	NTensor t432c2=t3c.broadcast( {3,3,2}, 0 );
+	std::cerr << t432c2 << std::endl;
 
 
 	// Multiplying two scalar variables which each take
