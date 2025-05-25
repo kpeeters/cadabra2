@@ -148,13 +148,16 @@ void Shell::interact_texmacs()
 			}
 		logf << "received block for execution: |" << collect << "|" << std::endl;
 		logf.flush();
+		std::cout << DATA_BEGIN << "verbatim:" << std::flush;
 		try {
 			bool display = !(flags & Flags::IgnoreSemicolons);
 			std::string error;
 			std::string code = cadabra::cdb2python_string(collect, display, error);
 			execute(code);
+			std::cout << DATA_END << std::flush;
 			}
 		catch (py::error_already_set& err) {
+			std::cout << DATA_END << std::flush;
 			logf << "error: " << err.what() << std::endl;
 			logf.flush();
 			handle_error(err);
