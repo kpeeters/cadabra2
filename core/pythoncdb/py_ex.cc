@@ -205,9 +205,11 @@ namespace cadabra {
 		auto ret = std::make_shared<Ex>(*ex1);
 		if (*ret->begin()->name != "\\sum")
 			ret->wrap(ret->begin(), str_node("\\sum"));
-		multiply(ret->append_child(ret->begin(), top2)->multiplier, -1);
+		auto it = ret->append_child(ret->begin(), top2);
+		multiply(it->multiplier, -1);
+		cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
 
-		auto it = ret->begin();
+		it = ret->begin();
 		cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
 
 		return ret;

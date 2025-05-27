@@ -4,17 +4,16 @@
 #include "Permutations.hh"
 #include "MultiIndex.hh"
 #include "Exceptions.hh"
-//#include "SympyCdb.hh"
 #include "algorithms/evaluate.hh"
 #include "algorithms/simplify.hh"
 #include "algorithms/substitute.hh"
 #include "algorithms/collect_terms.hh"
 #include "properties/EpsilonTensor.hh"
-#include "properties/Integer.hh"
 #include "properties/PartialDerivative.hh"
 #include "properties/Coordinate.hh"
-#include "properties/Depends.hh"
+#include "properties/DependsBase.hh"
 #include "properties/Accent.hh"
+#include "DisplayTerminal.hh"
 #include <functional>
 
 // #define DEBUG 1
@@ -89,10 +88,6 @@ Algorithm::result_t evaluate::apply(iterator& it)
 					if(! (only_rhs && tr.is_head(walk)==false && ( *(tr.parent(walk)->name)=="\\equals" || *(tr.parent(walk)->name)=="\\arrow" ) && tr.index(walk)==0) ) {
 						index_map_t empty;
 						sibling_iterator tmp(walk);
-#ifdef DEBUG
-						std::cerr << "handling factor" << std::endl;
-						std::cerr << *walk->name << std::endl;
-#endif
 						walk = handle_factor(tmp, empty);
 						// std::cerr << "handling factor done" << std::endl;
 						}
@@ -351,7 +346,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 					for(auto& r: subs.comparator.index_value_map) {
 						if(fi->first == r.first) {
 #ifdef DEBUG
-							std::cerr << "adding " << r.second.begin() << std::endl;
+//							std::cerr << "adding " << r.second.begin() << std::endl;
 #endif
 							repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none;
 							break;
@@ -367,7 +362,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 					for(auto& r: subs.comparator.index_value_map) {
 						if(fi->first == r.first) {
 #ifdef DEBUG
-							std::cerr << "adding2 " << r.second.begin() << std::endl;
+//							std::cerr << "adding2 " << r.second.begin() << std::endl;
 #endif
 							repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none;
 							break;
@@ -401,7 +396,10 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 		merge_component_children(repl.begin());
 
 #ifdef DEBUG
-		std::cerr << "result now " << repl << std::endl;
+		DisplayTerminal dt(kernel, repl);
+		std::cerr << "Result for this factor:\n";
+		dt.output(std::cerr);
+		std::cerr << std::endl;
 #endif
 		sib = tr.move_ontop(iterator(sib), repl.begin());
 		}

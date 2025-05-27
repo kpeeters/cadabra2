@@ -12,6 +12,10 @@ namespace cadabra {
 	/// levels, i.e. taking into account the "Inherit" property of
 	/// nodes. Needs access to Properties in the current scope in order to
 	/// determine which objects are indices.
+	///
+	/// Example use:
+	///
+	///    
 
 	class index_iterator : public Ex::iterator_base {
 		public:

@@ -274,7 +274,8 @@ namespace cadabra {
 			if(tr.begin(it)->is_range_wildcard())
 				return ret;
 
-		ret = ret || cleanup_numericalflat(k, tr, it);
+		bool tmp = cleanup_numericalflat(k, tr, it);
+		ret = ret || tmp;
 
 		// Turn products of ImaginaryI into -1 factors.
 		if(tr.number_of_children(it)>1) {
@@ -528,7 +529,8 @@ namespace cadabra {
 				}
 			}
 
-		ret = ret || push_down_multiplier(k, tr, it);
+		bool tmp = push_down_multiplier(k, tr, it);
+		ret = ret || tmp;
 
 #ifdef DEBUG
 		std::cerr << "cleanup_sumlike, after, " << ret << ": " << it << std::endl;
