@@ -316,6 +316,7 @@ test20()
 def test22():
    __cdbkernel__=create_scope()
    \diff{#}::PartialDerivative.
+   {m, n, p}::Indices(position=fixed).
    g3_{m n}::Metric.
    obj22:= \diff{\phi}_{p} * \diff{g3_{m m1}}_{n};
    canonicalise(_)

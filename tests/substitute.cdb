@@ -265,7 +265,7 @@ test108()
 
 def test109():
     __cdbkernel__=create_scope()
-    {\mu,\nu,\rho,\sigma}::Indices;
+    {\mu,\nu,\rho,\sigma}::Indices(position=fixed);
     \partial{#}::PartialDerivative;
     g_{\mu\nu}::Metric;
     g^{\mu\nu}::InverseMetric;
