@@ -242,6 +242,7 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 			str << "<div class='image_svg'><img src='data:image/svg+xml;base64,";
 			break;
 		case DataCell::CellType::slider:
+			strip_this=true;
 			break;
 		case DataCell::CellType::input_form:
 			// str << "<div class='input_form'>";
@@ -670,6 +671,7 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		if(it->textbuf.size()>0) {
 			if(it->cell_type!=DataCell::CellType::document
 				&& it->cell_type!=DataCell::CellType::latex
+				&& it->cell_type!=DataCell::CellType::slider
 				&& it->cell_type!=DataCell::CellType::input_form) {
 
 				if(!doc.hide_input_cells ||

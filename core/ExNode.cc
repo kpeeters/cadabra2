@@ -188,6 +188,24 @@ ExNode ExNode::free_indices()
 	return ret;
 	}
 
+ExNode ExNode::components()
+	{
+	if(*(ex->begin()->name) != "\\components")
+		throw ConsistencyException("ExNode::components: node not a components node.");
+	
+	ExNode ret(kernel, ex);
+   cadabra::Ex::sibling_iterator sib=ex->begin(it);
+	while(*sib->name!="\\comma") {
+		++sib;
+		if(sib==ex->end(it))
+			throw InternalError("ExNode::components: inconsistent internals structure.");
+		}
+	ret.topit=sib;
+	ret.use_sibling_iterator=true;
+	ret.update(true);
+	return ret;
+	}
+
 ExNode ExNode::args()
 	{
 	ExNode ret(kernel, ex);

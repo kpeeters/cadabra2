@@ -31,12 +31,12 @@ set(TUTORIALS
   kaluza_klein
   plotting
   scalar_manipulations
-  ndsolve
 
   input_format
   ref_printing
   ref_patterns
   ref_numerical
+  ref_ndsolve
   ref_properties
   ref_indices
   ref_derivatives
@@ -63,6 +63,7 @@ set(BOOK_PARTS
    ref_printing
    ref_patterns
    ref_numerical
+   ref_ndsolve
    ref_properties
    ref_indices
    ref_derivatives
@@ -126,6 +127,7 @@ set(ALGOS
   lr_tensor
   map_sympy
   meld
+  ndsolve
   nevaluate
   nval
   product_rule
@@ -207,7 +209,7 @@ set(PACKAGES
   cdb/relativity/abstract
   cdb/relativity/schwarzschild
   cdb/numeric/evaluate
-  cdb/numeric/integrate
+#  cdb/numeric/integrate
   cdb/graphics/plot
   )
 

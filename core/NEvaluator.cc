@@ -109,6 +109,7 @@ NTensor NEvaluator::evaluate()
 	const auto n_prod = name_set.find("\\prod");
 	const auto n_sum  = name_set.find("\\sum");
 	const auto n_pi   = name_set.find("\\pi");
+	const auto n_bigO = name_set.find("\\bigO");
 
 	NTensor lastval(0);
 
@@ -227,6 +228,9 @@ NTensor NEvaluator::evaluate()
 					std::cerr << "found \\pi" << std::endl;
 #endif 
 					lastval  = NTensor(const_pi * to_double(*it->multiplier));
+					}
+				else if(it->name==n_bigO) {
+					lastval = NTensor(0);
 					}
 				else {
 					// Try variable substitution rules.

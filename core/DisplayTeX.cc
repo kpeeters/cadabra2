@@ -339,7 +339,8 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 		if(current_bracket_!=str_node::b_none || previous_bracket_!=current_bracket_ || previous_parent_rel_!=current_parent_rel_) {
 			if(previous_parent_rel_!=current_parent_rel_) 
 				if(previous_parent_rel_==str_node::p_sub || previous_parent_rel_==str_node::p_super)
-					str << "\\!";
+					if(current_bracket_!=str_node::b_none)
+						str << "\\!";
 			
 			print_parent_rel(str, current_parent_rel_, ch==tree.begin(it));
 

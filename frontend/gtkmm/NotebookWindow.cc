@@ -2396,8 +2396,12 @@ void NotebookWindow::on_file_export_latex()
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
 			std::string name = dialog.get_filename();
+			size_t dotpos = name.rfind(".");
+			if(dotpos==std::string::npos) {
+				name += ".tex";
+				dotpos = name.rfind(".");
+				}
 			std::ofstream temp(name);
-			std::size_t dotpos = name.rfind('.');
 			std::string base = name.substr(0, dotpos);
 			// std::cerr << base << std::endl;
 			temp << export_as_LaTeX(doc, base);
@@ -2420,6 +2424,9 @@ void NotebookWindow::on_file_export_python()
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
 			std::string name = dialog.get_filename();
+			size_t dotpos = name.rfind(".");
+			if(dotpos==std::string::npos)
+				name += ".py";
 			std::ofstream temp(name);
 			temp << export_as_python(doc);
 			}
@@ -2442,6 +2449,9 @@ void NotebookWindow::on_file_export_html_segment()
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
 			std::string name = dialog.get_filename();
+			size_t dotpos = name.rfind(".");
+			if(dotpos==std::string::npos)
+				name += ".html";
 			std::ofstream temp(name);
 			temp << export_as_HTML(doc, true);
 			}

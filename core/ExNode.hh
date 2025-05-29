@@ -110,6 +110,9 @@ class ExNode : public cadabra::IndexClassifier {
 		/// for details on behaviour).
 		ExNode      free_indices();
 
+		///
+		ExNode      components();
+		
 		/// Get a new iterator which only iterates over all first-level
 		/// arguments (non-indices).
 		ExNode      args();

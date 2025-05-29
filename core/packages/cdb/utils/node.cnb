@@ -190,14 +190,14 @@
 			"cell_type": "latex",
 			"cells": [
 				{
-					"cell_id": 13139998648599712246,
+					"cell_id": 8816228911771772273,
 					"cell_origin": "client",
 					"cell_type": "latex_view",
-					"source": "\\algorithm{empty_sum() -> Ex}{Returns an Ex object with just one \\textbackslash sum node with no children}"
+					"source": "\\algorithm{empty_sum() -> Ex}{Returns an Ex object with just one sum node with no children}"
 				}
 			],
 			"hidden": true,
-			"source": "\\algorithm{empty_sum() -> Ex}{Returns an Ex object with just one \\textbackslash sum node with no children}"
+			"source": "\\algorithm{empty_sum() -> Ex}{Returns an Ex object with just one sum node with no children}"
 		},
 		{
 			"cell_id": 13241820287247340496,
@@ -211,14 +211,14 @@
 			"cell_type": "latex",
 			"cells": [
 				{
-					"cell_id": 18408345614398630523,
+					"cell_id": 16075171543177567621,
 					"cell_origin": "client",
 					"cell_type": "latex_view",
-					"source": "\\algorithm{empty_product() -> Ex}{Returns an Ex object with just one \\textbackslash product node with no children}"
+					"source": "\\algorithm{empty_product() -> Ex}{Returns an Ex object with just one product node with no children}"
 				}
 			],
 			"hidden": true,
-			"source": "\\algorithm{empty_product() -> Ex}{Returns an Ex object with just one \\textbackslash product node with no children}"
+			"source": "\\algorithm{empty_product() -> Ex}{Returns an Ex object with just one product node with no children}"
 		},
 		{
 			"cell_id": 7789116792134512028,
@@ -255,5 +255,8 @@
 		}
 	],
 	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
 	"version": 1.0
 }
