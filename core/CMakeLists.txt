@@ -469,7 +469,7 @@ else()
       ${GMP_LIBRARIES}
       PRIVATE Catch2::Catch2WithMain
     )
-    catch_discover_tests(test_internals)
+    catch_discover_tests(test_internals DL_PATHS "${CMAKE_CURRENT_BINARY_DIR}")
     catch_discover_tests(test_multiplier)
   endif()
 
