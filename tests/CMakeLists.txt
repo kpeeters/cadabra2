@@ -21,7 +21,6 @@ if (!WIN32)
   add_test(comparison     test_comparison)
 endif()
 
-
 # Notebooks with built-in tests.
 #
 set(CNBIN   ${CMAKE_SOURCE_DIR}/examples)

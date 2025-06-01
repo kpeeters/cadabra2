@@ -24,6 +24,11 @@ ExNode::ExNode(const Kernel& k, std::shared_ptr<Ex> ex_)
 	{
 	}
 
+bool ExNode::is_valid() const
+	{
+	return ex->is_valid(it);
+	}  
+
 ExNode ExNode::copy() const
 	{
 	ExNode ret(kernel, ex);
@@ -325,31 +330,6 @@ void ExNode::set_parent_rel(str_node::parent_rel_t pr)
 	if(!ex->is_valid(it))
 		throw ConsistencyException("Cannot set the value of an iterator before the first 'next'.");
 	it->fl.parent_rel=pr;
-	}
-
-pybind11::object ExNode::get_multiplier() const
-	{
-	if(!ex->is_valid(it))
-		throw ConsistencyException("Cannot get the multiplier of an iterator before the first 'next'.");
-
-	if(it->multiplier->is_rational()) {
-		pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
-		auto m = it->multiplier->get_rational();
-		pybind11::object mult = mpq(m.get_num().get_si(), m.get_den().get_si());
-		return mult;
-		}
-	else {
-		return pybind11::cast(it->multiplier->get_double());
-		}
-	}
-
-void ExNode::set_multiplier(pybind11::object mult)
-	{
-	if(!ex->is_valid(it))
-		throw ConsistencyException("Cannot set the multiplier of an iterator before the first 'next'.");
-
-	set(it->multiplier, multiplier_t(mult.attr("numerator").cast<long>(),
-												mult.attr("denominator").cast<long>()) );
 	}
 
 

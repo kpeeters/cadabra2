@@ -221,14 +221,14 @@
 			"cell_type": "latex",
 			"cells": [
 				{
-					"cell_id": 17475987741362274274,
+					"cell_id": 13138241579944557857,
 					"cell_origin": "client",
 					"cell_type": "latex_view",
-					"source": "\\algorithm{components_to_subrule(ex: Ex) -> Ex}{Turn a component expression (the result of a \\texttt{evaluate} command)\ninto a set of substitution rules}"
+					"source": "\\algorithm{components_to_subrule(ex: Ex) -> Ex}{Turn a component expression into a set of substitution rules}\n\nThe \\algo{evaluate} algorithm evaluates the component values of a tensor expression, and returns this in the form of an anonymous tensor component expression. This function turns such an expression into a set of substitution rules."
 				}
 			],
 			"hidden": true,
-			"source": "\\algorithm{components_to_subrule(ex: Ex) -> Ex}{Turn a component expression (the result of a \\texttt{evaluate} command)\ninto a set of substitution rules}"
+			"source": "\\algorithm{components_to_subrule(ex: Ex) -> Ex}{Turn a component expression into a set of substitution rules}\n\nThe \\algo{evaluate} algorithm evaluates the component values of a tensor expression, and returns this in the form of an anonymous tensor component expression. This function turns such an expression into a set of substitution rules."
 		},
 		{
 			"cell_id": 3321195237657858341,
@@ -295,5 +295,8 @@
 		}
 	],
 	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
 	"version": 1.0
 }

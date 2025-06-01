@@ -311,6 +311,32 @@ namespace cadabra {
 		return ret;
 		}
 
+	pybind11::object ExNode_get_multiplier(const ExNode& ex)
+		{
+		if(!ex.is_valid())
+			throw ConsistencyException("Cannot get the multiplier of an iterator before the first 'next'.");
+
+		if(ex.it->multiplier->is_rational()) {
+			pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
+			auto m = ex.it->multiplier->get_rational();
+			pybind11::object mult = mpq(m.get_num().get_si(), m.get_den().get_si());
+			return mult;
+			}
+		else {
+			return pybind11::cast(ex.it->multiplier->get_double());
+			}
+		}
+	
+	void ExNode_set_multiplier(ExNode& ex, pybind11::object mult)
+		{
+		if(!ex.is_valid())
+			throw ConsistencyException("Cannot set the multiplier of an iterator before the first 'next'.");
+
+		// FIXME: this assumes the python object is a rational, but it could be a double now.
+		set(ex.it->multiplier, multiplier_t(mult.attr("numerator").cast<long>(),
+														mult.attr("denominator").cast<long>()) );
+		}
+
 	pybind11::object ExNode_as_sympy(const ExNode& exnode)
 		{
 		return Ex_as_sympy(exnode.ex);
@@ -742,6 +768,7 @@ namespace cadabra {
 			.def("__str__", &ExNode::__str__)
 			.def("_sympy_", &ExNode_as_sympy)
 			.def("terms", &ExNode::terms, "Return an ExNode iterator over all terms at the level of the current ExNode.")
+			.def("components", &ExNode::components, "Returns an ExNode iterator over all components of the tensor at the given ExNode.")
 			.def("factors", &ExNode::factors, "Return an ExNode iterator over all factors at the level of the current ExNode.")
 			.def("own_indices", &ExNode::own_indices, "Return an ExNode iterator over all indices which are not inherited from child nodes.")
 			.def("indices", &ExNode::indices, "Return an ExNode iterator over all indices.")
@@ -759,7 +786,7 @@ namespace cadabra {
 				py::arg("other"), py::arg("use_props") = "always", py::arg("ignore_parent_rel") = false)
 			.def_property("name", &ExNode::get_name, &ExNode::set_name, "Set the name property of the node pointed to by the ExNode.")
 			.def_property("parent_rel", &ExNode::get_parent_rel, &ExNode::set_parent_rel)
-			.def_property("multiplier", &ExNode::get_multiplier, &ExNode::set_multiplier)
+			.def_property("multiplier", &ExNode_get_multiplier, &ExNode_set_multiplier)
 			.def_buffer([](ExNode &exnode) -> py::buffer_info {
 				throw std::range_error("Do not call this on ExNode");
 				})

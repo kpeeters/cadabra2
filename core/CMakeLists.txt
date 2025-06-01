@@ -459,21 +459,27 @@ else()
   # wasteful, but splitting out the ${LOCAL_SRC_FILES} into a separate
   # library turned out to lead to linking errors with the algorithm
   # modules in `packages/` (missing typeinfo things). For now this works.
-  target_link_libraries(test_internals PRIVATE
-    cadabra2
-    ${GMPXX_LIBRARIES}
-    ${GMP_LIBRARIES}
-    ${Python_LIBRARIES}
-  )
+  if(Catch2_FOUND)
+    target_link_libraries(test_internals PRIVATE
+      cadabra2
+      ${GMPXX_LIBRARIES}
+      ${GMP_LIBRARIES}
+      ${Python_LIBRARIES}
+      PRIVATE Catch2::Catch2WithMain
+    )
+    target_link_libraries(test_multiplier PRIVATE
+      ${GMPXX_LIBRARIES}
+      ${GMP_LIBRARIES}
+      PRIVATE Catch2::Catch2WithMain
+    )
+    catch_discover_tests(test_internals)
+    catch_discover_tests(test_multiplier)
+  endif()
   target_link_libraries(test_benchmark PRIVATE
     cadabra2
     ${GMPXX_LIBRARIES}
     ${GMP_LIBRARIES}
     ${Python_LIBRARIES}
-  )
-  target_link_libraries(test_multiplier PRIVATE
-    ${GMPXX_LIBRARIES}
-    ${GMP_LIBRARIES}
   )
 endif()
 

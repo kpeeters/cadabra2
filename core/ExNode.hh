@@ -45,14 +45,14 @@ class ExNode : public cadabra::IndexClassifier {
 		std::string get_name() const;
 		void        set_name(std::string);
 
+		/// Is the ExNode a valid pointer into an Ex?
+		bool is_valid() const;
+		
 		/// Create a copy of the Ex pointed to by this iterator.
 		cadabra::Ex get_ex() const;
 		
 		cadabra::str_node::parent_rel_t get_parent_rel() const;
 		void                            set_parent_rel(cadabra::str_node::parent_rel_t);
-
-		pybind11::object get_multiplier() const;
-		void             set_multiplier(pybind11::object);
 
 		/// Take a child argument out of the node and
 		/// add as child of current.

@@ -467,6 +467,13 @@ if(mimalloc_FOUND)
 else()
   message(STATUS "Using glibc allocator")
 endif()
+find_package(Catch2 3 QUIET) # This is optional; we will not run the C++ tests if Catch2 is not found
+if(Catch2_FOUND)
+  message(STATUS "Will run C++ tests with Catch2")
+  include(Catch)
+else()
+  message(STATUS "Catch2 not found, will not run C++ tests")
+endif()
 
 # Jupyter kernel
 print_header("Configuring Jupyter kernel")
