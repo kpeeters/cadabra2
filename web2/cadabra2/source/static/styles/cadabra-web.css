@@ -14,6 +14,7 @@ body {
 	 background: white;
 	 text-align: justify;
          hyphens: auto;
+	 margin: 0px;
 }
 a {
   color: #209020;
@@ -69,6 +70,7 @@ div#logobar #cadabra {
 div#topflex {
 	 display: flex;
 	 justify-content: space-between;
+	 box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 div#topflex div#search {
 	 margin-top: 32px;
@@ -247,11 +249,16 @@ div#main h1 span.date {
 div.icon_background {
 	 position: relative;
 	 width: 130px;
-	 height: 40px;
+	 height: 42px;
 /* 	 background: #D56203;/* #36a750;  */
  	 background: green; 
 	 cursor: pointer;
 	 margin-bottom: 10px;
+	 padding-left: 5px;
+	 padding-top: 5px;
+	 border-bottom: 4px solid green;
+	 transition: border-bottom 0.5s;
+/*	 border-radius: 4px; */
 }
 div.icon_background path {
 /* 	 fill: #fa6; */
@@ -293,9 +300,7 @@ div.firstline {
 	 transition-duration: 0.5s;  
 } */
 div.icon_background:hover {
-/* 	 background: #292;*/
-	 border-bottom: 2px solid #3a3;
-	 height: 38px;
+    border-bottom: 4px solid #ada;
 }
 div.icon_background:hover img {
 	 transition-duration: 0.5s;  
@@ -645,6 +650,25 @@ div.github-link a img {
 /* Small screens */
 
 @media screen and (max-width: 800px) {
+    div#topflex {
+	flex-direction: column;
+    }
+    div#topflex div#search {
+	margin-top: 0px;
+	margin-left: auto;
+	margin-right: 0px;
+    }
+    div#logobar {
+	padding-bottom: 0px;
+    }
+    ol.table_of_contents {
+	margin-left: 0px;
+	padding-left: 6%;
+    }
+    div.view_options span {
+	margin-left: 0px;
+	display: block;
+    }
 	 div#main {
 		  position: relative;
 		  margin-left: 2%;
@@ -660,6 +684,8 @@ div.github-link a img {
 	 div#menubar .icon_background {
 		  display: inline-block;
 		  margin-bottom: 5px;
+		  width: 31%;
+		  height: 34px;
 	 }
 	 div#menubar hr {
 		  display: none;
