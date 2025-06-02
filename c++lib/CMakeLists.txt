@@ -51,7 +51,11 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 14.0)
+    message(STATUS "This version of g++ (${CMAKE_CXX_COMPILER_VERSION}) incorrectly warns about possibly uninitialised memory when using std::variant containing a std::shared_ptr. Disabling this warning.")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-maybe-uninitialized")
+  endif()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -111,6 +115,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayTeX.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplaySympy.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayTerminal.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Grouping.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/TerminalStream.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Multiplier.cc  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/NDSolver.cc  
