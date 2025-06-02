@@ -312,7 +312,7 @@ namespace cadabra {
 
 			bool operator==(const Ex& other) const;
 
-			/// Push a copy of the current state of the expression onto the
+			/// Push a copy of the current Storstate of the expression onto the
 			/// history stack.  Also pushes a set of paths to terms which
 			/// will be kept in the next history step.
 			/// DEPRECATED, only used by take_match/replace_match.

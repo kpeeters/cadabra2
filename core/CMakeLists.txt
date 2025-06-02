@@ -240,6 +240,7 @@ set(LOCAL_SRC_FILES
   Exceptions.cc
   Exchange.cc
   Functional.cc
+  Grouping.cc
   Hash.cc
   IndexIterator.cc
   IndexClassifier.cc
@@ -471,6 +472,9 @@ else()
     )
     catch_discover_tests(test_internals DL_PATHS "${CMAKE_CURRENT_BINARY_DIR}")
     catch_discover_tests(test_multiplier)
+    set_target_properties(test_internals PROPERTIES
+      RPATH "${CMAKE_CURRENT_BINARY_DIR}"
+    )
   endif()
 
   # Some other tests which are more for diagnostics, not actual tests,
