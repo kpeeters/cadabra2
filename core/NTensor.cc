@@ -4,6 +4,8 @@
 #include <cassert>
 #include <cmath>
 #include <string>
+#include <execution>
+#include <algorithm>
 
 using namespace cadabra;
 
@@ -66,6 +68,7 @@ NTensor::NTensor(double val)
 
 NTensor::NTensor(const NTensor& other)
 	{
+//	std::cerr << "copy-constructor " << other.values.size() << std::endl;
 	DEBUGLN( std::cerr << "NTensor(const NTensor&): " << other.shape.size()
 				<< ", " << other.values.size() << std::endl; );
 	shape=other.shape;
@@ -211,8 +214,15 @@ std::ostream& cadabra::operator<<(std::ostream &str, const NTensor &nt)
 
 NTensor& NTensor::apply(std::complex<double> (*fun)(const std::complex<double>&))
 	{
+#ifdef HAS_TBB
+	std::transform(std::execution::par_unseq,
+						values.begin(), values.end(),
+						values.begin(),
+						fun);
+#else
 	for(auto& v: values)
 		v = fun(v);
+#endif
 
 	return *this;
 	}

@@ -47,8 +47,8 @@ NTensor NEvaluator::evaluate()
 
 	using complex_func = std::complex<double>(*)(const std::complex<double>&);
 	// const double eps = 1e-10;
-	
-	const std::vector<std::pair<nset_t::iterator, complex_func>> elementary
+
+	const std::map<nset_t::iterator, complex_func, nset_it_less> elementary
 		= { // Trigonometric functions.
 
 		{ name_set.find("\\sin"), std::sin<double> },
@@ -158,28 +158,31 @@ NTensor NEvaluator::evaluate()
 				found_elementary=true;
 				}
 			else {
-				for(const auto& el: elementary) {
-					if(it->name == el.first) {
-						auto arg    = ex.begin(it);
+				auto elementary_it = elementary.find(it->name);
+				if(elementary_it != elementary.end()) {
+					auto arg    = ex.begin(it);
 #ifdef DEBUG
-						std::cerr << *el.first << " has " << ex.number_of_children(it) << " child nodes" << std::endl;
-						std::cerr << "need to apply " << *el.first << " to " << arg << std::endl;
+					std::cerr << *el.first << " has " << ex.number_of_children(it) << " child nodes" << std::endl;
+					std::cerr << "need to apply " << *el.first << " to " << arg << std::endl;
 #endif
-						auto argit  = subtree_values.find(arg);
-						auto argval = NTensor(argit->second);
+					auto argit  = subtree_values.find(arg);
+				   lastval = NTensor(argit->second);
 #ifdef DEBUG
-						std::cerr << " argument equals " << argval
-									 << "; stored had multiplier " << *(argit->first->multiplier) << std::endl;
+					std::cerr << " argument equals " << argval
+								 << "; stored had multiplier " << *(argit->first->multiplier) << std::endl;
 #endif
-						// Any expressions are stored without multiplier, so we
-						// now need to first multiply-through with the current
-						// multiplier.
-						argval  *= to_double((*arg->multiplier)/(*argit->first->multiplier));
-						lastval  = argval.apply(el.second);
-						lastval *= to_double(*it->multiplier);
-						found_elementary=true;
-						break;
+					// Any expressions are stored without multiplier, so we
+					// now need to first multiply-through with the current
+					// multiplier.
+					multiplier_t tomult = (*arg->multiplier)/(*argit->first->multiplier);
+					if(tomult != 1) {
+						// std::cerr << "MULT!" << std::endl;
+						lastval *= to_double(tomult);
 						}
+					
+					lastval.apply(elementary_it->second);
+					lastval *= to_double(*it->multiplier);
+					found_elementary=true;
 					}
 				}
 			

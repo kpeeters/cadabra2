@@ -82,9 +82,13 @@ int main(int, char **)
 	ev3.set_variable(Ex("x"), NTensor::linspace(0.0, 3.14, 1000));
 	ev3.set_variable(Ex("y"), NTensor::linspace(0.0, 3.14, 1000));
 	sw.start();
-	auto res3 = ev3.evaluate();
+	int num=100;
+	for(int i=0; i<num; ++i) {
+		auto res3 = ev3.evaluate();
+		}
 	sw.stop();
-	std::cout << "cos(x) sin(y) over a 1000x1000 grid took " << sw << "\n\n";
+	sw /= num;
+	std::cout << "cos(x) sin(y) over a 1000x1000 grid took " << sw << " on average\n\n";
 
 	// Array indexing.
 

@@ -51,6 +51,8 @@ endif()
 
 cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 project(Cadabra)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -100,6 +102,13 @@ if (APPLE)
 endif()
 
 set(PKG_CONFIG_USE_STATIC_LIBS OFF)
+
+find_package(TBB QUIET)  
+if(TBB_FOUND)
+  message(STATUS "TBB found, will make some operations parallel")
+else()
+  message(STATUS "TBB not found, parallel operations disabled")
+endif()
 
 # Get version information.
 include(cmake/version.cmake)

@@ -328,6 +328,10 @@ if(IPO_SUPPORTED)
   set_target_properties(cadabra2 PROPERTIES LINK_FLAGS "-flto=auto")  
 endif()
 
+if(TBB_FOUND)
+  target_link_libraries(cadabra2 TBB::tbb)
+  target_compile_definitions(cadabra2 PRIVATE HAS_TBB)
+endif()
    
 # On Unix, don't link the extension module to libpython*.so
 # because some python executables are link to python static library for performance
