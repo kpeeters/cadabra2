@@ -329,7 +329,7 @@ if(IPO_SUPPORTED)
 endif()
 
 if(TBB_FOUND)
-  target_link_libraries(cadabra2 TBB::tbb)
+  target_link_libraries(cadabra2 PRIVATE TBB::tbb)
   target_compile_definitions(cadabra2 PRIVATE HAS_TBB)
 endif()
    

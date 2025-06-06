@@ -335,7 +335,7 @@ add_library(cadabra2++_static  STATIC $<TARGET_OBJECTS:cadabra2++objects>)
 target_link_libraries(cadabra2++_static ${GMPXX_LIB} ${GMP_LIB} ${Python_LIBRARIES})
 
 if(TBB_FOUND)
-  target_link_libraries(cadabra2++ TBB::tbb)
+  target_link_libraries(cadabra2++ PRIVATE TBB::tbb)
   target_compile_definitions(cadabra2++objects PRIVATE HAS_TBB)
 endif()
 
