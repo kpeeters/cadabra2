@@ -802,7 +802,7 @@ namespace cadabra {
 	str_node::str_node(void)
 		: content(std::monostate())
 		{
-		multiplier=rat_set.insert(1).first;
+		one(multiplier);
 		//	fl.modifier=m_none;
 		fl.bracket=b_none;
 		fl.parent_rel=p_none;
@@ -828,7 +828,7 @@ namespace cadabra {
 	str_node::str_node(nset_t::iterator nm, bracket_t br, parent_rel_t pr)
 		: content(std::monostate())
 		{
-		multiplier=rat_set.insert(1).first;
+		one(multiplier);
 		name=nm;
 		//	fl.modifier=m_none;
 		fl.bracket=br;
@@ -851,7 +851,7 @@ namespace cadabra {
 #ifdef DEBUG
 		std::cerr << "str_node: " << nm8 << std::endl;
 #endif
-		multiplier=rat_set.insert(1).first;
+		one(multiplier);
 		name=name_set.insert(nm8).first;
 		//	fl.modifier=m_none;
 		fl.bracket=br;
@@ -861,7 +861,7 @@ namespace cadabra {
 	str_node::str_node(const std::string& nm, bracket_t br, parent_rel_t pr)
 		: content(std::monostate())
 		{
-		multiplier=rat_set.insert(1).first;
+		one(multiplier);
 		name=name_set.insert(nm).first;
 		//	fl.modifier=m_none;
 		fl.bracket=br;
@@ -1157,7 +1157,11 @@ namespace cadabra {
 
 	void one(rset_t::iterator& num)
 		{
-		num=rat_set.insert(1).first;
+		static rset_t::iterator rat_it_one=rat_set.end();
+		
+		if(rat_it_one==rat_set.end())
+			rat_it_one = rat_set.insert(1).first;
+		num=rat_it_one; 
 		}
 
 	void flip_sign(rset_t::iterator& num)
