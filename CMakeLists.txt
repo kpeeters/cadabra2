@@ -103,11 +103,15 @@ endif()
 
 set(PKG_CONFIG_USE_STATIC_LIBS OFF)
 
-find_package(TBB QUIET)  
-if(TBB_FOUND)
-  message(STATUS "TBB found, will make some operations parallel")
+if(NOT APPLE)
+  find_package(TBB QUIET)  
+  if(TBB_FOUND)
+    message(STATUS "TBB found, will make some operations parallel")
+  else()
+    message(STATUS "TBB not found, parallel operations disabled")
+  endif()
 else()
-  message(STATUS "TBB not found, parallel operations disabled")
+  message(STATUS "Apple's toolchain not yet supporting TBB properly, disabled")
 endif()
 
 # Get version information.

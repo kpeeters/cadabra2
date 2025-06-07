@@ -31,6 +31,7 @@ You should have received a copy of the GNU General Public License
 #include <assert.h>
 #include <initializer_list>
 #include <variant>
+#include <memory_resource>
 
 #include "tree.hh"
 #include "Multiplier.hh"
@@ -154,7 +155,7 @@ namespace cadabra {
 	void     half(rset_t::iterator&);
 	void     set(rset_t::iterator&, multiplier_t);
 	
-	/// \ingroup core
+
 	///
 	/// Basic storage class for symbolic mathemematical expressions. The
 	/// full meaning of an expression typically requires knowledge about
@@ -162,11 +163,15 @@ namespace cadabra {
 	/// contain. All property dependent algorithms acting on Ex
 	/// objects are in Algorithm.hh.
 
-	class Ex : public std::enable_shared_from_this<Ex>, public tree<str_node> {
+//	typedef tree<str_node, std::pmr::polymorphic_allocator<tree_node_<str_node>>> cdb_tree;
+//	extern std::pmr::polymorphic_allocator<tree_node_<str_node>> alloc;
+	typedef tree<str_node, std::pmr::polymorphic_allocator<tree_node_<str_node>>> cdb_tree;
+	
+	class Ex : public std::enable_shared_from_this<Ex>, public cdb_tree {
 		public:
 			Ex();
 			/// Create a new Ex with a copy of the subtree at the given iterator.
-			explicit Ex(tree<str_node>::iterator);
+			explicit Ex(cdb_tree::iterator);
 			/// Create new Ex with single head node being a copy of the given node.
 			explicit Ex(const str_node&);
 			/// Copy constructor: create a full copy of the given other Ex.
@@ -330,7 +335,7 @@ namespace cadabra {
 		private:
 			result_t state_;
 
-			std::vector<tree<str_node> > history;
+			std::vector<cdb_tree> history;
 			/// Patterns which describe how to get from one history step to the next.
 			std::vector<std::vector<Ex::path_t> > terms;
 		};

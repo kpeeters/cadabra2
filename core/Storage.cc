@@ -42,6 +42,9 @@ namespace cadabra {
 	nset_t    name_set;
 	rset_t    rat_set;
 
+   // Simple pool for memory allocation.
+	std::pmr::unsynchronized_pool_resource                pool;
+	
 	long to_long(multiplier_t mul)
 		{
 		if(!mul.is_rational())
@@ -68,36 +71,35 @@ namespace cadabra {
 	// Expression constructor/destructor members.
 
 	Ex::Ex()
-		: tree<str_node>(), state_(result_t::l_no_action)
+		: cdb_tree(&pool)
+		, state_(result_t::l_no_action)
 		{
 		}
 
-	Ex::Ex(tree<str_node>::iterator it)
-		: tree<str_node>(it), state_(result_t::l_no_action)
+	Ex::Ex(cdb_tree::iterator it)
+		: cdb_tree(it, &pool)
+		, state_(result_t::l_no_action)
 		{
 		}
 
 	Ex::Ex(const str_node& x)
-		: tree<str_node>(x), state_(result_t::l_no_action)
+		: cdb_tree(x, &pool)
+		, state_(result_t::l_no_action)
 		{
 		}
 
 	Ex::Ex(const Ex& other)
-		: std::enable_shared_from_this<Ex>(other), tree<str_node>(other), state_(result_t::l_no_action)
+		: std::enable_shared_from_this<Ex>(other)
+		, cdb_tree(other, &pool)
+		, state_(result_t::l_no_action)
 		{
 		//	std::cout << "Ex copy constructor" << std::endl;
 		}
 
-//	Ex::Ex(Ex other)
-//		: std::enable_shared_from_this<Ex>(other), tree<str_node>(other), state_(result_t::l_no_action)
-//		{
-//		//	std::cout << "Ex copy constructor" << std::endl;
-//		}
-
 	Ex& Ex::operator=(Ex other)
 		{
-		std::swap(static_cast<tree<str_node>&>(*this),
-					 static_cast<tree<str_node>&>(other));
+		std::swap(static_cast<cdb_tree&>(*this),
+					 static_cast<cdb_tree&>(other));
 		std::swap((*this).state_, other.state_);
 		std::swap((*this).history, other.history);
 		std::swap((*this).terms, other.terms);
@@ -106,26 +108,31 @@ namespace cadabra {
 		}
 
 	Ex::Ex(const std::string& str)
-		: state_(result_t::l_no_action)
+		: cdb_tree(&pool)
+		, state_(result_t::l_no_action)
 		{
 		set_head(str_node(str));
 		}
 
 	Ex::Ex(int val)
-		: state_(result_t::l_no_action)
+		: cdb_tree(&pool)
+		, state_(result_t::l_no_action)
 		{
 		set_head(str_node("1"));
 		multiply(begin()->multiplier, val);
 		}
 
 	Ex::Ex(double val)
-		: state_(result_t::l_no_action)
+		: cdb_tree(&pool)
+		, state_(result_t::l_no_action)
 		{
 		std::ostringstream str;
 		str << val;
 		set_head(str_node(str.str()));
 		}
 
+
+	
 	Ex::result_t Ex::state() const
 		{
 		return state_;
@@ -787,7 +794,7 @@ namespace cadabra {
 
 	std::vector<Ex::path_t> Ex::pop_history()
 		{
-		tree<str_node>::operator=(history.back());
+		cdb_tree::operator=(history.back());
 		history.pop_back();
 		auto ret(terms.back());
 		terms.pop_back();
@@ -1152,7 +1159,11 @@ namespace cadabra {
 
 	void zero(rset_t::iterator& num)
 		{
-		num=rat_set.insert(0).first;
+		static rset_t::iterator rat_it_zero=rat_set.end();
+
+		if(rat_it_zero==rat_set.end())
+			rat_it_zero = rat_set.insert(0).first;
+		num=rat_it_zero;
 		}
 
 	void one(rset_t::iterator& num)
