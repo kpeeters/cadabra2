@@ -22,14 +22,14 @@
 			"cell_type": "latex",
 			"cells": [
 				{
-					"cell_id": 6506838075069087632,
+					"cell_id": 16021072591756643213,
 					"cell_origin": "client",
 					"cell_type": "latex_view",
-					"source": "The main object to deal with this conversion is \\verb|SympyBridge|. This object takes the expression you want to share with SymPy:"
+					"source": "The main object to deal with this conversion is \\verb|SympyBridge|. This object takes the expression you want to share with SymPy. Let us start with a non-trivial Cadabra expression,"
 				}
 			],
 			"hidden": true,
-			"source": "The main object to deal with this conversion is \\verb|SympyBridge|. This object takes the expression you want to share with SymPy:"
+			"source": "The main object to deal with this conversion is \\verb|SympyBridge|. This object takes the expression you want to share with SymPy. Let us start with a non-trivial Cadabra expression,"
 		},
 		{
 			"cell_id": 14640557008397293206,
@@ -78,6 +78,21 @@
 				}
 			],
 			"source": "ex:= \\sin(x)**2 + \\cos(x)**2 + \\partial_{t}{x};"
+		},
+		{
+			"cell_id": 811930716112812923,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 4981305692711169774,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The above expression contains \\verb|\\sin| and \\verb|\\cos| (which SymPy does not understand) and it also contains a variable $x$ which implicitly depends on $t$ (the dependence is not shown in the output). In order to be able to feed this into SymPy, and get it back later, we create a \\verb|SympyBridge| object, passing it the expression:"
+				}
+			],
+			"hidden": true,
+			"source": "The above expression contains \\verb|\\sin| and \\verb|\\cos| (which SymPy does not understand) and it also contains a variable $x$ which implicitly depends on $t$ (the dependence is not shown in the output). In order to be able to feed this into SymPy, and get it back later, we create a \\verb|SympyBridge| object, passing it the expression:"
 		},
 		{
 			"cell_id": 14171341419325683178,
@@ -258,14 +273,14 @@
 			"cell_type": "latex",
 			"cells": [
 				{
-					"cell_id": 17165981811349329774,
+					"cell_id": 16158702197574445152,
 					"cell_origin": "client",
 					"cell_type": "latex_view",
-					"source": "Note how this has nicely removed the explicit dependence on $t$ and turned it back into an implicit notation."
+					"source": "Note how this has nicely removed the explicit dependence on $t$ and turned it back into an implicit notation, writing just $x$ and not $x(t)$."
 				}
 			],
 			"hidden": true,
-			"source": "Note how this has nicely removed the explicit dependence on $t$ and turned it back into an implicit notation."
+			"source": "Note how this has nicely removed the explicit dependence on $t$ and turned it back into an implicit notation, writing just $x$ and not $x(t)$."
 		},
 		{
 			"cell_id": 11664900633694074895,
