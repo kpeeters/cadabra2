@@ -42,6 +42,7 @@ set(TUTORIALS
   ref_derivatives
   ref_default_simplification
   ref_programming
+  ref_sympy
   ref_kernel
   ref_dynamical_updates
   ref_plotting
@@ -69,6 +70,7 @@ set(BOOK_PARTS
    ref_derivatives
    ref_default_simplification
    ref_programming
+   ref_sympy
    ref_kernel
    ref_dynamical_updates
    ref_plotting

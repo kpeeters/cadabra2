@@ -644,7 +644,9 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 #ifdef DEBUG
 	std::cerr << "handle_derivative " << Ex(it) << std::endl;
 #endif
-
+	// Remember the name of the derivative in case we need to put it back later.
+	nset_t::iterator derivative_name = it->name;
+	
 	// In order to figure out which components to keep, we need to do two things:
 	// expand into components the argument of the derivative, and then
 	// figure out the dependence of that argument on the various coordinates.
@@ -905,7 +907,8 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 
 			// Wrap a '\\partial' node around the component value, and add the
 			// same index values as above to this node.
-			rhs=eqcopy.wrap(rhs, str_node("\\partial"));
+			// FIXME: use the same derivative as was present in the tree!
+			rhs=eqcopy.wrap(rhs, str_node(derivative_name)); // "\\partial"));
 			multiply(rhs->multiplier, mult);
 			multiply(rhs->multiplier, *it->multiplier);
 			//				auto pch=tr.begin(it);

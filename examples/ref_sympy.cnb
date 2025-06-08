@@ -1,0 +1,282 @@
+{
+	"cell_id": 6019221673666211598,
+	"cells": [
+		{
+			"cell_id": 3141052395239476853,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 11719283590375328817,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Using SymPy on Cadabra expressions}\n\nWhile Cadabra contains a large number of function for expression manipulation, there are many things for which it does not attempt to re-invent the wheel, and calls into SymPy instead. If you want to write functions which manipulate Cadabra expressions and call SymPy functionality on them yourself, you need to know how to export expressions to SymPy form, and read them back once it has done processing. This is somewhat non-trivial, because Cadabra's notation allows for much more general expressions than SymPy. Think of \\LaTeX{} expressions, super- and sub-scripts but also objects which depend implicitly on other variables. These things all need converting to something which SymPy can handle, and converting back once SymPy has produced a result."
+				}
+			],
+			"hidden": true,
+			"source": "\\section*{Using SymPy on Cadabra expressions}\n\nWhile Cadabra contains a large number of function for expression manipulation, there are many things for which it does not attempt to re-invent the wheel, and calls into SymPy instead. If you want to write functions which manipulate Cadabra expressions and call SymPy functionality on them yourself, you need to know how to export expressions to SymPy form, and read them back once it has done processing. This is somewhat non-trivial, because Cadabra's notation allows for much more general expressions than SymPy. Think of \\LaTeX{} expressions, super- and sub-scripts but also objects which depend implicitly on other variables. These things all need converting to something which SymPy can handle, and converting back once SymPy has produced a result."
+		},
+		{
+			"cell_id": 10363222040320991365,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6506838075069087632,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The main object to deal with this conversion is \\verb|SympyBridge|. This object takes the expression you want to share with SymPy:"
+				}
+			],
+			"hidden": true,
+			"source": "The main object to deal with this conversion is \\verb|SympyBridge|. This object takes the expression you want to share with SymPy:"
+		},
+		{
+			"cell_id": 14640557008397293206,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 1903856519260829384,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property PartialDerivative attached to~}\\backslash\\texttt{partial}\\{\\#\\}.\\end{dmath*}"
+				},
+				{
+					"cell_id": 5389729631487424600,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Coordinate attached to~}t.\\end{dmath*}"
+				},
+				{
+					"cell_id": 15183844825491131371,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Depends attached to~}x.\\end{dmath*}"
+				}
+			],
+			"source": "\\partial{#}::PartialDerivative;\nt::Coordinate;\nx::Depends(t);"
+		},
+		{
+			"cell_id": 2257448352953451952,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 5673945660503220817,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2244579140410715340,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(\\sin(x))**2 + (\\cos(x))**2 + \\partial_{t}(x)"
+						}
+					],
+					"source": "\\begin{dmath*}{}{\\left(\\sin{x}\\right)}^{2\\,}\\discretionary{}{}{}+{\\left(\\cos{x}\\right)}^{2\\,}\\discretionary{}{}{}+\\partial_{t}{x}\\end{dmath*}"
+				}
+			],
+			"source": "ex:= \\sin(x)**2 + \\cos(x)**2 + \\partial_{t}{x};"
+		},
+		{
+			"cell_id": 14171341419325683178,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9324437737560885980,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}<cadabra2.SympyBridge object at 0xe07bbf91e9f0>\\end{verbatim}"
+				}
+			],
+			"source": "sb = SympyBridge(ex);"
+		},
+		{
+			"cell_id": 12417034613577478302,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 12120598920304089059,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "In order to retrieve the SymPy object, use the \\verb|to_sympy()| function, "
+				}
+			],
+			"hidden": true,
+			"source": "In order to retrieve the SymPy object, use the \\verb|to_sympy()| function, "
+		},
+		{
+			"cell_id": 7460301723421844097,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 5072796742531126398,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}<class 'sympy.core.add.Add'>\n\\end{verbatim}"
+				}
+			],
+			"source": "ex_sympy = sb.to_sympy()\nprint(type(ex_sympy))"
+		},
+		{
+			"cell_id": 14363314488499443831,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 17654699939173108028,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "As you can see, the expression is now a SymPy object. If you print it, you will note that Cadabra has converted the \\LaTeX{} symbols \\verb|\\sin| and \\verb|\\cos| to something SymPy understands, and it has also written out the implicit dependence on the $t$ variable,"
+				}
+			],
+			"hidden": true,
+			"source": "As you can see, the expression is now a SymPy object. If you print it, you will note that Cadabra has converted the \\LaTeX{} symbols \\verb|\\sin| and \\verb|\\cos| to something SymPy understands, and it has also written out the implicit dependence on the $t$ variable,"
+		},
+		{
+			"cell_id": 12438384282863570392,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13812092378261898253,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}sin(x(t))**2 + cos(x(t))**2 + Derivative(x(t), t)\n\\end{verbatim}"
+				}
+			],
+			"source": "print(ex_sympy)"
+		},
+		{
+			"cell_id": 3314936080047954075,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 164194584640500209,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "You can now manipulate this expression as you want, using standard SymPy functionality. Let's simplify this,"
+				}
+			],
+			"hidden": true,
+			"source": "You can now manipulate this expression as you want, using standard SymPy functionality. Let's simplify this,"
+		},
+		{
+			"cell_id": 7089643061312412743,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16411946838613534031,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\frac{d}{d t} x{\\left(t \\right)} + 1\\end{dmath*}"
+				},
+				{
+					"cell_id": 4953591400351871195,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}<class 'sympy.core.add.Add'>\n\\end{verbatim}"
+				}
+			],
+			"source": "res = sympy.simplify( ex_sympy );\nprint(type(res))"
+		},
+		{
+			"cell_id": 6370470393263816966,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 2806557392660395011,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "This is of course still a SymPy expression. We can pull it back into Cadabra by using the \\verb|SympyBridge| again,"
+				}
+			],
+			"hidden": true,
+			"source": "This is of course still a SymPy expression. We can pull it back into Cadabra by using the \\verb|SympyBridge| again,"
+		},
+		{
+			"cell_id": 1133881024765925592,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16842440128708875391,
+					"cell_origin": "server",
+					"cell_type": "verbatim",
+					"source": "\\begin{verbatim}None\\end{verbatim}"
+				}
+			],
+			"source": "sb.from_sympy( str(res) );"
+		},
+		{
+			"cell_id": 17254762459033388476,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 13664737385979361090,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "This does not return a new expression (the return value is \\verb|None|), but instead puts the SymPy expression back into the original Cadabra expression that we started with when we constructed the bridge; here that is \\verb|ex|. Indeed,"
+				}
+			],
+			"hidden": true,
+			"source": "This does not return a new expression (the return value is \\verb|None|), but instead puts the SymPy expression back into the original Cadabra expression that we started with when we constructed the bridge; here that is \\verb|ex|. Indeed,"
+		},
+		{
+			"cell_id": 17271004422718666216,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 7299672788223294947,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5642009269026165180,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\partial_{t}(x) + 1"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\partial_{t}{x}\\discretionary{}{}{}+1\\end{dmath*}"
+				}
+			],
+			"source": "ex;"
+		},
+		{
+			"cell_id": 13344444686216197143,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 17165981811349329774,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Note how this has nicely removed the explicit dependence on $t$ and turned it back into an implicit notation."
+				}
+			],
+			"hidden": true,
+			"source": "Note how this has nicely removed the explicit dependence on $t$ and turned it back into an implicit notation."
+		},
+		{
+			"cell_id": 11664900633694074895,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
+	"version": 1.0
+}
