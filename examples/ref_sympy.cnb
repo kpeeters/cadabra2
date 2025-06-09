@@ -37,19 +37,19 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 1903856519260829384,
+					"cell_id": 17642380777219746400,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property PartialDerivative attached to~}\\backslash\\texttt{partial}\\{\\#\\}.\\end{dmath*}"
 				},
 				{
-					"cell_id": 5389729631487424600,
+					"cell_id": 11311532150071334257,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property Coordinate attached to~}t.\\end{dmath*}"
 				},
 				{
-					"cell_id": 15183844825491131371,
+					"cell_id": 10285511277438191052,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property Depends attached to~}x.\\end{dmath*}"
@@ -63,12 +63,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 5673945660503220817,
+					"cell_id": 11641289790669342633,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 2244579140410715340,
+							"cell_id": 6829148980251860903,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "(\\sin(x))**2 + (\\cos(x))**2 + \\partial_{t}(x)"
@@ -100,10 +100,10 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 9324437737560885980,
+					"cell_id": 16351361485273877233,
 					"cell_origin": "server",
 					"cell_type": "verbatim",
-					"source": "\\begin{verbatim}<cadabra2.SympyBridge object at 0xe07bbf91e9f0>\\end{verbatim}"
+					"source": "\\begin{verbatim}<cadabra2.SympyBridge object at 0xe74381340c70>\\end{verbatim}"
 				}
 			],
 			"source": "sb = SympyBridge(ex);"
@@ -129,7 +129,7 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 5072796742531126398,
+					"cell_id": 12898408199579522338,
 					"cell_origin": "server",
 					"cell_type": "output",
 					"source": "\\begin{verbatim}<class 'sympy.core.add.Add'>\n\\end{verbatim}"
@@ -158,7 +158,7 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 13812092378261898253,
+					"cell_id": 9598964413090421073,
 					"cell_origin": "server",
 					"cell_type": "output",
 					"source": "\\begin{verbatim}sin(x(t))**2 + cos(x(t))**2 + Derivative(x(t), t)\n\\end{verbatim}"
@@ -187,13 +187,13 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 16411946838613534031,
+					"cell_id": 11685820618493173482,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\frac{d}{d t} x{\\left(t \\right)} + 1\\end{dmath*}"
 				},
 				{
-					"cell_id": 4953591400351871195,
+					"cell_id": 546058567743717626,
 					"cell_origin": "server",
 					"cell_type": "output",
 					"source": "\\begin{verbatim}<class 'sympy.core.add.Add'>\n\\end{verbatim}"
@@ -222,13 +222,13 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 16842440128708875391,
+					"cell_id": 11794754683863187961,
 					"cell_origin": "server",
 					"cell_type": "verbatim",
 					"source": "\\begin{verbatim}None\\end{verbatim}"
 				}
 			],
-			"source": "sb.from_sympy( str(res) );"
+			"source": "sb.from_sympy( res );"
 		},
 		{
 			"cell_id": 17254762459033388476,
@@ -251,12 +251,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 7299672788223294947,
+					"cell_id": 16101485724532254709,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 5642009269026165180,
+							"cell_id": 8801360286293087809,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\partial_{t}(x) + 1"
