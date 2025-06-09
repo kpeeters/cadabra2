@@ -304,7 +304,7 @@ cadabra::Ex sympy::SympyBridge::convert(pybind11::handle obj)
 		// See https://github.com/sympy/sympy/issues/18028 for details.
 
 		pybind11::object mro = type_obj.attr("__mro__");
-		int depth=0;
+//		int depth=0;
 		for(pybind11::handle base_class: mro) {
 			std::string class_name = base_class.attr("__name__").cast<std::string>();
 			if(class_name == "Function") {
@@ -316,8 +316,8 @@ cadabra::Ex sympy::SympyBridge::convert(pybind11::handle obj)
 					}
 				return ex_fun;
 				}
-			if(++depth == 3)
-				break;
+//			if(++depth == 3)
+//				break;
 			}
 		throw InternalError("SympyBridge::convert: do not know (yet) how to handle "+type_name);
 		}
