@@ -184,6 +184,8 @@ namespace cadabra {
 			explicit Ex(int);
 			/// Create a single-node Ex representing the given float.
 			explicit Ex(double);
+			/// Create a single-node Ex representing the given rational.
+			explicit Ex(int, int);
 
 			Ex& operator=(Ex);
 			

@@ -798,6 +798,8 @@ namespace cadabra {
 		.def(py::init(&SympyBridge_init))
 		.def("to_sympy", &sympy::SympyBridge::export_ex)
 		.def("from_sympy", &sympy::SympyBridge::import_ex)
+//		.def("from_sympy_new", &sympy::SympyBridge::import_ex_new)			
+//		.def("from_sympy_new", &sympy::SympyBridge::import_ex_new)
 		;
 
 		m.def("join", [](const Ex_ptr ex1, const Ex_ptr ex2, py::args args) {

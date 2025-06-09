@@ -122,6 +122,14 @@ namespace cadabra {
 		multiply(begin()->multiplier, val);
 		}
 
+	Ex::Ex(int numer, int denom)
+		: cdb_tree(&pool)
+		, state_(result_t::l_no_action)
+		{
+		set_head(str_node("1"));
+		multiply(begin()->multiplier, mpq_class(numer, denom));
+		}
+
 	Ex::Ex(double val)
 		: cdb_tree(&pool)
 		, state_(result_t::l_no_action)

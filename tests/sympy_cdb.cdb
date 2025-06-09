@@ -4,8 +4,8 @@ def test01():
    __cdbkernel__=create_scope()    
    ex:=3x + x**2 + a x**2 + b x;
    q=SympyBridge(ex)
-   q.from_sympy( str(sympy.collect(q.to_sympy(), $x$)) )
-   tst:= x**2 (a + 1) + x ( b + 3) - @(ex);
+   q.from_sympy( sympy.collect(q.to_sympy(), $x$) )
+   tst:= (a + 1) x**2 + (b + 3) x - @(ex);
    assert(tst==0)
    print("Test 01 passed")
     
@@ -32,14 +32,15 @@ def test03():
    r::Depends(\tau).
    ex:=\partial{r};
    q=SympyBridge(ex)
-   q.from_sympy(str(q.to_sympy()))
+   q.from_sympy( q.to_sympy() )
+   ex;
    tst:= \partial{r} - @(ex);
    assert(tst==0)
    print("Test 03a passed")
 
    ex:=\partial{\partial{r}};
    q=SympyBridge(ex)
-   q.from_sympy(str(q.to_sympy()))
+   q.from_sympy( q.to_sympy() )
    tst:= \partial{\partial{r}} - @(ex);
    assert(tst==0)
    print("Test 03b passed")
@@ -125,3 +126,14 @@ def test09():
    print("Test 09 passed")
 
 test09()
+
+from cdb.sympy.solvers import *
+
+def test10():
+   __cdbkernel__=create_scope()
+   syst := {x**2 = y + z, z = x - 3};
+   sol=nonlinsolve(syst, $x, y$);
+   assert(sol == $\comma{x -> z + 3, y->z**2 + 5z + 9}$)
+   print("Test 10 passed")
+
+test10()

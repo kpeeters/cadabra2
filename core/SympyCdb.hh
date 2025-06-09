@@ -22,10 +22,13 @@ namespace sympy {
 			virtual ~SympyBridge();
 
 			pybind11::object export_ex();
-			void             import_ex(const std::string&);
+//			void             import_ex(const std::string&);
+			void             import_ex(pybind11::object obj);
 
 		private:
 			std::shared_ptr<cadabra::Ex> ex;
+
+			cadabra::Ex convert(pybind11::handle obj);
 		};
 #endif
 
