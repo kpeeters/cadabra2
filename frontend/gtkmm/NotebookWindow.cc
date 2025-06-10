@@ -1745,7 +1745,8 @@ void NotebookWindow::update_cell(const DTree&, DTree::iterator it)
 				  || it->cell_type==DataCell::CellType::output) {
 			vc.outbox->image.set_latex(it->textbuf);
 			vc.outbox->image.layout_latex();
-			vc.outbox->queue_draw();
+			resize_codeinput_texview(it, last_configure_width);
+//			vc.outbox->queue_draw();
 			}
 		else if(it->cell_type==DataCell::CellType::image_png) {
 			vc.imagebox->set_image_from_base64(it->textbuf);

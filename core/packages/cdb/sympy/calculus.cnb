@@ -58,18 +58,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 17044363474098762239,
+					"cell_id": 10741333136404033680,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 1549533792662962450,
+							"cell_id": 10741176021733363837,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": "\\partial_{x}(A_{\\mu}(x)) \\sin(x) + A_{\\mu}(x) \\cos(x)"
+							"source": "\\cos(x) A_{\\mu}(x) + \\sin(x) \\partial_{x}(A_{\\mu}(x))"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\partial_{x}\\left(A_{\\mu}\\left(x\\right)\\right) \\sin{x}\\discretionary{}{}{}+A_{\\mu}\\left(x\\right) \\cos{x}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\cos{x} A_{\\mu}\\left(x\\right)\\discretionary{}{}{}+\\sin{x} \\partial_{x}\\left(A_{\\mu}\\left(x\\right)\\right)\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
@@ -81,18 +81,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 13048674787581622951,
+					"cell_id": 15761683789547886217,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 11956679087606832042,
+							"cell_id": 16581721455931262993,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": "-\\cos(x) \\sin(y)"
+							"source": "-\\sin(y) \\cos(x)"
 						}
 					],
-					"source": "\\begin{dmath*}{}-\\,\\cos{x} \\sin{y}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}-\\,\\sin{y} \\cos{x}\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
@@ -140,12 +140,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 17241899187634684168,
+					"cell_id": 3923950039630300427,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 5119575656856446397,
+							"cell_id": 17106994130473408151,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": " 9/2 "
@@ -178,18 +178,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 13216076503953236972,
+					"cell_id": 400193765716168062,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 11563694952578919732,
+							"cell_id": 11825667400944765124,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": " 1/3 y (x)**3"
+							"source": " 1/3 (x)**3 y"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\frac{1}{3}\\,y {x}^{3\\,}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\frac{1}{3}\\,{x}^{3\\,} y\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
@@ -216,12 +216,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 11159826511854133461,
+					"cell_id": 13729551692473219465,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 9138173892197281644,
+							"cell_id": 1123541809795391727,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": " 1/4 (y)**2"
@@ -260,12 +260,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 15973647866713765846,
+					"cell_id": 3270259090712891077,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 13414905004892106419,
+							"cell_id": 9414493474589972675,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "1"
@@ -304,22 +304,22 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 7344744453168100686,
+					"cell_id": 16012079193316282695,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 15984370525418537606,
+							"cell_id": 1666930631384807356,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": "1 -  1/6 (x)**2 + \\bigO((x)**4)"
+							"source": "1 -  1/6 (x)**2 +  1/120 (x)**4 -  1/5040 (x)**6 + \\bigO((x)**8)"
 						}
 					],
-					"source": "\\begin{dmath*}{}1\\discretionary{}{}{} - \\frac{1}{6}\\,{x}^{2\\,}\\discretionary{}{}{}+\\bigO\\left({x}^{4\\,}\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}1\\discretionary{}{}{} - \\frac{1}{6}\\,{x}^{2\\,}\\discretionary{}{}{}+\\frac{1}{120}\\,{x}^{4\\,}\\discretionary{}{}{} - \\frac{1}{5040}\\,{x}^{6\\,}\\discretionary{}{}{}+\\bigO\\left({x}^{8\\,}\\right)\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
-			"source": "q=series($\\sin(x)/x$, $x$, 0, 4);"
+			"source": "q=series($\\sin(x)/x$, $x$, 0, 8);"
 		},
 		{
 			"cell_id": 12877610158835516880,
@@ -327,18 +327,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 11749476330229541989,
+					"cell_id": 16429600809897384787,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 583626970135417785,
+							"cell_id": 4370193819508955020,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": "1 -  1/6 (x)**2"
+							"source": "1 -  1/6 (x)**2 +  1/120 (x)**4 -  1/5040 (x)**6"
 						}
 					],
-					"source": "\\begin{dmath*}{}1\\discretionary{}{}{} - \\frac{1}{6}\\,{x}^{2\\,}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}1\\discretionary{}{}{} - \\frac{1}{6}\\,{x}^{2\\,}\\discretionary{}{}{}+\\frac{1}{120}\\,{x}^{4\\,}\\discretionary{}{}{} - \\frac{1}{5040}\\,{x}^{6\\,}\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
@@ -350,18 +350,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 4854290735318477927,
+					"cell_id": 3476155041445637448,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 10308547016749708807,
+							"cell_id": 83988254890014517,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": " 1/2 2**( 1/2 ) -  1/2 2**( 1/2 ) (x -  1/4 \\pi) + \\bigO((x -  1/4 \\pi)**2)"
+							"source": " 1/2 2**( 1/2 ) -  1/2 (x -  1/4 \\pi) 2**( 1/2 ) + \\bigO((x -  1/4 \\pi)**2)"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\frac{1}{2}\\,\\sqrt{2\\,}\\discretionary{}{}{} - \\frac{1}{2}\\,\\sqrt{2\\,} \\left(x\\discretionary{}{}{} - \\frac{1}{4}\\,\\pi\\right)\\discretionary{}{}{}+\\bigO\\left({\\left(x\\discretionary{}{}{} - \\frac{1}{4}\\,\\pi\\right)}^{2\\,}\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\frac{1}{2}\\,\\sqrt{2\\,}\\discretionary{}{}{} - \\frac{1}{2}\\,\\left(x\\discretionary{}{}{} - \\frac{1}{4}\\,\\pi\\right) \\sqrt{2\\,}\\discretionary{}{}{}+\\bigO\\left({\\left(x\\discretionary{}{}{} - \\frac{1}{4}\\,\\pi\\right)}^{2\\,}\\right)\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
@@ -394,18 +394,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 7069901094822300282,
+					"cell_id": 5406323791023273832,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 6550692298697243616,
+							"cell_id": 1855448709790499107,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": "x (1 + x)"
+							"source": "(x + 1) x"
 						}
 					],
-					"source": "\\begin{dmath*}{}x \\left(1\\discretionary{}{}{}+x\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\left(x\\discretionary{}{}{}+1\\right) x\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,

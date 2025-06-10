@@ -46,6 +46,8 @@ SliderView::SliderView(std::string config)
 	
 	scale.set_adjustment(adjustment);
 	scale.set_digits(compute_scale_digits(step_size));
+	scale.set_margin_start(20);
+	scale.set_margin_end(20);
 	vbox.pack_start(scale, Gtk::PACK_SHRINK);
 	set_name("SliderView"); // to be able to style it with CSS
 	show_all();
