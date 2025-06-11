@@ -1626,7 +1626,7 @@ inline bool enableRawMode(int fd) {
     raw.c_cc[VMIN] = 1; raw.c_cc[VTIME] = 0; /* 1 byte, no timer */
 
     /* put terminal in raw mode after flushing */
-    if (tcsetattr(fd,TCSAFLUSH,&raw) < 0) goto fatal;
+    if (tcsetattr(fd,TCSADRAIN,&raw) < 0) goto fatal;
     rawmode = true;
 #else
     if (!atexit_registered) {
@@ -1675,7 +1675,7 @@ inline void disableRawMode(int fd) {
     rawmode = false;
 #else
     /* Don't even check the return value as it's too late. */
-    if (rawmode && tcsetattr(fd,TCSAFLUSH,&orig_termios) != -1)
+    if (rawmode && tcsetattr(fd,TCSADRAIN,&orig_termios) != -1)
         rawmode = false;
 #endif
 }
