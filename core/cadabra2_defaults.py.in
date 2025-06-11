@@ -485,6 +485,31 @@ def display(obj, cell_id=0, delay_send=False):
            return None
            # FIXME: send input_form version.
 
+    elif type(obj)==dict:
+        if server.handles('latex_view'):
+           cdb_out = "\\left\\{\\displaystyle{}";
+           first = True
+           for key in obj:
+              if first==False:
+                 cdb_out += ",\\hspace{.5em}";
+              else:
+                 first = False;
+              if type(key)==str:
+                 cdb_out += "\\text{'}"
+              cdb_out += display(key, cell_id, delay_send=True)
+              if type(key)==str:
+                 cdb_out += "\\text{'}"
+              cdb_out += ":\\,"
+              cdb_out += display(obj[key], cell_id, delay_send=True)
+           cdb_out += "\\right\\}"
+           if delay_send:
+              return cdb_out;
+           else:
+              return server.send(cdb_out, "latex_view", 0, cell_id, False)
+        else:
+           server.send(str(obj), "plain", 0, cell_id, False)
+           return None
+           
     elif hasattr(obj, "__send_to_server__"):
         obj.__send_to_server__(server)
            
