@@ -21,7 +21,8 @@
 
 using namespace cadabra;
 
-// #define DEBUG 1
+// #define DEBUG __FILE__
+#include "Debug.hh"
 
 #ifndef NO_SYMPY
 
@@ -227,6 +228,11 @@ cadabra::Ex sympy::SympyBridge::convert(pybind11::handle obj)
 			{ "<class 'sympy.core.numbers.NegativeOne'>",          [](pybind11::handle node)
 					{
 					return Ex(-1);
+					}
+			},
+			{ "<class 'sympy.core.numbers.ImaginaryUnit'>",          [](pybind11::handle node)
+					{
+					return Ex("\\iu");
 					}
 			},
 			{ "<class 'sympy.core.numbers.Pi'>",          [](pybind11::handle node)

@@ -137,3 +137,18 @@ def test10():
    print("Test 10 passed")
 
 test10()
+
+from cdb.sympy.solvers import *
+
+def test11():
+   \tau::Coordinate;
+   \dot{#}::Derivative(\tau);
+   X::Depends(\tau);
+   ex:= \dot{\dot{X}} + m**2 X = 0;
+   sol = rhs(dsolve(ex, $X$))
+   tst:= \exp( -\tau m \iu ) C1 + \exp( \tau m \iu ) C2 - @(sol);
+   assert(tst==0)
+
+test11()
+
+

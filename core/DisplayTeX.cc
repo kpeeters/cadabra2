@@ -1061,7 +1061,7 @@ void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)
 			}
 		++sib;
 		}
-	str << "\\end{aligned}\\right.\n";
+	str << "\\end{aligned}\\right\\}\n";
 	}
 
 void DisplayTeX::print_conditional(std::ostream& str, Ex::iterator it)
