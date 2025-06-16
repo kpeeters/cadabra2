@@ -2,6 +2,7 @@
 #include "IndexIterator.hh"
 #include "Exceptions.hh"
 #include "Cleanup.hh"
+#include "IndexClassifier.hh"
 #include "properties/Indices.hh"
 #include "properties/Integer.hh"
 #include "algorithms/young_project_tensor.hh"

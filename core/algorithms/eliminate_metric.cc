@@ -1,5 +1,6 @@
 
 #include "Cleanup.hh"
+#include "IndexClassifier.hh"
 #include "algorithms/eliminate_metric.hh"
 #include "properties/Metric.hh"
 #include "properties/InverseMetric.hh"

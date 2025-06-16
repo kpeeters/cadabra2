@@ -2,7 +2,7 @@
 #pragma once
 
 #include "Compare.hh"
-
+#include "IndexClassifier.hh"
 
 /// \ingroup algorithms
 ///

@@ -128,6 +128,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/NInterpolatingFunction.cc  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Exceptions.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Exchange.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/ExManip.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Functional.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexIterator.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexClassifier.cc  
@@ -256,7 +257,9 @@ set(MAIN_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayBase.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayTerminal.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/NEvaluator.hh
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Equals.hh  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Exceptions.hh
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/ExManip.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexClassifier.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexIterator.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Kernel.hh

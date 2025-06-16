@@ -2,6 +2,7 @@
 #include "Config.hh"
 #include "simplify.hh"
 #include "Cleanup.hh"
+#include "IndexClassifier.hh"
 #include "properties/Coordinate.hh"
 #include "properties/Symbol.hh"
 #include "SympyCdb.hh"

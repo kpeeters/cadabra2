@@ -1,5 +1,6 @@
 
 #include "Exceptions.hh"
+#include "IndexClassifier.hh"
 #include "algorithms/split_index.hh"
 
 // #define DEBUG 1

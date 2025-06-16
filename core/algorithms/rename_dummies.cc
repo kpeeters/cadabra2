@@ -2,6 +2,7 @@
 #include "algorithms/rename_dummies.hh"
 #include "properties/Indices.hh"
 #include "Exceptions.hh"
+#include "IndexClassifier.hh"
 
 using namespace cadabra;
 

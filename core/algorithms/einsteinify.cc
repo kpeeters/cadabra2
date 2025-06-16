@@ -1,5 +1,6 @@
 
 #include "algorithms/einsteinify.hh"
+#include "IndexClassifier.hh"
 
 using namespace cadabra;
 

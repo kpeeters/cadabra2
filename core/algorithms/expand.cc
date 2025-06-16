@@ -1,6 +1,7 @@
 
 #include "Cleanup.hh"
 #include "Exceptions.hh"
+#include "IndexClassifier.hh"
 #include "algorithms/expand.hh"
 #include "properties/Matrix.hh"
 

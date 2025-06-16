@@ -244,6 +244,7 @@ set(LOCAL_SRC_FILES
   TerminalStream.cc
   Exceptions.cc
   Exchange.cc
+  ExManip.cc
   Functional.cc
   Grouping.cc
   Hash.cc

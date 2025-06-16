@@ -48,12 +48,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace cadabra;
 
-ExManip::ExManip(const Kernel &k, Ex &e)
-	: kernel(k)
-	, tr(e)
-	{
-	}
-
 Algorithm::Algorithm(const Kernel& k, Ex& tr_)
 	: ExManip(k, tr_),
 //	  IndexClassifier(k),
@@ -107,7 +101,7 @@ Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
 			}
 		}
 
-	cleanup_dispatch_deep(ExManip::kernel, tr);
+	cleanup_dispatch_deep(kernel, tr);
 
 	return ret;
 	}
@@ -183,7 +177,7 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 			++start;
 			bool cpy=false;
 			if(work==it) cpy=true;
-			cleanup_dispatch(ExManip::kernel, tr, work);
+			cleanup_dispatch(kernel, tr, work);
 			if(cpy) it=work;
 			}
 		}
@@ -206,7 +200,7 @@ Algorithm::result_t Algorithm::apply_once(Ex::iterator& it)
 			result_t res=apply(it);
 			// std::cerr << "apply algorithm at " << *it->name << std::endl;
 			if(res==result_t::l_applied || res==result_t::l_applied_no_new_dummies) {
-				cleanup_dispatch(ExManip::kernel, tr, it);
+				cleanup_dispatch(kernel, tr, it);
 				return res;
 				}
 			}
@@ -254,7 +248,7 @@ Algorithm::result_t Algorithm::apply_deep(Ex::iterator& it)
 #endif
 			iterator work=current;
 			bool work_is_topnode=(work==it);
-			cleanup_dispatch(ExManip::kernel, tr, work);
+			cleanup_dispatch(kernel, tr, work);
 			current=work;
 			if(work_is_topnode)
 				it=work;
@@ -337,8 +331,8 @@ void Algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnod
 //	if(!tr.is_valid(walk))
 //		return;
 
-	const Derivative *der=ExManip::kernel.properties.get<Derivative>(walk);
-	const Trace *trace=ExManip::kernel.properties.get<Trace>(walk);
+	const Derivative *der=kernel.properties.get<Derivative>(walk);
+	const Trace *trace=kernel.properties.get<Trace>(walk);
 	if(*walk->name=="\\prod" || der || trace) {
 		if(der && it->is_index()) return;
 		walk->multiplier=rat_set.insert(0).first;
@@ -443,7 +437,7 @@ void Algorithm::pushup_multiplier(iterator it)
 				//				iterator tmp=tr.parent(it);
 				// tmp not always valid?!? This one crashes hard with a loop!?!
 				//				txtout << " of " << *tmp->name << std::endl;
-				const PropertyInherit *pin=ExManip::kernel.properties.get<PropertyInherit>(tr.parent(it));
+				const PropertyInherit *pin=kernel.properties.get<PropertyInherit>(tr.parent(it));
 				if(pin || *(tr.parent(it)->name)=="\\prod") {
 					multiply(tr.parent(it)->multiplier, *it->multiplier);
 					::one(it->multiplier); // moved up, was at end of block, correct?
@@ -505,7 +499,7 @@ unsigned int Algorithm::number_of_indices(iterator it)
 
 std::string Algorithm::get_index_set_name(iterator it) const
 	{
-	const Indices *ind=ExManip::kernel.properties.get<Indices>(it, true);
+	const Indices *ind=kernel.properties.get<Indices>(it, true);
 	if(ind) {
 		return ind->set_name;
 		// TODO: The logic was once as below, but it is no longer clear to
@@ -518,12 +512,12 @@ std::string Algorithm::get_index_set_name(iterator it) const
 
 index_iterator Algorithm::begin_index(iterator it) const
 	{
-	return index_iterator::begin(ExManip::kernel.properties, it);
+	return index_iterator::begin(kernel.properties, it);
 	}
 
 index_iterator Algorithm::end_index(iterator it) const
 	{
-	return index_iterator::end(ExManip::kernel.properties, it);
+	return index_iterator::end(kernel.properties, it);
 	}
 
 
@@ -705,7 +699,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 		std::cerr << "double index pair" << std::endl;
 #endif
 		Ex the_key=(*it).first;
-		const Indices *dums=ExManip::kernel.properties.get<Indices>(it->second, true);
+		const Indices *dums=kernel.properties.get<Indices>(it->second, true);
 		if(!dums)
 			throw ConsistencyException("Failed to find dummy property for $"+*it->second->name+"$ while renaming dummies.");
 		//			txtout << "failed to find dummy property for " << *it->second->name << std::endl;
@@ -719,7 +713,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 			//			(*it).second->name=relabel;
 			++it;
 			}
-		while(it!=must_be_empty.end() && tree_exact_equal(&ExManip::kernel.properties, (*it).first,the_key, 1, true, -2, true));
+		while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
 		}
 
 	// Catch triple indices (two cases: dummy pair in replacement, free index elsewhere and
@@ -735,7 +729,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 	while(it!=must_be_empty.end()) {
 		//std::cerr << "triple index pair " << it->first << std::endl;
 		Ex the_key=(*it).first;
-		const Indices *dums=ExManip::kernel.properties.get<Indices>(it->second, true);
+		const Indices *dums=kernel.properties.get<Indices>(it->second, true);
 		if(!dums)
 			throw ConsistencyException("Failed to find dummy property for $"+*it->second->name+"$ while renaming dummies.");
 		assert(dums);
@@ -747,7 +741,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 			tr.replace_index((*it).second, relabel.begin(), true);
 			++it;
 			}
-		while(it!=must_be_empty.end() && tree_exact_equal(&ExManip::kernel.properties, (*it).first,the_key, 1, true, -2, true));
+		while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
 		}
 
 	must_be_empty.clear();
@@ -757,7 +751,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 	while(it!=must_be_empty.end()) {
 		// std::cerr << "triple index pair 2" << std::endl;
 		Ex the_key=(*it).first;
-		const Indices *dums=ExManip::kernel.properties.get<Indices>(it->second, true);
+		const Indices *dums=kernel.properties.get<Indices>(it->second, true);
 		if(!dums)
 			throw ConsistencyException("Failed to find dummy property for $"+*it->second->name+"$ while renaming dummies.");
 		assert(dums);
@@ -769,7 +763,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 			tr.replace_index((*it).second, relabel.begin(), true);
 			++it;
 			}
-		while(it!=must_be_empty.end() && tree_exact_equal(&ExManip::kernel.properties, (*it).first,the_key, 1, true, -2, true));
+		while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
 		}
 
 	return true;
@@ -851,41 +845,6 @@ bool Algorithm::is_factorlike(iterator it)
 	return false;
 	}
 
-bool ExManip::is_single_term(iterator it)
-	{
-	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit"
-	      && *it->name!="\\comma" && *it->name!="\\equals" && *it->name!="\\arrow") {
-
-		if(tr.is_head(it) || *tr.parent(it)->name=="\\equals" || *tr.parent(it)->name=="\\int") return true;
-		else if(*tr.parent(it)->name=="\\sum")
-			return true;
-		else if(*tr.parent(it)->name!="\\prod" && it->fl.parent_rel==str_node::parent_rel_t::p_none
-		        && ExManip::kernel.properties.get<Accent>(tr.parent(it))==0 ) {
-#ifdef DEBUG
-			std::cerr << "Found single term in " << tr.parent(it) << std::endl;
-#endif
-			return true;
-			}
-		}
-	return false;
-	}
-
-bool ExManip::is_nonprod_factor_in_prod(iterator it)
-	{
-	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit" && *it->name!="\\comma"
-	      && *it->name!="\\equals") {
-		try {
-			if(tr.is_head(it)==false && *tr.parent(it)->name=="\\prod")
-				return true;
-			}
-		catch(navigation_error& ex) {
-			// no parent, ignore
-			}
-		//		else return true;
-		}
-	return false;
-	}
-
 bool Algorithm::is_noncommuting(const Properties& properties, iterator it)
 	{
 	auto nc = properties.get<NonCommuting>(it);
@@ -900,69 +859,6 @@ bool Algorithm::is_noncommuting(const Properties& properties, iterator it)
 	auto sac = properties.get<SelfAntiCommuting>(it);
 	if(sac) return true;
 
-	return false;
-	}
-
-bool ExManip::prod_wrap_single_term(iterator& it)
-	{
-	if(is_single_term(it)) {
-		force_node_wrap(it, "\\prod");
-		return true;
-		}
-	else return false;
-	}
-
-bool ExManip::sum_wrap_single_term(iterator& it)
-	{
-	if(is_single_term(it)) {
-		force_node_wrap(it, "\\sum");
-		return true;
-		}
-	else return false;
-	}
-
-void ExManip::force_node_wrap(iterator& it, std::string nm)
-	{
-	iterator prodnode=tr.insert(it, str_node(nm));
-	sibling_iterator fr=it, to=it;
-	++to;
-	tr.reparent(prodnode, fr, to);
-	prodnode->fl.bracket=it->fl.bracket;
-	it->fl.bracket=str_node::b_none;
-	if(nm!="\\sum") { // multipliers should sit on terms in a sum
-		prodnode->multiplier=it->multiplier;
-		one(it->multiplier);
-		}
-	it=prodnode;
-	}
-
-bool ExManip::prod_unwrap_single_term(iterator& it)
-	{
-	if((*it->name)=="\\prod") {
-		if(tr.number_of_children(it)==1) {
-			multiply(tr.begin(it)->multiplier, *it->multiplier);
-			tr.begin(it)->fl.bracket=it->fl.bracket;
-			tr.begin(it)->multiplier=it->multiplier;
-			tr.flatten(it);
-			it=tr.erase(it);
-			return true;
-			}
-		}
-	return false;
-	}
-
-bool ExManip::sum_unwrap_single_term(iterator& it)
-	{
-	if((*it->name)=="\\sum") {
-		if(tr.number_of_children(it)==1) {
-			multiply(tr.begin(it)->multiplier, *it->multiplier);
-			tr.begin(it)->fl.bracket=it->fl.bracket;
-			tr.begin(it)->multiplier=it->multiplier;
-			tr.flatten(it);
-			it=tr.erase(it);
-			return true;
-			}
-		}
 	return false;
 	}
 
@@ -1016,8 +912,8 @@ bool Algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 			}
 		} one_run;
 
-	if(one_run(ExManip::kernel, tr, i1, lca, check_dependence)) return true;
-	if(one_run(ExManip::kernel, tr, i2, lca, check_dependence)) return true;
+	if(one_run(kernel, tr, i1, lca, check_dependence)) return true;
+	if(one_run(kernel, tr, i2, lca, check_dependence)) return true;
 
 	return false;
 	}
@@ -1103,11 +999,11 @@ bool Algorithm::locate_object_set(const Ex& objs,
 
 std::set<Ex, tree_exact_less_obj> Algorithm::dependencies(iterator it) const
 	{
-	tree_exact_less_obj comp(&ExManip::kernel.properties);
+	tree_exact_less_obj comp(&kernel.properties);
 	std::set<Ex, tree_exact_less_obj> ret(comp);
 
 	// Is this node a coordinate itself? If so, add it.
-	const Coordinate *cd = ExManip::kernel.properties.get<Coordinate>(it, true);
+	const Coordinate *cd = kernel.properties.get<Coordinate>(it, true);
 	if(cd) {
 		Ex cpy(it);
 		cpy.begin()->fl.bracket=str_node::b_none;
@@ -1125,7 +1021,7 @@ std::set<Ex, tree_exact_less_obj> Algorithm::dependencies(iterator it) const
 		if(nd==it) return nd; // skip node itself, leads to indefinite recursion
 		if(nd->fl.parent_rel==str_node::p_none)
 			{
-			const Coordinate *cd = ExManip::kernel.properties.get<Coordinate>(nd, true);
+			const Coordinate *cd = kernel.properties.get<Coordinate>(nd, true);
 			if(cd) {
 				Ex cpy(nd);
 				cpy.begin()->fl.bracket=str_node::b_none;
@@ -1148,12 +1044,12 @@ std::set<Ex, tree_exact_less_obj> Algorithm::dependencies(iterator it) const
 	std::cerr << "deps for " << Ex(it) << std::endl;
 #endif
 
-	const DependsBase *dep = ExManip::kernel.properties.get<DependsBase>(it, true);
+	const DependsBase *dep = kernel.properties.get<DependsBase>(it, true);
 	if(dep) {
 #ifdef DEBUG
 		std::cerr << "implicit deps" << std::endl;
 #endif
-		Ex deps(dep->dependencies(ExManip::kernel, it));
+		Ex deps(dep->dependencies(kernel, it));
 		cadabra::do_list(deps, deps.begin(), [&](Ex::iterator nd) {
 			Ex cpy(nd);
 			cpy.begin()->fl.bracket=str_node::b_none;

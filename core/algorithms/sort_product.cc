@@ -1,5 +1,6 @@
 
 #include "Cleanup.hh"
+#include "IndexClassifier.hh"
 #include "algorithms/sort_product.hh"
 #include "properties/Trace.hh"
 

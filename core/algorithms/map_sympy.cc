@@ -3,6 +3,7 @@
 #include "properties/Coordinate.hh"
 #include "properties/Symbol.hh"
 #include "SympyCdb.hh"
+#include "IndexClassifier.hh"
 
 using namespace cadabra;
 
