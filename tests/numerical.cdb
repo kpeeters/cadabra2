@@ -151,4 +151,15 @@ def test09():
 
 test09()
 
-    
+\tau::Coordinate;
+\dot{#}::PartialDerivative(\tau);
+{X,Y}::Depends(\tau);
+funcs:= { X, Y };
+odes:= { \dot{\dot{X}} + X Y = - X Y, \dot{\dot{Y}} - X Y = 0 };
+first_order_form(odes, funcs);
+
+# \tau::Coordinate;
+# \dot{#}::PartialDerivative(\tau);
+# funcs:= { X(\tau), Y(\tau) };
+# odes:= { \dot{\dot{X(\tau)}} + X(\tau) Y(\tau) = 0, \dot{\dot{Y(\tau)}} - X(\tau) Y(\tau) = 0 };
+# first_order_form(odes, funcs);

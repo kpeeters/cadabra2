@@ -36,6 +36,7 @@
 #include "../algorithms/factor_in.hh"
 #include "../algorithms/factor_out.hh"
 #include "../algorithms/fierz.hh"
+#include "../algorithms/first_order_form.hh"
 #include "../algorithms/flatten_sum.hh"
 #include "../algorithms/indexsort.hh"
 #include "../algorithms/integrate_by_parts.hh"
@@ -105,6 +106,7 @@ namespace cadabra {
 		def_algo<expand_dummies, const Ex*, bool>(m, "expand_dummies", true, false, 0, py::arg("components") = nullptr, py::arg("zero_missing_components") = true);
 		def_algo<expand_power>(m, "expand_power", true, false, 0);
 		def_algo<explicit_indices>(m, "explicit_indices", true, false, 0);
+		def_algo<first_order_form, Ex>(m, "first_order_form", true, false, 0, py::arg("functions") = Ex{});
 		def_algo<flatten_sum>(m, "flatten_sum", true, false, 0);
 		def_algo<indexsort>(m, "indexsort", true, false, 0);
 		def_algo<lr_tensor>(m, "lr_tensor", true, false, 0);

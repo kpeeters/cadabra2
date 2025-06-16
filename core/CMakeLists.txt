@@ -65,6 +65,10 @@ find_package(Threads)
 # Enumerate input files and directories.
 #---------------------------------------------------------------------------
 
+SET(RESERVED_NODE_SRC_FILES
+  Equals.cc
+)
+
 SET(ALGORITHM_SRC_FILES
    algorithms/canonicalise.cc
    algorithms/collect_components.cc
@@ -91,6 +95,7 @@ SET(ALGORITHM_SRC_FILES
    algorithms/factor_in.cc
    algorithms/factor_out.cc
    algorithms/fierz.cc
+   algorithms/first_order_form.cc
    algorithms/flatten_product.cc
    algorithms/flatten_sum.cc
    algorithms/indexsort.cc
@@ -260,7 +265,8 @@ set(LOCAL_SRC_FILES
   YoungTab.cc
   modules/xperm_new.cc
   ${CADABRA_LIBS_DIR}/whereami/whereami.c
-  ${CADABRA_LIBS_DIR}/base64/base64.cc  
+  ${CADABRA_LIBS_DIR}/base64/base64.cc
+  ${RESERVED_NODE_SRC_FILES}
   ${ALGORITHM_SRC_FILES}
   ${PROPERTY_SRC_FILES}
 )

@@ -22,6 +22,25 @@ namespace cadabra {
 			}
 		}
 
+	void do_sum(const Ex& tr, Ex::iterator it, std::function<bool(Ex::iterator)> f)
+		{
+		if(it==tr.end()) return;
+
+		if(*it->name=="\\sum") {
+			Ex::sibling_iterator sib=tr.begin(it);
+			while(sib!=tr.end(it)) {
+				Ex::sibling_iterator nxt=sib;
+				++nxt;
+				if(f(sib)==false)
+					return;
+				sib=nxt;
+				}
+			}
+		else {
+			f(it);
+			}
+		}
+
 	int list_size(const Ex& tr, Ex::iterator it)
 		{
 		if(*it->name=="\\comma")

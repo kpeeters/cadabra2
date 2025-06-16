@@ -511,8 +511,10 @@ Ex IndexClassifier::get_dummy(const list_property *dums,
 	// 		std::cerr << i.first << std::endl;
 
 	while(pr.first!=pr.second) {
-		// std::cerr << "trying " << pr.first->second->obj << std::endl;
+		// std::cerr << "trying: " << std::endl;
+		// std::cerr << pr.first->second->obj << std::endl;
 		if(pr.first->second->obj.begin()->is_autodeclare_wildcard()) {
+			// std::cerr << "is autodeclare wildcard" << std::endl;
 			std::string base=*pr.first->second->obj.begin()->name_only();
 			int used=max_numbered_name(base, one, two, three, four, five);
 			std::ostringstream str;
@@ -524,6 +526,7 @@ Ex IndexClassifier::get_dummy(const list_property *dums,
 			return ret;
 			}
 		else {
+			// std::cerr << "is NOT autodeclare" << std::endl;
 			const Ex& inm=(*pr.first).second->obj;
 			// BUG: even if only _{a} is in the used map, we should not
 			// accept ^{a}. But since ...

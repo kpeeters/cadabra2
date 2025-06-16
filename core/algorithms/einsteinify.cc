@@ -23,10 +23,11 @@ Algorithm::result_t einsteinify::apply(iterator& it)
 		if(*metric.begin()->name!="")
 			insert_metric=true;
 
-	index_map_t ind_free, ind_dummy;
-	classify_indices(it, ind_free, ind_dummy);
-	index_map_t::iterator dit=ind_free.begin();
-	index_map_t::iterator prev=ind_free.end();
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_map_t ind_free, ind_dummy;
+	ic.classify_indices(it, ind_free, ind_dummy);
+	IndexClassifier::index_map_t::iterator dit=ind_free.begin();
+	IndexClassifier::index_map_t::iterator prev=ind_free.end();
 	dit=ind_dummy.begin();
 	prev=dit;
 	++dit;
@@ -40,7 +41,7 @@ Algorithm::result_t einsteinify::apply(iterator& it)
 				// get a new dummy index
 				const Indices *dums=kernel.properties.get<Indices>(dit->second, true);
 				assert(dums);
-				Ex dum=get_dummy(dums, it);
+				Ex dum=ic.get_dummy(dums, it);
 
 				// relink the indices
 				iterator tmpit=tr.append_child(invmet, (*prev).second);

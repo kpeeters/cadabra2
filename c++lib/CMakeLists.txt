@@ -105,6 +105,10 @@ endif()
 # Enumerate source files.
 #---------------------------------------------------------------------------
 
+SET(RESERVED_NODE_SRC_FILES
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Equals.cc
+)
+
 set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Adjform.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Algorithm.cc
@@ -213,6 +217,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/factor_in.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/factor_out.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/fierz.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/first_order_form.cc  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/flatten_product.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/flatten_sum.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/indexsort.cc
@@ -322,7 +327,7 @@ endif()
 # Targets
 #---------------------------------------------------------------------------
 
-add_library(cadabra2++objects         OBJECT ${LOCAL_SRC_FILES})
+add_library(cadabra2++objects         OBJECT ${LOCAL_SRC_FILES} ${RESERVED_NODE_SRC_FILES})
 set_property(TARGET cadabra2++objects PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_include_directories(cadabra2++objects PUBLIC "${LIB_INCLUDE_DIRS}")
 

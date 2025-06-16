@@ -13,8 +13,8 @@ namespace cadabra {
 			virtual result_t apply(iterator&);
 
 		private:
-			index_map_t                             ind_free_sum, ind_dummy_sum;
-			index_map_t                             added_this_term;
+			IndexClassifier::index_map_t            ind_free_sum, ind_dummy_sum;
+			IndexClassifier::index_map_t            added_this_term;
 			std::map<const Indices *, Ex::iterator> index_lines, first_index, last_index;         // for the current term
 
 			void handle_factor(sibling_iterator& factor, bool trace_it);

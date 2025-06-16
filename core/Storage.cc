@@ -815,7 +815,8 @@ namespace cadabra {
 		}
 
 	str_node::str_node(void)
-		: content(std::monostate())
+		: name(name_set.end())
+		, content(std::monostate())
 		{
 		one(multiplier);
 		//	fl.modifier=m_none;
@@ -841,7 +842,8 @@ namespace cadabra {
 //		}
 	
 	str_node::str_node(nset_t::iterator nm, bracket_t br, parent_rel_t pr)
-		: content(std::monostate())
+		: name(name_set.end())
+		, content(std::monostate())
 		{
 		one(multiplier);
 		name=nm;
@@ -852,7 +854,8 @@ namespace cadabra {
 		}
 
 	str_node::str_node(const std::u32string& nm, bracket_t br, parent_rel_t pr)
-		: content(std::monostate())
+		: name(name_set.end())
+		, content(std::monostate())
 		{
 #ifdef _MSC_VER
 		std::wstring_convert<std::codecvt_utf8<int32_t>, int32_t> conv;
@@ -874,7 +877,8 @@ namespace cadabra {
 		}
 
 	str_node::str_node(const std::string& nm, bracket_t br, parent_rel_t pr)
-		: content(std::monostate())
+		: name(name_set.end())
+		, content(std::monostate())
 		{
 		one(multiplier);
 		name=name_set.insert(nm).first;
@@ -978,6 +982,8 @@ namespace cadabra {
 
 	bool str_node::is_command() const
 		{
+		if(name == name_set.end()) return false;
+
 		if((*name).size()>0)
 			if((*name)[0]=='@') {
 				if((*name).size()>1) {
@@ -991,6 +997,8 @@ namespace cadabra {
 
 	bool str_node::is_inert_command() const
 		{
+		if(name == name_set.end()) return false;
+
 		if((*name).size()>1)
 			if((*name)[0]=='@')
 				if((*name)[1]=='@')
@@ -1000,6 +1008,8 @@ namespace cadabra {
 
 	bool str_node::is_name_wildcard() const
 		{
+		if(name == name_set.end()) return false;
+		
 		if((*name).size()>0)
 			if((*name)[name->size()-1]=='?') {
 				if(name->size()>1) {
@@ -1013,6 +1023,8 @@ namespace cadabra {
 
 	bool str_node::is_object_wildcard() const
 		{
+		if(name == name_set.end()) return false;
+
 		if((*name).size()>1)
 			if((*name)[name->size()-1]=='?')
 				if((*name)[name->size()-2]=='?')
@@ -1022,6 +1034,8 @@ namespace cadabra {
 
 	bool str_node::is_range_wildcard() const
 		{
+		if(name == name_set.end()) return false;
+
 		if(name->size()>0) {
 			if((*name)[0]=='#')
 				return true;
@@ -1031,6 +1045,8 @@ namespace cadabra {
 
 	bool str_node::is_siblings_wildcard() const
 		{
+		if(name == name_set.end()) return false;
+
 		if(name->size()>0) {
 			if((*name)[name->size()-1]=='@')
 				return true;
@@ -1040,6 +1056,8 @@ namespace cadabra {
 
 	bool str_node::is_autodeclare_wildcard() const
 		{
+		if(name == name_set.end()) return false;
+
 		if(name->size()>0)
 			if((*name)[name->size()-1]=='#')
 				return true;
@@ -1048,6 +1066,8 @@ namespace cadabra {
 
 	bool str_node::is_indexstar_wildcard() const
 		{
+		if(name == name_set.end()) return false;
+
 		if((*name).size()>1)
 			if((*name)[name->size()-1]=='?')
 				if((*name)[name->size()-2]=='*')
@@ -1057,6 +1077,8 @@ namespace cadabra {
 
 	bool str_node::is_indexplus_wildcard() const
 		{
+		if(name == name_set.end()) return false;
+
 		if((*name).size()>1)
 			if((*name)[name->size()-1]=='?')
 				if((*name)[name->size()-2]=='+')
@@ -1066,6 +1088,8 @@ namespace cadabra {
 
 	bool str_node::is_numbered_symbol() const
 		{
+		if(name == name_set.end()) return false;
+
 		int len=(*name).size();
 		if(len>1)
 			if(isdigit((*name)[len-1]))

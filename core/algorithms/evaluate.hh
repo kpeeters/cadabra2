@@ -127,12 +127,13 @@ namespace cadabra {
 			/// The full_ind_free argument can contain a list of indices in the order
 			/// in which values should be stored in index value sets.
 
-			iterator handle_factor(sibling_iterator sib, const index_map_t& full_ind_free);
+			iterator handle_factor(sibling_iterator sib, const IndexClassifier::index_map_t& full_ind_free);
 
 			/// Expand a tensor factor into a components node with all components
 			/// written out explicitly. Used when there is no sparse rule matching
 			/// this factor.
-			iterator dense_factor(iterator sib, const index_map_t& ind_free, const index_map_t& ind_dummy);
+			iterator dense_factor(iterator sib, const IndexClassifier::index_map_t& ind_free,
+										 const IndexClassifier::index_map_t& ind_dummy);
 
 			/// Merge entries in a single 'components' node when they are for the
 			/// same index value(s).
@@ -148,9 +149,6 @@ namespace cadabra {
 			/// Inverse of the above.
 			void     unwrap_scalar_in_components_node(iterator sib);
 
-			/// Determine all the Coordinate dependencies of the object at 'it'. For the
-			/// time being this can only be a 'components' node.
-			std::set<Ex, tree_exact_less_obj> dependencies(iterator it);
 		};
 
 	}

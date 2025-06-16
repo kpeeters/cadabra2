@@ -39,8 +39,9 @@ bool simplify::can_apply(iterator st)
 	
 	left.clear();
 	index_factors.clear();
-	index_map_t ind_free, ind_dummy;
-	classify_indices(st, ind_free, ind_dummy);
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_map_t ind_free, ind_dummy;
+	ic.classify_indices(st, ind_free, ind_dummy);
 //	print_classify_indices(std::cerr, st);
 
 	bool still_ok=true;

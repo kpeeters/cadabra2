@@ -149,7 +149,8 @@ Algorithm::result_t expand::apply(iterator& it)
 	// Scan through the factors, adding indexbrackets around any
 	// objects which already carry indices, and adding new
 	// dummies when necessary.
-
+	IndexClassifier ic(kernel);
+	
 	sibling_iterator sib=tr.begin(prod);
 	Ex dum;
 	while(sib!=tr.end(prod)) {
@@ -184,7 +185,7 @@ Algorithm::result_t expand::apply(iterator& it)
 					origind=tr.erase(origind);
 					}
 				else {
-					dum=get_dummy(dums, sib);
+					dum=ic.get_dummy(dums, sib);
 					iterator tmpit=tr.append_child((iterator)(sib), dum.begin());
 					tmpit->fl.bracket=str_node::b_none;
 					if(check_pos) {
@@ -198,7 +199,7 @@ Algorithm::result_t expand::apply(iterator& it)
 				}
 			else {   // one-index object
 				if(origobj==ii_first) {
-					dum=get_dummy(dums, sib);
+					dum=ic.get_dummy(dums, sib);
 					iterator tmpit=tr.append_child((iterator)(sib), dum.begin());
 					tmpit->fl.bracket=str_node::b_none;
 					if(check_pos) {

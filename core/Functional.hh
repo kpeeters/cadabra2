@@ -8,7 +8,7 @@ namespace cadabra {
 
 	/// \ingroup core
 	///
-	/// Apply a function on every element of a list, or if the iterator
+	/// Apply a function to every element of a list, or if the iterator
 	/// 'it' does not point to a list, only on that single
 	/// element. Handles lists wrapped in an \expression node as well.
 	/// It is safe to remove the node pointed to by 'it' in 'f'.
@@ -16,6 +16,14 @@ namespace cadabra {
 
 	void do_list(const Ex& tr, Ex::iterator it, std::function<bool(Ex::iterator)> f);
 
+   /// \ingroup core
+	///
+	/// Apply a function to every term in a sum, or if the iterator does
+	/// not point to a sum, only on that single term. As in `do_list`, terminates
+	/// immediately if the function returns `false`.
+	
+	void do_sum(const Ex& sum, Ex::iterator it, std::function<bool(Ex::iterator)> f);
+	
 	/// \ingroup core
 	///
 	/// For lists as defined above for 'do_list', return their size (in case you
@@ -40,8 +48,6 @@ namespace cadabra {
 	/// Ensure that the tree is a list, even if it contains only a single element.
 
 	Ex make_list(Ex el);
-
-
 
 	/// \ingroup core
 	///

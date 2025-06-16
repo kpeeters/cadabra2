@@ -93,7 +93,8 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 	
 	ind_free_sum.clear();
 	ind_dummy_sum.clear();
-	classify_indices(it, ind_free_sum, ind_dummy_sum);
+	IndexClassifier ic(kernel);
+	ic.classify_indices(it, ind_free_sum, ind_dummy_sum);
 
 	sibling_iterator term=tr.begin(it);
 	while(term!=tr.end(it)) {
@@ -173,8 +174,9 @@ void explicit_indices::handle_factor(sibling_iterator& factor, bool )
 		// Determine indices on this factor. Use a copy because we
 		// need this object later.
 		Ex orig(factor);
-		index_map_t factor_ind_free, factor_ind_dummy;
-		classify_indices(orig.begin(), factor_ind_free, factor_ind_dummy);
+		IndexClassifier ic(kernel);
+		IndexClassifier::index_map_t factor_ind_free, factor_ind_dummy;
+		ic.classify_indices(orig.begin(), factor_ind_free, factor_ind_dummy);
 
 		// Substitute explcit replacement and rename the indices
 		// already present on the implicit factor.
@@ -190,12 +192,11 @@ void explicit_indices::handle_factor(sibling_iterator& factor, bool )
 		factor=factor_tmp;
 
 		// Determine indices on the replacement.
-		index_map_t repl_ind_free, repl_ind_dummy;
-		classify_indices(factor, repl_ind_free, repl_ind_dummy);
+		IndexClassifier::index_map_t repl_ind_free, repl_ind_dummy;
+		ic.classify_indices(factor, repl_ind_free, repl_ind_dummy);
 
 		// Which indices have been added?
-		index_map_t ind_same;
-		IndexClassifier ic(kernel);
+		IndexClassifier::index_map_t ind_same;
 		ic.determine_intersection(factor_ind_free, repl_ind_free, ind_same, true);
 
 		// Keep track of indices already added in this factor, to avoid making
@@ -231,7 +232,7 @@ void explicit_indices::handle_factor(sibling_iterator& factor, bool )
 					// No active line. Get a new free index.
 					auto di = ic.get_dummy(ip, &ind_free_sum, &ind_dummy_sum, &added_this_term);
 					auto loc = tr.replace_index(search->second, di.begin(), true);
-					added_this_term.insert(index_map_t::value_type(di, loc));
+					added_this_term.insert(IndexClassifier::index_map_t::value_type(di, loc));
 					index_lines[ip]=loc;
 					index_lines_factor[ip]=loc;
 					last_index[ip]=loc;

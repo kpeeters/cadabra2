@@ -133,7 +133,8 @@ Algorithm::result_t sort_product::apply(iterator& st)
 				}
 			// Narrow them down by comparing first digit, then second digit, ...
 			unsigned int digit=1;
-			index_map_t ind_free, ind_dummy;
+			IndexClassifier ic(kernel);
+			IndexClassifier::index_map_t ind_free, ind_dummy;
 			while(candidates.size()>1 && digit<=num) {
 				std::vector<std::vector<Ex::sibling_iterator>>::iterator candidate=candidates.begin();
 				one=candidate->at(digit-1);
@@ -150,7 +151,7 @@ Algorithm::result_t sort_product::apply(iterator& st)
 						unsigned int free2=0;
 						std::string free1_names="";
 						std::string free2_names="";
-						if(ind_free.size()==0 && ind_dummy.size()==0) classify_indices(st, ind_free, ind_dummy);
+						if(ind_free.size()==0 && ind_dummy.size()==0) ic.classify_indices(st, ind_free, ind_dummy);
 						index_iterator ch=begin_index(one);
 						while(ch!=end_index(one)) {
 							auto fnd=ind_free.find(Ex(ch));

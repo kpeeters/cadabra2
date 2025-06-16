@@ -2,6 +2,7 @@
 #include "Cleanup.hh"
 #include "Exchange.hh"
 #include "Functional.hh"
+#include "IndexClassifier.hh"
 #include "algorithms/canonicalise.hh"
 #include "modules/xperm_new.h"
 #include "properties/Trace.hh"
@@ -183,11 +184,12 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 
 
 	// Now the real thing...
-	index_map_t ind_free, ind_dummy;
-	classify_indices(it, ind_free, ind_dummy);
-	index_position_map_t ind_pos_free, ind_pos_dummy;
-	fill_index_position_map(it, ind_free, ind_pos_free);
-	fill_index_position_map(it, ind_dummy, ind_pos_dummy);
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_map_t ind_free, ind_dummy;
+	ic.classify_indices(it, ind_free, ind_dummy);
+	IndexClassifier::index_position_map_t ind_pos_free, ind_pos_dummy;
+	ic.fill_index_position_map(it, ind_free, ind_pos_free);
+	ic.fill_index_position_map(it, ind_dummy, ind_pos_dummy);
 	const unsigned int total_number_of_indices=ind_free.size()+ind_dummy.size();
 
 #ifdef DEBUG
@@ -265,10 +267,10 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 #ifdef DEBUG
 	std::cerr << "found " << ind_free.size() << " free indices" << std::endl;
 #endif
-	index_map_t::iterator sorted_it=ind_free.begin();
+	IndexClassifier::index_map_t::iterator sorted_it=ind_free.begin();
 	int curr_index=0;
 	while(sorted_it!=ind_free.end()) {
-		index_position_map_t::iterator ii=ind_pos_free.find(sorted_it->second);
+		IndexClassifier::index_position_map_t::iterator ii=ind_pos_free.find(sorted_it->second);
 		num_to_it_map.at(ii->second)=ii->first;
 		num_to_tree_map.push_back(Ex(ii->first));
 #ifdef DEBUG
@@ -300,10 +302,10 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		// general cadabra dummy concept).
 		// The lower index come first, and then the upper index.
 
-		index_position_map_t::const_iterator ii=ind_pos_dummy.find(sorted_it->second);
-		index_map_t::const_iterator          next_it=sorted_it;
+		IndexClassifier::index_position_map_t::const_iterator ii=ind_pos_dummy.find(sorted_it->second);
+		IndexClassifier::index_map_t::const_iterator          next_it=sorted_it;
 		++next_it;
-		index_position_map_t::const_iterator i2=ind_pos_dummy.find(next_it->second);
+		IndexClassifier::index_position_map_t::const_iterator i2=ind_pos_dummy.find(next_it->second);
 
 #ifdef XPERM_DEBUG
 		std::cerr << *(ii->first->name) << " at pos " << ii->second+1 << " " << ii->first->fl.parent_rel << std::endl;
@@ -593,7 +595,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		sorted_it=ind_free.begin();
 		curr_index=0;
 		while(sorted_it!=ind_free.end()) {
-			index_position_map_t::iterator ii=ind_pos_free.find(sorted_it->second);
+			IndexClassifier::index_position_map_t::iterator ii=ind_pos_free.find(sorted_it->second);
 			free_indices[curr_index++]=ii->second+1;
 			++sorted_it;
 			}

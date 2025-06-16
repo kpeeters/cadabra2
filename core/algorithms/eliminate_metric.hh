@@ -17,9 +17,9 @@ namespace cadabra {
 			virtual bool is_conversion_object(iterator) const=0;
 
 		private:
-			Ex          preferred;
-			index_map_t ind_dummy, ind_free;
-            bool        redundant;
+			Ex                           preferred;
+			IndexClassifier::index_map_t ind_dummy, ind_free;
+			bool                         redundant;
 
 			/// See if the conversion which turns index 'i1' into index
 			/// 'i2' can be applied on the expression, so that it gets a
