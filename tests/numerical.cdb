@@ -155,7 +155,7 @@ test09()
 \dot{#}::PartialDerivative(\tau);
 {X,Y}::Depends(\tau);
 funcs:= { X, Y };
-odes:= { \dot{\dot{X}} + X Y = - X Y, \dot{\dot{Y}} - X Y = 0 };
+odes:= { \dot{\dot{X}} + X Y = - X Y, \dot{\dot{Y}} - X Y = 0  };
 first_order_form(odes, funcs);
 
 # \tau::Coordinate;

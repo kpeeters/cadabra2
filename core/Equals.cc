@@ -51,4 +51,6 @@ void visit::Equals::move_all_to_lhs()
 		last.skip_children();
 		++last;
 		}
+
+	tr.append_child(rhs_, Ex(0).begin());
 	}
