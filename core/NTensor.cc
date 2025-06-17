@@ -4,7 +4,9 @@
 #include <cassert>
 #include <cmath>
 #include <string>
+#ifdef HAS_TBB
 #include <execution>
+#endif
 #include <algorithm>
 
 using namespace cadabra;
