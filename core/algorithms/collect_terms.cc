@@ -1,5 +1,7 @@
 #include <algorithm>
+#ifdef HAS_TBB
 #include <execution>
+#endif
 #include "algorithms/collect_terms.hh"
 
 using namespace cadabra;
