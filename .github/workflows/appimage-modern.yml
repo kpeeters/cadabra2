@@ -5,16 +5,16 @@
 name: AppImage (Modern)
 
 on:
-#  release:
-#    types: [created]
+  #  release:
+  #    types: [created]
   # Uncomment for testing
   push:
-     branches: [devel]
+    branches: [devel]
 
 jobs:
   build:
     name: AppImage ${{ matrix.arch }}
-    
+
     strategy:
       fail-fast: false
       matrix:
@@ -29,228 +29,201 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Install AppImageBuilder
-      run: |
-        sudo apt update
-        sudo apt install -y python3-pip
-         # sudo pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git@main
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Clean up any existing AppDir
-      run: |
-        sudo rm -rf AppDir || true
+      - name: Install AppImageBuilder
+        run: |
+          sudo apt update
+          sudo apt install -y python3-pip
 
-    - name: Create AppImageBuilder recipe
-      run: |
-        cat > AppImageBuilder.yml << 'EOF'
-        version: 1
+      - name: Clean up any existing AppDir
+        run: |
+          sudo rm -rf AppDir || true
 
-        script:
-          - mkdir -p AppDir
+      - name: Create AppImageBuilder recipe
+        run: |
+          cat > AppImageBuilder.yml << 'EOF'
+          version: 1
 
-        AppDir:
-          path: ./AppDir
-          app_info:
-            id: science.cadabra.cadabra2-gtk
-            name: Cadabra2
-            icon: cadabra2-gtk
-            version: latest
-            exec: usr/bin/cadabra2-gtk
-            exec_args: $@
+          script:
+            - mkdir -p AppDir
 
-          apt:
-            arch: ${{ matrix.ubuntu_arch }}
-            sources:
-              - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal main universe
-                key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
-              - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal-updates main universe
-                key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
+          AppDir:
+            path: ./AppDir
+            app_info:
+              id: science.cadabra.cadabra2-gtk
+              name: Cadabra2
+              icon: cadabra2-gtk
+              version: latest
+              exec: usr/bin/cadabra2-gtk
+              exec_args: $@
 
-            include:
-              # Core system libraries
-              - libc6
-              - libstdc++6
-              - libgcc-s1
-              
-              # Cadabra dependencies
-              - libgmp10
-              - libgmpxx4ldbl
-              - libboost-system1.71.0
-              - libboost-filesystem1.71.0
-              - libboost-program-options1.71.0
-              - libboost-date-time1.71.0
-              - libsqlite3-0
-              - uuid-runtime
-              - libssl1.1
-              
-              # GTK and GUI dependencies
-              - libgtkmm-3.0-1v5
-              - libgtk-3-0
-              - libgdk-pixbuf2.0-0
-              - libcairo2
-              - libpango-1.0-0
-              - libpangocairo-1.0-0
-              - libatk1.0-0
-              - libglib2.0-0
-              - adwaita-icon-theme
-              - hicolor-icon-theme
-              
-              # Python dependencies (Ubuntu 20.04 uses Python 3.8)
-              - python3.8
-              - python3.8-minimal
-              - libpython3.8
-              - python3-pip
-              - python3-matplotlib
-              - python3-sympy
-              - python3-gmpy2
-              - python3-numpy
-              - python3-scipy
+            apt:
+              arch: ${{ matrix.ubuntu_arch }}
+              sources:
+                - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal main universe
+                  key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
+                - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal-updates main universe
+                  key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
 
-            exclude:
-              - adwaita-icon-theme-full
-              - humanity-icon-theme
-              - ubuntu-mono
+              include:
+                # Core system libraries
+                - libc6
+                - libstdc++6
+                - libgcc-s1
 
-          files:
-            exclude:
-              - usr/lib/python*/site-packages/pip*
-              - usr/lib/python*/site-packages/setuptools*
-              - usr/share/doc
-              - usr/share/man
-              - usr/share/locale
-              - var/cache
-              - var/lib/apt
-              - etc/apt
+                # Cadabra dependencies
+                - libgmp10
+                - libgmpxx4ldbl
+                - libboost-system1.71.0
+                - libboost-filesystem1.71.0
+                - libboost-program-options1.71.0
+                - libboost-date-time1.71.0
+                - libsqlite3-0
+                - uuid-runtime
+                - libssl1.1
 
-          runtime:
-            env:
-              PATH: '${APPDIR}/usr/bin:${PATH}'
-              PYTHONHOME: '${APPDIR}/usr'
-              PYTHONPATH: '${APPDIR}/usr/lib/python3.8:${APPDIR}/usr/lib/python3.8/site-packages:${APPDIR}/usr/lib/python3.8/dist-packages'
-              LD_LIBRARY_PATH: '${APPDIR}/usr/lib:${APPDIR}/usr/lib/${{ matrix.arch }}-linux-gnu:${LD_LIBRARY_PATH}'
-              LC_ALL: C.UTF-8
-              LANG: C.UTF-8
+                # GTK and GUI dependencies
+                - libgtkmm-3.0-1v5
+                - libgtk-3-0
+                - libgdk-pixbuf2.0-0
+                - libcairo2
+                - libpango-1.0-0
+                - libpangocairo-1.0-0
+                - libatk1.0-0
+                - libglib2.0-0
+                - adwaita-icon-theme
+                - hicolor-icon-theme
 
-        AppImage:
-          update-information: gh-releases-zsync|kpeeters|cadabra2|latest|Cadabra*${{ matrix.arch }}.AppImage.zsync
-          sign-key: None
-          arch: ${{ matrix.arch }}
-        EOF
+                # Python dependencies (Ubuntu 20.04 uses Python 3.8)
+                - python3.8
+                - python3.8-minimal
+                - libpython3.8
+                - python3-pip
+                - python3-matplotlib
+                - python3-sympy
+                - python3-gmpy2
+                - python3-numpy
+                - python3-scipy
 
-    - name: Build Cadabra2 in container
-      run: |
-        # Use Docker to build for the target architecture with Ubuntu 20.04
-        docker run --rm --privileged \
-          --platform linux/${{ matrix.arch }} \
-          -v $PWD:/workspace \
-          -w /workspace \
-          ubuntu:20.04 /bin/bash -c "
-          
-          # Install dependencies
-          apt update
-          DEBIAN_FRONTEND=noninteractive apt install -y \
-            build-essential cmake git \
-            python3-dev python3-pip g++ \
-            libgmp3-dev libgtkmm-3.0-dev \
-            libboost-all-dev libssl-dev \
-            libsqlite3-dev uuid-dev \
-            python3-matplotlib python3-sympy \
-            python3-gmpy2 python3-numpy
-          
-          # Install directly from the main branch of the appimage-builder repository,
-          # to deal with the issue reported in
-          # https://github.com/AppImageCrafters/appimage-builder/pull/281
-          pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git@main
+              exclude:
+                - adwaita-icon-theme-full
+                - humanity-icon-theme
+                - ubuntu-mono
 
-          # Build Cadabra2
-          git config --global --add safe.directory /workspace
-          mkdir -p build
-          cd build
-          cmake -DCMAKE_INSTALL_PREFIX=/usr \
-                -DCMAKE_BUILD_TYPE=Release \
-                -DENABLE_MATHEMATICA=OFF \
-                ..
-          make -j\$(nproc)
-          make install DESTDIR=../AppDir
-          
-          # Copy additional files
-#          mkdir -p ../AppDir/usr/share/applications
-#          mkdir -p ../AppDir/usr/share/icons/hicolor/64x64/apps
-          
-          # Create desktop file if it doesn't exist
-#           if [ ! -f ../AppDir/usr/share/applications/cadabra2-gtk.desktop ]; then
-#             cat > ../AppDir/usr/share/applications/cadabra2-gtk.desktop << 'DESKTOP_EOF'
-#         [Desktop Entry]
-#         Type=Application
-#         Name=Cadabra2
-#         Comment=A field-theory motivated approach to computer algebra
-#         Exec=cadabra2-gtk
-#         Icon=cadabra2-gtk
-#         Categories=Education;Science;Math;
-#         MimeType=application/x-cadabra-notebook;
-#         DESKTOP_EOF
-#           fi
-          
-#          # Create icon if it doesn't exist
-#          if [ ! -f ../AppDir/usr/share/icons/hicolor/64x64/apps/cadabra2-gtk.png ]; then
-#            # Use a default icon or copy from images directory
-#            if [ -f ../images/cadabra2-gtk.png ]; then
-#              cp ../images/cadabra2-gtk.png ../AppDir/usr/share/icons/hicolor/64x64/apps/
-#            fi
-#          fi
-          
-          VERSION=`cat build/VERSION`
-        
-          # Update version in AppImageBuilder.yml
-          sed -i \"s/version: latest/version: $VERSION/\" /workspace/AppImageBuilder.yml
-          
-          # Build the AppImage
-          echo "Now going to run appimage-builder..."
-          appimage-builder --recipe /workspace/AppImageBuilder.yml --log DEBUG --skip-test
-        "
+            files:
+              exclude:
+                - usr/lib/python*/site-packages/pip*
+                - usr/lib/python*/site-packages/setuptools*
+                - usr/share/doc
+                - usr/share/man
+                - usr/share/locale
+                - var/cache
+                - var/lib/apt
+                - etc/apt
 
-    - name: Rename AppImage
-      run: |
-        VERSION=2.5.13
-        
-        # Find and rename the AppImage
-        APPIMAGE_FILE=$(find . -name "*.AppImage" -type f | head -n 1)
-        if [ -n "$APPIMAGE_FILE" ]; then
-          mv "$APPIMAGE_FILE" "Cadabra_${VERSION}_${{ matrix.arch }}.AppImage"
-          chmod +x "Cadabra_${VERSION}_${{ matrix.arch }}.AppImage"
-        fi
+            runtime:
+              env:
+                PATH: '${APPDIR}/usr/bin:${PATH}'
+                PYTHONHOME: '${APPDIR}/usr'
+                PYTHONPATH: '${APPDIR}/usr/lib/python3.8:${APPDIR}/usr/lib/python3.8/site-packages:${APPDIR}/usr/lib/python3.8/dist-packages'
+                LD_LIBRARY_PATH: '${APPDIR}/usr/lib:${APPDIR}/usr/lib/${{ matrix.arch }}-linux-gnu:${LD_LIBRARY_PATH}'
+                LC_ALL: C.UTF-8
+                LANG: C.UTF-8
 
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: cadabra2-appimage-${{ matrix.arch }}
-        path: Cadabra_*_${{ matrix.arch }}.AppImage
-        retention-days: 7
+          AppImage:
+            update-information: gh-releases-zsync|kpeeters|cadabra2|latest|Cadabra*${{ matrix.arch }}.AppImage.zsync
+            sign-key: None
+            arch: ${{ matrix.arch }}
+          EOF
 
-    - name: Upload to release
-      if: github.event_name == 'release'
-      run: |
-        VERSION=\"${{ github.ref_name }}\"
-        gh release upload \"$VERSION\" Cadabra_*_${{ matrix.arch }}.AppImage --clobber
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Cadabra2 in container
+        run: |
+          # Use Docker to build for the target architecture with Ubuntu 20.04
+          docker run --rm --privileged \
+            --platform linux/${{ matrix.arch }} \
+            -v $PWD:/workspace \
+            -w /workspace \
+            ubuntu:20.04 /bin/bash -c "
 
-    - name: Generate zsync file
-      if: github.event_name == 'release'
-      run: |
-        # Install zsync
-        sudo apt install -y zsync
-        
-        # Generate zsync file for the AppImage
-        APPIMAGE_FILE=$(find . -name "Cadabra_*_${{ matrix.arch }}.AppImage" -type f | head -n 1)
-        if [ -n \"$APPIMAGE_FILE\" ]; then
-          zsyncmake \"$APPIMAGE_FILE\"
-          
-          # Upload zsync file to release
+            # Install dependencies
+            apt update
+            DEBIAN_FRONTEND=noninteractive apt install -y \
+              build-essential cmake git \
+              python3-dev python3-pip g++ \
+              libgmp3-dev libgtkmm-3.0-dev \
+              libboost-all-dev libssl-dev \
+              libsqlite3-dev uuid-dev \
+              python3-matplotlib python3-sympy \
+              python3-gmpy2 python3-numpy
+
+            # Install directly from the main branch of the appimage-builder repository,
+            # to deal with the issue reported in
+            # https://github.com/AppImageCrafters/appimage-builder/pull/281
+            pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git@main
+
+            # Build Cadabra2
+            git config --global --add safe.directory /workspace
+            mkdir -p build
+            cd build
+            cmake -DCMAKE_INSTALL_PREFIX=/usr \
+                  -DCMAKE_BUILD_TYPE=Release \
+                  -DENABLE_MATHEMATICA=OFF \
+                  ..
+            make -j\$(nproc)
+            make install DESTDIR=../AppDir
+
+            VERSION=`cat build/VERSION`
+
+            # Update version in AppImageBuilder.yml
+            sed -i \"s/version: latest/version: $VERSION/\" /workspace/AppImageBuilder.yml
+
+            # Build the AppImage
+            echo "Now going to run appimage-builder..."
+            appimage-builder --recipe /workspace/AppImageBuilder.yml --log DEBUG --skip-test
+          "
+
+      - name: Rename AppImage
+        run: |
+          VERSION=2.5.13
+
+          # Find and rename the AppImage
+          APPIMAGE_FILE=$(find . -name "*.AppImage" -type f | head -n 1)
+          if [ -n "$APPIMAGE_FILE" ]; then
+            mv "$APPIMAGE_FILE" "Cadabra_${VERSION}_${{ matrix.arch }}.AppImage"
+            chmod +x "Cadabra_${VERSION}_${{ matrix.arch }}.AppImage"
+          fi
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cadabra2-appimage-${{ matrix.arch }}
+          path: Cadabra_*_${{ matrix.arch }}.AppImage
+          retention-days: 7
+
+      - name: Upload to release
+        if: github.event_name == 'release'
+        run: |
           VERSION=\"${{ github.ref_name }}\"
-          gh release upload \"$VERSION\" *.zsync --clobber || true
-        fi
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          gh release upload \"$VERSION\" Cadabra_*_${{ matrix.arch }}.AppImage --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate zsync file
+        if: github.event_name == 'release'
+        run: |
+          # Install zsync
+          sudo apt install -y zsync
+
+          # Generate zsync file for the AppImage
+          APPIMAGE_FILE=$(find . -name "Cadabra_*_${{ matrix.arch }}.AppImage" -type f | head -n 1)
+          if [ -n \"$APPIMAGE_FILE\" ]; then
+            zsyncmake \"$APPIMAGE_FILE\"
+
+            # Upload zsync file to release
+            VERSION=\"${{ github.ref_name }}\"
+            gh release upload \"$VERSION\" *.zsync --clobber || true
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
