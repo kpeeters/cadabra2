@@ -39,7 +39,7 @@ jobs:
          # Install directly from the main branch of the appimage-builder repository,
          # to deal with the issue reported in
          # https://github.com/AppImageCrafters/appimage-builder/pull/281
-        sudo pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git@main
+         # sudo pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git@main
 
     - name: Clean up any existing AppDir
       run: |
