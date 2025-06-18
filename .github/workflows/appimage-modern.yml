@@ -180,8 +180,9 @@ jobs:
             sed -i \"s/version: latest/version: $VERSION/\" /workspace/AppImageBuilder.yml
 
             # Build the AppImage
-            echo "Now going to run appimage-builder..."
+            echo \"Now going to run appimage-builder...\"
             appimage-builder --recipe /workspace/AppImageBuilder.yml --log DEBUG --skip-test
+            ls -la 
           "
 
       - name: Rename AppImage
@@ -189,6 +190,7 @@ jobs:
           VERSION=2.5.13
 
           # Find and rename the AppImage
+          ls -la .
           APPIMAGE_FILE=$(find . -name "*.AppImage" -type f | head -n 1)
           if [ -n "$APPIMAGE_FILE" ]; then
             mv "$APPIMAGE_FILE" "Cadabra_${VERSION}_${{ matrix.arch }}.AppImage"
