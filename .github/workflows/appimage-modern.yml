@@ -209,9 +209,9 @@ jobs:
         
         # Find and rename the AppImage
         APPIMAGE_FILE=$(find . -name "*.AppImage" -type f | head -n 1)
-        if [ -n \"$APPIMAGE_FILE\" ]; then
-          mv \"$APPIMAGE_FILE\" \"Cadabra_${VERSION}_${{ matrix.arch }}.AppImage\"
-          chmod +x \"Cadabra_${VERSION}_${{ matrix.arch }}.AppImage\"
+        if [ -n "$APPIMAGE_FILE" ]; then
+          mv "$APPIMAGE_FILE" "Cadabra_${VERSION}_${{ matrix.arch }}.AppImage"
+          chmod +x "Cadabra_${VERSION}_${{ matrix.arch }}.AppImage"
         fi
 
     - name: Upload artifacts
