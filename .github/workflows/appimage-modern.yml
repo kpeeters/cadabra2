@@ -162,6 +162,8 @@ jobs:
             python3-matplotlib python3-sympy \
             python3-gmpy2 python3-numpy
           
+          sudo pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git@main
+
           # Build Cadabra2
           mkdir -p build
           cd build
