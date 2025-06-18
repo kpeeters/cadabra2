@@ -33,7 +33,9 @@ jobs:
           cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
 
       - name: build
-        run: make -j`nproc`  install DESTDIR=AppDir
+        run: |
+          cd build
+          make -j`nproc`  install DESTDIR=AppDir
         
       - name: Build AppImage
         uses: AppImageCrafters/build-appimage-action@master
