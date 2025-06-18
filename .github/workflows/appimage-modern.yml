@@ -157,7 +157,8 @@ jobs:
               libboost-all-dev libssl-dev \
               libsqlite3-dev uuid-dev \
               python3-matplotlib python3-sympy \
-              python3-gmpy2 python3-numpy
+              python3-gmpy2 python3-numpy \
+              squashfs-tools file desktop-file-utils fakeroot strace patchelf zsync
 
             # Install directly from the main branch of the appimage-builder repository,
             # to deal with the issue reported in
