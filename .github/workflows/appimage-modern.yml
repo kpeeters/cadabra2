@@ -175,9 +175,10 @@ jobs:
             make install DESTDIR=../AppDir
 
             VERSION=`cat build/VERSION`
+            echo \"Version built is ${VERSION}\"
 
             # Update version in AppImageBuilder.yml
-            sed -i \"s/version: latest/version: $VERSION/\" /workspace/AppImageBuilder.yml
+            sed -i \"s/version: latest/version: 2.5.13/\" /workspace/AppImageBuilder.yml
 
             # Build the AppImage
             echo \"Now going to run appimage-builder, using:\"
