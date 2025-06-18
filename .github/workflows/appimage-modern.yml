@@ -23,7 +23,7 @@ jobs:
             os: ubuntu-24.04
             ubuntu_arch: amd64
           - arch: arm64
-            us: ubuntu-24.04-arm
+            os: ubuntu-24.04-arm
             ubuntu_arch: arm64
 
     runs-on: ${{ matrix.os }}
