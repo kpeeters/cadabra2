@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: install dependencies
         run: |
           sudo apt-get update
@@ -42,6 +42,6 @@ jobs:
         with:
           recipe: AppImageBuilder.yml
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: AppImage
