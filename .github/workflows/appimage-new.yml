@@ -26,6 +26,103 @@ jobs:
             python3-matplotlib python3-sympy \
             python3-gmpy2 python3-numpy
 
+    - name: Create AppImageBuilder recipe
+      run: |
+        cat > AppImageBuilder.yml << 'EOF'
+        version: 1
+
+        script:
+          - mkdir -p AppDir
+
+        AppDir:
+          path: ./build/AppDir
+          app_info:
+            id: science.cadabra.cadabra2-gtk
+            name: Cadabra2
+            icon: cadabra2-gtk
+            version: latest
+            exec: usr/bin/cadabra2-gtk
+            exec_args: $@
+
+          apt:
+            arch: ${{ matrix.ubuntu_arch }}
+            sources:
+              - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal main universe
+                key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
+              - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal-updates main universe
+                key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
+
+            include:
+              # Core system libraries
+              - libc6
+              - libstdc++6
+              - libgcc-s1
+              
+              # Cadabra dependencies
+              - libgmp10
+              - libgmpxx4ldbl
+              - libboost-system1.71.0
+              - libboost-filesystem1.71.0
+              - libboost-program-options1.71.0
+              - libboost-date-time1.71.0
+              - libsqlite3-0
+              - uuid-runtime
+              - libssl1.1
+              
+              # GTK and GUI dependencies
+              - libgtkmm-3.0-1v5
+              - libgtk-3-0
+              - libgdk-pixbuf2.0-0
+              - libcairo2
+              - libpango-1.0-0
+              - libpangocairo-1.0-0
+              - libatk1.0-0
+              - libglib2.0-0
+              - adwaita-icon-theme
+              - hicolor-icon-theme
+              
+              # Python dependencies (Ubuntu 20.04 uses Python 3.8)
+              - python3.8
+              - python3.8-minimal
+              - libpython3.8
+              - python3-pip
+              - python3-matplotlib
+              - python3-sympy
+              - python3-gmpy2
+              - python3-numpy
+              - python3-scipy
+
+            exclude:
+              - adwaita-icon-theme-full
+              - humanity-icon-theme
+              - ubuntu-mono
+
+          files:
+            exclude:
+              - usr/lib/python*/site-packages/pip*
+              - usr/lib/python*/site-packages/setuptools*
+              - usr/share/doc
+              - usr/share/man
+              - usr/share/locale
+              - var/cache
+              - var/lib/apt
+              - etc/apt
+
+          runtime:
+            env:
+              PATH: '${APPDIR}/usr/bin:${PATH}'
+              PYTHONHOME: '${APPDIR}/usr'
+              PYTHONPATH: '${APPDIR}/usr/lib/python3.8:${APPDIR}/usr/lib/python3.8/site-packages:${APPDIR}/usr/lib/python3.8/dist-packages'
+              LD_LIBRARY_PATH: '${APPDIR}/usr/lib:${APPDIR}/usr/lib/${{ matrix.arch }}-linux-gnu:${LD_LIBRARY_PATH}'
+              LC_ALL: C.UTF-8
+              LANG: C.UTF-8
+
+        AppImage:
+          update-information: gh-releases-zsync|kpeeters|cadabra2|latest|Cadabra*${{ matrix.arch }}.AppImage.zsync
+          sign-key: None
+          arch: ${{ matrix.arch }}
+        EOF
+
       - name: configure
         run: |
           mkdir build

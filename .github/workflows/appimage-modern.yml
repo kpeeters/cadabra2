@@ -206,7 +206,7 @@ jobs:
           sed -i \"s/version: latest/version: $VERSION/\" AppImageBuilder.yml
           
           # Build the AppImage
-          appimage-builder --recipe AppImageBuilder.yml --skip-test
+          appimage-builder --recipe /workspace/AppImageBuilder.yml --skip-test
         "
 
     - name: Rename AppImage
