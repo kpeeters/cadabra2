@@ -36,7 +36,11 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y python3-pip
-        sudo pip3 install appimage-builder
+        sudo pip3 install appimage-builder==1.1.0
+
+    - name: Clean up any existing AppDir
+      run: |
+        sudo rm -rf AppDir || true
 
     - name: Create AppImageBuilder recipe
       run: |
