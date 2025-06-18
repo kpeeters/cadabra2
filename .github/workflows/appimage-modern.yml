@@ -188,7 +188,10 @@ jobs:
             echo \"---------\"
             echo \"Here we go...\"
             appimage-builder --recipe /workspace/AppImageBuilder.yml --log DEBUG --skip-test
-            ls -la 
+            echo \"This is /workspace/build/AppDir/usr/bin/ :\"
+            echo \"---------\"
+            ls -la /workspace/build/AppDir/usr/bin/
+            echo \"---------\"
           "
 
       - name: Rename AppImage
