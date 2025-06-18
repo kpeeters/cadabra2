@@ -1,10 +1,11 @@
 name: AppImage
 
 on:
+#  release:
+#    types: [created]
+  # Uncomment for testing
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+     branches: [devel]
 
 jobs:
   build-appimage:
