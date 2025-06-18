@@ -36,7 +36,10 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y python3-pip
-        sudo pip3 install appimage-builder==1.1.0
+         # Install directly from the main branch of the appimage-builder repository,
+         # to deal with the issue reported in
+         # https://github.com/AppImageCrafters/appimage-builder/pull/281
+        sudo pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git@main
 
     - name: Clean up any existing AppDir
       run: |
@@ -48,7 +51,6 @@ jobs:
         version: 1
 
         script:
-          - rm -rf AppDir || true
           - mkdir -p AppDir
 
         AppDir:
@@ -195,17 +197,15 @@ jobs:
               cp ../images/cadabra2-gtk.png ../AppDir/usr/share/icons/hicolor/64x64/apps/
             fi
           fi
+          
+          VERSION=`cat build/VERSION`
+        
+          # Update version in AppImageBuilder.yml
+          sed -i "s/version: latest/version: $VERSION/" AppImageBuilder.yml
+          
+          # Build the AppImage
+          appimage-builder --recipe AppImageBuilder.yml --skip-test
         "
-
-    - name: Build AppImage
-      run: |
-        VERSION=2.5.13
-        
-        # Update version in AppImageBuilder.yml
-        sed -i "s/version: latest/version: $VERSION/" AppImageBuilder.yml
-        
-        # Build the AppImage
-        appimage-builder --recipe AppImageBuilder.yml --skip-test
 
     - name: Rename AppImage
       run: |
