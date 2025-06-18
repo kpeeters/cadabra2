@@ -136,6 +136,7 @@ jobs:
             update-information: gh-releases-zsync|kpeeters|cadabra2|latest|Cadabra*${{ matrix.arch }}.AppImage.zsync
             sign-key: None
             arch: ${{ matrix.arch }}
+            comp: gzip
           EOF
 
       - name: Build Cadabra2 in container
