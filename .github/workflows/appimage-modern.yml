@@ -173,7 +173,7 @@ jobs:
                   -DENABLE_MATHEMATICA=OFF \
                   ..
             make -j\$(nproc)
-            make install DESTDIR=../AppDir
+            make install DESTDIR=/workspace/build/AppDir
 
             VERSION=`cat build/VERSION`
             echo \"Version built is ${VERSION}\"
@@ -187,7 +187,7 @@ jobs:
             cat /workspace/AppImageBuilder.yml
             echo \"---------\"
             echo \"Here we go...\"
-            appimage-builder --recipe /workspace/AppImageBuilder.yml --log DEBUG --skip-test
+            appimage-builder --recipe /workspace/AppImageBuilder.yml --skip-test
             echo \"This is /workspace/build/AppDir/usr/bin/ :\"
             echo \"---------\"
             ls -la /workspace/build/AppDir/usr/bin/
