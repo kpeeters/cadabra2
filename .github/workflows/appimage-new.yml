@@ -1,0 +1,46 @@
+name: AppImage
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-appimage:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: install dependencies
+        run: |
+          sudo apt-get update
+          DEBIAN_FRONTEND=noninteractive sudo apt install -y \
+            build-essential cmake git \
+            python3-dev python3-pip g++ \
+            libgmp3-dev libgtkmm-3.0-dev \
+            libboost-all-dev libssl-dev \
+            libsqlite3-dev uuid-dev \
+            python3-matplotlib python3-sympy \
+            python3-gmpy2 python3-numpy
+
+      - name: configure
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+
+      - name: build
+        run: make -j`nproc`  install DESTDIR=AppDir
+        
+      - name: Build AppImage
+        uses: AppImageCrafters/build-appimage-action@master
+        env:
+          UPDATE_INFO: gh-releases-zsync|kpeeters|cadabra2|latest|*x86_64.AppImage.zsync
+        with:
+          recipe: AppImageBuilder.yml
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: AppImage
