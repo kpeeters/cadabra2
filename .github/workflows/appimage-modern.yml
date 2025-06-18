@@ -201,7 +201,7 @@ jobs:
           VERSION=`cat build/VERSION`
         
           # Update version in AppImageBuilder.yml
-          sed -i "s/version: latest/version: $VERSION/" AppImageBuilder.yml
+          sed -i \"s/version: latest/version: $VERSION/\" AppImageBuilder.yml
           
           # Build the AppImage
           appimage-builder --recipe AppImageBuilder.yml --skip-test
