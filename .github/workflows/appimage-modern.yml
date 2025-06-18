@@ -36,9 +36,6 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y python3-pip
-         # Install directly from the main branch of the appimage-builder repository,
-         # to deal with the issue reported in
-         # https://github.com/AppImageCrafters/appimage-builder/pull/281
          # sudo pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git@main
 
     - name: Clean up any existing AppDir
@@ -162,9 +159,13 @@ jobs:
             python3-matplotlib python3-sympy \
             python3-gmpy2 python3-numpy
           
+          # Install directly from the main branch of the appimage-builder repository,
+          # to deal with the issue reported in
+          # https://github.com/AppImageCrafters/appimage-builder/pull/281
           pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git@main
 
           # Build Cadabra2
+          git config --global --add safe.directory /workspace
           mkdir -p build
           cd build
           cmake -DCMAKE_INSTALL_PREFIX=/usr \
@@ -175,30 +176,30 @@ jobs:
           make install DESTDIR=../AppDir
           
           # Copy additional files
-          mkdir -p ../AppDir/usr/share/applications
-          mkdir -p ../AppDir/usr/share/icons/hicolor/64x64/apps
+#          mkdir -p ../AppDir/usr/share/applications
+#          mkdir -p ../AppDir/usr/share/icons/hicolor/64x64/apps
           
           # Create desktop file if it doesn't exist
-          if [ ! -f ../AppDir/usr/share/applications/cadabra2-gtk.desktop ]; then
-            cat > ../AppDir/usr/share/applications/cadabra2-gtk.desktop << 'DESKTOP_EOF'
-        [Desktop Entry]
-        Type=Application
-        Name=Cadabra2
-        Comment=A field-theory motivated approach to computer algebra
-        Exec=cadabra2-gtk
-        Icon=cadabra2-gtk
-        Categories=Education;Science;Math;
-        MimeType=application/x-cadabra-notebook;
-        DESKTOP_EOF
-          fi
+#           if [ ! -f ../AppDir/usr/share/applications/cadabra2-gtk.desktop ]; then
+#             cat > ../AppDir/usr/share/applications/cadabra2-gtk.desktop << 'DESKTOP_EOF'
+#         [Desktop Entry]
+#         Type=Application
+#         Name=Cadabra2
+#         Comment=A field-theory motivated approach to computer algebra
+#         Exec=cadabra2-gtk
+#         Icon=cadabra2-gtk
+#         Categories=Education;Science;Math;
+#         MimeType=application/x-cadabra-notebook;
+#         DESKTOP_EOF
+#           fi
           
-          # Create icon if it doesn't exist
-          if [ ! -f ../AppDir/usr/share/icons/hicolor/64x64/apps/cadabra2-gtk.png ]; then
-            # Use a default icon or copy from images directory
-            if [ -f ../images/cadabra2-gtk.png ]; then
-              cp ../images/cadabra2-gtk.png ../AppDir/usr/share/icons/hicolor/64x64/apps/
-            fi
-          fi
+#          # Create icon if it doesn't exist
+#          if [ ! -f ../AppDir/usr/share/icons/hicolor/64x64/apps/cadabra2-gtk.png ]; then
+#            # Use a default icon or copy from images directory
+#            if [ -f ../images/cadabra2-gtk.png ]; then
+#              cp ../images/cadabra2-gtk.png ../AppDir/usr/share/icons/hicolor/64x64/apps/
+#            fi
+#          fi
           
           VERSION=`cat build/VERSION`
         
@@ -206,7 +207,8 @@ jobs:
           sed -i \"s/version: latest/version: $VERSION/\" /workspace/AppImageBuilder.yml
           
           # Build the AppImage
-          appimage-builder --recipe /workspace/AppImageBuilder.yml --skip-test
+          echo "Now going to run appimage-builder..."
+          appimage-builder --recipe /workspace/AppImageBuilder.yml --log DEBUG --skip-test
         "
 
     - name: Rename AppImage
