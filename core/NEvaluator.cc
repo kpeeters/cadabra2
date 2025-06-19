@@ -51,7 +51,7 @@ NTensor NEvaluator::evaluate()
 	const std::map<nset_t::iterator, complex_func, nset_it_less> elementary
 		= { // Trigonometric functions.
 
-		{ name_set.find("\\sin"), [](const std::complex<double>& x) { return std::sin(x); } },
+		{ name_set.find("\\sin"), std::sin<double> },
 		{ name_set.find("\\cos"), std::cos<double> },
 		{ name_set.find("\\tan"), std::tan<double> },
 
