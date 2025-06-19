@@ -168,7 +168,7 @@ jobs:
             pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git@main
 
             # Patch mpmath (bug fixed only in ubuntu-22.04)
-            sudo sed -i \"s/if other is 0:/if other == 0:/g\" /usr/lib/python3/dist-packages/mpmath/ctx_mp_python.py
+            sed -i \"s/if other is 0:/if other == 0:/g\" /usr/lib/python3/dist-packages/mpmath/ctx_mp_python.py
             
             # Build Cadabra2
             git config --global --add safe.directory /workspace
@@ -178,12 +178,14 @@ jobs:
                   -DCMAKE_BUILD_TYPE=Release \
                   -DENABLE_MATHEMATICA=OFF \
                   ..
-            make -j\$(nproc)
-            make install DESTDIR=/workspace/build/AppDir
 
-            ls /workspace/build/
+            ls -la /workspace/build/
+            cat /workspace/build/VERSION
             VERSION=`cat /workspace/build/VERSION`
             echo \"Version built is ${VERSION}\"
+
+            make -j\$(nproc)
+            make install DESTDIR=/workspace/build/AppDir
 
             # Update version in AppImageBuilder.yml
             sed -i \"s/version: latest/version: ${VERSION}/\" /workspace/AppImageBuilder.yml
