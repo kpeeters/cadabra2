@@ -198,6 +198,7 @@ jobs:
       - name: Rename AppImage
         run: |
           VERSION=2.5.13
+          sudo chown runner:docker build -R
 
           # Find and rename the AppImage
           ls -la .
