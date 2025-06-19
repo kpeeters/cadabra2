@@ -52,12 +52,10 @@ jobs:
 
           script:
             - mkdir -p AppDir
-            - |
-              # Install newer mpmath via pip to avoid Ubuntu 20.04 SyntaxWarning bug
-              mkdir -p AppDir/usr/lib/python3.8/site-packages
-              pip3 install --target=AppDir/usr/lib/python3.8/site-packages --upgrade mpmath>=1.2.0
-              # Install astunparse
-              pip3 install --target=AppDir/usr/lib/python3.8/site-packages astunparse
+
+          after_bundle:
+            - pip3 install --target=${APPDIR}/usr/lib/python3.8/site-packages --upgrade mpmath>=1.2.0
+            - pip3 install --target=${APPDIR}/usr/lib/python3.8/site-packages astunparse
               
           AppDir:
             path: ./AppDir
@@ -137,7 +135,7 @@ jobs:
               env:
                 PATH: '${APPDIR}/usr/bin:${PATH}'
                 PYTHONHOME: '${APPDIR}/usr'
-                PYTHONPATH: '${APPDIR}/usr/lib/python3.8:${APPDIR}/usr/lib/python3.8/site-packages:${APPDIR}/usr/lib/python3.8/dist-packages'
+                PYTHONPATH: '${APPDIR}/usr/lib/python3.8/site-packages:${APPDIR}/usr/lib/python3.8:${APPDIR}/usr/lib/python3.8/dist-packages'
                 LD_LIBRARY_PATH: '${APPDIR}/usr/lib:${APPDIR}/usr/lib/${{ matrix.arch }}-linux-gnu:${LD_LIBRARY_PATH}'
                 LC_ALL: C.UTF-8
                 LANG: C.UTF-8
