@@ -181,7 +181,7 @@ jobs:
 
             ls -la /workspace/build/
             cat /workspace/build/VERSION
-            VERSION=`cat /workspace/build/VERSION`
+            VERSION=\$(cat /workspace/build/VERSION)
             echo \"Version built is \${VERSION}\"
 
             make -j\$(nproc)
