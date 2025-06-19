@@ -152,7 +152,9 @@ jobs:
             -v $PWD:/workspace \
             -w /workspace \
             ubuntu:20.04 /bin/bash -c "
-
+            # Stop on error inside the Docker container
+            set -e
+            
             # Install dependencies
             apt update
             DEBIAN_FRONTEND=noninteractive apt install -y \
