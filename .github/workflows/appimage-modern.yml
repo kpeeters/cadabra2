@@ -52,7 +52,13 @@ jobs:
 
           script:
             - mkdir -p AppDir
-
+            - |
+              # Install newer mpmath via pip to avoid Ubuntu 20.04 SyntaxWarning bug
+              mkdir -p AppDir/usr/lib/python3.8/site-packages
+              pip3 install --target=AppDir/usr/lib/python3.8/site-packages --upgrade mpmath>=1.2.0
+              # Install astunparse
+              pip3 install --target=AppDir/usr/lib/python3.8/site-packages astunparse
+              
           AppDir:
             path: ./AppDir
             app_info:
@@ -173,8 +179,8 @@ jobs:
             pip3 install astunparse
 
             # Patch mpmath (bug fixed only in ubuntu-22.04)
-            sed -i \"s/if other is 0:/if other == 0:/g\" /usr/lib/python3/dist-packages/mpmath/ctx_mp_python.py
-            cat /usr/lib/python3/dist-packages/mpmath/ctx_mp_python.py
+            # sed -i \"s/if other is 0:/if other == 0:/g\" /usr/lib/python3/dist-packages/mpmath/ctx_mp_python.py
+            # cat /usr/lib/python3/dist-packages/mpmath/ctx_mp_python.py
             
             # Build Cadabra2
             git config --global --add safe.directory /workspace
