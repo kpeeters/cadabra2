@@ -263,9 +263,9 @@ int cadabra::is_python_code_complete(const std::string& code, std::string& error
 
 std::string cadabra::remove_variable_assignments(const std::string& code, const std::string& variable)
 	{
-//	pybind11::scoped_interpreter guard{};	
+//	pybind11::scoped_interpreter guard{};
 
-	static std::string removal_code = R"PYTHON(
+static std::string removal_code = R"PYTHON(
 import ast
 
 class AssignmentRemover(ast.NodeTransformer):
@@ -289,11 +289,19 @@ class AssignmentRemover(ast.NodeTransformer):
         return node
 
 def remove_assignments(code: str, var_name: str) -> str:
+    try:
+        # Python 3.9+
+        unparse = ast.unparse
+    except AttributeError:
+        # Python < 3.9
+        import astunparse
+        unparse = astunparse.unparse
+
     tree = ast.parse(code)
     transformer = AssignmentRemover(var_name)
     modified_tree = transformer.visit(tree)
     ast.fix_missing_locations(modified_tree)
-    return ast.unparse(modified_tree)
+    return unparse(modified_tree)
 )PYTHON";
 
 	

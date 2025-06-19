@@ -22,9 +22,11 @@ jobs:
           - arch: x86_64
             os: ubuntu-24.04
             ubuntu_arch: amd64
+            repo: http://archive.ubuntu.com/ubuntu/
           - arch: arm64
             os: ubuntu-24.04-arm
             ubuntu_arch: arm64
+            repo: http://ports.ubuntu.com/ubuntu-ports/
 
     runs-on: ${{ matrix.os }}
 
@@ -62,9 +64,9 @@ jobs:
             apt:
               arch: ${{ matrix.ubuntu_arch }}
               sources:
-                - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal main universe
+                - sourceline: deb ${{ matrix.repo }} focal main universe
                   key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
-                - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal-updates main universe
+                - sourceline: deb ${{ matrix.repo }} focal-updates main universe
                   key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
 
               include:
@@ -165,6 +167,9 @@ jobs:
             # https://github.com/AppImageCrafters/appimage-builder/pull/281
             pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git@main
 
+            # Patch mpmath (bug fixed only in ubuntu-22.04)
+            sudo sed -i \"s/if other is 0:/if other == 0:/g\" /usr/lib/python3/dist-packages/mpmath/ctx_mp_python.py
+            
             # Build Cadabra2
             git config --global --add safe.directory /workspace
             mkdir -p build
@@ -176,11 +181,11 @@ jobs:
             make -j\$(nproc)
             make install DESTDIR=/workspace/build/AppDir
 
-            VERSION=`cat build/VERSION`
+            VERSION=`cat /workspace/build/VERSION`
             echo \"Version built is ${VERSION}\"
 
             # Update version in AppImageBuilder.yml
-            sed -i \"s/version: latest/version: 2.5.13/\" /workspace/AppImageBuilder.yml
+            sed -i \"s/version: latest/version: ${VERSION}/\" /workspace/AppImageBuilder.yml
 
             # Build the AppImage
             echo \"Now going to run appimage-builder, using:\"
@@ -197,7 +202,7 @@ jobs:
 
       - name: Rename AppImage
         run: |
-          VERSION=2.5.13
+          VERSION=`cat build/VERSION`
           sudo chown runner:docker build -R
 
           # Find and rename the AppImage
