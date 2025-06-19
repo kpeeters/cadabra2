@@ -104,7 +104,8 @@ NTensor& NTensor::operator=(const NTensor&& other) noexcept
 NTensor NTensor::linspace(std::complex<double> from, std::complex<double> to, size_t steps)
 	{
 	NTensor res(std::vector<size_t>({steps}), 0.0);
-	assert(steps>1);
+	if(steps <= 1)
+		throw std::range_error("NTensor::linspace: steps must be greater than 1");
 
 	for(size_t i=0; i<steps; ++i) {
 		res.values[i] = from + (double)(i)*(to-from)/(double(steps-1));
@@ -346,8 +347,10 @@ NTensor NTensor::outer_product(const NTensor& a, const NTensor& b)
 	for(size_t i=0; i<res.values.size(); ++i) {
 		size_t idx_a = i / b.values.size();
 		size_t idx_b = i % b.values.size();
-		assert(idx_a < a.values.size());
-		assert(idx_b < b.values.size());
+		if(idx_a >= a.values.size())
+			throw std::range_error("NTensor::outer_product: index a out of range");
+		if(idx_b >= b.values.size())
+			throw std::range_error("NTensor::outer_product: index b out of range");
 
 		res.values[i] = a.values[idx_a] * b.values[idx_b];
 		}
@@ -373,9 +376,12 @@ NTensor NTensor::broadcast(std::vector<size_t> new_shape, size_t pos) const
 	// for(auto s: new_shape)
 	// 	std::cerr << s << ", ";
 	// std::cerr << "\n" << pos << std::endl;
-	assert( pos < new_shape.size() );
-	assert( shape.size()==1 );
-	assert( new_shape[pos]==shape[0] );
+	if(pos >= new_shape.size())
+		throw std::range_error("NTensor::broadcast: pos out of range");
+	if(shape.size() != 1)
+		throw std::range_error("NTensor::broadcast: tensor must be rank-1");
+	if(new_shape[pos] != shape[0])
+		throw std::range_error("NTensor::broadcast: shape mismatch");
 
 
 	NTensor res(new_shape, 0.);
@@ -392,7 +398,8 @@ NTensor NTensor::broadcast(std::vector<size_t> new_shape, size_t pos) const
 	for(size_t i=0; i<res.values.size(); ++i) {
 		size_t orig_i = (i % higher) / lower;
 		// std::cerr << i << " -> " << orig_i << std::endl;
-		assert( orig_i < new_shape[pos] );
+		if(orig_i >= new_shape[pos])
+			throw std::range_error("NTensor::broadcast: computed index out of range");
 
 		res.values[i] = values[orig_i];
 		}
