@@ -54,8 +54,8 @@ jobs:
             - mkdir -p AppDir
 
           after_bundle:
-            - pip3 install --target=${APPDIR}/usr/lib/python3.8/site-packages --upgrade mpmath>=1.2.0
-            - pip3 install --target=${APPDIR}/usr/lib/python3.8/site-packages astunparse
+            - pip3 install --target=AppDir/usr/lib/python3.8/site-packages --upgrade mpmath>=1.2.0
+            - pip3 install --target=AppDir/usr/lib/python3.8/site-packages astunparse
               
           AppDir:
             path: ./AppDir
