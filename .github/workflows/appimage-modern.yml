@@ -22,10 +22,12 @@ jobs:
           - arch: x86_64
             os: ubuntu-24.04
             ubuntu_arch: amd64
+            appimage_arch: x86_64
             repo: http://archive.ubuntu.com/ubuntu/
           - arch: arm64
             os: ubuntu-24.04-arm
             ubuntu_arch: arm64
+            appimage_arch: aarch64
             repo: http://ports.ubuntu.com/ubuntu-ports/
 
     runs-on: ${{ matrix.os }}
@@ -137,7 +139,7 @@ jobs:
           AppImage:
             update-information: gh-releases-zsync|kpeeters|cadabra2|latest|Cadabra*${{ matrix.arch }}.AppImage.zsync
             sign-key: None
-            arch: ${{ matrix.arch }}
+            arch: ${{ matrix.appimage_arch }}
             comp: gzip
           EOF
 
@@ -167,8 +169,12 @@ jobs:
             # https://github.com/AppImageCrafters/appimage-builder/pull/281
             pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git@main
 
+            # Python 3.8 does not have ast.unparse, so install unparse separately
+            pip3 install astunparse
+
             # Patch mpmath (bug fixed only in ubuntu-22.04)
             sed -i \"s/if other is 0:/if other == 0:/g\" /usr/lib/python3/dist-packages/mpmath/ctx_mp_python.py
+            cat /usr/lib/python3/dist-packages/mpmath/ctx_mp_python.py
             
             # Build Cadabra2
             git config --global --add safe.directory /workspace
