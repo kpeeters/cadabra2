@@ -81,6 +81,11 @@ jobs:
                 - libstdc++6
                 - libgcc-s1
 
+                # Shell interpreters
+                - bash
+                - dash
+                - perl-base
+                
                 # Cadabra dependencies
                 - libgmp10
                 - libgmpxx4ldbl
