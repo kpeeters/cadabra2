@@ -110,6 +110,7 @@ jobs:
                 - python3.8-minimal
                 - libpython3.8
                 - python3-pip
+                - python3-gmpy2
 
               exclude:
                 - adwaita-icon-theme-full
@@ -192,7 +193,7 @@ jobs:
             # Ensure the target path is correct for your AppDir's Python installation
             pip3 install --target=/workspace/build/AppDir/usr/lib/python3.8/site-packages --upgrade mpmath>=1.2.0
             pip3 install --target=/workspace/build/AppDir/usr/lib/python3.8/site-packages astunparse
-            pip3 install --target=/workspace/build/AppDir/usr/lib/python3.8/site-packages gmpy2 pillow sympy matplotlib numpy
+            pip3 install --target=/workspace/build/AppDir/usr/lib/python3.8/site-packages pillow sympy matplotlib numpy
 
             # Update version in AppImageBuilder.yml
             sed -i \"s/version: latest/version: \${VERSION}/\" /workspace/AppImageBuilder.yml
