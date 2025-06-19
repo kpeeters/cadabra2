@@ -182,13 +182,13 @@ jobs:
             ls -la /workspace/build/
             cat /workspace/build/VERSION
             VERSION=`cat /workspace/build/VERSION`
-            echo \"Version built is ${VERSION}\"
+            echo \"Version built is \${VERSION}\"
 
             make -j\$(nproc)
             make install DESTDIR=/workspace/build/AppDir
 
             # Update version in AppImageBuilder.yml
-            sed -i \"s/version: latest/version: ${VERSION}/\" /workspace/AppImageBuilder.yml
+            sed -i \"s/version: latest/version: \${VERSION}/\" /workspace/AppImageBuilder.yml
 
             # Build the AppImage
             echo \"Now going to run appimage-builder, using:\"
