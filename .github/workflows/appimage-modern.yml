@@ -181,6 +181,7 @@ jobs:
             make -j\$(nproc)
             make install DESTDIR=/workspace/build/AppDir
 
+            ls /workspace/build/
             VERSION=`cat /workspace/build/VERSION`
             echo \"Version built is ${VERSION}\"
 
