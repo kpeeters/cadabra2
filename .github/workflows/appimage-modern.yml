@@ -185,6 +185,8 @@ jobs:
                   -DENABLE_MATHEMATICA=OFF \
                   ..
 
+            make test
+                  
             VERSION=\$(cat /workspace/build/VERSION)
             echo \"Version built is \${VERSION}\"
 
