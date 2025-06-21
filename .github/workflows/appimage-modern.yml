@@ -185,14 +185,13 @@ jobs:
                   -DENABLE_MATHEMATICA=OFF \
                   ..
 
-            make test
-                  
             VERSION=\$(cat /workspace/build/VERSION)
-            echo \"Version built is \${VERSION}\"
+            echo \"Building version \${VERSION}\"
 
             make -j\$(nproc)
             make install DESTDIR=/workspace/build/AppDir
-
+            make test
+                  
             # Install Python packages directly into the AppDir after 'make install'
             # Ensure the target path is correct for your AppDir's Python installation
             pip3 install --target=/workspace/build/AppDir/usr/lib/python3.8/site-packages --upgrade mpmath>=1.2.0
