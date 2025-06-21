@@ -3,7 +3,6 @@
 #include "Functional.hh"
 #include "algorithms/factor_out.hh"
 #include "algorithms/sort_product.hh"
-#include <map>
 
 //#define DEBUG __FILE__
 #include "Debug.hh"
@@ -42,6 +41,8 @@ Algorithm::result_t factor_out::apply(iterator& it)
 
 	Ex_comparator comparator(kernel.properties);
 
+	// `new_term_t` holds the factored-out factors, and a sum of terms
+	// which multiply that. 
 	typedef std::pair<Ex, std::vector<Ex> > new_term_t;
 	std::vector<new_term_t> new_terms;
 
@@ -114,9 +115,10 @@ Algorithm::result_t factor_out::apply(iterator& it)
 		DEBUGLN( std::cerr << "product after factoring out " << Ex(prod) << std::endl; );
 
 		if(collector.number_of_children(collector.begin())!=0) {
-			// The stuff factored out of this term is in 'collector'. See if we have
-			// factored out that thing before. Because we may not always have collected
-			// factors in the same order (the original expression may not have had
+			// The stuff factored out of this term is in 'collector'. See
+			// if we have factored out that thing before for a different
+			// term. Because we may not always have collected factors in
+			// the same order (the original expression may not have had
 			// its product sorted), we first sort the collector product.
 
 			sort_product sp(kernel, collector);
@@ -196,6 +198,7 @@ Algorithm::result_t factor_out::apply(iterator& it)
 				auto tmp = tr.append_child(sum, term.begin());
 				cleanup_dispatch(kernel, tr, tmp);
 				}
+			cleanup_dispatch(kernel, tr, sum);
 			}
 		}
 
