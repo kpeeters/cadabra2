@@ -1392,11 +1392,18 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 		VisualCell newcell;
 		Gtk::Widget *w=0;
 		switch(it->cell_type) {
-			case DataCell::CellType::document:
-				newcell.document = manage( new Gtk::Box(Gtk::Orientation::ORIENTATION_VERTICAL) );
+			case DataCell::CellType::document: {
+				Gtk::Box *docbox = manage( new Gtk::Box(Gtk::Orientation::ORIENTATION_VERTICAL) );
+				newcell.document = docbox;
 				w=newcell.document;
+				// Add spacer so we can scroll a bit further than the bottom cell.
+				Gtk::Box* spacer = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+				spacer->set_size_request(-1, 200); // Minimum height for scrollable space
+				spacer->set_vexpand(true);
+				spacer->set_valign(Gtk::ALIGN_FILL);
+				docbox->pack_end(*spacer, Gtk::PACK_EXPAND_WIDGET);
 				break;
-
+				}
 			case DataCell::CellType::output:
 			case DataCell::CellType::error:
 			case DataCell::CellType::verbatim:
@@ -1514,6 +1521,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 
 			if(it->cell_type==DataCell::CellType::document) {
 				canvasses[i]->scroll.add(*w);
+
 				w->show_all(); // FIXME: if you drop this, the whole document remains invisible
 
 				canvasses[i]->connect_scroll_listener();
@@ -1706,6 +1714,8 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 			});
 		}
 	modified=true;
+	follow_mode=true;
+	follow_cell=current_cell;
 	update_title();
 	}
 
@@ -1762,7 +1772,7 @@ void NotebookWindow::update_cell(const DTree&, DTree::iterator it)
 	update_title();
 	}
 
-void NotebookWindow::position_cursor(const DTree&, DTree::iterator it, int pos)
+void NotebookWindow::position_cursor(const DTree& tr, DTree::iterator it, int pos)
 	{
 	//	if(it==doc.end()) return;
 	// std::cerr << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
@@ -1775,7 +1785,20 @@ void NotebookWindow::position_cursor(const DTree&, DTree::iterator it, int pos)
 
 	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
 
-	//	Gtk::Allocation alloc=target.inbox->get_allocation();
+	Gtk::Allocation alloc=target.inbox->get_allocation();
+	// std::cerr << "allocation for position box " << alloc.get_width() << std::endl;
+	if(alloc.get_width()<2) {
+		// This box is not yet realised, which means that we cannot scroll to it either.
+		// Re-schedule the position action for later.
+		// std::cerr << "Reschedule" << std::endl;
+		Glib::signal_timeout().connect_once(  [this, &tr, it, pos]() {
+			position_cursor(tr, it, pos);
+			}, 30);
+		return;
+		}
+
+	// We now know that our target box is realized, so we can grab focus and
+	// scroll to it.
 	target.inbox->edit.grab_focus();
 
 	if(pos>=0) {
@@ -1841,12 +1864,17 @@ void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 	{
 	if(!follow_mode)
 		return;
-	
-//	std::cerr << "----- scroll into view" << std::endl;
-//	std::cerr << "cell content to show: " << cell->textbuf << std::endl;
+
+	// This will trigger multiple times, but the scroller below
+	// will not setup any animation for a target which is already
+	// being pursued. So this is ok.
+	// std::cerr << "----- scroll into view" << std::endl;
+	// std::cerr << "cell content to show: " << cell->textbuf << std::endl;
 
 	if(current_canvas>=(int)canvasses.size()) return;
 
+	// std::cerr << "canvas vadjustment = " << canvasses[current_canvas]->scroll.get_vadjustment()->get_value() << std::endl;
+        
 	if(canvasses[current_canvas]->visualcells.find(&(*cell))==canvasses[current_canvas]->visualcells.end()) return;
 
 	const VisualCell& focusbox = canvasses[current_canvas]->visualcells[&(*cell)];
@@ -1891,7 +1919,8 @@ void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 //	std::cerr << "shift = " << shift << std::endl;
 	if(shift>0 || (-shift)>va->get_page_size()) {
 //		va->set_value( upper_visible + shift);
-		// std::cerr << "SCROLLING " << follow_mode << " " << upper_visible + shift << std::endl;
+		// std::cerr << "SCROLLING " << follow_mode << " scroll from " << upper_visible
+		//			 << " to " << upper_visible + shift << std::endl;
 		canvasses[current_canvas]->scroller.scroll_to(upper_visible + shift);
 		}
 	}
@@ -2621,11 +2650,11 @@ void NotebookWindow::on_edit_insert_below()
 	std::shared_ptr<ActionBase> action =
 	   std::make_shared<ActionAddCell>(newcell, current_cell->id(), ActionAddCell::Position::after);
 	queue_action(action);
-	if (prefs.move_into_new_cell) {
+	if(prefs.move_into_new_cell) {
 		std::shared_ptr<ActionBase> action2 =
 			std::make_shared<ActionPositionCursor>(newcell.id(), ActionPositionCursor::Position::in);
 		queue_action(action2);
-	}
+		}
 	process_data();
 	}
 
