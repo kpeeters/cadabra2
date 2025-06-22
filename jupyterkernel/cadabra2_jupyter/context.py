@@ -2,8 +2,6 @@ from io import StringIO
 import sys, os
 import cadabra2
 
-from cadabra2_jupyter import SITE_PATH
-
 # super important
 __cdbkernel__ = cadabra2.__cdbkernel__
 
@@ -37,7 +35,10 @@ class SandboxContext:
             "server": kernel._cdb_server,
             "__cdbkernel__": cadabra2.__cdbkernel__,
         }
-        with open(os.path.join(SITE_PATH, "cadabra2_defaults.py")) as f:
+        # Since we have been able to `import cadabra2`, we know where
+        # that module is located. The `cadabra2_defaults.py` is at the
+        # same location.
+        with open(os.path.join(os.path.dirname(cadabra2.__file__), "cadabra2_defaults.py")) as f:
             code = compile(f.read(), "cadabra2_defaults.py", "exec")
         exec(code, self._sandbox)
 
