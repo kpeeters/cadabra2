@@ -66,7 +66,9 @@ find_package(Threads)
 #---------------------------------------------------------------------------
 
 SET(RESERVED_NODE_SRC_FILES
+  ReservedNode.cc
   Equals.cc
+  Sum.cc
 )
 
 SET(ALGORITHM_SRC_FILES

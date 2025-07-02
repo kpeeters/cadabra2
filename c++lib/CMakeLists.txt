@@ -106,7 +106,9 @@ endif()
 #---------------------------------------------------------------------------
 
 SET(RESERVED_NODE_SRC_FILES
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/ReservedNode.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Equals.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Sum.cc
 )
 
 set(LOCAL_SRC_FILES

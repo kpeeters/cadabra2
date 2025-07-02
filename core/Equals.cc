@@ -4,11 +4,6 @@
 
 using namespace cadabra;
 
-visit::ReservedNode::ReservedNode(const Kernel &k, Ex &e, Ex::iterator i)
-   : ExManip(k, e), top(i)
-	{
-	}
-
 visit::Equals::Equals(const Kernel &k, Ex &e, Ex::iterator i)
 	: ReservedNode(k, e, i)
 	{

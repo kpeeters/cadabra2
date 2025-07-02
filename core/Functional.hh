@@ -43,6 +43,10 @@ namespace cadabra {
 
 	Ex::iterator find_in_subtree(const Ex& tr, Ex::iterator it, std::function<bool(Ex::iterator)> f, bool including_head=true);
 
+	/// 
+
+	std::vector<Ex::iterator> find_in_sum_multiple();
+	
 	/// \ingroup core
 	///
 	/// Ensure that the tree is a list, even if it contains only a single element.

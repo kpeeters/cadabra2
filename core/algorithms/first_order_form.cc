@@ -1,9 +1,9 @@
 
 #include "algorithms/first_order_form.hh"
 #include "Algorithm.hh"
-#include "Bridge.hh"
 #include "Compare.hh"
 #include "Equals.hh"
+#include "Sum.hh"
 #include "Exceptions.hh"
 #include "Functional.hh"
 #include "properties/PartialDerivative.hh"
@@ -63,7 +63,7 @@ Algorithm::result_t first_order_form::apply(iterator& it)
 	do_list(functions, functions.begin(),
 			  [this, &all_deps](Ex::iterator fun)
 				  {
-				  auto deps = dependencies(fun);
+				  auto deps = dependencies(fun, false);
 				  all_deps.insert(deps.begin(), deps.end());
 				  return true;
 				  }
@@ -73,68 +73,62 @@ Algorithm::result_t first_order_form::apply(iterator& it)
 		throw std::logic_error("first_order_form: more than one dependent variable present");
 		}
 	DEBUGLN( std::cerr << "first_order_form: found dependent variable " << *all_deps.begin() << std::endl; );
-	
+
 	// Walk all nodes in the ODEs, and determine the location of the
-	// functions and their derivative orders. The goal latre will be to
+	// functions and their derivative orders. The goal later will be to
 	// write this as a linear system in which the highest-order
 	// derivatives for each variable are the 'independents'. We then
 	// solve for those to get the ODEs in canonical form.
 	do_list(tr, it,
+			  // One ODE at a time.
 			  [this](Ex::iterator ode)
 				  {
 				  DEBUGLN( std::cerr << "process ODE " << ode << std::endl; );
-				  // FIXME: move all terms to the lhs.
-				  do_sum(tr, tr.begin(ode),
-							[this](Ex::iterator term)
-								{
-								DEBUGLN( std::cerr << "  process term " << term << std::endl; );
-								do_subtree(tr, term,
-											  [this, term](Ex::iterator el)
-												  {
-												  // If we find one of our functions, walk up the tree to determine
-												  // the order of the derivative.
-												  do_list(functions, functions.begin(),
-															 [this, el, term](Ex::iterator fun)
-																 {
-																 if(subtree_exact_equal(&kernel.properties, el, fun)) {
-																	 DEBUGLN( std::cerr << "  Found " << fun << std::endl; );
-																	 // Determine the derivative order.
-																	 Ex::iterator walk=el;
-																	 int order=0;
-																	 do {
-																		 walk = tr.parent(walk);
-																		 const auto *pd = kernel.properties.get<PartialDerivative>(walk);
-																		 if(pd) {
-																			 ++order;
-																			 DEBUGLN( std::cerr << "     derivative!" << std::endl; );
-																			 }
-																		 else break;
-																		 } while(walk != term);
-//																	 if(derivative_order_map.find(fun) == derivative_order_map.end())
-//																		 derivative_order_map[fun] = order;
-//																	 else
-//																		 derivative_order_map[fun] = std::max(derivative_order_map[fun], order);
-																	 }
-																 return true;
-																 }
-															 );
-												  return el;
-												  }
-											  );
-								return true;
-								}
-							);
-				  return true;
-				  }
-			  );
+				  visit::Equals equals(kernel, tr, ode.begin());
+				  visit::Sum    sum(kernel, tr, equals.lhs());
+				  
+				  // For each function, figure out where it appears in this ODE
+				  std::map<Ex::iterator, std::vector<std::pair<Ex::iterator, int>> > appearances;
+
+				  do_list(functions, functions.begin(),
+							 [this, &appearances, &sum](Ex::iterator fun)
+								 {
+								 auto fun_locs = sum.find_terms_containing(fun);
+								 std::vector<std::pair<Ex::iterator, int>> this_fun_appearances;
+								 for(auto fun_loc: fun_locs) {
+									 Ex::iterator walk=fun_loc;
+									 int order=0;
+									 do {
+										 walk = tr.parent(walk);
+										 const auto *pd = kernel.properties.get<PartialDerivative>(walk);
+										 if(pd) {
+											 ++order;
+											 DEBUGLN( std::cerr << "     derivative!" << std::endl; );
+											 }
+										 else break;
+										 } while(walk != sum.node());
+									 this_fun_appearances.push_back(std::make_pair(fun_loc, order));
+									 }
+								 appearances[fun] = this_fun_appearances;
+								 return true;
+								 }
+							 );
+
+				  // All functions scanned.
+				  for(auto& fun: appearances) {
+					  for(auto& pr: fun.second) {
+						  std::cerr << "function " << fun.first << " order " << pr.second << std::endl;
+						  }
+					  }
+
+			  return true;
+			  }
+		  );
 
 	// Move all terms except the highest-order derivative term to the
 	// rhs of every ODE. If this term is not linear in that highest-derivative
 	// term, throw an exception.
 	
-//	for(auto& fun: derivative_order_map) {
-//		std::cerr << "function " << fun.first << " order " << fun.second << std::endl;
-//		}
 	
 	// We now know the location of the highest order derivatives of each function.
 	// Treat these as independent variables and construct a linear system so that

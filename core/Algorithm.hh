@@ -143,8 +143,14 @@ namespace cadabra {
 			/// do not (yet) handle non-commuting behaviour.
 			static bool is_noncommuting(const Properties&, iterator);
 
-			/// Determine all the Coordinate dependencies of the object at 'it'.
-			Ex_set_t dependencies(iterator it) const;
+			/// Determine all the Coordinate dependencies of the object at 'it'. If
+			/// the flag is false, do not include derivatives of these coordinates
+			/// (e.g. when coordinates are dependent on parameters and derivatives
+			/// wrt. these parameters are present, do not include these as dependencies).
+			Ex_set_t dependencies(iterator it, bool include_derivatives_of=true) const;
+
+			/// Is this a symbol on which a derivative acts?
+			bool derivative_acts_on(iterator it) const;
 			
 		protected:
 			ProgressMonitor *pm;

@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Cleanup.hh"
 #include "Exceptions.hh"
 #include "Functional.hh"
+#include "properties/PartialDerivative.hh"
 #include <typeinfo>
 #include <boost/version.hpp>
 #if BOOST_VERSION > 105500
@@ -997,7 +998,16 @@ bool Algorithm::locate_object_set(const Ex& objs,
 	return true;
 	}
 
-std::set<Ex, tree_exact_less_obj> Algorithm::dependencies(iterator it) const
+bool Algorithm::derivative_acts_on(iterator it) const
+	{
+	if(tr.is_head(it)) return false;
+	const auto *pd = kernel.properties.get<PartialDerivative>(tr.parent(it));
+	if(pd) return true;
+
+	return false;
+	}
+
+std::set<Ex, tree_exact_less_obj> Algorithm::dependencies(iterator it, bool include_derivatives_of) const
 	{
 	tree_exact_less_obj comp(&kernel.properties);
 	std::set<Ex, tree_exact_less_obj> ret(comp);
@@ -1005,11 +1015,13 @@ std::set<Ex, tree_exact_less_obj> Algorithm::dependencies(iterator it) const
 	// Is this node a coordinate itself? If so, add it.
 	const Coordinate *cd = kernel.properties.get<Coordinate>(it, true);
 	if(cd) {
-		Ex cpy(it);
-		cpy.begin()->fl.bracket=str_node::b_none;
-		cpy.begin()->fl.parent_rel=str_node::p_none;
-		one(cpy.begin()->multiplier);
-		ret.insert(cpy);
+		if(include_derivatives_of || derivative_acts_on(it)==false) {
+			Ex cpy(it);
+			cpy.begin()->fl.bracket=str_node::b_none;
+			cpy.begin()->fl.parent_rel=str_node::p_none;
+			one(cpy.begin()->multiplier);
+			ret.insert(cpy);
+			}
 		}
 
 	// Determine explicit dependence on Coordinates, that is, collect
@@ -1023,11 +1035,13 @@ std::set<Ex, tree_exact_less_obj> Algorithm::dependencies(iterator it) const
 			{
 			const Coordinate *cd = kernel.properties.get<Coordinate>(nd, true);
 			if(cd) {
-				Ex cpy(nd);
-				cpy.begin()->fl.bracket=str_node::b_none;
-				cpy.begin()->fl.parent_rel=str_node::p_none;
-				one(cpy.begin()->multiplier);
-				ret.insert(cpy);
+				if(include_derivatives_of || derivative_acts_on(nd)==false) {
+					Ex cpy(nd);
+					cpy.begin()->fl.bracket=str_node::b_none;
+					cpy.begin()->fl.parent_rel=str_node::p_none;
+					one(cpy.begin()->multiplier);
+					ret.insert(cpy);
+					}
 				}
 			else {
 				auto arg_deps=dependencies(nd);
@@ -1051,10 +1065,12 @@ std::set<Ex, tree_exact_less_obj> Algorithm::dependencies(iterator it) const
 #endif
 		Ex deps(dep->dependencies(kernel, it));
 		cadabra::do_list(deps, deps.begin(), [&](Ex::iterator nd) {
-			Ex cpy(nd);
-			cpy.begin()->fl.bracket=str_node::b_none;
-			cpy.begin()->fl.parent_rel=str_node::p_none;
-			ret.insert(cpy);
+			if(include_derivatives_of || derivative_acts_on(nd)==false) {
+				Ex cpy(nd);
+				cpy.begin()->fl.bracket=str_node::b_none;
+				cpy.begin()->fl.parent_rel=str_node::p_none;
+				ret.insert(cpy);
+				}
 			return true;
 			});
 #ifdef DEBUG

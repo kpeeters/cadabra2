@@ -2,21 +2,13 @@
 
 #include "Storage.hh"
 #include "Kernel.hh"
-#include "Algorithm.hh"
+#include "ReservedNode.hh"
 
 namespace cadabra {
 
 	namespace visit {
 	
-		class ReservedNode : public ExManip {
-			public:
-				ReservedNode(const Kernel&, Ex&, Ex::iterator);
-				
-			protected:
-				Ex::iterator   top;
-		};
-		
-		class Equals : public ReservedNode {
+		class Equals : public cadabra::visit::ReservedNode {
 			public:
 				Equals(const Kernel&, Ex&, Ex::iterator);
 				

@@ -13,13 +13,13 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 2887701758043666003,
+					"cell_id": 6278840647255743935,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property Coordinate attached to~}\\left[t, \\discretionary{}{}{}r, \\discretionary{}{}{}\\theta, \\discretionary{}{}{}\\phi\\right].\\end{dmath*}"
 				},
 				{
-					"cell_id": 9891110003411846192,
+					"cell_id": 6846866674437952589,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property Indices(position=fixed, values=\\{{t}\n, {r}\n, {\\theta}\n, {\\phi}\n\\}) attached to~}\\left[\\mu, \\discretionary{}{}{}\\nu, \\discretionary{}{}{}\\rho, \\discretionary{}{}{}\\sigma, \\discretionary{}{}{}\\kappa, \\discretionary{}{}{}\\lambda\\right].\\end{dmath*}"
@@ -33,25 +33,25 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 6692690346774303168,
+					"cell_id": 6042237038597741993,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property Depends attached to~}a.\\end{dmath*}"
 				},
 				{
-					"cell_id": 8677221884869630064,
+					"cell_id": 5727658145276422944,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property PartialDerivative attached to~}\\backslash\\texttt{partial}\\{\\#\\}.\\end{dmath*}"
 				},
 				{
-					"cell_id": 11414015433870757889,
+					"cell_id": 14992956572435558237,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property LaTeXForm attached to {\\texttt{\\backslash{}partial}}.}\\end{dmath*}"
 				},
 				{
-					"cell_id": 16732457139886400228,
+					"cell_id": 14748187663173571912,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property LaTeXForm attached to {\\texttt{\\backslash{}partial}}.}\\end{dmath*}"
@@ -65,13 +65,13 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 9441967265961646366,
+					"cell_id": 4547194245541305689,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property Metric attached to~}g_{\\mu \\nu}.\\end{dmath*}"
 				},
 				{
-					"cell_id": 9689501505628052241,
+					"cell_id": 9810108694561868228,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property TableauSymmetry attached to~}g^{\\mu \\nu}.\\end{dmath*}"
@@ -85,12 +85,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 2075858345744578720,
+					"cell_id": 6139535987905113585,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 1121553334723250520,
+							"cell_id": 766435461356623527,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "{g_{t t} = -1, g_{r r} = (a)**2 (1-k (r)**2)**(-1), g_{\\theta \\theta} = (a)**2 (r)**2, g_{\\phi \\phi} = (a)**2 (r)**2 (\\sin(\\theta))**2}"
@@ -107,12 +107,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 18123888399413553130,
+					"cell_id": 16350274063269046608,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 4719245003569658620,
+							"cell_id": 2041974376356296988,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "{g_{t t} = -1, g_{r r} = (a)**2 (1-k (r)**2)**(-1), g_{\\theta \\theta} = (a)**2 (r)**2, g_{\\phi \\phi} = (a)**2 (r)**2 (\\sin(\\theta))**2, g^{t t} = -1, g^{r r} = (-k (r)**2 + 1) (a)**(-2), g^{\\theta \\theta} = ((r)**2 (a)**2)**(-1), g^{\\phi \\phi} = ((r)**2 (a)**2 (\\sin(\\theta))**2)**(-1)}"
@@ -129,12 +129,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 3895265071008586506,
+					"cell_id": 3739387488082977978,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 7888992467564095726,
+							"cell_id": 13904654066456474925,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\Gamma^{\\sigma}_{\\mu \\nu} =  1/2 g^{\\sigma \\rho} (\\partial_{\\mu}(g_{\\nu \\rho}) + \\partial_{\\nu}(g_{\\mu \\rho})-\\partial_{\\rho}(g_{\\mu \\nu}))"
@@ -151,18 +151,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 13003736169319255673,
+					"cell_id": 4591549504333152962,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 2488724124352475127,
+							"cell_id": 11051608797055996367,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\Gamma^{\\sigma}_{\\mu \\nu} = \\components_{\\nu \\mu}^{\\sigma}({{\\phi, t, \\phi} = \\partial_{t}(a) (a)**(-1), {\\phi, r, \\phi} = (r)**(-1), {\\phi, \\theta, \\phi} = (\\tan(\\theta))**(-1), {\\theta, t, \\theta} = \\partial_{t}(a) (a)**(-1), {\\theta, r, \\theta} = (r)**(-1), {r, t, r} = \\partial_{t}(a) (a)**(-1), {r, r, r} = -k r (k (r)**2-1)**(-1), {t, \\phi, \\phi} = \\partial_{t}(a) (a)**(-1), {r, \\phi, \\phi} = (r)**(-1), {\\theta, \\phi, \\phi} = (\\tan(\\theta))**(-1), {t, \\theta, \\theta} = \\partial_{t}(a) (a)**(-1), {r, \\theta, \\theta} = (r)**(-1), {t, r, r} = \\partial_{t}(a) (a)**(-1), {\\phi, \\phi, t} = (r)**2 a (\\sin(\\theta))**2 \\partial_{t}(a), {\\phi, \\phi, r} = r (k (r)**2-1) (\\sin(\\theta))**2, {\\phi, \\phi, \\theta} =  -  1/2 \\sin(2\\theta), {\\theta, \\theta, t} = (r)**2 a \\partial_{t}(a), {\\theta, \\theta, r} = k (r)**3-r, {r, r, t} = -a \\partial_{t}(a) (k (r)**2-1)**(-1)})"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\Gamma^{\\sigma}\\,_{\\mu \\nu} = \\square{}_{\\nu}{}_{\\mu}{}^{\\sigma}\\left\\{\\begin{aligned}\\square{}_{\\phi}{}_{t}{}^{\\phi}& = \\square{}_{t}{}_{\\theta}{}^{\\theta} = \\square{}_{r}{}_{t}{}^{r} = \\square{}_{t}{}_{r}{}^{r} = \\square{}_{t}{}_{\\phi}{}^{\\phi} = \\square{}_{\\theta}{}_{t}{}^{\\theta} = \\frac{\\dot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{r}{}^{\\phi}& = \\square{}_{r}{}_{\\phi}{}^{\\phi} = \\square{}_{r}{}_{\\theta}{}^{\\theta} = \\square{}_{\\theta}{}_{r}{}^{\\theta} = \\frac{1}{r}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}& = \\square{}_{\\theta}{}_{\\phi}{}^{\\phi} = \\frac{1}{\\tan{\\theta}}\\\\[-.5ex]\n\\square{}_{r}{}_{r}{}^{r}& = -\\frac{k r}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{t}& = {r}^{2\\,} a {\\left(\\sin{\\theta}\\right)}^{2\\,} \\dot{a}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{r}& = r \\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}& =  - \\frac{1}{2}\\,\\sin\\left(2\\,\\theta\\right)\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{t}& = {r}^{2\\,} a \\dot{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{r}& = k {r}^{3\\,}\\discretionary{}{}{}-\\,r\\\\[-.5ex]\n\\square{}_{r}{}_{r}{}^{t}& = -\\frac{a \\dot{a}}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\Gamma^{\\sigma}\\,_{\\mu \\nu} = \\square{}_{\\nu}{}_{\\mu}{}^{\\sigma}\\left\\{\\begin{aligned}\\square{}_{\\phi}{}_{t}{}^{\\phi}& = \\square{}_{t}{}_{\\phi}{}^{\\phi} = \\square{}_{r}{}_{t}{}^{r} = \\square{}_{t}{}_{\\theta}{}^{\\theta} = \\square{}_{t}{}_{r}{}^{r} = \\square{}_{\\theta}{}_{t}{}^{\\theta} = \\frac{\\dot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{r}{}^{\\phi}& = \\square{}_{r}{}_{\\phi}{}^{\\phi} = \\square{}_{r}{}_{\\theta}{}^{\\theta} = \\square{}_{\\theta}{}_{r}{}^{\\theta} = \\frac{1}{r}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}& = \\square{}_{\\theta}{}_{\\phi}{}^{\\phi} = \\frac{1}{\\tan{\\theta}}\\\\[-.5ex]\n\\square{}_{r}{}_{r}{}^{r}& = -\\frac{k r}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{t}& = {r}^{2\\,} a {\\left(\\sin{\\theta}\\right)}^{2\\,} \\dot{a}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{r}& = r \\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}& =  - \\frac{1}{2}\\,\\sin\\left(2\\,\\theta\\right)\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{t}& = {r}^{2\\,} a \\dot{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{r}& = k {r}^{3\\,}\\discretionary{}{}{}-\\,r\\\\[-.5ex]\n\\square{}_{r}{}_{r}{}^{t}& = -\\frac{a \\dot{a}}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n\\end{dmath*}"
 				}
 			],
 			"source": "evaluate(chr, metric, rhsonly=True);"
@@ -173,12 +173,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 3337908906118586945,
+					"cell_id": 18387406634533306773,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 6496080798379591468,
+							"cell_id": 9015241021054378139,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "R^{\\rho}_{\\sigma \\mu \\nu} = \\partial_{\\mu}(\\Gamma^{\\rho}_{\\sigma \\nu})-\\partial_{\\nu}(\\Gamma^{\\rho}_{\\sigma \\mu}) + \\Gamma^{\\rho}_{\\mu \\lambda} \\Gamma^{\\lambda}_{\\nu \\sigma}-\\Gamma^{\\rho}_{\\nu \\lambda} \\Gamma^{\\lambda}_{\\mu \\sigma}"
@@ -201,18 +201,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 6742245331117519629,
+					"cell_id": 17270529304093918135,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 14219288940181194431,
+							"cell_id": 15939039594621404881,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "R^{\\rho}_{\\sigma \\mu \\nu} = \\components_{\\nu \\sigma}^{\\rho}_{\\mu}({{r, r, t, t} = -a \\partial_{t t}(a) (k (r)**2-1)**(-1), {\\theta, \\theta, r, r} = (r)**2 (k + (\\partial_{t}(a))**2), {\\theta, \\theta, t, t} = (r)**2 a \\partial_{t t}(a), {\\phi, \\phi, \\theta, \\theta} = (r)**2 (k + (\\partial_{t}(a))**2) (\\sin(\\theta))**2, {\\phi, \\phi, r, r} = (r)**2 (k + (\\partial_{t}(a))**2) (\\sin(\\theta))**2, {\\phi, \\phi, t, t} = (r)**2 a (\\sin(\\theta))**2 \\partial_{t t}(a), {r, t, r, t} = \\partial_{t t}(a) (a)**(-1), {\\theta, t, \\theta, t} = \\partial_{t t}(a) (a)**(-1), {\\phi, \\theta, \\phi, \\theta} = (r)**2 (-k-(\\partial_{t}(a))**2), {\\phi, t, \\phi, t} = \\partial_{t t}(a) (a)**(-1), {t, r, t, r} = a \\partial_{t t}(a) (k (r)**2-1)**(-1), {r, \\theta, r, \\theta} = (r)**2 (-k-(\\partial_{t}(a))**2), {t, \\theta, t, \\theta} = -(r)**2 a \\partial_{t t}(a), {\\theta, \\phi, \\theta, \\phi} = -(r)**2 (k + (\\partial_{t}(a))**2) (\\sin(\\theta))**2, {r, \\phi, r, \\phi} = (r)**2 (-k-(\\partial_{t}(a))**2) (\\sin(\\theta))**2, {t, \\phi, t, \\phi} = -(r)**2 a (\\sin(\\theta))**2 \\partial_{t t}(a), {t, t, r, r} = -\\partial_{t t}(a) (a)**(-1), {r, r, \\theta, \\theta} = (-k-(\\partial_{t}(a))**2) (k (r)**2-1)**(-1), {t, t, \\theta, \\theta} = -\\partial_{t t}(a) (a)**(-1), {\\theta, \\theta, \\phi, \\phi} = (r)**2 (k + (\\partial_{t}(a))**2), {r, r, \\phi, \\phi} = (-k-(\\partial_{t}(a))**2) (k (r)**2-1)**(-1), {t, t, \\phi, \\phi} = -\\partial_{t t}(a) (a)**(-1), {\\phi, r, \\phi, r} = (k + (\\partial_{t}(a))**2) (k (r)**2-1)**(-1), {\\theta, r, \\theta, r} = (k + (\\partial_{t}(a))**2) (k (r)**2-1)**(-1)})"
 						}
 					],
-					"source": "\\begin{dmath*}{}R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\square{}_{\\nu}{}_{\\sigma}{}^{\\rho}{}_{\\mu}\\left\\{\\begin{aligned}\\square{}_{r}{}_{r}{}^{t}{}_{t}& = -\\frac{a \\ddot{a}}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{r}{}_{r}& = \\square{}_{\\theta}{}_{\\theta}{}^{\\phi}{}_{\\phi} = {r}^{2\\,} \\left(k\\discretionary{}{}{}+{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{t}{}_{t}& = {r}^{2\\,} a \\ddot{a}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}{}_{\\theta}& = \\square{}_{\\phi}{}_{\\phi}{}^{r}{}_{r} = {r}^{2\\,} \\left(k\\discretionary{}{}{}+{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{t}{}_{t}& = {r}^{2\\,} a {\\left(\\sin{\\theta}\\right)}^{2\\,} \\ddot{a}\\\\[-.5ex]\n\\square{}_{r}{}_{t}{}^{r}{}_{t}& = \\square{}_{\\theta}{}_{t}{}^{\\theta}{}_{t} = \\square{}_{\\phi}{}_{t}{}^{\\phi}{}_{t} = \\frac{\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}{}_{\\theta}& = \\square{}_{r}{}_{\\theta}{}^{r}{}_{\\theta} = {r}^{2\\,} \\left(-\\,k\\discretionary{}{}{}-\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{t}{}_{r}{}^{t}{}_{r}& = \\frac{a \\ddot{a}}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{t}{}_{\\theta}{}^{t}{}_{\\theta}& = -\\,{r}^{2\\,} a \\ddot{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\phi}{}^{\\theta}{}_{\\phi}& = -\\,{r}^{2\\,} \\left(k\\discretionary{}{}{}+{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\square{}_{r}{}_{\\phi}{}^{r}{}_{\\phi}& = {r}^{2\\,} \\left(-\\,k\\discretionary{}{}{}-\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\square{}_{t}{}_{\\phi}{}^{t}{}_{\\phi}& = -\\,{r}^{2\\,} a {\\left(\\sin{\\theta}\\right)}^{2\\,} \\ddot{a}\\\\[-.5ex]\n\\square{}_{t}{}_{t}{}^{r}{}_{r}& = \\square{}_{t}{}_{t}{}^{\\theta}{}_{\\theta} = \\square{}_{t}{}_{t}{}^{\\phi}{}_{\\phi} = -\\frac{\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{r}{}_{r}{}^{\\theta}{}_{\\theta}& = \\square{}_{r}{}_{r}{}^{\\phi}{}_{\\phi} = \\frac{\\left(-\\,k\\discretionary{}{}{}-\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{r}{}^{\\phi}{}_{r}& = \\square{}_{\\theta}{}_{r}{}^{\\theta}{}_{r} = \\frac{\\left(k\\discretionary{}{}{}+{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source": "\\begin{dmath*}{}R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\square{}_{\\nu}{}_{\\sigma}{}^{\\rho}{}_{\\mu}\\left\\{\\begin{aligned}\\square{}_{r}{}_{r}{}^{t}{}_{t}& = -\\frac{a \\ddot{a}}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{r}{}_{r}& = \\square{}_{\\theta}{}_{\\theta}{}^{\\phi}{}_{\\phi} = {r}^{2\\,} \\left(k\\discretionary{}{}{}+{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{t}{}_{t}& = {r}^{2\\,} a \\ddot{a}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}{}_{\\theta}& = \\square{}_{\\phi}{}_{\\phi}{}^{r}{}_{r} = {r}^{2\\,} \\left(k\\discretionary{}{}{}+{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{t}{}_{t}& = {r}^{2\\,} a {\\left(\\sin{\\theta}\\right)}^{2\\,} \\ddot{a}\\\\[-.5ex]\n\\square{}_{r}{}_{t}{}^{r}{}_{t}& = \\square{}_{\\phi}{}_{t}{}^{\\phi}{}_{t} = \\square{}_{\\theta}{}_{t}{}^{\\theta}{}_{t} = \\frac{\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}{}_{\\theta}& = \\square{}_{r}{}_{\\theta}{}^{r}{}_{\\theta} = {r}^{2\\,} \\left(-\\,k\\discretionary{}{}{}-\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{t}{}_{r}{}^{t}{}_{r}& = \\frac{a \\ddot{a}}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{t}{}_{\\theta}{}^{t}{}_{\\theta}& = -\\,{r}^{2\\,} a \\ddot{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\phi}{}^{\\theta}{}_{\\phi}& = -\\,{r}^{2\\,} \\left(k\\discretionary{}{}{}+{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\square{}_{r}{}_{\\phi}{}^{r}{}_{\\phi}& = {r}^{2\\,} \\left(-\\,k\\discretionary{}{}{}-\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\square{}_{t}{}_{\\phi}{}^{t}{}_{\\phi}& = -\\,{r}^{2\\,} a {\\left(\\sin{\\theta}\\right)}^{2\\,} \\ddot{a}\\\\[-.5ex]\n\\square{}_{t}{}_{t}{}^{r}{}_{r}& = \\square{}_{t}{}_{t}{}^{\\theta}{}_{\\theta} = \\square{}_{t}{}_{t}{}^{\\phi}{}_{\\phi} = -\\frac{\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{r}{}_{r}{}^{\\theta}{}_{\\theta}& = \\square{}_{r}{}_{r}{}^{\\phi}{}_{\\phi} = \\frac{\\left(-\\,k\\discretionary{}{}{}-\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{r}{}^{\\phi}{}_{r}& = \\square{}_{\\theta}{}_{r}{}^{\\theta}{}_{r} = \\frac{\\left(k\\discretionary{}{}{}+{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n\\end{dmath*}"
 				}
 			],
 			"source": "evaluate(riem, metric, rhsonly=True);"
@@ -223,12 +223,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 2021492136842023225,
+					"cell_id": 8055576766416093956,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 16329057209760145042,
+							"cell_id": 17976892358335415207,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "R_{\\mu \\nu} = R^{\\rho}_{\\mu \\nu \\rho}"
@@ -245,21 +245,235 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 9949557845089133963,
+					"cell_id": 18424815107255673273,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 2516148027363165931,
+							"cell_id": 15285328043211694640,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "R_{\\mu \\nu} = \\components_{\\mu \\nu}({{t, t} = 3\\partial_{t t}(a) (a)**(-1), {\\theta, \\theta} = (r)**2 (-2k-a \\partial_{t t}(a)-2(\\partial_{t}(a))**2), {r, r} = (2k + a \\partial_{t t}(a) + 2(\\partial_{t}(a))**2) (k (r)**2-1)**(-1), {\\phi, \\phi} = (r)**2 (-2k-a \\partial_{t t}(a)-2(\\partial_{t}(a))**2) (\\sin(\\theta))**2})"
 						}
 					],
-					"source": "\\begin{dmath*}{}R_{\\mu \\nu} = \\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = \\frac{3\\,\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{\\left(2\\,k\\discretionary{}{}{}+a \\ddot{a}\\discretionary{}{}{}+2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source": "\\begin{dmath*}{}R_{\\mu \\nu} = \\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = \\frac{3\\,\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{\\left(2\\,k\\discretionary{}{}{}+a \\ddot{a}\\discretionary{}{}{}+2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n\\end{dmath*}"
 				}
 			],
 			"source": "substitute(ricc, riem)\nevaluate(ricc, metric, rhsonly=True);"
+		},
+		{
+			"cell_id": 18439898758683516277,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 17764669073962124504,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6449485821058317619,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R = g^{\\mu \\nu} R_{\\mu \\nu}"
+						}
+					],
+					"source": "\\begin{dmath*}{}R = g^{\\mu \\nu} R_{\\mu \\nu}\\end{dmath*}"
+				}
+			],
+			"source": "rsc:= R = g^{\\mu\\nu} R_{\\mu\\nu};"
+		},
+		{
+			"cell_id": 7536224625176264330,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14598921007266714213,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17619451859496771489,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R = 6(-k-a \\partial_{t t}(a)-(\\partial_{t}(a))**2) (a)**(-2)"
+						}
+					],
+					"source": "\\begin{dmath*}{}R = \\frac{6\\,\\left(-\\,k\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{{a}^{2\\,}}\\end{dmath*}"
+				}
+			],
+			"source": "substitute(rsc, ricc)\nevaluate(rsc, metric, rhsonly=True);"
+		},
+		{
+			"cell_id": 14251455638551275443,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 3040197892620593075,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Let's compute the Einstein tensor, as we will need that to compute equations of motion for the scale factor. Start with the definition,"
+				}
+			],
+			"hidden": true,
+			"source": "Let's compute the Einstein tensor, as we will need that to compute equations of motion for the scale factor. Start with the definition,"
+		},
+		{
+			"cell_id": 12320538355060283436,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13673596348289381928,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17786104397218562362,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "G_{\\mu \\nu} = R_{\\mu \\nu} -  1/2 g_{\\mu \\nu} R"
+						}
+					],
+					"source": "\\begin{dmath*}{}G_{\\mu \\nu} = R_{\\mu \\nu}\\discretionary{}{}{} - \\frac{1}{2}\\,g_{\\mu \\nu} R\\end{dmath*}"
+				}
+			],
+			"source": "einstein:= G_{\\mu\\nu} = R_{\\mu\\nu} - 1/2 g_{\\mu\\nu} R;"
+		},
+		{
+			"cell_id": 8363691169720324631,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 10277930022379001609,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Substitute the components for the Ricci tensor and scalar computed above, and then use the metric at the last step to finish the computation,"
+				}
+			],
+			"hidden": true,
+			"source": "Substitute the components for the Ricci tensor and scalar computed above, and then use the metric at the last step to finish the computation,"
+		},
+		{
+			"cell_id": 10782175449488819360,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 2035524564443219634,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11692588637972694010,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "G_{\\mu \\nu} = \\components_{\\mu \\nu}({{t, t} = 3(-k-(\\partial_{t}(a))**2) (a)**(-2), {\\theta, \\theta} = (r)**2 (k + 2a \\partial_{t t}(a) + (\\partial_{t}(a))**2), {r, r} = (-k-2a \\partial_{t t}(a)-(\\partial_{t}(a))**2) (k (r)**2-1)**(-1), {\\phi, \\phi} = (r)**2 (k + 2a \\partial_{t t}(a) + (\\partial_{t}(a))**2) (\\sin(\\theta))**2})"
+						}
+					],
+					"source": "\\begin{dmath*}{}G_{\\mu \\nu} = \\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = \\frac{3\\,\\left(-\\,k\\discretionary{}{}{}-\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{{a}^{2\\,}}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = {r}^{2\\,} \\left(k\\discretionary{}{}{}+2\\,a \\ddot{a}\\discretionary{}{}{}+{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{\\left(-\\,k\\discretionary{}{}{}-2\\,a \\ddot{a}\\discretionary{}{}{}-\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = {r}^{2\\,} \\left(k\\discretionary{}{}{}+2\\,a \\ddot{a}\\discretionary{}{}{}+{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n\\end{dmath*}"
+				}
+			],
+			"source": "substitute(einstein, ricc)\nsubstitute(einstein, rsc)\nevaluate(einstein, metric, rhsonly=True);"
+		},
+		{
+			"cell_id": 251939380337894963,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6375792474797107374,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Let's compute the Einstein tensor with mixed indices by simply raising one:"
+				}
+			],
+			"hidden": true,
+			"source": "Let's compute the Einstein tensor with mixed indices by simply raising one:"
+		},
+		{
+			"cell_id": 11152058718401270058,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 2331349124689904645,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 12620239727471059401,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "G^{\\mu}_{\\nu} = \\components_{\\nu}^{\\mu}({{t, t} = 3(k + (\\partial_{t}(a))**2) (a)**(-2), {\\theta, \\theta} = (k + 2a \\partial_{t t}(a) + (\\partial_{t}(a))**2) (a)**(-2), {r, r} = (k + 2a \\partial_{t t}(a) + (\\partial_{t}(a))**2) (a)**(-2), {\\phi, \\phi} = (k + 2a \\partial_{t t}(a) + (\\partial_{t}(a))**2) (a)**(-2)})"
+						}
+					],
+					"source": "\\begin{dmath*}{}G^{\\mu}\\,_{\\nu} = \\square{}_{\\nu}{}^{\\mu}\\left\\{\\begin{aligned}\\square{}_{t}{}^{t}& = \\frac{3\\,\\left(k\\discretionary{}{}{}+{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{{a}^{2\\,}}\\\\[-.5ex]\n\\square{}_{\\theta}{}^{\\theta}& = \\square{}_{r}{}^{r} = \\square{}_{\\phi}{}^{\\phi} = \\frac{\\left(k\\discretionary{}{}{}+2\\,a \\ddot{a}\\discretionary{}{}{}+{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{{a}^{2\\,}}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n\\end{dmath*}"
+				}
+			],
+			"source": "evaluate(substitute($G^{\\mu}_{\\nu} = g^{\\mu\\rho} G_{\\rho\\nu}$, einstein), metric, rhsonly=True);"
+		},
+		{
+			"cell_id": 17244476709214870349,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16335368620656234184,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11282213324064228681,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "G^{\\mu}_{\\nu} = g^{\\mu \\rho} G_{\\rho \\nu}"
+						}
+					],
+					"source": "\\begin{dmath*}{}G^{\\mu}\\,_{\\nu} = g^{\\mu \\rho} G_{\\rho \\nu}\\end{dmath*}"
+				}
+			],
+			"source": "einsteinmixed:= G^{\\mu}_{\\nu} = g^{\\mu\\rho} G_{\\rho\\nu};"
+		},
+		{
+			"cell_id": 275681027250199802,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13888328276992074924,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10143560440639855835,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "G^{\\mu}_{\\nu} = \\components_{\\nu}^{\\mu}({{t, t} = 3(k + (\\partial_{t}(a))**2) (a)**(-2), {\\theta, \\theta} = (k + 2a \\partial_{t t}(a) + (\\partial_{t}(a))**2) (a)**(-2), {r, r} = (k + 2a \\partial_{t t}(a) + (\\partial_{t}(a))**2) (a)**(-2), {\\phi, \\phi} = (k + 2a \\partial_{t t}(a) + (\\partial_{t}(a))**2) (a)**(-2)})"
+						}
+					],
+					"source": "\\begin{dmath*}{}G^{\\mu}\\,_{\\nu} = \\square{}_{\\nu}{}^{\\mu}\\left\\{\\begin{aligned}\\square{}_{t}{}^{t}& = \\frac{3\\,\\left(k\\discretionary{}{}{}+{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{{a}^{2\\,}}\\\\[-.5ex]\n\\square{}_{\\theta}{}^{\\theta}& = \\square{}_{r}{}^{r} = \\square{}_{\\phi}{}^{\\phi} = \\frac{\\left(k\\discretionary{}{}{}+2\\,a \\ddot{a}\\discretionary{}{}{}+{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{{a}^{2\\,}}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n\\end{dmath*}"
+				}
+			],
+			"source": "substitute(einsteinmixed, einstein)\nevaluate(einsteinmixed, metric, rhsonly=True);"
+		},
+		{
+			"cell_id": 14767310302042208122,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 13707870999398618981,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Now on to the Friedmann equations. We need the Einstein equations first (could have used the pre-computed Einstein tensor above),"
+				}
+			],
+			"hidden": true,
+			"source": "Now on to the Friedmann equations. We need the Einstein equations first (could have used the pre-computed Einstein tensor above),"
 		},
 		{
 			"cell_id": 2707163638401030064,
@@ -267,12 +481,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 9559121143387654948,
+					"cell_id": 6893369584150017871,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 2135264547896073738,
+							"cell_id": 11109506132705913347,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "R_{\\mu \\nu} -  1/2 g_{\\mu \\nu} = T_{\\mu \\nu}"
@@ -289,12 +503,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 15845800710322749165,
+					"cell_id": 4800274537670768984,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 1462063060029412116,
+							"cell_id": 1873151167832302103,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "{T_{t t} = \\rho, T_{r r} = p g_{r r}, T_{\\phi \\phi} = p g_{\\phi \\phi}, T_{\\theta \\theta} = p g_{\\theta \\theta}}"
@@ -311,18 +525,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 5786410153667838209,
+					"cell_id": 12012379353390368245,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 13506758049599324522,
+							"cell_id": 7775411517433978780,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\components_{\\mu \\nu}({{t, t} = 3\\partial_{t t}(a) (a)**(-1), {\\theta, \\theta} = (r)**2 (-2k-a \\partial_{t t}(a)-2(\\partial_{t}(a))**2), {r, r} = (2k + a \\partial_{t t}(a) + 2(\\partial_{t}(a))**2) (k (r)**2-1)**(-1), {\\phi, \\phi} = (r)**2 (-2k-a \\partial_{t t}(a)-2(\\partial_{t}(a))**2) (\\sin(\\theta))**2}) -  1/2 g_{\\mu \\nu} = T_{\\mu \\nu}"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = \\frac{3\\,\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{\\left(2\\,k\\discretionary{}{}{}+a \\ddot{a}\\discretionary{}{}{}+2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\discretionary{}{}{} - \\frac{1}{2}\\,g_{\\mu \\nu} = T_{\\mu \\nu}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = \\frac{3\\,\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{\\left(2\\,k\\discretionary{}{}{}+a \\ddot{a}\\discretionary{}{}{}+2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n\\discretionary{}{}{} - \\frac{1}{2}\\,g_{\\mu \\nu} = T_{\\mu \\nu}\\end{dmath*}"
 				}
 			],
 			"source": "substitute(frw, ricc);"
@@ -333,18 +547,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 17124182964689543855,
+					"cell_id": 1865938083906276254,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 17093331701975123107,
+							"cell_id": 12273741059518738884,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\components_{\\mu \\nu}({{t, t} =  1/2  + 3\\partial_{t t}(a) (a)**(-1), {\\theta, \\theta} = (r)**2 (-2k -  1/2 (a)**2-a \\partial_{t t}(a)-2(\\partial_{t}(a))**2), {r, r} = (2k +  1/2 (a)**2 + a \\partial_{t t}(a) + 2(\\partial_{t}(a))**2) (k (r)**2-1)**(-1), {\\phi, \\phi} = (r)**2 (-2k -  1/2 (a)**2-a \\partial_{t t}(a)-2(\\partial_{t}(a))**2) (\\sin(\\theta))**2}) = \\components_{\\mu \\nu}({{t, t} = \\rho, {r, r} = p g_{r r}, {\\phi, \\phi} = p g_{\\phi \\phi}, {\\theta, \\theta} = p g_{\\theta \\theta}})"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = \\frac{1}{2}\\,\\discretionary{}{}{}+\\frac{3\\,\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{\\left(2\\,k\\discretionary{}{}{}+\\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}+a \\ddot{a}\\discretionary{}{}{}+2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right.\n = \\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = \\rho\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = p g_{r r}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = p g_{\\phi \\phi}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = p g_{\\theta \\theta}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = \\frac{1}{2}\\,\\discretionary{}{}{}+\\frac{3\\,\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{\\left(2\\,k\\discretionary{}{}{}+\\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}+a \\ddot{a}\\discretionary{}{}{}+2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n = \\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = \\rho\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = p g_{r r}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = p g_{\\phi \\phi}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = p g_{\\theta \\theta}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n\\end{dmath*}"
 				}
 			],
 			"source": "evaluate(frw, join(metric, stress));"
@@ -355,18 +569,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 7668273178015610704,
+					"cell_id": 2243419952119428589,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 6358719296208858277,
+							"cell_id": 17061535033441028440,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\components_{\\mu \\nu}({{t, t} =  1/2  + 3\\partial_{t t}(a) (a)**(-1), {\\theta, \\theta} = (r)**2 (-2k -  1/2 (a)**2-a \\partial_{t t}(a)-2(\\partial_{t}(a))**2), {r, r} = (2k +  1/2 (a)**2 + a \\partial_{t t}(a) + 2(\\partial_{t}(a))**2) (k (r)**2-1)**(-1), {\\phi, \\phi} = (r)**2 (-2k -  1/2 (a)**2-a \\partial_{t t}(a)-2(\\partial_{t}(a))**2) (\\sin(\\theta))**2}) = \\components_{\\mu \\nu}({{t, t} = \\rho, {r, r} = p (a)**2 (1-k (r)**2)**(-1), {\\phi, \\phi} = p (a)**2 (r)**2 (\\sin(\\theta))**2, {\\theta, \\theta} = p (a)**2 (r)**2})"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = \\frac{1}{2}\\,\\discretionary{}{}{}+\\frac{3\\,\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{\\left(2\\,k\\discretionary{}{}{}+\\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}+a \\ddot{a}\\discretionary{}{}{}+2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right.\n = \\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = \\rho\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{p {a}^{2\\,}}{\\left(1\\discretionary{}{}{}-\\,k {r}^{2\\,}\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = p {a}^{2\\,} {r}^{2\\,} {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = p {a}^{2\\,} {r}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = \\frac{1}{2}\\,\\discretionary{}{}{}+\\frac{3\\,\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{\\left(2\\,k\\discretionary{}{}{}+\\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}+a \\ddot{a}\\discretionary{}{}{}+2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n = \\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = \\rho\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{p {a}^{2\\,}}{\\left(1\\discretionary{}{}{}-\\,k {r}^{2\\,}\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = p {a}^{2\\,} {r}^{2\\,} {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = p {a}^{2\\,} {r}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n\\end{dmath*}"
 				}
 			],
 			"source": "substitute(frw, metric);"
@@ -383,18 +597,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 9902495130267031200,
+					"cell_id": 5928231195483670410,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 6711314841074063146,
+							"cell_id": 3750470487921315635,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\components_{\\mu \\nu}({{t, t} =  1/2  + 3\\partial_{t t}(a) (a)**(-1), {\\theta, \\theta} = (r)**2 (-2k -  1/2 (a)**2-a \\partial_{t t}(a)-2(\\partial_{t}(a))**2), {r, r} = (2k +  1/2 (a)**2 + a \\partial_{t t}(a) + 2(\\partial_{t}(a))**2) (k (r)**2-1)**(-1), {\\phi, \\phi} = (r)**2 (-2k -  1/2 (a)**2-a \\partial_{t t}(a)-2(\\partial_{t}(a))**2) (\\sin(\\theta))**2}) + \\components_{\\mu \\nu}({{t, t} = -\\rho, {r, r} = -p (a)**2 (1-k (r)**2)**(-1), {\\phi, \\phi} = -p (a)**2 (r)**2 (\\sin(\\theta))**2, {\\theta, \\theta} = -p (a)**2 (r)**2})"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = \\frac{1}{2}\\,\\discretionary{}{}{}+\\frac{3\\,\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{\\left(2\\,k\\discretionary{}{}{}+\\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}+a \\ddot{a}\\discretionary{}{}{}+2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\discretionary{}{}{}+\\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = -\\,\\rho\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = -\\frac{p {a}^{2\\,}}{\\left(1\\discretionary{}{}{}-\\,k {r}^{2\\,}\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = -\\,p {a}^{2\\,} {r}^{2\\,} {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = -\\,p {a}^{2\\,} {r}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = \\frac{1}{2}\\,\\discretionary{}{}{}+\\frac{3\\,\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{\\left(2\\,k\\discretionary{}{}{}+\\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}+a \\ddot{a}\\discretionary{}{}{}+2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n\\discretionary{}{}{}+\\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = -\\,\\rho\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = -\\frac{p {a}^{2\\,}}{\\left(1\\discretionary{}{}{}-\\,k {r}^{2\\,}\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = -\\,p {a}^{2\\,} {r}^{2\\,} {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = -\\,p {a}^{2\\,} {r}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n\\end{dmath*}"
 				}
 			],
 			"source": "q=lhs(frw) - rhs(frw);"
@@ -405,18 +619,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 823232539067403802,
+					"cell_id": 11029541099087982197,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 2572044945631135281,
+							"cell_id": 68213334860507748,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\components_{\\mu \\nu}({{t, t} = -\\rho +  1/2  + 3\\partial_{t t}(a) (a)**(-1), {\\theta, \\theta} = (r)**2 (-2k-p (a)**2 -  1/2 (a)**2-a \\partial_{t t}(a)-2(\\partial_{t}(a))**2), {r, r} = (2k + p (a)**2 +  1/2 (a)**2 + a \\partial_{t t}(a) + 2(\\partial_{t}(a))**2) (k (r)**2-1)**(-1), {\\phi, \\phi} = (r)**2 (-2k-p (a)**2 -  1/2 (a)**2-a \\partial_{t t}(a)-2(\\partial_{t}(a))**2) (\\sin(\\theta))**2})"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = -\\,\\rho\\discretionary{}{}{}+\\frac{1}{2}\\,\\discretionary{}{}{}+\\frac{3\\,\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,p {a}^{2\\,}\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{\\left(2\\,k\\discretionary{}{}{}+p {a}^{2\\,}\\discretionary{}{}{}+\\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}+a \\ddot{a}\\discretionary{}{}{}+2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,p {a}^{2\\,}\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = -\\,\\rho\\discretionary{}{}{}+\\frac{1}{2}\\,\\discretionary{}{}{}+\\frac{3\\,\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,p {a}^{2\\,}\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{\\left(2\\,k\\discretionary{}{}{}+p {a}^{2\\,}\\discretionary{}{}{}+\\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}+a \\ddot{a}\\discretionary{}{}{}+2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,p {a}^{2\\,}\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n\\end{dmath*}"
 				}
 			],
 			"source": "collect_components(q);"
@@ -433,18 +647,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 12516555127768229595,
+					"cell_id": 11247039435171374167,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 1151881182614332032,
+							"cell_id": 16043885347605951914,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\components_{\\mu \\nu}({{t, t} = -\\rho +  1/2  + 3\\partial_{t t}(a) (a)**(-1), {\\theta, \\theta} = (r)**2 (-2k-p (a)**2 -  1/2 (a)**2-a \\partial_{t t}(a)-2(\\partial_{t}(a))**2), {r, r} = (2k + p (a)**2 +  1/2 (a)**2 + a \\partial_{t t}(a) + 2(\\partial_{t}(a))**2) (k (r)**2-1)**(-1), {\\phi, \\phi} = (r)**2 (-2k-p (a)**2 -  1/2 (a)**2-a \\partial_{t t}(a)-2(\\partial_{t}(a))**2) (\\sin(\\theta))**2})"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = -\\,\\rho\\discretionary{}{}{}+\\frac{1}{2}\\,\\discretionary{}{}{}+\\frac{3\\,\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,p {a}^{2\\,}\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{\\left(2\\,k\\discretionary{}{}{}+p {a}^{2\\,}\\discretionary{}{}{}+\\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}+a \\ddot{a}\\discretionary{}{}{}+2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,p {a}^{2\\,}\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\square{}_{\\mu}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{t}{}_{t}& = -\\,\\rho\\discretionary{}{}{}+\\frac{1}{2}\\,\\discretionary{}{}{}+\\frac{3\\,\\ddot{a}}{a}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,p {a}^{2\\,}\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)\\\\[-.5ex]\n\\square{}_{r}{}_{r}& = \\frac{\\left(2\\,k\\discretionary{}{}{}+p {a}^{2\\,}\\discretionary{}{}{}+\\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}+a \\ddot{a}\\discretionary{}{}{}+2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right)}{\\left(k {r}^{2\\,}\\discretionary{}{}{}-\\,1\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}& = {r}^{2\\,} \\left(-2\\,k\\discretionary{}{}{}-\\,p {a}^{2\\,}\\discretionary{}{}{} - \\frac{1}{2}\\,{a}^{2\\,}\\discretionary{}{}{}-\\,a \\ddot{a}\\discretionary{}{}{}-2\\,{\\left(\\dot{a}\\right)}^{2\\,}\\right) {\\left(\\sin{\\theta}\\right)}^{2\\,}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n\\end{dmath*}"
 				}
 			],
 			"source": "unzoom(q);"
@@ -455,12 +669,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 17971146387506998133,
+					"cell_id": 4871449050226298094,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 6152932651123532448,
+							"cell_id": 13725429586557322669,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "(r)**2 (-2k-p (a)**2 -  1/2 (a)**2-a \\partial_{t t}(a)-2(\\partial_{t}(a))**2)"
@@ -477,12 +691,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 16546423542006675190,
+					"cell_id": 9151203916009267879,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 11785598225496261592,
+							"cell_id": 11701340608753929026,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "-\\rho +  1/2  + 3\\partial_{t t}(a) (a)**(-1)"
