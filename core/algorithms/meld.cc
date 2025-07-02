@@ -24,7 +24,8 @@
 #include "properties/SelfNonCommuting.hh"
 #include "properties/NonCommuting.hh"
 
-// #define DEBUG 1
+// #define DEBUG __FILE__
+#include "Debug.hh"
 
 using namespace cadabra;
 
@@ -744,6 +745,7 @@ std::vector<meld::tab_t> meld::collect_tableaux(Ex& ex) const
 					++depth;
 					}
 				if (kernel.properties.get<RiemannTensor>(child)) {
+					DEBUGLN( std::cerr << "collect_tableaux: this is a derivative of a Riemann." << std::endl; );
 					// Append indices to top row of Riemann tableau
 					for (size_t k = 0; k < depth; ++k) {
 						tabs.back().add_box(0, total_indices + k);
