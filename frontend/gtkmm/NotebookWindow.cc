@@ -2117,9 +2117,12 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, bool shift_pressed
 
 	// Since the user has initiated this cell execution, we can
 	// turn on cell follow mode.
+	// FIXME: this is also done in `run_cell` which we call below,
+	// so unnecessary.
 	follow_cell=it;
 	follow_mode=true;
 
+	// Use the `DocumentThread` method to actually run the cell.
 	run_cell(it, shift_pressed);
 	
 	return true;
@@ -2797,12 +2800,17 @@ void NotebookWindow::on_run_cell()
 
 void NotebookWindow::on_run_runtocursor()
 	{
-	// FIXME: move to DocumentThread
+	// FIXME: It would be nicer to move this to DocumentThread, but since
+	// we call `cell_content_execute` that's not yet possible. 
 
 	DTree::sibling_iterator sib=doc.begin(doc.begin());
 	while(sib!=current_cell && sib!=doc.end(doc.begin())) {
-		if(sib->cell_type==DataCell::CellType::python)
+		if(sib->cell_type==DataCell::CellType::python) {
+			// We trigger running of the cell by calling the callback
+			// which CodeInput would call on a ctrl-enter press.
+			scroll_cell_into_view(sib);
 			cell_content_execute(DTree::iterator(sib), false);
+			}
 		++sib;
 		}
 	}

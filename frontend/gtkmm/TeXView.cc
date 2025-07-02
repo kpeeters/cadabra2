@@ -422,6 +422,9 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\bigO)"),
 											"\\mathcal{O}");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\dot\{\\dot\{)"),
+											"\\ddot{{");
 		fixed = std::regex_replace(fixed, std::regex(R"(\{\}_)"), "{\\,\\!}_");
 		fixed = std::regex_replace(fixed, std::regex(R"(\{\}\^)"), "{\\,\\!}^");
 		fixed = "\\text{$\\displaystyle{}"+fixed+"$}";
