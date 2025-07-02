@@ -206,7 +206,7 @@ namespace cadabra {
 		Properties& props = kernel->properties;
 
 		const auto *thisprop = get_prop();
-		thisprop->validate(*kernel, *obj);
+		thisprop->validate(*kernel, obj);
 		props.master_insert(*obj, thisprop);
 		}
 

@@ -8,7 +8,9 @@ namespace cadabra {
 		public:
 			RiemannTensor();
 			virtual std::string name() const override;
-			virtual void        validate(const Kernel&, const Ex&) const override;
+			virtual void        validate(Kernel&, std::shared_ptr<Ex>) const override;
+//			virtual bool        parse(Kernel&, std::shared_ptr<Ex>, keyval_t&) override;
+
 		};
 
 	}

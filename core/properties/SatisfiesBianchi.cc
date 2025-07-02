@@ -5,7 +5,7 @@
 #include "Kernel.hh"
 #include "properties/Derivative.hh"
 
-#define DEBUG __FILE__
+// #define DEBUG __FILE__
 #include "Debug.hh"
 
 using namespace cadabra;
@@ -15,13 +15,13 @@ std::string SatisfiesBianchi::name() const
 	return "SatisfiesBianchi";
 	}
 
-void SatisfiesBianchi::validate(const Kernel& kernel, const Ex& pat) const 
+void SatisfiesBianchi::validate(Kernel& kernel, std::shared_ptr<Ex> pat) const 
 	{
-	auto *der = kernel.properties.get<Derivative>(pat.begin());
+	auto *der = kernel.properties.get<Derivative>(pat->begin());
 	if(!der)
 		throw ArgumentException("SatisfiesBianchi: can only apply to objects with Derivative property.");
 
-	if(pat.number_of_children(pat.begin())!=2)
+	if(pat->number_of_children(pat->begin())!=2)
 		throw ArgumentException("SatisfiesBianchi: can only apply to a single Derivative acting on an explicit object.");
 	}
 

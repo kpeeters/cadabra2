@@ -84,7 +84,7 @@ Algorithm::result_t first_order_form::apply(iterator& it)
 			  [this](Ex::iterator ode)
 				  {
 				  DEBUGLN( std::cerr << "process ODE " << ode << std::endl; );
-				  visit::Equals equals(kernel, tr, ode.begin());
+				  visit::Equals equals(kernel, tr, ode);
 				  visit::Sum    sum(kernel, tr, equals.lhs());
 				  
 				  // For each function, figure out where it appears in this ODE
@@ -114,7 +114,7 @@ Algorithm::result_t first_order_form::apply(iterator& it)
 								 }
 							 );
 
-				  // All functions scanned.
+				  // All functions scanned for this ODE.
 				  for(auto& fun: appearances) {
 					  for(auto& pr: fun.second) {
 						  std::cerr << "function " << fun.first << " order " << pr.second << std::endl;

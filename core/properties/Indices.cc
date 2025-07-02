@@ -184,14 +184,16 @@ const std::vector<Ex>& Indices::values(const Properties& properties, Ex::iterato
 	return values_;
 	}
 
-void Indices::validate(const Kernel& k, const Ex& ex) const
+void Indices::validate(Kernel& k, std::shared_ptr<Ex> ex) const
 	{
-	do_list(ex, ex.begin(), [&k](Ex::iterator i) {
-									if(k.properties.get<Coordinate>(i))
-										throw ConsistencyException("Object already has a Coordinate property attached to it.");
-									return true;
-									}
-		);
+	do_list(*ex, ex->begin(),
+			  [&k](Ex::iterator i)
+				  {
+				  if(k.properties.get<Coordinate>(i))
+					  throw ConsistencyException("Object already has a Coordinate property attached to it.");
+				  return true;
+				  }
+			  );
 	}
 
 

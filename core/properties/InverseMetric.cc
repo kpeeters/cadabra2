@@ -27,8 +27,8 @@ bool InverseMetric::parse(Kernel&, keyval_t& keyvals)
 	return true;
 	}
 
-void InverseMetric::validate(const Kernel&, const Ex& tr) const
+void InverseMetric::validate(Kernel&, std::shared_ptr<Ex> tr) const
 	{
-	if(tr.number_of_children(tr.begin())!=2)
+	if(tr->number_of_children(tr->begin())!=2)
 		throw ArgumentException("InverseMetric: needs exactly 2 indices.");
 	}

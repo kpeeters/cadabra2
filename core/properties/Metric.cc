@@ -29,10 +29,10 @@ bool Metric::parse(Kernel&, keyval_t& keyvals)
 	return true;
 	}
 
-void Metric::validate(const Kernel& kernel, const Ex& tr) const
+void Metric::validate(Kernel& kernel, std::shared_ptr<Ex> tr) const
 	{
-	auto st = index_iterator::begin(kernel.properties, tr.begin());
-	auto nd = index_iterator::end(kernel.properties, tr.begin());
+	auto st = index_iterator::begin(kernel.properties, tr->begin());
+	auto nd = index_iterator::end(kernel.properties, tr->begin());
 	size_t num=0;
 	while(st != nd) {
 		const Indices *ind = kernel.properties.get<Indices>(st);

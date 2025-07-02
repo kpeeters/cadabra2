@@ -123,7 +123,7 @@ void Kernel::inject_property(property *prop, std::shared_ptr<Ex> ex, std::shared
 		prop->parse(*this, ex, keyvals);
 		}
 	// Validate and insert a copy of the property.
-	prop->validate(*this, Ex(it));
+	prop->validate(*this, ex);
 	properties.master_insert(Ex(it), prop);
 	}
 

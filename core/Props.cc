@@ -252,7 +252,7 @@ bool property::parse(Kernel& kernel, std::shared_ptr<Ex>, keyval_t& keyvals)
 	return parse(kernel, keyvals);
 	}
 
-void property::validate(const Kernel&, const Ex&) const
+void property::validate(Kernel&, std::shared_ptr<Ex>) const
 	{
 	}
 
