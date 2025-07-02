@@ -12,6 +12,7 @@ namespace cadabra {
 
 			virtual unsigned int size(const Properties&, Ex&, Ex::iterator) const override;
 			virtual tab_t        get_tab(const Properties&, Ex&, Ex::iterator, unsigned int) const override;
+			virtual void         validate(const Kernel&, const Ex&) const override;
 		};
 
 	}
