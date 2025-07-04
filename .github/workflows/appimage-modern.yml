@@ -131,7 +131,7 @@ jobs:
               env:
                 PATH: '${APPDIR}/usr/bin:${PATH}'
                 PYTHONHOME: '${APPDIR}/usr'
-                PYTHONPATH: '${APPDIR}/usr/lib/python3.8/site-packages:${APPDIR}/usr/lib/python3.8:${APPDIR}/usr/lib/python3.8/dist-packages'
+                PYTHONPATH: '${APPDIR}/usr/lib/python3.10/site-packages:${APPDIR}/usr/lib/python3.10:${APPDIR}/usr/lib/python3.10/dist-packages'
                 LD_LIBRARY_PATH: '${APPDIR}/usr/lib:${APPDIR}/usr/lib/${{ matrix.arch }}-linux-gnu:${LD_LIBRARY_PATH}'
                 LC_ALL: C.UTF-8
                 LANG: C.UTF-8
@@ -193,9 +193,9 @@ jobs:
                   
             # Install Python packages directly into the AppDir after 'make install'
             # Ensure the target path is correct for your AppDir's Python installation
-            pip3 install --target=/workspace/build/AppDir/usr/lib/python3.8/site-packages --upgrade mpmath>=1.2.0
-            pip3 install --target=/workspace/build/AppDir/usr/lib/python3.8/site-packages astunparse
-            pip3 install --target=/workspace/build/AppDir/usr/lib/python3.8/site-packages pillow sympy matplotlib numpy
+            pip3 install --target=/workspace/build/AppDir/usr/lib/python3.10/site-packages --upgrade mpmath>=1.2.0
+            pip3 install --target=/workspace/build/AppDir/usr/lib/python3.10/site-packages astunparse
+            pip3 install --target=/workspace/build/AppDir/usr/lib/python3.10/site-packages pillow sympy matplotlib numpy
 
             # Update version in AppImageBuilder.yml
             sed -i \"s/version: latest/version: \${VERSION}/\" /workspace/AppImageBuilder.yml
