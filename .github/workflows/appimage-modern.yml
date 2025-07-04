@@ -67,9 +67,9 @@ jobs:
               arch: ${{ matrix.ubuntu_arch }}
               sources:
                 - sourceline: deb ${{ matrix.repo }} jammy main universe
-                  key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
+                  key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x871920D1991BC93C'
                 - sourceline: deb ${{ matrix.repo }} jammy-updates main universe
-                  key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
+                  key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x871920D1991BC93C'
 
               include:
                 # Core system libraries
