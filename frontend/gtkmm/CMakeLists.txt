@@ -255,21 +255,29 @@ set(CDBICONS
   cdb-save
 )
 
+set(CDBDEPS "")
 foreach(CDBICON ${CDBICONS})
   add_custom_command(
-    OUTPUT  ${CMAKE_BINARY_DIR}/${CDBICON}.png
+    OUTPUT  cdb-icons/${CDBICON}.png
     DEPENDS cdb-icons/${CDBICON}.svg
     COMMAND inkscape
-    ARGS    ${CMAKE_SOURCE_DIR}/frontend/gtkmm/cdb-icons/${CDBICON}.svg --export-filename=${CMAKE_BINARY_DIR}/${CDBICON}.png -w 80 -h 80
+    ARGS    cdb-icons/${CDBICON}.svg --export-filename=cdb-icons/${CDBICON}.png -w 80 -h 80
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/frontend/gtkmm
     COMMENT "Converting ${CDBICON}.svg to ${CDBICON}.png"
   )
-  add_custom_target(
-    "${CDBICON}_conversion" ALL echo -n DEPENDS ${CMAKE_BINARY_DIR}/${CDBICON}.png
-  )
-  install(FILES ${CMAKE_BINARY_DIR}/${CDBICON}.png DESTINATION share/cadabra2/cdb-icons)
+  set(CDBDEPS ${CDBDEPS} cdb-icons/${CDBICON}.png)
+
+  # Always install
+  install(FILES cdb-icons/${CDBICON}.png DESTINATION share/cadabra2/cdb-icons)
   install(FILES cdb-icons/${CDBICON}.svg DESTINATION share/cadabra2/cdb-icons)
 endforeach()
-    
+
+add_custom_target(
+  "update_icons"
+  DEPENDS
+  ${CDBDEPS}
+)
+
 
 #---------------------------------------------------------------------------
 # Installation.
