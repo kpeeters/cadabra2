@@ -36,6 +36,7 @@
 
 #include <nlohmann/json.hpp>
 
+// Use png icons on apple to avoid issues with broken librsvg installations.
 #ifdef __APPLE__
  #define ICONEXT ".png"
 #else
