@@ -242,6 +242,34 @@ if(USE_MICROTEX)
   endif()
 endif()
 
+# Create PNG versions for our icons, for macOS where librsvg and
+# libpixbufloader_svg.dylib are currently broken.
+
+set(CDBICONS
+  cdb-cancel
+  cdb-copy-all
+  cdb-open
+  cdb-restart
+  cdb-run
+  cdb-save-as
+  cdb-save
+)
+
+foreach(CDBICON ${CDBICONS})
+  add_custom_command(
+    OUTPUT  ${CMAKE_BINARY_DIR}/${CDBICON}.png
+    DEPENDS cdb-icons/${CDBICON}.svg
+    COMMAND inkscape
+    ARGS    ${CMAKE_SOURCE_DIR}/frontend/gtkmm/cdb-icons/${CDBICON}.svg --export-filename=${CMAKE_BINARY_DIR}/${CDBICON}.png -w 80 -h 80
+    COMMENT "Converting ${CDBICON}.svg to ${CDBICON}.png"
+  )
+  add_custom_target(
+    "${CDBICON}_conversion" ALL echo -n DEPENDS ${CMAKE_BINARY_DIR}/${CDBICON}.png
+  )
+  install(FILES ${CMAKE_BINARY_DIR}/${CDBICON}.png DESTINATION share/cadabra2/cdb-icons)
+  install(FILES cdb-icons/${CDBICON}.svg DESTINATION share/cadabra2/cdb-icons)
+endforeach()
+    
 
 #---------------------------------------------------------------------------
 # Installation.
@@ -296,7 +324,7 @@ if (NOT INSTALL_TARGETS_ONLY)
     install(CODE     "execute_process(COMMAND update-desktop-database ${ICON_PREFIX_WITH_DESTDIR}/share/applications)")
     install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor/icon-theme.cache)")
   endif()
-  install(DIRECTORY cdb-icons  DESTINATION share/cadabra2/)
+  # install(DIRECTORY cdb-icons  DESTINATION share/cadabra2/)
   install(FILES     ${CMAKE_SOURCE_DIR}/config/cadabra2.ico  DESTINATION share/cadabra2/cdb-icons/)    
 
   # Install shared libraries on Windows. 

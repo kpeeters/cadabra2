@@ -36,6 +36,12 @@
 
 #include <nlohmann/json.hpp>
 
+#ifdef __APPLE__
+ #define ICONEXT ".png"
+#else
+ #define ICONEXT ".svg"
+#endif
+
 using namespace cadabra;
 
 // #define DEBUG 1
@@ -681,13 +687,13 @@ void NotebookWindow::on_realize()
 		// Stop button.
 		tool_stop.add(*Gtk::make_managed<ImageArea>(
 							  40/display_scale, display_scale,
-							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-cancel.svg",
+							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-cancel"+ICONEXT,
 							  false));
 		tool_stop.get_accessible()->set_name("Stop");
 
 		// Run button.
 		auto img_run = Gtk::make_managed<ImageArea>(40/display_scale, display_scale,
-																  install_prefix()+"/share/cadabra2/cdb-icons/cdb-run.svg",
+																  install_prefix()+"/share/cadabra2/cdb-icons/cdb-run"+ICONEXT,
 																  false);
 		img_run->get_accessible()->set_role(Atk::ROLE_PUSH_BUTTON);
 		tool_run.add(*img_run);
@@ -697,28 +703,28 @@ void NotebookWindow::on_realize()
 		// Restart button.
 		tool_restart.add(*Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
-								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart.svg",
+								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart"+ICONEXT,
 								  false));
 		tool_restart.get_accessible()->set_name("Restart kernel");
 
 		// Open button.
 		tool_open.add(*Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
-								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-open.svg",
+								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-open"+ICONEXT,
 								  false));
 		tool_open.get_accessible()->set_name("Open");
 
 		// Save button.
 		tool_save.add(*Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
-								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save.svg",
+								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save"+ICONEXT,
 								  false));
 		tool_save.get_accessible()->set_name("Save");
 
 		// Save as button.
 		tool_save_as.add(*Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
-								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save-as.svg",
+								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save-as"+ICONEXT,
 								  false));
 		tool_save_as.get_accessible()->set_name("Save as");
 
