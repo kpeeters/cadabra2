@@ -122,8 +122,9 @@ NTensor& NTensor::operator=(const NTensor& other)
 
 std::complex<double> NTensor::at() const
 	{
-	if(shape.size()!=1 || shape[0]!=1)
-		throw std::range_error("NTensor::at: cannot convert tensor to single scalar.");
+//	if(shape.size()!=1 || shape[0]!=1)
+//		throw std::range_error("NTensor::at: cannot convert tensor "+std::to_string(shape.size())
+//									  +", "+std::to_string(shape[0])+" to single scalar.");
 
 	if(values.size()!=1)
 		throw std::range_error("NTensor::at: inconsistent value array.");

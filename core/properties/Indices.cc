@@ -155,7 +155,11 @@ void Indices::latex(std::ostream& str) const
 				first=false;
 			else
 				str << ", ";
-			str << v;
+			// FIXME: this needs proper printing
+			if(v.is_integer())
+				str << v.to_integer();
+			else
+				str << v;
 			}
 		str << "\\})";
 		}
