@@ -85,13 +85,13 @@ jobs:
                 # Cadabra dependencies
                 - libgmp10
                 - libgmpxx4ldbl
-                - libboost-system1.71.0
-                - libboost-filesystem1.71.0
-                - libboost-program-options1.71.0
-                - libboost-date-time1.71.0
+                - libboost-system1.74.0
+                - libboost-filesystem1.74.0
+                - libboost-program-options1.74.0
+                - libboost-date-time1.74.0
                 - libsqlite3-0
                 - uuid-runtime
-                - libssl1.1
+                - libssl3
 
                 # GTK and GUI dependencies
                 - libgtkmm-3.0-1v5
