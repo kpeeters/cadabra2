@@ -1,6 +1,6 @@
 # Modern AppImage build using AppImageBuilder
 # Supports both x86_64 and arm64 architectures on current GitHub runners
-# Uses Ubuntu 20.04 base for maximum compatibility
+# Uses Ubuntu 22.04 base for maximum compatibility
 
 name: AppImage (Modern)
 
@@ -66,9 +66,9 @@ jobs:
             apt:
               arch: ${{ matrix.ubuntu_arch }}
               sources:
-                - sourceline: deb ${{ matrix.repo }} focal main universe
+                - sourceline: deb ${{ matrix.repo }} noble main universe
                   key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
-                - sourceline: deb ${{ matrix.repo }} focal-updates main universe
+                - sourceline: deb ${{ matrix.repo }} noble-updates main universe
                   key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
 
               include:
