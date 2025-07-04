@@ -105,10 +105,10 @@ jobs:
                 - adwaita-icon-theme
                 - hicolor-icon-theme
 
-                # Python dependencies (Ubuntu 20.04 uses Python 3.8)
-                - python3.8
-                - python3.8-minimal
-                - libpython3.8
+                # Python dependencies (Ubuntu 22.04 uses Python 3.10)
+                - python3.10
+                - python3.10-minimal
+                - libpython3.10
                 - python3-pip
                 - python3-gmpy2
 
@@ -146,12 +146,12 @@ jobs:
 
       - name: Build Cadabra2 in container
         run: |
-          # Use Docker to build for the target architecture with Ubuntu 20.04
+          # Use Docker to build for the target architecture with Ubuntu 22.04
           docker run --rm --privileged \
             --platform linux/${{ matrix.arch }} \
             -v $PWD:/workspace \
             -w /workspace \
-            ubuntu:20.04 /bin/bash -c "
+            ubuntu:22.04 /bin/bash -c "
             # Stop on error inside the Docker container
             set -e
             
