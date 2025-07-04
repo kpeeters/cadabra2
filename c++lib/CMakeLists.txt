@@ -272,8 +272,10 @@ set(MAIN_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Parser.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/ProgressMonitor.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Props.hh
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/ReservedNode.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Storage.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Stopwatch.hh
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Sum.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/TerminalStream.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/tree.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/YoungTab.hh
