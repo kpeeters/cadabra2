@@ -105,7 +105,10 @@ jobs:
                 - librsvg2-common
                 - adwaita-icon-theme
                 - hicolor-icon-theme
-
+                - libwayland-client0
+                - libwayland-cursor0
+                - libwayland-egl1-mesa
+ 
                 # Python dependencies (Ubuntu 22.04 uses Python 3.10)
                 - python3.10
                 - libpython3.10
