@@ -639,9 +639,9 @@ if(NOT WIN32)
     )
 endif()
 
-if(APPIMAGE_MODE)
-  # Install sympy. Matplotlib would be nice, but that pulls in blas and fortran and zillions of other things,
-  # which then don't link properly anymore either.
-  install(CODE      "execute_process(COMMAND echo \"Installing python things in \$ENV{DESTDIR}|${CMAKE_INSTALL_PREFIX}|${PYTHON_SITE_PATH}\")")
-  install(CODE      "execute_process(COMMAND pip3 install --target \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PATH} sympy matplotlib)")
-endif()
+# if(APPIMAGE_MODE)
+#   # Install sympy. Matplotlib would be nice, but that pulls in blas and fortran and zillions of other things,
+#   # which then don't link properly anymore either.
+#   install(CODE      "execute_process(COMMAND echo \"Installing python things in \$ENV{DESTDIR}|${CMAKE_INSTALL_PREFIX}|${PYTHON_SITE_PATH}\")")
+#   install(CODE      "execute_process(COMMAND pip3 install --target \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PATH} sympy matplotlib)")
+# endif()

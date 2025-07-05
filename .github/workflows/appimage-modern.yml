@@ -182,6 +182,7 @@ jobs:
             cmake -DCMAKE_INSTALL_PREFIX=/usr \
                   -DCMAKE_BUILD_TYPE=Release \
                   -DENABLE_MATHEMATICA=OFF \
+                  -DAPPIMAGE_MODE=ON \
                   ..
 
             VERSION=\$(cat /workspace/build/VERSION)
