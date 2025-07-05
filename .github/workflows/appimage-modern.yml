@@ -102,6 +102,7 @@ jobs:
                 - libpangocairo-1.0-0
                 - libatk1.0-0
                 - libglib2.0-0
+                - librsvg2-common
                 - adwaita-icon-theme
                 - hicolor-icon-theme
 
