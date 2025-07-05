@@ -25,3 +25,5 @@
 #define Python_VERSION_MINOR  "@Python_VERSION_MINOR@"
 
 #cmakedefine USE_MICROTEX
+
+#cmakedefine APPIMAGE_MODE
