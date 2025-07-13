@@ -449,28 +449,42 @@ std::string replace_dollar_expressions(const std::string& input,
 	std::ostringstream result;
 	bool in_single_quote = false;
 	bool in_double_quote = false;
+	bool in_bracket = false;
+	bool in_dollar = false;
 	size_t dollar_start = std::string::npos;
 	
 	for (size_t i = 0; i < input.length(); ++i) {
 		char c = input[i];
       
 		// Toggle quote state
-		if (c == '"' && !in_single_quote) {
+		if (c == '{') {
+			in_bracket = true;
+			if (!in_dollar)
+				result << c;
+        }
+		else if (c == '}') {
+			in_bracket = false;
+			if (!in_dollar)
+				result << c;
+        }
+		else if (c == '"' && !in_single_quote && !in_bracket) {
 			in_double_quote = !in_double_quote;
 			result << c;
         }
-		else if (c == '\'' && !in_double_quote) {
+		else if (c == '\'' && !in_double_quote && !in_bracket) {
 			in_single_quote = !in_single_quote;
 			result << c;
 			}
 		// Handle dollar signs outside of quotes
 		else if (c == '$' && !in_single_quote && !in_double_quote) {
 			if (dollar_start == std::string::npos) {
+				in_dollar = true;
 				// First dollar sign
 				dollar_start = i;
 				// Don't append the $ yet, wait until we find the matching one
             }
 			else {
+				in_dollar = false;
 				// Second dollar sign, found a match
 				std::string content = input.substr(dollar_start + 1, i - dollar_start - 1);
 				result << replacer(content);
@@ -485,6 +499,7 @@ std::string replace_dollar_expressions(const std::string& input,
             }
 			// If we're between $...$, don't add anything yet
 			}
+
 		}
 	
 	// Handle unclosed dollar
@@ -529,10 +544,12 @@ std::pair<std::string, std::string> cadabra::convert_line(const std::string& lin
 	// Bare ';' gets replaced with 'display(_)' but *only* if we have no
 	// preceding lines which have not finished parsing.
 	if(line_stripped==";" && lhs=="") {
-		if(display)
+		if(display){
 			return std::make_pair(prefix, indent_line+"display(_)");
-		else
+		}
+		else{
 			return std::make_pair(prefix, indent_line);
+		}
 		}
 
 	// 'lastchar' is either a Cadabra termination character, or empty.
