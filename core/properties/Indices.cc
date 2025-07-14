@@ -180,7 +180,7 @@ const std::vector<Ex>& Indices::values(const Properties& properties, Ex::iterato
 //		throw ArgumentException("No explicit values set for indices, and no Integer property found.");
 		
 	if(!iv->from.is_integer() || !iv->to.is_integer()) 
-		throw ArgumentException("Indicex has integer property, but explicit range needed.");
+		throw ArgumentException("Indices have integer property, but explicit range needed.");
 	
 	for(int val = iv->from.to_integer(); val <= iv->to.to_integer(); ++val)
 		values_.push_back(Ex(val));

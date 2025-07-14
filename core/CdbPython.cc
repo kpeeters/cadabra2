@@ -15,7 +15,8 @@
 #include "DataCell.hh"
 #endif
 
-// #define DEBUG
+// #define DEBUG __FILE__
+#include "Debug.hh"
 
 std::string cadabra::escape_quotes(const std::string& line)
 	{
@@ -467,11 +468,11 @@ std::string replace_dollar_expressions(const std::string& input,
 		char c = input[i];
       
 		// Toggle quote state
-		if (c == '"' && !in_single_quote) {
+		if (c == '"' && !in_single_quote && dollar_start == std::string::npos) {
 			in_double_quote = !in_double_quote;
 			result << c;
         }
-		else if (c == '\'' && !in_double_quote) {
+		else if (c == '\'' && !in_double_quote && dollar_start == std::string::npos) {
 			in_single_quote = !in_single_quote;
 			result << c;
 			}
@@ -594,6 +595,7 @@ std::pair<std::string, std::string> cadabra::convert_line(const std::string& lin
 		};
     
 	line_stripped = replace_dollar_expressions(line_stripped, replacement);
+	DEBUGLN( std::cerr << "line_stripped = " << line_stripped << std::endl; );
 	
 // 	std::regex dollarmatch(R"(\$([^\$]*)\$)");
 // 	line_stripped = std::regex_replace(line_stripped, dollarmatch, "Ex(r'''$1''', False)", std::regex_constants::match_default | std::regex_constants::format_default );
