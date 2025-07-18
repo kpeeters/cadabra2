@@ -34,6 +34,8 @@
 #include <algorithm>
 #include <cstddef>
 #include <string>
+#include <vector>
+
 
 /// A node in the tree, combining links to other nodes as well as the actual data.
 template<class T>
@@ -425,6 +427,11 @@ class tree {
 		void     sort(sibling_iterator from, sibling_iterator to, bool deep=false);
 		template<class StrictWeakOrdering>
 		void     sort(sibling_iterator from, sibling_iterator to, StrictWeakOrdering comp, bool deep=false);
+		/// Sort the sibling subtrees using the user-supplied subtree_comp (which must take sibling_iterator args).
+		/// Returns true/false if a sort occurs.
+		template<class StrictWeakOrdering>
+		bool     subtree_sort(sibling_iterator from, sibling_iterator to, StrictWeakOrdering subtree_comp);
+
 		/// Compare two ranges of nodes (compares nodes as well as tree structure).
 		template<typename iter>
 		bool     equal(const iter& one, const iter& two, const iter& three) const;
@@ -2104,6 +2111,52 @@ void tree<T, tree_node_allocator>::sort(sibling_iterator from, sibling_iterator 
 			}
 		}
 	}
+
+
+template <class T, class tree_node_allocator>
+template <class StrictWeakOrdering>
+bool tree<T, tree_node_allocator>::subtree_sort(sibling_iterator from,
+                                               sibling_iterator to,
+                                               StrictWeakOrdering subtree_comp)
+	{
+    if (from == to) return false;
+	
+	// Populate a buffer with the subtrees to be sorted
+	// Use sibling_iterators since tree_node structure hidden outside tree.hh
+    std::vector<sibling_iterator> buf;
+    buf.reserve(std::distance(from, to));
+    for (auto it = from; it != to; ++it) buf.push_back(it);
+
+	// Checks if sort is needed.
+	if (std::is_sorted(buf.begin(), buf.end(), subtree_comp)) return false;
+
+	// Sort using the user-supplied subtree_comp function
+    std::stable_sort(buf.begin(), buf.end(), subtree_comp);
+
+	// What nodes precede and follow the sorted range?
+	tree_node* prev = from.node->prev_sibling;   // may be nullptr
+    sibling_iterator last = to; --last;          // to is exclusive, last is inclusive
+    tree_node* next = last.node->next_sibling;   // may be nullptr
+
+	// Fix the sibling relationships
+	const std::size_t n = buf.size();
+    for (std::size_t i = 0; i < n; ++i)
+		{
+        buf[i].node->prev_sibling = (i == 0)     ? prev : buf[i - 1].node;
+        buf[i].node->next_sibling = (i + 1 == n) ? next : buf[i + 1].node;
+    	}
+
+	// Fix references from parent or siblings outside the sorted range
+    if (prev)  prev->next_sibling  = buf.front().node;
+    else if (buf.front().node->parent)  buf.front().node->parent->first_child = buf.front().node;
+
+    if (next)  next->prev_sibling  = buf.back().node;
+    else if (buf.back().node->parent)   buf.back().node->parent->last_child   = buf.back().node;
+
+	return true;
+	}
+
+
 
 template <class T, class tree_node_allocator>
 template <typename iter>
