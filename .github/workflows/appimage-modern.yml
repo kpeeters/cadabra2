@@ -246,19 +246,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate zsync file
-        if: github.event_name == 'release'
-        run: |
-          # Install zsync
-          sudo apt install -y zsync
-
-          # Generate zsync file for the AppImage
-          APPIMAGE_FILE=$(find . -name "Cadabra_*_${{ matrix.arch }}.AppImage" -type f | head -n 1)
-          if [ -n \"$APPIMAGE_FILE\" ]; then
-            zsyncmake \"$APPIMAGE_FILE\"
-
-            # Upload zsync file to release
-            gh release upload ${{ github.ref_name }} *.zsync --clobber || true
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Generate zsync file
+#         if: github.event_name == 'release'
+#         run: |
+#           # Install zsync
+#           sudo apt install -y zsync
+# 
+#           # Generate zsync file for the AppImage
+#           APPIMAGE_FILE=$(find . -name "Cadabra_*_${{ matrix.arch }}.AppImage" -type f | head -n 1)
+#           if [ -n \"$APPIMAGE_FILE\" ]; then
+#             zsyncmake \"$APPIMAGE_FILE\"
+# 
+#             # Upload zsync file to release
+#             gh release upload ${{ github.ref_name }} *.zsync --clobber || true
+#           fi
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
