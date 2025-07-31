@@ -5,11 +5,11 @@
 name: AppImage (Modern)
 
 on:
-  #  release:
-  #    types: [created]
+  release:
+    types: [created]
   # Uncomment for testing
-  push:
-    branches: [devel]
+  #push:
+  #  branches: [devel]
 
 jobs:
   build:
