@@ -242,8 +242,7 @@ jobs:
       - name: Upload to release
         if: github.event_name == 'release'
         run: |
-          VERSION=\"${{ github.ref_name }}\"
-          gh release upload \"$VERSION\" Cadabra_*_${{ matrix.arch }}.AppImage --clobber
+          gh release upload "${{ github.ref_name }}" Cadabra_*_${{ matrix.arch }}.AppImage --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -259,8 +258,7 @@ jobs:
             zsyncmake \"$APPIMAGE_FILE\"
 
             # Upload zsync file to release
-            VERSION=\"${{ github.ref_name }}\"
-            gh release upload \"$VERSION\" *.zsync --clobber || true
+            gh release upload ${{ github.ref_name }} *.zsync --clobber || true
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
