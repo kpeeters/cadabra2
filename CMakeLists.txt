@@ -254,7 +254,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-maybe-uninitialized")
     endif()
   endif()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -Wall -Wextra -Wunused -Wno-unknown-pragmas -Wno-misleading-indentation -fvisibility=hidden -Wno-unused-but-set-variable -Wno-unused-parameter")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -Wall -Wextra -Wunused -Wno-psabi -Wno-unknown-pragmas -Wno-misleading-indentation -fvisibility=hidden -Wno-unused-but-set-variable -Wno-unused-parameter")
 endif()
 
 # Clang

@@ -6,7 +6,7 @@
 #include <iostream>
 #include <cstdio>
 #include <boost/algorithm/string.hpp>
-#include "lodepng.h"
+// #include "lodepng.h"
 #include <fstream>
 #include <sstream>
 #include <internal/unistd.h>
@@ -354,6 +354,10 @@ void TeXEngine::convert_one(std::shared_ptr<TeXRequest> req)
 
 void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	{
+	throw std::logic_error("TeXEngine::convert_set: disabled in favour of MicroTeX.");
+
+#if 1==0	
+	
 	// We now no longer follow
 	//
 	// https://www.securecoding.cert.org/confluence/display/seccode/FI039-C.+Create+temporary+files+securely
@@ -636,4 +640,6 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 
 	if(chdir(olddir)==-1)
 		throw TeXException("Failed to chdir back to " +std::string(olddir)+".");
+
+#endif
 	}

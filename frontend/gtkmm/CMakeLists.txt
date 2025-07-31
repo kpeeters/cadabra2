@@ -107,7 +107,7 @@ set(cadabra_gtk_src
   Console.cc
   Keywords.cc 
   ../common/TeXEngine.cc
-  ../common/lodepng.cc
+#  ../common/lodepng.cc
   # ../common/exec-stream.cc
   ${CADABRA_CORE_DIR}/CdbPython.cc 
   ${CADABRA_LIBS_DIR}/tiny-process-library/process.cpp

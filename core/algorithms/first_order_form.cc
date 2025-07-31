@@ -8,7 +8,7 @@
 #include "Functional.hh"
 #include "properties/PartialDerivative.hh"
 
-#define DEBUG __FILE__
+// #define DEBUG __FILE__
 #include "Debug.hh"
 
 using namespace cadabra;
