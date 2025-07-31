@@ -94,7 +94,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: wix.log
+        name: wix-${{ matrix.name }}.log
         path: build/_CPack_Packages/win64/WIX/wix.log
         retention-days: 2
 
