@@ -41,8 +41,8 @@ namespace cadabra {
 	
 	int subtree_compare(const Properties* properties,
 	                    const Lazy_Ex& one, const Lazy_Ex& two,
-	                    int mod_prel=-2, bool checksets=true, int compare_multiplier=-2,
-	                    bool literal_wildcards=false)
+	                    int mod_prel, bool checksets, int compare_multiplier,
+	                    bool literal_wildcards)
 		{
 		return subtree_compare(properties, one.it, two.it, mod_prel, checksets, compare_multiplier, literal_wildcards, one.op, two.op);
 		}
@@ -185,6 +185,9 @@ namespace cadabra {
 		return remember_ret;
 		}
 
+	bool Lazy_Ex::less::operator()(const Lazy_Ex& first, const Lazy_Ex& second) const {
+		return subtree_compare(nullptr, first.it, second.it, -2, true, 0, true, first.op, second.op) > 0;
+	}
 
 	bool tree_less(const Properties* properties, const Ex& one, const Ex& two, int mod_prel, bool checksets, int compare_multiplier)
 		{

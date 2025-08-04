@@ -17,8 +17,9 @@ namespace cadabra {
 				erase_children		// ignore any children
 			};
 
+			Lazy_Ex() = default;
 			Lazy_Ex(Ex::iterator it_, repl_t op_) : it(it_), op(op_) {};
-			
+
 			Ex::iterator it;
 			repl_t op;
 
