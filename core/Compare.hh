@@ -303,7 +303,6 @@ namespace cadabra {
 			typedef std::map<Ex, Ex, tree_exact_less_no_wildcards_obj>     replacement_map_t;
 			typedef std::map<Lazy_Ex, Lazy_Ex, lazy_less>                  new_replacement_map_t;
 
-			// typedef checkpoint_map<Ex, Ex, tree_exact_less_no_wildcards_obj>     replacement_map_t;
 			replacement_map_t                                              replacement_map;
 			new_replacement_map_t                                              new_replacement_map;
 
