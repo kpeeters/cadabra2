@@ -84,6 +84,7 @@ namespace cadabra {
 
 	std::string BoundPropertyBase::str_() const
 	{
+		if (!prop) return "deleted";
 		std::ostringstream str;
 		str << "Property ";
 //		std::cerr << "going to print" << std::endl;
@@ -94,11 +95,11 @@ namespace cadabra {
 
 	std::string BoundPropertyBase::latex_() const
 	{
+		if (!prop) return "deleted";
 		std::ostringstream str;
 
 		//	HERE: this text should go away, property should just print itself in a python form,
 		//   the decorating text should be printed in a separate place.
-
 		str << "\\text{Property ";
 		prop->latex(str);
 		std::string bare = Ex_as_latex(for_obj);
@@ -169,13 +170,12 @@ namespace cadabra {
 	{
 		auto new_prop = new cpp_type();
 		get_kernel_from_scope()->inject_property(new_prop, ex, param);
-		BoundPropertyBase::prop = new_prop;
+		this->prop = new_prop;
 	}
 
 
 	template <typename PropT, typename... ParentTs>
 	std::shared_ptr<BoundProperty<PropT, ParentTs...>> BoundProperty<PropT, ParentTs...>::get_from_kernel(Ex::iterator it, const std::string& label, bool ignore_parent_rel)
-
 	{
 		int tmp;
 		auto res = get_kernel_from_scope()->properties.get_with_pattern<PropT>(
@@ -189,6 +189,14 @@ namespace cadabra {
 		else {
 			return nullptr;
 		}
+	}
+
+
+	template <typename PropT, typename... ParentTs>
+	void BoundProperty<PropT, ParentTs...>::remove_from_kernel()
+	{
+		get_kernel_from_scope()->properties.erase(this->prop);
+		this->prop = nullptr;
 	}
 
 
@@ -263,6 +271,7 @@ namespace cadabra {
 			.def("__str__", &BoundPropT::str_)
 			.def("__repr__", &BoundPropT::repr_)
 			.def("_latex_", &BoundPropT::latex_)
+			.def("erase", &BoundPropT::remove_from_kernel)
 			;
 	}
 
@@ -422,7 +431,7 @@ namespace cadabra {
 				if (last_list_prop && list_prop != last_list_prop) {
 					pybind11::object bound_property =
 						py_property_registry.create_bound_property(last_list_prop, ex_pattern_list);
-					if (bound_property) {
+					if (!bound_property.is_none()) {
 						// Key: Python class name of the bound property
 						pybind11::str key =
 							pybind11::str(bound_property.get_type().attr("__name__"));
@@ -471,7 +480,7 @@ namespace cadabra {
 			if (last_list_prop) {
 				pybind11::object bound_property =
 					py_property_registry.create_bound_property(last_list_prop, ex_pattern_list);
-				if (bound_property) {
+				if (!bound_property.is_none()) {
 					// Key: Python class name of the bound property
 					pybind11::str key =
 						pybind11::str(bound_property.get_type().attr("__name__"));

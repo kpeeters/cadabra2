@@ -41,6 +41,8 @@ namespace cadabra {
 		// when the Python object goes out of scope.
 		const property* prop;
 
+		std::vector<const pattern*> pats;
+		
 		// We also keep a shared pointer to the expression for which we
 		// have defined this property, so that we can print sensible
 		// information.
@@ -78,6 +80,10 @@ namespace cadabra {
 			// Return type is not the same as BoundPropertyBase, but this is ok
 			// by the standard as cpp_type* is convertible to property*
 			const cpp_type* get_prop() const;
+
+			/// Delete the entire property from the kernel
+			void remove_from_kernel();
+
 
 		};
 
