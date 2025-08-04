@@ -69,6 +69,12 @@ long Stopwatch::useconds() const
 	return elapsed_ % s_to_us;
 	}
 
+Stopwatch& Stopwatch::operator/=(int num)
+	{
+	elapsed_ /= num;
+	return *this;
+	}
+
 std::ostream& operator<<(std::ostream& lhs, const Stopwatch& rhs)
 	{
 	return lhs << rhs.seconds() << "s and " << rhs.useconds() << "us";

@@ -109,14 +109,45 @@ except:
     sympy = Sympy()
 
 if sympy.__version__ != "unavailable":
-#    from sympy import factor
-#    from sympy import integrate
-#    from sympy import diff
     from sympy import symbols
     from sympy import latex
-#    from sympy import sin, cos, tan, sqrt, trigsimp
     from sympy import Matrix as sMatrix
 
+
+def detect_terminal():
+    """Detect which terminal emulator is being used."""
+    term = os.environ.get('TERM', '').lower()
+    term_program = os.environ.get('TERM_PROGRAM', '').lower()
+    
+    if 'kitty' in term:
+        return 'kitty'
+    elif 'iterm' in term_program:
+        return 'iterm2'
+    else:
+        return 'unknown'      
+
+def kitty_serialize_gr_command(**cmd):
+    payload = cmd.pop('payload', None)
+    cmd = ','.join(f'{k}={v}' for k, v in cmd.items())
+    ans = []
+    w = ans.append
+    w(b'\033_G'), w(cmd.encode('ascii'))
+    if payload:
+        w(b';')
+        w(payload)
+    w(b'\033\\')
+    return b''.join(ans)
+
+def kitty_write_chunked(**cmd):
+    data = base64.standard_b64encode(cmd.pop('data'))
+    while data:
+        chunk, data = data[:4096], data[4096:]
+        m = 1 if data else 0
+        sys.stdout.buffer.write(kitty_serialize_gr_command(payload=chunk, m=m, **cmd))
+        sys.stdout.flush()
+        cmd.clear()
+    print('')
+        
 # Whether running in command-line mode or as client-server, there always
 # needs to be a Server object known as 'server' through which interaction
 # with the display routines is handled. The 'display' function will
@@ -136,13 +167,58 @@ else:
         from the command line this simply prints to the screen, but it
         can talk to a remote client to display images and maths.
         """
+
+        def __init__(self):
+            self.texmacs = False
+            # self.logf    = open("cdb_out.log", "w")
+            self.DATA_START = chr(2)
+            self.DATA_END   = chr(5)
+            self.output_sent = False
         
         def send(self, data, typestr, parent_id, cell_id, last_in_sequence):
             """ Send a message to the client; 'typestr' indicates the cell type,
             'parent_id', if non-null, indicates the serial number of the parent
             cell. If 'cell_id' is not 0, put the output in the cell with that id.
             """
-            print(data)
+            if self.texmacs and typestr=='input_form':
+               return 0
+            if self.texmacs:
+               if typestr=="image_ps":
+                  self.output_sent=True
+                  print(self.DATA_START, end='')
+                  print(r"ps:", end='')
+                  #print(base64.b64decode(data), file=self.logf, flush=True)
+                  print(base64.b64decode(data).decode('utf-8'), end='')
+                  print(self.DATA_END, flush=True)
+               elif typestr=='latex_view':
+                  self.output_sent=True
+                  print(self.DATA_START, end='')
+                  print(r"latex:\begin{equation*}", end='')
+                  data = data.replace(r"\discretionary{}{}{}", "")
+                  # print(data, file=self.logf, flush=True)
+                  print(data, end='')
+                  print(r"\end{equation*}", end='')
+                  print(self.DATA_END, flush=True)
+               else:
+                  self.output_sent=True
+                  print(self.DATA_START, end='')
+                  print(r"verbatim:", end='')
+                  print(data, end='')
+                  print(self.DATA_END, flush=True)
+            else:
+               if typestr=="image_png":
+                  term = detect_terminal()
+                  if term=="kitty":
+                     kitty_write_chunked(a='T', f=100, data=base64.b64decode(data))
+                  elif term=="iterm2":
+                     payload = f"\033]1337;File=inline=1;size={len(data)}:{data.decode('utf-8')}\007"
+                     sys.stdout.write(payload)
+                     sys.stdout.flush()
+                     print('', flush=True)
+                  else:
+                     print("<image>")
+               else:
+                  print(data)
             return 0
 
         def architecture(self):
@@ -152,9 +228,15 @@ else:
             print("hello there!")
 
         def handles(self, otype):
-            if(otype=="plain"):
+            if self.texmacs:
+               if otype=="image_ps" or otype=="latex_view" or otype=="verbatim" or otype=="plain":
+                  return True
+            elif otype=="plain" or otype=="verbatim":
                 return True
-            return False
+            elif otype=="image_png":
+                return True
+            else:
+                return False
 
         def totals(self):
             return __cdb_progress_monitor__.totals()
@@ -222,6 +304,7 @@ import base64
 # - "latex_view": text-mode LaTeX string.
 # - "image_png":  base64 encoded png image.
 # - "image_svg":  svg image.
+# - "image_ps":   ps image
 # - "verbatim":   ascii string to be displayed verbatim.
 
 def display(obj, cell_id=0, delay_send=False):
@@ -246,22 +329,51 @@ def display(obj, cell_id=0, delay_send=False):
        return display(obj[0], cell_id, delay_send)
     
     if 'matplotlib' in sys.modules and isinstance(obj, matplotlib.figure.Figure):
-        imgstring = io.BytesIO()
-        obj.savefig(imgstring,format='svg')
-        imgstring.seek(0)
-        b64 = base64.b64encode(imgstring.getvalue())
-        return server.send(b64, "image_svg", 0, cell_id, False)
-        # FIXME: Use the 'handles' query method on the Server object
-        # to figure out whether it can do something useful
-        # with a particular data type.
+        if server.handles('image_svg'):
+            imgstring = io.BytesIO()
+            obj.savefig(imgstring,format='svg')
+            imgstring.seek(0)
+            b64 = base64.b64encode(imgstring.getvalue())
+            return server.send(b64, "image_svg", 0, cell_id, False)
+        elif server.handles('image_ps'):
+            imgstring = io.BytesIO()
+            obj.savefig(imgstring,format='eps', bbox_inches='tight', pad_inches=0.1)
+            imgstring.seek(0)
+            b64 = base64.b64encode(imgstring.getvalue())
+            return server.send(b64, "image_ps", 0, cell_id, False)
+        elif server.handles('image_png'):
+            imgstring = io.BytesIO()
+            obj.savefig(imgstring,format='png')
+            imgstring.seek(0)
+            b64 = base64.b64encode(imgstring.getvalue())
+            return server.send(b64, "image_png", 0, cell_id, False)
+        else:
+            return None
 
     elif 'matplotlib' in sys.modules and isinstance(obj, matplotlib.artist.Artist):
-        f = obj.get_figure()
-        imgstring = io.BytesIO()
-        f.savefig(imgstring,format='svg')
-        imgstring.seek(0)
-        b64 = base64.b64encode(imgstring.getvalue())
-        return server.send(b64, "image_svg", 0, cell_id, False)
+        if server.handles('image_svg'):
+            f = obj.get_figure()
+            imgstring = io.BytesIO()
+            f.savefig(imgstring,format='svg')
+            imgstring.seek(0)
+            b64 = base64.b64encode(imgstring.getvalue())
+            return server.send(b64, "image_svg", 0, cell_id, False)
+        elif server.handles('image_ps'):
+            f = obj.get_figure()
+            imgstring = io.BytesIO()
+            f.savefig(imgstring,format='ps')
+            imgstring.seek(0)
+            b64 = base64.b64encode(imgstring.getvalue())
+            return server.send(b64, "image_svg", 0, cell_id, False)
+        elif server.handles('image_png'):
+            f = obj.get_figure()
+            imgstring = io.BytesIO()
+            f.savefig(imgstring,format='png')
+            imgstring.seek(0)
+            b64 = base64.b64encode(imgstring.getvalue())
+            return server.send(b64, "image_png", 0, cell_id, False)
+        else:
+            return None
 
     elif have_plotly and isinstance(obj, plotly.graph_objs._figure.Figure):
         imgstring = obj.to_image(format="svg")
@@ -373,6 +485,31 @@ def display(obj, cell_id=0, delay_send=False):
            return None
            # FIXME: send input_form version.
 
+    elif type(obj)==dict:
+        if server.handles('latex_view'):
+           cdb_out = "\\left\\{\\displaystyle{}";
+           first = True
+           for key in obj:
+              if first==False:
+                 cdb_out += ",\\hspace{.5em}";
+              else:
+                 first = False;
+              if type(key)==str:
+                 cdb_out += "\\text{'}"
+              cdb_out += display(key, cell_id, delay_send=True)
+              if type(key)==str:
+                 cdb_out += "\\text{'}"
+              cdb_out += ":\\,"
+              cdb_out += display(obj[key], cell_id, delay_send=True)
+           cdb_out += "\\right\\}"
+           if delay_send:
+              return cdb_out;
+           else:
+              return server.send(cdb_out, "latex_view", 0, cell_id, False)
+        else:
+           server.send(str(obj), "plain", 0, cell_id, False)
+           return None
+           
     elif hasattr(obj, "__send_to_server__"):
         obj.__send_to_server__(server)
            

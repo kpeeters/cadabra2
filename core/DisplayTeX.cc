@@ -1,6 +1,8 @@
 
 #include "Config.hh"
+#include "Exceptions.hh"
 #include "Symbols.hh"
+#include "Grouping.hh"
 #include "DisplayTeX.hh"
 #include "Algorithm.hh"
 #include "algorithms/substitute.hh"
@@ -338,7 +340,8 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 		if(current_bracket_!=str_node::b_none || previous_bracket_!=current_bracket_ || previous_parent_rel_!=current_parent_rel_) {
 			if(previous_parent_rel_!=current_parent_rel_) 
 				if(previous_parent_rel_==str_node::p_sub || previous_parent_rel_==str_node::p_super)
-					str << "\\!";
+					if(current_bracket_!=str_node::b_none)
+						str << "\\!";
 			
 			print_parent_rel(str, current_parent_rel_, ch==tree.begin(it));
 
@@ -1012,10 +1015,16 @@ void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)
 		++sib;
 		}
 
-	str << "\\left\\{\\begin{aligned}";
-	sib=tree.begin(ind_values);
-	while(sib!=tree.end(ind_values)) {
-		Ex::sibling_iterator c=tree.begin(sib);
+	// Find duplicates.
+	equiv_fun_t component_equiv = [](const Ex& ex, Ex::iterator it1, Ex::iterator it2) {
+		it1 = ex.child(it1, 1);
+		it2 = ex.child(it2, 1);
+		return ex.equal_subtree(it1, it2);
+		};
+	auto grp = group_by_equivalence(tree, ind_values, component_equiv);
+
+	// Function to display anonymous tensor.
+	auto display_anon = [this, &str, &ind_names](Ex::sibling_iterator c) {
 		auto iv = tree.begin(c);
 		auto in = ind_names;
 		str << "\\square";
@@ -1027,13 +1036,32 @@ void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)
 			++in;
 			++iv;
 			}
-		str << "& = ";
-		++c;
-		dispatch(str, c);
-		str << "\\\\[-.5ex]\n";
+		};
+
+	// Display all unique components.
+	str << "\\left\\{\\begin{aligned}";
+	sib=tree.begin(ind_values);
+	while(sib!=tree.end(ind_values)) {
+		if( grp.find( sib ) == grp.end() ) {
+			Ex::sibling_iterator c=tree.begin(sib);
+			display_anon(c);
+			str << "& = ";
+
+			for(const auto& equal_tensor: grp) {
+				// std::cerr << equal_tensor.second.second << std::endl;
+				if( equal_tensor.second.second == sib ) {
+					display_anon(tree.begin(equal_tensor.first));
+					str << " = ";
+					}
+				}
+			
+			++c;
+			dispatch(str, c);
+			str << "\\\\[-.5ex]\n";
+			}
 		++sib;
 		}
-	str << "\\end{aligned}\\right.\n";
+	str << "\\end{aligned}\\right\\}\n";
 	}
 
 void DisplayTeX::print_conditional(std::ostream& str, Ex::iterator it)

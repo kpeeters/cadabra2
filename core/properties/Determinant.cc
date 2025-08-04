@@ -26,7 +26,7 @@ bool Determinant::parse(Kernel&, keyval_t& keyvals)
 	return true;
 	}
 
-void Determinant::validate(const Kernel&, const Ex& ) const
+void Determinant::validate(Kernel&, std::shared_ptr<Ex> ) const
 	{
 	}
 

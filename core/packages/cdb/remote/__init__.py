@@ -150,6 +150,21 @@ class CadabraRemote:
             return self.received_msg["cell_id"]
         return 0
 
+    def insert_text(self, content, cell_id=0, wait=True):
+        """ Add a text to the given cell. """
+        self.serial += 1
+        msg = { "action":   "insert_text",
+                "cell_id":  cell_id,
+                "serial":   self.serial,
+                "content":  content
+               }
+        self.ws.send( json.dumps(msg) )
+        if wait:
+            with self.condition:
+                self.condition.wait()
+            return self.received_msg["cell_id"]
+        return 0
+
     def wait(self):
         with self.close_condition:
             try:

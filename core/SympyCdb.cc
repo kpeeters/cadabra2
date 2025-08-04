@@ -1,8 +1,13 @@
 
+#include "Storage.hh"
+#include <gmpxx.h>
+#define PYBIND11_DETAILED_ERROR_MESSAGES
+
 #include <pybind11/pybind11.h>
 #include <sstream>
 #include "Functional.hh"
 #include "SympyCdb.hh"
+#include "Exceptions.hh"
 #include "PreClean.hh"
 #include "Cleanup.hh"
 #include "Parser.hh"
@@ -16,7 +21,8 @@
 
 using namespace cadabra;
 
-// #define DEBUG 1
+// #define DEBUG __FILE__
+#include "Debug.hh"
 
 #ifndef NO_SYMPY
 
@@ -53,30 +59,314 @@ pybind11::object sympy::SympyBridge::export_ex()
 	return ret;
 	}
 
-void sympy::SympyBridge::import_ex(const std::string& s)
+cadabra::Ex sympy::SympyBridge::convert(pybind11::handle obj)
 	{
-	preparse_import(s);
-#ifdef DEBUG
-	std::cerr << "sympy::SympyBridge::import_ex: " << s << std::endl;
-#endif
-	auto ptr = std::make_shared<Ex>();
-	cadabra::Parser parser(ptr);
-	std::stringstream istr(s);
-	istr >> parser;
+	static std::map<std::string, std::function<Ex(pybind11::handle)>> known =
+		{
+			{ "<class 'sympy.sets.sets.FiniteSet'>",  [this](pybind11::handle node)
+					{
+					Ex ex_tuple("\\comma");
+					
+					pybind11::object py_args = node.attr("args");
+					for(auto item: py_args)
+						ex_tuple.append_child(ex_tuple.begin(), convert(item).begin());
 
-	pre_clean_dispatch_deep(kernel, *parser.tree);
-	cleanup_dispatch_deep(kernel, *parser.tree);
-#ifdef DEBUG
-	std::cerr << "importing " << parser.tree->begin() << std::endl;
-#endif
-	import(*parser.tree);
-	Ex::iterator first=parser.tree->begin();
+					return ex_tuple;
+					}
+			},
+			{ "<class 'set'>",  [this](pybind11::handle node)
+					{
+					Ex ex_tuple("\\comma");
+					
+					for(auto item: node)
+						ex_tuple.append_child(ex_tuple.begin(), convert(item).begin());
+
+					return ex_tuple;
+					}
+			},
+			{ "<class 'list'>",  [this](pybind11::handle node)
+					{
+					Ex ex_tuple("\\comma");
+					
+					for(auto item: node)
+						ex_tuple.append_child(ex_tuple.begin(), convert(item).begin());
+
+					return ex_tuple;
+					}
+			},
+			{ "<class 'sympy.core.containers.Tuple'>", [this](pybind11::handle node)
+					{
+					Ex ex_tuple("\\comma");
+					
+					pybind11::object py_args = node.attr("args");
+					for(auto item: py_args)
+						ex_tuple.append_child(ex_tuple.begin(), convert(item).begin());
+
+					
+					return ex_tuple;
+					}
+			},
+			{ "<class 'tuple'>", [this](pybind11::handle node)
+					{
+					Ex ex_tuple("\\comma");
+					
+					pybind11::tuple py_vars_tuple = pybind11::reinterpret_borrow<pybind11::tuple>(node);
+					size_t num = pybind11::len(py_vars_tuple);
+					for(size_t i=0; i<num; ++i) 
+						ex_tuple.append_child(ex_tuple.begin(), convert(py_vars_tuple[i]).begin());
+
+					return ex_tuple;
+					}
+			},
+			{ "<class 'sympy.core.add.Add'>",          [this](pybind11::handle node)
+					{
+					Ex ex_add("\\sum");
+
+					// The order of terms in `args` is some weird SymPy idea of canonical
+					// form. We use StrPrinter()._as_ordered_terms(node) to get something
+					// suitable for human consumption.
+
+					pybind11::module sympy_printing = pybind11::module::import("sympy.printing.str");
+					auto StrPrinter_class = sympy_printing.attr("StrPrinter");
+					pybind11::object printer = StrPrinter_class();
+					pybind11::object py_args = printer.attr("_as_ordered_terms")(node);
+					
+					for(auto item: py_args)
+						ex_add.append_child(ex_add.begin(), convert(item).begin());
+
+					return ex_add;
+					}
+			},
+			{ "<class 'sympy.core.mul.Mul'>",          [this](pybind11::handle node)
+					{
+					Ex ex_mul("\\prod");
+
+					// For `Mul`, SymPy uses *reverse* lexicographical ordering. That is just
+					// madness.
+					pybind11::tuple py_args = node.attr("args");
+					size_t num = pybind11::len(py_args);
+					for(; num>0; --num) 
+						ex_mul.append_child(ex_mul.begin(), convert(py_args[num-1]).begin());
+
+					return ex_mul;
+					}
+			},
+			{ "<class 'sympy.core.power.Pow'>",          [this](pybind11::handle node)
+					{
+					Ex ex_pow("\\pow");
+					
+					pybind11::object py_base = node.attr("base");
+					pybind11::object py_exp  = node.attr("exp");
+
+					ex_pow.append_child(ex_pow.begin(), convert(py_base).begin());
+					ex_pow.append_child(ex_pow.begin(), convert(py_exp).begin());					
+
+					return ex_pow;
+					}
+			},
+			{ "<class 'sympy.core.function.Derivative'>",          [this](pybind11::handle node)
+					{
+					Ex ex_der("\\partial"); // FIXME: use the original derivative!
+					
+					pybind11::object py_expr = node.attr("expr");
+					pybind11::object py_vars = node.attr("variables");
+
+					ex_der.append_child(ex_der.begin(), convert(py_expr).begin());
+
+					pybind11::tuple py_vars_tuple = pybind11::reinterpret_borrow<pybind11::tuple>(py_vars);
+					size_t num = pybind11::len(py_vars_tuple);
+					for(size_t i=0; i<num; ++i) {
+						ex_der.append_child(ex_der.begin(), convert(py_vars_tuple[i]).begin())->fl.parent_rel=str_node::p_sub;
+						}
+
+					return ex_der;
+					}
+			},
+			{ "<class 'sympy.core.numbers.Integer'>",   [](pybind11::handle node)
+					{
+					// Make sure to handle large integers: convert to string, then parse back into mpz_class.
+					std::string int_str = pybind11::str(node);
+					Ex res(1);
+					multiply(res.begin()->multiplier, Multiplier(mpz_class(int_str)));
+					return res;
+					}
+			},
+			{ "<class 'int'>",   [](pybind11::handle node)
+					{
+					// Make sure to handle large integers: convert to string, then parse back into mpz_class.
+					std::string int_str = pybind11::str(node);
+					Ex res(1);
+					multiply(res.begin()->multiplier, Multiplier(mpz_class(int_str)));
+					return res;
+					}
+			},
+			{ "<class 'sympy.core.numbers.Float'>",          [](pybind11::handle node)
+					{
+					return Ex(node.cast<double>());
+					}
+			},
+			{ "<class 'sympy.core.numbers.Zero'>",          [](pybind11::handle node)
+					{
+					return Ex(0);
+					}
+			},
+			{ "<class 'sympy.core.numbers.One'>",          [](pybind11::handle node)
+					{
+					return Ex(1);
+					}
+			},
+			{ "<class 'sympy.core.numbers.Half'>",          [](pybind11::handle node)
+					{
+					return Ex(1,2);
+					}
+			},
+			{ "<class 'sympy.core.numbers.NegativeOne'>",          [](pybind11::handle node)
+					{
+					return Ex(-1);
+					}
+			},
+			{ "<class 'sympy.core.numbers.NegativeOne'>",          [](pybind11::handle node)
+					{
+					return Ex(-1);
+					}
+			},
+			{ "<class 'sympy.core.numbers.ImaginaryUnit'>",          [](pybind11::handle node)
+					{
+					return Ex("\\iu");
+					}
+			},
+			{ "<class 'sympy.core.numbers.Pi'>",          [](pybind11::handle node)
+					{
+					return Ex("\\pi");
+					}
+			},
+			{ "<class 'sympy.core.numbers.Infinity'>",          [](pybind11::handle node)
+					{
+					return Ex("\\infty");
+					}
+			},
+			{ "<class 'sympy.core.numbers.NegativeInfinity'>",          [](pybind11::handle node)
+					{
+					Ex neginf("\\infty");
+					multiply(neginf.begin()->multiplier, -1);
+					return neginf;
+					}
+			},
+			{ "<class 'sympy.series.order.Order'>",          [this](pybind11::handle node)
+					{
+					Ex ex_order("\\bigO");
+					pybind11::object py_expr = node.attr("expr");
+					pybind11::object py_vars = node.attr("variables");
+
+					ex_order.append_child(ex_order.begin(), convert(py_expr).begin());
+					return ex_order;
+					}
+			},
+			{ "<class 'sympy.core.relational.Equality'>",          [this](pybind11::handle node)
+					{
+					Ex ex_equal("\\equals");
+					
+					pybind11::object py_lhs = node.attr("lhs");
+					pybind11::object py_rhs = node.attr("rhs");
+
+					ex_equal.append_child(ex_equal.begin(), convert(py_lhs).begin());
+					ex_equal.append_child(ex_equal.begin(), convert(py_rhs).begin());					
+
+					return ex_equal;
+					}
+			},
+			{ "<class 'sympy.core.numbers.Rational'>",          [this](pybind11::handle node)
+					{
+					Ex ex_frac("\\frac");
+					pybind11::object py_numer = node.attr("numerator");
+					pybind11::object py_denom = node.attr("denominator");
+
+					ex_frac.append_child(ex_frac.begin(), convert(py_numer).begin());
+					ex_frac.append_child(ex_frac.begin(), convert(py_denom).begin());					
+					
+					return ex_frac;
+					}
+			},
+			{ "<class 'sympy.core.symbol.Symbol'>",          [](pybind11::handle node)
+					{
+					pybind11::handle py_name = node.attr("name");
+					return Ex(pybind11::str(py_name));
+					}
+			}
+		};
+
+	pybind11::handle type_obj = obj.get_type();
+	std::string type_name = pybind11::str(type_obj);
+
+	auto fun = known.find(type_name);
+	if(fun != known.end()) {
+		// std::cerr << type_name << std::endl;
+		return (fun->second)(obj);
+		}
+	else {
+		// SymPy represents each function as a separate class. So the type of
+		// `f(x)` will be `f`, and you need to walk the inheritance chain to
+		// figure out that it is f -> AppliedUndef -> Function.
+		// See https://github.com/sympy/sympy/issues/18028 for details.
+
+		pybind11::object mro = type_obj.attr("__mro__");
+//		int depth=0;
+		for(pybind11::handle base_class: mro) {
+			std::string class_name = base_class.attr("__name__").cast<std::string>();
+			if(class_name == "Function") {
+				// std::cerr << " Function!" << std::endl;
+				Ex ex_fun(type_name);
+				pybind11::object py_args = obj.attr("args");
+				for(pybind11::handle py_arg: py_args) {
+					ex_fun.append_child(ex_fun.begin(), convert(py_arg).begin())->fl.bracket=str_node::b_none;
+					}
+				return ex_fun;
+				}
+//			if(++depth == 3)
+//				break;
+			}
+		throw InternalError("SympyBridge::convert: do not know (yet) how to handle "+type_name);
+		}
+	}
+
+void sympy::SympyBridge::import_ex(pybind11::object obj)
+	{
+	if(pybind11::isinstance<pybind11::str>(obj))
+		throw ArgumentException("SympyBridge::from_sympy: passing as 'str' is now disabled, pass the sympy object instead.");
+	
+	Ex new_ex = convert(obj);
+	pre_clean_dispatch_deep(kernel, new_ex);
+	cleanup_dispatch_deep(kernel, new_ex);
+	import(new_ex);
+	Ex::iterator first=new_ex.begin();
 	Ex::iterator orig=tree.begin();
 	ex->move_ontop(orig, first);
-#ifdef DEBUG
-	std::cerr << "result " << ex->begin() << std::endl;
-#endif
 	}
+
+// void sympy::SympyBridge::import_ex(const std::string& s)
+// 	{
+// 	preparse_import(s);
+// #ifdef DEBUG
+// 	std::cerr << "sympy::SympyBridge::import_ex: " << s << std::endl;
+// #endif
+// 	auto ptr = std::make_shared<Ex>();
+// 	cadabra::Parser parser(ptr);
+// 	std::stringstream istr(s);
+// 	istr >> parser;
+// 
+// 	pre_clean_dispatch_deep(kernel, *parser.tree);
+// 	cleanup_dispatch_deep(kernel, *parser.tree);
+// #ifdef DEBUG
+// 	std::cerr << "importing " << parser.tree->begin() << std::endl;
+// #endif
+// 	import(*parser.tree);
+// 	Ex::iterator first=parser.tree->begin();
+// 	Ex::iterator orig=tree.begin();
+// 	ex->move_ontop(orig, first);
+// #ifdef DEBUG
+// 	std::cerr << "result " << ex->begin() << std::endl;
+// #endif
+// 	}
 
 #endif
 

@@ -4,10 +4,12 @@
 #include "DisplaySympy.hh"
 #include "properties/Depends.hh"
 #include "properties/Accent.hh"
+#include "Exceptions.hh"
 #include "properties/Derivative.hh"
 #include <regex>
 
-// #define DEBUG 1
+// #define DEBUG __FILE__
+#include "Debug.hh"
 
 using namespace cadabra;
 
@@ -348,6 +350,8 @@ void DisplaySympy::dispatch(std::ostream& str, Ex::iterator it)
 	else if(std::holds_alternative<std::shared_ptr<NInterpolatingFunction>>(it->content)) {
 		throw ArgumentException("Cannot yet convert NInterpolatingFunction to SymPy expression.");
 		}
+
+	auto der = kernel.properties.get<Derivative>(it);
 	
    // The node names below should only be reserved node names; all others
 	// should be looked up using properties. FIXME
@@ -361,8 +365,8 @@ void DisplaySympy::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\sum")    print_intlike(str, it);
 	else if(*it->name=="\\equals") print_equalitylike(str, it);
 	else if(*it->name=="\\components") print_components(str, it);
-	else if(*it->name=="\\partial") print_partial(str, it);
 	else if(*it->name=="\\matrix") print_matrix(str, it);
+	else if(der)                   print_derivative(str, it, der);
 	else                           print_other(str, it);
 	}
 
@@ -548,7 +552,7 @@ void DisplaySympy::print_components(std::ostream& str, Ex::iterator it)
 		}
 	}
 
-void DisplaySympy::print_partial(std::ostream& str, Ex::iterator it)
+void DisplaySympy::print_derivative(std::ostream& str, Ex::iterator it, const Derivative *der)
 	{
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
@@ -565,10 +569,15 @@ void DisplaySympy::print_partial(std::ostream& str, Ex::iterator it)
 	// write the implicit direction of the derivative, if any.
 	const Derivative *derivative = kernel.properties.get<Derivative>(it);
 	if(derivative) {
+		DEBUGLN( std::cerr << *it->name << " is a derivative" << std::endl; );
 		if(derivative->with_respect_to.size()>0) {
+			DEBUGLN( std::cerr << *it->name << " has coordinates set" << std::endl; );
 			str << ", ";
 			dispatch(str, derivative->with_respect_to.begin());
 			}
+		}
+	else {
+		DEBUGLN( std::cerr << *it->name << " is NOT a derivative" << std::endl; );
 		}
 	
 	// write the explicit direction(s) of the derivative.

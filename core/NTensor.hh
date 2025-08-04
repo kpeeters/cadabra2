@@ -77,12 +77,15 @@ namespace cadabra {
 			///
 			///    A_{i} ->  A_{k i l}
 			///
-			///  shape {2} tensor [3,4] to shape {4,2} pos 1:
+			/// E.g. shape {2} tensor [3,4] (vector) to shape {4,2} (two-tensor) pos 1:
 			///
 			///   -> [[3,4], [3,4]]
 			///
-			/// For now only works if the original shape is one-dimensional,
-			/// that is, a vector (as above).
+			/// So no matter the value of the new indices, the component
+			/// is always determined by the value of the `pos` index (`i` above).
+			///
+			/// For now only works if the original shape size is 1, so that
+			/// the tensor is rank one, `that is, a vector (as in the example above).
 
 			NTensor broadcast(std::vector<size_t> new_shape, size_t pos) const;
 
@@ -101,6 +104,10 @@ namespace cadabra {
 
 			/// Test if all values of the tensor are real.
 			bool is_real() const;
+
+			/// Test if the shape is a single element equal to 1 (so the tensor
+			/// is actually a scalar).
+			bool is_scalar() const;
 			
 			friend std::ostream& operator<<(std::ostream&, const NTensor&);
 

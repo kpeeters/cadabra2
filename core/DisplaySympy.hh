@@ -10,6 +10,8 @@ typedef uint32_t kunichar;
 
 namespace cadabra {
 
+	class Derivative;
+	
 	/// \ingroup display
 	///
 	/// Class to display expressions in a format that Sympy can
@@ -72,8 +74,8 @@ namespace cadabra {
 			void print_intlike(std::ostream&, Ex::iterator);
 			void print_equalitylike(std::ostream&, Ex::iterator);
 			void print_components(std::ostream&, Ex::iterator);
-			void print_partial(std::ostream& str, Ex::iterator it);
 			void print_matrix(std::ostream& str, Ex::iterator it);
+			void print_derivative(std::ostream& str, Ex::iterator it, const Derivative *der);
 			void print_other(std::ostream& str, Ex::iterator it);
 
 			bool children_have_brackets(Ex::iterator ch) const;

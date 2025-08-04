@@ -3,10 +3,11 @@
 
 name: Windows 11
 
-on:
-  push:
-  release:
-    types: [created]
+on: [push]
+
+#on:
+#  release:
+#    types: [created]
 
 defaults:
     run:
@@ -151,9 +152,6 @@ jobs:
           - os: windows-2022
             name: x86_64
             display-name: "Windows 11 x86_64"
-          - os: windows-2019
-            name: x86_64
-            display-name: "Windows 10 x86_64"
           - os: windows-11-arm
             name: arm64
             display-name: "Windows 11 arm64"

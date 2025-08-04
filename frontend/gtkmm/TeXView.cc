@@ -422,6 +422,9 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\bigO)"),
 											"\\mathcal{O}");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\dot\{\\dot\{)"),
+											"\\ddot{{");
 		fixed = std::regex_replace(fixed, std::regex(R"(\{\}_)"), "{\\,\\!}_");
 		fixed = std::regex_replace(fixed, std::regex(R"(\{\}\^)"), "{\\,\\!}^");
 		fixed = "\\text{$\\displaystyle{}"+fixed+"$}";
@@ -500,6 +503,12 @@ void TeXView::TeXArea::set_latex(const std::string& latex)
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\property\{([^\}]*)\}\{([^\}]*)\}[ ]*)"),
 											"\\text{\\large\\texttt{$1}}\\\\\\vspace{2.5ex}\\text{\\textit{$2}}\\\\\\vspace{2.5ex}");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\url\{([^\}]*)\})"),
+											"\\texttt{$1}");
+		fixed = std::regex_replace(fixed,
+											std::regex(R"(\\href\{([^\}]*)\}\{([^\}]*)\})"),
+											"\\texttt{$2}");
 		fixed = std::regex_replace(fixed,
 											std::regex(R"(\\algo\{([^\}]*)\})"),
 											"\\texttt{$1}");

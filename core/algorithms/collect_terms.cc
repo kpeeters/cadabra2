@@ -1,4 +1,7 @@
-
+#include <algorithm>
+#ifdef HAS_TBB
+#include <execution>
+#endif
 #include "algorithms/collect_terms.hh"
 
 using namespace cadabra;
@@ -17,16 +20,36 @@ bool collect_terms::can_apply(iterator st)
 
 void collect_terms::fill_hash_map(iterator it)
 	{
-	fill_hash_map(tr.begin(it), tr.end(it));
-	}
-
-void collect_terms::fill_hash_map(sibling_iterator sib, sibling_iterator end)
-	{
 	term_hash.clear();
+#ifdef HAS_TBB
+	size_t num = tr.number_of_children(it);
+	std::vector<std::pair<hashval_t, sibling_iterator>> hash_pairs(num);
+	std::vector<sibling_iterator>                       iterators(num);
+	sibling_iterator sib=tr.begin(it);
+	for(size_t i=0; i<num; ++i) {
+		iterators[i]=sib;
+		++sib;
+		}
+	
+	std::transform(std::execution::par_unseq,
+						iterators.begin(), iterators.end(),
+						hash_pairs.begin(),
+						[this, &iterators, &it](sibling_iterator term_it)
+							{
+							auto hv = tr.calc_hash(term_it);
+							return std::make_pair(hv, term_it);
+							}
+						);
+
+	term_hash = term_hash_t(hash_pairs.begin(), hash_pairs.end());
+#else
+	sibling_iterator sib=tr.begin(it);
+	sibling_iterator end=tr.end(it);
 	while(sib!=end) {
 		term_hash.insert(std::pair<hashval_t, sibling_iterator>(tr.calc_hash(sib), sib));
 		++sib;
 		}
+#endif
 	}
 
 void collect_terms::remove_zeroed_terms(sibling_iterator from, sibling_iterator to)

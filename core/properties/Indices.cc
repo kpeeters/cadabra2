@@ -155,7 +155,11 @@ void Indices::latex(std::ostream& str) const
 				first=false;
 			else
 				str << ", ";
-			str << v;
+			// FIXME: this needs proper printing
+			if(v.is_integer())
+				str << v.to_integer();
+			else
+				str << v;
 			}
 		str << "\\})";
 		}
@@ -176,7 +180,7 @@ const std::vector<Ex>& Indices::values(const Properties& properties, Ex::iterato
 //		throw ArgumentException("No explicit values set for indices, and no Integer property found.");
 		
 	if(!iv->from.is_integer() || !iv->to.is_integer()) 
-		throw ArgumentException("Indicex has integer property, but explicit range needed.");
+		throw ArgumentException("Indices have integer property, but explicit range needed.");
 	
 	for(int val = iv->from.to_integer(); val <= iv->to.to_integer(); ++val)
 		values_.push_back(Ex(val));
@@ -184,14 +188,16 @@ const std::vector<Ex>& Indices::values(const Properties& properties, Ex::iterato
 	return values_;
 	}
 
-void Indices::validate(const Kernel& k, const Ex& ex) const
+void Indices::validate(Kernel& k, std::shared_ptr<Ex> ex) const
 	{
-	do_list(ex, ex.begin(), [&k](Ex::iterator i) {
-									if(k.properties.get<Coordinate>(i))
-										throw ConsistencyException("Object already has a Coordinate property attached to it.");
-									return true;
-									}
-		);
+	do_list(*ex, ex->begin(),
+			  [&k](Ex::iterator i)
+				  {
+				  if(k.properties.get<Coordinate>(i))
+					  throw ConsistencyException("Object already has a Coordinate property attached to it.");
+				  return true;
+				  }
+			  );
 	}
 
 

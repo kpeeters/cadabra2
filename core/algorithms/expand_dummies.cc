@@ -89,8 +89,9 @@ Algorithm::result_t expand_dummies::apply(iterator& it)
 	std::vector<std::vector<iterator>> dummies;
 	std::vector<const std::vector<Ex>*> values;
 
-	index_map_t full_ind_free, full_ind_dummy;
-	classify_indices(pat.begin(), full_ind_free, full_ind_dummy);
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_map_t full_ind_free, full_ind_dummy;
+	ic.classify_indices(pat.begin(), full_ind_free, full_ind_dummy);
 	for (const auto& kv : full_ind_dummy) {
 		auto pos = std::find_if(dummies.begin(), dummies.end(),
 										[this, kv](const std::vector<iterator>& lhs) {

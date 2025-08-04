@@ -60,7 +60,7 @@ namespace cadabra {
 			
 			class EventException : public CadabraException {
 				public:
-					EventException(std::string="");
+					EventException(std::string reason="");
 			};
 			
 			Ex ODEs, stop;
@@ -71,9 +71,16 @@ namespace cadabra {
 			// For each function in the ODEs we have one evaluator.
 			std::vector<NEvaluator>   evaluators;
 
+			// For each condition in the `stop` expression we also have one evaluator.
+			std::vector<NEvaluator>   stop_lhs_evaluators, stop_rhs_evaluators;
+			std::vector<bool>         stop_conditions;
+
 			// Extract from `ODEs` the right-hand side expressions as
 			// well as the names of the functions to solve for.
 			void extract_from_ODEs();
+
+			// Evaluate the stop condition.
+			bool evaluate_stop(const state_type& x, const double t);
 
 			// Storage of the result of the integration.
 			std::vector<std::vector<double>> states;

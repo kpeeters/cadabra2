@@ -1,5 +1,6 @@
 
 #include "Cleanup.hh"
+#include "IndexClassifier.hh"
 #include "algorithms/eliminate_metric.hh"
 #include "properties/Metric.hh"
 #include "properties/InverseMetric.hh"
@@ -118,7 +119,8 @@ Algorithm::result_t eliminate_converter::apply(iterator& it)
 	ind_free.clear();
 	ind_dummy.clear();
 
-	classify_indices(it, ind_free, ind_dummy);
+	IndexClassifier ic(kernel);
+	ic.classify_indices(it, ind_free, ind_dummy);
 
 	// Run over all factors, find metrics, figure out whether they can
 	// be used to turn the indices on the other tensors to preferred type.

@@ -1,0 +1,264 @@
+# Modern AppImage build using AppImageBuilder
+# Supports both x86_64 and arm64 architectures on current GitHub runners
+# Uses Ubuntu 22.04 base for maximum compatibility
+
+name: AppImage (Modern)
+
+on:
+  release:
+    types: [created]
+  # Uncomment for testing
+  #push:
+  #  branches: [devel]
+
+jobs:
+  build:
+    name: AppImage ${{ matrix.arch }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            os: ubuntu-24.04
+            ubuntu_arch: amd64
+            appimage_arch: x86_64
+            repo: http://archive.ubuntu.com/ubuntu/
+          - arch: arm64
+            os: ubuntu-24.04-arm
+            ubuntu_arch: arm64
+            appimage_arch: aarch64
+            repo: http://ports.ubuntu.com/ubuntu-ports/
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install AppImageBuilder
+        run: |
+          sudo apt update
+          sudo apt install -y python3-pip
+
+      - name: Clean up any existing AppDir
+        run: |
+          sudo rm -rf AppDir || true
+
+      - name: Create AppImageBuilder recipe
+        run: |
+          cat > AppImageBuilder.yml << 'EOF'
+          version: 1
+
+          script:
+            - mkdir -p AppDir
+
+          AppDir:
+            path: ./AppDir
+            app_info:
+              id: science.cadabra.cadabra2-gtk
+              name: Cadabra2
+              icon: cadabra2-gtk
+              version: latest
+              exec: usr/bin/cadabra2-gtk
+              exec_args: $@
+
+            apt:
+              arch: ${{ matrix.ubuntu_arch }}
+              sources:
+                - sourceline: deb ${{ matrix.repo }} jammy main universe
+                  key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x871920D1991BC93C'
+                - sourceline: deb ${{ matrix.repo }} jammy-updates main universe
+                  key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x871920D1991BC93C'
+
+              include:
+                # Core system libraries
+                - libc6
+                - libstdc++6
+                - libgcc-s1
+
+                # Shell interpreters
+                - bash
+                - dash
+                - perl-base
+                
+                # Cadabra dependencies
+                - libgmp10
+                - libgmpxx4ldbl
+                - libboost-system1.74.0
+                - libboost-filesystem1.74.0
+                - libboost-program-options1.74.0
+                - libboost-date-time1.74.0
+                - libsqlite3-0
+                - uuid-runtime
+                - libssl3
+                - libtbb12
+
+                # GTK and GUI dependencies
+                - libgtkmm-3.0-1v5
+                - libgtk-3-0
+                - libgdk-pixbuf2.0-0
+                - libcairo2
+                - libpango-1.0-0
+                - libpangocairo-1.0-0
+                - libatk1.0-0
+                - libglib2.0-0
+                - librsvg2-common
+                - adwaita-icon-theme
+                - hicolor-icon-theme
+                - libwayland-client0
+                - libwayland-cursor0
+                - libwayland-egl1-mesa
+ 
+                # Python dependencies (Ubuntu 22.04 uses Python 3.10)
+                - python3.10
+                - libpython3.10
+                - python3-pip
+                - python3-gmpy2
+
+              exclude:
+                - adwaita-icon-theme-full
+                - humanity-icon-theme
+                - ubuntu-mono
+
+            files:
+              exclude:
+                - usr/lib/python*/site-packages/pip*
+                - usr/lib/python*/site-packages/setuptools*
+                - usr/share/doc
+                - usr/share/man
+                - usr/share/locale
+                - var/cache
+                - var/lib/apt
+                - etc/apt
+
+            runtime:
+              env:
+                PATH: '${APPDIR}/usr/bin:${PATH}'
+                PYTHONHOME: '${APPDIR}/usr'
+                PYTHONPATH: '${APPDIR}/usr/lib/python3.10/site-packages:${APPDIR}/usr/lib/python3.10:${APPDIR}/usr/lib/python3.10/dist-packages'
+                LD_LIBRARY_PATH: '${APPDIR}/usr/lib:${APPDIR}/usr/lib/${{ matrix.arch }}-linux-gnu:${LD_LIBRARY_PATH}'
+                LC_ALL: C.UTF-8
+                LANG: C.UTF-8
+
+          AppImage:
+            update-information: gh-releases-zsync|kpeeters|cadabra2|latest|Cadabra*${{ matrix.arch }}.AppImage.zsync
+            sign-key: None
+            arch: ${{ matrix.appimage_arch }}
+            comp: gzip
+          EOF
+
+      - name: Build Cadabra2 in container
+        run: |
+          # Use Docker to build for the target architecture with Ubuntu 22.04
+          docker run --rm --privileged \
+            --platform linux/${{ matrix.arch }} \
+            -v $PWD:/workspace \
+            -w /workspace \
+            ubuntu:22.04 /bin/bash -c "
+            # Stop on error inside the Docker container
+            set -e
+            
+            # Install dependencies
+            apt update
+            DEBIAN_FRONTEND=noninteractive apt install -y \
+              build-essential cmake git \
+              python3-dev python3-pip g++ \
+              libgmp3-dev libgtkmm-3.0-dev \
+              libboost-all-dev libssl-dev \
+              libsqlite3-dev uuid-dev \
+              python3-matplotlib python3-sympy \
+              python3-gmpy2 python3-numpy \
+              squashfs-tools file desktop-file-utils fakeroot strace patchelf zsync
+
+            # Install directly from the main branch of the appimage-builder repository,
+            # to deal with the issue reported in
+            # https://github.com/AppImageCrafters/appimage-builder/pull/281
+            pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git@main
+
+            # Patch mpmath (bug fixed only in ubuntu-22.04)
+            # sed -i \"s/if other is 0:/if other == 0:/g\" /usr/lib/python3/dist-packages/mpmath/ctx_mp_python.py
+            # cat /usr/lib/python3/dist-packages/mpmath/ctx_mp_python.py
+            
+            # Build Cadabra2
+            git config --global --add safe.directory /workspace
+            mkdir -p build
+            cd build
+            cmake -DCMAKE_INSTALL_PREFIX=/usr \
+                  -DCMAKE_BUILD_TYPE=Release \
+                  -DENABLE_MATHEMATICA=OFF \
+                  -DAPPIMAGE_MODE=ON \
+                  ..
+
+            VERSION=\$(cat /workspace/build/VERSION)
+            echo \"Building version \${VERSION}\"
+
+            make -j\$(nproc)
+            make install DESTDIR=/workspace/build/AppDir
+            make test
+                  
+            # Install Python packages directly into the AppDir after 'make install'
+            # Ensure the target path is correct for your AppDir's Python installation
+            pip3 install --target=/workspace/build/AppDir/usr/lib/python3.10/site-packages --upgrade mpmath>=1.2.0
+            pip3 install --target=/workspace/build/AppDir/usr/lib/python3.10/site-packages astunparse
+            pip3 install --target=/workspace/build/AppDir/usr/lib/python3.10/site-packages pillow sympy matplotlib numpy
+
+            # Update version in AppImageBuilder.yml
+            sed -i \"s/version: latest/version: \${VERSION}/\" /workspace/AppImageBuilder.yml
+
+            # Build the AppImage
+            echo \"Now going to run appimage-builder, using:\"
+            echo \"---------\"
+            cat /workspace/AppImageBuilder.yml
+            echo \"---------\"
+            echo \"Here we go...\"
+            appimage-builder --recipe /workspace/AppImageBuilder.yml --skip-test
+            echo \"This is /workspace/build/AppDir/usr/bin/ :\"
+            echo \"---------\"
+            ls -la /workspace/build/AppDir/usr/bin/
+            echo \"---------\"
+          "
+
+      - name: Rename AppImage
+        run: |
+          VERSION=`cat build/VERSION`
+          sudo chown runner:docker build -R
+
+          # Find and rename the AppImage
+          ls -la .
+          APPIMAGE_FILE=$(find . -name "*.AppImage" -type f | head -n 1)
+          if [ -n "$APPIMAGE_FILE" ]; then
+            mv "$APPIMAGE_FILE" "Cadabra_${VERSION}_${{ matrix.arch }}.AppImage"
+            chmod +x "Cadabra_${VERSION}_${{ matrix.arch }}.AppImage"
+          fi
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cadabra2-appimage-${{ matrix.arch }}
+          path: Cadabra_*_${{ matrix.arch }}.AppImage
+          retention-days: 7
+
+      - name: Upload to release
+        if: github.event_name == 'release'
+        run: |
+          gh release upload "${{ github.ref_name }}" Cadabra_*_${{ matrix.arch }}.AppImage --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#       - name: Generate zsync file
+#         if: github.event_name == 'release'
+#         run: |
+#           # Install zsync
+#           sudo apt install -y zsync
+# 
+#           # Generate zsync file for the AppImage
+#           APPIMAGE_FILE=$(find . -name "Cadabra_*_${{ matrix.arch }}.AppImage" -type f | head -n 1)
+#           if [ -n \"$APPIMAGE_FILE\" ]; then
+#             zsyncmake \"$APPIMAGE_FILE\"
+# 
+#             # Upload zsync file to release
+#             gh release upload ${{ github.ref_name }} *.zsync --clobber || true
+#           fi
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

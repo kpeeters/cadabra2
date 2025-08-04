@@ -51,7 +51,11 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 14.0)
+    message(STATUS "This version of g++ (${CMAKE_CXX_COMPILER_VERSION}) incorrectly warns about possibly uninitialised memory when using std::variant containing a std::shared_ptr. Disabling this warning.")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-maybe-uninitialized")
+  endif()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -101,6 +105,12 @@ endif()
 # Enumerate source files.
 #---------------------------------------------------------------------------
 
+SET(RESERVED_NODE_SRC_FILES
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/ReservedNode.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Equals.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Sum.cc
+)
+
 set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Adjform.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Algorithm.cc
@@ -111,6 +121,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayTeX.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplaySympy.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayTerminal.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Grouping.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/TerminalStream.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Multiplier.cc  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/NDSolver.cc  
@@ -119,6 +130,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/NInterpolatingFunction.cc  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Exceptions.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Exchange.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/ExManip.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Functional.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexIterator.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexClassifier.cc  
@@ -208,6 +220,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/factor_in.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/factor_out.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/fierz.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/first_order_form.cc  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/flatten_product.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/flatten_sum.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/algorithms/indexsort.cc
@@ -246,7 +259,9 @@ set(MAIN_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayBase.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/DisplayTerminal.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/NEvaluator.hh
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Equals.hh  
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Exceptions.hh
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/ExManip.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexClassifier.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/IndexIterator.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Kernel.hh
@@ -257,8 +272,10 @@ set(MAIN_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Parser.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/ProgressMonitor.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Props.hh
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/ReservedNode.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Storage.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/Stopwatch.hh
+  ${CMAKE_CURRENT_SOURCE_DIR}/../core/Sum.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/TerminalStream.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/tree.hh
   ${CMAKE_CURRENT_SOURCE_DIR}/../core/YoungTab.hh
@@ -317,7 +334,7 @@ endif()
 # Targets
 #---------------------------------------------------------------------------
 
-add_library(cadabra2++objects         OBJECT ${LOCAL_SRC_FILES})
+add_library(cadabra2++objects         OBJECT ${LOCAL_SRC_FILES} ${RESERVED_NODE_SRC_FILES})
 set_property(TARGET cadabra2++objects PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_include_directories(cadabra2++objects PUBLIC "${LIB_INCLUDE_DIRS}")
 
@@ -328,6 +345,11 @@ target_link_libraries(cadabra2++        ${GMPXX_LIB} ${GMP_LIB} ${Python_LIBRARI
 
 add_library(cadabra2++_static  STATIC $<TARGET_OBJECTS:cadabra2++objects>)
 target_link_libraries(cadabra2++_static ${GMPXX_LIB} ${GMP_LIB} ${Python_LIBRARIES})
+
+if(TBB_FOUND)
+  target_link_libraries(cadabra2++ TBB::tbb)
+  target_compile_definitions(cadabra2++objects PRIVATE HAS_TBB)
+endif()
 
 # Trivial example
 add_executable(trivial trivial.cc)

@@ -111,14 +111,21 @@ class tree {
 		class sibling_iterator;
       class leaf_iterator;
 
-		tree();                                         // empty constructor
-		tree(const T&);                                 // constructor setting given element as head
-		tree(const iterator_base&);                     // create tree with copy of subtree at iterator
-		tree(const tree<T, tree_node_allocator>&);      // copy constructor
-		tree(tree<T, tree_node_allocator>&&);           // move constructor
+		tree();                                                                        // empty constructor
+		explicit tree(const tree_node_allocator&);                                     // empty constructor with allocator
+		tree(const T&);                                                                // constructor setting given element as head
+		tree(const T&, const tree_node_allocator&);                                    // constructor setting given element as head with allocator
+		tree(const iterator_base&);                                                    // create tree with copy of subtree at iterator
+		tree(const iterator_base&, const tree_node_allocator&);                        // create tree with copy of subtree at iterator
+		tree(const tree<T, tree_node_allocator>&);                                     // copy constructor
+		tree(const tree<T, tree_node_allocator>&, const tree_node_allocator&);         // copy constructor
+		tree(tree<T, tree_node_allocator>&&);                                          // move constructor
+		tree(tree<T, tree_node_allocator>&&, const tree_node_allocator&);              // move constructor
 		~tree();
 		tree<T,tree_node_allocator>& operator=(const tree<T, tree_node_allocator>&);   // copy assignment
 		tree<T,tree_node_allocator>& operator=(tree<T, tree_node_allocator>&&);        // move assignment
+
+		void swap(tree& other);
 
       /// Base class for iterators, only pointers stored, no traversal logic.
 #ifdef __SGI_STL_PORT
@@ -570,20 +577,53 @@ class tree {
 // Tree
 
 template <class T, class tree_node_allocator>
-tree<T, tree_node_allocator>::tree() 
+tree<T, tree_node_allocator>::tree()
+	: alloc_()
+	{
+	head_initialise_();
+	}
+
+template <class T, class tree_node_allocator>		
+tree<T, tree_node_allocator>::tree(const tree_node_allocator& alloc)
+	: alloc_(alloc)
 	{
 	head_initialise_();
 	}
 
 template <class T, class tree_node_allocator>
-tree<T, tree_node_allocator>::tree(const T& x) 
+tree<T, tree_node_allocator>::tree(const T& x)
+	: alloc_()
 	{
 	head_initialise_();
 	set_head(x);
 	}
 
 template <class T, class tree_node_allocator>
-tree<T, tree_node_allocator>::tree(tree<T, tree_node_allocator>&& x) 
+tree<T, tree_node_allocator>::tree(const T& x, const tree_node_allocator& alloc)
+	: alloc_(alloc)
+	{
+	head_initialise_();
+	set_head(x);
+	}
+
+template <class T, class tree_node_allocator>
+tree<T, tree_node_allocator>::tree(tree<T, tree_node_allocator>&& x)
+	: alloc_(std::move(x.alloc_))
+	{
+	head_initialise_();
+	if(x.head->next_sibling!=x.feet) { // move tree if non-empty only
+		head->next_sibling=x.head->next_sibling;
+		feet->prev_sibling=x.feet->prev_sibling;
+		x.head->next_sibling->prev_sibling=head;
+		x.feet->prev_sibling->next_sibling=feet;
+		x.head->next_sibling=x.feet;
+		x.feet->prev_sibling=x.head;
+		}
+	}
+
+template <class T, class tree_node_allocator>
+tree<T, tree_node_allocator>::tree(tree<T, tree_node_allocator>&& x, const tree_node_allocator& alloc)
+	: alloc_(alloc)
 	{
 	head_initialise_();
 	if(x.head->next_sibling!=x.feet) { // move tree if non-empty only
@@ -598,6 +638,16 @@ tree<T, tree_node_allocator>::tree(tree<T, tree_node_allocator>&& x)
 
 template <class T, class tree_node_allocator>
 tree<T, tree_node_allocator>::tree(const iterator_base& other)
+	: alloc_()
+	{
+	head_initialise_();
+	set_head((*other));
+	replace(begin(), other);
+	}
+
+template <class T, class tree_node_allocator>
+tree<T, tree_node_allocator>::tree(const iterator_base& other, const tree_node_allocator& alloc)
+	: alloc_(alloc)
 	{
 	head_initialise_();
 	set_head((*other));
@@ -638,29 +688,61 @@ void tree<T, tree_node_allocator>::head_initialise_()
 template <class T, class tree_node_allocator>
 tree<T,tree_node_allocator>& tree<T, tree_node_allocator>::operator=(const tree<T, tree_node_allocator>& other)
 	{
-	if(this != &other)
+	if(this != &other) {
+		// Handle allocator propagation on copy assignment
+		if constexpr(std::allocator_traits<tree_node_allocator>::propagate_on_container_copy_assignment::value) {
+			if (alloc_ != other.alloc_) {
+				clear();
+				alloc_ = other.alloc_;
+				}
+			}
 		copy_(other);
+		}
 	return *this;
 	}
 
 template <class T, class tree_node_allocator>
-tree<T,tree_node_allocator>& tree<T, tree_node_allocator>::operator=(tree<T, tree_node_allocator>&& x)
+tree<T,tree_node_allocator>& tree<T, tree_node_allocator>::operator=(tree<T, tree_node_allocator>&& other)
 	{
-	if(this != &x) {
-		clear(); // clear any existing data.
+	if(this != &other) {
+      // Handle allocator propagation on move assignment  
+		if constexpr(std::allocator_traits<tree_node_allocator>::propagate_on_container_move_assignment::value) {
+			clear();
+			alloc_ = std::move(other.alloc_);
+			// Move the tree structure...
+			}
+		else if (alloc_ == other.alloc_) {
+			// Can move
+			clear();
+			// Move the tree structure...
+			}
+		else {
+			// Must copy since allocators differ and don't propagate
+			copy_(other);
+			return *this;
+			}		
 		
-		head->next_sibling=x.head->next_sibling;
-		feet->prev_sibling=x.feet->prev_sibling;
-		x.head->next_sibling->prev_sibling=head;
-		x.feet->prev_sibling->next_sibling=feet;
-		x.head->next_sibling=x.feet;
-		x.feet->prev_sibling=x.head;
+		head->next_sibling=other.head->next_sibling;
+		feet->prev_sibling=other.feet->prev_sibling;
+		other.head->next_sibling->prev_sibling=head;
+		other.feet->prev_sibling->next_sibling=feet;
+		other.head->next_sibling=other.feet;
+		other.feet->prev_sibling=other.head;
 		}
 	return *this;
 	}
 
 template <class T, class tree_node_allocator>
 tree<T, tree_node_allocator>::tree(const tree<T, tree_node_allocator>& other)
+	: alloc_(std::allocator_traits<tree_node_allocator>::select_on_container_copy_construction(other.alloc_))
+	{
+	head_initialise_();
+	copy_(other);
+	}
+
+template <class T, class tree_node_allocator>
+tree<T, tree_node_allocator>::tree(const tree<T, tree_node_allocator>& other, const tree_node_allocator& alloc)
+	: alloc_(alloc)
 	{
 	head_initialise_();
 	copy_(other);
@@ -2393,6 +2475,17 @@ unsigned int tree<T, tree_node_allocator>::number_of_siblings(const iterator_bas
 	return ret;
 	}
 
+template<class T, class tree_node_allocator>
+void tree<T, tree_node_allocator>::swap(tree& other)
+	{
+	if constexpr(std::allocator_traits<tree_node_allocator>:: propagate_on_container_swap::value) {
+		std::swap(alloc_, other.alloc_);
+		}
+	// Swap tree structure (head, feet pointers)
+	std::swap(head, other.head);
+	std::swap(feet, other.feet);
+	}
+		
 template <class T, class tree_node_allocator>
 void tree<T, tree_node_allocator>::swap(sibling_iterator it)
 	{

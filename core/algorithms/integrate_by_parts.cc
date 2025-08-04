@@ -3,6 +3,7 @@
 #include "algorithms/integrate_by_parts.hh"
 #include "properties/Derivative.hh"
 #include "Cleanup.hh"
+#include "Exceptions.hh"
 
 using namespace cadabra;
 

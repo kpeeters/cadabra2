@@ -22,13 +22,13 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 17459842851096438457,
+					"cell_id": 12219498635224641087,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property LaTeXForm attached to {\\texttt{\\backslash{}vac}}.}\\end{dmath*}"
 				},
 				{
-					"cell_id": 2326358633043535571,
+					"cell_id": 6622951027121726959,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property LaTeXForm attached to {\\texttt{\\backslash{}state}}.}\\end{dmath*}"
@@ -63,16 +63,16 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 5362613492025069767,
+					"cell_id": 17854114525733755598,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
-					"source": "\\begin{dmath*}{}\\text{Property SelfNonCommuting attached to~}\\alpha_{n}\\!\\,^{\\mu}.\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\text{Property SelfNonCommuting attached to~}\\alpha_{n}\\,^{\\mu}.\\end{dmath*}"
 				},
 				{
-					"cell_id": 9067400034152918656,
+					"cell_id": 7439065201232637219,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
-					"source": "\\begin{dmath*}{}\\text{Property NonCommuting attached to~}\\left[\\alpha_{n}\\!\\,^{\\mu}, \\discretionary{}{}{}|k\\rangle\\right].\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\text{Property NonCommuting attached to~}\\left[\\alpha_{n}\\,^{\\mu}, \\discretionary{}{}{}|k\\rangle\\right].\\end{dmath*}"
 				}
 			],
 			"source": "\\alpha_{n}^{\\mu}::SelfNonCommuting;\n{\\alpha_{n}^{\\mu}, \\vac}::NonCommuting;\n{\\mu,\\nu,\\rho}::Integer(0..d-1).\n{\\mu,\\nu,\\rho}::Indices.\n{m,n}::Integer.\n{m,n}::Symbol.\n\\delta{#}::KroneckerDelta.\n\\delta{#}::Diagonal."
@@ -98,46 +98,46 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 6618914548712676167,
+					"cell_id": 7121571075127984182,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 4561521846099422645,
+							"cell_id": 5891641989506425649,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\alpha_{-1}^{\\mu} \\alpha_{-1}^{\\mu} \\vac"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\alpha_{-\\,1}\\!\\,^{\\mu} \\alpha_{-\\,1}\\!\\,^{\\mu} |k\\rangle\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\alpha_{-\\,1}\\,^{\\mu} \\alpha_{-\\,1}\\,^{\\mu} |k\\rangle\\end{dmath*}"
 				},
 				{
-					"cell_id": 924603262268266279,
+					"cell_id": 11102694686377995133,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 9747213784145017342,
+							"cell_id": 2247540854261473185,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\alpha_{0}^{\\mu} \\alpha_{-2}^{\\mu} \\vac"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\alpha_{0\\,}\\!\\,^{\\mu} \\alpha_{-2\\,}\\!\\,^{\\mu} |k\\rangle\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\alpha_{0\\,}\\,^{\\mu} \\alpha_{-2\\,}\\,^{\\mu} |k\\rangle\\end{dmath*}"
 				},
 				{
-					"cell_id": 8586928482437960823,
+					"cell_id": 3700299009548757784,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 15666153001103670010,
+							"cell_id": 11941757822541534415,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\alpha_{0}^{\\mu} \\alpha_{-1}^{\\mu} \\alpha_{0}^{\\nu} \\alpha_{-1}^{\\nu} \\vac"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\alpha_{0\\,}\\!\\,^{\\mu} \\alpha_{-\\,1}\\!\\,^{\\mu} \\alpha_{0\\,}\\!\\,^{\\nu} \\alpha_{-\\,1}\\!\\,^{\\nu} |k\\rangle\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\alpha_{0\\,}\\,^{\\mu} \\alpha_{-\\,1}\\,^{\\mu} \\alpha_{0\\,}\\,^{\\nu} \\alpha_{-\\,1}\\,^{\\nu} |k\\rangle\\end{dmath*}"
 				}
 			],
 			"source": "chi1:= \\alpha_{-1}^{\\mu} \\alpha_{-1}^{\\mu} \\vac;\nchi2:= \\alpha_{0}^\\mu \\alpha_{-2}^\\mu \\vac;\nchi3:= \\alpha_{0}^{\\mu} \\alpha_{-1}^{\\mu} \\alpha_{0}^{\\nu} \\alpha_{-1}^{\\nu})\\vac;"
@@ -163,18 +163,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 9168676123674203811,
+					"cell_id": 4212629900660971514,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 5730817777691307809,
+							"cell_id": 12803967079591093387,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "{\\alpha_{m}^{\\mu} \\alpha_{n}^{\\nu} with m > n -> \\alpha_{n}^{\\nu} \\alpha_{m}^{\\mu} + m \\delta_{m -n} \\delta^{\\mu \\nu}, \\alpha_{m}^{\\mu} \\vac with m > 0 -> 0, \\alpha_{0}^{\\mu} \\vac -> 2**( 1/2 ) k^{\\mu} \\vac, k^{\\mu} k^{\\mu} -> -1}"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\left[\\alpha_{m}\\!\\,^{\\mu} \\alpha_{n}\\!\\,^{\\nu}\\quad\\text{with}\\quad{}m > n \\rightarrow \\alpha_{n}\\!\\,^{\\nu} \\alpha_{m}\\!\\,^{\\mu}\\discretionary{}{}{}+m \\delta_{m -\\,n} \\delta^{\\mu \\nu}, \\discretionary{}{}{}\\alpha_{m}\\!\\,^{\\mu} |k\\rangle\\quad\\text{with}\\quad{}m > 0\\, \\rightarrow 0\\,, \\discretionary{}{}{}\\alpha_{0\\,}\\!\\,^{\\mu} |k\\rangle \\rightarrow \\sqrt{2\\,} k^{\\mu} |k\\rangle, \\discretionary{}{}{}k^{\\mu} k^{\\mu} \\rightarrow -\\,1\\right]\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\left[\\alpha_{m}\\,^{\\mu} \\alpha_{n}\\,^{\\nu}\\quad\\text{with}\\quad{}m > n \\rightarrow \\alpha_{n}\\,^{\\nu} \\alpha_{m}\\,^{\\mu}\\discretionary{}{}{}+m \\delta_{m -\\,n} \\delta^{\\mu \\nu}, \\discretionary{}{}{}\\alpha_{m}\\,^{\\mu} |k\\rangle\\quad\\text{with}\\quad{}m > 0\\, \\rightarrow 0\\,, \\discretionary{}{}{}\\alpha_{0\\,}\\,^{\\mu} |k\\rangle \\rightarrow \\sqrt{2\\,} k^{\\mu} |k\\rangle, \\discretionary{}{}{}k^{\\mu} k^{\\mu} \\rightarrow -\\,1\\right]\\end{dmath*}"
 				}
 			],
 			"source": "rl:= { \\alpha_{m}^{\\mu} \\alpha_{n}^{\\nu} | m > n -> \\alpha_{n}^{\\nu} \\alpha_{m}^{\\mu} +  m\\delta_{m}_{-n} \\delta^{\\mu\\nu},\n       \\alpha_{m}^{\\mu} \\vac | m > 0 -> 0, \n       \\alpha_{0}^{\\mu} \\vac -> \\sqrt{2} k^{\\mu} \\vac, k^{\\mu} k^{\\mu} -> -1 };"
@@ -236,18 +236,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 14173337516324918388,
+					"cell_id": 12509002642855599097,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 3703952586724784627,
+							"cell_id": 10192848523477307335,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": " 1/2 \\alpha_{10}^{\\mu} \\alpha_{-10}^{\\mu} +  1/2 \\alpha_{9}^{\\mu} \\alpha_{-9}^{\\mu} +  1/2 \\alpha_{8}^{\\mu} \\alpha_{-8}^{\\mu} +  1/2 \\alpha_{7}^{\\mu} \\alpha_{-7}^{\\mu} +  1/2 \\alpha_{6}^{\\mu} \\alpha_{-6}^{\\mu} +  1/2 \\alpha_{5}^{\\mu} \\alpha_{-5}^{\\mu} +  1/2 \\alpha_{4}^{\\mu} \\alpha_{-4}^{\\mu} +  1/2 \\alpha_{3}^{\\mu} \\alpha_{-3}^{\\mu} +  1/2 \\alpha_{2}^{\\mu} \\alpha_{-2}^{\\mu} +  1/2 \\alpha_{1}^{\\mu} \\alpha_{-1}^{\\mu} +  1/2 \\alpha_{0}^{\\mu} \\alpha_{0}^{\\mu} +  1/2 \\alpha_{-1}^{\\mu} \\alpha_{1}^{\\mu} +  1/2 \\alpha_{-2}^{\\mu} \\alpha_{2}^{\\mu} +  1/2 \\alpha_{-3}^{\\mu} \\alpha_{3}^{\\mu} +  1/2 \\alpha_{-4}^{\\mu} \\alpha_{4}^{\\mu} +  1/2 \\alpha_{-5}^{\\mu} \\alpha_{5}^{\\mu} +  1/2 \\alpha_{-6}^{\\mu} \\alpha_{6}^{\\mu} +  1/2 \\alpha_{-7}^{\\mu} \\alpha_{7}^{\\mu} +  1/2 \\alpha_{-8}^{\\mu} \\alpha_{8}^{\\mu} +  1/2 \\alpha_{-9}^{\\mu} \\alpha_{9}^{\\mu}"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\frac{1}{2}\\,\\alpha_{10\\,}\\!\\,^{\\mu} \\alpha_{-10\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{9\\,}\\!\\,^{\\mu} \\alpha_{-9\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{8\\,}\\!\\,^{\\mu} \\alpha_{-8\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{7\\,}\\!\\,^{\\mu} \\alpha_{-7\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{6\\,}\\!\\,^{\\mu} \\alpha_{-6\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{5\\,}\\!\\,^{\\mu} \\alpha_{-5\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{4\\,}\\!\\,^{\\mu} \\alpha_{-4\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{3\\,}\\!\\,^{\\mu} \\alpha_{-3\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{2\\,}\\!\\,^{\\mu} \\alpha_{-2\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{1}\\!\\,^{\\mu} \\alpha_{-\\,1}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{0\\,}\\!\\,^{\\mu} \\alpha_{0\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-\\,1}\\!\\,^{\\mu} \\alpha_{1}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-2\\,}\\!\\,^{\\mu} \\alpha_{2\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-3\\,}\\!\\,^{\\mu} \\alpha_{3\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-4\\,}\\!\\,^{\\mu} \\alpha_{4\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-5\\,}\\!\\,^{\\mu} \\alpha_{5\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-6\\,}\\!\\,^{\\mu} \\alpha_{6\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-7\\,}\\!\\,^{\\mu} \\alpha_{7\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-8\\,}\\!\\,^{\\mu} \\alpha_{8\\,}\\!\\,^{\\mu}\\discretionary{}{}{}%\n+\\frac{1}{2}\\,\\alpha_{-9\\,}\\!\\,^{\\mu} \\alpha_{9\\,}\\!\\,^{\\mu}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\frac{1}{2}\\,\\alpha_{10\\,}\\,^{\\mu} \\alpha_{-10\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{9\\,}\\,^{\\mu} \\alpha_{-9\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{8\\,}\\,^{\\mu} \\alpha_{-8\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{7\\,}\\,^{\\mu} \\alpha_{-7\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{6\\,}\\,^{\\mu} \\alpha_{-6\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{5\\,}\\,^{\\mu} \\alpha_{-5\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{4\\,}\\,^{\\mu} \\alpha_{-4\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{3\\,}\\,^{\\mu} \\alpha_{-3\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{2\\,}\\,^{\\mu} \\alpha_{-2\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{1}\\,^{\\mu} \\alpha_{-\\,1}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{0\\,}\\,^{\\mu} \\alpha_{0\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-\\,1}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-2\\,}\\,^{\\mu} \\alpha_{2\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-3\\,}\\,^{\\mu} \\alpha_{3\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-4\\,}\\,^{\\mu} \\alpha_{4\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-5\\,}\\,^{\\mu} \\alpha_{5\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-6\\,}\\,^{\\mu} \\alpha_{6\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-7\\,}\\,^{\\mu} \\alpha_{7\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-8\\,}\\,^{\\mu} \\alpha_{8\\,}\\,^{\\mu}\\discretionary{}{}{}%\n+\\frac{1}{2}\\,\\alpha_{-9\\,}\\,^{\\mu} \\alpha_{9\\,}\\,^{\\mu}\\end{dmath*}"
 				}
 			],
 			"source": "L0=L(0);\nL1=L(1)\nL2=L(2)"
@@ -273,18 +273,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 2022464440954079799,
+					"cell_id": 14990495914634320299,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 10060937019647914664,
+							"cell_id": 14714523208758333255,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "( 1/2 \\alpha_{11}^{\\mu} \\alpha_{-10}^{\\mu} +  1/2 \\alpha_{10}^{\\mu} \\alpha_{-9}^{\\mu} +  1/2 \\alpha_{9}^{\\mu} \\alpha_{-8}^{\\mu} +  1/2 \\alpha_{8}^{\\mu} \\alpha_{-7}^{\\mu} +  1/2 \\alpha_{7}^{\\mu} \\alpha_{-6}^{\\mu} +  1/2 \\alpha_{6}^{\\mu} \\alpha_{-5}^{\\mu} +  1/2 \\alpha_{5}^{\\mu} \\alpha_{-4}^{\\mu} +  1/2 \\alpha_{4}^{\\mu} \\alpha_{-3}^{\\mu} +  1/2 \\alpha_{3}^{\\mu} \\alpha_{-2}^{\\mu} +  1/2 \\alpha_{2}^{\\mu} \\alpha_{-1}^{\\mu} +  1/2 \\alpha_{1}^{\\mu} \\alpha_{0}^{\\mu} +  1/2 \\alpha_{0}^{\\mu} \\alpha_{1}^{\\mu} +  1/2 \\alpha_{-1}^{\\mu} \\alpha_{2}^{\\mu} +  1/2 \\alpha_{-2}^{\\mu} \\alpha_{3}^{\\mu} +  1/2 \\alpha_{-3}^{\\mu} \\alpha_{4}^{\\mu} +  1/2 \\alpha_{-4}^{\\mu} \\alpha_{5}^{\\mu} +  1/2 \\alpha_{-5}^{\\mu} \\alpha_{6}^{\\mu} +  1/2 \\alpha_{-6}^{\\mu} \\alpha_{7}^{\\mu} +  1/2 \\alpha_{-7}^{\\mu} \\alpha_{8}^{\\mu} +  1/2 \\alpha_{-8}^{\\mu} \\alpha_{9}^{\\mu}) \\alpha_{-1}^{\\nu} \\alpha_{-1}^{\\nu} \\vac"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\left(\\frac{1}{2}\\,\\alpha_{11\\,}\\!\\,^{\\mu} \\alpha_{-10\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{10\\,}\\!\\,^{\\mu} \\alpha_{-9\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{9\\,}\\!\\,^{\\mu} \\alpha_{-8\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{8\\,}\\!\\,^{\\mu} \\alpha_{-7\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{7\\,}\\!\\,^{\\mu} \\alpha_{-6\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{6\\,}\\!\\,^{\\mu} \\alpha_{-5\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{5\\,}\\!\\,^{\\mu} \\alpha_{-4\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{4\\,}\\!\\,^{\\mu} \\alpha_{-3\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{3\\,}\\!\\,^{\\mu} \\alpha_{-2\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{2\\,}\\!\\,^{\\mu} \\alpha_{-\\,1}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{1}\\!\\,^{\\mu} \\alpha_{0\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{0\\,}\\!\\,^{\\mu} \\alpha_{1}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-\\,1}\\!\\,^{\\mu} \\alpha_{2\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-2\\,}\\!\\,^{\\mu} \\alpha_{3\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-3\\,}\\!\\,^{\\mu} \\alpha_{4\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-4\\,}\\!\\,^{\\mu} \\alpha_{5\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-5\\,}\\!\\,^{\\mu} \\alpha_{6\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-6\\,}\\!\\,^{\\mu} \\alpha_{7\\,}\\!\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-7\\,}\\!\\,^{\\mu} \\alpha_{8\\,}\\!\\,^{\\mu}\\discretionary{}{}{}%\n+\\frac{1}{2}\\,\\alpha_{-8\\,}\\!\\,^{\\mu} \\alpha_{9\\,}\\!\\,^{\\mu}\\right) \\alpha_{-\\,1}\\!\\,^{\\nu} \\alpha_{-\\,1}\\!\\,^{\\nu} |k\\rangle\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\left(\\frac{1}{2}\\,\\alpha_{11\\,}\\,^{\\mu} \\alpha_{-10\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{10\\,}\\,^{\\mu} \\alpha_{-9\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{9\\,}\\,^{\\mu} \\alpha_{-8\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{8\\,}\\,^{\\mu} \\alpha_{-7\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{7\\,}\\,^{\\mu} \\alpha_{-6\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{6\\,}\\,^{\\mu} \\alpha_{-5\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{5\\,}\\,^{\\mu} \\alpha_{-4\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{4\\,}\\,^{\\mu} \\alpha_{-3\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{3\\,}\\,^{\\mu} \\alpha_{-2\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{2\\,}\\,^{\\mu} \\alpha_{-\\,1}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{1}\\,^{\\mu} \\alpha_{0\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{0\\,}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-\\,1}\\,^{\\mu} \\alpha_{2\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-2\\,}\\,^{\\mu} \\alpha_{3\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-3\\,}\\,^{\\mu} \\alpha_{4\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-4\\,}\\,^{\\mu} \\alpha_{5\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-5\\,}\\,^{\\mu} \\alpha_{6\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-6\\,}\\,^{\\mu} \\alpha_{7\\,}\\,^{\\mu}\\discretionary{}{}{}+\\frac{1}{2}\\,\\alpha_{-7\\,}\\,^{\\mu} \\alpha_{8\\,}\\,^{\\mu}\\discretionary{}{}{}%\n+\\frac{1}{2}\\,\\alpha_{-8\\,}\\,^{\\mu} \\alpha_{9\\,}\\,^{\\mu}\\right) \\alpha_{-\\,1}\\,^{\\nu} \\alpha_{-\\,1}\\,^{\\nu} |k\\rangle\\end{dmath*}"
 				}
 			],
 			"source": "L1c1:= @(L1) @(chi1);\nL1c2:= @(L1) @(chi2).\nL1c3:= @(L1) @(chi3)."
@@ -331,18 +331,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 17198388042182760043,
+					"cell_id": 9700561367777170514,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 10565969662805330463,
+							"cell_id": 5820230579626345328,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "2\\alpha_{-1}^{\\mu} 2**( 1/2 ) k^{\\mu} \\vac"
 						}
 					],
-					"source": "\\begin{dmath*}{}2\\,\\alpha_{-\\,1}\\!\\,^{\\mu} \\sqrt{2\\,} k^{\\mu} |k\\rangle\\end{dmath*}"
+					"source": "\\begin{dmath*}{}2\\,\\alpha_{-\\,1}\\,^{\\mu} \\sqrt{2\\,} k^{\\mu} |k\\rangle\\end{dmath*}"
 				}
 			],
 			"source": "act(L1c1);"
@@ -353,18 +353,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 12241043922059915674,
+					"cell_id": 11729531843188402201,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 4248673021074050225,
+							"cell_id": 17177252407339749839,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "2\\alpha_{-1}^{\\mu} 2**( 1/2 ) k^{\\mu} \\vac"
 						}
 					],
-					"source": "\\begin{dmath*}{}2\\,\\alpha_{-\\,1}\\!\\,^{\\mu} \\sqrt{2\\,} k^{\\mu} |k\\rangle\\end{dmath*}"
+					"source": "\\begin{dmath*}{}2\\,\\alpha_{-\\,1}\\,^{\\mu} \\sqrt{2\\,} k^{\\mu} |k\\rangle\\end{dmath*}"
 				}
 			],
 			"source": "act(L1c2);"
@@ -375,18 +375,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 4410946154011998020,
+					"cell_id": 1328742277609010763,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 2689499022261651208,
+							"cell_id": 10959090359551434310,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "-4\\alpha_{-1}^{\\mu} 2**( 1/2 ) \\vac k^{\\mu}"
 						}
 					],
-					"source": "\\begin{dmath*}{}-4\\,\\alpha_{-\\,1}\\!\\,^{\\mu} \\sqrt{2\\,} |k\\rangle k^{\\mu}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}-4\\,\\alpha_{-\\,1}\\,^{\\mu} \\sqrt{2\\,} |k\\rangle k^{\\mu}\\end{dmath*}"
 				}
 			],
 			"source": "act(L1c3);"
@@ -418,12 +418,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 15834454827825811798,
+					"cell_id": 6778235984817189062,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 16722240417600047761,
+							"cell_id": 4229702900126160237,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "d \\vac"
@@ -440,12 +440,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 7882029043639400659,
+					"cell_id": 1767126210920816023,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 18010148635206813042,
+							"cell_id": 9397666429387678638,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "-4\\vac"
@@ -462,12 +462,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 17994533131016820162,
+					"cell_id": 7336243701534558571,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 938194989573903584,
+							"cell_id": 4868608633034813290,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "-2\\vac"
@@ -499,18 +499,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 15360390438951738313,
+					"cell_id": 15711706727387074879,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 4556570839770677432,
+							"cell_id": 14772577574293813296,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "2\\alpha_{-1}^{\\mu} 2**( 1/2 ) \\vac k^{\\mu} + 2A \\alpha_{-1}^{\\mu} 2**( 1/2 ) \\vac k^{\\mu}-4B \\alpha_{-1}^{\\mu} 2**( 1/2 ) \\vac k^{\\mu} = 0"
 						}
 					],
-					"source": "\\begin{dmath*}{}2\\,\\alpha_{-\\,1}\\!\\,^{\\mu} \\sqrt{2\\,} |k\\rangle k^{\\mu}\\discretionary{}{}{}+2\\,A \\alpha_{-\\,1}\\!\\,^{\\mu} \\sqrt{2\\,} |k\\rangle k^{\\mu}\\discretionary{}{}{}-4\\,B \\alpha_{-\\,1}\\!\\,^{\\mu} \\sqrt{2\\,} |k\\rangle k^{\\mu} = 0\\,\\end{dmath*}"
+					"source": "\\begin{dmath*}{}2\\,\\alpha_{-\\,1}\\,^{\\mu} \\sqrt{2\\,} |k\\rangle k^{\\mu}\\discretionary{}{}{}+2\\,A \\alpha_{-\\,1}\\,^{\\mu} \\sqrt{2\\,} |k\\rangle k^{\\mu}\\discretionary{}{}{}-4\\,B \\alpha_{-\\,1}\\,^{\\mu} \\sqrt{2\\,} |k\\rangle k^{\\mu} = 0\\,\\end{dmath*}"
 				}
 			],
 			"source": "tst1:=@(L1c1) + A @(L1c2) + B @(L1c3) = 0:\nsort_product(tst1);"
@@ -521,12 +521,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 3769240763439313985,
+					"cell_id": 1980851252189073104,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 9351595465503225355,
+							"cell_id": 16252494889117073428,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "d \\vac-4A \\vac-2B \\vac = 0"
@@ -543,18 +543,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 18038967194803388301,
+					"cell_id": 12538660012652809938,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 16863990392247577039,
+							"cell_id": 17497383109365579360,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "(2 + 2A-4B) \\alpha_{-1}^{\\mu} 2**( 1/2 ) \\vac k^{\\mu} = 0"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\left(2\\,\\discretionary{}{}{}+2\\,A\\discretionary{}{}{}-4\\,B\\right) \\alpha_{-\\,1}\\!\\,^{\\mu} \\sqrt{2\\,} |k\\rangle k^{\\mu} = 0\\,\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\left(2\\,\\discretionary{}{}{}+2\\,A\\discretionary{}{}{}-4\\,B\\right) \\alpha_{-\\,1}\\,^{\\mu} \\sqrt{2\\,} |k\\rangle k^{\\mu} = 0\\,\\end{dmath*}"
 				}
 			],
 			"source": "factor_in(tst1, $d,A,B$);"
@@ -565,12 +565,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 1139151432683509914,
+					"cell_id": 15246499768897879848,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 14203504485473513135,
+							"cell_id": 2807280639535753229,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "(d-4A-2B) \\vac = 0"
@@ -614,18 +614,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 4908847808083377204,
+					"cell_id": 3749470538894674769,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 16837415695050452478,
+							"cell_id": 7682055029995724966,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": "{{A ->  1/5 d -  1/5 , B ->  1/10 d +  2/5 }}"
+							"source": "{{A ->  -  1/5  +  1/5 d, B ->  2/5  +  1/10 d}}"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\left[\\left[A \\rightarrow \\frac{1}{5}\\,d\\discretionary{}{}{} - \\frac{1}{5}\\,, \\discretionary{}{}{}B \\rightarrow \\frac{1}{10}\\,d\\discretionary{}{}{}+\\frac{2}{5}\\,\\right]\\right]\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\left[\\left[A \\rightarrow  - \\frac{1}{5}\\,\\discretionary{}{}{}+\\frac{1}{5}\\,d, \\discretionary{}{}{}B \\rightarrow \\frac{2}{5}\\,\\discretionary{}{}{}+\\frac{1}{10}\\,d\\right]\\right]\\end{dmath*}"
 				}
 			],
 			"source": "linsolve($@(tst1),@(tst2)$,$A,B$);"
@@ -636,14 +636,14 @@
 			"cell_type": "latex",
 			"cells": [
 				{
-					"cell_id": 8633540622656287519,
+					"cell_id": 13433475463539098231,
 					"cell_origin": "client",
 					"cell_type": "latex_view",
-					"source": "These are (indeed) solved by $A=\\frac{d-1}{5}$ and $B=\\frac{d+4}{10}$."
+					"source": "These are thus (indeed) solved by $A=\\frac{d-1}{5}$ and $B=\\frac{d+4}{10}$."
 				}
 			],
 			"hidden": true,
-			"source": "These are (indeed) solved by $A=\\frac{d-1}{5}$ and $B=\\frac{d+4}{10}$."
+			"source": "These are thus (indeed) solved by $A=\\frac{d-1}{5}$ and $B=\\frac{d+4}{10}$."
 		},
 		{
 			"cell_id": 13219877329185599024,

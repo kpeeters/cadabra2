@@ -1,6 +1,7 @@
 
 #include "Cleanup.hh"
 #include "Exceptions.hh"
+#include "IndexClassifier.hh"
 
 #include "algorithms/fierz.hh"
 
@@ -164,8 +165,9 @@ Algorithm::result_t fierz::apply(iterator& it)
 
 	Ex rep("\\sum");
 
-	index_map_t ind_free, ind_dummy;
-	classify_indices(it, ind_free, ind_dummy);
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_map_t ind_free, ind_dummy;
+	ic.classify_indices(it, ind_free, ind_dummy);
 	spinordim=(1 << dim/2);
 	int maxind=dim;
 	if(prop1->weyl || dim%2==1)
@@ -213,11 +215,11 @@ Algorithm::result_t fierz::apply(iterator& it)
 			}
 
 		// Insert the indices on the projector gammas.
-		index_map_t ind_added;
+		IndexClassifier::index_map_t ind_added;
 		for(int j=1; j<=i; ++j) {
-			Ex newdum=get_dummy(indprop, &ind_free, &ind_dummy, &ind_added);
+			Ex newdum=ic.get_dummy(indprop, &ind_free, &ind_dummy, &ind_added);
 			iterator loc1=cpyterm.append_child(locgam1, newdum.begin());
-			ind_added.insert(index_map_t::value_type(newdum, loc1));
+			ind_added.insert(IndexClassifier::index_map_t::value_type(newdum, loc1));
 			loc1->fl.parent_rel=str_node::p_super;
 			// Add the indices in opposite order in the second gamma matrix
 			//			std::cerr << "inserting " << newdum << " at " << Ex(locgam2) << std::endl;

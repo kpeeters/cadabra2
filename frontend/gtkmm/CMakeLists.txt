@@ -107,7 +107,7 @@ set(cadabra_gtk_src
   Console.cc
   Keywords.cc 
   ../common/TeXEngine.cc
-  ../common/lodepng.cc
+#  ../common/lodepng.cc
   # ../common/exec-stream.cc
   ${CADABRA_CORE_DIR}/CdbPython.cc 
   ${CADABRA_LIBS_DIR}/tiny-process-library/process.cpp
@@ -242,6 +242,42 @@ if(USE_MICROTEX)
   endif()
 endif()
 
+# Create PNG versions for our icons, for macOS where librsvg and
+# libpixbufloader_svg.dylib are currently broken.
+
+set(CDBICONS
+  cdb-cancel
+  cdb-copy-all
+  cdb-open
+  cdb-restart
+  cdb-run
+  cdb-save-as
+  cdb-save
+)
+
+set(CDBDEPS "")
+foreach(CDBICON ${CDBICONS})
+  add_custom_command(
+    OUTPUT  cdb-icons/${CDBICON}.png
+    DEPENDS cdb-icons/${CDBICON}.svg
+    COMMAND inkscape
+    ARGS    cdb-icons/${CDBICON}.svg --export-filename=cdb-icons/${CDBICON}.png -w 80 -h 80
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/frontend/gtkmm
+    COMMENT "Converting ${CDBICON}.svg to ${CDBICON}.png"
+  )
+  set(CDBDEPS ${CDBDEPS} cdb-icons/${CDBICON}.png)
+
+  # Always install
+  install(FILES cdb-icons/${CDBICON}.png DESTINATION share/cadabra2/cdb-icons)
+  install(FILES cdb-icons/${CDBICON}.svg DESTINATION share/cadabra2/cdb-icons)
+endforeach()
+
+add_custom_target(
+  "update_icons"
+  DEPENDS
+  ${CDBDEPS}
+)
+
 
 #---------------------------------------------------------------------------
 # Installation.
@@ -296,7 +332,7 @@ if (NOT INSTALL_TARGETS_ONLY)
     install(CODE     "execute_process(COMMAND update-desktop-database ${ICON_PREFIX_WITH_DESTDIR}/share/applications)")
     install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX_WITH_DESTDIR}/share/icons/hicolor/icon-theme.cache)")
   endif()
-  install(DIRECTORY cdb-icons  DESTINATION share/cadabra2/)
+  # install(DIRECTORY cdb-icons  DESTINATION share/cadabra2/)
   install(FILES     ${CMAKE_SOURCE_DIR}/config/cadabra2.ico  DESTINATION share/cadabra2/cdb-icons/)    
 
   # Install shared libraries on Windows. 

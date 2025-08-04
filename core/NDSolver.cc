@@ -1,9 +1,17 @@
 
 #include "NDSolver.hh"
+#include "Exceptions.hh"
 #include "Functional.hh"
+#include "NEvaluator.hh"
 #include <boost/numeric/odeint.hpp>
+#include <boost/numeric/odeint/integrate/integrate_const.hpp>
 
 using namespace cadabra;
+
+NDSolver::EventException::EventException(std::string reason)
+	: CadabraException(reason)
+	{
+	}
 
 NDSolver::NDSolver(const Ex& odes)
 	: ODEs(odes), time_variable(Ex("t")), range_from(0), range_to(1)
@@ -21,10 +29,40 @@ void NDSolver::operator()(const state_type& x, state_type& dxdt, const double t)
 		for(size_t i=0; i<x.size(); ++i) {
 			evaluator.set_variable(variables[i], NTensor(x[i]));
 			}
+		NTensor res = evaluator.evaluate();
+//		std::cerr << "size = " << res.shape.size() << std::endl;
+//		std::cerr << res << std::endl;
+//		std::cerr << shape
 		dxdt[e] = evaluator.evaluate().at().real(); // FIXME: solve over C?
 		// std::cerr << x[0] << ", " << x[1] << " -> "
 		//			 << dxdt[0] << ", " << dxdt[1] << std::endl;
 		}
+	}
+
+bool NDSolver::evaluate_stop(const state_type& x, const double t)
+	{
+	for(size_t e=0; e<stop_conditions.size(); ++e) {
+		NEvaluator& lhs_evaluator = stop_lhs_evaluators[e];
+		NEvaluator& rhs_evaluator = stop_rhs_evaluators[e];
+		lhs_evaluator.set_variable(time_variable, NTensor(t));
+		for(size_t i=0; i<x.size(); ++i) {
+			lhs_evaluator.set_variable(variables[i], NTensor(x[i]));
+			rhs_evaluator.set_variable(variables[i], NTensor(x[i]));
+			}
+		auto lhs = lhs_evaluator.evaluate().at().real();
+		auto rhs = rhs_evaluator.evaluate().at().real();
+		if(stop_conditions[e]) {
+			if(lhs < rhs)
+				return true;
+			}
+		else {
+			if(lhs > rhs)
+				return true;
+			}
+		// FIXME: handle <= and >=.
+		}
+	
+	return false;
 	}
 
 void NDSolver::operator()(const state_type&x, const double t)
@@ -38,6 +76,9 @@ void NDSolver::operator()(const state_type&x, const double t)
 	times.push_back(t);
 	for(size_t i=0; i<x.size(); ++i) 
 		states[i].push_back( x[i] );
+
+	if(evaluate_stop(x, t))
+		throw EventException("NDSolve::evaluate: stop condition triggered.");
 	}
 
 void NDSolver::set_ODEs(const Ex& odes)
@@ -71,6 +112,8 @@ void NDSolver::set_stop(const Ex& stop_)
 void NDSolver::extract_from_ODEs()
 	{
 	evaluators.clear();
+	stop_lhs_evaluators.clear();
+	stop_rhs_evaluators.clear();	
 	
 	do_list(ODEs, ODEs.begin(), [this](Ex::iterator it) {
 		if(*it->name!="\\equals")
@@ -88,6 +131,22 @@ void NDSolver::extract_from_ODEs()
 		evaluators.push_back(NEvaluator(lhs));
 		// std::cerr << "found rhs " << lhs << std::endl;
 		
+		return true;
+		});
+
+	do_list(stop, stop.begin(), [this](Ex::iterator it) {
+		if(*it->name!="\\less" && *it->name!="\\greater")
+			throw ConsistencyException("NDSolver: stopping conditions have to be inequalities.");
+
+		stop_conditions.push_back( *it->name=="\\less" );
+		
+		auto lhs = stop.begin(it);
+		stop_lhs_evaluators.push_back(NEvaluator(lhs));
+
+		auto rhs = lhs;
+		++rhs;
+		stop_rhs_evaluators.push_back(NEvaluator(rhs));
+
 		return true;
 		});
 	}
@@ -116,6 +175,9 @@ std::vector<NTensor> NDSolver::integrate()
 
 	size_t steps=0;
 	try {
+		// FIXME: use integrate_const (see gemini chat) to use an event observer,
+		// so that we can stop integration precisely at the point where the event
+		// occurs. Right now, we typically overshoot.
 		steps = boost::numeric::odeint::integrate(std::ref(*this),
 																ivs,    // initial values
 																range_from,

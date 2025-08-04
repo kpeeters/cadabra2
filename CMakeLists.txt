@@ -51,6 +51,8 @@ endif()
 
 cmake_minimum_required(VERSION ${CADABRA_CMAKE_VERSION})
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 project(Cadabra)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -60,6 +62,8 @@ endif()
 #---------------------------------------------------------------------------
 # Preamble
 #---------------------------------------------------------------------------
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Aliases for directories
 set(CADABRA_ROOT_DIR ${CMAKE_SOURCE_DIR})
@@ -98,6 +102,17 @@ if (APPLE)
 endif()
 
 set(PKG_CONFIG_USE_STATIC_LIBS OFF)
+
+if(NOT APPLE)
+  find_package(TBB QUIET)  
+  if(TBB_FOUND)
+    message(STATUS "TBB found, will make some operations parallel")
+  else()
+    message(STATUS "TBB not found, parallel operations disabled")
+  endif()
+else()
+  message(STATUS "Apple's toolchain not yet supporting TBB properly, disabled")
+endif()
 
 # Get version information.
 include(cmake/version.cmake)
@@ -239,7 +254,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-maybe-uninitialized")
     endif()
   endif()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -Wall -Wextra -Wunused -Wno-unknown-pragmas -Wno-misleading-indentation -fvisibility=hidden -Wno-unused-but-set-variable -Wno-unused-parameter")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -Wall -Wextra -Wunused -Wno-psabi -Wno-unknown-pragmas -Wno-misleading-indentation -fvisibility=hidden -Wno-unused-but-set-variable -Wno-unused-parameter")
 endif()
 
 # Clang
@@ -465,6 +480,13 @@ if(mimalloc_FOUND)
 else()
   message(STATUS "Using glibc allocator")
 endif()
+find_package(Catch2 3 QUIET) # This is optional; we will not run the C++ tests if Catch2 is not found
+if(Catch2_FOUND)
+  message(STATUS "Will run C++ tests with Catch2")
+  include(Catch)
+else()
+  message(STATUS "Catch2 not found, will not run C++ tests")
+endif()
 
 # Jupyter kernel
 print_header("Configuring Jupyter kernel")
@@ -603,66 +625,15 @@ add_custom_target(uninstall
 # Provide target to build AppImage.
 #---------------------------------------------------------------------------
 
-if(APPIMAGE_MODE)
-  # We need linuxdeploy to create the AppImage. It is best to have this built
-  # from source and installed locally. Make sure to first install deps by doing
-  #
-  #   sudo apt install libcimg-dev libgtest-dev
-  #
-  # Then checkout appimagetool, linuxdeploy, linuxdeploy-plugin-appimage using
-  #
-  #   git clone https://github.com/AppImage/appimagetool.git --recurse-submodules
-  #   git clone https://github.com/linuxdeploy/linuxdeploy.git --recurse-submodules
-  #   git clone https://github.com/linuxdeploy/linuxdeploy-plugin-appimage.git --recurse-submodules
-  #
-  # Do *not* forget the `--recurse-submodules` flag!
-  #
-  # Build `appimagetool` as usual, and for the other two use
-  #
-  #   cd linuxdeploy && mkdir build && cd build
-  #   cmake -DBUILD_TESTING=OFF ..
-  #   make && sudo make install
-  #
-  # and ditto for the plugin,
-  #
-  #   cd linuxdeploy && mkdir build && cd build
-  #   cmake -DBUILD_TESTING=OFF ..
-  #   make && sudo make install
-  #
-  # If you do not have it locally, the configure process will download an
-  # AppImage for linuxdeploy, but this does *not* run inside a QEMU container.
-  
-  print_header("Configuring AppImage build")
-  find_program(LINUXDEPLOY linuxdeploy "${CMAKE_BINARY_DIR}")
-  set(DEPLOY         linuxdeploy-${CMAKE_SYSTEM_PROCESSOR}.AppImage)
-  set(DEPLOY_URL     https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/${DEPLOY})
-  set(DEPLOY_GTK_URL https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh)
-  if(${LINUXDEPLOY} MATCHES "LINUXDEPLOY-NOTFOUND")
-    message(STATUS "The 'linuxdeploy' binary is not present, downloading one")
-    message(STATUS "Generating AppImage using ${DEPLOY_URL}")
-    if(NOT EXISTS "linuxdeploy")
-      message(STATUS "Downloading...")
-      file(DOWNLOAD ${DEPLOY_URL} ${CMAKE_BINARY_DIR}/linuxdeploy)
-      execute_process(COMMAND chmod u+x ${CMAKE_BINARY_DIR}/linuxdeploy)
-    endif()
-    set(LINUXDEPLOY ${CMAKE_BINARY_DIR}/linuxdeploy)
-  else()
-    message(STATUS "Found linuxdeploy at ${LINUXDEPLOY}")
-  endif()
-  if(NOT EXISTS "linuxdeploy-plugin-gtk.sh")
-      file(DOWNLOAD ${DEPLOY_GTK_URL} ${CMAKE_BINARY_DIR}/linuxdeploy-plugin-gtk.sh)
-      execute_process(COMMAND chmod u+x ${CMAKE_BINARY_DIR}/linuxdeploy-plugin-gtk.sh)
-  endif()
-  add_custom_target(appimage
-    COMMAND mkdir -p AppDir/${Python_SITELIB}
-    COMMAND cp -a ${CMAKE_SOURCE_DIR}/config/AppRun AppDir/
-    COMMAND chmod gou+x ${CMAKE_SOURCE_DIR}/config/AppRun AppDir/AppRun
-    COMMAND cp -a ${Python_SITELIB}/setuptools AppDir/${Python_SITELIB}/
-    COMMAND cp -a ${Python_STDARCH}/* AppDir/${Python_STDARCH}/
-    COMMAND ${LINUXDEPLOY} --appdir AppDir --plugin gtk --desktop-file AppDir/usr/share/applications/science.cadabra.cadabra2-gtk.desktop --output appimage
-    COMMAND mv Cadabra_2-${CMAKE_SYSTEM_PROCESSOR}.AppImage Cadabra_${CADABRA_VERSION_SEM}_${CMAKE_SYSTEM_PROCESSOR}.AppImage
-  )
-endif()
+# if(APPIMAGE_MODE)
+#   add_custom_target(appimage
+#     COMMAND mkdir -p AppDir/${Python_SITELIB}
+#     COMMAND cp -a ${CMAKE_SOURCE_DIR}/config/AppRun AppDir/
+#     COMMAND chmod gou+x ${CMAKE_SOURCE_DIR}/config/AppRun AppDir/AppRun
+#     COMMAND cp -a ${Python_SITELIB}/setuptools AppDir/${Python_SITELIB}/
+#     COMMAND cp -a ${Python_STDARCH}/* AppDir/${Python_STDARCH}/
+#   )
+# endif()
 
 if(WIN32)
   add_custom_target(windows-installer

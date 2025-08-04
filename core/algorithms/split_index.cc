@@ -1,4 +1,6 @@
 
+#include "Exceptions.hh"
+#include "IndexClassifier.hh"
 #include "algorithms/split_index.hh"
 
 // #define DEBUG 1
@@ -79,19 +81,20 @@ Algorithm::result_t split_index::apply(iterator& it)
 #endif
 
 	// we only replace summed indices, so first find them.
-	index_map_t ind_free, ind_dummy;
-	classify_indices(workcopy.begin(), ind_free, ind_dummy);
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_map_t ind_free, ind_dummy;
+	ic.classify_indices(workcopy.begin(), ind_free, ind_dummy);
 	//	txtout << "indices classified" << std::endl;
 
-	index_map_t::iterator prs=ind_dummy.begin();
+	IndexClassifier::index_map_t::iterator prs=ind_dummy.begin();
 	while(prs!=ind_dummy.end()) {
 		const Indices *tcl=kernel.properties.get<Indices>((*prs).second, true);
 		if(tcl) {
 			if((*tcl).set_name==(*full_class).set_name) {
 				Ex dum1,dum2;
 				if(!part1_is_number && !part1_coord)
-					dum1=get_dummy(part1_class, it);
-				index_map_t::iterator current=prs;
+					dum1=ic.get_dummy(part1_class, it);
+				IndexClassifier::index_map_t::iterator current=prs;
 				while(current!=ind_dummy.end() && tree_exact_equal(&kernel.properties, (*prs).first,(*current).first,true)) {
 					if(part1_is_number) {
 						node_integer(current->second, num1);
@@ -111,7 +114,7 @@ Algorithm::result_t split_index::apply(iterator& it)
 				rep.append_child(rep.begin(), workcopy.begin());
 				current=prs;
 				if(!part2_is_number && !part2_coord)
-					dum2=get_dummy(part2_class, it);
+					dum2=ic.get_dummy(part2_class, it);
 				while(current!=ind_dummy.end() && tree_exact_equal(&kernel.properties, (*prs).first,(*current).first,true)) {
 					if(part2_is_number) {
 						node_integer(current->second, num2);
@@ -139,7 +142,7 @@ Algorithm::result_t split_index::apply(iterator& it)
 				}
 			}
 		// skip other occurrances of this index
-		index_map_t::iterator current=prs;
+		IndexClassifier::index_map_t::iterator current=prs;
 		while(prs!=ind_dummy.end() && tree_exact_equal(&kernel.properties, (*prs).first,(*current).first,false))
 			++prs;
 		}

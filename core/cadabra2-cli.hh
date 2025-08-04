@@ -1,5 +1,6 @@
 #include <string>
 #include <memory>
+#include <fstream>
 
 // Work around MSVC linking problem
 #ifdef _DEBUG
@@ -22,6 +23,7 @@ class Shell : public pybind11::scoped_interpreter {
 			IgnoreSemicolons = 0x02,
 			NoColour         = 0x04,
 			NoReadline       = 0x08,
+			TeXmacs          = 0x10
 		};
 		
 		Shell(Flags flags);
@@ -29,20 +31,38 @@ class Shell : public pybind11::scoped_interpreter {
 		
 		void start();
 		void interact();
-		pybind11::object evaluate(const std::string& code, const std::string& filename = "<stdin>");
+		void interact_texmacs();
+		pybind11::object evaluate(const std::string& code, const std::string& filename = "<stdin>") const;
 		void execute(const std::string& code, const std::string& filename = "<stdin>");
 		void execute_file(const std::string& filename, bool preprocess = true);
 		void interact_file(const std::string& filename, bool preprocess = true);
-		
+
+		void show_banner() const;
 		void write_stdout(const std::string& text, const std::string& end = "\n", bool flush = false);
 		void write_stderr(const std::string& text, const std::string& end = "\n", bool flush = false);
 		
+		class CatchOutput {
+			public:
+				CatchOutput();
+				CatchOutput(const CatchOutput&);
+
+				void        write(const std::string& txt);
+				void        clear();
+				void        flush();
+				std::string str() const;
+			private:
+				std::string collect;
+			};
+
+		CatchOutput catchOut, catchErr;
+
 	private:
 		void set_histfile();
 		std::string histfile;
 		std::string site_path;
+		std::ofstream logf;
 
-		std::string str(const pybind11::handle& obj);
+		std::string str(const pybind11::handle& obj) const;
 		std::string repr(const pybind11::handle& obj);
 		std::string sanitize(std::string s);
 
@@ -56,6 +76,8 @@ class Shell : public pybind11::scoped_interpreter {
 		void handle_error();
 		void handle_error(pybind11::error_already_set& err);
 
+		void open_texmacs_logfile();
+		
 		// These mimic what we do in Server.cc
 		pybind11::module             main_module;
 		pybind11::object             main_namespace;

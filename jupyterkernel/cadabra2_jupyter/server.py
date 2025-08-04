@@ -1,3 +1,5 @@
+import base64
+
 def _latex_post_parser(text):
     return (
         text.replace("\\begin{dmath*}", "$")
@@ -15,8 +17,10 @@ class Server:
         if typestr == "latex_view":
             data = _latex_post_parser(data)
             self._kernel._send_result(data)
+        elif typestr == "image_svg":
+            self._kernel._send_image(base64.b64decode(data), "svg+xml")
         elif typestr == "image_png":
-            self._kernel._send_image(data)
+            self._kernel._send_image(data, "png")
         elif typestr == "verbatim":
             self._kernel._send_code(data)
         elif typestr == "input_form":
@@ -33,7 +37,7 @@ class Server:
         self._kernel._send_result("Test: We've gone on holiday by mistake!")
 
     def handles(self, otype):
-        if otype == "latex_view" or otype == "image_png" or otype == "verbatim":
+        if otype == "latex_view" or otype == "image_png" or otype=="image_svg" or otype == "verbatim":
             return True
         return False
 

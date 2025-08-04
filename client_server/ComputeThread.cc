@@ -554,7 +554,7 @@ void ComputeThread::execute_cell(DTree::iterator it, std::string no_assign, std:
 		}
 
 	// Position the cursor in the next cell so this one will not
-	// accidentally get executed twice.
+	// accidentally get executed twice. This runs synchronously!
 	std::shared_ptr<ActionBase> actionpos =
 	   std::make_shared<ActionPositionCursor>(it->id(), ActionPositionCursor::Position::next);
 	docthread->queue_action(actionpos);

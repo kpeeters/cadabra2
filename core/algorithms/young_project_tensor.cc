@@ -2,6 +2,7 @@
 #include "IndexIterator.hh"
 #include "Exceptions.hh"
 #include "Cleanup.hh"
+#include "IndexClassifier.hh"
 #include "properties/Indices.hh"
 #include "properties/Integer.hh"
 #include "algorithms/young_project_tensor.hh"
@@ -93,9 +94,10 @@ Algorithm::result_t young_project_tensor::apply(iterator& it)
 
 	if(tab.selfdual_column!=0) {
 		// Classify indices so we can insert dummies.
-		index_map_t one, two, three, four, added_dummies;
-		classify_indices_up(it, one, two);
-		classify_indices(it, three, four);
+		IndexClassifier ic(kernel);
+		IndexClassifier::index_map_t one, two, three, four, added_dummies;
+		ic.classify_indices_up(it, one, two);
+		ic.classify_indices(it, three, four);
 
 		// Figure out the properties of the indices for which we want dummy partners.
 		index_iterator iit=index_iterator::begin(kernel.properties, it);
@@ -133,13 +135,13 @@ Algorithm::result_t young_project_tensor::apply(iterator& it)
 				while(subtree_exact_equal(&kernel.properties, iit, iit_orig)==false)
 					++iit;
 
-				Ex dum=get_dummy(ind, &one, &two, &three, &four, &added_dummies);
+				Ex dum=ic.get_dummy(ind, &one, &two, &three, &four, &added_dummies);
 				repfac.append_child(epsit, iterator(iit)); // move index to eps
 				iterator repind=rep.replace_index(iterator(iit), dum.begin()); // replace index on tens
-				added_dummies.insert(index_map_t::value_type(dum, repind));
+				added_dummies.insert(IndexClassifier::index_map_t::value_type(dum, repind));
 				}
 			// Now insert the new dummies in the epsilon.
-			index_map_t::iterator adi=added_dummies.begin();
+			IndexClassifier::index_map_t::iterator adi=added_dummies.begin();
 			while(adi!=added_dummies.end()) {
 				iterator ni=repfac.append_child(epsit, adi->first.begin());
 				ni->fl.parent_rel=str_node::p_sub;

@@ -73,7 +73,8 @@ namespace cadabra {
 			void    set_lookup_function(lookup_function_t);
 			
 			/// Evaluate the expression, using the variable values set in
-			/// `set_variable`.
+			/// `set_variable`. This will only work if the expression evaluates
+			/// to a complex double.
 			NTensor evaluate();
 
 			/// PRIVATE:

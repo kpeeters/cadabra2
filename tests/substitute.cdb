@@ -265,7 +265,7 @@ test108()
 
 def test109():
     __cdbkernel__=create_scope()
-    {\mu,\nu,\rho,\sigma}::Indices;
+    {\mu,\nu,\rho,\sigma}::Indices(position=fixed);
     \partial{#}::PartialDerivative;
     g_{\mu\nu}::Metric;
     g^{\mu\nu}::InverseMetric;
@@ -662,3 +662,15 @@ def test132():
     print("Test 132 passed")
 
 test132()
+
+def test133():
+    __cdbkernel__=create_scope()
+    ex:= A + B3 + C7.
+    substitute(_, $A + M? + N? | \regex{M?}{"[A-Z]7"} -> \sin(M? N?)/N?$)
+    tst:= \sin(C7 B3)/B3 - @(ex);
+    assert(tst==0)
+    print("Test 133 passed")
+
+test133()
+
+    

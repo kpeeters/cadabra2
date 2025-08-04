@@ -1,4 +1,5 @@
 
+#include "IndexClassifier.hh"
 #include "algorithms/eliminate_vielbein.hh"
 #include "properties/Vielbein.hh"
 

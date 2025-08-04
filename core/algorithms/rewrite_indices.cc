@@ -1,5 +1,7 @@
 
 #include "Cleanup.hh"
+#include "Exceptions.hh"
+#include "IndexClassifier.hh"
 #include "algorithms/rewrite_indices.hh"
 #include "properties/Derivative.hh"
 #include "properties/Indices.hh"
@@ -46,8 +48,9 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 	if(is_derivative_argument) force_node_wrap(it, "\\prod");
 	else                       prod_wrap_single_term(it);
 
-	index_map_t ind_free, ind_dummy;
-	classify_indices(it, ind_free, ind_dummy);
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_map_t ind_free, ind_dummy;
+	ic.classify_indices(it, ind_free, ind_dummy);
 
 	// Put arguments in canonical form.
 
@@ -82,7 +85,7 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 	// there are indices on the object!!!
 
 	// 'dit' is the index under consideration for a rewrite.
-	index_map_t::const_iterator dit=ind_dummy.begin();
+	IndexClassifier::index_map_t::const_iterator dit=ind_dummy.begin();
 	while(dit!=ind_dummy.end()) {
 		//std::cerr << "** considering index " << Ex(dit->second) << std::endl;
 		sibling_iterator par=tr.parent(dit->second);
@@ -148,7 +151,7 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 					if( itype1->position_type==Indices::free || dit->second->fl.parent_rel == pr1 ) {
 						if( itype2->position_type==Indices::free || walk->fl.parent_rel != pr2 ) {
 							tr.replace_index(vbi1, dit->second);
-							Ex nd=get_dummy(itype2, par);
+							Ex nd=ic.get_dummy(itype2, par);
 							auto nl = tr.replace_index(dit->second, nd.begin(), true);
 							auto vielbein_index = tr.replace_index(vbi2, nd.begin());
 							nl->fl.parent_rel=walk->fl.parent_rel;
@@ -163,7 +166,7 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 					if( itype2->position_type==Indices::free || dit->second->fl.parent_rel == pr2 ) {
 						if( itype1->position_type==Indices::free || walk->fl.parent_rel != pr1 ) {
 							tr.replace_index(vbi2, dit->second);
-							Ex nd=get_dummy(itype1, par);
+							Ex nd=ic.get_dummy(itype1, par);
 							auto nl=tr.replace_index(dit->second,nd.begin());
 							auto vielbein_index = tr.replace_index(vbi1,nd.begin());
 							nl->fl.parent_rel=walk->fl.parent_rel;

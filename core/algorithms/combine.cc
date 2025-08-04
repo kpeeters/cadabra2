@@ -1,5 +1,7 @@
 
 #include "Cleanup.hh"
+#include "Exceptions.hh"
+#include "IndexClassifier.hh"
 #include "algorithms/combine.hh"
 #include "properties/Matrix.hh"
 
@@ -19,14 +21,15 @@ bool combine::can_apply(iterator it)
 Algorithm::result_t combine::apply(iterator& it)
 	{
 	sibling_iterator sib=tr.begin(it);
-	index_map_t ind_free, ind_dummy;
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_map_t ind_free, ind_dummy;
 	std::vector<Ex::iterator> dummies;
 	while(sib!=tr.end(it)) {  // iterate over all factors in the product
 		sibling_iterator ch=tr.begin(sib);
 		while(ch!=tr.end(sib)) { // iterate over all indices of this factor
 			//			auto parent=tr.parent(sib);
 			if(ch->fl.parent_rel==str_node::p_sub || ch->fl.parent_rel==str_node::p_super) {
-				classify_add_index(ch, ind_free, ind_dummy);
+				ic.classify_add_index(ch, ind_free, ind_dummy);
 				}
 			++ch;
 			}
@@ -36,7 +39,7 @@ Algorithm::result_t combine::apply(iterator& it)
 
 	while(ind_dummy.begin()!=ind_dummy.end()) {
 		bool found=false;
-		index_map_t::iterator start=ind_dummy.begin(), backup;
+		IndexClassifier::index_map_t::iterator start=ind_dummy.begin(), backup;
 		while(!found && start!=ind_dummy.end()) {
 			iterator parent=tr.parent(start->second);
 			sibling_iterator ch=tr.begin(parent), last_part;
@@ -85,7 +88,7 @@ Algorithm::result_t combine::apply(iterator& it)
 				}
 			else {
 				start=fnd;
-				index_map_t::iterator check=ind_dummy.end();
+				IndexClassifier::index_map_t::iterator check=ind_dummy.end();
 				iterator parent=tr.parent(start->second);
 				sibling_iterator ch=tr.begin(parent), first_part;
 				while(check==ind_dummy.end()) {

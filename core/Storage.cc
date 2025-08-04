@@ -42,6 +42,9 @@ namespace cadabra {
 	nset_t    name_set;
 	rset_t    rat_set;
 
+   // Simple pool for memory allocation.
+	std::pmr::unsynchronized_pool_resource                pool;
+	
 	long to_long(multiplier_t mul)
 		{
 		if(!mul.is_rational())
@@ -68,36 +71,35 @@ namespace cadabra {
 	// Expression constructor/destructor members.
 
 	Ex::Ex()
-		: tree<str_node>(), state_(result_t::l_no_action)
+		: cdb_tree(&pool)
+		, state_(result_t::l_no_action)
 		{
 		}
 
-	Ex::Ex(tree<str_node>::iterator it)
-		: tree<str_node>(it), state_(result_t::l_no_action)
+	Ex::Ex(cdb_tree::iterator it)
+		: cdb_tree(it, &pool)
+		, state_(result_t::l_no_action)
 		{
 		}
 
 	Ex::Ex(const str_node& x)
-		: tree<str_node>(x), state_(result_t::l_no_action)
+		: cdb_tree(x, &pool)
+		, state_(result_t::l_no_action)
 		{
 		}
 
 	Ex::Ex(const Ex& other)
-		: std::enable_shared_from_this<Ex>(other), tree<str_node>(other), state_(result_t::l_no_action)
+		: std::enable_shared_from_this<Ex>(other)
+		, cdb_tree(other, &pool)
+		, state_(result_t::l_no_action)
 		{
 		//	std::cout << "Ex copy constructor" << std::endl;
 		}
 
-//	Ex::Ex(Ex other)
-//		: std::enable_shared_from_this<Ex>(other), tree<str_node>(other), state_(result_t::l_no_action)
-//		{
-//		//	std::cout << "Ex copy constructor" << std::endl;
-//		}
-
 	Ex& Ex::operator=(Ex other)
 		{
-		std::swap(static_cast<tree<str_node>&>(*this),
-					 static_cast<tree<str_node>&>(other));
+		std::swap(static_cast<cdb_tree&>(*this),
+					 static_cast<cdb_tree&>(other));
 		std::swap((*this).state_, other.state_);
 		std::swap((*this).history, other.history);
 		std::swap((*this).terms, other.terms);
@@ -106,26 +108,39 @@ namespace cadabra {
 		}
 
 	Ex::Ex(const std::string& str)
-		: state_(result_t::l_no_action)
+		: cdb_tree(&pool)
+		, state_(result_t::l_no_action)
 		{
 		set_head(str_node(str));
 		}
 
 	Ex::Ex(int val)
-		: state_(result_t::l_no_action)
+		: cdb_tree(&pool)
+		, state_(result_t::l_no_action)
 		{
 		set_head(str_node("1"));
 		multiply(begin()->multiplier, val);
 		}
 
+	Ex::Ex(int numer, int denom)
+		: cdb_tree(&pool)
+		, state_(result_t::l_no_action)
+		{
+		set_head(str_node("1"));
+		multiply(begin()->multiplier, mpq_class(numer, denom));
+		}
+
 	Ex::Ex(double val)
-		: state_(result_t::l_no_action)
+		: cdb_tree(&pool)
+		, state_(result_t::l_no_action)
 		{
 		std::ostringstream str;
 		str << val;
 		set_head(str_node(str.str()));
 		}
 
+
+	
 	Ex::result_t Ex::state() const
 		{
 		return state_;
@@ -787,7 +802,7 @@ namespace cadabra {
 
 	std::vector<Ex::path_t> Ex::pop_history()
 		{
-		tree<str_node>::operator=(history.back());
+		cdb_tree::operator=(history.back());
 		history.pop_back();
 		auto ret(terms.back());
 		terms.pop_back();
@@ -800,9 +815,10 @@ namespace cadabra {
 		}
 
 	str_node::str_node(void)
-		: content(std::monostate())
+		: name(name_set.end())
+		, content(std::monostate())
 		{
-		multiplier=rat_set.insert(1).first;
+		one(multiplier);
 		//	fl.modifier=m_none;
 		fl.bracket=b_none;
 		fl.parent_rel=p_none;
@@ -826,9 +842,10 @@ namespace cadabra {
 //		}
 	
 	str_node::str_node(nset_t::iterator nm, bracket_t br, parent_rel_t pr)
-		: content(std::monostate())
+		: name(name_set.end())
+		, content(std::monostate())
 		{
-		multiplier=rat_set.insert(1).first;
+		one(multiplier);
 		name=nm;
 		//	fl.modifier=m_none;
 		fl.bracket=br;
@@ -837,7 +854,8 @@ namespace cadabra {
 		}
 
 	str_node::str_node(const std::u32string& nm, bracket_t br, parent_rel_t pr)
-		: content(std::monostate())
+		: name(name_set.end())
+		, content(std::monostate())
 		{
 #ifdef _MSC_VER
 		std::wstring_convert<std::codecvt_utf8<int32_t>, int32_t> conv;
@@ -851,7 +869,7 @@ namespace cadabra {
 #ifdef DEBUG
 		std::cerr << "str_node: " << nm8 << std::endl;
 #endif
-		multiplier=rat_set.insert(1).first;
+		one(multiplier);
 		name=name_set.insert(nm8).first;
 		//	fl.modifier=m_none;
 		fl.bracket=br;
@@ -859,9 +877,10 @@ namespace cadabra {
 		}
 
 	str_node::str_node(const std::string& nm, bracket_t br, parent_rel_t pr)
-		: content(std::monostate())
+		: name(name_set.end())
+		, content(std::monostate())
 		{
-		multiplier=rat_set.insert(1).first;
+		one(multiplier);
 		name=name_set.insert(nm).first;
 		//	fl.modifier=m_none;
 		fl.bracket=br;
@@ -963,6 +982,8 @@ namespace cadabra {
 
 	bool str_node::is_command() const
 		{
+		if(name == name_set.end()) return false;
+
 		if((*name).size()>0)
 			if((*name)[0]=='@') {
 				if((*name).size()>1) {
@@ -976,6 +997,8 @@ namespace cadabra {
 
 	bool str_node::is_inert_command() const
 		{
+		if(name == name_set.end()) return false;
+
 		if((*name).size()>1)
 			if((*name)[0]=='@')
 				if((*name)[1]=='@')
@@ -985,6 +1008,8 @@ namespace cadabra {
 
 	bool str_node::is_name_wildcard() const
 		{
+		if(name == name_set.end()) return false;
+		
 		if((*name).size()>0)
 			if((*name)[name->size()-1]=='?') {
 				if(name->size()>1) {
@@ -998,6 +1023,8 @@ namespace cadabra {
 
 	bool str_node::is_object_wildcard() const
 		{
+		if(name == name_set.end()) return false;
+
 		if((*name).size()>1)
 			if((*name)[name->size()-1]=='?')
 				if((*name)[name->size()-2]=='?')
@@ -1007,6 +1034,8 @@ namespace cadabra {
 
 	bool str_node::is_range_wildcard() const
 		{
+		if(name == name_set.end()) return false;
+
 		if(name->size()>0) {
 			if((*name)[0]=='#')
 				return true;
@@ -1016,6 +1045,8 @@ namespace cadabra {
 
 	bool str_node::is_siblings_wildcard() const
 		{
+		if(name == name_set.end()) return false;
+
 		if(name->size()>0) {
 			if((*name)[name->size()-1]=='@')
 				return true;
@@ -1025,6 +1056,8 @@ namespace cadabra {
 
 	bool str_node::is_autodeclare_wildcard() const
 		{
+		if(name == name_set.end()) return false;
+
 		if(name->size()>0)
 			if((*name)[name->size()-1]=='#')
 				return true;
@@ -1033,6 +1066,8 @@ namespace cadabra {
 
 	bool str_node::is_indexstar_wildcard() const
 		{
+		if(name == name_set.end()) return false;
+
 		if((*name).size()>1)
 			if((*name)[name->size()-1]=='?')
 				if((*name)[name->size()-2]=='*')
@@ -1042,6 +1077,8 @@ namespace cadabra {
 
 	bool str_node::is_indexplus_wildcard() const
 		{
+		if(name == name_set.end()) return false;
+
 		if((*name).size()>1)
 			if((*name)[name->size()-1]=='?')
 				if((*name)[name->size()-2]=='+')
@@ -1051,6 +1088,8 @@ namespace cadabra {
 
 	bool str_node::is_numbered_symbol() const
 		{
+		if(name == name_set.end()) return false;
+
 		int len=(*name).size();
 		if(len>1)
 			if(isdigit((*name)[len-1]))
@@ -1152,12 +1191,20 @@ namespace cadabra {
 
 	void zero(rset_t::iterator& num)
 		{
-		num=rat_set.insert(0).first;
+		static rset_t::iterator rat_it_zero=rat_set.end();
+
+		if(rat_it_zero==rat_set.end())
+			rat_it_zero = rat_set.insert(0).first;
+		num=rat_it_zero;
 		}
 
 	void one(rset_t::iterator& num)
 		{
-		num=rat_set.insert(1).first;
+		static rset_t::iterator rat_it_one=rat_set.end();
+		
+		if(rat_it_one==rat_set.end())
+			rat_it_one = rat_set.insert(1).first;
+		num=rat_it_one; 
 		}
 
 	void flip_sign(rset_t::iterator& num)

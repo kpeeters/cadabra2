@@ -17,7 +17,6 @@ namespace cadabra {
 			virtual result_t apply(iterator&);
 
 			void  fill_hash_map(iterator);
-			void  fill_hash_map(sibling_iterator, sibling_iterator);
 		private:
 			result_t collect_from_hash_map();
 			void remove_zeroed_terms(sibling_iterator, sibling_iterator);

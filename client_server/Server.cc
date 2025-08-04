@@ -605,7 +605,7 @@ void Server::on_block_finished(Block block)
 
 bool Server::handles(const std::string& otype) const
 	{
-	if(otype=="latex_view" || otype=="image_png" || otype=="verbatim") return true;
+	if(otype=="latex_view" || otype=="image_png" || otype=="image_svg" || otype=="verbatim") return true;
 	return false;
 	}
 

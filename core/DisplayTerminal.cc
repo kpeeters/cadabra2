@@ -2,6 +2,7 @@
 #include "Algorithm.hh"
 #include "DisplayTerminal.hh"
 #include "Symbols.hh"
+#include "Exceptions.hh"
 #include "properties/Accent.hh"
 #include "NTensor.hh"
 #include <variant>
@@ -12,14 +13,15 @@ DisplayTerminal::DisplayTerminal(const Kernel& k, const Ex& e, bool uuc)
 	: DisplayBase(k, e), use_unicode(uuc)
 	{
 	symmap = {
-			{"\\cos", "cos"},
-			{"\\sin", "sin"},
-			{"\\tan", "tan"},
+			{"\\cos",  "cos"},
+			{"\\sin",  "sin"},
+			{"\\tan",  "tan"},
 			{"\\cosh", "cosh"},
 			{"\\sinh", "sinh"},
 			{"\\tanh", "tanh"},
-			{"\\int", "∫" },
-			{"\\sum", "∑" }
+			{"\\int",  "∫" },
+			{"\\sum",  "∑" },
+			{"\\iu",   "i" }
 		};
 	}
 

@@ -17,7 +17,40 @@
   even-numbered ones are released in packaged/installer form.
 </p>
 <a name="devel"></a>
-<h3>github devel branch (2.5.11)</h3>
+<h3>github devel branch (2.5.15)</h3>
+<ul>
+</ul>
+
+<a name="2.5.14"></a>
+<h3>2.5.14 (released 31-Jul-2025)</h3>
+<ul>
+  <li>TeXmacs is supported again, including plotting (put
+    the <tt>config/init-cadabra2.scm</tt> file in the appropriate
+    location).</li>
+  <li>Plotting is now supported again by the Jupyter kernel.</li>
+  <li>Support for plotting in Kitty and iTerm2 terminals.</li>
+  <li>Group equal components when displaying component values of tensors.</li>
+  <li>Internal: some operations now use multiple threads (work in progress).</li>
+  <li>Internal: use a pool allocator for tree nodes.</li>
+  <li>Internal: speedup in handling of <tt>Multiplier</tt> (test suite speedup by 1.5x).</li>
+  <li>Docs: add <tt>SympyBridge</tt> docs.</li>
+  <li>Fix bug when subtracting two <tt>component</tt> expressions.</li>
+  <li>Fix bug with <tt>NTensor</tt> broadcasting from scalar.</li>
+  <li>Fix <tt>cadabra2-cli</tt> argument handling.</li>
+  <li>Fix handling of code blocks in <tt>cadabra2-cli</tt>, making it consistent with the notebook.</li>
+  <li>Stability improvement to the SymPy bridge by walking the SymPy AST directly instead of parsing printed output.</li>
+  <li>Make Homebrew package provide a working Jupyter kernel too.</li>
+  <li>Made <tt>\iu</tt> the imaginary unit, by default displaying as $i$.</li>
+  <li>AppImages are back, on both x86_64 and arm64.</li>
+  <li>Fix loading <tt>cadabra2_defaults.py</tt> in the Jupyter kernel.</li>
+  <li>Fix scrolling bug in notebook which would make the document jump around for no good reason.</li>
+  <li>Fix homebrew package (by avoiding svg icons on macOS, as homebrew does not package librsvg correctly).</li>
+  <li>Internal: refactor to enable cleaner insertion of related properties on property declaration.</li>
+  <li>Fix handling substitute with regex (<a href="https://github.com/kpeeters/cadabra2/issues/230">#230</a>, David).</li>
+</ul>
+
+<a name="2.5.12"></a>
+<h3>2.5.12 (released 07-May-2025)</h3>
 <ul>
   <li>Make <tt>evaluate</tt> handle expressions in which indices have
     been fixed to integers explicitly (e.g. an epsilon tensor with one
@@ -138,7 +171,7 @@
   <li>Ability to use builtin MicroTeX for typesetting (the default in 2.5.x),
     which removes the requirement to have a LaTeX installation.</li>
   <li>Experimental AppImages now available for Linux on both x86-64
-  and aarch64 architectures.</li>
+  and arm64 architectures.</li>
   <li>Removed deprecated GTK-3 features and cleaned up the UI.</li>
   <li>Fix bug in code to interrupt a running computation.</li>
   <li>Added dynamical cell updates, e.g. to create animations.</li>

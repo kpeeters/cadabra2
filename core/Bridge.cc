@@ -1,9 +1,9 @@
 
 #include "pythoncdb/py_ex.hh"
 #include "pythoncdb/py_helpers.hh"
-#include "pythoncdb/py_globals.hh"
 #include "Bridge.hh"
 #include "algorithms/collect_terms.hh"
+#include "Exceptions.hh"
 
 using namespace cadabra;
 namespace py = pybind11;

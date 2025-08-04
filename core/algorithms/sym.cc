@@ -1,4 +1,5 @@
 
+#include "Exceptions.hh"
 #include "algorithms/sym.hh"
 
 using namespace cadabra;

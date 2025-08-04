@@ -26,7 +26,7 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 	prod_wrap_single_term(st);
 	const nset_t::iterator onept=name_set.insert("1").first;
 
-	int looping=0;
+//	int looping=0;
 
 	sibling_iterator it=tr.begin(st);
 	while(it!=tr.end(st)) { // Loop over all factors in a product, looking for Kroneckers
@@ -69,7 +69,7 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 				}
 			else {
 				sibling_iterator oi=tr.begin(st);
-				++looping;
+//				++looping;
 				// iterate over all factors in the product
 				bool doing1=false;
 				bool doing2=false;

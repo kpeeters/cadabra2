@@ -3,17 +3,17 @@
 #include "Cleanup.hh"
 #include "Permutations.hh"
 #include "MultiIndex.hh"
-//#include "SympyCdb.hh"
+#include "Exceptions.hh"
 #include "algorithms/evaluate.hh"
 #include "algorithms/simplify.hh"
 #include "algorithms/substitute.hh"
 #include "algorithms/collect_terms.hh"
 #include "properties/EpsilonTensor.hh"
-#include "properties/Integer.hh"
 #include "properties/PartialDerivative.hh"
 #include "properties/Coordinate.hh"
-#include "properties/Depends.hh"
+#include "properties/DependsBase.hh"
 #include "properties/Accent.hh"
+#include "DisplayTerminal.hh"
 #include <functional>
 
 // #define DEBUG 1
@@ -86,12 +86,8 @@ Algorithm::result_t evaluate::apply(iterator& it)
 					}
 				else if(*walk->name!="\\equals" && walk->is_index()==false) {
 					if(! (only_rhs && tr.is_head(walk)==false && ( *(tr.parent(walk)->name)=="\\equals" || *(tr.parent(walk)->name)=="\\arrow" ) && tr.index(walk)==0) ) {
-						index_map_t empty;
+						IndexClassifier::index_map_t empty;
 						sibling_iterator tmp(walk);
-#ifdef DEBUG
-						std::cerr << "handling factor" << std::endl;
-						std::cerr << *walk->name << std::endl;
-#endif
 						walk = handle_factor(tmp, empty);
 						// std::cerr << "handling factor done" << std::endl;
 						}
@@ -138,8 +134,9 @@ Ex::iterator evaluate::handle_components(iterator it)
 	// This just cleans up component nodes. At the moment this means
 	// taking care of handling dummy pairs.
 
-	index_map_t ind_free, ind_dummy;
-	classify_indices(it, ind_free, ind_dummy);
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_map_t ind_free, ind_dummy;
+	ic.classify_indices(it, ind_free, ind_dummy);
 	if(ind_dummy.size()==0) return it;
 
 	// Wrap in a product, use handle_prod to sort out summation.
@@ -164,7 +161,7 @@ Ex::iterator evaluate::handle_sum(iterator it)
 			tr.erase(sib);
 			}
 		else if(is_component(sib)==false) {
-			index_map_t empty;
+			IndexClassifier::index_map_t empty;
 			handle_factor(sib, empty);
 			}
 
@@ -175,13 +172,14 @@ Ex::iterator evaluate::handle_sum(iterator it)
 		return it;
 		}
 
-	index_map_t full_ind_free, full_ind_dummy;
+	IndexClassifier::index_map_t full_ind_free, full_ind_dummy;
 
 	// First find the values that all indices will need to take. We do not loop over
 	// them, but we need them in order to figure out which patterns in the rule can
 	// match to patterns in the expression.
 
-	classify_indices(it, full_ind_free, full_ind_dummy);
+	IndexClassifier ic(kernel);
+	ic.classify_indices(it, full_ind_free, full_ind_dummy);
 	for(auto i: full_ind_free) {
 		// std::cerr << "finding prop for " << Ex(i.second) << std::endl;
 		const Indices *prop = kernel.properties.get<Indices>(i.second);
@@ -235,7 +233,7 @@ Ex::iterator evaluate::handle_sum(iterator it)
 	return it;
 	}
 
-Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& full_ind_free)
+Ex::iterator evaluate::handle_factor(sibling_iterator sib, const IndexClassifier::index_map_t& full_ind_free)
 	{
 #ifdef DEBUG
 	std::cerr << "handle_factor " << Ex(sib) << std::endl;
@@ -265,8 +263,9 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 
 	// We need to know for all indices whether they are free or dummy,
 	// in particular to handle internal contractions correctly.
-	index_map_t ind_free, ind_dummy;
-	classify_indices(sib, ind_free, ind_dummy);
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_map_t ind_free, ind_dummy;
+	ic.classify_indices(sib, ind_free, ind_dummy);
 
 #ifdef DEBUG
 	for(const auto& i: ind_free)
@@ -350,7 +349,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 					for(auto& r: subs.comparator.index_value_map) {
 						if(fi->first == r.first) {
 #ifdef DEBUG
-							std::cerr << "adding " << r.second.begin() << std::endl;
+//							std::cerr << "adding " << r.second.begin() << std::endl;
 #endif
 							repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none;
 							break;
@@ -366,7 +365,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 					for(auto& r: subs.comparator.index_value_map) {
 						if(fi->first == r.first) {
 #ifdef DEBUG
-							std::cerr << "adding2 " << r.second.begin() << std::endl;
+//							std::cerr << "adding2 " << r.second.begin() << std::endl;
 #endif
 							repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none;
 							break;
@@ -400,7 +399,10 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 		merge_component_children(repl.begin());
 
 #ifdef DEBUG
-		std::cerr << "result now " << repl << std::endl;
+		DisplayTerminal dt(kernel, repl);
+		std::cerr << "Result for this factor:\n";
+		dt.output(std::cerr);
+		std::cerr << std::endl;
 #endif
 		sib = tr.move_ontop(iterator(sib), repl.begin());
 		}
@@ -408,7 +410,8 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 	return sib;
 	}
 
-Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, const index_map_t& ind_dummy)
+Ex::iterator evaluate::dense_factor(iterator it, const IndexClassifier::index_map_t& ind_free,
+												const IndexClassifier::index_map_t& ind_dummy)
 	{
 	if(ind_dummy.size()!=0)
 		throw RuntimeException("Cannot yet evaluate this expression.");
@@ -422,8 +425,9 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 	// python treats 'map', but that will require wrapping all access to
 	// '\components' in a separate class.
 
-	index_position_map_t ind_pos_free;
-	fill_index_position_map(it, ind_free, ind_pos_free);
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_position_map_t ind_pos_free;
+	ic.fill_index_position_map(it, ind_free, ind_pos_free);
 
 	Ex comp("\\components");
 
@@ -645,7 +649,9 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 #ifdef DEBUG
 	std::cerr << "handle_derivative " << Ex(it) << std::endl;
 #endif
-
+	// Remember the name of the derivative in case we need to put it back later.
+	nset_t::iterator derivative_name = it->name;
+	
 	// In order to figure out which components to keep, we need to do two things:
 	// expand into components the argument of the derivative, and then
 	// figure out the dependence of that argument on the various coordinates.
@@ -656,7 +662,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 	while(sib!=tr.end(it)) {
 		if(sib->is_index()==false) {
 			if(is_component(sib)==false) {
-				index_map_t empty;
+				IndexClassifier::index_map_t empty;
 				// This really shouldn't be necessary; the way in which the
 				// top level 'apply' works, it should have rewritten the argument
 				// of the derivative into a \components node already.
@@ -670,8 +676,9 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 
 	// std::cerr << "after handle\n" << Ex(it) << std::endl;
 
-	index_map_t ind_free, ind_dummy;
-	classify_indices(it, ind_free, ind_dummy);
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_map_t ind_free, ind_dummy;
+	ic.classify_indices(it, ind_free, ind_dummy);
 
 	// Flag an error if a partial derivative has an upper index which
 	// is not position=free: this would require converting the index
@@ -906,7 +913,8 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 
 			// Wrap a '\\partial' node around the component value, and add the
 			// same index values as above to this node.
-			rhs=eqcopy.wrap(rhs, str_node("\\partial"));
+			// FIXME: use the same derivative as was present in the tree!
+			rhs=eqcopy.wrap(rhs, str_node(derivative_name)); // "\\partial"));
 			multiply(rhs->multiplier, mult);
 			multiply(rhs->multiplier, *it->multiplier);
 			//				auto pch=tr.begin(it);
@@ -1161,75 +1169,6 @@ void evaluate::simplify_components(iterator it, bool run_sympy)
 	// replace this with a scalar zero here.
 	}
 
-std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
-	{
-	tree_exact_less_obj comp(&kernel.properties);
-	std::set<Ex, tree_exact_less_obj> ret(comp);
-
-	// Is this node a coordinate itself? If so, add it.
-	const Coordinate *cd = kernel.properties.get<Coordinate>(it, true);
-	if(cd) {
-		Ex cpy(it);
-		cpy.begin()->fl.bracket=str_node::b_none;
-		cpy.begin()->fl.parent_rel=str_node::p_none;
-		one(cpy.begin()->multiplier);
-		ret.insert(cpy);
-		}
-
-	// Determine explicit dependence on Coordinates, that is, collect
-	// parent_rel=p_none arguments, and add them directly if they
-	// carry a Coordinate property, or run the algorithm recursively
-	// if not (to catch e.g. exp(F(r)) depending on 'r'.
-
-	cadabra::do_subtree(tr, it, [&](Ex::iterator nd) -> Ex::iterator {
-		if(nd==it) return nd; // skip node itself, leads to indefinite recursion
-		if(nd->fl.parent_rel==str_node::p_none)
-			{
-			const Coordinate *cd = kernel.properties.get<Coordinate>(nd, true);
-			if(cd) {
-				Ex cpy(nd);
-				cpy.begin()->fl.bracket=str_node::b_none;
-				cpy.begin()->fl.parent_rel=str_node::p_none;
-				one(cpy.begin()->multiplier);
-				ret.insert(cpy);
-				}
-			else {
-				auto arg_deps=dependencies(nd);
-				if(arg_deps.size()>0)
-					for(const auto& new_dep: arg_deps)
-						ret.insert(new_dep);
-				}
-			}
-		return nd;
-		});
-
-	// Determine implicit dependence via Depends.
-#ifdef DEBUG
-	std::cerr << "deps for " << Ex(it) << std::endl;
-#endif
-
-	const DependsBase *dep = kernel.properties.get<DependsBase>(it, true);
-	if(dep) {
-#ifdef DEBUG
-		std::cerr << "implicit deps" << std::endl;
-#endif
-		Ex deps(dep->dependencies(kernel, it));
-		cadabra::do_list(deps, deps.begin(), [&](Ex::iterator nd) {
-			Ex cpy(nd);
-			cpy.begin()->fl.bracket=str_node::b_none;
-			cpy.begin()->fl.parent_rel=str_node::p_none;
-			ret.insert(cpy);
-			return true;
-			});
-#ifdef DEBUG
-		for(auto& e: ret)
-			std::cerr << e << std::endl;
-#endif
-		}
-
-	return ret;
-	}
-
 Algorithm::iterator evaluate::wrap_scalar_in_components_node(iterator sib)
 	{
 	// FIXME: would be good if we could write this in a more readable form.
@@ -1274,7 +1213,7 @@ Ex::iterator evaluate::handle_prod(iterator it)
 			}
 
 		if(is_component(sib)==false) {
-			index_map_t empty;
+			IndexClassifier::index_map_t empty;
 			handle_factor(sib, empty);
 			}
 
@@ -1297,8 +1236,9 @@ Ex::iterator evaluate::handle_prod(iterator it)
 	// sums over the dummy indices, turning this into a single
 	// \component node.
 
-	index_map_t ind_free, ind_dummy;
-	classify_indices(it, ind_free, ind_dummy);
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_map_t ind_free, ind_dummy;
+	ic.classify_indices(it, ind_free, ind_dummy);
 
 	auto di = ind_dummy.begin();
 	// Since no factor can be a sum anymore, dummy indices always occur in pairs,

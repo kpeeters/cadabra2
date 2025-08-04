@@ -130,7 +130,7 @@ test08()
 def test09():
     __cdbkernel__=create_scope() 
     N::Integer;
-    {i,j}::Indices(vector);
+    {i,j}::Indices(vector, position=fixed);
     {i,j}::Integer(1..N);
     g_{i j}::Metric;
     g^{i j}::InverseMetric;

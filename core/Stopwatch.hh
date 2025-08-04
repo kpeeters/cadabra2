@@ -125,6 +125,8 @@ class Stopwatch {
 
 		friend std::ostream& operator<<(std::ostream&, const Stopwatch&);
 
+		Stopwatch& operator/=(int);
+
 	private:
 		void checkpoint_() const;
 

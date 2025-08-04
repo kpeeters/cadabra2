@@ -1,6 +1,8 @@
 
 #include "Config.hh"
 
+#include <pybind11/stl.h>
+
 #include "py_ex.hh"
 #include "py_helpers.hh"
 #include "py_globals.hh"
@@ -19,6 +21,7 @@
 #include "Bridge.hh"
 #include "SympyCdb.hh"
 #include "NTensor.hh"
+#include "NInterpolatingFunction.hh"
 
 // Includes for display routines
 #include <sstream>
@@ -202,9 +205,11 @@ namespace cadabra {
 		auto ret = std::make_shared<Ex>(*ex1);
 		if (*ret->begin()->name != "\\sum")
 			ret->wrap(ret->begin(), str_node("\\sum"));
-		multiply(ret->append_child(ret->begin(), top2)->multiplier, -1);
+		auto it = ret->append_child(ret->begin(), top2);
+		multiply(it->multiplier, -1);
+		cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
 
-		auto it = ret->begin();
+		it = ret->begin();
 		cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
 
 		return ret;
@@ -304,6 +309,32 @@ namespace cadabra {
 #endif
 		pybind11::object ret = parse(txt);
 		return ret;
+		}
+
+	pybind11::object ExNode_get_multiplier(const ExNode& ex)
+		{
+		if(!ex.is_valid())
+			throw ConsistencyException("Cannot get the multiplier of an iterator before the first 'next'.");
+
+		if(ex.it->multiplier->is_rational()) {
+			pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
+			auto m = ex.it->multiplier->get_rational();
+			pybind11::object mult = mpq(m.get_num().get_si(), m.get_den().get_si());
+			return mult;
+			}
+		else {
+			return pybind11::cast(ex.it->multiplier->get_double());
+			}
+		}
+	
+	void ExNode_set_multiplier(ExNode& ex, pybind11::object mult)
+		{
+		if(!ex.is_valid())
+			throw ConsistencyException("Cannot set the multiplier of an iterator before the first 'next'.");
+
+		// FIXME: this assumes the python object is a rational, but it could be a double now.
+		set(ex.it->multiplier, multiplier_t(mult.attr("numerator").cast<long>(),
+														mult.attr("denominator").cast<long>()) );
 		}
 
 	pybind11::object ExNode_as_sympy(const ExNode& exnode)
@@ -737,6 +768,7 @@ namespace cadabra {
 			.def("__str__", &ExNode::__str__)
 			.def("_sympy_", &ExNode_as_sympy)
 			.def("terms", &ExNode::terms, "Return an ExNode iterator over all terms at the level of the current ExNode.")
+			.def("components", &ExNode::components, "Returns an ExNode iterator over all components of the tensor at the given ExNode.")
 			.def("factors", &ExNode::factors, "Return an ExNode iterator over all factors at the level of the current ExNode.")
 			.def("own_indices", &ExNode::own_indices, "Return an ExNode iterator over all indices which are not inherited from child nodes.")
 			.def("indices", &ExNode::indices, "Return an ExNode iterator over all indices.")
@@ -754,7 +786,7 @@ namespace cadabra {
 				py::arg("other"), py::arg("use_props") = "always", py::arg("ignore_parent_rel") = false)
 			.def_property("name", &ExNode::get_name, &ExNode::set_name, "Set the name property of the node pointed to by the ExNode.")
 			.def_property("parent_rel", &ExNode::get_parent_rel, &ExNode::set_parent_rel)
-			.def_property("multiplier", &ExNode::get_multiplier, &ExNode::set_multiplier)
+			.def_property("multiplier", &ExNode_get_multiplier, &ExNode_set_multiplier)
 			.def_buffer([](ExNode &exnode) -> py::buffer_info {
 				throw std::range_error("Do not call this on ExNode");
 				})
@@ -766,6 +798,8 @@ namespace cadabra {
 		.def(py::init(&SympyBridge_init))
 		.def("to_sympy", &sympy::SympyBridge::export_ex)
 		.def("from_sympy", &sympy::SympyBridge::import_ex)
+//		.def("from_sympy_new", &sympy::SympyBridge::import_ex_new)			
+//		.def("from_sympy_new", &sympy::SympyBridge::import_ex_new)
 		;
 
 		m.def("join", [](const Ex_ptr ex1, const Ex_ptr ex2, py::args args) {
@@ -778,6 +812,8 @@ namespace cadabra {
 
 		m.def("tree", &print_tree);
 
+		m.def("function_domain", &cadabra::function_domain);
+		
 		m.def("map_sympy", &map_sympy_wrapper,
 		      pybind11::arg("ex"),
 		      pybind11::arg("function") = "",

@@ -2,12 +2,36 @@
 #include <iostream>
 
 websocket_client::websocket_client()
-	: ssl_ctx_(boost::asio::ssl::context::tlsv12_client)
+	: ssl_ctx_(boost::asio::ssl::context::sslv23_client) // tlsv12_client)
 	, resolver_(ioc_)
 	, is_ssl_(false)
 	{
 	ssl_ctx_.set_default_verify_paths();
+#ifdef __APPLE__
+  #include <TargetConditionals.h>
+  #if TARGET_OS_IPHONE
+	ssl_ctx_.set_verify_mode(boost::asio::ssl::verify_none);
+  #else
+	// on MacOS or related, include the system certificate chain.
+	ssl_ctx_.set_verify_mode(boost::asio::ssl::verify_none);
+//	ssl_ctx_.load_verify_file("/etc/ssl/cert.pem");
+//	ssl_ctx_.set_verify_mode(boost::asio::ssl::verify_peer);
+	// Configure SSL context to be more permissive
+  #endif
+//  ssl_ctx_.set_options(boost::asio::ssl::context::default_workarounds |
+//							  boost::asio::ssl::context::no_sslv2 |
+//							  boost::asio::ssl::context::no_sslv3);
+#else
 	ssl_ctx_.set_verify_mode(boost::asio::ssl::verify_peer);
+#endif
+//	ssl_ctx_.set_verify_callback([](bool preverified, ssl::verify_context& ctx) {
+//		// Log verification details for debugging
+//		char subject_name[256];
+//		X509* cert = X509_STORE_CTX_get_current_cert(ctx.native_handle());
+//		X509_NAME_oneline(X509_get_subject_name(cert), subject_name, 256);
+//		std::cerr << "websocket_client::verify_callback: " << subject_name << "\n";
+//		return preverified;
+//		});
 	}
 
 websocket_client::~websocket_client()
@@ -49,6 +73,23 @@ void websocket_client::connect(const std::string& uri_string)
 		wss_stream_->binary(false);  // Set to text mode
 		wss_stream_->auto_fragment(false);  // Don't fragment messages
 		wss_stream_->read_message_max(64 * 1024 * 1024);  // 64MB max message size
+//		ssl_ctx_.set_verify_callback(
+//			[host](bool preverified, ssl::verify_context& ctx) {
+//			// You can add debug logging here to see verification attempts
+//			std::cerr << "Verifying certificate: " << preverified << std::endl;
+//			return preverified;
+//			});
+//		wss_stream_->next_layer().set_server_hostname(host_);
+		wss_stream_->set_option(boost::beast::websocket::stream_base::decorator(
+											[](boost::beast::websocket::request_type& req) {
+											req.version(11); 
+											req.set(boost::beast::http::field::user_agent, "WebSocket-Client/1.0");
+											// Log all headers
+											// for (auto const& field : req) {
+											// 	std::cerr << field.name_string() << ": " 
+											// 				 << field.value() << "\n";
+											// 	}
+											}));
 		}
 	else {
 		ws_stream_ = std::make_unique<boost::beast::websocket::stream<
@@ -96,6 +137,14 @@ void websocket_client::on_connect(const boost::beast::error_code& ec)
 	if (ec) return fail(ec);
 	
 	if (is_ssl_) {
+		if (!SSL_set_tlsext_host_name(
+				 wss_stream_->next_layer().native_handle(), host_.c_str())) {
+			throw boost::beast::system_error{
+				boost::beast::error_code{
+					static_cast<int>(::ERR_get_error()),
+					boost::beast::net::error::get_ssl_category()}};
+			}
+		
 		wss_stream_->next_layer().async_handshake(
 			boost::asio::ssl::stream_base::client,
 			[this](const boost::beast::error_code& ec) {

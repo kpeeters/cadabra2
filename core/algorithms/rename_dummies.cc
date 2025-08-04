@@ -2,6 +2,7 @@
 #include "algorithms/rename_dummies.hh"
 #include "properties/Indices.hh"
 #include "Exceptions.hh"
+#include "IndexClassifier.hh"
 
 using namespace cadabra;
 
@@ -42,9 +43,10 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 
 	// First do a normal classify_indices both downwards and upwards.
 	//
-	index_map_t ind_free, ind_dummy, ind_free_up, ind_dummy_up;
-	classify_indices(st, ind_free, ind_dummy);
-	classify_indices_up(st, ind_free_up, ind_dummy_up);
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_map_t ind_free, ind_dummy, ind_free_up, ind_dummy_up;
+	ic.classify_indices(st, ind_free, ind_dummy);
+	ic.classify_indices_up(st, ind_free_up, ind_dummy_up);
 
 	//	print_classify_indices(std::cerr, st);
 
@@ -55,7 +57,7 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 	//
 	typedef std::map<Ex, Ex, tree_exact_less_for_indexmap_obj> repmap_t;
 	repmap_t    repmap;
-	index_map_t added_dummies;
+	IndexClassifier::index_map_t added_dummies;
 
 	// If a target set is provided, move any dummies from this set in ind_dummy
 	// to added_dummies to prevent them from being reused
@@ -119,9 +121,9 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 				if(dset1=="" || dums->set_name==dset1) {
 					if(dset2!="") dums=ind2; // replace with dummies from set 2
 
-					Ex relabel=get_dummy(dums, &ind_free, &ind_free_up, &ind_dummy_up, &added_dummies);
+					Ex relabel=ic.get_dummy(dums, &ind_free, &ind_free_up, &ind_dummy_up, &added_dummies);
 					repmap.insert(repmap_t::value_type(Ex(ii),relabel));
-					added_dummies.insert(index_map_t::value_type(relabel, ii));
+					added_dummies.insert(IndexClassifier::index_map_t::value_type(relabel, ii));
 					if(subtree_compare(&kernel.properties, ii, relabel.begin())!=0) {
 						res=result_t::l_applied;
 						tr.replace_index(ii, relabel.begin(), true);

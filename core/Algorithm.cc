@@ -20,9 +20,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <stddef.h>
 #include "Algorithm.hh"
+#include "IndexClassifier.hh"
 #include "Storage.hh"
 #include "Props.hh"
 #include "Cleanup.hh"
+#include "Exceptions.hh"
+#include "Functional.hh"
+#include "properties/PartialDerivative.hh"
 #include <typeinfo>
 #include <boost/version.hpp>
 #if BOOST_VERSION > 105500
@@ -31,10 +35,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include <boost/stacktrace.hpp>
 
 #include "properties/Accent.hh"
+#include "properties/Coordinate.hh"
 #include "properties/Derivative.hh"
 #include "properties/Indices.hh"
-#include "properties/Coordinate.hh"
-#include "properties/Symbol.hh"
 #include "properties/Trace.hh"
 #include "properties/DependsBase.hh"
 #include "properties/NonCommuting.hh"
@@ -42,19 +45,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "properties/SelfNonCommuting.hh"
 #include "properties/SelfAntiCommuting.hh"
 
-#include <sstream>
-
 //#define DEBUG
 
 using namespace cadabra;
 
 Algorithm::Algorithm(const Kernel& k, Ex& tr_)
-	: IndexClassifier(k),
+	: ExManip(k, tr_),
+//	  IndexClassifier(k),
 	  interrupted(false),
 	  number_of_calls(0), number_of_modifications(0),
 	  suppress_normal_output(false),
 	  discard_command_node(false),
-	  tr(tr_),
 	  pm(0),
 	  traverse_ldots(false)
 	{
@@ -72,9 +73,9 @@ void Algorithm::set_progress_monitor(ProgressMonitor *pm_)
 Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
 	{
 #if BOOST_VERSION > 105500
-	ScopedProgressGroup(pm, boost::core::demangle(typeid(*this).name()));
+	ScopedProgressGroup sp(pm, boost::core::demangle(typeid(*this).name()));
 #else
-	ScopedProgressGroup(typeid(*this).name());
+	ScopedProgressGroup sp(typeid(*this).name());
 #endif
 	
 	result_t ret=result_t::l_no_action;
@@ -115,9 +116,9 @@ Algorithm::result_t Algorithm::apply_generic(bool deep, bool repeat, unsigned in
 Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool repeat, unsigned int depth)
 	{
 #if BOOST_VERSION > 105500
-	ScopedProgressGroup(pm, boost::core::demangle(typeid(*this).name()));
+	ScopedProgressGroup sp(pm, boost::core::demangle(typeid(*this).name()));
 #else
-	ScopedProgressGroup(typeid(*this).name());
+	ScopedProgressGroup sp(typeid(*this).name());
 #endif
 
 	result_t ret=result_t::l_no_action;
@@ -473,18 +474,18 @@ void Algorithm::node_integer(iterator it, int num)
 	::multiply(it->multiplier, num);
 	}
 
-int Algorithm::index_parity(iterator it) const
-	{
-	sibling_iterator frst=tr.begin(tr.parent(it));
-	sibling_iterator fnd(it);
-	int sgn=1;
-	while(frst!=fnd) {
-		sgn=-sgn;
-		++frst;
-		}
-	return sgn;
-	}
-
+// int Algorithm::index_parity(iterator it) const
+// 	{
+// 	sibling_iterator frst=tr.begin(tr.parent(it));
+// 	sibling_iterator fnd(it);
+// 	int sgn=1;
+// 	while(frst!=fnd) {
+// 		sgn=-sgn;
+// 		++frst;
+// 		}
+// 	return sgn;
+// 	}
+// 
 
 unsigned int Algorithm::number_of_indices(iterator it)
 	{
@@ -525,8 +526,10 @@ index_iterator Algorithm::end_index(iterator it) const
 
 bool Algorithm::check_index_consistency(iterator it) const
 	{
-	index_map_t ind_free, ind_dummy;
-	classify_indices(it,ind_free,ind_dummy);
+	IndexClassifier ic(kernel);
+	
+	IndexClassifier::index_map_t ind_free, ind_dummy;
+	ic.classify_indices(it,ind_free,ind_dummy);
 	return true;
 	}
 
@@ -662,17 +665,18 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 	//	std::cout << "replacement" << std::endl;
 	//	print_classify_indices(std::cout, two);
 
-	index_map_t ind_free, ind_dummy;
-	index_map_t ind_free_full, ind_dummy_full;
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_map_t ind_free, ind_dummy;
+	IndexClassifier::index_map_t ind_free_full, ind_dummy_full;
 
 	if(false && still_inside_algo) {
 		if(tr.is_head(two)==false)
-			classify_indices_up(tr.parent(two), ind_free_full, ind_dummy_full);
+			ic.classify_indices_up(tr.parent(two), ind_free_full, ind_dummy_full);
 		}
 	else {
-		classify_indices_up(two, ind_free_full, ind_dummy_full); // the indices in everything except the replacement
+		ic.classify_indices_up(two, ind_free_full, ind_dummy_full); // the indices in everything except the replacement
 		}
-	classify_indices(two, ind_free, ind_dummy); // the indices in the replacement subtree
+	ic.classify_indices(two, ind_free, ind_dummy); // the indices in the replacement subtree
 #ifdef DEBUG
 	std::cerr << "dummies of " << *two->name << std::endl;
 	for(auto& ii: ind_dummy)
@@ -685,12 +689,12 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 		std::cerr << ii.first << std::endl;
 #endif
 
-	index_map_t must_be_empty;
-	index_map_t newly_generated;
+	IndexClassifier::index_map_t must_be_empty;
+	IndexClassifier::index_map_t newly_generated;
 
 	// Catch double index pairs
-	determine_intersection(ind_dummy_full, ind_dummy, must_be_empty);
-	index_map_t::iterator it=must_be_empty.begin();
+	ic.determine_intersection(ind_dummy_full, ind_dummy, must_be_empty);
+	IndexClassifier::index_map_t::iterator it=must_be_empty.begin();
 	while(it!=must_be_empty.end()) {
 #ifdef DEBUG
 		std::cerr << "double index pair" << std::endl;
@@ -702,8 +706,8 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 		//			txtout << "failed to find dummy property for " << *it->second->name << std::endl;
 		assert(dums);
 		Ex relabel
-		   =get_dummy(dums, &ind_dummy_full, &ind_dummy, &ind_free_full, &ind_free, &newly_generated);
-		newly_generated.insert(index_map_t::value_type(Ex(relabel),(*it).second));
+		   =ic.get_dummy(dums, &ind_dummy_full, &ind_dummy, &ind_free_full, &ind_free, &newly_generated);
+		newly_generated.insert(IndexClassifier::index_map_t::value_type(Ex(relabel),(*it).second));
 		//		txtout << " renamed to " << *relabel << std::endl;
 		do {
 			tr.replace_index((*it).second, relabel.begin(), true);
@@ -718,7 +722,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 	must_be_empty.clear();
 	//	newly_generated.clear(); // DO NOT ERASE, IDIOT!
 
-	determine_intersection(ind_free_full, ind_dummy, must_be_empty);
+	ic.determine_intersection(ind_free_full, ind_dummy, must_be_empty);
 	//for(auto& ii: must_be_empty) {
 	//	std::cerr << ii.first << std::endl;
 	//	}
@@ -731,9 +735,9 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 			throw ConsistencyException("Failed to find dummy property for $"+*it->second->name+"$ while renaming dummies.");
 		assert(dums);
 		Ex relabel
-		   =get_dummy(dums, &ind_dummy_full, &ind_dummy, &ind_free_full, &ind_free, &newly_generated);
+		   =ic.get_dummy(dums, &ind_dummy_full, &ind_dummy, &ind_free_full, &ind_free, &newly_generated);
 		relabel.begin()->fl.parent_rel=it->second->fl.parent_rel;
-		newly_generated.insert(index_map_t::value_type(relabel,(*it).second));
+		newly_generated.insert(IndexClassifier::index_map_t::value_type(relabel,(*it).second));
 		do {
 			tr.replace_index((*it).second, relabel.begin(), true);
 			++it;
@@ -743,7 +747,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 
 	must_be_empty.clear();
 	//	newly_generated.clear();
-	determine_intersection(ind_free, ind_dummy_full, must_be_empty);
+	ic.determine_intersection(ind_free, ind_dummy_full, must_be_empty);
 	it=must_be_empty.begin();
 	while(it!=must_be_empty.end()) {
 		// std::cerr << "triple index pair 2" << std::endl;
@@ -753,9 +757,9 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 			throw ConsistencyException("Failed to find dummy property for $"+*it->second->name+"$ while renaming dummies.");
 		assert(dums);
 		Ex relabel
-		   =get_dummy(dums, &ind_dummy_full, &ind_dummy, &ind_free_full, &ind_free, &newly_generated);
+		   =ic.get_dummy(dums, &ind_dummy_full, &ind_dummy, &ind_free_full, &ind_free, &newly_generated);
 		relabel.begin()->fl.parent_rel=it->second->fl.parent_rel;
-		newly_generated.insert(index_map_t::value_type(relabel,(*it).second));
+		newly_generated.insert(IndexClassifier::index_map_t::value_type(relabel,(*it).second));
 		do {
 			tr.replace_index((*it).second, relabel.begin(), true);
 			++it;
@@ -842,44 +846,6 @@ bool Algorithm::is_factorlike(iterator it)
 	return false;
 	}
 
-// This only returns true if the indicated node is a single non-reserved node (non-prod, non-sum, ...)
-// at the top level of an expression (real top, top of equation lhs/rhs, top of integral argument, ...).
-
-bool Algorithm::is_single_term(iterator it)
-	{
-	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit"
-	      && *it->name!="\\comma" && *it->name!="\\equals" && *it->name!="\\arrow") {
-
-		if(tr.is_head(it) || *tr.parent(it)->name=="\\equals" || *tr.parent(it)->name=="\\int") return true;
-		else if(*tr.parent(it)->name=="\\sum")
-			return true;
-		else if(*tr.parent(it)->name!="\\prod" && it->fl.parent_rel==str_node::parent_rel_t::p_none
-		        && kernel.properties.get<Accent>(tr.parent(it))==0 ) {
-#ifdef DEBUG
-			std::cerr << "Found single term in " << tr.parent(it) << std::endl;
-#endif
-			return true;
-			}
-		}
-	return false;
-	}
-
-bool Algorithm::is_nonprod_factor_in_prod(iterator it)
-	{
-	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit" && *it->name!="\\comma"
-	      && *it->name!="\\equals") {
-		try {
-			if(tr.is_head(it)==false && *tr.parent(it)->name=="\\prod")
-				return true;
-			}
-		catch(navigation_error& ex) {
-			// no parent, ignore
-			}
-		//		else return true;
-		}
-	return false;
-	}
-
 bool Algorithm::is_noncommuting(const Properties& properties, iterator it)
 	{
 	auto nc = properties.get<NonCommuting>(it);
@@ -894,69 +860,6 @@ bool Algorithm::is_noncommuting(const Properties& properties, iterator it)
 	auto sac = properties.get<SelfAntiCommuting>(it);
 	if(sac) return true;
 
-	return false;
-	}
-
-bool Algorithm::prod_wrap_single_term(iterator& it)
-	{
-	if(is_single_term(it)) {
-		force_node_wrap(it, "\\prod");
-		return true;
-		}
-	else return false;
-	}
-
-bool Algorithm::sum_wrap_single_term(iterator& it)
-	{
-	if(is_single_term(it)) {
-		force_node_wrap(it, "\\sum");
-		return true;
-		}
-	else return false;
-	}
-
-void Algorithm::force_node_wrap(iterator& it, std::string nm)
-	{
-	iterator prodnode=tr.insert(it, str_node(nm));
-	sibling_iterator fr=it, to=it;
-	++to;
-	tr.reparent(prodnode, fr, to);
-	prodnode->fl.bracket=it->fl.bracket;
-	it->fl.bracket=str_node::b_none;
-	if(nm!="\\sum") { // multipliers should sit on terms in a sum
-		prodnode->multiplier=it->multiplier;
-		one(it->multiplier);
-		}
-	it=prodnode;
-	}
-
-bool Algorithm::prod_unwrap_single_term(iterator& it)
-	{
-	if((*it->name)=="\\prod") {
-		if(tr.number_of_children(it)==1) {
-			multiply(tr.begin(it)->multiplier, *it->multiplier);
-			tr.begin(it)->fl.bracket=it->fl.bracket;
-			tr.begin(it)->multiplier=it->multiplier;
-			tr.flatten(it);
-			it=tr.erase(it);
-			return true;
-			}
-		}
-	return false;
-	}
-
-bool Algorithm::sum_unwrap_single_term(iterator& it)
-	{
-	if((*it->name)=="\\sum") {
-		if(tr.number_of_children(it)==1) {
-			multiply(tr.begin(it)->multiplier, *it->multiplier);
-			tr.begin(it)->fl.bracket=it->fl.bracket;
-			tr.begin(it)->multiplier=it->multiplier;
-			tr.flatten(it);
-			it=tr.erase(it);
-			return true;
-			}
-		}
 	return false;
 	}
 
@@ -1095,6 +998,90 @@ bool Algorithm::locate_object_set(const Ex& objs,
 	return true;
 	}
 
+bool Algorithm::derivative_acts_on(iterator it) const
+	{
+	if(tr.is_head(it)) return false;
+	const auto *pd = kernel.properties.get<PartialDerivative>(tr.parent(it));
+	if(pd) return true;
+
+	return false;
+	}
+
+std::set<Ex, tree_exact_less_obj> Algorithm::dependencies(iterator it, bool include_derivatives_of) const
+	{
+	tree_exact_less_obj comp(&kernel.properties);
+	std::set<Ex, tree_exact_less_obj> ret(comp);
+
+	// Is this node a coordinate itself? If so, add it.
+	const Coordinate *cd = kernel.properties.get<Coordinate>(it, true);
+	if(cd) {
+		if(include_derivatives_of || derivative_acts_on(it)==false) {
+			Ex cpy(it);
+			cpy.begin()->fl.bracket=str_node::b_none;
+			cpy.begin()->fl.parent_rel=str_node::p_none;
+			one(cpy.begin()->multiplier);
+			ret.insert(cpy);
+			}
+		}
+
+	// Determine explicit dependence on Coordinates, that is, collect
+	// parent_rel=p_none arguments, and add them directly if they
+	// carry a Coordinate property, or run the algorithm recursively
+	// if not (to catch e.g. exp(F(r)) depending on 'r'.
+
+	cadabra::do_subtree(tr, it, [&](Ex::iterator nd) -> Ex::iterator {
+		if(nd==it) return nd; // skip node itself, leads to indefinite recursion
+		if(nd->fl.parent_rel==str_node::p_none)
+			{
+			const Coordinate *cd = kernel.properties.get<Coordinate>(nd, true);
+			if(cd) {
+				if(include_derivatives_of || derivative_acts_on(nd)==false) {
+					Ex cpy(nd);
+					cpy.begin()->fl.bracket=str_node::b_none;
+					cpy.begin()->fl.parent_rel=str_node::p_none;
+					one(cpy.begin()->multiplier);
+					ret.insert(cpy);
+					}
+				}
+			else {
+				auto arg_deps=dependencies(nd);
+				if(arg_deps.size()>0)
+					for(const auto& new_dep: arg_deps)
+						ret.insert(new_dep);
+				}
+			}
+		return nd;
+		});
+
+	// Determine implicit dependence via Depends.
+#ifdef DEBUG
+	std::cerr << "deps for " << Ex(it) << std::endl;
+#endif
+
+	const DependsBase *dep = kernel.properties.get<DependsBase>(it, true);
+	if(dep) {
+#ifdef DEBUG
+		std::cerr << "implicit deps" << std::endl;
+#endif
+		Ex deps(dep->dependencies(kernel, it));
+		cadabra::do_list(deps, deps.begin(), [&](Ex::iterator nd) {
+			if(include_derivatives_of || derivative_acts_on(nd)==false) {
+				Ex cpy(nd);
+				cpy.begin()->fl.bracket=str_node::b_none;
+				cpy.begin()->fl.parent_rel=str_node::p_none;
+				ret.insert(cpy);
+				}
+			return true;
+			});
+#ifdef DEBUG
+		for(auto& e: ret)
+			std::cerr << e << std::endl;
+#endif
+		}
+
+	return ret;
+	}
+
 
 namespace cadabra {
 
@@ -1123,51 +1110,51 @@ namespace cadabra {
 		return res;
 		}
 
-	bool Algorithm::less_without_numbers(nset_t::iterator it1, nset_t::iterator it2)
-		{
-		std::string::const_iterator ch1=(*it1).begin();
-		std::string::const_iterator ch2=(*it2).begin();
-
-		while(ch1!=(*it1).end() && ch2!=(*it2).end()) {
-			if(isdigit(*ch1)) return true;   // bla1  < blaq
-			if(isdigit(*ch2)) return false;  // blaa !< bla1
-			if(*ch1>=*ch2)    return false;
-			++ch1;
-			++ch2;
-			}
-		if(ch1==(*it1).end()) {
-			if(ch2==(*it2).end())
-				return false;
-			else
-				return true;
-			}
-		return false;
-		}
-
-	bool Algorithm::equal_without_numbers(nset_t::iterator it1, nset_t::iterator it2)
-		{
-		std::string::const_iterator ch1=(*it1).begin();
-		std::string::const_iterator ch2=(*it2).begin();
-
-		while(ch1!=(*it1).end() && ch2!=(*it2).end()) {
-			if(isdigit(*ch1)) {
-				if(isdigit(*ch2))
-					return true;
-				else
-					return false;
-				}
-			if(*ch1!=*ch2) return false;
-			++ch1;
-			++ch2;
-			}
-		if(ch1==(*it1).end()) {
-			if(ch2==(*it2).end())
-				return true;
-			else
-				return false;
-			}
-		return false;
-		}
+//	bool Algorithm::less_without_numbers(nset_t::iterator it1, nset_t::iterator it2)
+//		{
+//		std::string::const_iterator ch1=(*it1).begin();
+//		std::string::const_iterator ch2=(*it2).begin();
+//
+//		while(ch1!=(*it1).end() && ch2!=(*it2).end()) {
+//			if(isdigit(*ch1)) return true;   // bla1  < blaq
+//			if(isdigit(*ch2)) return false;  // blaa !< bla1
+//			if(*ch1>=*ch2)    return false;
+//			++ch1;
+//			++ch2;
+//			}
+//		if(ch1==(*it1).end()) {
+//			if(ch2==(*it2).end())
+//				return false;
+//			else
+//				return true;
+//			}
+//		return false;
+//		}
+//
+//	bool Algorithm::equal_without_numbers(nset_t::iterator it1, nset_t::iterator it2)
+//		{
+//		std::string::const_iterator ch1=(*it1).begin();
+//		std::string::const_iterator ch2=(*it2).begin();
+//
+//		while(ch1!=(*it1).end() && ch2!=(*it2).end()) {
+//			if(isdigit(*ch1)) {
+//				if(isdigit(*ch2))
+//					return true;
+//				else
+//					return false;
+//				}
+//			if(*ch1!=*ch2) return false;
+//			++ch1;
+//			++ch2;
+//			}
+//		if(ch1==(*it1).end()) {
+//			if(ch2==(*it2).end())
+//				return true;
+//			else
+//				return false;
+//			}
+//		return false;
+//		}
 
 	bool Algorithm::compare_(const str_node& one, const str_node& two)
 		{

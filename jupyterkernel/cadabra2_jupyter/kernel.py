@@ -117,11 +117,11 @@ class CadabraJupyterKernel(ipykernel.kernelbase.Kernel):
             {"data": {"text/markdown": "{}".format(res_str)}, "metadata": {}},
         )
 
-    def _send_image(self, img):
+    def _send_image(self, img, img_type):
         self.send_response(
             self.iopub_socket,
             "display_data",
-            {"data": {"image/png": "{}".format(img.decode("utf-8"))}, "metadata": {}},
+            {"data": {"image/"+img_type: "{}".format(img.decode("utf-8"))}, "metadata": {}},
         )
 
     def _send_code(self, res_str):

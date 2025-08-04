@@ -93,6 +93,46 @@
   </div>
 </div>
 
+<div class='faq_item'>
+  <input type="radio" name="collapse" id="q_02_02">    
+  <h3 class="handle">
+    <label for="q_02_02">How can I select all terms which contain a particular symbol?</label>
+  </h3>
+  <div class="content">
+    Consider an expression like
+    <div class='verbatim'>
+      <div class="source donthyphenate">
+        <pre class='output'>ex:= A + A B + A B C + B C + D E;</pre>
+      </div>
+    </div>
+    There are two ways to use <tt>zoom</tt> to select terms which
+    contain <tt>A</tt>. One will select terms which <strong>only</strong>
+    contain the factor <tt>A</tt>,
+    <div class='verbatim'>
+      <div class="source donthyphenate">
+        <pre class='output'>zoom(ex, $A$);
+	</pre>
+      </div>
+    </div>
+    The other one selects all terms which have <tt>A</tt> <strong>as
+    well as</strong> other factors,
+    <div class='verbatim'>
+      <div class="source donthyphenate">
+        <pre class='output'>zoom(ex, $A B??$);
+	</pre>
+      </div>
+    </div>
+    You can combine these two to select all terms which contain either
+    a bare <tt>A</tt> or <tt>A</tt> multiplied with other things,
+    <div class='verbatim'>
+      <div class="source donthyphenate">
+        <pre class='output'>zoom(ex, $A, A B??$);
+	</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
 <h2>Error messages</h2>
 
 <div class='faq_item'>

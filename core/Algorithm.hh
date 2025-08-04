@@ -22,17 +22,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Stopwatch.hh"
 #include "Storage.hh"
-#include "Compare.hh"
 #include "Props.hh"
-#include "Exceptions.hh"
 #include "Kernel.hh"
 #include "IndexIterator.hh"
 #include "ProgressMonitor.hh"
-#include "IndexClassifier.hh"
-
-#include <map>
-#include <fstream>
-#include <cstddef>
+#include "ExManip.hh"
+#include "Compare.hh"
 
 namespace cadabra {
 
@@ -56,7 +51,7 @@ namespace cadabra {
 	/// The algorithm is, however, allowed to change the node itself or
 	/// replace it with another one, as long as it updates the iterator.
 
-	class Algorithm : public IndexClassifier {
+	class Algorithm : public ExManip /* , public IndexClassifier */ {
 		public:
 			/// Initialise the algorithm with a reference to the expression
 			/// tree, but do not yet do anything with this tree. Algorithms
@@ -64,13 +59,10 @@ namespace cadabra {
 			/// Kernel, so it is passed const.
 
 			Algorithm(const Kernel&, Ex&);
-
 			virtual ~Algorithm();
 
-			typedef Ex::iterator            iterator;
-			typedef Ex::post_order_iterator post_order_iterator;
-			typedef Ex::sibling_iterator    sibling_iterator;
-			typedef Ex::result_t            result_t;
+			typedef std::set<Ex, tree_exact_less_obj> Ex_set_t;
+			typedef Ex::result_t                      result_t;
 
 			bool interrupted;
 
@@ -151,8 +143,16 @@ namespace cadabra {
 			/// do not (yet) handle non-commuting behaviour.
 			static bool is_noncommuting(const Properties&, iterator);
 
+			/// Determine all the Coordinate dependencies of the object at 'it'. If
+			/// the flag is false, do not include derivatives of these coordinates
+			/// (e.g. when coordinates are dependent on parameters and derivatives
+			/// wrt. these parameters are present, do not include these as dependencies).
+			Ex_set_t dependencies(iterator it, bool include_derivatives_of=true) const;
+
+			/// Is this a symbol on which a derivative acts?
+			bool derivative_acts_on(iterator it) const;
+			
 		protected:
-			Ex& tr;
 			ProgressMonitor *pm;
 
 			// The main entry point which is used by the public entry points listed
@@ -162,9 +162,9 @@ namespace cadabra {
 			virtual result_t apply(iterator&)=0;
 
 			// Index stuff
-			int      index_parity(iterator) const;
-			static bool less_without_numbers(nset_t::iterator, nset_t::iterator);
-			static bool equal_without_numbers(nset_t::iterator, nset_t::iterator);
+			// int      index_parity(iterator) const;
+			// static bool less_without_numbers(nset_t::iterator, nset_t::iterator);
+			// static bool equal_without_numbers(nset_t::iterator, nset_t::iterator);
 
 			/// Finding objects in sets.
 			typedef std::pair<sibling_iterator, sibling_iterator> range_t;
@@ -185,23 +185,6 @@ namespace cadabra {
 			                               std::vector<unsigned int>& store);
 			static bool  compare_(const str_node&, const str_node&);
 
-
-			bool     is_single_term(iterator);
-			bool     is_nonprod_factor_in_prod(iterator);
-
-			/// Take a single non-product node in a sum and wrap it in a
-			/// product node, so it can be handled on the same footing as a proper product.
-			bool     prod_wrap_single_term(iterator&);
-			bool     prod_unwrap_single_term(iterator&);
-			bool     sum_wrap_single_term(iterator&);
-			bool     sum_unwrap_single_term(iterator&);
-
-			/// Wrap a term in a product or sum in a node with indicated
-			/// name, irrespective of its parent (it usually makes more
-			/// sense to call the safer prod_wrap_single_term or
-			/// sum_wrap_single_term above). Sets the iterator to the
-			/// new node.
-			void     force_node_wrap(iterator&, std::string);
 
 			/// Figure out whether two objects (commonly indices) are separated by a derivative
 			/// operator, as in \f[ \partial_{a}{A_{b}} C^{b} \f].

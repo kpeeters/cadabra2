@@ -37,7 +37,7 @@ bool Trace::parse(Kernel&, keyval_t& keyvals)
 	return true;
 	}
 
-void Trace::validate(const Kernel&, const Ex& ) const
+void Trace::validate(Kernel&, std::shared_ptr<Ex> ) const
 	{
 	}
 

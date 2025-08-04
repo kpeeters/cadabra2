@@ -114,6 +114,21 @@ void ScriptThread::on_message(websocket_server::id_type ws_id, const std::string
 			document->queue_action(action);
 			gui->process_data();
 			}
+		else if(msg_action=="insert_text") {
+			std::string content = jmsg.value("content", "");
+			DataCell::id_t id;
+			id.id=0;
+			std::shared_ptr<ActionBase> action = std::make_shared<ActionInsertText>(id, 0, content);
+			action->callback = [this, ws_id, msg_serial, msg_action]() {
+				nlohmann::json msg;
+				msg["status"]="completed";
+				msg["serial"]=msg_serial;
+				msg["action"]=msg_action;
+				wserver.send(ws_id, msg.dump());
+				};
+			document->queue_action(action);
+			gui->process_data();
+			}
 		else if(msg_action=="add_cell") {
 			std::string content = jmsg.value("content", "");
 			uint64_t cell_id = jmsg.value("cell_id", uint64_t(0));

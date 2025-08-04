@@ -1,7 +1,9 @@
 
 #include <sstream>
 #include "Cleanup.hh"
+#include "Exceptions.hh"
 #include "Functional.hh"
+#include "IndexClassifier.hh"
 #include "algorithms/substitute.hh"
 #include "properties/Indices.hh"
 
@@ -85,13 +87,14 @@ substitute::substitute(const Kernel& k, Ex& tr, Ex& args_, bool partial)
 					}
 
 				// check whether there are dummies.
-				index_map_t ind_free, ind_dummy;
-				classify_indices(lhs, ind_free, ind_dummy);
+				IndexClassifier ic(kernel);
+				IndexClassifier::index_map_t ind_free, ind_dummy;
+				ic.classify_indices(lhs, ind_free, ind_dummy);
 				lhs_contains_dummies[arrow]= ind_dummy.size()>0;
 				ind_free.clear();
 				ind_dummy.clear();
 				if(rhs!=tr.end()) {
-					classify_indices(rhs, ind_free, ind_dummy);
+					ic.classify_indices(rhs, ind_free, ind_dummy);
 					rhs_contains_dummies[arrow]=ind_dummy.size()>0;
 					}
 				}
@@ -211,10 +214,11 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// replacement rule, and then replace nodes and subtrees in there
 	// based on how the pattern matching went.
 	Ex repl(rhs);
-	index_map_t ind_free, ind_dummy, ind_forced;
+	IndexClassifier ic(kernel);
+	IndexClassifier::index_map_t ind_free, ind_dummy, ind_forced;
 
 	if(rhs_contains_dummies[use_rule]) {
-		classify_indices(repl.begin(), ind_free, ind_dummy);
+		ic.classify_indices(repl.begin(), ind_free, ind_dummy);
 		//std::cerr << "rhs contains dummies " << ind_dummy.size() << std::endl;
 		}
 	else {
@@ -285,7 +289,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 				}
 			it->fl.bracket=remember_br;
 			if(rhs_contains_dummies[use_rule])
-				ind_forced.insert(index_map_t::value_type(Ex(it), it));
+				ind_forced.insert(IndexClassifier::index_map_t::value_type(Ex(it), it));
 			++it;
 
 			}
@@ -305,10 +309,10 @@ Algorithm::result_t substitute::apply(iterator& st)
 			DEBUGLN( std::cerr << "subtree replaced 2: " << repl << std::endl; );
 
 			subtree_insertion_points.push_back(tmp);
-			index_map_t ind_subtree_free, ind_subtree_dummy;
+			IndexClassifier::index_map_t ind_subtree_free, ind_subtree_dummy;
 			// FIXME: as in the name wildcard case above, we only need these
 			// next three lines if there are wildcards in the rhs.
-			classify_indices(tmp, ind_subtree_free, ind_subtree_dummy);
+			ic.classify_indices(tmp, ind_subtree_free, ind_subtree_dummy);
 			ind_forced.insert(ind_subtree_free.begin(), ind_subtree_free.end());
 			ind_forced.insert(ind_subtree_dummy.begin(), ind_subtree_dummy.end());
 			}
@@ -326,10 +330,10 @@ Algorithm::result_t substitute::apply(iterator& st)
 
 		DEBUGLN( std::cerr << "avoid dummy clashes" << std::endl; );
 
-		index_map_t must_be_empty;
-		determine_intersection(ind_forced, ind_dummy, must_be_empty);
-		index_map_t::iterator indit=must_be_empty.begin();
-		index_map_t added_dummies;
+		IndexClassifier::index_map_t must_be_empty;
+		ic.determine_intersection(ind_forced, ind_dummy, must_be_empty);
+		IndexClassifier::index_map_t::iterator indit=must_be_empty.begin();
+		IndexClassifier::index_map_t added_dummies;
 		// std::cerr << must_be_empty.size() << " dummies have to be relabelled" << std::endl;
 		while(indit!=must_be_empty.end()) {
 			Ex the_key=indit->first;
@@ -339,8 +343,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 				str << "Need to know an index set for " << Ex(*indit->second) << ".";
 				throw ConsistencyException(str.str());
 				}
-			Ex relabel=get_dummy(dums, &ind_dummy, &ind_forced, &added_dummies);
-			added_dummies.insert(index_map_t::value_type(relabel,(*indit).second));
+			Ex relabel=ic.get_dummy(dums, &ind_dummy, &ind_forced, &added_dummies);
+			added_dummies.insert(IndexClassifier::index_map_t::value_type(relabel,(*indit).second));
 			do {
 				// std::cerr << "replace index " << *(indit->second->name) << " with " << *(relabel.begin()->name) << std::endl;
 				tr.replace_index(indit->second,relabel.begin(), true);

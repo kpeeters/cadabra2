@@ -149,7 +149,12 @@ namespace cadabra {
 			// Throw an error if validation fails. Needs access to all other
 			// declared properties so that it can understand what the pattern
 			// means (which objects are indices etc.).
-			virtual void        validate(const Kernel&, const Ex&) const;
+			//
+			// This is currently also the point where properties are allowed
+			// to insert other, related properties (see e.g. `Indices`), and form
+			// that reason the Kernel parameter is not const. FIXME: split and
+			// then make Kernel const again).
+			virtual void        validate(Kernel&, std::shared_ptr<Ex>) const;
 
 			/// Display the property on the stream
 			//		virtual void        display(std::ostream&) const;

@@ -65,6 +65,12 @@ find_package(Threads)
 # Enumerate input files and directories.
 #---------------------------------------------------------------------------
 
+SET(RESERVED_NODE_SRC_FILES
+  ReservedNode.cc
+  Equals.cc
+  Sum.cc
+)
+
 SET(ALGORITHM_SRC_FILES
    algorithms/canonicalise.cc
    algorithms/collect_components.cc
@@ -91,6 +97,7 @@ SET(ALGORITHM_SRC_FILES
    algorithms/factor_in.cc
    algorithms/factor_out.cc
    algorithms/fierz.cc
+   algorithms/first_order_form.cc
    algorithms/flatten_product.cc
    algorithms/flatten_sum.cc
    algorithms/indexsort.cc
@@ -239,7 +246,9 @@ set(LOCAL_SRC_FILES
   TerminalStream.cc
   Exceptions.cc
   Exchange.cc
+  ExManip.cc
   Functional.cc
+  Grouping.cc
   Hash.cc
   IndexIterator.cc
   IndexClassifier.cc
@@ -259,7 +268,8 @@ set(LOCAL_SRC_FILES
   YoungTab.cc
   modules/xperm_new.cc
   ${CADABRA_LIBS_DIR}/whereami/whereami.c
-  ${CADABRA_LIBS_DIR}/base64/base64.cc  
+  ${CADABRA_LIBS_DIR}/base64/base64.cc
+  ${RESERVED_NODE_SRC_FILES}
   ${ALGORITHM_SRC_FILES}
   ${PROPERTY_SRC_FILES}
 )
@@ -327,6 +337,10 @@ if(IPO_SUPPORTED)
   set_target_properties(cadabra2 PROPERTIES LINK_FLAGS "-flto=auto")  
 endif()
 
+if(TBB_FOUND)
+  target_link_libraries(cadabra2 PRIVATE TBB::tbb)
+  target_compile_definitions(cadabra2 PRIVATE HAS_TBB)
+endif()
    
 # On Unix, don't link the extension module to libpython*.so
 # because some python executables are link to python static library for performance
@@ -445,35 +459,47 @@ endif()
 if(WIN32)
   message(STATUS "Not building C++ tests on Windows")
 else()
-  add_executable(test_internals
-    test_internals.cc
-  )
-  add_executable(test_benchmark
-    test_benchmark.cc
-  )
-  add_executable(test_multiplier
-    test_multiplier.cc
-    Multiplier.cc
-  )
   # We are linking the test with the full python module, which is a bit
   # wasteful, but splitting out the ${LOCAL_SRC_FILES} into a separate
   # library turned out to lead to linking errors with the algorithm
   # modules in `packages/` (missing typeinfo things). For now this works.
-  target_link_libraries(test_internals PRIVATE
-    cadabra2
-    ${GMPXX_LIBRARIES}
-    ${GMP_LIBRARIES}
-    ${Python_LIBRARIES}
+  if(Catch2_FOUND)
+    add_executable(test_internals
+      test_internals.cc
+    )
+    add_executable(test_multiplier
+      test_multiplier.cc
+      Multiplier.cc
+    )
+    target_link_libraries(test_internals PRIVATE
+      cadabra2
+      ${GMPXX_LIBRARIES}
+      ${GMP_LIBRARIES}
+      ${Python_LIBRARIES}
+      PRIVATE Catch2::Catch2WithMain
+    )
+    target_link_libraries(test_multiplier PRIVATE
+      ${GMPXX_LIBRARIES}
+      ${GMP_LIBRARIES}
+      PRIVATE Catch2::Catch2WithMain
+    )
+    catch_discover_tests(test_internals DL_PATHS "${CMAKE_CURRENT_BINARY_DIR}")
+    catch_discover_tests(test_multiplier)
+    set_target_properties(test_internals PROPERTIES
+      RPATH "${CMAKE_CURRENT_BINARY_DIR}"
+    )
+  endif()
+
+  # Some other tests which are more for diagnostics, not actual tests,
+  # so they do not run under control of catch2.
+  add_executable(test_benchmark
+    test_benchmark.cc
   )
   target_link_libraries(test_benchmark PRIVATE
     cadabra2
     ${GMPXX_LIBRARIES}
     ${GMP_LIBRARIES}
     ${Python_LIBRARIES}
-  )
-  target_link_libraries(test_multiplier PRIVATE
-    ${GMPXX_LIBRARIES}
-    ${GMP_LIBRARIES}
   )
 endif()
 
@@ -613,9 +639,9 @@ if(NOT WIN32)
     )
 endif()
 
-if(APPIMAGE_MODE)
-  # Install sympy. Matplotlib would be nice, but that pulls in blas and fortran and zillions of other things,
-  # which then don't link properly anymore either.
-  install(CODE      "execute_process(COMMAND echo \"Installing python things in \$ENV{DESTDIR}|${CMAKE_INSTALL_PREFIX}|${PYTHON_SITE_PATH}\")")
-  install(CODE      "execute_process(COMMAND pip3 install --target \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PATH} sympy matplotlib)")
-endif()
+# if(APPIMAGE_MODE)
+#   # Install sympy. Matplotlib would be nice, but that pulls in blas and fortran and zillions of other things,
+#   # which then don't link properly anymore either.
+#   install(CODE      "execute_process(COMMAND echo \"Installing python things in \$ENV{DESTDIR}|${CMAKE_INSTALL_PREFIX}|${PYTHON_SITE_PATH}\")")
+#   install(CODE      "execute_process(COMMAND pip3 install --target \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PATH} sympy matplotlib)")
+# endif()
