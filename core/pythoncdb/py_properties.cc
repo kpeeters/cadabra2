@@ -340,7 +340,7 @@ namespace cadabra {
 		pybind11::dict globals = get_globals();
 		bool handles_latex_view = globals["server"].attr("handles")(pybind11::str("latex_view")).cast<bool>();
 		*/
-
+		
 		pybind11::list ret;
 		for (const auto& [_, pats] : props.pats_dict) {
 			for (auto it = pats.begin(); it != pats.end(); ++it) {
@@ -399,6 +399,97 @@ namespace cadabra {
 		}
 		return ret;
 	}
+
+
+	pybind11::dict properties_dict() {
+		Kernel* kernel = get_kernel_from_scope();
+		Properties& props = kernel->properties;
+
+		// Dictionary of properties, keyed by property type
+		pybind11::dict ret;
+		const property* last_list_prop = nullptr;
+		Ex_ptr ex_pattern_list = nullptr;
+
+		for (const auto& [_, pats] : props.pats_dict) {
+			for (auto it = pats.begin(); it != pats.end(); ++it) {
+				if (it->first->hidden()) continue;
+
+				const property* prop   = it->first;
+				const list_property* list_prop = dynamic_cast<const list_property*>(prop);
+
+				// Close the current list property if necessary
+				// (when prop isn't a list or not the same list)
+				if (last_list_prop && list_prop != last_list_prop) {
+					pybind11::object bound_property =
+						py_property_registry.create_bound_property(last_list_prop, ex_pattern_list);
+					if (bound_property) {
+						// Key: Python class name of the bound property
+						pybind11::str key =
+							pybind11::str(bound_property.get_type().attr("__name__"));
+
+						// Ensure a list exists for this key and append
+						if (!ret.contains(key))
+							ret[key] = pybind11::list();
+
+						ret[key].cast<pybind11::list>().append(bound_property);
+					} 
+					last_list_prop = nullptr;
+				}
+
+				// Open a new list property if prop is a list and no existing last list
+				if (!last_list_prop && list_prop) {
+					// Open a new list property		
+					last_list_prop = list_prop;
+					ex_pattern_list = std::make_shared<Ex>("\\comma");
+				}
+
+				// Add list property or add regular property
+				if (list_prop) {
+					ex_pattern_list->append_child(ex_pattern_list->begin(), it->second->obj.begin());
+				} else {
+					Ex_ptr          ex_ptr = std::make_shared<Ex>(it->second->obj);
+
+					pybind11::object bound_property =
+						py_property_registry.create_bound_property(prop, ex_ptr);
+
+					if (!bound_property)
+						continue;
+
+					// Key: Python class name of the bound property
+					pybind11::str key =
+						pybind11::str(bound_property.get_type().attr("__name__"));
+
+					// Ensure a list exists for this key and append
+					if (!ret.contains(key))
+						ret[key] = pybind11::list();
+
+					ret[key].cast<pybind11::list>().append(bound_property);
+				}
+
+			}
+			// If there is an open list property, close it.
+			if (last_list_prop) {
+				pybind11::object bound_property =
+					py_property_registry.create_bound_property(last_list_prop, ex_pattern_list);
+				if (bound_property) {
+					// Key: Python class name of the bound property
+					pybind11::str key =
+						pybind11::str(bound_property.get_type().attr("__name__"));
+
+					// Ensure a list exists for this key and append
+					if (!ret.contains(key))
+						ret[key] = pybind11::list();
+
+					ret[key].cast<pybind11::list>().append(bound_property);
+				}
+				last_list_prop = nullptr;
+				ex_pattern_list = nullptr;
+			}
+
+		}
+		return ret;
+	}
+
 	std::vector<Ex> indices_get_all(const Indices* indices, bool include_wildcards)
 	{
 		auto kernel = get_kernel_from_scope();
@@ -427,6 +518,7 @@ namespace cadabra {
 		m.def("properties", &list_properties);
 		m.def("properties2", &list_properties2);
 		m.def("properties3", &list_properties3);
+		m.def("properties_dict", &properties_dict);
 
 		py::class_<BoundPropertyBase, std::shared_ptr<BoundPropertyBase>>(m, "Property")
 			.def_property_readonly("for_obj", &BoundPropertyBase::get_ex);
@@ -460,6 +552,16 @@ namespace cadabra {
 		def_abstract_prop<Py_WeightBase>(m, "WeightBase")
 			.def("value", [](const Py_WeightBase & p, const std::string& forcedLabel) {
 				auto m = p.get_prop()->value(p.get_kernel(), p.get_it(), forcedLabel);
+				if(m.is_rational()) {
+					// This is mpq_class, convert to the Python equivalent.
+					pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
+					pybind11::object mult = mpq(m.get_rational().get_num().get_si(), m.get_rational().get_den().get_si());
+					return mult;
+					}
+				else return pybind11::cast(m.get_double());
+				})
+			.def("value", [](const Py_WeightBase & p) {
+				auto m = p.get_prop()->value(p.get_kernel(), p.get_it(), p.get_prop()->label);
 				if(m.is_rational()) {
 					// This is mpq_class, convert to the Python equivalent.
 					pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
