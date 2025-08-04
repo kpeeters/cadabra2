@@ -550,7 +550,6 @@ Ex IndexClassifier::get_dummy(const list_property *dums,
 	assert(dd);
 	throw ConsistencyException("Ran out of dummy indices for type \""+dd->set_name+"\".");
 	}
-	}
 
 Ex IndexClassifier::get_dummy(const list_property *dums, Ex::iterator it) const
 	{
