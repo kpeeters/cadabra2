@@ -284,6 +284,7 @@ namespace cadabra {
 		pybind11::list ret;
 		std::string res;
 		bool multi = false;
+		/*
 		for (auto it = props.pats.begin(); it != props.pats.end(); ++it) {
 			if (it->first->hidden()) continue;
 			
@@ -324,14 +325,15 @@ namespace cadabra {
 				res += ", ";
 				}
 			}
-		
+		*/
 		return ret;
 		}
 
 	std::vector<Ex> indices_get_all(const Indices* indices, bool include_wildcards)
 	{
 		auto kernel = get_kernel_from_scope();
-		auto its = kernel->properties.pats.equal_range(indices);
+		// auto its = kernel->properties.pats.equal_range(indices);
+		auto its = kernel->properties.pats_dict[typeid(*indices)].equal_range(indices);
 
 		std::vector<Ex> res;
 		for (auto it = its.first; it != its.second; ++it) {

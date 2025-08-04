@@ -84,16 +84,20 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 	// with this name.
 	const Indices *ind2=0;
 	if(dset2!="") {
-		auto f2=kernel.properties.pats.begin();
-		while(f2!=kernel.properties.pats.end()) {
-			ind2 = dynamic_cast<const Indices *>(f2->first);
-			if(ind2) {
-				if(ind2->set_name==dset2)
-					break;
-				else ind2=0;
+		auto pats_it = kernel.properties.pats_dict.find(typeid(Indices));
+		if (pats_it != kernel.properties.pats_dict.end()) {
+			auto pats = pats_it->second;
+			auto f2=pats.begin();
+			while(f2!=pats.end()) {
+				ind2 = dynamic_cast<const Indices *>(f2->first);
+				if(ind2) {
+					if(ind2->set_name==dset2)
+						break;
+					else ind2=0;
+					}
+				++f2;
 				}
-			++f2;
-			}
+		}
 		if(ind2==0)
 			throw ConsistencyException("No index set with name `"+dset2+"' known.");
 		}

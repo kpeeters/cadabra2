@@ -490,57 +490,60 @@ Ex IndexClassifier::get_dummy(const list_property *dums,
                               const index_map_t * four,
                               const index_map_t * five) const
 	{
-	std::pair<Properties::pattern_map_t::const_iterator, Properties::pattern_map_t::const_iterator>
-	pr=kernel.properties.pats.equal_range(dums);
+	auto pats_it = kernel.properties.pats_dict.find(typeid(*dums));
+	if (pats_it != kernel.properties.pats_dict.end()) {
+		Properties::pattern_map_t pats = pats_it->second;
+		std::pair<Properties::pattern_map_t::const_iterator, Properties::pattern_map_t::const_iterator> pr=pats.equal_range(dums);
 
-	// std::cerr << "finding index not in: " << std::endl;
-	// if(one)
-	// 	for(auto& i: *one)
-	// 		std::cerr << i.first << std::endl;
-	// if(two)
-	// 	for(auto& i: *two)
-	// 		std::cerr << i.first << std::endl;
-	// if(three)
-	// 	for(auto& i: *three)
-	// 		std::cerr << i.first << std::endl;
-	// if(four)
-	// 	for(auto& i: *four)
-	// 		std::cerr << i.first << std::endl;
-	// if(five)
-	// 	for(auto& i: *five)
-	// 		std::cerr << i.first << std::endl;
+		// std::cerr << "finding index not in: " << std::endl;
+		// if(one)
+		// 	for(auto& i: *one)
+		// 		std::cerr << i.first << std::endl;
+		// if(two)
+		// 	for(auto& i: *two)
+		// 		std::cerr << i.first << std::endl;
+		// if(three)
+		// 	for(auto& i: *three)
+		// 		std::cerr << i.first << std::endl;
+		// if(four)
+		// 	for(auto& i: *four)
+		// 		std::cerr << i.first << std::endl;
+		// if(five)
+		// 	for(auto& i: *five)
+		// 		std::cerr << i.first << std::endl;
 
-	while(pr.first!=pr.second) {
-		// std::cerr << "trying: " << std::endl;
+		while(pr.first!=pr.second) {
+			// std::cerr << "trying: " << std::endl;
 		// std::cerr << pr.first->second->obj << std::endl;
-		if(pr.first->second->obj.begin()->is_autodeclare_wildcard()) {
+			if(pr.first->second->obj.begin()->is_autodeclare_wildcard()) {
 			// std::cerr << "is autodeclare wildcard" << std::endl;
-			std::string base=*pr.first->second->obj.begin()->name_only();
-			int used=max_numbered_name(base, one, two, three, four, five);
-			std::ostringstream str;
-			str << base << used+1;
-			//			txtout << "going to use " << str.str() << std::endl;
-			nset_t::iterator newnm=name_set.insert(str.str()).first;
-			Ex ret;
-			ret.set_head(str_node(newnm));
-			return ret;
-			}
-		else {
-			// std::cerr << "is NOT autodeclare" << std::endl;
-			const Ex& inm=(*pr.first).second->obj;
-			// BUG: even if only _{a} is in the used map, we should not
-			// accept ^{a}. But since ...
-			if(index_in_set(inm, one)==false   &&
-			      index_in_set(inm, two)==false   &&
-			      index_in_set(inm, three)==false &&
-			      index_in_set(inm, four)==false  &&
-			      index_in_set(inm, five)==false) {
-				// std::cerr << "ok to use " << inm << std::endl;
-				return inm;
+				std::string base=*pr.first->second->obj.begin()->name_only();
+				int used=max_numbered_name(base, one, two, three, four, five);
+				std::ostringstream str;
+				str << base << used+1;
+				//			txtout << "going to use " << str.str() << std::endl;
+				nset_t::iterator newnm=name_set.insert(str.str()).first;
+				Ex ret;
+				ret.set_head(str_node(newnm));
+				return ret;
 				}
+			else {
+			// std::cerr << "is NOT autodeclare" << std::endl;
+				const Ex& inm=(*pr.first).second->obj;
+				// BUG: even if only _{a} is in the used map, we should not
+				// accept ^{a}. But since ...
+				if(index_in_set(inm, one)==false   &&
+					index_in_set(inm, two)==false   &&
+					index_in_set(inm, three)==false &&
+					index_in_set(inm, four)==false  &&
+					index_in_set(inm, five)==false) {
+					// std::cerr << "ok to use " << inm << std::endl;
+					return inm;
+					}
+				}
+			++pr.first;
 			}
-		++pr.first;
-		}
+	}
 
 	const Indices *dd=dynamic_cast<const Indices *>(dums);
 	assert(dd);
