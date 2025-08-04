@@ -559,7 +559,7 @@ void Properties::insert_list_prop(const std::vector<Ex>& its, const list_propert
 	{
 	assert(its.size()>0);
 	
-	auto pats = pats_dict[typeid(*pr)];
+	auto& pats = pats_dict[typeid(*pr)];
 	assert(pats.find(pr)==pats.end()); // identical properties have to be assigned through insert_list_prop
 
 	/* Description of below code

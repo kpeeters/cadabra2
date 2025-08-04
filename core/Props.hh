@@ -283,7 +283,7 @@ namespace cadabra {
 
 			registered_property_map_t     registered_properties;
 			// typedef std::pair<pattern *, const property *>  pat_prop_pair_t;
-			typedef std::pair<const property *, pattern *>  prop_pat_pair_t;
+			typedef std::pair<const property * const, pattern *>  prop_pat_pair_t;
 
 			// Register a type by template. Usage: `register_property_type<T>();`
 			// Just calls `registered_properties.register_type<T>()`
@@ -333,7 +333,8 @@ namespace cadabra {
 			 * 
 			 **************************************************************************************/
 			typedef std::multimap<const property *, pattern *>                      	   pattern_map_t;
-			typedef boost::container::flat_multimap<const property*, pattern*>             prop_pat_map_t;
+			// typedef boost::container::flat_multimap<const property*, pattern*>             prop_pat_map_t;
+			typedef std::multimap<const property *, pattern *>					           prop_pat_map_t;
 
 			typedef std::map<std::type_index, prop_pat_map_t> 			   				   prop_pat_typemap_t;
 			typedef std::map<nset_t::iterator, prop_pat_typemap_t, nset_it_less>           property_dictmap_t;
@@ -388,9 +389,6 @@ namespace cadabra {
 			//		property_map_t::iterator      get_equivalent(Ex::iterator,
 			//																	  property_map_t::iterator=props.begin());
 					
-			class iterator;
-			class const_iterator;
-
 			/// Erases property completely.
 			void erase(const property*);
 			/// Erases pattern from a given property, leaving other patterns alone.
@@ -430,263 +428,122 @@ namespace cadabra {
 
 
 		public:
-			/// Specialized property iterator for iterating over properties in a prop_pat_typemap_t that match a condition.
-			
-			class iterator; // forward declaration
-			class const_iterator {
+			// Need specialized iterator and const_iterator classes. These are built from iterator_base below.
+			template <bool IsConst>
+			class iterator_base {
+			public:
+				using map_type = std::conditional_t<IsConst, const prop_pat_typemap_t, prop_pat_typemap_t>;
+				using outer_iterator = std::conditional_t<IsConst, typename prop_pat_typemap_t::const_iterator, typename prop_pat_typemap_t::iterator>;
+				using inner_iterator = std::conditional_t<IsConst, typename prop_pat_map_t::const_iterator, typename prop_pat_map_t::iterator>;
 
 				using iterator_category = std::bidirectional_iterator_tag;
 				using difference_type   = std::ptrdiff_t;
-				using value_type        = const prop_pat_pair_t;
-				using pointer           = value_type*;
-				using reference         = value_type&;
+				using value_type = std::conditional_t<IsConst, const prop_pat_pair_t, prop_pat_pair_t>;
+				using pointer = value_type*;
+				using reference = value_type&;
 
-				using InnerIter =  prop_pat_map_t::const_iterator;
-				using OuterIter  = prop_pat_typemap_t::const_iterator;
+				using condition_t = std::function<bool(const iterator_base<IsConst>&)>;
 
-				public:
-					const_iterator(const prop_pat_typemap_t* m, std::function<bool(const const_iterator&)> condition, bool is_end = false) : typemap_(m), condition_(condition) {
-						if (is_end) {
-							outer_it_ = typemap_->end();
-							inner_it_ = InnerIter();
-						} else {
-							outer_it_ = typemap_->begin();
-							skip_ahead();
-						}
+				iterator_base(map_type* m, condition_t cond, bool is_end = false)
+					: typemap_(m), condition_(std::move(cond)) {
+					if (is_end) {
+						outer_it_ = typemap_->end();
+						inner_it_ = inner_iterator();
+					} else {
+						outer_it_ = typemap_->begin();
+						skip_ahead();
 					}
-					/*
-					// Convert Properties::iterator to Properties::const_iterator
-					const_iterator(iterator it) {
-						typemap_ = it.typemap_;
-						condition_ = it.condition_;
-						inner_it_ = it.inner_it_;
-						outer_it_ = it.outer_it_;
-					}
-					*/
-					const_iterator& operator++() {
-						++inner_it_;
-						if (inner_it_ == outer_it_->second.end()) {
-							++outer_it_;
-							skip_ahead();
-						}
-						return *this;
-					}
+				}
 
-					const_iterator& operator--() {
-						if (outer_it_ == typemap_->end()) { // End() to last element
-							--outer_it_;
-							skip_back();
-						}
-						if (inner_it_ == outer_it_->second.begin()) {
-							--outer_it_;
-							skip_back();
-						}
-						--inner_it_;
-						return *this;
-					}
-
-					/// Advance the iterator to the next property type
-					const_iterator& next_proptype() {
+				iterator_base<IsConst>& operator++() {
+					++inner_it_;
+					if (inner_it_ == outer_it_->second.end()) {
 						++outer_it_;
-						while (outer_it_ != typemap_->end()) {
-							if (condition_(*this)) {
-								inner_it_ = outer_it_->second.begin();
-								if (inner_it_ != outer_it_->second.end()) return *this;
-							}
-							++outer_it_;
-						}
-						return *this;
+						skip_ahead();
 					}
-					/// Return the current property type
-					std::type_index proptype() const {
-						return outer_it_->first;
+					return *this;
+				}
+
+				iterator_base<IsConst>& operator--() {
+					if (outer_it_ == typemap_->end()) {
+						--outer_it_;
+						skip_back();
 					}
-					/// Return the current prop_pat_map
-					const prop_pat_map_t& prop_pat_pairs() const {
-						return outer_it_->second;
+					if (inner_it_ == outer_it_->second.begin()) {
+						--outer_it_;
+						skip_back();
 					}
+					--inner_it_;
+					return *this;
+				}
 
-					reference operator*() const { return *inner_it_; }
-    				pointer operator->() const { return &(*inner_it_); }
+				iterator_base<IsConst>& next_proptype() {
+					++outer_it_;
+					skip_ahead();
+					return *this;
+				}
 
-					bool operator==(const const_iterator& other) const {
-						return inner_it_ == other.inner_it_ && outer_it_ == other.outer_it_;
-					}
+				std::type_index proptype() const {
+					return outer_it_->first;
+				}
 
-					bool operator!=(const const_iterator& other) const {
-						return !(*this == other);
-					}
+				const prop_pat_map_t& prop_pat_pairs() const {
+					return outer_it_->second;
+				}
 
-				private:
-					const prop_pat_typemap_t* typemap_;
-					std::function<bool(const const_iterator&)> condition_;
-					OuterIter outer_it_;
-					InnerIter inner_it_;
+				reference operator*() const { return *inner_it_; }
+				pointer operator->() const { return &(*inner_it_); }
 
-					// Skip ahead to the next property class if needed
-					void skip_ahead() {
-						while (outer_it_ != typemap_->end()) {
-							inner_it_ = outer_it_->second.begin();
-							if (condition_(*this)) {
-								// inner_it_ = outer_it_->second.begin();
-								if (inner_it_ != outer_it_->second.end()) return;
-							}
-							++outer_it_;
-						}
-						// At end, so inner_it_ is blank.
-						inner_it_ = InnerIter();
-					}
-					
-					// Skip back to the previous class if needed
-					void skip_back() {
-						while (outer_it_ != typemap_->begin()) {
-							inner_it_ = outer_it_->second.end();
-							if (condition_(*this)) {
-								// inner_it_ = outer_it_->second.end();
-								if (inner_it_ != outer_it_->second.begin()) {
-									--inner_it_;
-									return;
-								}
-							}
-							--outer_it_;
-						}
+				bool operator==(const iterator_base<IsConst>& other) const {
+					return inner_it_ == other.inner_it_ && outer_it_ == other.outer_it_;
+				}
 
-						// assert(outer_it_ == typemap_->begin())
+				bool operator!=(const iterator_base<IsConst>& other) const {
+					return !(*this == other);
+				}
+
+			protected:
+				map_type* typemap_;
+				condition_t condition_;
+				outer_iterator outer_it_;
+				inner_iterator inner_it_;
+
+				void skip_ahead() {
+					while (outer_it_ != typemap_->end()) {
+						inner_it_ = outer_it_->second.begin();
 						if (condition_(*this)) {
-							inner_it_ = outer_it_->second.end();
+							if (inner_it_ != outer_it_->second.end()) return;
+						}
+						++outer_it_;
+					}
+					inner_it_ = inner_iterator();
+				}
+
+				void skip_back() {
+					while (outer_it_ != typemap_->begin()) {
+						inner_it_ = outer_it_->second.end();
+						if (condition_(*this)) {
 							if (inner_it_ != outer_it_->second.begin()) {
 								--inner_it_;
 								return;
 							}
-						} else {
-							inner_it_ = outer_it_->second.begin();
 						}
-						// assert(inner_it_ == outer_it_->second.begin())
+						--outer_it_;
 					}
+					if (condition_(*this)) {
+						inner_it_ = outer_it_->second.end();
+						if (inner_it_ != outer_it_->second.begin()) {
+							--inner_it_;
+							return;
+						}
+					} else {
+						inner_it_ = outer_it_->second.begin();
+					}
+				}
 			};
 
-			class iterator {
-
-				using iterator_category = std::bidirectional_iterator_tag;
-				using difference_type   = std::ptrdiff_t;
-				using value_type        = prop_pat_pair_t;
-				using pointer           = value_type*;
-				using reference         = value_type&;
-
-				using InnerIter =  prop_pat_map_t::iterator;
-				using OuterIter  = prop_pat_typemap_t::iterator;
-				// friend class const_iterator; 
-
-				public:
-					iterator(prop_pat_typemap_t* m, std::function<bool(const iterator&)> condition, bool is_end = false) : typemap_(m), condition_(condition) {
-						if (is_end) {
-							outer_it_ = typemap_->end();
-							inner_it_ = InnerIter();
-						} else {
-							outer_it_ = typemap_->begin();
-							skip_ahead();
-						}
-					}
-
-					iterator& operator++() {
-						++inner_it_;
-						if (inner_it_ == outer_it_->second.end()) {
-							++outer_it_;
-							skip_ahead();
-						}
-						return *this;
-					}
-
-					iterator& operator--() {
-						if (outer_it_ == typemap_->end()) { // End() to last element
-							--outer_it_;
-							skip_back();
-						}
-						if (inner_it_ == outer_it_->second.begin()) {
-							--outer_it_;
-							skip_back();
-						}
-						--inner_it_;
-						return *this;
-					}
-
-					/// Advance the iterator to the next property type
-					iterator& next_proptype() {
-						++outer_it_;
-						while (outer_it_ != typemap_->end()) {
-							if (condition_(*this)) {
-								inner_it_ = outer_it_->second.begin();
-								if (inner_it_ != outer_it_->second.end()) return *this;
-							}
-							++outer_it_;
-						}
-						return *this;
-					}
-					/// Return the current property type
-					std::type_index proptype() const {
-						return outer_it_->first;
-					}
-					/// Return the current prop_pat_map
-					const prop_pat_map_t& prop_pat_pairs() const {
-						return outer_it_->second;
-					}
-
-					reference operator*() const { return *inner_it_; }
-    				pointer operator->() const { return &(*inner_it_); }
-
-					bool operator==(const iterator& other) const {
-						return inner_it_ == other.inner_it_ && outer_it_ == other.outer_it_;
-					}
-
-					bool operator!=(const iterator& other) const {
-						return !(*this == other);
-					}
-
-				private:
-					prop_pat_typemap_t* typemap_;
-					std::function<bool(const iterator&)> condition_;
-					OuterIter outer_it_;
-					InnerIter inner_it_;
-
-					// Skip ahead to the next property class if needed
-					void skip_ahead() {
-						while (outer_it_ != typemap_->end()) {
-							if (condition_(*this)) {
-								inner_it_ = outer_it_->second.begin();
-								if (inner_it_ != outer_it_->second.end()) return;
-							}
-							++outer_it_;
-						}
-						// At end, so inner_it_ is blank.
-						inner_it_ = InnerIter();
-					}
-					
-					// Skip back to the previous class if needed
-					void skip_back() {
-						while (outer_it_ != typemap_->begin()) {
-							if (condition_(*this)) {
-								inner_it_ = outer_it_->second.end();
-								if (inner_it_ != outer_it_->second.begin()) {
-									--inner_it_;
-									return;
-								}
-							}
-							--outer_it_;
-						}
-
-						// assert(outer_it_ == typemap_->begin())
-						if (condition_(*this)) {
-							inner_it_ = outer_it_->second.end();
-							if (inner_it_ != outer_it_->second.begin()) {
-								--inner_it_;
-								return;
-							}
-						} else {
-							inner_it_ = outer_it_->second.begin();
-						}
-						// assert(inner_it_ == outer_it_->second.begin())
-					}
-			};
+			typedef iterator_base<false> iterator;
+			typedef iterator_base<true>  const_iterator;
 			
 			/// Specialized property filter. Use to build PropertyIterators that satisfy a condition.
 			template<class Map, class It>
@@ -721,6 +578,9 @@ namespace cadabra {
 
 		};
 
+
+
+
 	template<class T>
 	const T* Properties::get(Ex::iterator it, bool ignore_parent_rel) const
 		{
@@ -748,8 +608,8 @@ namespace cadabra {
 
 	template<class T>
 	std::pair<const T*, const pattern *> Properties::get_with_pattern_ext(Ex::iterator it, Ex_comparator& comp,
-																								 int& serialnum, const std::string& label,
-																								 bool doserial, bool ignore_parent_rel) const
+																									int& serialnum, const std::string& label,
+																									bool doserial, bool ignore_parent_rel) const
 		{
 		auto helper_heritable = [this](const const_iterator& pit) {
 										return is_castable<Inherit<T>>(pit.proptype(), pit->first) || is_castable<PropertyInherit>(pit.proptype(), pit->first);
@@ -891,7 +751,7 @@ namespace cadabra {
 			// Are any of these properties heritable?
 			// FIXME: Below just uses PropertyInherit and not Inherit<T>?
 			auto heritable_props = PropertyFilter<const prop_pat_typemap_t, const_iterator>(&props_dict_it1->second, 
-				    // static_cast<bool(*)(const PropertyIterator&)>(&helper_castable<PropertyInherit>) );
+					// static_cast<bool(*)(const PropertyIterator&)>(&helper_castable<PropertyInherit>) );
 					([this](const const_iterator& pit) {return is_castable<PropertyInherit>(pit.proptype(), pit->first);}));
 			inherits1 = (heritable_props.begin() != heritable_props.end());
 
@@ -913,7 +773,7 @@ namespace cadabra {
 			for (auto pit1 = castable_props1.begin(), pit2 = castable_props2.begin();
 				pit1 != castable_props1.end() && pit2 != castable_props2.end(); )
 			{
-				// Because we use a std::map the std::type_index prop types are sorted
+				// Because we use a std::map, the std::type_index prop types are sorted
 				if (pit1.proptype() < pit2.proptype()) {
 					pit1.next_proptype();
 				}
@@ -921,7 +781,7 @@ namespace cadabra {
 					pit2.next_proptype();
 				}
 				else {
-					// it1 and it2 are of the same property type
+					// pit1 and pit2 are of the same property type
 
 					// Get the pat_prop_pairs for each
 					auto& prop_pats1 = pit1.prop_pat_pairs();
@@ -971,8 +831,14 @@ namespace cadabra {
 								// Return the recasted property
 								return dynamic_cast<const T *>( ppit1->first );
 							}
+							// Otherwise, continue.
+							++ppit1;
+							++ppit2;
 						}
 					}
+
+					pit1.next_proptype();
+					pit2.next_proptype();
 				}
 			}
 		}
@@ -1035,5 +901,9 @@ namespace cadabra {
 			return false;
 		}		
 	}
+
+
+
+
 
 	}

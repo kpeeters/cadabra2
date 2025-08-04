@@ -715,6 +715,7 @@ namespace cadabra {
 		.def("state", &Ex::state)
 		.def("reset", &Ex::reset_state)
 		.def("copy", [](const Ex& ex) { return std::make_shared<Ex>(ex); })
+		.def("size", [](const Ex& ex) { return ex.size();})
 		.def("changed", &Ex::changed_state)
 		.def("cleanup", &Ex_cleanup)
 		.def("__array__", [](Ex& ex) {

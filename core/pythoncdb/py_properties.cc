@@ -251,6 +251,9 @@ namespace cadabra {
 		using cpp_type = typename base_type::cpp_type;
 		using py_type = typename base_type::py_type;
 
+		// Register the property type for dynamic lookup.
+		py_property_registry.register_type<BoundPropT>();
+
 		return py_type(m, std::make_shared<cpp_type>()->name().c_str(), py::multiple_inheritance(), read_manual(m, "properties", std::make_shared<cpp_type>()->name().c_str()).c_str())
 			.def(py::init<Ex_ptr, Ex_ptr>(), py::arg("ex"), py::arg("param")=Ex{})
 
@@ -284,51 +287,118 @@ namespace cadabra {
 		pybind11::list ret;
 		std::string res;
 		bool multi = false;
-		/*
-		for (auto it = props.pats.begin(); it != props.pats.end(); ++it) {
-			if (it->first->hidden()) continue;
-			
-			// print the property name if we are at the end or if the next entry is for
-			// a different property.
-			decltype(it) nxt = it;
-			++nxt;
-			if (res == "" && (nxt != props.pats.end() && it->first == nxt->first)) {
-				if(handles_latex_view) res += "\\{";
-				else                   res += "{";
-				multi = true;
-				}
-			
-			std::ostringstream str;
-			if(handles_latex_view) {
-				DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
-				dt.output(str);
-				}
-			else {
-				DisplayTerminal dt(*get_kernel_from_scope(), it->second->obj);
-				dt.output(str);
-				}
-			
-			res += str.str();
-			
-			if (nxt == props.pats.end() || it->first != nxt->first) {
-				if (multi) {
-					if(handles_latex_view) res += "\\}";
-					else                   res += "}";
+		for (const auto& [_, pats] : props.pats_dict) {
+			for (auto it = pats.begin(); it != pats.end(); ++it) {
+				if (it->first->hidden()) continue;
+				
+				// print the property name if we are at the end or if the next entry is for
+				// a different property.
+				decltype(it) nxt = it;
+				++nxt;
+				if (res == "" && (nxt != pats.end() && it->first == nxt->first)) {
+					if(handles_latex_view) res += "\\{";
+					else                   res += "{";
+					multi = true;
 					}
-				multi = false;
-				res += "::\\texttt{";
-				res += (*it).first->name() + "}";
-				ret.append(LaTeXString(res));
-				res = "";
-				}
-			else {
-				res += ", ";
+				
+				std::ostringstream str;
+				if(handles_latex_view) {
+					DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
+					dt.output(str);
+					}
+				else {
+					DisplayTerminal dt(*get_kernel_from_scope(), it->second->obj);
+					dt.output(str);
+					}
+				
+				res += str.str();
+				
+				if (nxt == pats.end() || it->first != nxt->first) {
+					if (multi) {
+						if(handles_latex_view) res += "\\}";
+						else                   res += "}";
+						}
+					multi = false;
+					res += "::\\texttt{";
+					res += (*it).first->name() + "}";
+					ret.append(LaTeXString(res));
+					res = "";
+					}
+				else {
+					res += ", ";
+					}
 				}
 			}
-		*/
 		return ret;
 		}
 
+	pybind11::list list_properties2() {
+		Kernel* kernel = get_kernel_from_scope();
+		Properties& props = kernel->properties;
+
+		/*
+		pybind11::dict globals = get_globals();
+		bool handles_latex_view = globals["server"].attr("handles")(pybind11::str("latex_view")).cast<bool>();
+		*/
+
+		pybind11::list ret;
+		for (const auto& [_, pats] : props.pats_dict) {
+			for (auto it = pats.begin(); it != pats.end(); ++it) {
+				if (it->first->hidden()) continue;
+				const property* prop = it->first;
+				Ex_ptr ex_ptr = std::make_shared<Ex>(it->second->obj);
+				auto bound_property = py_property_registry.create_bound_property(prop, ex_ptr);
+				if (bound_property) {
+					ret.append(bound_property);
+				} else {
+					// Nothing to do yet.
+				}
+			}
+		}
+		return ret;
+	}
+
+
+	pybind11::list list_properties3() {
+		Kernel* kernel = get_kernel_from_scope();
+		Properties& props = kernel->properties;
+
+		/*
+		pybind11::dict globals = get_globals();
+		bool handles_latex_view = globals["server"].attr("handles")(pybind11::str("latex_view")).cast<bool>();
+		*/
+
+		pybind11::list ret;
+
+		for (const auto& [_, pats] : props.pats_dict) {
+			for (auto it = pats.begin(); it != pats.end(); ++it) {
+				if (it->first->hidden()) continue;
+
+				auto nxt = it;
+				++nxt;
+				if (nxt != pats.end() && it->first == nxt->first) {
+					// If nxt property is the same, bind them together in a list
+					if (it->first->hidden()) continue;
+					pybind11::list shared_property;
+					while (it != pats.end() && it->first == nxt->first) {
+						const property* prop = it->first;
+						Ex_ptr ex_ptr = std::make_shared<Ex>(it->second->obj);
+						auto bound_property = py_property_registry.create_bound_property(prop, ex_ptr);
+						shared_property.append(bound_property);
+						it++;
+					}
+					it--;
+					ret.append(shared_property);
+				} else {
+					const property* prop = it->first;
+					Ex_ptr ex_ptr = std::make_shared<Ex>(it->second->obj);
+					auto bound_property = py_property_registry.create_bound_property(prop, ex_ptr);
+					ret.append(bound_property);
+				}
+			}
+		}
+		return ret;
+	}
 	std::vector<Ex> indices_get_all(const Indices* indices, bool include_wildcards)
 	{
 		auto kernel = get_kernel_from_scope();
@@ -355,6 +425,8 @@ namespace cadabra {
 		{
 
 		m.def("properties", &list_properties);
+		m.def("properties2", &list_properties2);
+		m.def("properties3", &list_properties3);
 
 		py::class_<BoundPropertyBase, std::shared_ptr<BoundPropertyBase>>(m, "Property")
 			.def_property_readonly("for_obj", &BoundPropertyBase::get_ex);
@@ -560,4 +632,6 @@ namespace cadabra {
 
 
 		}
+
+	BoundPropertyRegistry py_property_registry;
 	}
