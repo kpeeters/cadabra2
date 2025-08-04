@@ -1,3 +1,17 @@
+#ifdef NDEBUG
+#  undef NDEBUG
+#endif
+#include <cassert>
+
+// #define TEST
+
+#ifdef TEST
+	#define IF_TEST(...) __VA_ARGS__
+#else
+	#define IF_TEST(...)
+#endif
+
+
 
 #include <sstream>
 #include "Cleanup.hh"
@@ -233,11 +247,10 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// NOTE: this does not yet insert the replacement into the main tree!
 
 	iterator it=repl.begin();
-	Ex_comparator::replacement_map_t::iterator loc;
-	Ex_comparator::subtree_replacement_map_t::iterator sloc;
-
-
+	IF_TEST(Ex_comparator::replacement_map_t::iterator loc;)
 	Ex_comparator::new_replacement_map_t::iterator nloc;
+
+	Ex_comparator::subtree_replacement_map_t::iterator sloc;
 
 	std::vector<iterator> subtree_insertion_points;
 	while(it!=repl.end()) {
@@ -246,20 +259,26 @@ Algorithm::result_t substitute::apply(iterator& st)
 		// For some reason 'a?' is not found!?! Well, that's presumably because _{a?} does not
 		// match ^{a?}. (though this does match when we write 'i' instead of a?.
 
-		loc=comparator.replacement_map.find(Ex(it));
 		nloc = comparator.new_replacement_map.find({it, repl_t::same});
-		assert( (loc==comparator.replacement_map.end()) == (nloc==comparator.new_replacement_map.end()) );
-		if(loc==comparator.replacement_map.end() && it->is_name_wildcard() && tr.number_of_children(it)!=0) {
-			Ex tmp(it);
-			tmp.erase_children(tmp.begin());
-			loc=comparator.replacement_map.find(tmp);
+		IF_TEST(
+			loc=comparator.replacement_map.find(Ex(it));
+			assert( (loc==comparator.replacement_map.end()) == (nloc==comparator.new_replacement_map.end()) );
+		)
+		
+		
+		if(nloc==comparator.new_replacement_map.end() && it->is_name_wildcard() && tr.number_of_children(it)!=0) {
 			nloc=comparator.new_replacement_map.find({it, repl_t::erase_children});
 			is_stripped=true;
+			IF_TEST(
+				Ex tmp(it);
+				tmp.erase_children(tmp.begin());
+				loc=comparator.replacement_map.find(tmp);
+			)
 			}
 
 		//std::cerr << "consider element of repl " << Ex(it) << std::endl;
-		assert( (loc==comparator.replacement_map.end()) == (nloc==comparator.new_replacement_map.end()) );
-		if(loc!=comparator.replacement_map.end()) { // name wildcards
+		IF_TEST( assert( (loc==comparator.replacement_map.end()) == (nloc==comparator.new_replacement_map.end()) ); )
+		if(nloc!=comparator.new_replacement_map.end()) { // name wildcards
 			DEBUGLN( std::cerr << "wildcard replaced: " << loc->first << " -> " << loc->second << std::endl; )
 
 			// When a replacement is made here, and the index is actually
@@ -278,11 +297,19 @@ Algorithm::result_t substitute::apply(iterator& st)
 				// TODO: should we replace brackets here too?
 				DEBUGLN( std::cerr << "stripped replacing " << it
 							<< " with " << (*loc).second.begin() << " * " << *it->multiplier << std::endl; );
-				it->name=(*loc).second.begin()->name;
+				it->name=nloc->second.first->name;
 				// See the comment below about multipliers.
-				multiply(it->multiplier, *(*loc).second.begin()->multiplier);
+				multiply(it->multiplier, *nloc->second.first->multiplier);
 				// assert((*loc).second.begin()->fl == (*nloc).second.first.begin()->fl);
-				it->fl=(*loc).second.begin()->fl;
+				it->fl= nloc->second.first->fl;
+				switch(nloc->second.second) {
+					case repl_t::erase_parent_rel:
+						it->fl.parent_rel = str_node::parent_rel_t::p_none;
+						break;
+					case repl_t::flip_parent_rel:
+						it->flip_parent_rel();
+						break;
+					}
 				}
 			else {
 				// Consider "A? -> 3 A?". If "A?" matches "2 C", then the replacement
@@ -292,7 +319,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 				multiplier_t mt=*it->multiplier;
 				DEBUGLN( std::cerr << "replacing " << it
 							<< " with " << (*loc).second.begin() << " * " << mt << std::endl; );
-				it=tr.replace_index(it, (*loc).second.begin()); //, true);
+				// it=tr.replace_index(it, (*loc).second.begin()); //, true);
+				it=tr.replace_index(it, resolve_lazy(nloc->second).begin()); //, true);
 				multiply(it->multiplier, mt);
 				}
 			it->fl.bracket=remember_br;

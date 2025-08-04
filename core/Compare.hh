@@ -73,6 +73,8 @@ namespace cadabra {
 			
 	};
 
+	Ex resolve_lazy(Lazy_Ex lazy);
+
 	int subtree_compare(const Properties*,
 	                    Lazy_Ex one, Lazy_Ex two,
 	                    int mod_prel=-2, bool checksets=true, int compare_multiplier=-2,
