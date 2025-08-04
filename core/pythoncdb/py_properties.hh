@@ -38,15 +38,22 @@ namespace cadabra {
 		// We keep a pointer to the C++ property, so it is possible to
 		// query properties using the Python interface. However, this C++
 		// object is owned by the C++ kernel and does not get destroyed
-		// when the Python object goes out of scope.
-		const property* prop;
+		// when the Python object goes out of scope. Member functions
+		// should always call validate(), which sets prop = nullptr if invalid.
+		mutable const property* prop;
 
-		std::vector<const pattern*> pats;
-		
 		// We also keep a shared pointer to the expression for which we
 		// have defined this property, so that we can print sensible
 		// information.
-		Ex_ptr for_obj;
+		mutable Ex_ptr for_obj;
+
+		/// Validate the property and return the associated patterns.
+		/// If the property is invalid, prop is set to nullptr.
+		void validate() const;
+
+		// FIXME: The above is a mess because we now call validate() everywhere.
+		// None of these are actually const, because prop, for_obj above are
+		// mutable. It would make more sense to just eliminate the const everywhere.
 	};
 
 

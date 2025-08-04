@@ -559,7 +559,8 @@ void Properties::insert_prop_old(const Ex& et, const property *pr)
 	}
 */
 
-void Properties::insert_list_prop(const std::vector<Ex>& its, const list_property*& pr)
+// Insert a list property into the kernel. 
+const list_property* Properties::insert_list_prop(const std::vector<Ex>& its, const list_property* pr)
 	{
 	assert(its.size()>0);
 	
@@ -574,7 +575,7 @@ void Properties::insert_list_prop(const std::vector<Ex>& its, const list_propert
 	
 	If we find one of the same type and `equals` returns `exact_match`, we discard (and delete)
 	the list_property pointer. This ensures e.g. that there is only one
-	Indices property with the label "vector". The code the continues, as if this property was the
+	Indices property with the label "vector". The code then continues, as if this property was the
 	one passed to `insert_list_prop`.
 
 	If we find a list property that returns `id_match`, we delete that older list property.
@@ -674,6 +675,7 @@ void Properties::insert_list_prop(const std::vector<Ex>& its, const list_propert
 		props_dict[pat->obj.begin()->name_only()][typeid(*pr)].emplace(pr, pat);
 		pats.emplace(pr, pat);
 		}
+	return pr;
 	}
 
 
@@ -727,10 +729,12 @@ d,e should have their property removed.
 
 // Insert a property for the given pattern Ex. Determines whether the property
 // is a list property or a normal one, and dispatches accordingly.
+// Returns a pointer to the new property. (For a list property, this may differ
+// from the original pointer.)
 
-std::string Properties::master_insert(Ex proptree, const property *thepropbase)
+const property* Properties::master_insert(Ex proptree, const property *thepropbase)
 	{
-	std::ostringstream str;
+	// std::ostringstream str;
 
 	Ex::sibling_iterator st=proptree.begin();
 
@@ -765,10 +769,10 @@ std::string Properties::master_insert(Ex proptree, const property *thepropbase)
 				obj2.begin()->fl.parent_rel=str_node::p_sub;
 				objs2.push_back(obj2);
 				}
-			insert_list_prop(objs2, thelistprop);
+			thelistprop = insert_list_prop(objs2, thelistprop);
 			}
 		else {
-			insert_list_prop(objs, thelistprop);
+			thelistprop = insert_list_prop(objs, thelistprop);
 			}
 		}
 	else {   // a normal property
@@ -788,7 +792,12 @@ std::string Properties::master_insert(Ex proptree, const property *thepropbase)
 			insert_prop(Ex(st), theprop);
 			}
 		}
-	return str.str();
+	// return str.str();
+	if (thelistprop) {
+		return dynamic_cast<const property *>(thelistprop);
+	} else {
+		return thepropbase;
+	}
 	}
 
 bool Properties::check_label(const property* p, const std::string& label) const
@@ -891,3 +900,20 @@ void Properties::erase(const property* prop, pattern* pat) {
 	delete pat;
 }
 
+std::pair<const property*, std::vector<const pattern*> > Properties::lookup_property(const property* sus) const {
+	// Warning: sus may be invalid
+	std::pair<const property*, std::vector<const pattern*>> ret = {nullptr, {}};
+
+	for (const auto& [_, pats] : pats_dict) {
+		auto range = pats.equal_range(sus);
+		if (range.first == range.second) continue;
+
+		// property is found, so sus is valid
+		ret.first = sus;
+		for (auto it = range.first; it != range.second; ++it) {
+			ret.second.push_back(it->second);
+		}
+		break;
+	}
+	return ret;
+}
