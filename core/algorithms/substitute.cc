@@ -259,7 +259,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 		// For some reason 'a?' is not found!?! Well, that's presumably because _{a?} does not
 		// match ^{a?}. (though this does match when we write 'i' instead of a?.
 
-		nloc = comparator.new_replacement_map.find({it, repl_t::same});
+		nloc = comparator.new_replacement_map.find({it, Lazy_Ex::repl_t::same});
 		IF_TEST(
 			loc=comparator.replacement_map.find(Ex(it));
 			assert( (loc==comparator.replacement_map.end()) == (nloc==comparator.new_replacement_map.end()) );
@@ -267,7 +267,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 		
 		
 		if(nloc==comparator.new_replacement_map.end() && it->is_name_wildcard() && tr.number_of_children(it)!=0) {
-			nloc=comparator.new_replacement_map.find({it, repl_t::erase_children});
+			nloc=comparator.new_replacement_map.find({it, Lazy_Ex::repl_t::erase_children});
 			is_stripped=true;
 			IF_TEST(
 				Ex tmp(it);
@@ -297,16 +297,16 @@ Algorithm::result_t substitute::apply(iterator& st)
 				// TODO: should we replace brackets here too?
 				DEBUGLN( std::cerr << "stripped replacing " << it
 							<< " with " << (*loc).second.begin() << " * " << *it->multiplier << std::endl; );
-				it->name=nloc->second.first->name;
+				it->name=nloc->second.it->name;
 				// See the comment below about multipliers.
-				multiply(it->multiplier, *nloc->second.first->multiplier);
+				multiply(it->multiplier, *nloc->second.it->multiplier);
 				// assert((*loc).second.begin()->fl == (*nloc).second.first.begin()->fl);
-				it->fl= nloc->second.first->fl;
-				switch(nloc->second.second) {
-					case repl_t::erase_parent_rel:
+				it->fl= nloc->second.it->fl;
+				switch(nloc->second.op) {
+					case Lazy_Ex::repl_t::erase_parent_rel:
 						it->fl.parent_rel = str_node::parent_rel_t::p_none;
 						break;
-					case repl_t::flip_parent_rel:
+					case Lazy_Ex::repl_t::flip_parent_rel:
 						it->flip_parent_rel();
 						break;
 					}
@@ -320,7 +320,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 				DEBUGLN( std::cerr << "replacing " << it
 							<< " with " << (*loc).second.begin() << " * " << mt << std::endl; );
 				// it=tr.replace_index(it, (*loc).second.begin()); //, true);
-				it=tr.replace_index(it, resolve_lazy(nloc->second).begin()); //, true);
+				Ex nloc_resolved = nloc->second.resolve();
+				it=tr.replace_index(it, nloc_resolved.begin()); //, true);
 				multiply(it->multiplier, mt);
 				}
 			it->fl.bracket=remember_br;

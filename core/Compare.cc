@@ -39,9 +39,19 @@ namespace cadabra {
 
 	int Ex_comparator::offset=0;
 	
+	int subtree_compare(const Properties* properties,
+	                    const Lazy_Ex& one, const Lazy_Ex& two,
+	                    int mod_prel=-2, bool checksets=true, int compare_multiplier=-2,
+	                    bool literal_wildcards=false)
+		{
+		return subtree_compare(properties, one.it, two.it, mod_prel, checksets, compare_multiplier, literal_wildcards, one.op, two.op);
+		}
+
+
 	int subtree_compare(const Properties *properties,
 	                    Ex::iterator one, Ex::iterator two,
-	                    int mod_prel, bool, int compare_multiplier, bool literal_wildcards)
+	                    int mod_prel, bool, int compare_multiplier, bool literal_wildcards,
+						Lazy_Ex::repl_t op1, Lazy_Ex::repl_t op2)
 		{
 		//	std::cerr << "comparing " << Ex(one) << " with " << Ex(two) << " " << mod_prel << ", " << checksets << std::endl;
 
@@ -94,133 +104,18 @@ namespace cadabra {
 		if(mod_prel<=-2) {
 			str_node::parent_rel_t p1=one->fl.parent_rel;
 			str_node::parent_rel_t p2=two->fl.parent_rel;
-			if(p1!=p2) {
-				return (p1<p2)?2:-2;
-				}
-			}
 
-		// Now turn to the child nodes. Before comparing them directly, first compare
-		// the number of children, taking into account range wildcards.
-		int numch1=Ex::number_of_children(one);
-		int numch2=Ex::number_of_children(two);
-
-		// FIXME: handle range wildcards as in Props.cc
-
-		if(numch1!=numch2) {
-			if(numch1<numch2) return 2;
-			else return -2;
-			}
-
-		// Compare actual children. We run through this twice: first
-		// consider all non-index children, then all index children. This
-		// is because we want products of tensors which differ only by
-		// index position to be sorted by the names of the tensors first,
-		// not first by their index positions. Otherwise canonicalise cannot
-		// do its raising/lowering job.
-
-		bool do_indices=false;
-		int remember_ret=0;
-		if(mod_prel==0) mod_prel=-2;
-		else if(mod_prel>0)  --mod_prel;
-		if(compare_multiplier==0) compare_multiplier=-2;
-		else if(compare_multiplier>0)  --compare_multiplier;
-
-		for(;;) {
-			Ex::sibling_iterator sib1=one.begin(), sib2=two.begin();
-
-			while(sib1!=one.end()) {
-				if(sib1->is_index() == do_indices) {
-					int ret=subtree_compare(properties, sib1,sib2, mod_prel, true /* checksets */,
-					                        compare_multiplier, literal_wildcards);
-					// std::cerr << "result " << ret << std::endl;
-					if(abs(ret)>1)
-						return ret/abs(ret)*mult;
-					if(ret!=0 && remember_ret==0)
-						remember_ret=ret;
-					}
-				++sib1;
-				++sib2;
-				}
-
-			if(remember_ret!=0) break;
-
-			if(!do_indices) do_indices=true;
-			else break;
-			}
-
-		return remember_ret;
-		}
-
-	int subtree_compare(const Properties *properties,
-	                    Lazy_Ex lazy_one, Lazy_Ex lazy_two,
-	                    int mod_prel, bool, int compare_multiplier, bool literal_wildcards)
-		{
-		Ex::iterator one = lazy_one.first;
-		Ex::iterator two = lazy_two.first;
-
-		//	std::cerr << "comparing " << Ex(one) << " with " << Ex(two) << " " << mod_prel << ", " << checksets << std::endl;
-
-		// The logic is to compare successive aspects of the two objects, returning a
-		// no-match code if a difference is found at a particular level, or continuing
-		// further down the line if there still is a match.
-
-		// Compare multipliers. Skip this step if one of the objects is a rational and the
-		// other not, as in that case we are matching values to symbols.
-		if( one->is_rational()==two->is_rational() ) {
-			if(compare_multiplier==-2 && !two->is_name_wildcard() && !one->is_name_wildcard())
-				if(one->multiplier != two->multiplier) {
-					if(*one->multiplier < *two->multiplier) return 2;
-					else return -2;
-					}
-			}
-
-		int  mult=2;
-		// Handle object wildcards and comparison
-		if(!literal_wildcards) {
-			if(one->is_object_wildcard() || two->is_object_wildcard())
-				return 0;
-			}
-
-		// Handle mismatching node names.
-		if(one->name!=two->name) {
-			//		std::cerr << *one->name << " != " << *two->name << std::endl;
-			if(literal_wildcards) {
-				if(*one->name < *two->name) return mult;
-				else return -mult;
-				}
-
-			DEBUGLN( std::cerr << "auto? " << one->is_autodeclare_wildcard() << ", " << two->is_numbered_symbol() << std::endl; );
-			if( (one->is_autodeclare_wildcard() && two->is_numbered_symbol()) ||
-			      (two->is_autodeclare_wildcard() && one->is_numbered_symbol()) ) {
-				if( one->name_only() != two->name_only() ) {
-					if(*one->name < *two->name) return mult;
-					else return -mult;
-					}
-				}
-			else if( one->is_name_wildcard()==false && two->is_name_wildcard()==false ) {
-				if(*one->name < *two->name) return mult;
-				else return -mult;
-				}
-
-			DEBUGLN( std::cerr << "match despite difference: " << *one->name << " and " << *two->name << std::endl; );			
-			}
-
-		// Compare parent relations.
-		if(mod_prel<=-2) {
-			str_node::parent_rel_t p1=one->fl.parent_rel;
-			str_node::parent_rel_t p2=two->fl.parent_rel;
-
-			if (lazy_one.second == repl_t::erase_parent_rel) {
+			if (op1 == Lazy_Ex::repl_t::erase_parent_rel) {
 				p1 = str_node::parent_rel_t::p_none;
-			} else if (lazy_one.second == repl_t::flip_parent_rel) {
+			} else if (op1 == Lazy_Ex::repl_t::flip_parent_rel) {
 				if(p1==str_node::parent_rel_t::p_super)       p1=str_node::parent_rel_t::p_sub;
 				else if(p1==str_node::parent_rel_t::p_sub)    p1=str_node::parent_rel_t::p_super;
 				else throw std::logic_error("flip_parent_rel called on non-index");
 			}
 
-			if (lazy_two.second == repl_t::erase_parent_rel) {
+			if (op2 == Lazy_Ex::repl_t::erase_parent_rel) {
 				p2 = str_node::parent_rel_t::p_none;
-			} else if (lazy_two.second == repl_t::flip_parent_rel) {
+			} else if (op2 == Lazy_Ex::repl_t::flip_parent_rel) {
 				if(p2==str_node::parent_rel_t::p_super)       p2=str_node::parent_rel_t::p_sub;
 				else if(p2==str_node::parent_rel_t::p_sub)    p2=str_node::parent_rel_t::p_super;
 				else throw std::logic_error("flip_parent_rel called on non-index");
@@ -233,8 +128,8 @@ namespace cadabra {
 
 		// Now turn to the child nodes. Before comparing them directly, first compare
 		// the number of children, taking into account range wildcards.
-		int numch1 = (lazy_one.second == repl_t::erase_children) ? 0 : Ex::number_of_children(one);
-		int numch2 = (lazy_two.second == repl_t::erase_children) ? 0 : Ex::number_of_children(two);
+		int numch1 = (op1 == Lazy_Ex::repl_t::erase_children) ? 0 : Ex::number_of_children(one);
+		int numch2 = (op2 == Lazy_Ex::repl_t::erase_children) ? 0 : Ex::number_of_children(two);
 
 		// FIXME: handle range wildcards as in Props.cc
 
@@ -290,144 +185,6 @@ namespace cadabra {
 		return remember_ret;
 		}
 
-	int subtree_compare(const Properties *properties,
-	                    Lazy_Ex lazy_one, Lazy_Ex lazy_two,
-	                    int mod_prel, bool, int compare_multiplier, bool literal_wildcards)
-		{
-		Ex::iterator one = lazy_one.first;
-		Ex::iterator two = lazy_two.first;
-
-		//	std::cerr << "comparing " << Ex(one) << " with " << Ex(two) << " " << mod_prel << ", " << checksets << std::endl;
-
-		// The logic is to compare successive aspects of the two objects, returning a
-		// no-match code if a difference is found at a particular level, or continuing
-		// further down the line if there still is a match.
-
-		// Compare multipliers. Skip this step if one of the objects is a rational and the
-		// other not, as in that case we are matching values to symbols.
-		if( one->is_rational()==two->is_rational() ) {
-			if(compare_multiplier==-2 && !two->is_name_wildcard() && !one->is_name_wildcard())
-				if(one->multiplier != two->multiplier) {
-					if(*one->multiplier < *two->multiplier) return 2;
-					else return -2;
-					}
-			}
-
-		int  mult=2;
-		// Handle object wildcards and comparison
-		if(!literal_wildcards) {
-			if(one->is_object_wildcard() || two->is_object_wildcard())
-				return 0;
-			}
-
-		// Handle mismatching node names.
-		if(one->name!=two->name) {
-			//		std::cerr << *one->name << " != " << *two->name << std::endl;
-			if(literal_wildcards) {
-				if(*one->name < *two->name) return mult;
-				else return -mult;
-				}
-
-			DEBUGLN( std::cerr << "auto? " << one->is_autodeclare_wildcard() << ", " << two->is_numbered_symbol() << std::endl; );
-			if( (one->is_autodeclare_wildcard() && two->is_numbered_symbol()) ||
-			      (two->is_autodeclare_wildcard() && one->is_numbered_symbol()) ) {
-				if( one->name_only() != two->name_only() ) {
-					if(*one->name < *two->name) return mult;
-					else return -mult;
-					}
-				}
-			else if( one->is_name_wildcard()==false && two->is_name_wildcard()==false ) {
-				if(*one->name < *two->name) return mult;
-				else return -mult;
-				}
-
-			DEBUGLN( std::cerr << "match despite difference: " << *one->name << " and " << *two->name << std::endl; );			
-			}
-
-		// Compare parent relations.
-		if(mod_prel<=-2) {
-			str_node::parent_rel_t p1=one->fl.parent_rel;
-			str_node::parent_rel_t p2=two->fl.parent_rel;
-
-			if (lazy_one.second == repl_t::erase_parent_rel) {
-				p1 = str_node::parent_rel_t::p_none;
-			} else if (lazy_one.second == repl_t::flip_parent_rel) {
-				if(p1==str_node::parent_rel_t::p_super)       p1=str_node::parent_rel_t::p_sub;
-				else if(p1==str_node::parent_rel_t::p_sub)    p1=str_node::parent_rel_t::p_super;
-				else throw std::logic_error("flip_parent_rel called on non-index");
-			}
-
-			if (lazy_two.second == repl_t::erase_parent_rel) {
-				p2 = str_node::parent_rel_t::p_none;
-			} else if (lazy_two.second == repl_t::flip_parent_rel) {
-				if(p2==str_node::parent_rel_t::p_super)       p2=str_node::parent_rel_t::p_sub;
-				else if(p2==str_node::parent_rel_t::p_sub)    p2=str_node::parent_rel_t::p_super;
-				else throw std::logic_error("flip_parent_rel called on non-index");
-			}
-
-			if(p1!=p2) {
-				return (p1<p2)?2:-2;
-				}
-			}
-
-		// Now turn to the child nodes. Before comparing them directly, first compare
-		// the number of children, taking into account range wildcards.
-		int numch1 = (lazy_one.second == repl_t::erase_children) ? 0 : Ex::number_of_children(one);
-		int numch2 = (lazy_two.second == repl_t::erase_children) ? 0 : Ex::number_of_children(two);
-
-		// FIXME: handle range wildcards as in Props.cc
-
-		if(numch1!=numch2) {
-			if(numch1<numch2) return 2;
-			else return -2;
-			}
-		
-		assert(numch1 == numch2);
-		// Return equal if both have no children
-		if (numch1 == 0) {
-			return 0;
-		}
-
-		// Compare actual children. We run through this twice: first
-		// consider all non-index children, then all index children. This
-		// is because we want products of tensors which differ only by
-		// index position to be sorted by the names of the tensors first,
-		// not first by their index positions. Otherwise canonicalise cannot
-		// do its raising/lowering job.
-
-		bool do_indices=false;
-		int remember_ret=0;
-		if(mod_prel==0) mod_prel=-2;
-		else if(mod_prel>0)  --mod_prel;
-		if(compare_multiplier==0) compare_multiplier=-2;
-		else if(compare_multiplier>0)  --compare_multiplier;
-
-		for(;;) {
-			Ex::sibling_iterator sib1=one.begin(), sib2=two.begin();
-
-			while(sib1!=one.end()) {
-				if(sib1->is_index() == do_indices) {
-					int ret=subtree_compare(properties, sib1,sib2, mod_prel, true /* checksets */,
-					                        compare_multiplier, literal_wildcards);
-					// std::cerr << "result " << ret << std::endl;
-					// FIXME(Dan): The below could be modified?
-					if(abs(ret)>1)
-						return ret/abs(ret)*mult;
-					if(ret!=0 && remember_ret==0)
-						remember_ret=ret;
-					}
-				++sib1;
-				++sib2;
-				}
-
-			if(remember_ret!=0) break;
-
-			if(!do_indices) do_indices=true;
-			else break;
-			}
-
-		return remember_ret;
-		}
 
 	bool tree_less(const Properties* properties, const Ex& one, const Ex& two, int mod_prel, bool checksets, int compare_multiplier)
 		{
@@ -892,7 +649,7 @@ namespace cadabra {
 			IF_TEST(replacement_map_t::iterator loc=replacement_map.find(Ex(one)););
 			// FIXME(Dan): Modified to work directly with iterator
 
-			new_replacement_map_t::iterator new_loc=new_replacement_map.find({one, repl_t::same}); 
+			new_replacement_map_t::iterator new_loc=new_replacement_map.find({one, Lazy_Ex::repl_t::same}); 
 
 			bool tested_full=true;
 
@@ -909,7 +666,7 @@ namespace cadabra {
 						tmp1.erase_children(tmp1.begin());
 						loc = replacement_map.find(tmp1);
 					);
-					new_loc = new_replacement_map.find({one, repl_t::erase_children});
+					new_loc = new_replacement_map.find({one, Lazy_Ex::repl_t::erase_children});
 					tested_full=false;
 					}
 				}
@@ -924,11 +681,11 @@ namespace cadabra {
 
 				// If this is an index/pattern, try to match the whole index/pattern.
 				if(tested_full) {
-					cmp = subtree_compare(&properties, new_loc->second, {two, repl_t::same}, -2); 
+					cmp = subtree_compare(&properties, new_loc->second, {two, Lazy_Ex::repl_t::same}, -2); 
 					IF_TEST(assert(cmp == subtree_compare(&properties, (*loc).second.begin(), two, -2)););
 					}
 				else {
-					cmp = subtree_compare(&properties, new_loc->second, {two, repl_t::erase_children}, -2);
+					cmp = subtree_compare(&properties, new_loc->second, {two, Lazy_Ex::repl_t::erase_children}, -2);
 					IF_TEST (
 						Ex tmp2(two);
 						tmp2.erase_children(tmp2.begin());
@@ -1055,7 +812,7 @@ namespace cadabra {
             		// cadabra::one(tmp.begin()->multiplier);
 					replacement_map[Ex(one)]=tmp;
 				);
-				new_replacement_map[{one, repl_t::same}] = {two, repl_t::same};
+				new_replacement_map[{one, Lazy_Ex::repl_t::same}] = {two, Lazy_Ex::repl_t::same};
 
 				// if this is an index, also store the pattern with the parent_rel flipped
 
@@ -1072,9 +829,9 @@ namespace cadabra {
 				
 				if(one->is_index()) {
 					if(two->is_index())
-						new_replacement_map[{one, repl_t::flip_parent_rel}] = {two, repl_t::flip_parent_rel};
+						new_replacement_map[{one, Lazy_Ex::repl_t::flip_parent_rel}] = {two, Lazy_Ex::repl_t::flip_parent_rel};
 					else
-						new_replacement_map[{one, repl_t::flip_parent_rel}] = {two, repl_t::same};
+						new_replacement_map[{one, Lazy_Ex::repl_t::flip_parent_rel}] = {two, Lazy_Ex::repl_t::same};
 				}
 
 				// if this is a pattern and the pattern has a non-zero number of children,
@@ -1086,12 +843,12 @@ namespace cadabra {
 						tmp2.erase_children(tmp2.begin());
 						replacement_map[tmp1]=tmp2;
 					);
-					new_replacement_map[{one, repl_t::erase_children}]={two, repl_t::erase_children};
+					new_replacement_map[{one, Lazy_Ex::repl_t::erase_children}]={two, Lazy_Ex::repl_t::erase_children};
 					}
 				// and if this is a pattern also insert the one without the parent_rel
 				if( /* one->is_name_wildcard()  &&  */ one->is_index()) {
 					//std::cerr << "storing pattern without pattern rel " << replacement_map.size() << std::endl;
-					auto new_fnd=new_replacement_map.find({one, repl_t::erase_parent_rel});
+					auto new_fnd=new_replacement_map.find({one, Lazy_Ex::repl_t::erase_parent_rel});
 					IF_TEST(
 						Ex tmp1(one), tmp2(two);
 						tmp1.begin()->fl.parent_rel=str_node::p_none;
@@ -1106,7 +863,7 @@ namespace cadabra {
 					//				assert(replacement_map.find(tmp1)!=replacement_map.end());
 					// std::cerr << "storing " << Ex(tmp1) << " -> " << Ex(tmp2) << std::endl;
 					IF_TEST( replacement_map[tmp1]=tmp2; );
-					new_replacement_map[{one, repl_t::erase_parent_rel}]={two, repl_t::erase_parent_rel};
+					new_replacement_map[{one, Lazy_Ex::repl_t::erase_parent_rel}]={two, Lazy_Ex::repl_t::erase_parent_rel};
 					}
 
 				DEBUGLN( std::cerr << "Replacement map is now:" << std::endl; 
@@ -1284,10 +1041,6 @@ namespace cadabra {
 	      Ex::sibling_iterator st,
 	      Ex::iterator conditions)
 		{
-		bool swflag = !Stopwatches["internal"].stopped() & Stopwatches["can_move_adjacent"].stopped();
-		if (swflag) Stopwatches["match_subproduct"].start();
-		if (swflag) Stopwatches["map_copies"].start();
-		
 		IF_TEST(replacement_map_t         backup_replacements(replacement_map););
 
 		new_replacement_map_t         new_backup_replacements(new_replacement_map);
@@ -1338,10 +1091,8 @@ namespace cadabra {
 						DEBUGLN(std::cerr << "--- done can move ---" << sign << std::endl; );
 						}
 					if(sign==0) { // object found, but we cannot move it in the right order
-						if (swflag) Stopwatches["map_copies"].start();
 						IF_TEST(replacement_map=backup_replacements;);
 						new_replacement_map=new_backup_replacements;
-						// replacement_map.revert();
 						subtree_replacement_map=backup_subtree_replacements;
 						}
 					else {
@@ -1358,10 +1109,8 @@ namespace cadabra {
 								//						txtout << tofind.node << "found factor useless " << start.node << std::endl;
 								factor_locations.pop_back();
 								factor_moving_signs.pop_back();
-								if (swflag) Stopwatches["map_copies"].start();
 								IF_TEST(replacement_map=backup_replacements;);
 								new_replacement_map=new_backup_replacements;
-								// replacement_map.revert();
 								subtree_replacement_map=backup_subtree_replacements;
 								}
 							}
@@ -1375,10 +1124,8 @@ namespace cadabra {
 							else {
 								factor_locations.pop_back();
 								factor_moving_signs.pop_back();
-								if (swflag) Stopwatches["map_copies"].start();
 								IF_TEST(replacement_map=backup_replacements;);
 								new_replacement_map=new_backup_replacements;
-								// replacement_map.revert();
 								subtree_replacement_map=backup_subtree_replacements;
 								}
 							}
@@ -1386,10 +1133,8 @@ namespace cadabra {
 					}
 				else {
 					//				txtout << tofind.node << "does not match" << std::endl;
-					if (swflag) Stopwatches["map_copies"].start();
 					IF_TEST(replacement_map=backup_replacements;);
 					new_replacement_map=new_backup_replacements;
-					// replacement_map.revert();
 					subtree_replacement_map=backup_subtree_replacements;
 					}
 				}
@@ -1405,7 +1150,6 @@ namespace cadabra {
 	      Ex::iterator conditions)
 		{
 		IF_TEST(replacement_map_t         backup_replacements(replacement_map););
-		// replacement_map.checkpoint();
 		new_replacement_map_t         backup_new_replacements(new_replacement_map);
 		subtree_replacement_map_t backup_subtree_replacements(subtree_replacement_map);
 
@@ -1437,7 +1181,6 @@ namespace cadabra {
 					auto this_ratio = (*tofind->multiplier)/(*start->multiplier);
 					if(this_ratio!=term_ratio) {
 						IF_TEST(replacement_map=backup_replacements;);
-						// replacement_map.revert();
 						new_replacement_map=backup_new_replacements;
 						subtree_replacement_map=backup_subtree_replacements;
 						}
@@ -1452,7 +1195,6 @@ namespace cadabra {
 							else {
 								factor_locations.pop_back();
 								IF_TEST(replacement_map=backup_replacements;);
-								// replacement_map.revert();
 								new_replacement_map=backup_new_replacements;
 								subtree_replacement_map=backup_subtree_replacements;
 								}
@@ -1467,7 +1209,6 @@ namespace cadabra {
 							else {
 								factor_locations.pop_back();
 								IF_TEST(replacement_map=backup_replacements;);
-								// replacement_map.revert();
 								new_replacement_map=backup_new_replacements;
 								subtree_replacement_map=backup_subtree_replacements;
 								}
@@ -1477,7 +1218,6 @@ namespace cadabra {
 				else {
 					//				txtout << tofind.node << "does not match" << std::endl;
 					IF_TEST(replacement_map=backup_replacements;);
-					// replacement_map.revert();
 					new_replacement_map=backup_new_replacements;
 					subtree_replacement_map=backup_subtree_replacements;
 					}
@@ -2136,31 +1876,8 @@ namespace cadabra {
 		if(ret < 0) return true;
 		else        return false;
 		}
-
-
-	bool lazy_less::operator()(const Lazy_Ex& one, const Lazy_Ex& two) const {
-		return subtree_compare(nullptr, one, two, -2, true, 0, true) > 0;
-		}
-
-	Ex resolve_lazy(Lazy_Ex lazy) {
-		Ex ret {lazy.first};
-
-		switch(lazy.second) {
-			case repl_t::erase_children:
-				ret.erase_children(ret.begin());
-				break;
-			case repl_t::flip_parent_rel:
-				ret.begin()->flip_parent_rel();
-				break;
-			case repl_t::erase_parent_rel:
-				ret.begin()->fl.parent_rel = str_node::parent_rel_t::p_none;
-				break;
-			case repl_t::same:
-				break;
-			}
-		return ret;
-		}
 	}
+
 
 bool operator<(const cadabra::Ex::iterator& i1, const cadabra::Ex::iterator& i2)
 	{
