@@ -27,7 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <list>
 #include <type_traits>
 #include "Storage.hh"
-
+#include <typeindex>
+		
 namespace cadabra {
 
 	class Properties;
@@ -241,7 +242,8 @@ namespace cadabra {
 
 	class Properties {
 		public:
-			// Registering property types.
+
+			// Class to store names and std::type_index for property objects
 			class registered_property_map_t {
 				public:
 					~registered_property_map_t();
@@ -250,15 +252,46 @@ namespace cadabra {
 					typedef internal_property_map_t::iterator iterator;
 
 					internal_property_map_t store;
-				};
 
+					// Modifications to registered_property_map_t.
+					// FIXME: Pieces above here are old and do not seem to be used anywhere.
+					// (Pieces below here are new.)
+
+					// Register a type by template. Usage: `register_type<T>();`
+					template<typename T>
+					void register_type();
+
+					// Register the type of an object. Usage: `register_type(obj);`
+					template<typename T>
+					void register_type(const T&);
+					
+				private:
+					// Dictionary from type_index to human readable name.
+					std::map<std::type_index, std::string>       types_to_names_;
+					// Dictionary from human readable name to type_index.
+					std::multimap<std::string, std::type_index>  names_to_types_;
+
+
+				};			
 			/// Registering properties.  When inserting a property or
 			/// list_property, ownership of the property gets transferred to
 			/// this class.
-
+			
+			// FIXME: register_property does not seem to be used.
 			void                          register_property(property* (*)(), const std::string& name);
+
 			registered_property_map_t     registered_properties;
 			typedef std::pair<pattern *, const property *>  pat_prop_pair_t;
+
+			// Register a type by template. Usage: `register_property_type<T>();`
+			// Just calls `registered_properties.register_type<T>()`
+			template<typename T>  void       register_property_type();
+
+			// Register the type of an object. Usage: `register_property_type(obj);`
+			// Just calls `registered_properties.register_type(obj)`
+			template<typename T>  void       register_property_type(const T&);
+
+
 
 			/// We keep two multi-maps: one from the pattern to the property (roughly) and
 			/// one from the property to the pattern. These are both multi-maps because
@@ -283,6 +316,30 @@ namespace cadabra {
 			/// shared between patterns).
 			property_map_t  props;  // pattern -> property
 			pattern_map_t   pats;   // property -> pattern; for list properties, patterns are stored here in order
+
+
+			/**************************************************************************************
+			 * BELOW REVISES EXISTING PROPS/PATS STRUCTURE.
+			 *
+			 * The original props/pats maps can be inefficient because accessing requires dynamic casts,
+			 * and the number of such casts can quickly become huge. The below is intended as
+			 * a replacement for props/pats by including information about the property_type directly.
+			 * Currently it works side-by-side with props/parts, duplicating the work
+			 * if/until we replace props/pats entirely with these.
+			 * 
+			 * props_dict groups the pat_prop_pairs in a multimap by their property_type
+			 * pats_dict groups the properties in pats by their property_type. This allows us to
+			 * iterate over e.g. all AntiCommuting patterns directly.
+			 **************************************************************************************/
+
+			typedef std::map<nset_t::iterator, 
+							 std::map<std::type_index, std::vector<pat_prop_pair_t>>, 
+							 nset_it_less>   													property_dictmap_t;
+			typedef std::map<std::type_index,  
+							 std::multimap<const property *, pattern *>>                     	pattern_dictmap_t;
+
+			property_dictmap_t  props_dict;  // pattern -> map(property_type, pat_prop_pairs)
+			pattern_dictmap_t   pats_dict;   // property_type -> multimap(property, pattern)
 
 			/// Normal search: given a pattern, get its property if any.
 			template<class T> const T*  get(Ex::iterator, bool ignore_parent_rel=false) const;
@@ -316,6 +373,10 @@ namespace cadabra {
 			// map from this particular point. Note: this searches on property type, not exact property.
 			//		template<class T>
 			//		property_map_t::iterator      get_pattern(property_map_t::iterator=props.begin());
+			template<class T>
+			property_map_t::iterator      get_pattern();
+			template<class T>
+			property_map_t::iterator      get_pattern(property_map_t::iterator);
 
 			// Equivalent search: given a node, get a pattern of equivalents.
 			//		property_map_t::iterator      get_equivalent(Ex::iterator,
@@ -334,6 +395,18 @@ namespace cadabra {
 			int  serial_number(const property *, const pattern *) const;
 			Ex_comparator *create_comparator() const;
 			void           destroy_comparator(Ex_comparator *) const;			
+
+			// Erases property completely.
+			void dict_erase_(const property*);
+			// Erases pattern from a given property, leaving other patterns alone.
+			void dict_erase_(const property*, pattern*);
+			// Insert property/pattern into the dictmaps.
+			void dict_insert_(const property*, pattern*);
+
+			// Erases the first key-value pair from a multimap, returning 1 if found, 0 if not.
+			template <typename K, typename V>
+			int mmap_erase_key_value_(std::multimap<K,V>&, const K&, const V&);
+
 		};
 
 	template<class T>
@@ -366,9 +439,9 @@ namespace cadabra {
 																								 int& serialnum, const std::string& label,
 																								 bool doserial, bool ignore_parent_rel) const
 		{
-		std::pair<const T*, const pattern *> ret;
-		ret.first=0;
-		ret.second=0;
+		
+		std::pair<const T*, const pattern *> ret = {nullptr, nullptr};
+
 		bool inherits=false;
 
 		//std::cerr << *it->name_only() << std::endl;
@@ -386,7 +459,56 @@ namespace cadabra {
 		bool ignore_properties=false;
 		if(std::is_same<T, Accent>::value)
 			ignore_properties=true;
+
+		auto props_dict_it = props_dict.find(it->name_only());
+		if (props_dict_it == props_dict.end()) {
+			return ret;
+		}
+		const auto& bucket = props_dict_it->second;
+		// bucket is a std::multimap taking std::type_index to pat_prop_pair_t
+		// We only care about std::type_index entries that are either castable to T 
+		// or inherit from a child
+
+		bool found_property = false;
 		
+		for (const auto& entry : bucket) {
+			// entry.second contains all pat_prop_pairs of the same property type
+			// So we can quickly shortcut some things right now.
+
+			// Is entry castable to T?
+			bool T_castable = is_castable(typeid(T), entry.first);
+			inherits = inherits || is_castable(typeid(PropertyInherit), entry.first) || is_castable(typeid(Inherit<T>, entry.first));
+			
+			if (T_castable) {
+				for (const auto& pat_prop_pair : entry.second) {
+					if(wildcards==pat_prop_pair.first->children_wildcard()) {
+						ret.first=dynamic_cast<const T *>(pat_prop_pair.second);
+						if(ret.first) {
+							if(pat_prop_pair.first->match_ext(*this, it, comp, ignore_parent_rel, ignore_properties)) {
+								ret.second=pat_prop_pair.first;
+								if(!check_label(ret.first, label))
+									ret.first=0;
+								else {
+									if(doserial) 
+										serialnum=serial_number( pat_prop_pair.second, pat_prop_pair.first);
+									found_property = true;
+									break;
+									}
+								}
+							}
+						ret.first=0;
+						}
+					}
+				}
+			if (found_property)
+				break;
+			}
+
+		// First deal with ones that are directly castable to T
+		// FIXME: Add a cache for this
+
+
+
 		for(;;) {
 			property_map_t::const_iterator walk=pit.first;
 			while(walk!=pit.second) {
@@ -551,5 +673,27 @@ done:
 			}
 		return dn;
 		}
+
+
+	template<class T>
+	Properties::property_map_t::iterator Properties::get_pattern() 
+		{
+		return get_pattern<T>(props.begin());
+		}
+
+	template<class T>
+	Properties::property_map_t::iterator Properties::get_pattern(Properties::property_map_t::iterator prop_it) 
+		{
+		// Return the next property of type T (or that inherits from T)
+		while (prop_it != props.end()) {
+			if (dynamic_cast<const T*>(prop_it->second.second)) {
+				return prop_it;
+			}
+			++prop_it;
+		}
+		return props.end();
+		}
+		
+
 
 	}
