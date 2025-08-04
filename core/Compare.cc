@@ -189,6 +189,11 @@ namespace cadabra {
 		return subtree_compare(nullptr, first.it, second.it, -2, true, 0, true, first.op, second.op) > 0;
 	}
 
+	bool operator==(const Lazy_Ex& first, const Lazy_Ex& second) {
+		return subtree_compare(nullptr, first.it, second.it, -2, true, 0, true, first.op, second.op) == 0;
+	}
+
+
 	bool tree_less(const Properties* properties, const Ex& one, const Ex& two, int mod_prel, bool checksets, int compare_multiplier)
 		{
 		return subtree_less(properties, one.begin(), two.begin(), mod_prel, checksets, compare_multiplier);
@@ -340,7 +345,8 @@ namespace cadabra {
 		IF_TEST(replacement_map.clear(););
 		new_replacement_map.clear();
 		subtree_replacement_map.clear();
-		index_value_map.clear();
+		IF_TEST(index_value_map.clear();)
+		new_index_value_map.clear();
 		factor_locations.clear();
 		factor_moving_signs.clear();
 		}
@@ -949,21 +955,39 @@ namespace cadabra {
 				if(ivals!=values.end()) {
 					// Verify that the 'two' index has not already been matched to a value
 					// different from 'one'.
-					Ex t1(two), t2(two), o1(one), o2(one);
-					t2.begin()->flip_parent_rel();
-					o2.begin()->flip_parent_rel();
-					auto prev1 = index_value_map.find(t1);
-					auto prev2 = index_value_map.find(t2);
-					if(prev1!=index_value_map.end() && ! (prev1->second==o1) ) {
+					auto nprev1 = new_index_value_map.find({two, Lazy_Ex::repl_t::same});
+					auto nprev2 = new_index_value_map.find({two, Lazy_Ex::repl_t::flip_parent_rel});
+
+					Lazy_Ex new_o1 = {one, Lazy_Ex::repl_t::same};
+					Lazy_Ex new_o2 = {one, Lazy_Ex::repl_t::flip_parent_rel};
+
+					IF_TEST(
+						Ex t1(two), t2(two), o1(one), o2(one);
+						t2.begin()->flip_parent_rel();
+						o2.begin()->flip_parent_rel();
+						auto prev1 = index_value_map.find(t1);
+						auto prev2 = index_value_map.find(t2);
+
+						assert( (prev1==index_value_map.end()) == (nprev1 == new_index_value_map.end()) );
+						assert( (prev2==index_value_map.end()) == (nprev2 == new_index_value_map.end()) );
+						assert( (prev1->second == o1) == (nprev1->second == new_o1) );
+						assert( (prev2->second == o2) == (nprev2->second == new_o2) );
+					)
+
+					//if(prev1!=index_value_map.end() && ! (prev1->second==o1) ) {
+					if(nprev1!=new_index_value_map.end() && ! (nprev1->second==new_o1) ) {
 						//					std::cerr << "Previously 1 " << Ex(two) << " was " << Ex(prev1->second) << std::endl;
 						return report(match_t::no_match_less);
 						}
-					if(prev2!=index_value_map.end() && ! (prev2->second==o2) ) {
+					if(nprev2!=new_index_value_map.end() && ! (nprev2->second==new_o2) ) {
 						//					std::cerr << "Previously 2 " << Ex(two) << " was " << Ex(prev2->second) << std::endl;
 						return report(match_t::no_match_less);
 						}
 
-					index_value_map[Ex(two)]=Ex(one);
+					IF_TEST(
+						index_value_map[Ex(two)]=Ex(one);
+					)
+					new_index_value_map[{two, Lazy_Ex::repl_t::same}] = {one, Lazy_Ex::repl_t::same};
 					return report(match_t::node_match);
 					}
 				else {
