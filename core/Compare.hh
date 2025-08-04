@@ -58,6 +58,28 @@ namespace cadabra {
 	                    int mod_prel=-2, bool checksets=true, int compare_multiplier=-2,
 	                    bool literal_wildcards=false);
 
+
+
+	// Introduce a lazy replacement type to avoid temporary Ex objects
+	enum class repl_t {same,				// identity operation
+						flip_parent_rel,  	// flip top node's parent_rel
+						erase_parent_rel,	// erase top node's parent_rel
+						erase_children		// ignore any children
+						};
+	typedef std::pair<Ex::iterator, repl_t>                        Lazy_Ex;
+	class lazy_less {
+		public:
+			bool operator()(const Lazy_Ex& first, const Lazy_Ex& second) const;
+			
+	};
+
+	int subtree_compare(const Properties*,
+	                    Lazy_Ex one, Lazy_Ex two,
+	                    int mod_prel=-2, bool checksets=true, int compare_multiplier=-2,
+	                    bool literal_wildcards=false);
+
+
+
 	/// Various comparison functions, some exact, some with pattern logic.
 
 	bool tree_less(const Properties*,
@@ -277,7 +299,11 @@ namespace cadabra {
 			/// Map for the replacement of nodes (indices, patterns).
 
 			typedef std::map<Ex, Ex, tree_exact_less_no_wildcards_obj>     replacement_map_t;
+			typedef std::map<Lazy_Ex, Lazy_Ex, lazy_less>                  new_replacement_map_t;
+
+			// typedef checkpoint_map<Ex, Ex, tree_exact_less_no_wildcards_obj>     replacement_map_t;
 			replacement_map_t                                              replacement_map;
+			new_replacement_map_t                                              new_replacement_map;
 
 			/// Map for the replacement of entire subtrees (object patterns).
 

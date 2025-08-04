@@ -155,7 +155,7 @@ bool substitute::can_apply(iterator st)
 			ret == Ex_comparator::match_t::match_index_less ||
 			ret == Ex_comparator::match_t::match_index_greater) {
 			use_rule=arrow;
-
+			// std::cout << comparator.replacement_map.print_tree() << "\n";
 			// If we are not matching a partial sum or partial product, need to check that all
 			// terms or factors are accounted for.
 			if(!partial) {
@@ -235,6 +235,10 @@ Algorithm::result_t substitute::apply(iterator& st)
 	iterator it=repl.begin();
 	Ex_comparator::replacement_map_t::iterator loc;
 	Ex_comparator::subtree_replacement_map_t::iterator sloc;
+
+
+	Ex_comparator::new_replacement_map_t::iterator nloc;
+
 	std::vector<iterator> subtree_insertion_points;
 	while(it!=repl.end()) {
 		bool is_stripped=false;
@@ -243,15 +247,18 @@ Algorithm::result_t substitute::apply(iterator& st)
 		// match ^{a?}. (though this does match when we write 'i' instead of a?.
 
 		loc=comparator.replacement_map.find(Ex(it));
+		nloc = comparator.new_replacement_map.find({it, repl_t::same});
+		assert( (loc==comparator.replacement_map.end()) == (nloc==comparator.new_replacement_map.end()) );
 		if(loc==comparator.replacement_map.end() && it->is_name_wildcard() && tr.number_of_children(it)!=0) {
 			Ex tmp(it);
 			tmp.erase_children(tmp.begin());
 			loc=comparator.replacement_map.find(tmp);
+			nloc=comparator.new_replacement_map.find({it, repl_t::erase_children});
 			is_stripped=true;
 			}
 
 		//std::cerr << "consider element of repl " << Ex(it) << std::endl;
-
+		assert( (loc==comparator.replacement_map.end()) == (nloc==comparator.new_replacement_map.end()) );
 		if(loc!=comparator.replacement_map.end()) { // name wildcards
 			DEBUGLN( std::cerr << "wildcard replaced: " << loc->first << " -> " << loc->second << std::endl; )
 
@@ -274,6 +281,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 				it->name=(*loc).second.begin()->name;
 				// See the comment below about multipliers.
 				multiply(it->multiplier, *(*loc).second.begin()->multiplier);
+				// assert((*loc).second.begin()->fl == (*nloc).second.first.begin()->fl);
 				it->fl=(*loc).second.begin()->fl;
 				}
 			else {
