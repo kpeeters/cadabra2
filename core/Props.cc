@@ -167,8 +167,8 @@ bool Properties::has(const property *pb, Ex::iterator it)
 void Properties::clear()
 	{
 	// Clear and free the property lists. Since pointers to properties can
-	// be shared, we use the pats_dict map and make sure that we only free each
-	// property* pointer once.
+	// be shared (but patterns cannot yet), we use the pats_dict map and make 
+	// sure that we only free each property* pointer once.
 
 	for (const auto& [_, this_pats] : pats_dict) {
 		auto it=this_pats.begin();
@@ -615,7 +615,7 @@ const list_property* Properties::insert_list_prop(const std::vector<Ex>& its, co
 		if (match_type == list_property::exact_match) {
 			delete pr;
 			pr=static_cast<const list_property *>( (*pit).first );
-			// Because pr is passed by reference, the caller maintains a valid pointer.
+			// Later we return the new pr to the caller so they have a valid pointer.
 			break;
 		} else if (match_type == list_property::id_match) {
 			erase((*pit).first);
