@@ -400,7 +400,7 @@ namespace cadabra {
 			// interface `master_insert` instead.
 			void insert_prop(const Ex&, const property *);
 			void insert_prop_old(const Ex&, const property *);
-			void insert_list_prop(const std::vector<Ex>&, const list_property *);
+			void insert_list_prop(const std::vector<Ex>&, const list_property *&);
 			bool check_label(const property *, const std::string&) const;
 			bool check_label(const labelled_property *, const std::string&) const;			
 			// Search through pointers
@@ -429,10 +429,13 @@ namespace cadabra {
 
 		public:
 			// Need specialized iterator and const_iterator classes. These are built from iterator_base below.
-			template <bool IsConst>
+			template<bool IsConst, typename T1 = void, typename T2 = void>
 			class iterator_base {
+				// Compile-time assurance that we cannot have T1=void but T2 not void.
+				static_assert(!(std::is_void<T1>::value && !std::is_void<T2>::value), "If T1 is void, T2 must also be void.");
+
 			public:
-				using map_type = std::conditional_t<IsConst, const prop_pat_typemap_t, prop_pat_typemap_t>;
+				using map_t = std::conditional_t<IsConst, const prop_pat_typemap_t, prop_pat_typemap_t>;
 				using outer_iterator = std::conditional_t<IsConst, typename prop_pat_typemap_t::const_iterator, typename prop_pat_typemap_t::iterator>;
 				using inner_iterator = std::conditional_t<IsConst, typename prop_pat_map_t::const_iterator, typename prop_pat_map_t::iterator>;
 
@@ -441,11 +444,10 @@ namespace cadabra {
 				using value_type = std::conditional_t<IsConst, const prop_pat_pair_t, prop_pat_pair_t>;
 				using pointer = value_type*;
 				using reference = value_type&;
+				using self_type = iterator_base<IsConst, T1, T2>;
 
-				using condition_t = std::function<bool(const iterator_base<IsConst>&)>;
-
-				iterator_base(map_type* m, condition_t cond, bool is_end = false)
-					: typemap_(m), condition_(std::move(cond)) {
+				iterator_base(map_t* m, bool is_end = false)
+					: typemap_(m) {
 					if (is_end) {
 						outer_it_ = typemap_->end();
 						inner_it_ = inner_iterator();
@@ -455,7 +457,7 @@ namespace cadabra {
 					}
 				}
 
-				iterator_base<IsConst>& operator++() {
+				self_type& operator++() {
 					++inner_it_;
 					if (inner_it_ == outer_it_->second.end()) {
 						++outer_it_;
@@ -464,7 +466,7 @@ namespace cadabra {
 					return *this;
 				}
 
-				iterator_base<IsConst>& operator--() {
+				self_type& operator--() {
 					if (outer_it_ == typemap_->end()) {
 						--outer_it_;
 						skip_back();
@@ -477,7 +479,7 @@ namespace cadabra {
 					return *this;
 				}
 
-				iterator_base<IsConst>& next_proptype() {
+				self_type& next_proptype() {
 					++outer_it_;
 					skip_ahead();
 					return *this;
@@ -494,24 +496,35 @@ namespace cadabra {
 				reference operator*() const { return *inner_it_; }
 				pointer operator->() const { return &(*inner_it_); }
 
-				bool operator==(const iterator_base<IsConst>& other) const {
+				bool operator==(const self_type& other) const {
 					return inner_it_ == other.inner_it_ && outer_it_ == other.outer_it_;
 				}
 
-				bool operator!=(const iterator_base<IsConst>& other) const {
+				bool operator!=(const self_type& other) const {
 					return !(*this == other);
 				}
 
 			protected:
-				map_type* typemap_;
-				condition_t condition_;
+				map_t* typemap_;
 				outer_iterator outer_it_;
 				inner_iterator inner_it_;
 
+				static bool condition_(const property* pr) {
+					if constexpr (std::is_void<T1>::value) return true;
+					if constexpr (std::is_void<T2>::value)
+						return dynamic_cast<const T1*>(pr) != nullptr;
+					return  dynamic_cast<const T1*>(pr) != nullptr ||
+							dynamic_cast<const T2*>(pr) != nullptr;
+				}
+
 				void skip_ahead() {
 					while (outer_it_ != typemap_->end()) {
+						if (outer_it_->second.empty()) {
+        				    ++outer_it_;
+            				continue;
+						}
 						inner_it_ = outer_it_->second.begin();
-						if (condition_(*this)) {
+						if (condition_(inner_it_->first)) {
 							if (inner_it_ != outer_it_->second.end()) return;
 						}
 						++outer_it_;
@@ -519,10 +532,11 @@ namespace cadabra {
 					inner_it_ = inner_iterator();
 				}
 
+				// The below still needs to be fixed but we don't use it really.
 				void skip_back() {
 					while (outer_it_ != typemap_->begin()) {
 						inner_it_ = outer_it_->second.end();
-						if (condition_(*this)) {
+						if (condition_(inner_it_->first)) {
 							if (inner_it_ != outer_it_->second.begin()) {
 								--inner_it_;
 								return;
@@ -530,7 +544,7 @@ namespace cadabra {
 						}
 						--outer_it_;
 					}
-					if (condition_(*this)) {
+					if (condition_(inner_it_->first)) {
 						inner_it_ = outer_it_->second.end();
 						if (inner_it_ != outer_it_->second.begin()) {
 							--inner_it_;
@@ -546,34 +560,29 @@ namespace cadabra {
 			typedef iterator_base<true>  const_iterator;
 			
 			/// Specialized property filter. Use to build PropertyIterators that satisfy a condition.
-			template<class Map, class It>
+			template<bool IsConst, typename T1 = void, typename T2 = void>
 			class PropertyFilter {
-			public:
-				PropertyFilter(Map* m)
-					: typemap_(m),
-					  condition_([](const It&) {return true;})
-					{
+				using map_t = std::conditional_t<IsConst, const prop_pat_typemap_t, prop_pat_typemap_t>;
+				using It = iterator_base<IsConst, T1, T2>;
+				public:
+					PropertyFilter(map_t* m)
+						: typemap_(m),
+						begin_(typemap_, /*is_end=*/false),
+						end_(typemap_, /*is_end=*/true) 
+						{}
+
+					It begin() const {
+						return begin_;
 					}
-				PropertyFilter(Map* m, std::function<bool(const It&)> condition)
-					: typemap_(m),
-					  condition_(condition),
-					  begin_(typemap_, condition_, /*is_end=*/false),
-					  end_(typemap_, condition_,   /*is_end=*/true) 
-					{}
 
-				It begin() const {
-					return begin_;
-				}
+					It end() const {
+						return end_;
+					}
 
-				It end() const {
-					return end_;
-				}
-
-			private:
-				Map* typemap_;
-				std::function<bool(const It&)> condition_;
-				It begin_;
-				It end_;
+				private:
+					map_t* typemap_;
+					It begin_;
+					It end_;
 			};
 
 		};
@@ -611,13 +620,6 @@ namespace cadabra {
 																									int& serialnum, const std::string& label,
 																									bool doserial, bool ignore_parent_rel) const
 		{
-		auto helper_heritable = [this](const const_iterator& pit) {
-										return is_castable<Inherit<T>>(pit.proptype(), pit->first) || is_castable<PropertyInherit>(pit.proptype(), pit->first);
-									};
-		auto helper_castable = [this](const const_iterator& pit) {
-										return is_castable<T>(pit.proptype(), pit->first);
-									};
-
 		std::pair<const T*, const pattern *> ret = {nullptr, nullptr};
 
 		bool inherits = false;
@@ -644,43 +646,26 @@ namespace cadabra {
 
 		auto props_dict_it = props_dict.find(it->name_only());
 		if (props_dict_it != props_dict.end()) {
-			auto heritable_props = PropertyFilter<const prop_pat_typemap_t, const_iterator>(&props_dict_it->second, 
-									helper_heritable
-									// static_cast<bool(*)(const PropertyIterator&)>(&helper_heritable<T>) 
-									/*
-									([this](const const_iterator& pit) {
-										return is_castable<Inherit<T>>(pit.proptype(), pit->first) || is_castable<PropertyInherit>(pit.proptype(), pit->first);
-									})
-									*/
-								);
+			auto heritable_props = PropertyFilter<true, Inherit<T>, PropertyInherit>(&props_dict_it->second);
 			inherits = (heritable_props.begin() != heritable_props.end());
 
 			// Filter all properties that are castable to T.
-			auto castable_props = PropertyFilter<const prop_pat_typemap_t, const_iterator>(&props_dict_it->second, 
-									helper_castable
-									// static_cast<bool(*)(const PropertyIterator&)>(&helper_castable<T>) 
-									/*
-									([this](const const_iterator& pit) {
-										return is_castable<T>(pit.proptype(), pit->first);
-									})
-									*/
-								);
+			auto castable_props = PropertyFilter<true, T>(&props_dict_it->second);
 
 			// Outer loop runs first with wildcards = false, second (if needed) with wildcards = true
 			for(;;) {
 				for (const prop_pat_pair_t& prop_pat : castable_props) {
 					if(wildcards==prop_pat.second->children_wildcard()) {
+						// The cast is guaranteed to work so we can use
 						ret.first=dynamic_cast<const T *>(prop_pat.first);
-						if(ret.first) {
-							if(prop_pat.second->match_ext(*this, it, comp, ignore_parent_rel, ignore_properties)) {
-								ret.second=prop_pat.second;
-								if(!check_label(ret.first, label))
-									ret.first=0;
-								else {
-									if(doserial) 
-										serialnum=serial_number( prop_pat.first, prop_pat.second);
-									break;
-									}
+						if(prop_pat.second->match_ext(*this, it, comp, ignore_parent_rel, ignore_properties)) {
+							ret.second=prop_pat.second;
+							if(!check_label(ret.first, label))
+								ret.first=0;
+							else {
+								if(doserial) 
+									serialnum=serial_number( prop_pat.first, prop_pat.second);
+								break;
 								}
 							}
 						ret.first=0;
@@ -750,24 +735,16 @@ namespace cadabra {
 		if (props_dict_it1 != props_dict.end() && props_dict_it2 != props_dict.end()) {
 			// Are any of these properties heritable?
 			// FIXME: Below just uses PropertyInherit and not Inherit<T>?
-			auto heritable_props = PropertyFilter<const prop_pat_typemap_t, const_iterator>(&props_dict_it1->second, 
-					// static_cast<bool(*)(const PropertyIterator&)>(&helper_castable<PropertyInherit>) );
-					([this](const const_iterator& pit) {return is_castable<PropertyInherit>(pit.proptype(), pit->first);}));
+			auto heritable_props = PropertyFilter<true, PropertyInherit>(&props_dict_it1->second);
 			inherits1 = (heritable_props.begin() != heritable_props.end());
 
-			heritable_props = PropertyFilter<const prop_pat_typemap_t, const_iterator>(&props_dict_it2->second,
-					// static_cast<bool(*)(const PropertyIterator&)>(&helper_castable<PropertyInherit>) );
-					([this](const const_iterator& pit) {return is_castable<PropertyInherit>(pit.proptype(), pit->first);}));
+			heritable_props = PropertyFilter<true, PropertyInherit>(&props_dict_it2->second);
 			inherits2 = (heritable_props.begin() != heritable_props.end());
 
 			// Find all castable properties that appear in both props_dict_t1->second and props_dict_t2->second
-			auto castable_props1 = PropertyFilter<const prop_pat_typemap_t, const_iterator>(&props_dict_it1->second, 
-					// static_cast<bool(*)(const PropertyIterator&)>(&helper_castable<T>) );
-					([this](const const_iterator& pit) {return is_castable<T>(pit.proptype(), pit->first);}) );
-			auto castable_props2 = PropertyFilter<const prop_pat_typemap_t, const_iterator>(&props_dict_it2->second,
-					// static_cast<bool(*)(const PropertyIterator&)>(&helper_castable<T>) );
-					([this](const const_iterator& pit) {return is_castable<T>(pit.proptype(), pit->first);}));
-
+			auto castable_props1 = PropertyFilter<true, T>(&props_dict_it1->second);
+			auto castable_props2 = PropertyFilter<true, T>(&props_dict_it2->second);
+	
 
 			// Search for properties that appear in both pit1 and pit2
 			for (auto pit1 = castable_props1.begin(), pit2 = castable_props2.begin();

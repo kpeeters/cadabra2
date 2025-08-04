@@ -400,28 +400,29 @@ void Properties::insert_prop(const Ex& et, const property *pr) {
 	pattern *pat = new pattern(et);
 
 	// Make sure there is no existing property of the same type matching pat
-	auto pdit = props_dict.find(pat->obj.begin()->name_only());
-	if (pdit != props_dict.end() ) {
-		auto possible_dups = PropertyFilter<prop_pat_typemap_t, iterator>(&pdit->second,
-										    [pr](const iterator& pit) { 
-												return typeid(*pr) == typeid(*(pit->second));
-											});
-		
-		for (iterator pdit = possible_dups.begin(); pdit != possible_dups.end();) {
+	auto tmp = props_dict.find(pat->obj.begin()->name_only());
+	if (tmp != props_dict.end() ) {
+		auto possible_dups = PropertyFilter<false>(&tmp->second);
+		for (iterator dup_it = possible_dups.begin(); dup_it != possible_dups.end();) {
+			// std::cerr << "Accessing: " << dup_it->first << '\n';
+			if (typeid(*dup_it->first) != typeid(*pr)) {
+				dup_it.next_proptype();
+				continue;
+			}
 			// A given pattern can only have one property of any given type. The following
 			// triggers on entries in the props map which match the pattern to be inserted
 			// and are of the same type as pr.
-			if( pdit->second->match(*this, et.begin())) {
+			if( dup_it->second->match(*this, et.begin())) {
 				// If this is a labelled property, is the label different from the one on the
 				// property we are trying to insert?
 				const labelled_property *lp    = dynamic_cast<const labelled_property *>(pr);
-				const labelled_property *lpold = dynamic_cast<const labelled_property *>(pdit->first);
+				const labelled_property *lpold = dynamic_cast<const labelled_property *>(dup_it->first);
 
 				if(!lp || !lpold || lp->label==lpold->label) {
 					// The to-be-inserted property cannot co-exist on this pattern with the
 					// one that is currently associated to the pattern. Remove it.
-					pattern        *oldpat  = pdit->second;
-					const property *oldprop = pdit->first;
+					pattern        *oldpat  = dup_it->second;
+					const property *oldprop = dup_it->first;
 
 					// If the new property instance is the same as the old one, we can stop
 					// (this happens if a pattern is accidentally repeated in a property assignment).
@@ -432,9 +433,10 @@ void Properties::insert_prop(const Ex& et, const property *pr) {
 
 					// Erase the pattern->property entry, and delete the pattern.
 					// FIXME: store pattern by value. (why?)
-					iterator old_pdit = pdit;
-					++pdit;
-					erase(old_pdit->first, old_pdit->second);
+					iterator old_dup_it = dup_it;
+					++dup_it;
+					// std::cerr << "Freeing: " << old_dup_it->first << '\n';
+					erase(old_dup_it->first, old_dup_it->second);
 
 					// Remove the property->pattern entry. Only delete the property
 					// if it is no longer associated to any other pattern.
@@ -447,9 +449,11 @@ void Properties::insert_prop(const Ex& et, const property *pr) {
 					// identical, or when they can coexist, or something like that.
 					
 					// FIXME: SelfAntiCommuting is not a list property, so above should be fine.
+				} else {
+					++dup_it;
 				}
 			} else {
-				++pdit;
+				++dup_it;
 			}
 		}
 	}
@@ -555,7 +559,7 @@ void Properties::insert_prop_old(const Ex& et, const property *pr)
 	}
 */
 
-void Properties::insert_list_prop(const std::vector<Ex>& its, const list_property *pr)
+void Properties::insert_list_prop(const std::vector<Ex>& its, const list_property*& pr)
 	{
 	assert(its.size()>0);
 	
@@ -610,6 +614,7 @@ void Properties::insert_list_prop(const std::vector<Ex>& its, const list_propert
 		if (match_type == list_property::exact_match) {
 			delete pr;
 			pr=static_cast<const list_property *>( (*pit).first );
+			// Because pr is passed by reference, the caller maintains a valid pointer.
 			break;
 		} else if (match_type == list_property::id_match) {
 			erase((*pit).first);
@@ -839,39 +844,48 @@ void Properties::erase(const property* p) {
 // Erase a property and related pattern.
 void Properties::erase(const property* prop, pattern* pat) {
 	auto name = pat->obj.begin()->name_only();
+	int num_found = 0;
 
-	// Eliminate from pats_dict
 	auto pad_it = pats_dict.find(typeid(*prop));
-	if (pad_it != pats_dict.end()) {
-		auto prop_pat_pairs = pad_it->second;
-		for (auto pairs_it = prop_pat_pairs.begin(); pairs_it != prop_pat_pairs.end(); ) {
-			if (pairs_it->first == prop && pairs_it->second == pat) {
-				pairs_it = prop_pat_pairs.erase(pairs_it);
-			} else {
-				++pairs_it;
-			}
-		}
+	if (pad_it == pats_dict.end()) {
+		throw ConsistencyException("Properties erase failure: Cannot find property of matching type to property/pattern pair to erase.");
 	}
+	
 
-	// Eliminate from props_dict
+	// Eliminate from props_dict (where they are first keyed by name of pattern)
 	auto pdit = props_dict.find(name);
 	if (pdit != props_dict.end()) {
 		auto ppit = pdit->second.find(typeid(*prop));
 		if (ppit != pdit->second.end()) {
-			auto prop_pat_pairs = ppit->second;
-			for (auto pairs_it = prop_pat_pairs.begin(); pairs_it != prop_pat_pairs.end(); ) {
+			auto& named_typed_pairs = ppit->second;
+			for (auto pairs_it = named_typed_pairs.begin(); pairs_it != named_typed_pairs.end(); ) {
 				if (pairs_it->first == prop && pairs_it->second == pat) {
-					pairs_it = prop_pat_pairs.erase(pairs_it);
+					pairs_it = named_typed_pairs.erase(pairs_it);
+					++num_found;
 				} else {
 					++pairs_it;
 				}
 			}
-			// Does prop have any more patterns associated with it?
-			if (prop_pat_pairs.find(prop) == prop_pat_pairs.end()) {
-				delete prop;
-			}
-
 		}
+	}
+
+	//	Look over all prop/pat pairs of matching types and erase them
+	auto& all_typed_pairs = pad_it->second;
+	for (auto pairs_it = all_typed_pairs.begin(); pairs_it != all_typed_pairs.end(); ) {
+		if (pairs_it->first == prop && pairs_it->second == pat) {
+			pairs_it = all_typed_pairs.erase(pairs_it);
+			++num_found;
+		} else {
+			++pairs_it;
+		}
+	}
+
+	// Does prop have any more patterns associated with it?
+	if (all_typed_pairs.find(prop) == all_typed_pairs.end()) {
+		delete prop;
+	}
+	if (num_found != 2) {
+		throw ConsistencyException("Properties erase failure: Inconsistent numbers of property/patterns erased.");
 	}
 
 	delete pat;
