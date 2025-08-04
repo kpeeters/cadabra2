@@ -180,6 +180,7 @@ Properties::registered_property_map_t::~registered_property_map_t()
 template<typename T>
 void Properties::registered_property_map_t::register_type() {
 	T obj;
+	// obj is an actual property object (e.g. AntiCommuting) and not a pointer
 	std::type_index typeidx = typeid(obj);
 	auto it = types_to_names_.find(typeidx);
 	if (it == types_to_names_.end()) {
@@ -188,13 +189,12 @@ void Properties::registered_property_map_t::register_type() {
 	}
 }
 
-template<typename T>
-void Properties::registered_property_map_t::register_type(const T& obj) {
-	std::type_index typeidx(typeid(obj));
+void Properties::registered_property_map_t::register_type(const property* prop) {
+	std::type_index typeidx(typeid(*prop));
 	auto it = types_to_names_.find(typeidx);
 	if (it == types_to_names_.end()) {
-		types_to_names_[typeidx] = obj.name();
-		names_to_types_.insert({obj.name(),typeidx});
+		types_to_names_[typeidx] = prop->name();
+		names_to_types_.insert({prop->name(),typeidx});
 	}
 }
 
@@ -210,10 +210,9 @@ void Properties::register_property_type()
 	registered_properties.register_type<T>();
 	}
 
-template<typename T>
-void Properties::register_property_type(const T& obj)
+void Properties::register_property_type(const property* prop)
 	{
-	registered_properties.register_type(obj);
+	registered_properties.register_type(prop);
 	}
 
 keyval_t::const_iterator keyval_t::find(const std::string& key) const
@@ -757,7 +756,7 @@ void Properties::dict_erase_(const property* prop, pattern* pat) {
 
 // Insert a property and pattern into the dict_maps
 void Properties::dict_insert_(const property* prop, pattern* pat) {
-	register_property_type(*prop);
+	register_property_type(prop);
 	std::type_index type_idx = typeid(*prop);
 	auto name = pat->obj.begin()->name_only();
 	props_dict[name].emplace( type_idx, std::make_pair(pat,prop));
