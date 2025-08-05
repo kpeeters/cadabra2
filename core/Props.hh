@@ -265,6 +265,10 @@ namespace cadabra {
 					// Register the type of an object. Usage: `register_type(prop);`
 					void register_type(const property* prop);
 					
+					// Fuzzy bool type
+					enum fbool {False, True, Unknown};
+					fbool castable(std::type_index to, std::type_index from);
+
 				private:
 					// Dictionary from type_index to human readable name.
 					std::map<std::type_index, std::string>       types_to_names_;
@@ -319,25 +323,13 @@ namespace cadabra {
 			// property_map_t  props;  // pattern -> property
 			// pattern_map_t   pats;   // property -> pattern; for list properties, patterns are stored here in order
 
-			/**************************************************************************************
-			 * BELOW REVISES PROPS/PATS STRUCTURE.
-			 *
-			 * The below is intended as a replacement for props/pats by including information about the
-			 * property_type directly. This could be used to circumvent dynamic casts where they are
-			 * known to succeed, but currently only used for quickly finding properties of a specific
-			 * type (e.g. Indices).
-			 * 
-			 **************************************************************************************/
-			typedef std::multimap<const property *, pattern *>                      	   pattern_map_t;
-			typedef std::multimap<const property *, pattern *>					           prop_pat_map_t;
+			typedef std::multimap<const property *, pattern *>				propmap_t;
+			typedef std::map<std::type_index, propmap_t>				    typemap_t;
+			typedef std::map<nset_t::iterator, typemap_t, nset_it_less>		namemap_t;
 
-			typedef std::map<std::type_index, prop_pat_map_t> 			   				   prop_pat_typemap_t;
-			typedef std::map<nset_t::iterator, prop_pat_typemap_t, nset_it_less>           property_dictmap_t;
-			typedef std::map<std::type_index, std::multimap<const property *, pattern *>>  pattern_dictmap_t;
+			typemap_t  pats_dict;
+			namemap_t  props_dict;
 
-			property_dictmap_t  props_dict;
-			pattern_dictmap_t   pats_dict;
-			
 			/// Normal search: given a pattern, get its property if any.
 			template<class T> const T*  get(Ex::iterator, bool ignore_parent_rel=false) const;
 			template<class T> const T*  get(Ex::iterator, int& serialnum, bool doserial=true, bool ignore_parent_rel=false) const;
@@ -394,7 +386,6 @@ namespace cadabra {
 			// Insert a property. Do not use this directly, use the public
 			// interface `master_insert` instead.
 			void insert_prop(const Ex&, const property *);
-			void insert_prop_old(const Ex&, const property *);
 			const list_property* insert_list_prop(const std::vector<Ex>&, const list_property *);
 			bool check_label(const property *, const std::string&) const;
 			bool check_label(const labelled_property *, const std::string&) const;			
@@ -409,32 +400,34 @@ namespace cadabra {
 
 
 		public:
-			// Need specialized iterator and const_iterator classes. These are built from iterator_base below.
-			template<bool IsConst, typename T1 = void, typename T2 = void>
+			// typedef std::multimap<const property *, pattern *>				propmap_t;
+			// typedef std::map<std::type_index, propmap_t>				    typemap_t;
+
+			template<bool IsConst>
 			class iterator_base {
-				// Compile-time assurance that we cannot have T1=void but T2 not void.
-				static_assert(!(std::is_void<T1>::value && !std::is_void<T2>::value), "If T1 is void, T2 must also be void.");
-
 			public:
-				using map_t = std::conditional_t<IsConst, const prop_pat_typemap_t, prop_pat_typemap_t>;
-				using outer_iterator = std::conditional_t<IsConst, typename prop_pat_typemap_t::const_iterator, typename prop_pat_typemap_t::iterator>;
-				using inner_iterator = std::conditional_t<IsConst, typename prop_pat_map_t::const_iterator, typename prop_pat_map_t::iterator>;
-
+				using map_t = std::conditional_t<IsConst, const typemap_t, typemap_t>;
+				using outer_iterator = std::conditional_t<IsConst, typename typemap_t::const_iterator, typename typemap_t::iterator>;
+				using inner_iterator = std::conditional_t<IsConst, typename propmap_t::const_iterator, typename propmap_t::iterator>;
 				using iterator_category = std::forward_iterator_tag;
 				using difference_type   = std::ptrdiff_t;
 				using value_type = std::conditional_t<IsConst, const prop_pat_pair_t, prop_pat_pair_t>;
 				using pointer = value_type*;
 				using reference = value_type&;
-				using self_type = iterator_base<IsConst, T1, T2>;
+				using self_type = iterator_base<IsConst>;
+
+				iterator_base() = default;
 
 				iterator_base(map_t* m, bool is_end = false)
 					: typemap_(m) {
 					if (is_end) {
 						outer_it_ = typemap_->end();
 						inner_it_ = inner_iterator();
+						// Warning: default-constructed iterator can only be compared with another
+						// default constructed iterator. Comparison with an actual iterator is undefined.
 					} else {
 						outer_it_ = typemap_->begin();
-						skip_ahead();
+						inner_it_ = outer_it_->second.begin();
 					}
 				}
 
@@ -442,28 +435,14 @@ namespace cadabra {
 					++inner_it_;
 					if (inner_it_ == outer_it_->second.end()) {
 						++outer_it_;
-						skip_ahead();
+						inner_it_ = outer_it_->second.begin();
 					}
 					return *this;
 				}
 
-				/* skip_back() doesn't work properly yet.
-				self_type& operator--() {
-					if (outer_it_ == typemap_->end()) {
-						--outer_it_;
-						skip_back();
-					}
-					if (inner_it_ == outer_it_->second.begin()) {
-						--outer_it_;
-						skip_back();
-					}
-					--inner_it_;
-					return *this;
-				}
-				*/
 				self_type& next_proptype() {
 					++outer_it_;
-					skip_ahead();
+					inner_it_ = outer_it_->second.begin();
 					return *this;
 				}
 
@@ -471,7 +450,7 @@ namespace cadabra {
 					return outer_it_->first;
 				}
 
-				const prop_pat_map_t& prop_pat_pairs() const {
+				const propmap_t& prop_pat_pairs() const {
 					return outer_it_->second;
 				}
 
@@ -479,7 +458,8 @@ namespace cadabra {
 				pointer operator->() const { return &(*inner_it_); }
 
 				bool operator==(const self_type& other) const {
-					return inner_it_ == other.inner_it_ && outer_it_ == other.outer_it_;
+					return outer_it_ == other.outer_it_ && inner_it_ == other.inner_it_;
+					// should work correctly for end iterator
 				}
 
 				bool operator!=(const self_type& other) const {
@@ -491,84 +471,38 @@ namespace cadabra {
 				outer_iterator outer_it_;
 				inner_iterator inner_it_;
 
-				static bool condition_(const property* pr) {
-					if constexpr (std::is_void<T1>::value) return true;
-					if constexpr (std::is_void<T2>::value)
-						return dynamic_cast<const T1*>(pr) != nullptr;
-					return  dynamic_cast<const T1*>(pr) != nullptr ||
-							dynamic_cast<const T2*>(pr) != nullptr;
-				}
-
-				void skip_ahead() {
-					while (outer_it_ != typemap_->end()) {
-						if (outer_it_->second.empty()) {
-        				    ++outer_it_;
-            				continue;
-						}
-						inner_it_ = outer_it_->second.begin();
-						if (condition_(inner_it_->first)) {
-							if (inner_it_ != outer_it_->second.end()) return;
-						}
-						++outer_it_;
-					}
-					inner_it_ = inner_iterator();
-				}
-
-				/*
-				// The below still needs to be fixed but we don't use it really.
-				void skip_back() {
-					while (outer_it_ != typemap_->begin()) {
-						inner_it_ = outer_it_->second.end();
-						if (condition_(inner_it_->first)) {
-							if (inner_it_ != outer_it_->second.begin()) {
-								--inner_it_;
-								return;
-							}
-						}
-						--outer_it_;
-					}
-					if (condition_(inner_it_->first)) {
-						inner_it_ = outer_it_->second.end();
-						if (inner_it_ != outer_it_->second.begin()) {
-							--inner_it_;
-							return;
-						}
-					} else {
-						inner_it_ = outer_it_->second.begin();
-					}
-				}
-				*/
-
 			};
 
 			typedef iterator_base<false> iterator;
 			typedef iterator_base<true>  const_iterator;
+
+			// Iterator over all properties
+			iterator begin() {return iterator(&pats_dict);}
+			iterator end() {return iterator(&pats_dict, /*is_end=*/ true);}
+			const_iterator begin() const {return const_iterator(&pats_dict);}
+			const_iterator end() const {return const_iterator(&pats_dict, /*is_end = */ true);}
 			
-			/// Specialized property filter. Use to build PropertyIterators that can be cast to T1 or T2.
-			template<bool IsConst, typename T1 = void, typename T2 = void>
-			class PropertyFilter {
-				using map_t = std::conditional_t<IsConst, const prop_pat_typemap_t, prop_pat_typemap_t>;
-				using It = iterator_base<IsConst, T1, T2>;
-				public:
-					PropertyFilter(map_t* m)
-						: typemap_(m),
-						begin_(typemap_, /*is_end=*/false),
-						end_(typemap_, /*is_end=*/true) 
-						{}
-
-					It begin() const {
-						return begin_;
-					}
-
-					It end() const {
-						return end_;
-					}
-
-				private:
-					map_t* typemap_;
-					It begin_;
-					It end_;
-			};
+			// Iterator over all properties with a pattern matching name
+			iterator begin(nset_t::iterator name) {
+				auto it = props_dict.find(name);
+				if (it == props_dict.end()) return iterator{};
+				else return iterator(&(it->second));
+			}
+			iterator end(nset_t::iterator name) {
+				auto it = props_dict.find(name);
+				if (it == props_dict.end()) return iterator{};
+				else return iterator(&(it->second), /*is_end=*/ true);
+			}
+			const_iterator begin(nset_t::iterator name) const {
+				auto it = props_dict.find(name);
+				if (it == props_dict.end()) return const_iterator{};
+				else return const_iterator(&(it->second));
+			}
+			const_iterator end(nset_t::iterator name) const {
+				auto it = props_dict.find(name);
+				if (it == props_dict.end()) return const_iterator{};
+				else return const_iterator(&(it->second), /*is_end=*/ true);
+			}
 
 		};
 
@@ -611,11 +545,6 @@ namespace cadabra {
 		//std::cerr << *it->name_only() << std::endl;
 		//	std::cerr << props.size() << std::endl;
 		
-		// The original version of this used walked the iterator pit and checked dynamic casts to T 
-		// and to Inherit<T> and PropertyInherit. The new PropertyFilter lets us walk the dictmap
-		// just for the various castable cases. But we have to split the logic up and check
-		// the T castable cases first.
-
 		// First look for properties of the node itself. Go through the loop twice:
 		// once looking for patterns which do not have wildcards, and then looking
 		// for wildcard patterns.
@@ -628,43 +557,64 @@ namespace cadabra {
 		if(std::is_same<T, Accent>::value)
 			ignore_properties=true;
 
+		// Outer loop runs first with wildcards = false, second (if needed) with wildcards = true
+		auto walk = begin(it->name_only());
+		auto end_it = end(it->name_only());
+		// Make sure we found something before bothering to loop
 
-		auto props_dict_it = props_dict.find(it->name_only());
-		if (props_dict_it != props_dict.end()) {
-			// Filter all properties that are castable to T.
-			auto castable_props = PropertyFilter<true, T>(&props_dict_it->second);
-
-			// Outer loop runs first with wildcards = false, second (if needed) with wildcards = true
+		if (walk != end_it) {
 			for(;;) {
-				for (const prop_pat_pair_t& prop_pat : castable_props) {
-					if(wildcards==prop_pat.second->children_wildcard()) {
-						// The cast is guaranteed to work so we can use
-						ret.first=dynamic_cast<const T *>(prop_pat.first);
-						if(prop_pat.second->match_ext(*this, it, comp, ignore_parent_rel, ignore_properties)) {
-							ret.second=prop_pat.second;
-							if(!check_label(ret.first, label))
-								ret.first=0;
-							else {
-								if(doserial) 
-									serialnum=serial_number( prop_pat.first, prop_pat.second);
-								break;
+				while (walk != end_it) {
+					if(wildcards==walk->second->children_wildcard()) {
+						auto this_prop = walk->first;
+						ret.first=dynamic_cast<const T *>(this_prop);
+						if (!ret.first) {
+							// If we can't dynamically cast this property, then move on
+							// but check heritability first
+							if (!inherits) {
+								inherits = dynamic_cast<const PropertyInherit *>(this_prop) || 
+										dynamic_cast<const Inherit<T> *>(this_prop);
 								}
+							walk.next_proptype();
+							continue;
+						}
+						// If we *can* dynamically cast this property, loop over all associated patterns
+						// as there may be multiple patterns that are associated with the same property
+						// and there is no point in repeatedly casting the same property.
+						while (this_prop == walk->first) {
+							if(walk->second->match_ext(*this, it, comp, ignore_parent_rel, ignore_properties)) {
+								ret.second=walk->second;
+								if(!check_label(ret.first, label))
+									ret = {0,0};
+									//ret.first=0;
+								else {
+									if(doserial) 
+										serialnum=serial_number( walk->first, walk->second);
+									break;
+									}
+								}
+							++walk;
 							}
-						ret.first=0;
-						}				
+						// None of the patterns associated with this_prop matched
+						// ret.first=0;
+						ret = {0,0};
+						// Check heritability
+						if (!inherits) {
+							inherits = dynamic_cast<const PropertyInherit *>(this_prop) || 
+									   dynamic_cast<const Inherit<T> *>(this_prop);
+							}
+						}	
+					++walk;
 					}
 				if(!wildcards && !ret.first) {
 					//			std::cerr << "not yet found, switching to wildcards" << std::endl;
 					wildcards=true;
+					walk = begin(it->name_only()); // restarting the for loop
 					}
 				else break;
 				}
-			
-			// Check heritability
-			auto heritable_props = PropertyFilter<true, Inherit<T>, PropertyInherit>(&props_dict_it->second);
-			inherits = (heritable_props.begin() != heritable_props.end());
-
 			}
+
 		// Do not walk down the tree if the property cannot be passed up the tree.
 		// FIXME: see issue/259.
 		if(std::is_same<T, LaTeXForm>::value)
@@ -712,101 +662,96 @@ namespace cadabra {
 	template<class T>
 	const T* Properties::get(Ex::iterator it1, Ex::iterator it2, int& serialnum1, int& serialnum2, bool ignore_parent_rel) const
 		{
-		bool found=false;
-
 		bool inherits1=false, inherits2=false;
 		
 		// Find all common properties of it1 and it2
-		auto props_dict_it1 = props_dict.find(it1->name_only());
-		auto props_dict_it2 = props_dict.find(it2->name_only());
-		if (props_dict_it1 != props_dict.end() && props_dict_it2 != props_dict.end()) {
+		auto walk1 = begin(it1->name_only());
+		auto walk2 = begin(it2->name_only());
+		auto end1 = end(it1->name_only());
+		auto end2 = end(it2->name_only());
 
-			// Find all castable properties that appear in both props_dict_t1->second and props_dict_t2->second
-			auto castable_props1 = PropertyFilter<true, T>(&props_dict_it1->second);
-			auto castable_props2 = PropertyFilter<true, T>(&props_dict_it2->second);
-
-			// Search for properties that appear in both pit1 and pit2
-			for (auto pit1 = castable_props1.begin(), pit2 = castable_props2.begin();
-				pit1 != castable_props1.end() && pit2 != castable_props2.end(); )
-			{
-				// Because we use a std::map, the std::type_index prop types are sorted
-				// so we can walk them simultaneously.
-				if (pit1.proptype() < pit2.proptype()) {
-					pit1.next_proptype();
-				}
-				else if (pit2.proptype() < pit1.proptype()) {
-					pit2.next_proptype();
-				}
-				else {
-					// pit1 and pit2 are of the same property type
-
-					// Get the pat_prop_pairs for each
-					auto& prop_pats1 = pit1.prop_pat_pairs();
-					auto& prop_pats2 = pit2.prop_pat_pairs();
-
-					bool match1_found = false;
-					bool match2_found = false;
-
-					// By construction, the pat_props are always sorted by property pointer.
-					// This allows the iteration below to be as fast as possible.
-					for (auto ppit1 = prop_pats1.begin(), ppit2 = prop_pats2.begin();
-						ppit1 != prop_pats1.end() && ppit2 != prop_pats2.end(); )
-					{
-						// Advance both iterators until their properties match
-						if (ppit1->first < ppit2->first) {
-							++ppit1;
-							match1_found = false;
-						} else if (ppit2->first < ppit1->first) {
-							++ppit2;
-							match2_found = false;
-						} else {
-							// The properties match, so see if there is a pattern match
-							if (!match1_found) {
-								if (ppit1->second->match(*this, it1, ignore_parent_rel)) {
-									match1_found = true;
-								} else {
-									++ppit1;
-									// assert(match1_found == false);
-									continue;
-								}
+		if (walk1 != end1 && walk2 != end2) {
+			if (walk1.proptype() < walk2.proptype()) {
+				walk1.next_proptype();
+			} else if (walk2.proptype() < walk1.proptype()) {
+				walk2.next_proptype();
+			} else if (!dynamic_cast<const T*>(walk1->first)) {
+				walk1.next_proptype();
+				walk2.next_proptype();
+			} else {
+				// walk1 and walk2 are of the same castable property type
+				// Take the property maps
+				auto& propmap1 = walk1.prop_pat_pairs();
+				auto& propmap2 = walk2.prop_pat_pairs();
+				bool match1_found = false;
+				bool match2_found = false;
+				// By construction, the pat_props are always sorted by property pointer.
+				// This allows the iteration below to be as fast as possible.
+				for (auto ppit1 = propmap1.begin(), ppit2 = propmap2.begin();
+					ppit1 != propmap1.end() && ppit2 != propmap2.end(); ) {
+					// Advance both iterators until their properties match
+					if (ppit1->first < ppit2->first) {
+						++ppit1;
+						match1_found = false;
+					} else if (ppit2->first < ppit1->first) {
+						++ppit2;
+						match2_found = false;
+					} else {
+						// The properties match, so see if there is a pattern match
+						if (!match1_found) {
+							if (ppit1->second->match(*this, it1, ignore_parent_rel)) {
+								match1_found = true;
+							} else {
+								++ppit1;
+								// assert(match1_found == false);
+								continue;
 							}
-							if (!match2_found) {
-								if (ppit2->second->match(*this, it2, ignore_parent_rel)) {
-									match2_found = true;
-								} else {
-									++ppit2;
-									// assert(match2_found == false);
-									continue;
-								}
-							}
-							// assert(match1_found && match2_found)
-							
-							// accept if properties are the same and patterns are not
-							if ((ppit1->first == ppit2->first) && (ppit1->second != ppit2->second)) {
-								serialnum1=serial_number( ppit1->first, ppit1->second );
-								serialnum2=serial_number( ppit2->first, ppit2->second );
-								// Return the recasted property
-								return dynamic_cast<const T *>( ppit1->first );
-							}
-							// Otherwise, continue.
-							++ppit1;
-							++ppit2;
 						}
+						if (!match2_found) {
+							if (ppit2->second->match(*this, it2, ignore_parent_rel)) {
+								match2_found = true;
+							} else {
+								++ppit2;
+								// assert(match2_found == false);
+								continue;
+							}
+						}
+						// assert(match1_found && match2_found)
+						
+						// accept if properties are the same and patterns are not
+						if ((ppit1->first == ppit2->first) && (ppit1->second != ppit2->second)) {
+							serialnum1=serial_number( ppit1->first, ppit1->second );
+							serialnum2=serial_number( ppit2->first, ppit2->second );
+							// Return the recasted property
+							return dynamic_cast<const T *>( ppit1->first );
+						}
+						// Otherwise, continue.
+						++ppit1;
+						++ppit2;
 					}
-
-					pit1.next_proptype();
-					pit2.next_proptype();
 				}
+				walk1.next_proptype();
+				walk2.next_proptype();
 			}
+		}
 
-			// Are any of these properties heritable?
-			// FIXME: Below just uses PropertyInherit and not Inherit<T>?
-			auto heritable_props = PropertyFilter<true, PropertyInherit>(&props_dict_it1->second);
-			inherits1 = (heritable_props.begin() != heritable_props.end());
-
-			heritable_props = PropertyFilter<true, PropertyInherit>(&props_dict_it2->second);
-			inherits2 = (heritable_props.begin() != heritable_props.end());
-
+		// Are any of these properties heritable?
+		// FIXME: Below just uses PropertyInherit and not Inherit<T>?
+		walk1 = begin(it1->name_only());
+		while (walk1 != end1) {
+			if (dynamic_cast<const PropertyInherit*>(walk1->first)) {
+				inherits1 = true;
+				break;
+			}
+			walk1.next_proptype();
+		}
+		walk2 = begin(it2->name_only());
+		while (walk2 != end2) {
+			if (dynamic_cast<const PropertyInherit*>(walk2->first)) {
+				inherits2 = true;
+				break;
+			}
+			walk2.next_proptype();
 		}
 
 		// If no property was found, figure out whether a property is inherited from a child node.

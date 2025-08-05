@@ -493,8 +493,8 @@ Ex IndexClassifier::get_dummy(const list_property *dums,
 	std::type_index type_idx = std::type_index(typeid(*dums));
 	auto pats_it = kernel.properties.pats_dict.find(type_idx);
 	if (pats_it != kernel.properties.pats_dict.end()) {
-		Properties::pattern_map_t pats = pats_it->second;
-		std::pair<Properties::pattern_map_t::const_iterator, Properties::pattern_map_t::const_iterator> pr=pats.equal_range(dums);
+		Properties::propmap_t pats = pats_it->second;
+		std::pair<Properties::propmap_t::const_iterator, Properties::propmap_t::const_iterator> pr=pats.equal_range(dums);
 
 		// std::cerr << "finding index not in: " << std::endl;
 		// if(one)

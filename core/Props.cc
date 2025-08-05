@@ -148,7 +148,7 @@ bool Properties::has(const property *pb, Ex::iterator it)
 		}
 	
 	// Look for property *pb
-	prop_pat_typemap_t::iterator pptit = pdit->second.find(typeid(*pb));
+	typemap_t::iterator pptit = pdit->second.find(typeid(*pb));
 	if (pptit == pdit->second.end()) {
 		return false;
 		}
@@ -400,61 +400,59 @@ void Properties::insert_prop(const Ex& et, const property *pr) {
 	pattern *pat = new pattern(et);
 
 	// Make sure there is no existing property of the same type matching pat
-	auto tmp = props_dict.find(pat->obj.begin()->name_only());
-	if (tmp != props_dict.end() ) {
-		auto possible_dups = PropertyFilter<false>(&tmp->second);
-		for (iterator dup_it = possible_dups.begin(); dup_it != possible_dups.end();) {
-			// std::cerr << "Accessing: " << dup_it->first << '\n';
-			if (typeid(*dup_it->first) != typeid(*pr)) {
-				dup_it.next_proptype();
-				continue;
-			}
-			// A given pattern can only have one property of any given type. The following
-			// triggers on entries in the props map which match the pattern to be inserted
-			// and are of the same type as pr.
-			if( dup_it->second->match(*this, et.begin())) {
-				// If this is a labelled property, is the label different from the one on the
-				// property we are trying to insert?
-				const labelled_property *lp    = dynamic_cast<const labelled_property *>(pr);
-				const labelled_property *lpold = dynamic_cast<const labelled_property *>(dup_it->first);
+	auto walk = begin(pat->obj.begin()->name_only());
+	auto end_it = end(pat->obj.begin()->name_only());
 
-				if(!lp || !lpold || lp->label==lpold->label) {
-					// The to-be-inserted property cannot co-exist on this pattern with the
-					// one that is currently associated to the pattern. Remove it.
-					pattern        *oldpat  = dup_it->second;
-					const property *oldprop = dup_it->first;
+	while (walk != end_it) {
+		if (typeid(*walk->first) != typeid(*pr)) {
+			walk.next_proptype();
+			continue;
+		}
+		// A given pattern can only have one property of any given type. The following
+		// triggers on entries in the props map which match the pattern to be inserted
+		// and are of the same type as pr.
+		if( walk->second->match(*this, et.begin())) {
+			// If this is a labelled property, is the label different from the one on the
+			// property we are trying to insert?
+			const labelled_property *lp    = dynamic_cast<const labelled_property *>(pr);
+			const labelled_property *lpold = dynamic_cast<const labelled_property *>(walk->first);
 
-					// If the new property instance is the same as the old one, we can stop
-					// (this happens if a pattern is accidentally repeated in a property assignment).
-					if(oldprop==pr) {
-						delete pat;
-						return;
-						}
+			if(!lp || !lpold || lp->label==lpold->label) {
+				// The to-be-inserted property cannot co-exist on this pattern with the
+				// one that is currently associated to the pattern. Remove it.
+				const property *oldprop = walk->first;
+				pattern        *oldpat  = walk->second;
 
-					// Erase the pattern->property entry, and delete the pattern.
-					// FIXME: store pattern by value. (why?)
-					iterator old_dup_it = dup_it;
-					++dup_it;
-					// std::cerr << "Freeing: " << old_dup_it->first << '\n';
-					erase(old_dup_it->first, old_dup_it->second);
+				// If the new property instance is the same as the old one, we can stop
+				// (this happens if a pattern is accidentally repeated in a property assignment).
+				if(oldprop==pr) {
+					delete pat;
+					return;
+					}
 
-					// Remove the property->pattern entry. Only delete the property
-					// if it is no longer associated to any other pattern.
-					// FIXME:
-					//   {A, B}::SelfAntiCommuting.
-					//   {A}::SelfAntiCommuting.
-					//   {B}::SelfAntiCommuting.
-					// leads to two properties SelfAntiCommuting, which are identical.
-					// We need a way to compare properties and decide when they are
-					// identical, or when they can coexist, or something like that.
-					
-					// FIXME: SelfAntiCommuting is not a list property, so above should be fine.
-				} else {
-					++dup_it;
-				}
+				// Erase the pattern->property entry, and delete the pattern.
+				// FIXME: store pattern by value.
+				iterator old_dup = walk;
+				++walk;
+				// std::cerr << "Freeing: " << old_dup_it->first << '\n';
+				erase(old_dup->first, old_dup->second);
+
+				// Remove the property->pattern entry. Only delete the property
+				// if it is no longer associated to any other pattern.
+				// FIXME:
+				//   {A, B}::SelfAntiCommuting.
+				//   {A}::SelfAntiCommuting.
+				//   {B}::SelfAntiCommuting.
+				// leads to two properties SelfAntiCommuting, which are identical.
+				// We need a way to compare properties and decide when they are
+				// identical, or when they can coexist, or something like that.
+				
+				// FIXME: SelfAntiCommuting is not a list property, so above should be fine.
 			} else {
-				++dup_it;
+				++walk;
 			}
+		} else {
+			++walk;
 		}
 	}
 
@@ -466,98 +464,6 @@ void Properties::insert_prop(const Ex& et, const property *pr) {
 }
 
 
-/*
-void Properties::insert_prop_old(const Ex& et, const property *pr)
-	{
-	//	assert(pats.find(pr)==pats.end()); // identical properties have to be assigned through insert_list_prop
-
-	// FIXME: is it really necessary to store this by pointer? We are in any case
-	// not cleaning this up correctly yet.
-	pattern *pat=new pattern(et);
-
-	// pit iterates over pat_prop pairs matching name_only()
-	std::pair<property_map_t::iterator, property_map_t::iterator> pit=
-	   props.equal_range(pat->obj.begin()->name_only());
-
-	property_map_t::iterator first_nonpattern=pit.first;
-
-	while(pit.first!=pit.second) {
-		// keep track of the first non-pattern element
-		if(Ex::number_of_children((*pit.first).second.first->obj.begin())==1)
-			if((*pit.first).second.first->obj.begin().begin()->is_range_wildcard())
-				++first_nonpattern;
-		
-		// A given pattern can only have one property of any given type. The following
-		// triggers on entries in the props map which match the pattern to be inserted.
-		if((*pit.first).second.first->match(*this, et.begin())) {
-
-			// Does this entry in props give a property of the same type as the one we
-			// are trying to insert?
-			const property *tmp = (*pit.first).second.second;
-			if(typeid(*pr)==typeid(*tmp)) {
-
-				// If this is a labelled property, is the label different from the one on the
-				// property we are trying to insert?
-				const labelled_property *lp   =dynamic_cast<const labelled_property *>(pr);
-				const labelled_property *lpold=dynamic_cast<const labelled_property *>(pit.first->second.second);
-
-				if(!lp || !lpold || lp->label==lpold->label) {
-
-					// The to-be-inserted property cannot co-exist on this pattern with the
-					// one that is currently associated to the pattern. Remove it.
-
-					pattern        *oldpat =pit.first->second.first;
-					const property *oldprop=pit.first->second.second;
-
-					// If the new property instance is the same as the old one, we can stop
-					// (this happens if a pattern is accidentally repeated in a property assignment).
-					if(oldprop==pr) {
-						delete pat;
-						return;
-						}
-
-					// Erase the pattern->property entry, and delete the pattern.
-					// FIXME: store pattern by value.
-
-					// erase <oldpat, oldprop> pattern from props
-					props.erase(pit.first);
-					delete oldpat;
-
-					// Remove the property->pattern entry. Only delete the property
-					// if it is no longer associated to any other pattern.
-					// FIXME:
-					//   {A, B}::SelfAntiCommuting.
-					//   {A}::SelfAntiCommuting.
-					//   {B}::SelfAntiCommuting.
-					// leads to two properties SelfAntiCommuting, which are identical.
-					// We need a way to compare properties and decide when they are
-					// identical, or when they can coexist, or something like that.
-					
-					// erase <oldpat, oldprop> pattern from props
-					for(auto pi=pats.begin(); pi!=pats.end(); ++pi) {
-						if((*pi).first==oldprop && (*pi).second==oldpat) {
-							//							std::cerr << "found old entry, deleting" << std::endl;
-							pats.erase(pi);
-							break;
-							}
-						}
-					if(pats.find(oldprop)==pats.end()) {
-						//						std::cerr << "no other references" << std::endl;
-						delete oldprop;
-						}
-
-					break;
-					}
-				}
-			}
-		++pit.first;
-		}
-
-	pats.insert(pattern_map_t::value_type(pr, pat));
-	// std::cerr << "inserting for " << *(pat->obj.begin()->name) << std::endl;
-	props.insert(property_map_t::value_type(pat->obj.begin()->name_only(), pat_prop_pair_t(pat,pr)));
-	}
-*/
 
 // Insert a list property into the kernel. 
 const list_property* Properties::insert_list_prop(const std::vector<Ex>& its, const list_property* pr)
