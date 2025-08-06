@@ -320,7 +320,7 @@ namespace cadabra {
 		// 
 		// if(!i1.is_valid() && !i2.is_valid())
 		// 	return match_t::subtree_match;
-		
+
 		DEBUGLN( std::cerr << tab() << "equal_subtree with use_props = " << use_props << std::endl; );
 		++offset;
 

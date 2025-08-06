@@ -22,10 +22,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Exceptions.hh"
 #include "Compare.hh"
 #include <stdlib.h>
-#include <typeinfo>
+// #include <typeinfo>
 #include <iostream>
 #include <sstream>
 #include "properties/Indices.hh"
+#include <vector>
 
 // #define DEBUG 1
 
@@ -139,37 +140,50 @@ bool pattern::children_wildcard() const
 
 bool Properties::has(const property *pb, Ex::iterator it)
 	{
-	std::pair<property_map_t::iterator, property_map_t::iterator> pit=props.equal_range(it->name_only());
-	while(pit.first!=pit.second) {
-		//		txtout << *it->name << std::endl;
-		//		txtout << typeid(pit.first->second.second).name() << " versus "
-		//				 << typeid(pb).name() << std::endl;
-		const property *tmp = (pit.first->second.second);
-		if(typeid(*tmp)==typeid(*pb) &&
-		      pit.first->second.first->match(*this, it))  // match found
-			return true;
-		++pit.first;
+	// Does Ex::iterator `it` possess property *pb?
+	
+	auto pdit = props_dict.find(it->name_only());
+	if (pdit == props_dict.end()) {
+		return false;
 		}
+	
+	// Look for property *pb
+	typemap_t::iterator pptit = pdit->second.find(typeid(*pb));
+	if (pptit == pdit->second.end()) {
+		return false;
+		}
+
+	// Check if any prop_pat pair matches
+	for (const prop_pat_pair_t& prop_pat : pptit->second) {
+		if (prop_pat.second->match(*this, it)) {
+			return true;
+			}
+		}
+
 	return false;
 	}
+
 
 void Properties::clear()
 	{
 	// Clear and free the property lists. Since pointers to properties can
-	// be shared, we use the pats map and make sure that we only free each
-	// property* pointer once.
-	pattern_map_t::const_iterator it=pats.begin();
-	const property *previous=0;
-	while(it!=pats.end()) {
-		if(previous!=it->first) {
-			previous=it->first;
-			delete it->first;
+	// be shared (but patterns cannot yet), we use the pats_dict map and make 
+	// sure that we only free each property* pointer once.
+
+	for (const auto& [_, this_pats] : pats_dict) {
+		auto it=this_pats.begin();
+		const property *previous=0;
+		while(it!=this_pats.end()) {
+			if(previous!=it->first) {
+				previous=it->first;
+				delete it->first;
+				}
+			delete it->second;
+			++it;
 			}
-		delete it->second;
-		++it;
 		}
-	props.clear();
-	pats.clear();
+	props_dict.clear();
+	pats_dict.clear();
 	}
 
 Properties::registered_property_map_t::~registered_property_map_t()
@@ -177,9 +191,42 @@ Properties::registered_property_map_t::~registered_property_map_t()
 	// FIXME: V2
 	}
 
+template<typename T>
+void Properties::registered_property_map_t::register_type() {
+	T obj;
+	// obj is an actual property object (e.g. AntiCommuting) and not a pointer
+	std::type_index typeidx = typeid(obj);
+	auto it = types_to_names_.find(typeidx);
+	if (it == types_to_names_.end()) {
+		types_to_names_[typeidx] = obj.name();
+		names_to_types_.emplace(obj.name(),typeidx);
+	}
+}
+
+void Properties::registered_property_map_t::register_type(const property* prop) {
+	std::type_index typeidx(typeid(*prop));
+	auto it = types_to_names_.find(typeidx);
+	if (it == types_to_names_.end()) {
+		types_to_names_[typeidx] = prop->name();
+		names_to_types_.emplace(prop->name(),typeidx);
+	}
+}
+
+
 void Properties::register_property(property* (*fun)(), const std::string& name)
 	{
 	registered_properties.store[name]=fun;
+	}
+
+template<typename T>
+void Properties::register_property_type()
+	{
+	registered_properties.register_type<T>();
+	}
+
+void Properties::register_property_type(const property* prop)
+	{
+	registered_properties.register_type(prop);
 	}
 
 keyval_t::const_iterator keyval_t::find(const std::string& key) const
@@ -312,7 +359,7 @@ std::string property::unnamed_argument() const
 	return "";
 	}
 
-property::match_t property::equals(const property *) const
+list_property::match_t list_property::equals(const property *) const
 	{
 	return exact_match;
 	}
@@ -346,138 +393,146 @@ bool labelled_property::parse(Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals)
 //	  return one.obj==two.obj; // FIXME: handle dummy indices
 //	  }
 
-void Properties::insert_prop(const Ex& et, const property *pr)
-	{
+void Properties::insert_prop(const Ex& et, const property *pr) {
 	//	assert(pats.find(pr)==pats.end()); // identical properties have to be assigned through insert_list_prop
 
-	// FIXME: is it really necessary to store this by pointer? We are in any case
-	// not cleaning this up correctly yet.
-	pattern *pat=new pattern(et);
+	// Create the pattern from et
+	pattern *pat = new pattern(et);
 
-	std::pair<property_map_t::iterator, property_map_t::iterator> pit=
-	   props.equal_range(pat->obj.begin()->name_only());
+	// Make sure there is no existing property of the same type matching pat
+	auto walk = begin(pat->obj.begin()->name_only());
 
-	property_map_t::iterator first_nonpattern=pit.first;
-
-	while(pit.first!=pit.second) {
-		// keep track of the first non-pattern element
-		if(Ex::number_of_children((*pit.first).second.first->obj.begin())==1)
-			if((*pit.first).second.first->obj.begin().begin()->is_range_wildcard())
-				++first_nonpattern;
-
-		// A given pattern can only have one property of any given type. The following
-		// triggers on entries in the props map which match the pattern to be inserted.
-		if((*pit.first).second.first->match(*this, et.begin())) {
-
-			// Does this entry in props give a property of the same type as the one we
-			// are trying to insert?
-			const property *tmp = (*pit.first).second.second;
-			if(typeid(*pr)==typeid(*tmp)) {
-
-				// If this is a labelled property, is the label different from the one on the
-				// property we are trying to insert?
-				const labelled_property *lp   =dynamic_cast<const labelled_property *>(pr);
-				const labelled_property *lpold=dynamic_cast<const labelled_property *>(pit.first->second.second);
-
-				if(!lp || !lpold || lp->label==lpold->label) {
-
-					// The to-be-inserted property cannot co-exist on this pattern with the
-					// one that is currently associated to the pattern. Remove it.
-
-					pattern        *oldpat =pit.first->second.first;
-					const property *oldprop=pit.first->second.second;
-
-					// If the new property instance is the same as the old one, we can stop
-					// (this happens if a pattern is accidentally repeated in a property assignment).
-					if(oldprop==pr) {
-						delete pat;
-						return;
-						}
-
-					// Erase the pattern->property entry, and delete the pattern.
-					// FIXME: store pattern by value.
-					props.erase(pit.first);
-					delete oldpat;
-
-					// Remove the property->pattern entry. Only delete the property
-					// if it is no longer associated to any other pattern.
-					// FIXME:
-					//   {A, B}::SelfAntiCommuting.
-					//   {A}::SelfAntiCommuting.
-					//   {B}::SelfAntiCommuting.
-					// leads to two properties SelfAntiCommuting, which are identical.
-					// We need a way to compare properties and decide when they are
-					// identical, or when they can coexist, or something like that.
-					for(auto pi=pats.begin(); pi!=pats.end(); ++pi) {
-						if((*pi).first==oldprop && (*pi).second==oldpat) {
-							//							std::cerr << "found old entry, deleting" << std::endl;
-							pats.erase(pi);
-							break;
-							}
-						}
-					if(pats.find(oldprop)==pats.end()) {
-						//						std::cerr << "no other references" << std::endl;
-						delete oldprop;
-						}
-
-					break;
-					}
-				}
-			}
-		++pit.first;
+	while (walk != end()) {
+		if (typeid(*walk->first) != typeid(*pr)) {
+			walk.next_proptype();
+			continue;
 		}
+		// A given pattern can only have one property of any given type. The following
+		// triggers on entries in the props map which match the pattern to be inserted
+		// and are of the same type as pr.
+		if( walk->second->match(*this, et.begin())) {
+			// If this is a labelled property, is the label different from the one on the
+			// property we are trying to insert?
+			const labelled_property *lp    = dynamic_cast<const labelled_property *>(pr);
+			const labelled_property *lpold = dynamic_cast<const labelled_property *>(walk->first);
 
-	pats.insert(pattern_map_t::value_type(pr, pat));
-	// std::cerr << "inserting for " << *(pat->obj.begin()->name) << std::endl;
-	props.insert(property_map_t::value_type(pat->obj.begin()->name_only(), pat_prop_pair_t(pat,pr)));
+			if(!lp || !lpold || lp->label==lpold->label) {
+				// The to-be-inserted property cannot co-exist on this pattern with the
+				// one that is currently associated to the pattern. Remove it.
+				const property *oldprop = walk->first;
+				pattern        *oldpat  = walk->second;
+
+				// If the new property instance is the same as the old one, we can stop
+				// (this happens if a pattern is accidentally repeated in a property assignment).
+				if(oldprop==pr) {
+					delete pat;
+					return;
+					}
+
+				// Erase the pattern->property entry, and delete the pattern.
+				// FIXME: store pattern by value.
+				iterator old_dup = walk;
+				++walk;
+				// std::cerr << "Freeing: " << old_dup_it->first << '\n';
+				erase(old_dup->first, old_dup->second);
+
+				// Remove the property->pattern entry. Only delete the property
+				// if it is no longer associated to any other pattern.
+				// FIXME:
+				//   {A, B}::SelfAntiCommuting.
+				//   {A}::SelfAntiCommuting.
+				//   {B}::SelfAntiCommuting.
+				// leads to two properties SelfAntiCommuting, which are identical.
+				// We need a way to compare properties and decide when they are
+				// identical, or when they can coexist, or something like that.
+				
+				// FIXME: SelfAntiCommuting is not a list property, so above should be fine.
+			} else {
+				++walk;
+			}
+		} else {
+			++walk;
+		}
 	}
 
-void Properties::insert_list_prop(const std::vector<Ex>& its, const list_property *pr)
+	register_property_type(pr);
+	// Add to the props_dict
+	props_dict[pat->obj.begin()->name_only()][typeid(*pr)].emplace(pr,pat);
+	// Add to the pats_dict
+	pats_dict[typeid(*pr)].emplace(pr, pat);
+}
+
+
+
+// Insert a list property into the kernel. 
+const list_property* Properties::insert_list_prop(const std::vector<Ex>& its, const list_property* pr)
 	{
-	assert(pats.find(pr)==pats.end()); // identical properties have to be assigned through insert_list_prop
 	assert(its.size()>0);
+	
+	auto& pats = pats_dict[typeid(*pr)];
+	assert(pats.find(pr)==pats.end()); // identical properties have to be assigned through insert_list_prop
+
+	/* Description of below code
+
+	List properties in Cadabra include (currently) Indices, SortOrder, CommutingBehaviour (and derived classes).
+	Calling `equals` on another list property will yield `no_match`, `id_match`, or `exact_match`.
+	Upon insertion of a list property, we look for existing properties of the same type.
+	
+	If we find one of the same type and `equals` returns `exact_match`, we discard (and delete)
+	the list_property pointer. This ensures e.g. that there is only one
+	Indices property with the label "vector". The code then continues, as if this property was the
+	one passed to `insert_list_prop`.
+
+	If we find a list property that returns `id_match`, we delete that older list property.
+	This happens e.g. if we have Indices(vector, position=free) and then create
+	Indices(vector, position=fixed). This invalidates all the prior free vector indices.
+
+	If `no_match`, we continue as normal.
+
+	The is the current state of affairs (except `equals` was declared in `property` rather than `list_property`.)
+
+	However, a problem arises (as discussed below). In the older code, the following failed:	
+			{a,b,c,d,e}::Indices(vector).
+			{a,b,c}::Indices(spinor).
+	This should make a,b,c spinor indices, and keep d,e as vector indices.
+	Instead, both sets were kept.
+	Similarly,
+			{a,b,c}::Indices(vector).
+			{a,b,c,d,e,f}::Indices(spinor).
+	This should make all indices spinor indices.
+	Instead, both sets were kept.
+
+	Eventually we should fix this. It is somewhat subtle as it requires we do something else.
+	A fourth match type is needed that would indicate we need to look at the properties and
+	eliminate incompatible types.
+
+	*/
 
 	// If 'pr' is exactly equal to an existing property, we should use that one instead of
 	// introducing a duplicate.
-	pattern_map_t::iterator fit=pats.begin();
-	while(fit!=pats.end()) {
-		const property *tmp = (*fit).first;
-		if(typeid(*tmp)==typeid(*pr))
-			if(pr->equals((*fit).first)==property::exact_match) {
-				pr=static_cast<const list_property *>( (*fit).first );
-				break;
-				}
-		++fit;
-		}
-
-	// If 'pr' has id_match with an existing property, we need to remove all property assignments
-	// for the existing one, except when there is an exact_match.
-	const property *to_delete_property=0;
-	pattern_map_t::iterator pit=pats.begin();
+	// Alternatively, if 'pr' has id_match with an existing property, we need to remove all property assignments
+	// for the existing one.
+	auto pit=pats.begin();
 	while(pit!=pats.end()) {
 		const property *tmp = (*pit).first;
-		if(typeid(*tmp)==typeid(*pr))
-			if(pr->equals((*pit).first)==property::id_match) {
-				to_delete_property = (*pit).first;
-				break;
-				}
+		// if(typeid(*tmp)==typeid(*pr))  // unnecessary now
+		list_property::match_t match_type = pr->equals((*pit).first);
+		if (match_type == list_property::exact_match) {
+			delete pr;
+			pr=static_cast<const list_property *>( (*pit).first );
+			// Later we return the new pr to the caller so they have a valid pointer.
+			break;
+		} else if (match_type == list_property::id_match) {
+			erase((*pit).first);
+			break;
+		}
 		++pit;
-		}
-	if(to_delete_property) {
-		pats.erase(to_delete_property);
-		property_map_t::iterator it=props.begin();
-		while(it!=props.end()) {
-			property_map_t::iterator nxt=it;
-			++nxt;
-			if((*it).second.second==to_delete_property) props.erase(it);
-			it=nxt;
-			}
-		}
-
-
+	}
+	
 	// Now register the list property.
+	register_property_type(pr);
 
-	for(unsigned int i=0; i<its.size(); ++i) {
+	for(size_t i=0; i<its.size(); ++i) {
 		pattern *pat=new pattern(its[i]);
 
 		// Removing properties causes more problems than it solves (the only reason
@@ -521,19 +576,22 @@ void Properties::insert_list_prop(const std::vector<Ex>& its, const list_propert
 
 		// Now register the property.
 		//		txtout << "registering " << *(pat->headnode) << std::endl;
-		pats.insert(pattern_map_t::value_type(pr, pat));
-		props.insert(property_map_t::value_type(pat->obj.begin()->name_only(), pat_prop_pair_t(pat,pr)));
+		
+		props_dict[pat->obj.begin()->name_only()][typeid(*pr)].emplace(pr, pat);
+		pats.emplace(pr, pat);
 		}
+	return pr;
 	}
 
 
 int Properties::serial_number(const property *listprop, const pattern *pat) const
 	{
 	int serialnum=0;
-
-	std::pair<pattern_map_t::const_iterator, pattern_map_t::const_iterator>
-	pm=pats.equal_range(listprop);
-	serialnum=0;
+	auto it = pats_dict.find(typeid(*listprop));
+	if (it == pats_dict.end()) {
+		return serialnum;
+	}
+	auto pm=it->second.equal_range(listprop);
 	while(pm.first!=pm.second) {
 		if((*pm.first).second==pat)
 			break;
@@ -576,10 +634,12 @@ d,e should have their property removed.
 
 // Insert a property for the given pattern Ex. Determines whether the property
 // is a list property or a normal one, and dispatches accordingly.
+// Returns a pointer to the new property. (For a list property, this may differ
+// from the original pointer.)
 
-std::string Properties::master_insert(Ex proptree, const property *thepropbase)
+const property* Properties::master_insert(Ex proptree, const property *thepropbase)
 	{
-	std::ostringstream str;
+	// std::ostringstream str;
 
 	Ex::sibling_iterator st=proptree.begin();
 
@@ -614,10 +674,10 @@ std::string Properties::master_insert(Ex proptree, const property *thepropbase)
 				obj2.begin()->fl.parent_rel=str_node::p_sub;
 				objs2.push_back(obj2);
 				}
-			insert_list_prop(objs2, thelistprop);
+			thelistprop = insert_list_prop(objs2, thelistprop);
 			}
 		else {
-			insert_list_prop(objs, thelistprop);
+			thelistprop = insert_list_prop(objs, thelistprop);
 			}
 		}
 	else {   // a normal property
@@ -637,7 +697,12 @@ std::string Properties::master_insert(Ex proptree, const property *thepropbase)
 			insert_prop(Ex(st), theprop);
 			}
 		}
-	return str.str();
+	// return str.str();
+	if (thelistprop) {
+		return dynamic_cast<const property *>(thelistprop);
+	} else {
+		return thepropbase;
+	}
 	}
 
 bool Properties::check_label(const property* p, const std::string& label) const
@@ -659,3 +724,101 @@ void Properties::destroy_comparator(Ex_comparator *c) const
 	{
 	delete c;
 	}
+
+
+// Completely erase a property.
+void Properties::erase(const property* p) {
+	// Make a list of matching patterns
+	auto pad_it = pats_dict.find(typeid(*p));
+	if (pad_it == pats_dict.end())
+		return;
+	
+	// FIXME: Above should perhaps throw an exception? Property not found or some such.
+
+	std::vector<nset_t::iterator> pattern_names;
+	auto patterns = pad_it->second.equal_range(p);	
+	for (auto it = patterns.first; it != patterns.second; ++it) {
+		// Store all the pattern names
+		pattern_names.push_back(it->second->obj.begin()->name_only());
+		// Free all the patterns
+		delete it->second;
+	}
+
+	// Delete all the entries in pats_dict
+	pad_it->second.erase(p);
+
+	// Delete all the entries in props_dict
+	for (auto pattern_name : pattern_names) {
+		props_dict[pattern_name][typeid(*p)].erase(p);
+	}
+
+	delete p;
+}
+
+// Erase a property and related pattern.
+void Properties::erase(const property* prop, pattern* pat) {
+	auto name = pat->obj.begin()->name_only();
+	int num_found = 0;
+
+	auto pad_it = pats_dict.find(typeid(*prop));
+	if (pad_it == pats_dict.end()) {
+		throw ConsistencyException("Properties erase failure: Cannot find property of matching type to property/pattern pair to erase.");
+	}
+	
+
+	// Eliminate from props_dict (where they are first keyed by name of pattern)
+	auto pdit = props_dict.find(name);
+	if (pdit != props_dict.end()) {
+		auto ppit = pdit->second.find(typeid(*prop));
+		if (ppit != pdit->second.end()) {
+			auto& named_typed_pairs = ppit->second;
+			for (auto pairs_it = named_typed_pairs.begin(); pairs_it != named_typed_pairs.end(); ) {
+				if (pairs_it->first == prop && pairs_it->second == pat) {
+					pairs_it = named_typed_pairs.erase(pairs_it);
+					++num_found;
+				} else {
+					++pairs_it;
+				}
+			}
+		}
+	}
+
+	//	Look over all prop/pat pairs of matching types and erase them
+	auto& all_typed_pairs = pad_it->second;
+	for (auto pairs_it = all_typed_pairs.begin(); pairs_it != all_typed_pairs.end(); ) {
+		if (pairs_it->first == prop && pairs_it->second == pat) {
+			pairs_it = all_typed_pairs.erase(pairs_it);
+			++num_found;
+		} else {
+			++pairs_it;
+		}
+	}
+
+	// Does prop have any more patterns associated with it?
+	if (all_typed_pairs.find(prop) == all_typed_pairs.end()) {
+		delete prop;
+	}
+	if (num_found != 2) {
+		throw ConsistencyException("Properties erase failure: Inconsistent numbers of property/patterns erased.");
+	}
+
+	delete pat;
+}
+
+std::pair<const property*, std::vector<const pattern*> > Properties::lookup_property(const property* sus) const {
+	// Warning: sus may be invalid
+	std::pair<const property*, std::vector<const pattern*>> ret = {nullptr, {}};
+
+	for (const auto& [_, pats] : pats_dict) {
+		auto range = pats.equal_range(sus);
+		if (range.first == range.second) continue;
+
+		// property is found, so sus is valid
+		ret.first = sus;
+		for (auto it = range.first; it != range.second; ++it) {
+			ret.second.push_back(it->second);
+		}
+		break;
+	}
+	return ret;
+}

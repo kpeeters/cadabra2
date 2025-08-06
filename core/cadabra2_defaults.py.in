@@ -550,6 +550,7 @@ class Console(object):
         """
         def log(self, *objs):
             """Sends a string representation of objs to the console"""
+            cell_id = 0
             if server.architecture() == "terminal":
                 print(*objs)
             elif server.architecture() == "client-server":
@@ -557,10 +558,12 @@ class Console(object):
 
         def clear(self):
             """Clears the output of the console window"""
+            cell_id = 0
             if server.architecture() == "client-server":
                 server.send("", "csl_clear", 0, cell_id, False)
 
         def warn(self, msg):
+            cell_id = 0
             if server.architecture() == "terminal":
                 print("Warning: " + msg)
             elif server.architecture() == "client-server":

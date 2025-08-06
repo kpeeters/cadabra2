@@ -84,6 +84,8 @@ namespace cadabra {
 
 	std::string BoundPropertyBase::str_() const
 	{
+		validate();
+		if (!prop) return "invalid";
 		std::ostringstream str;
 		str << "Property ";
 //		std::cerr << "going to print" << std::endl;
@@ -94,11 +96,12 @@ namespace cadabra {
 
 	std::string BoundPropertyBase::latex_() const
 	{
+		validate();
+		if (!prop) return "invalid";
 		std::ostringstream str;
 
 		//	HERE: this text should go away, property should just print itself in a python form,
 		//   the decorating text should be printed in a separate place.
-
 		str << "\\text{Property ";
 		prop->latex(str);
 		std::string bare = Ex_as_latex(for_obj);
@@ -124,6 +127,7 @@ namespace cadabra {
 
 	std::string BoundPropertyBase::repr_() const
 	{
+		validate();
 		// FIXME: this needs work, it does not output things which can be fed back into python.
 		return "Property::repr: " + prop->name();
 	}
@@ -148,6 +152,24 @@ namespace cadabra {
 		return for_obj->begin();
 	}
 
+	void BoundPropertyBase::validate() const
+	{
+		auto pair = get_kernel_from_scope()->properties.lookup_property(prop);
+		if (pair.first == nullptr) {
+			prop = nullptr;
+		}
+		// Update pattern
+		if (pair.second.size() == 1) {
+			for_obj = std::make_shared<Ex>(pair.second[0]->obj);
+		} else {
+			for_obj = std::make_shared<Ex>("\\comma");
+			for (const auto& pat : pair.second) {
+				for_obj->append_child(for_obj->begin(), pat->obj.begin());
+			}
+		}
+	}
+
+
 
 	template <typename PropT, typename... ParentTs>
 	BoundProperty<PropT, ParentTs...>::BoundProperty()
@@ -168,14 +190,12 @@ namespace cadabra {
 		: BoundPropertyBase(nullptr, ex)
 	{
 		auto new_prop = new cpp_type();
-		get_kernel_from_scope()->inject_property(new_prop, ex, param);
-		BoundPropertyBase::prop = new_prop;
+		this->prop = get_kernel_from_scope()->inject_property(new_prop, ex, param);
 	}
 
 
 	template <typename PropT, typename... ParentTs>
 	std::shared_ptr<BoundProperty<PropT, ParentTs...>> BoundProperty<PropT, ParentTs...>::get_from_kernel(Ex::iterator it, const std::string& label, bool ignore_parent_rel)
-
 	{
 		int tmp;
 		auto res = get_kernel_from_scope()->properties.get_with_pattern<PropT>(
@@ -193,9 +213,18 @@ namespace cadabra {
 
 
 	template <typename PropT, typename... ParentTs>
+	void BoundProperty<PropT, ParentTs...>::remove_from_kernel()
+	{
+		get_kernel_from_scope()->properties.erase(this->prop);
+		this->prop = nullptr;
+	}
+
+
+	template <typename PropT, typename... ParentTs>
 	const PropT* BoundProperty<PropT, ParentTs...>::get_prop() const
 	{
-	return dynamic_cast<const PropT*>(BoundPropertyBase::prop);
+		this->validate();
+		return dynamic_cast<const PropT*>(this->prop);
 	}
 
 	template <typename PropT, typename... ParentTs>
@@ -206,6 +235,7 @@ namespace cadabra {
 		Properties& props = kernel->properties;
 
 		const auto *thisprop = get_prop();
+		if (!thisprop) return; // Maybe raise error message?
 		thisprop->validate(*kernel, obj);
 		props.master_insert(*obj, thisprop);
 		}
@@ -251,6 +281,9 @@ namespace cadabra {
 		using cpp_type = typename base_type::cpp_type;
 		using py_type = typename base_type::py_type;
 
+		// Register the property type for dynamic lookup.
+		py_property_registry.register_type<BoundPropT>();
+
 		return py_type(m, std::make_shared<cpp_type>()->name().c_str(), py::multiple_inheritance(), read_manual(m, "properties", std::make_shared<cpp_type>()->name().c_str()).c_str())
 			.def(py::init<Ex_ptr, Ex_ptr>(), py::arg("ex"), py::arg("param")=Ex{})
 
@@ -260,9 +293,73 @@ namespace cadabra {
 			.def("__str__", &BoundPropT::str_)
 			.def("__repr__", &BoundPropT::repr_)
 			.def("_latex_", &BoundPropT::latex_)
+			.def("erase", &BoundPropT::remove_from_kernel)
 			;
 	}
 
+
+
+	pybind11::list list_properties_old()
+	{
+	// This function is fundamentally limited. We would *like* to return a list of
+	// BoundProperties, so that you can do something with the output. But we cannot
+	// walk the full property list and create a BoundProperty for each of them, as
+	// we do not know the type (we can only dynamic_cast).
+	//
+	// So for now this is just returning a list of LaTeXStrings, obtained by asking
+	// each property to print itself.
+	
+	Kernel *kernel = get_kernel_from_scope();
+	Properties& props = kernel->properties;
+
+	pybind11::dict globals = get_globals();
+	bool handles_latex_view = globals["server"].attr("handles")(pybind11::str("latex_view")).cast<bool>();
+	
+	pybind11::list ret;
+	std::string res;
+	bool multi = false;
+	
+	for (auto it = props.begin(); it != props.end(); ++it) {
+		if (it->first->hidden()) continue;
+		// print the property name if we are at the end or if the next entry is for
+		// a different property.
+		decltype(it) nxt = it;
+		++nxt;
+		if (res == "" && (nxt != props.end() && it->first == nxt->first)) {
+			if(handles_latex_view) res += "\\{";
+			else                   res += "{";
+			multi = true;
+			}
+		
+		std::ostringstream str;
+		if(handles_latex_view) {
+			DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
+			dt.output(str);
+			}
+		else {
+			DisplayTerminal dt(*get_kernel_from_scope(), it->second->obj);
+			dt.output(str);
+			}
+		
+		res += str.str();
+		
+		if (nxt == props.end() || it->first != nxt->first) {
+			if (multi) {
+				if(handles_latex_view) res += "\\}";
+				else                   res += "}";
+				}
+			multi = false;
+			res += "::\\texttt{";
+			res += (*it).first->name() + "}";
+			ret.append(LaTeXString(res));
+			res = "";
+			}
+		else {
+			res += ", ";
+			}
+		}
+	return ret;
+	}
 
 
 	pybind11::list list_properties()
@@ -278,20 +375,32 @@ namespace cadabra {
 		Kernel *kernel = get_kernel_from_scope();
 		Properties& props = kernel->properties;
 
-		pybind11::dict globals = get_globals();
-		bool handles_latex_view = globals["server"].attr("handles")(pybind11::str("latex_view")).cast<bool>();
+		// pybind11::dict globals = get_globals();
+		// bool handles_latex_view = globals["server"].attr("handles")(pybind11::str("latex_view")).cast<bool>();
 		
 		pybind11::list ret;
-		std::string res;
-		bool multi = false;
-		for (auto it = props.pats.begin(); it != props.pats.end(); ++it) {
+		// std::string res;
+		// bool multi = false;
+		for (auto it = props.begin(); it != props.end();  it.next_prop()) {
 			if (it->first->hidden()) continue;
-			
+			const property* prop   = it->first;
+
+			Ex_ptr          ex_ptr = std::make_shared<Ex>(it->second->obj);
+
+			pybind11::object bound_property =
+				py_property_registry.create_bound_property(prop, ex_ptr);
+
+			if (bound_property.is_none())
+				continue;
+
+			ret.append(bound_property);
+
+			/*
 			// print the property name if we are at the end or if the next entry is for
 			// a different property.
 			decltype(it) nxt = it;
 			++nxt;
-			if (res == "" && (nxt != props.pats.end() && it->first == nxt->first)) {
+			if (res == "" && (nxt != pats.end() && it->first == nxt->first)) {
 				if(handles_latex_view) res += "\\{";
 				else                   res += "{";
 				multi = true;
@@ -309,7 +418,7 @@ namespace cadabra {
 			
 			res += str.str();
 			
-			if (nxt == props.pats.end() || it->first != nxt->first) {
+			if (nxt == pats.end() || it->first != nxt->first) {
 				if (multi) {
 					if(handles_latex_view) res += "\\}";
 					else                   res += "}";
@@ -323,15 +432,48 @@ namespace cadabra {
 			else {
 				res += ", ";
 				}
+			*/
 			}
-		
 		return ret;
 		}
+
+	pybind11::dict properties_dict() {
+		Kernel* kernel = get_kernel_from_scope();
+		Properties& props = kernel->properties;
+
+		// Dictionary of properties, keyed by property type
+		pybind11::dict ret;
+
+		for (auto it = props.begin(); it!=props.end(); it.next_prop()) {
+			if (it->first->hidden()) continue;
+			const property* prop   = it->first;
+
+			Ex_ptr          ex_ptr = std::make_shared<Ex>(it->second->obj);
+
+			pybind11::object bound_property =
+				py_property_registry.create_bound_property(prop, ex_ptr);
+
+			if (bound_property.is_none())
+				continue;
+
+			// Key: Python class name of the bound property
+			pybind11::str key =
+				pybind11::str(bound_property.get_type().attr("__name__"));
+
+			// Ensure a list exists for this key and append
+			if (!ret.contains(key))
+				ret[key] = pybind11::list();
+
+			ret[key].cast<pybind11::list>().append(bound_property);
+		}
+		return ret;
+	}
 
 	std::vector<Ex> indices_get_all(const Indices* indices, bool include_wildcards)
 	{
 		auto kernel = get_kernel_from_scope();
-		auto its = kernel->properties.pats.equal_range(indices);
+		// auto its = kernel->properties.pats.equal_range(indices);
+		auto its = kernel->properties.equal_range(indices);
 
 		std::vector<Ex> res;
 		for (auto it = its.first; it != its.second; ++it) {
@@ -353,6 +495,8 @@ namespace cadabra {
 		{
 
 		m.def("properties", &list_properties);
+		m.def("properties_old", &list_properties_old);
+		m.def("properties_dict", &properties_dict);
 
 		py::class_<BoundPropertyBase, std::shared_ptr<BoundPropertyBase>>(m, "Property")
 			.def_property_readonly("for_obj", &BoundPropertyBase::get_ex);
@@ -386,6 +530,16 @@ namespace cadabra {
 		def_abstract_prop<Py_WeightBase>(m, "WeightBase")
 			.def("value", [](const Py_WeightBase & p, const std::string& forcedLabel) {
 				auto m = p.get_prop()->value(p.get_kernel(), p.get_it(), forcedLabel);
+				if(m.is_rational()) {
+					// This is mpq_class, convert to the Python equivalent.
+					pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
+					pybind11::object mult = mpq(m.get_rational().get_num().get_si(), m.get_rational().get_den().get_si());
+					return mult;
+					}
+				else return pybind11::cast(m.get_double());
+				})
+			.def("value", [](const Py_WeightBase & p) {
+				auto m = p.get_prop()->value(p.get_kernel(), p.get_it(), p.get_prop()->label);
 				if(m.is_rational()) {
 					// This is mpq_class, convert to the Python equivalent.
 					pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
@@ -558,4 +712,6 @@ namespace cadabra {
 
 
 		}
+
+	BoundPropertyRegistry py_property_registry;
 	}

@@ -20,7 +20,7 @@ std::string Indices::name() const
 	return "Indices";
 	}
 
-property::match_t Indices::equals(const property *other) const
+list_property::match_t Indices::equals(const property *other) const
 	{
 	const Indices *cast_other = dynamic_cast<const Indices *>(other);
 	if(cast_other) {
@@ -32,7 +32,7 @@ property::match_t Indices::equals(const property *other) const
 			}
 		return no_match;
 		}
-	return property::equals(other);
+	return list_property::equals(other);
 	}
 
 bool Indices::parse(Kernel& kernel, std::shared_ptr<Ex> ex, keyval_t& keyvals)
