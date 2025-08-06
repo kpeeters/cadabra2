@@ -401,9 +401,8 @@ void Properties::insert_prop(const Ex& et, const property *pr) {
 
 	// Make sure there is no existing property of the same type matching pat
 	auto walk = begin(pat->obj.begin()->name_only());
-	auto end_it = end(pat->obj.begin()->name_only());
 
-	while (walk != end_it) {
+	while (walk != end(pat->obj.begin()->name_only())) {
 		if (typeid(*walk->first) != typeid(*pr)) {
 			walk.next_proptype();
 			continue;
