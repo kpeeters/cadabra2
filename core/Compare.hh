@@ -328,23 +328,16 @@ namespace cadabra {
 			bool    satisfies_conditions(Ex::iterator conditions, std::string& error);
 
 			/// Map for the replacement of nodes (indices, patterns).
-
-			typedef std::map<Ex, Ex, tree_exact_less_no_wildcards_obj>     replacement_map_t;
-			typedef std::map<Lazy_Ex, Lazy_Ex, Lazy_Ex::less>                  new_replacement_map_t;
-
+			typedef std::map<Lazy_Ex, Lazy_Ex, Lazy_Ex::less>                  replacement_map_t;
 			replacement_map_t                                              replacement_map;
-			new_replacement_map_t                                              new_replacement_map;
 
 			/// Map for the replacement of entire subtrees (object patterns).
-
 			typedef std::map<nset_t::iterator, Ex::iterator, nset_it_less> subtree_replacement_map_t;
 			subtree_replacement_map_t                                      subtree_replacement_map;
 
 			/// Map for matching of index names to index values. Note: this is in the opposite order
 			/// from replacement_map!
-
-			replacement_map_t                                              index_value_map;
-			new_replacement_map_t                                              new_index_value_map;
+			replacement_map_t                                              new_index_value_map;
 
 			/// Information to keep track of where individual factors/terms
 			/// in a sub-product/sub-sum were found, and (for sub-products)

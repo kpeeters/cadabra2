@@ -1,18 +1,3 @@
-#ifdef NDEBUG
-#  undef NDEBUG
-#endif
-#include <cassert>
-
-// #define TEST
-
-#ifdef TEST
-	#define IF_TEST(...) __VA_ARGS__
-#else
-	#define IF_TEST(...)
-#endif
-
-
-
 #include <sstream>
 #include "Cleanup.hh"
 #include "Exceptions.hh"
@@ -247,8 +232,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// NOTE: this does not yet insert the replacement into the main tree!
 
 	iterator it=repl.begin();
-	IF_TEST(Ex_comparator::replacement_map_t::iterator loc;)
-	Ex_comparator::new_replacement_map_t::iterator nloc;
+	Ex_comparator::replacement_map_t::iterator nloc;
 
 	Ex_comparator::subtree_replacement_map_t::iterator sloc;
 
@@ -259,26 +243,15 @@ Algorithm::result_t substitute::apply(iterator& st)
 		// For some reason 'a?' is not found!?! Well, that's presumably because _{a?} does not
 		// match ^{a?}. (though this does match when we write 'i' instead of a?.
 
-		nloc = comparator.new_replacement_map.find({it, Lazy_Ex::repl_t::same});
-		IF_TEST(
-			loc=comparator.replacement_map.find(Ex(it));
-			assert( (loc==comparator.replacement_map.end()) == (nloc==comparator.new_replacement_map.end()) );
-		)
+		nloc = comparator.replacement_map.find({it, Lazy_Ex::repl_t::same});
 		
-		
-		if(nloc==comparator.new_replacement_map.end() && it->is_name_wildcard() && tr.number_of_children(it)!=0) {
-			nloc=comparator.new_replacement_map.find({it, Lazy_Ex::repl_t::erase_children});
+		if(nloc==comparator.replacement_map.end() && it->is_name_wildcard() && tr.number_of_children(it)!=0) {
+			nloc=comparator.replacement_map.find({it, Lazy_Ex::repl_t::erase_children});
 			is_stripped=true;
-			IF_TEST(
-				Ex tmp(it);
-				tmp.erase_children(tmp.begin());
-				loc=comparator.replacement_map.find(tmp);
-			)
 			}
 
 		//std::cerr << "consider element of repl " << Ex(it) << std::endl;
-		IF_TEST( assert( (loc==comparator.replacement_map.end()) == (nloc==comparator.new_replacement_map.end()) ); )
-		if(nloc!=comparator.new_replacement_map.end()) { // name wildcards
+		if(nloc!=comparator.replacement_map.end()) { // name wildcards
 			DEBUGLN( std::cerr << "wildcard replaced: " << loc->first << " -> " << loc->second << std::endl; )
 
 			// When a replacement is made here, and the index is actually
