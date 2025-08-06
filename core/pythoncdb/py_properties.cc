@@ -318,9 +318,84 @@ namespace cadabra {
 	pybind11::list ret;
 	std::string res;
 	bool multi = false;
-	for (const auto& [_, pats] : props.pats_dict) {
-		for (auto it = pats.begin(); it != pats.end();  ++it) {
+	
+	for (auto it = props.begin(); it != props.end(); ++it) {
+		if (it->first->hidden()) continue;
+		// print the property name if we are at the end or if the next entry is for
+		// a different property.
+		decltype(it) nxt = it;
+		++nxt;
+		if (res == "" && (nxt != props.end() && it->first == nxt->first)) {
+			if(handles_latex_view) res += "\\{";
+			else                   res += "{";
+			multi = true;
+			}
+		
+		std::ostringstream str;
+		if(handles_latex_view) {
+			DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
+			dt.output(str);
+			}
+		else {
+			DisplayTerminal dt(*get_kernel_from_scope(), it->second->obj);
+			dt.output(str);
+			}
+		
+		res += str.str();
+		
+		if (nxt == props.end() || it->first != nxt->first) {
+			if (multi) {
+				if(handles_latex_view) res += "\\}";
+				else                   res += "}";
+				}
+			multi = false;
+			res += "::\\texttt{";
+			res += (*it).first->name() + "}";
+			ret.append(LaTeXString(res));
+			res = "";
+			}
+		else {
+			res += ", ";
+			}
+		}
+	return ret;
+	}
+
+
+	pybind11::list list_properties()
+		{
+		// This function is fundamentally limited. We would *like* to return a list of
+		// BoundProperties, so that you can do something with the output. But we cannot
+		// walk the full property list and create a BoundProperty for each of them, as
+		// we do not know the type (we can only dynamic_cast).
+		//
+		// So for now this is just returning a list of LaTeXStrings, obtained by asking
+		// each property to print itself.
+		
+		Kernel *kernel = get_kernel_from_scope();
+		Properties& props = kernel->properties;
+
+		// pybind11::dict globals = get_globals();
+		// bool handles_latex_view = globals["server"].attr("handles")(pybind11::str("latex_view")).cast<bool>();
+		
+		pybind11::list ret;
+		// std::string res;
+		// bool multi = false;
+		for (auto it = props.begin(); it != props.end();  it.next_prop()) {
 			if (it->first->hidden()) continue;
+			const property* prop   = it->first;
+
+			Ex_ptr          ex_ptr = std::make_shared<Ex>(it->second->obj);
+
+			pybind11::object bound_property =
+				py_property_registry.create_bound_property(prop, ex_ptr);
+
+			if (bound_property.is_none())
+				continue;
+
+			ret.append(bound_property);
+
+			/*
 			// print the property name if we are at the end or if the next entry is for
 			// a different property.
 			decltype(it) nxt = it;
@@ -357,85 +432,7 @@ namespace cadabra {
 			else {
 				res += ", ";
 				}
-			}
-		}
-	return ret;
-	}
-
-
-	pybind11::list list_properties()
-		{
-		// This function is fundamentally limited. We would *like* to return a list of
-		// BoundProperties, so that you can do something with the output. But we cannot
-		// walk the full property list and create a BoundProperty for each of them, as
-		// we do not know the type (we can only dynamic_cast).
-		//
-		// So for now this is just returning a list of LaTeXStrings, obtained by asking
-		// each property to print itself.
-		
-		Kernel *kernel = get_kernel_from_scope();
-		Properties& props = kernel->properties;
-
-		// pybind11::dict globals = get_globals();
-		// bool handles_latex_view = globals["server"].attr("handles")(pybind11::str("latex_view")).cast<bool>();
-		
-		pybind11::list ret;
-		// std::string res;
-		// bool multi = false;
-		for (const auto& [_, pats] : props.pats_dict) {
-			for (auto it = pats.begin(); it != pats.end();  it=pats.upper_bound(it->first)) {
-				if (it->first->hidden()) continue;
-				const property* prop   = it->first;
-
-				Ex_ptr          ex_ptr = std::make_shared<Ex>(it->second->obj);
-
-				pybind11::object bound_property =
-					py_property_registry.create_bound_property(prop, ex_ptr);
-
-				if (bound_property.is_none())
-					continue;
-
-				ret.append(bound_property);
-
-				/*
-				// print the property name if we are at the end or if the next entry is for
-				// a different property.
-				decltype(it) nxt = it;
-				++nxt;
-				if (res == "" && (nxt != pats.end() && it->first == nxt->first)) {
-					if(handles_latex_view) res += "\\{";
-					else                   res += "{";
-					multi = true;
-					}
-				
-				std::ostringstream str;
-				if(handles_latex_view) {
-					DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
-					dt.output(str);
-					}
-				else {
-					DisplayTerminal dt(*get_kernel_from_scope(), it->second->obj);
-					dt.output(str);
-					}
-				
-				res += str.str();
-				
-				if (nxt == pats.end() || it->first != nxt->first) {
-					if (multi) {
-						if(handles_latex_view) res += "\\}";
-						else                   res += "}";
-						}
-					multi = false;
-					res += "::\\texttt{";
-					res += (*it).first->name() + "}";
-					ret.append(LaTeXString(res));
-					res = "";
-					}
-				else {
-					res += ", ";
-					}
-				*/
-				}
+			*/
 			}
 		return ret;
 		}
@@ -447,30 +444,27 @@ namespace cadabra {
 		// Dictionary of properties, keyed by property type
 		pybind11::dict ret;
 
-		for (const auto& [_, pats] : props.pats_dict) {
-			// Iterate over keys to the pats multimap
-			for (auto it = pats.begin(); it != pats.end(); it=pats.upper_bound(it->first)) {
-				if (it->first->hidden()) continue;
-				const property* prop   = it->first;
+		for (auto it = props.begin(); it!=props.end(); it.next_prop()) {
+			if (it->first->hidden()) continue;
+			const property* prop   = it->first;
 
-				Ex_ptr          ex_ptr = std::make_shared<Ex>(it->second->obj);
+			Ex_ptr          ex_ptr = std::make_shared<Ex>(it->second->obj);
 
-				pybind11::object bound_property =
-					py_property_registry.create_bound_property(prop, ex_ptr);
+			pybind11::object bound_property =
+				py_property_registry.create_bound_property(prop, ex_ptr);
 
-				if (bound_property.is_none())
-					continue;
+			if (bound_property.is_none())
+				continue;
 
-				// Key: Python class name of the bound property
-				pybind11::str key =
-					pybind11::str(bound_property.get_type().attr("__name__"));
+			// Key: Python class name of the bound property
+			pybind11::str key =
+				pybind11::str(bound_property.get_type().attr("__name__"));
 
-				// Ensure a list exists for this key and append
-				if (!ret.contains(key))
-					ret[key] = pybind11::list();
+			// Ensure a list exists for this key and append
+			if (!ret.contains(key))
+				ret[key] = pybind11::list();
 
-				ret[key].cast<pybind11::list>().append(bound_property);
-			}
+			ret[key].cast<pybind11::list>().append(bound_property);
 		}
 		return ret;
 	}
@@ -479,7 +473,7 @@ namespace cadabra {
 	{
 		auto kernel = get_kernel_from_scope();
 		// auto its = kernel->properties.pats.equal_range(indices);
-		auto its = kernel->properties.pats_dict[typeid(*indices)].equal_range(indices);
+		auto its = kernel->properties.equal_range(indices);
 
 		std::vector<Ex> res;
 		for (auto it = its.first; it != its.second; ++it) {
