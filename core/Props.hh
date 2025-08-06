@@ -31,10 +31,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <iterator>
 #include <functional>
 
-#ifdef NDEBUG
-#undef NDEBUG
-#endif
 #include <cassert>
+
 namespace cadabra {
 
 	class Properties;
@@ -420,13 +418,13 @@ namespace cadabra {
 				using reference = value_type&;
 				using self_type = iterator_base<IsConst>;
 
-				iterator_base(bool is_end = true) : is_end_(is_end) {}
+				iterator_base(bool is_end = true) {
+					typemap_ = nullptr;
+				}
 
-
-				iterator_base(map_t* m, bool is_end_ = false)
-					: typemap_(m), is_end_(is_end_) {
+				iterator_base(map_t* m, bool is_end_ = false): typemap_(m) {
 					if (is_end_) {
-						outer_it_ = typemap_->end();
+						typemap_ = nullptr;
 					} else {
 						outer_it_ = typemap_->begin();
 						skip_ahead();
@@ -434,7 +432,7 @@ namespace cadabra {
 				}
 
 				iterator_base(map_t* m, outer_iterator outer, inner_iterator inner)
-					: typemap_(m), outer_it_(outer), inner_it_(inner), is_end_(false) {
+					: typemap_(m), outer_it_(outer), inner_it_(inner) {
 						if (inner_it_ == outer_it_->second.end()) {
 							++outer_it_;
 							skip_ahead();
@@ -458,7 +456,7 @@ namespace cadabra {
 
 				self_type& next_prop() {
 					const property* this_prop = inner_it_->first;
-					while (!is_end_ && inner_it_->first == this_prop) {
+					while (typemap_ && inner_it_->first == this_prop) {
 						operator++();
 					}
 					return *this;
@@ -476,9 +474,7 @@ namespace cadabra {
 				pointer operator->() const { return &(*inner_it_); }
 
 				bool operator==(const self_type& other) const {
-					if (is_end_ && other.is_end_) return true;
-					if (is_end_ || other.is_end_) return false;
-					return outer_it_ == other.outer_it_ && inner_it_ == other.inner_it_;
+					return (!typemap_ && !other.typemap_) || (typemap_ == other.typemap_ && outer_it_==other.outer_it_ && inner_it_ == other.inner_it_);
 				}
 
 				bool operator!=(const self_type& other) const {
@@ -489,7 +485,6 @@ namespace cadabra {
 				map_t* typemap_;
 				outer_iterator outer_it_;
 				inner_iterator inner_it_;
-				bool is_end_;
 
 				void skip_ahead() {
 					while (outer_it_ != typemap_->end()) {
@@ -505,7 +500,8 @@ namespace cadabra {
 						*/
 					}
 					// inner_it_ = inner_iterator();
-					is_end_ = true;
+					// is_end_ = true;
+					typemap_ = nullptr;
 				}
 
 
@@ -627,8 +623,6 @@ namespace cadabra {
 				// If it has, check castability and skip if not castable.
 				if (last_type != walk.proptype()) {
 					// This is the first time we are encountering this property type in the loop.
-					// Check heritability once per type
-					inherits = inherits || dynamic_cast<const PropertyInherit *>(walk->first) || dynamic_cast<const Inherit<T> *>(walk->first);
 					last_type = walk.proptype();
 					ret.first = dynamic_cast<const T *>(walk->first);
 					if (!ret.first) {
@@ -663,10 +657,22 @@ namespace cadabra {
 				}
 			else break;
 		}
+
 		// Do not walk down the tree if the property cannot be passed up the tree.
 		// FIXME: see issue/259.
-		if(std::is_same<T, LaTeXForm>::value)
+		if(std::is_same<T, LaTeXForm>::value) {
 			inherits=false;
+		} else if (!ret.first) {
+			auto walk = begin(it->name_only());
+			auto end_it = end();
+			while (walk != end_it) {
+				if (dynamic_cast<const Inherit<T>*>(walk->first) || dynamic_cast<const PropertyInherit*>(walk->first)) {
+					inherits = true;
+					break;
+				}
+				walk.next_proptype();
+			}
+		}
 		
 		// If no property was found, figure out whether a property is inherited from a child node.
 		if(!ret.first && inherits) {
@@ -714,8 +720,9 @@ namespace cadabra {
 		// Find all common properties of it1 and it2
 		auto walk1 = begin(it1->name_only());
 		auto walk2 = begin(it2->name_only());
+		auto end_it = end();
 
-		if (walk1 != end() && walk2 != end()) {
+		if (walk1 != end_it && walk2 != end_it) {
 			if (walk1.proptype() < walk2.proptype()) {
 				walk1.next_proptype();
 			} else if (walk2.proptype() < walk1.proptype()) {
@@ -786,7 +793,7 @@ namespace cadabra {
 		// Are any of these properties heritable?
 		// FIXME: Below just uses PropertyInherit and not Inherit<T>?
 		walk1 = begin(it1->name_only());
-		while (walk1 != end()) {
+		while (walk1 != end_it) {
 			if (dynamic_cast<const PropertyInherit*>(walk1->first)) {
 				inherits1 = true;
 				break;
@@ -794,7 +801,7 @@ namespace cadabra {
 			walk1.next_proptype();
 		}
 		walk2 = begin(it2->name_only());
-		while (walk2 != end()) {
+		while (walk2 != end_it) {
 			if (dynamic_cast<const PropertyInherit*>(walk2->first)) {
 				inherits2 = true;
 				break;
