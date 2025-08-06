@@ -31,6 +31,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <iterator>
 #include <functional>
 
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
+#include <cassert>
 namespace cadabra {
 
 	class Properties;
@@ -416,15 +420,13 @@ namespace cadabra {
 				using reference = value_type&;
 				using self_type = iterator_base<IsConst>;
 
-				iterator_base() = default;
+				iterator_base(bool is_end = true) : is_end_(is_end) {}
 
-				iterator_base(map_t* m, bool is_end = false)
-					: typemap_(m) {
-					if (is_end) {
+
+				iterator_base(map_t* m, bool is_end_ = false)
+					: typemap_(m), is_end_(is_end_) {
+					if (is_end_) {
 						outer_it_ = typemap_->end();
-						inner_it_ = inner_iterator();
-						// Warning: default-constructed iterator can only be compared with another
-						// default constructed iterator. Comparison with an actual iterator is undefined.
 					} else {
 						outer_it_ = typemap_->begin();
 						skip_ahead();
@@ -458,8 +460,9 @@ namespace cadabra {
 				pointer operator->() const { return &(*inner_it_); }
 
 				bool operator==(const self_type& other) const {
+					if (is_end_ && other.is_end_) return true;
+					if (is_end_ || other.is_end_) return false;
 					return outer_it_ == other.outer_it_ && inner_it_ == other.inner_it_;
-					// should work correctly for end iterator
 				}
 
 				bool operator!=(const self_type& other) const {
@@ -470,6 +473,7 @@ namespace cadabra {
 				map_t* typemap_;
 				outer_iterator outer_it_;
 				inner_iterator inner_it_;
+				bool is_end_;
 
 				void skip_ahead() {
 					while (outer_it_ != typemap_->end()) {
@@ -479,8 +483,13 @@ namespace cadabra {
 						}
 						inner_it_ = outer_it_->second.begin();
 						return;
+						/*
+						if (inner_it_ != outer_it_->second.end()) return;
+						++outer_it_;
+						*/
 					}
-					inner_it_ = inner_iterator();
+					// inner_it_ = inner_iterator();
+					is_end_ = true;
 				}
 
 
@@ -492,31 +501,23 @@ namespace cadabra {
 
 			// Iterator over all properties
 			iterator begin() {return iterator(&pats_dict);}
-			iterator end() {return iterator(&pats_dict, /*is_end=*/ true);}
 			const_iterator begin() const {return const_iterator(&pats_dict);}
-			const_iterator end() const {return const_iterator(&pats_dict, /*is_end = */ true);}
-			
 			// Iterator over all properties with a pattern matching name
 			iterator begin(nset_t::iterator name) {
 				auto it = props_dict.find(name);
-				if (it == props_dict.end()) return iterator{};
+				if (it == props_dict.end()) return iterator{true};
 				else return iterator(&(it->second));
-			}
-			iterator end(nset_t::iterator name) {
-				auto it = props_dict.find(name);
-				if (it == props_dict.end()) return iterator{};
-				else return iterator(&(it->second), /*is_end=*/ true);
 			}
 			const_iterator begin(nset_t::iterator name) const {
 				auto it = props_dict.find(name);
-				if (it == props_dict.end()) return const_iterator{};
+				if (it == props_dict.end()) return const_iterator{true};
 				else return const_iterator(&(it->second));
 			}
-			const_iterator end(nset_t::iterator name) const {
-				auto it = props_dict.find(name);
-				if (it == props_dict.end()) return const_iterator{};
-				else return const_iterator(&(it->second), /*is_end=*/ true);
-			}
+
+			// All end iterators are the same.
+			iterator end() {return iterator(/*is_end=*/ true);}
+			const_iterator end() const {return const_iterator(/*is_end=*/ true);}
+			
 
 		};
 
@@ -569,59 +570,56 @@ namespace cadabra {
 			ignore_properties=true;
 
 		// Outer loop runs first with wildcards = false, second (if needed) with wildcards = true
-		auto walk = begin(it->name_only());
-		auto end_it = end(it->name_only());
 		
-		std::type_index last_type = typeid(void);
+		for(;;) {
+			// first pass: wildcards == false
+			// second pass (optional): wildcards == true
+			auto walk = begin(it->name_only());
+			auto end_it = end();
+			std::type_index last_type = typeid(void);
 
-		// Make sure we found something before bothering to loop
-		if (walk != end_it) {
-			for(;;) {
-				// first pass: wildcards == false
-				// second pass (optional): wildcards == true
-
-				// walk takes us through all properties that have patterns matching name
-				while (walk != end_it) {
-					// Upon (re)starting the loop, check whether the property type has changed.
-					// If it has, check castability and skip if not castable.
-					if (last_type != walk.proptype()) {
-						// This is the first time we are encountering this property type in the loop.
-						// Check heritability once per type
-						inherits = inherits || dynamic_cast<const PropertyInherit *>(walk->first) || dynamic_cast<const Inherit<T> *>(walk->first);
-						last_type = walk.proptype();
-						ret.first = dynamic_cast<const T *>(walk->first);
-						if (!ret.first) {
-							// If we can't dynamically cast this property type, then move on...
-							// but check heritability first
-							walk.next_proptype();
-							continue;
-						}
+			// walk takes us through all properties that have patterns matching name
+			while (walk != end_it) {
+				// Upon (re)starting the loop, check whether the property type has changed.
+				// If it has, check castability and skip if not castable.
+				if (last_type != walk.proptype()) {
+					// This is the first time we are encountering this property type in the loop.
+					// Check heritability once per type
+					inherits = inherits || dynamic_cast<const PropertyInherit *>(walk->first) || dynamic_cast<const Inherit<T> *>(walk->first);
+					last_type = walk.proptype();
+					ret.first = dynamic_cast<const T *>(walk->first);
+					if (!ret.first) {
+						// If we can't dynamically cast this property type, then move on...
+						// but check heritability first
+						walk.next_proptype();
+						continue;
 					}
-					// We are only dealing with castable properties now.
-					if(wildcards==walk->second->children_wildcard()) {
-						if(walk->second->match_ext(*this, it, comp, ignore_parent_rel, ignore_properties)) {
-							ret.first  = dynamic_cast<const T *>(walk->first);
-							ret.second = walk->second;
-							if(!check_label(ret.first, label)) {
-								ret.first=0;
-							}
-							else {
-								if(doserial) 
-									serialnum=serial_number( walk->first, walk->second);
-								break;
-							}
-						}
-						ret.first=0;
-					}
-					++walk;
 				}
-				if(!wildcards && !ret.first) {
-					//			std::cerr << "not yet found, switching to wildcards" << std::endl;
-					wildcards=true;
-					walk = begin(it->name_only()); // restarting the for loop
+				// We are only dealing with castable properties now.
+				if(wildcards==walk->second->children_wildcard()) {
+					if(walk->second->match_ext(*this, it, comp, ignore_parent_rel, ignore_properties)) {
+						ret.first  = dynamic_cast<const T *>(walk->first);
+						assert(ret.first != nullptr);
+						ret.second = walk->second;
+						if(!check_label(ret.first, label)) {
+							ret.first=0;
+						}
+						else {
+							if(doserial) 
+								serialnum=serial_number( walk->first, walk->second);
+							break;
+						}
 					}
-				else break;
+					ret.first=0;
+				}
+				++walk;
 			}
+			if(!wildcards && !ret.first) {
+				//			std::cerr << "not yet found, switching to wildcards" << std::endl;
+				wildcards=true;
+				// walk = begin(it->name_only()); // restarting the for loop
+				}
+			else break;
 		}
 		// Do not walk down the tree if the property cannot be passed up the tree.
 		// FIXME: see issue/259.
@@ -674,10 +672,8 @@ namespace cadabra {
 		// Find all common properties of it1 and it2
 		auto walk1 = begin(it1->name_only());
 		auto walk2 = begin(it2->name_only());
-		auto end1 = end(it1->name_only());
-		auto end2 = end(it2->name_only());
 
-		if (walk1 != end1 && walk2 != end2) {
+		if (walk1 != end() && walk2 != end()) {
 			if (walk1.proptype() < walk2.proptype()) {
 				walk1.next_proptype();
 			} else if (walk2.proptype() < walk1.proptype()) {
@@ -745,7 +741,7 @@ namespace cadabra {
 		// Are any of these properties heritable?
 		// FIXME: Below just uses PropertyInherit and not Inherit<T>?
 		walk1 = begin(it1->name_only());
-		while (walk1 != end1) {
+		while (walk1 != end()) {
 			if (dynamic_cast<const PropertyInherit*>(walk1->first)) {
 				inherits1 = true;
 				break;
@@ -753,7 +749,7 @@ namespace cadabra {
 			walk1.next_proptype();
 		}
 		walk2 = begin(it2->name_only());
-		while (walk2 != end2) {
+		while (walk2 != end()) {
 			if (dynamic_cast<const PropertyInherit*>(walk2->first)) {
 				inherits2 = true;
 				break;
