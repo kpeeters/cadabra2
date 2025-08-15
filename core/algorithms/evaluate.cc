@@ -347,11 +347,12 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const IndexClassifier
 				fi=ind_free.begin();
 				while(fi!=ind_free.end()) {
 					for(auto& r: subs.comparator.index_value_map) {
-						if(fi->first == r.first) {
+						if(fi->first == r.first.resolve()) {
 #ifdef DEBUG
 //							std::cerr << "adding " << r.second.begin() << std::endl;
 #endif
-							repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none;
+							Ex lazy_resolved = r.second.resolve();
+							repl.append_child(il, lazy_resolved.begin())->fl.parent_rel=str_node::p_none;
 							break;
 							}
 						}
@@ -363,11 +364,12 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const IndexClassifier
 			else {
 				while(fi!=full_ind_free.end()) {
 					for(auto& r: subs.comparator.index_value_map) {
-						if(fi->first == r.first) {
+						if(fi->first == r.first.resolve()) {
 #ifdef DEBUG
 //							std::cerr << "adding2 " << r.second.begin() << std::endl;
 #endif
-							repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none;
+							Ex lazy_resolved = r.second.resolve();
+							repl.append_child(il, lazy_resolved.begin())->fl.parent_rel=str_node::p_none;
 							break;
 							}
 						}
