@@ -346,7 +346,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const IndexClassifier
 
 				fi=ind_free.begin();
 				while(fi!=ind_free.end()) {
-					for(auto& r: subs.comparator.new_index_value_map) {
+					for(auto& r: subs.comparator.index_value_map) {
 						if(fi->first == r.first.resolve()) {
 #ifdef DEBUG
 //							std::cerr << "adding " << r.second.begin() << std::endl;
@@ -363,7 +363,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const IndexClassifier
 				}
 			else {
 				while(fi!=full_ind_free.end()) {
-					for(auto& r: subs.comparator.new_index_value_map) {
+					for(auto& r: subs.comparator.index_value_map) {
 						if(fi->first == r.first.resolve()) {
 #ifdef DEBUG
 //							std::cerr << "adding2 " << r.second.begin() << std::endl;

@@ -331,7 +331,7 @@ namespace cadabra {
 		{
 		replacement_map.clear();
 		subtree_replacement_map.clear();
-		new_index_value_map.clear();
+		index_value_map.clear();
 		factor_locations.clear();
 		factor_moving_signs.clear();
 		}
@@ -895,23 +895,23 @@ namespace cadabra {
 				if(ivals!=values.end()) {
 					// Verify that the 'two' index has not already been matched to a value
 					// different from 'one'.
-					auto nprev1 = new_index_value_map.find({two, Lazy_Ex::repl_t::same});
-					auto nprev2 = new_index_value_map.find({two, Lazy_Ex::repl_t::flip_parent_rel});
+					auto nprev1 = index_value_map.find({two, Lazy_Ex::repl_t::same});
+					auto nprev2 = index_value_map.find({two, Lazy_Ex::repl_t::flip_parent_rel});
 
 					Lazy_Ex new_o1 = {one, Lazy_Ex::repl_t::same};
 					Lazy_Ex new_o2 = {one, Lazy_Ex::repl_t::flip_parent_rel};
 
 					//if(prev1!=index_value_map.end() && ! (prev1->second==o1) ) {
-					if(nprev1!=new_index_value_map.end() && ! (nprev1->second==new_o1) ) {
+					if(nprev1!=index_value_map.end() && ! (nprev1->second==new_o1) ) {
 						//					std::cerr << "Previously 1 " << Ex(two) << " was " << Ex(prev1->second) << std::endl;
 						return report(match_t::no_match_less);
 						}
-					if(nprev2!=new_index_value_map.end() && ! (nprev2->second==new_o2) ) {
+					if(nprev2!=index_value_map.end() && ! (nprev2->second==new_o2) ) {
 						//					std::cerr << "Previously 2 " << Ex(two) << " was " << Ex(prev2->second) << std::endl;
 						return report(match_t::no_match_less);
 						}
 
-					new_index_value_map[{two, Lazy_Ex::repl_t::same}] = {one, Lazy_Ex::repl_t::same};
+					index_value_map[{two, Lazy_Ex::repl_t::same}] = {one, Lazy_Ex::repl_t::same};
 					return report(match_t::node_match);
 					}
 				else {
@@ -1095,7 +1095,7 @@ namespace cadabra {
 	      Ex::sibling_iterator st,
 	      Ex::iterator conditions)
 		{
-		replacement_map_t         backup_new_replacements(replacement_map);
+		replacement_map_t         backup_replacements(replacement_map);
 		subtree_replacement_map_t backup_subtree_replacements(subtree_replacement_map);
 
 		// 'Start' iterates over all terms, trying to find 'tofind'. It may happen that the
@@ -1125,7 +1125,7 @@ namespace cadabra {
 						}
 					auto this_ratio = (*tofind->multiplier)/(*start->multiplier);
 					if(this_ratio!=term_ratio) {
-						replacement_map=backup_new_replacements;
+						replacement_map=backup_replacements;
 						subtree_replacement_map=backup_subtree_replacements;
 						}
 					else {
@@ -1138,7 +1138,7 @@ namespace cadabra {
 							if(res==match_t::subtree_match) return res;
 							else {
 								factor_locations.pop_back();
-								replacement_map=backup_new_replacements;
+								replacement_map=backup_replacements;
 								subtree_replacement_map=backup_subtree_replacements;
 								}
 							}
@@ -1151,7 +1151,7 @@ namespace cadabra {
 								}
 							else {
 								factor_locations.pop_back();
-								replacement_map=backup_new_replacements;
+								replacement_map=backup_replacements;
 								subtree_replacement_map=backup_subtree_replacements;
 								}
 							}
@@ -1159,7 +1159,7 @@ namespace cadabra {
 					}
 				else {
 					//				txtout << tofind.node << "does not match" << std::endl;
-					replacement_map=backup_new_replacements;
+					replacement_map=backup_replacements;
 					subtree_replacement_map=backup_subtree_replacements;
 					}
 				}

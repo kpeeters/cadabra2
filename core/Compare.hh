@@ -337,7 +337,7 @@ namespace cadabra {
 
 			/// Map for matching of index names to index values. Note: this is in the opposite order
 			/// from replacement_map!
-			replacement_map_t                                              new_index_value_map;
+			replacement_map_t                                              index_value_map;
 
 			/// Information to keep track of where individual factors/terms
 			/// in a sub-product/sub-sum were found, and (for sub-products)
