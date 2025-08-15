@@ -327,9 +327,9 @@ void Server::on_close(websocket_server::id_type ws_id)
 
 int quit(void *)
 	{
-	std::cerr << "Server: setting python interrupt." << std::endl;
+//	std::cerr << "Server: setting python interrupt." << std::endl;
 	PyErr_SetInterrupt();
-	std::cerr << "Server: python interrupt set." << std::endl;
+//	std::cerr << "Server: python interrupt set." << std::endl;
 	return -1;
 	}
 
@@ -441,7 +441,7 @@ void Server::wait_for_job()
 void Server::stop_block()
 	{
 //	interrupt_block=true;
-	std::cerr << "Server: sending SIGINT to python thread." << std::endl;
+//	std::cerr << "Server: sending SIGINT to python thread." << std::endl;
 	PyErr_SetInterrupt();
 
 	// PyGILState_STATE state = PyGILState_Ensure();
@@ -533,12 +533,12 @@ void Server::dispatch_message(websocket_server::id_type ws_id, const std::string
 		}
 	else if(msg_type=="execute_interrupt") {
 		std::unique_lock<std::mutex> lock(block_available_mutex);
-		std::cerr << "Server: requesting python thread stop." << std::endl;
+		// std::cerr << "Server: requesting python thread stop." << std::endl;
 		stop_block();
-		std::cerr << "Server: clearing block queue." << std::endl;
+		// std::cerr << "Server: clearing block queue." << std::endl;
 		std::queue<Block> empty;
 		std::swap(block_queue, empty);
-		std::cerr << "Server: block queue cleared." << std::endl;
+		// std::cerr << "Server: block queue cleared." << std::endl;
 		//snoop::log(snoop::warn) << "Job stop requested." << snoop::flush;
 		}
 	else if(msg_type=="init") {

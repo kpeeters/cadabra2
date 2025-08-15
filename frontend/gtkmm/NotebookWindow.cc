@@ -73,7 +73,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry, std::s
 	, tex_running(false), tex_need_width(0)
 	, last_find_location(doc.end(), std::string::npos)
 	, is_configured(false)
-
+	, run_all_after_restart(false)
 	{
 	}
 
@@ -287,6 +287,7 @@ void NotebookWindow::on_realize()
 
 	// Kernel menu actions.
 	actiongroup->add_action( "KernelRestart",         sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart) );			
+	actiongroup->add_action( "KernelRestartRun",      sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart_and_run_all) );
 	
 	// Tools menu actions.
 	actiongroup->add_action( "CompareFile",           sigc::mem_fun(*this, &NotebookWindow::compare_to_file) );
@@ -579,6 +580,10 @@ void NotebookWindow::on_realize()
 		"          <attribute name='label'>Restart kernel</attribute>"
 		"          <attribute name='action'>cdb.KernelRestart</attribute>"
 		"        </item>"
+	   "        <item>"
+		"          <attribute name='label'>Restart kernel and run notebook</attribute>"
+		"          <attribute name='action'>cdb.KernelRestartRun</attribute>"
+		"        </item>"
 		"      </section>"
 		"    </submenu>"
 		"    <submenu>"
@@ -708,6 +713,13 @@ void NotebookWindow::on_realize()
 								  false));
 		tool_restart.get_accessible()->set_name("Restart kernel");
 
+		// Restart-and-run-all button.
+		tool_restart_and_run_all.add(*Gtk::make_managed<ImageArea>(
+												  40/display_scale, display_scale,
+												  install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart-and-run-all"+ICONEXT,
+												  false));
+		tool_restart_and_run_all.get_accessible()->set_name("Restart kernel and run notebook");
+
 		// Open button.
 		tool_open.add(*Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
@@ -732,6 +744,7 @@ void NotebookWindow::on_realize()
 		tool_stop.set_size_request(70/display_scale, 70/display_scale);
 		tool_run.set_size_request(70/display_scale, 70/display_scale);
 		tool_restart.set_size_request(70/display_scale, 70/display_scale);
+		tool_restart_and_run_all.set_size_request(70/display_scale, 70/display_scale);
 		tool_open.set_size_request(70/display_scale, 70/display_scale);
 		tool_save.set_size_request(70/display_scale, 70/display_scale);
 		tool_save_as.set_size_request(70/display_scale, 70/display_scale);
@@ -739,6 +752,7 @@ void NotebookWindow::on_realize()
 		tool_run.set_tooltip_text("Execute all cells");
 		tool_stop.set_tooltip_text("Stop execution");
 		tool_restart.set_tooltip_text("Restart kernel");
+		tool_restart_and_run_all.set_tooltip_text("Restart kernel and run entire notebook");
 		tool_open.set_tooltip_text("Open notebook...");
 		tool_save.set_tooltip_text("Save notebook");
 		tool_save_as.set_tooltip_text("Save notebook as...");
@@ -750,6 +764,7 @@ void NotebookWindow::on_realize()
 		toolbar.pack_start(tool_run, Gtk::PACK_SHRINK);
 		toolbar.pack_start(tool_stop, Gtk::PACK_SHRINK);
 		toolbar.pack_start(tool_restart, Gtk::PACK_SHRINK);
+		toolbar.pack_start(tool_restart_and_run_all, Gtk::PACK_SHRINK);
 		toolbar.pack_start(top_label);
 		toolbar.pack_end(kernel_spinner, Gtk::PACK_SHRINK);
 		kernel_spinner.set_size_request(50/display_scale, 50/display_scale);
@@ -766,6 +781,7 @@ void NotebookWindow::on_realize()
 	tool_run.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::run_all_cells));
 	tool_stop.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::on_run_stop));
 	tool_restart.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart));
+	tool_restart_and_run_all.signal_clicked().connect(sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart_and_run_all));
 	
 //	
 //	Gtk::Widget *toolbar=0;
@@ -1144,16 +1160,19 @@ void NotebookWindow::set_stop_sensitive(bool s)
 
 void NotebookWindow::process_data()
 	{
+	// std::cerr << "process_data() called" << std::endl;
 	dispatcher.emit();
 	}
 
 
 void NotebookWindow::on_connect()
 	{
+	// std::cerr << "kernel connected" << std::endl;
+	
 	std::lock_guard<std::mutex> guard(status_mutex);
 	kernel_string = "connected";
 	progress_string = "Idle";
-	dispatcher.emit();
+//	dispatcher.emit();
 	dispatch_update_status.emit();
 	console.initialize();
 	// prefs.python_path might end in a backslash which will raise an EOF syntax error, so we add a
@@ -1163,10 +1182,17 @@ void NotebookWindow::on_connect()
 	if (!name.empty()) {
 		console.send_input("sys.path.insert(0, '''" + escape_backslashes(name.substr(0, name.find_last_of("\\/"))) + "''')");
 		}
+
+	if(run_all_after_restart) {
+		run_all_after_restart=false;
+		std::shared_ptr<ActionBase> action = std::make_shared<ActionRunCell>();
+		queue_action(action);
+		}
 	}
 
 void NotebookWindow::on_disconnect(const std::string& reason)
 	{
+	// std::cerr << "***** kernel disconnected" << std::endl;
 	std::lock_guard<std::mutex> guard(status_mutex);
 	kernel_string = reason;
 	dispatcher.emit();
@@ -1191,6 +1217,7 @@ void NotebookWindow::on_kernel_runstatus(bool running)
 			follow_last_cell=doc.end();
 			}
 		}
+	// FIXME: WHY would we need to process the queue here?
 	dispatcher.emit();
 	}
 
@@ -1251,6 +1278,8 @@ void NotebookWindow::process_todo_queue()
 	{
 	static bool running=false;
 
+	// std::cerr << "process_todo_queue, running="  << running << std::endl;
+	
 	// Prevent from re-entering this from the process_action_queue entered below.
 	if(running) return;
 	running=true;
@@ -1631,6 +1660,7 @@ void NotebookWindow::set_progress(const std::string& msg, int cur_step, int tota
 void NotebookWindow::update_status()
 	{
 	// This should only be called from dispatch_update_status!
+	// This will then run on the GUI thread, as it should.
 
 	// Update status and progress, kernel status is taken card of in process_action_queue
 	std::lock_guard<std::mutex> guard(status_mutex);
@@ -2831,6 +2861,8 @@ void NotebookWindow::on_run_stop()
 void NotebookWindow::on_kernel_restart()
 	{
 	// FIXME: add warnings
+	kernel_string = "restarting";
+	update_status();
 	follow_last_cell=doc.end();
 	
 	compute->restart_kernel();
@@ -2842,6 +2874,13 @@ void NotebookWindow::on_kernel_restart()
 		}
 
 	dispatch_update_status.emit();
+	}
+
+void NotebookWindow::on_kernel_restart_and_run_all()
+	{
+	// Run all cells after the restart has completed.
+	run_all_after_restart=true;
+	on_kernel_restart();
 	}
 
 void NotebookWindow::on_help() const

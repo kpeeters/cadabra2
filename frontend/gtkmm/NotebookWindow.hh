@@ -56,11 +56,13 @@ namespace cadabra {
 
 			void           select_range(const DTree&, DTree::iterator, int start, int len);
 
+			// Implementations of the functions which the compute thread will
+			// call directly. If these need to modify the GUI, they need to do
+			// so by calling one of the dispatchers.
 			virtual void on_connect() override;
 			virtual void on_disconnect(const std::string&) override;
 			virtual void on_network_error() override;
 			virtual void on_kernel_runstatus(bool) override;
-
 			virtual void process_data() override;
 
 			// TeX stuff
@@ -146,7 +148,7 @@ namespace cadabra {
 			Gtk::Box                       topbox;
 			Gtk::Box                       toolbar;
 			Gtk::Button                    tool_open, tool_save, tool_save_as;
-			Gtk::Button                    tool_run, tool_run_to, tool_stop, tool_restart;		
+			Gtk::Button                    tool_run, tool_run_to, tool_stop, tool_restart, tool_restart_and_run_all;		
 			Gtk::Box                       supermainbox;
 			Gtk::Paned                     dragbox;
 			Gtk::Box                       mainbox;
@@ -184,7 +186,16 @@ namespace cadabra {
 			std::string                    status_string, kernel_string, progress_string;
 			double                         progress_frac;
 			int                            status_line, status_col;
+
+			// Functions which get called on the compute thread can signal to
+			// the GUI thread that elements need to be updated, by sending
+			// signals using the following dispatchers.
 			Glib::Dispatcher               dispatch_update_status, dispatch_refresh, dispatch_tex_error;
+
+			// Update the status line and progress bar. This should only
+			// be called on the GUI thread, so typically gets called
+			// indirectly by calling `dispatch_update_status.emmit()`
+			// from the compute thread, which calls this function.
 			void                           update_status();
 
 			// Run the TeX engine on a separate thread, then call
@@ -248,6 +259,7 @@ namespace cadabra {
 			void on_help() const;
 
 			void on_kernel_restart();
+			void on_kernel_restart_and_run_all();			
 
 			/// Search handling.
 			void on_search_text_changed();
@@ -263,6 +275,8 @@ namespace cadabra {
 			/// Todo deque processing logic. This gets called by the dispatcher, but it
 			/// is also allowed to call this from within NotebookWindow itself. The important
 			/// thing is that it is run on the GUI thread.
+			/// This is a wrapper around `Document::process_action_queue`, to set the
+			/// spinner status and handle crashes.
 			void process_todo_queue();
 
 			/// Refresh the display after a TeX engine run has completed. The TeX
@@ -321,7 +335,8 @@ namespace cadabra {
 			std::pair<DTree::iterator, size_t> last_find_location;
 			std::string                        last_find_string;
 
-			bool  is_configured;
+			bool  is_configured;         // have received and handled a configure event
+			bool  run_all_after_restart; // queue notebook running when kernel comes back
 
 			// We keep references to a few menu actions so we can
 			// enable/disable them at runtime.

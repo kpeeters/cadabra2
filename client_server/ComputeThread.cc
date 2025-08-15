@@ -124,12 +124,17 @@ void ComputeThread::all_cells_nonrunning()
 
 void ComputeThread::on_fail(const boost::beast::error_code& ec)
 	{
-	std::cerr << "cadabra-client: connection to server on port " << port << " failed, " << ec.message() << std::endl;
+	if(!restarting_kernel) {
+		std::cerr << "cadabra-client: connection to server on port " << port << " failed, " << ec.message() << std::endl;
+		}
 	connection_is_open=false;
 	all_cells_nonrunning();
 	if(gui && server_pid!=0) {
+		// When a kernel restart is in progress, server_pid will be zero
+		// and this block never runs.
 		close(server_stdout);
 		// close(server_stderr);
+		// std::cerr << "closing connetion to terminated server" << std::endl;
 		Glib::spawn_close_pid(server_pid);
 		//		kill(server_pid, SIGKILL);
 		server_pid=0;
@@ -460,7 +465,8 @@ void ComputeThread::on_message(const std::string& msg)
 					   std::make_shared<ActionPositionCursor>(parent_id, ActionPositionCursor::Position::in);
 					docthread->queue_action(actionpos);
 
-					// FIXME: iterate over all cells and set the running flag to false.
+					// Action has stopped, so mark all cells as non-running.
+					all_cells_nonrunning();
 					}
 				else if (msg_type == "image_png") {
 					DataCell result(cell_id, DataCell::CellType::image_png, content["output"].get<std::string>());
@@ -525,7 +531,7 @@ void ComputeThread::execute_interactive(uint64_t id, const std::string& code)
 	std::ostringstream oss;
 	oss << req << std::endl;
 	if(getenv("CADABRA_SHOW_SENT")) {
-		std::cerr << "SEND: " << req.dump(3) << std::endl;
+		std::cerr << "SENT: " << req.dump(3) << std::endl;
 		}
 	wsclient.send(oss.str());
 	interactive_cells.insert(id);
@@ -593,7 +599,7 @@ void ComputeThread::execute_cell(DTree::iterator it, std::string no_assign, std:
 		std::ostringstream str;
 		str << req << std::endl;
 		if(getenv("CADABRA_SHOW_SENT")) {
-			std::cerr << "SEND: " << req.dump(3) << std::endl;
+			std::cerr << "SENT: " << req.dump(3) << std::endl;
 			}
 		wsclient.send(str.str());
 		// NOTE: we can get a return message in on_message at any point after this,
@@ -628,7 +634,7 @@ void ComputeThread::update_variable_on_server(std::string variable, double value
 	std::ostringstream str;
 	str << req << std::endl;
 	if(getenv("CADABRA_SHOW_SENT")) {
-		std::cerr << "SEND: " << req.dump(3) << std::endl;
+		std::cerr << "SENT: " << req.dump(3) << std::endl;
 		}
 	wsclient.send(str.str());
 	}
@@ -644,6 +650,8 @@ void ComputeThread::stop()
 	if(connection_is_open==false)
 		return;
 
+	// std::cerr << "stopping existing kernel" << std::endl;
+	
 	nlohmann::json req, header, content;
 	header["uuid"]="none";
 	header["msg_type"]="execute_interrupt";
@@ -657,10 +665,12 @@ void ComputeThread::stop()
 
 	server_pid=0;
 	if(getenv("CADABRA_SHOW_SENT")) {
-		std::cerr << "SEND: " << req.dump(3) << std::endl;
+		std::cerr << "SENT: " << req.dump(3) << std::endl;
 		}
 	wsclient.send(str.str());
-	all_cells_nonrunning();	
+	// Do not yet mark cells non-running, otherwise we are unable to
+	// process any error messages. Do this once the stop comes through.
+	// all_cells_nonrunning();	
 	}
 
 void ComputeThread::restart_kernel()
@@ -689,7 +699,7 @@ void ComputeThread::restart_kernel()
 	//	std::cerr << str.str() << std::endl;
 
 	if(getenv("CADABRA_SHOW_SENT")) {
-		std::cerr << "SEND: " << req.dump(3) << std::endl;
+		std::cerr << "SENT: " << req.dump(3) << std::endl;
 		}
 	wsclient.send(str.str());
 	docthread->on_interactive_output(req);

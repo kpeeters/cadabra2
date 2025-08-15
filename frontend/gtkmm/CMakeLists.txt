@@ -250,6 +250,7 @@ set(CDBICONS
   cdb-copy-all
   cdb-open
   cdb-restart
+  cdb-restart-and-run-all  
   cdb-run
   cdb-save-as
   cdb-save

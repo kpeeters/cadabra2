@@ -290,9 +290,8 @@ void DocumentThread::run_cells_referencing_variable(std::string variable, double
 
 void DocumentThread::process_action_queue()
 	{
-	// FIXME: we certainly do not want any two threads to run this at the same time,
-	// but that is not guaranteed. Actions should always be run on the GUI thread.
-	// This absolutely has to be run on the main GUI thread.
+	// This routine *absolutely* has to be run on the main GUI thread. Anything
+	// else is a bug.
 
 	if(main_thread_id != std::this_thread::get_id())
 		std::cerr << "INTERNAL ERROR: DocumentThread::process_action_queue not running on main thread."
@@ -300,6 +299,7 @@ void DocumentThread::process_action_queue()
 
 	stack_mutex.lock();
 	while(pending_actions.size()>0) {
+		// std::cerr << "pending_actions.size() == " << pending_actions.size() << std::endl;
 		std::shared_ptr<ActionBase> ab = pending_actions.front();
 		// Unlock the action queue while we are processing this particular action,
 		// so that other actions can be added which we run.
