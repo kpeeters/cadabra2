@@ -34,7 +34,7 @@ configure_file(
 #   # so no linking takes place
 #   set(Boost_USE_STATIC_LIBS   ON)
 # endif()
-find_package(Boost 1.71.0 COMPONENTS system filesystem REQUIRED)
+find_package(Boost 1.71.0 COMPONENTS filesystem REQUIRED)
 message(STATUS "Boost version ${Boost_VERSION}")
 
 # Find glibmm (for base64)

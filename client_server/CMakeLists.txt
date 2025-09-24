@@ -36,7 +36,7 @@ find_package(Threads)
 # websocket functionality) which was not stable before that version.
 # Actually, it is probably not stable before 1.75.0, but if we go that
 # high we cannot build on Ubuntu 20.04 anymore.
-find_package(Boost 1.71.0 COMPONENTS system program_options date_time filesystem REQUIRED)
+find_package(Boost 1.71.0 COMPONENTS program_options date_time filesystem REQUIRED)
 
 # OpenSSL needs to be linked in explicitly (probably because the boost
 # material referring to it is all in headers?). If you use a cmake module,
