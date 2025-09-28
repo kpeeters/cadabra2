@@ -17,34 +17,24 @@ bool sort_sum::can_apply(iterator st)
 
 Algorithm::result_t sort_sum::apply(iterator& st)
 	{
-	// This bubble sort is of course a disaster, but it'll have to do for now.
+	bool changed = tr.subtree_sort(st.begin(), st.end(), 
+		[this](const sibling_iterator& sib1, const sibling_iterator& sib2) {
+            /* The less function for stable_sort requires less(a,a) = false.
+             * Simplest fix is to swap order of arguments below.
+             */
+			int es=subtree_compare(&kernel.properties, sib2, sib1, -2, true, 0, true);
+			return should_swap(sib2, sib1, es);
+			});
 
-	result_t ret=result_t::l_no_action;
-	sibling_iterator one, two;
-	unsigned int num=tr.number_of_children(st);
-	for(unsigned int i=1; i<num; ++i) {
-		one=tr.begin(st);
-		two=one;
-		++two;
-		for(unsigned int j=i+1; j<=num; ++j) { // this loops too many times, no?
-			int es=subtree_compare(&kernel.properties, one, two, -2, true, 0, true);
-			if(should_swap(one, es)) {
-				tr.swap(one);
-				std::swap(one,two);  // put the iterators back in order
-				ret=result_t::l_applied;
-				}
-			++one;
-			++two;
-			}
-		}
-
-	return ret;
+	// check if anything actually moved.
+    if (changed) return result_t::l_applied;
+	else return result_t::l_no_action;
 	}
 
-bool sort_sum::should_swap(iterator obj, int subtree_comparison) const
+
+bool sort_sum::should_swap(iterator obj1, iterator obj2, int subtree_comparison) const
 	{
-	sibling_iterator one=obj, two=obj;
-	++two;
+	sibling_iterator one=obj1, two=obj2;
 
 	// Find a SortOrder property which contains both one and two.
 	int num1, num2;
@@ -68,4 +58,3 @@ bool sort_sum::should_swap(iterator obj, int subtree_comparison) const
 
 	return false;
 	}
-
