@@ -186,7 +186,8 @@ Algorithm::result_t vary::apply(iterator& it)
 			}
 		if(res!=result_t::l_applied) {
 			// restore original
-			it=tr.replace(it, backup.begin());
+//			it=tr.replace(it, backup.begin());
+			zero(it->multiplier);
 			}
 		return res;
 		}
@@ -237,6 +238,7 @@ Algorithm::result_t vary::apply(iterator& it)
 				return result_t::l_applied;
 				}
 			}
+		zero(it->multiplier);
 		}
 
 	// If we get here we have a single term for which we do not know

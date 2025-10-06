@@ -188,3 +188,20 @@ def test15():
     print("Test 15b passed")
 
 test15()
+
+def test16():
+    __cdbkernel__=create_scope()
+    ex:=A + B + C;
+    vary(_, $B -> b, C->c$);
+    assert(ex==$b+c$)
+    print("Test 16a passed")        
+    ex:=r**2 + B;
+    vary(_, $B -> b$);
+    assert(ex==$b$)
+    print("Test 16b passed")        
+    ex:=r**2 B + r**2 A + B;
+    vary(_, $B -> b$);
+    assert(ex==$r**2 b + b$)
+    print("Test 16b passed")        
+
+test16()
