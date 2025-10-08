@@ -490,8 +490,7 @@ Ex IndexClassifier::get_dummy(const list_property *dums,
                               const index_map_t * four,
                               const index_map_t * five) const
 	{
-	std::pair<Properties::pattern_map_t::const_iterator, Properties::pattern_map_t::const_iterator>
-	pr=kernel.properties.pats.equal_range(dums);
+	std::pair<Properties::const_iterator, Properties::const_iterator> pr=kernel.properties.equal_range(dums);
 
 	// std::cerr << "finding index not in: " << std::endl;
 	// if(one)
@@ -512,9 +511,9 @@ Ex IndexClassifier::get_dummy(const list_property *dums,
 
 	while(pr.first!=pr.second) {
 		// std::cerr << "trying: " << std::endl;
-		// std::cerr << pr.first->second->obj << std::endl;
+	// std::cerr << pr.first->second->obj << std::endl;
 		if(pr.first->second->obj.begin()->is_autodeclare_wildcard()) {
-			// std::cerr << "is autodeclare wildcard" << std::endl;
+		// std::cerr << "is autodeclare wildcard" << std::endl;
 			std::string base=*pr.first->second->obj.begin()->name_only();
 			int used=max_numbered_name(base, one, two, three, four, five);
 			std::ostringstream str;
@@ -526,15 +525,15 @@ Ex IndexClassifier::get_dummy(const list_property *dums,
 			return ret;
 			}
 		else {
-			// std::cerr << "is NOT autodeclare" << std::endl;
+		// std::cerr << "is NOT autodeclare" << std::endl;
 			const Ex& inm=(*pr.first).second->obj;
 			// BUG: even if only _{a} is in the used map, we should not
 			// accept ^{a}. But since ...
 			if(index_in_set(inm, one)==false   &&
-			      index_in_set(inm, two)==false   &&
-			      index_in_set(inm, three)==false &&
-			      index_in_set(inm, four)==false  &&
-			      index_in_set(inm, five)==false) {
+				index_in_set(inm, two)==false   &&
+				index_in_set(inm, three)==false &&
+				index_in_set(inm, four)==false  &&
+				index_in_set(inm, five)==false) {
 				// std::cerr << "ok to use " << inm << std::endl;
 				return inm;
 				}
