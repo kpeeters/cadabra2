@@ -36,11 +36,12 @@ You should have received a copy of the GNU General Public License
 #include "tree.hh"
 #include "Multiplier.hh"
 
+
 namespace cadabra {
 
 	class NTensor;
 	class NInterpolatingFunction;
-	
+
 	typedef Multiplier              multiplier_t;
 	typedef std::set<std::string>   nset_t;
 	typedef std::set<multiplier_t>  rset_t;
