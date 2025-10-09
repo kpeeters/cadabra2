@@ -513,6 +513,8 @@ class tree {
 		void copy_(const tree<T, tree_node_allocator>& other);
 
       /// Comparator class for two nodes of a tree (used for sorting and searching).
+		/// This accepts two `tree_node` objects, as opposed to a user-defined
+		/// comparator class which will typically compare the data stored at the node.
 		template<class StrictWeakOrdering>
 		class compare_nodes {
 			public:
