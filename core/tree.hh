@@ -1,7 +1,7 @@
 
 //	STL-like templated tree class.
 //
-// Copyright (C) 2001-2024 Kasper Peeters <kasper@phi-sci.com>
+// Copyright (C) 2001-2025 Kasper Peeters <kasper@phi-sci.com>
 // Distributed under the GNU General Public License version 3.
 //
 // Special permission to use tree.hh under the conditions of a 
@@ -9,8 +9,8 @@
 
 /** \mainpage tree.hh
     \author   Kasper Peeters
-    \version  3.20
-    \date     2024-04-12
+    \version  3.21
+    \date     2025-10-09
     \see      http://github.com/kpeeters/tree.hh/
 
    The tree.hh library for C++ provides an STL-like container class
@@ -430,10 +430,15 @@ class tree {
 							bool duplicate_leaves=false);
 		/// As above, but using two trees with a single top node at the 'to' and 'from' positions.
 		void     merge(iterator to, iterator from, bool duplicate_leaves);
+
 		/// Sort (std::sort only moves values of nodes, this one moves children as well).
 		void     sort(sibling_iterator from, sibling_iterator to, bool deep=false);
+
+		/// Sort, using a user-defined comparison function. This only compares data at the
+		/// top node of each element; use `subtree_sort` for a more generic algorithm.
 		template<class StrictWeakOrdering>
 		void     sort(sibling_iterator from, sibling_iterator to, StrictWeakOrdering comp, bool deep=false);
+				
 		/// Sort the sibling subtrees using the user-supplied subtree_comp (which must take sibling_iterator args).
 		/// Returns true/false if a sort occurs.
 		template<class StrictWeakOrdering>
