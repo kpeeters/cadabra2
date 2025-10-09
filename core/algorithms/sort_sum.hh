@@ -13,7 +13,8 @@ namespace cadabra {
 			virtual result_t apply(iterator&) override;
 
 		private:
-			bool should_swap(iterator obj, int subtree_comparison) const;
+			// bool should_swap(iterator obj, int subtree_comparison) const;
+			bool should_swap(iterator obj1, iterator obj2, int subtree_comparison) const;
 		};
 
 	}

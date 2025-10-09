@@ -46,7 +46,7 @@ Algorithm::result_t sort_product::apply(iterator& st)
 	// about using stable_sort, and then the tree.sort() doesn't do that,
 	// and anyhow you would perhaps want exceptions. Let's just use a bubble
 	// sort since how many times do we have more than 100 items in a product?
-
+	// Revised version below uses improved bubble sort.
 	result_t ret=result_t::l_no_action;
 
 	Ex::sibling_iterator one, two;
@@ -58,12 +58,22 @@ Algorithm::result_t sort_product::apply(iterator& st)
 	//	tr.print_recursive_treeform(std::cout, st);
 
 	unsigned int num=tr.number_of_children(st);
-	for(unsigned int i=1; i<num; ++i) {
+	
+	// for(unsigned int i = 1; i < num; ++i) {
+
+	// Record location of last swap:  [last_swap, num) are sorted and larger than [0, last_swap)
+	unsigned int last_swap = num;
+	while (last_swap > 1) {
 		one=tr.begin(st);
 		two=one;
 		++two;
 		//		for(unsigned int j=i+1; j<=num; ++j) { // this loops too many times, no?
-		while(two!=tr.end(st)) {
+
+		unsigned int current_pos = 1;		// Current index location of `two`
+		unsigned int new_last_swap = 0;		// Keep updating where the next last swap happens
+
+		// Inner loop does not need to check inside [last_swap, num) because that's sorted
+		while(two!=tr.end(st) && current_pos < last_swap) {
 			compare.clear();
 			auto es = compare.equal_subtree(one, two);
 			if(compare.should_swap(one, es)) {
@@ -82,12 +92,15 @@ Algorithm::result_t sort_product::apply(iterator& st)
 						//						std::cout << "MINUS" << std::endl;
 						flip_sign(st->multiplier);
 						}
+					new_last_swap = current_pos;
 					ret=result_t::l_applied;
 					}
 				}
 			++one;
 			++two;
+			++current_pos;
 			}
+		last_swap = new_last_swap;
 		}
 
 	if(ret==result_t::l_no_action) {
