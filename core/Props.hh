@@ -501,7 +501,7 @@ namespace cadabra {
 				outer_iterator outer_it_;
 				inner_iterator inner_it_;
 
-				/// Given the outer iterator, advance to the next non-empty inner iterator.
+				/// Advance to the next non-empty beginning inner iterator.
 				void skip_ahead() {
 					while (outer_it_ != typemap_->end()) {
 						if (outer_it_->second.empty()) {
@@ -535,10 +535,10 @@ namespace cadabra {
 				else return Properties::const_iterator(&(it->second));
 			}
 			
-			iterator end() {return Properties::iterator(/*is_end=*/ true);}
-			const_iterator end() const {return Properties::const_iterator(/*is_end=*/ true);}
-			iterator end(nset_t::iterator name) {return Properties::iterator(/*is_end=*/ true);}
-			const_iterator end(nset_t::iterator name) const {return Properties::const_iterator(/*is_end=*/ true);}
+			iterator end() noexcept {return Properties::iterator(/*is_end=*/ true);}
+			const_iterator end() const noexcept {return Properties::const_iterator(/*is_end=*/ true);}
+			iterator end(nset_t::iterator name) noexcept {return Properties::iterator(/*is_end=*/ true);}
+			const_iterator end(nset_t::iterator name) const noexcept {return Properties::const_iterator(/*is_end=*/ true);}
 
 
 			// Create iterator over all property/pattern pairs of a specific type (ignoring castability)
