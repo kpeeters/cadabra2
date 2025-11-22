@@ -267,10 +267,6 @@ namespace cadabra {
 					// Register the type of an object. Usage: `register_type(prop);`
 					void register_type(const property* prop);
 					
-					// Fuzzy bool type
-					enum fbool {False, True, Unknown};
-					fbool castable(std::type_index to, std::type_index from);
-
 				private:
 					// Dictionary from type_index to human readable name.
 					std::map<std::type_index, std::string>       types_to_names_;
@@ -402,12 +398,29 @@ namespace cadabra {
 
 
 		public:
-			// typedef std::multimap<const property *, pattern *>				propmap_t;
-			// typedef std::map<std::type_index, propmap_t>				    typemap_t;
 
+			/**************************************************************************************
+			 * Property iterators
+			 * ------------------
+			 * The internal structure of Properties can be abstracted away with the below
+			 * iterator_base type, which is templated for const and non-const variants.
+			 * 
+			 * It is an iterator over a typemap_t that maps a property type
+			 * to a propmap_t, which is a multimap over property/pattern pairs. Explicitly,
+			 *   typemap_t = std::map<std::type_index, propmap_t>
+			 *   propmap_t = std::multimap<const property *, pattern *>
+			 *
+			 * The iterator_base contains an outer iterator over the typemap and an inner iterator
+			 * over the propmaps to which the typemap points. Dereferencing it dereferences the inner
+			 * iterator.
+			 * 
+			 **************************************************************************************/
 			template<bool IsConst>
 			class iterator_base {
 			public:
+				// Properties needs visibility into iterator_base
+				friend Properties;
+
 				using map_t = std::conditional_t<IsConst, const typemap_t, typemap_t>;
 				using outer_iterator = std::conditional_t<IsConst, typename typemap_t::const_iterator, typename typemap_t::iterator>;
 				using inner_iterator = std::conditional_t<IsConst, typename propmap_t::const_iterator, typename propmap_t::iterator>;
@@ -419,11 +432,13 @@ namespace cadabra {
 				using self_type = iterator_base<IsConst>;
 
 				iterator_base(bool is_end = true) {
+					// An iterator without a typemap_ should always be the end iterator.
+					assert(is_end);
 					typemap_ = nullptr;
 				}
 
-				iterator_base(map_t* m, bool is_end_ = false): typemap_(m) {
-					if (is_end_) {
+				iterator_base(map_t* m, bool is_end = false): typemap_(m) {
+					if (is_end) {
 						typemap_ = nullptr;
 					} else {
 						outer_it_ = typemap_->begin();
@@ -486,6 +501,7 @@ namespace cadabra {
 				outer_iterator outer_it_;
 				inner_iterator inner_it_;
 
+				/// Given the outer iterator, advance to the next non-empty inner iterator.
 				void skip_ahead() {
 					while (outer_it_ != typemap_->end()) {
 						if (outer_it_->second.empty()) {
@@ -494,17 +510,9 @@ namespace cadabra {
 						}
 						inner_it_ = outer_it_->second.begin();
 						return;
-						/*
-						if (inner_it_ != outer_it_->second.end()) return;
-						++outer_it_;
-						*/
 					}
-					// inner_it_ = inner_iterator();
-					// is_end_ = true;
 					typemap_ = nullptr;
 				}
-
-
 
 			};
 
@@ -517,46 +525,70 @@ namespace cadabra {
 
 			// Create iterator over all property/pattern pairs with a pattern matching name
 			iterator begin(nset_t::iterator name) {
-				auto it = props_dict.find(name);
-				if (it == props_dict.end()) return iterator{true};
-				else return iterator(&(it->second));
+				namemap_t::iterator it = props_dict.find(name);
+				if (it == props_dict.end()) return Properties::iterator{true};
+				else return Properties::iterator(&(it->second));
 			}
 			const_iterator begin(nset_t::iterator name) const {
-				auto it = props_dict.find(name);
-				if (it == props_dict.end()) return const_iterator{true};
-				else return const_iterator(&(it->second));
+				namemap_t::const_iterator it = props_dict.find(name);
+				if (it == props_dict.end()) return Properties::const_iterator{true};
+				else return Properties::const_iterator(&(it->second));
 			}
 			
-			// Create iterator over all property/pattern pairs of a specific type
+			iterator end() {return Properties::iterator(/*is_end=*/ true);}
+			const_iterator end() const {return Properties::const_iterator(/*is_end=*/ true);}
+			iterator end(nset_t::iterator name) {return Properties::iterator(/*is_end=*/ true);}
+			const_iterator end(nset_t::iterator name) const {return Properties::const_iterator(/*is_end=*/ true);}
+
+
+			// Create iterator over all property/pattern pairs of a specific type (ignoring castability)
 			iterator begin(std::type_index type) {
-				auto it = pats_dict.find(type);
-				if (it == pats_dict.end()) return iterator{true};
-				else return iterator(&(it->second));
+				typemap_t::iterator outer_it = pats_dict.find(type);
+				if (outer_it == pats_dict.end()) return Properties::iterator{true};
+				else return Properties::iterator(&pats_dict, outer_it, outer_it->second.begin());
 			}
 			const_iterator begin(std::type_index type) const {
-				auto it = pats_dict.find(type);
-				if (it == pats_dict.end()) return const_iterator{true};
-				else return const_iterator(&(it->second));
+				typemap_t::const_iterator outer_it = pats_dict.find(type);
+				if (outer_it == pats_dict.end()) return Properties::const_iterator{true};
+				else return Properties::const_iterator(&pats_dict, outer_it, outer_it->second.begin());
 			}
+
+			iterator end(std::type_index type) {
+				typemap_t::iterator outer_it = pats_dict.find(type);
+				if (outer_it == pats_dict.end()) return Properties::iterator{true};
+
+				auto start = Properties::iterator(&pats_dict, outer_it, outer_it->second.begin());
+				if (start.typemap_ != nullptr && start.proptype() == type) {
+					start.next_proptype();
+				}
+				return start;
+			}
+
+			const_iterator end(std::type_index type) const {
+				typemap_t::const_iterator outer_it = pats_dict.find(type);
+				if (outer_it == pats_dict.end()) return Properties::const_iterator{true};
+
+				auto start = Properties::const_iterator(&pats_dict, outer_it, outer_it->second.begin());
+				if (start.typemap_ != nullptr && start.proptype() == type) {
+					start.next_proptype();
+				}
+				return start;
+			}
+
 
 			// Return pair corresponding to begin and end of a property range
 			std::pair<iterator, iterator> equal_range(const property *prop) {
 				auto it = pats_dict.find(typeid(*prop));
-				if (it == pats_dict.end()) return {iterator{true}, iterator{true}};
+				if (it == pats_dict.end()) return {Properties::iterator{true}, Properties::iterator{true}};
 				auto range = it->second.equal_range(prop);
-				return {iterator{&pats_dict, it, range.first}, iterator{&pats_dict, it, range.second}};
+				return {Properties::iterator{&pats_dict, it, range.first}, Properties::iterator{&pats_dict, it, range.second}};
 			}
 			std::pair<const_iterator, const_iterator> equal_range(const property *prop) const {
 				auto it = pats_dict.find(typeid(*prop));
-				if (it == pats_dict.end()) return {const_iterator{true}, const_iterator{true}};
+				if (it == pats_dict.end()) return {Properties::const_iterator{true}, Properties::const_iterator{true}};
 				auto range = it->second.equal_range(prop);
-				return {const_iterator{&pats_dict, it, range.first}, const_iterator{&pats_dict, it, range.second}};
+				return {Properties::const_iterator{&pats_dict, it, range.first}, Properties::const_iterator{&pats_dict, it, range.second}};
 			}
-
-			// All end iterators are the same.
-			iterator end() {return iterator(/*is_end=*/ true);}
-			const_iterator end() const {return const_iterator(/*is_end=*/ true);}
-			
 
 		};
 
@@ -614,7 +646,7 @@ namespace cadabra {
 			// first pass: wildcards == false
 			// second pass (optional): wildcards == true
 			auto walk = begin(it->name_only());
-			auto end_it = end();
+			auto end_it = end(it->name_only());
 			std::type_index last_type = typeid(void);
 
 			// walk takes us through all properties that have patterns matching name
@@ -635,19 +667,16 @@ namespace cadabra {
 				if(wildcards==walk->second->children_wildcard()) {
 					if(walk->second->match_ext(*this, it, comp, ignore_parent_rel, ignore_properties)) {
 						ret.first  = dynamic_cast<const T *>(walk->first);
-						assert(ret.first != nullptr);
+						assert(ret.first);
 						ret.second = walk->second;
-						if(!check_label(ret.first, label)) {
-							ret.first=0;
-						}
-						else {
+						if(check_label(ret.first, label)) {
 							if(doserial) 
 								serialnum=serial_number( walk->first, walk->second);
 							break;
 						}
 					}
-					ret.first=0;
 				}
+				ret.first=0;
 				++walk;
 			}
 			if(!wildcards && !ret.first) {
@@ -664,7 +693,7 @@ namespace cadabra {
 			inherits=false;
 		} else if (!ret.first) {
 			auto walk = begin(it->name_only());
-			auto end_it = end();
+			auto end_it = end(it->name_only());
 			while (walk != end_it) {
 				if (dynamic_cast<const Inherit<T>*>(walk->first) || dynamic_cast<const PropertyInherit*>(walk->first)) {
 					inherits = true;
@@ -722,7 +751,7 @@ namespace cadabra {
 		auto walk2 = begin(it2->name_only());
 		auto end_it = end();
 
-		if (walk1 != end_it && walk2 != end_it) {
+		while (walk1 != end_it && walk2 != end_it) {
 			if (walk1.proptype() < walk2.proptype()) {
 				walk1.next_proptype();
 			} else if (walk2.proptype() < walk1.proptype()) {

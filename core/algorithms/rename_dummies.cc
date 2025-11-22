@@ -86,7 +86,7 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 	if(dset2!="") {
 		// FIXME: We assume only Indices type is castable to Indices.
 		auto f2 = kernel.properties.begin(typeid(Indices));
-		while(f2!=kernel.properties.end()) {
+		while(f2!=kernel.properties.end(typeid(Indices))) {
 			ind2 = dynamic_cast<const Indices *>(f2->first);
 			if(ind2) {
 				if(ind2->set_name==dset2)
