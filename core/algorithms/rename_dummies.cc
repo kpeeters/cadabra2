@@ -84,8 +84,10 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 	// with this name.
 	const Indices *ind2=0;
 	if(dset2!="") {
-		auto f2=kernel.properties.pats.begin();
-		while(f2!=kernel.properties.pats.end()) {
+		// FIXME: We assume only Indices type is castable to Indices.
+		auto f2 = kernel.properties.begin(typeid(Indices));
+		auto f2_end = kernel.properties.end(typeid(Indices));
+		while(f2!=f2_end) {
 			ind2 = dynamic_cast<const Indices *>(f2->first);
 			if(ind2) {
 				if(ind2->set_name==dset2)
