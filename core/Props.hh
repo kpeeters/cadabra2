@@ -749,9 +749,12 @@ namespace cadabra {
 		// Find all common properties of it1 and it2
 		auto walk1 = begin(it1->name_only());
 		auto walk2 = begin(it2->name_only());
-		auto end_it = end();
+		auto end1 = end(it1->name_only());
+		auto end2 = end(it2->name_only());
+		
+		// For current properties implementation, end1 == end2 == end()
 
-		while (walk1 != end_it && walk2 != end_it) {
+		while (walk1 != end1 && walk2 != end2) {
 			if (walk1.proptype() < walk2.proptype()) {
 				walk1.next_proptype();
 			} else if (walk2.proptype() < walk1.proptype()) {
@@ -822,7 +825,7 @@ namespace cadabra {
 		// Are any of these properties heritable?
 		// FIXME: Below just uses PropertyInherit and not Inherit<T>?
 		walk1 = begin(it1->name_only());
-		while (walk1 != end_it) {
+		while (walk1 != end1) {
 			if (dynamic_cast<const PropertyInherit*>(walk1->first)) {
 				inherits1 = true;
 				break;
@@ -830,7 +833,7 @@ namespace cadabra {
 			walk1.next_proptype();
 		}
 		walk2 = begin(it2->name_only());
-		while (walk2 != end_it) {
+		while (walk2 != end2) {
 			if (dynamic_cast<const PropertyInherit*>(walk2->first)) {
 				inherits2 = true;
 				break;
