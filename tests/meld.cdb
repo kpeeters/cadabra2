@@ -635,6 +635,15 @@ def test34():
 
 test34()
 
+def test35():
+   __cdbkernel__=create_scope()
+   \partial{#}::PartialDerivative.
+   ex1:= G^{m j} \partial_{i}{A} \partial_{m}{F_{j}} +  G^{m j} \partial_{m}{A} \partial_{i}{F_{j}};
+   ex2:= D^{m n} \partial_{i}{C} \partial_{m}{Q_{n j}} + D^{m n} \partial_{m}{C} \partial_{i}{Q_{n j}};
+   meld(ex1);
+   meld(ex2);
+   # These should not combine terms.
+
 # {a,b,c,i,j,k}::Indices;
 # {a,b,c,i,j,k}::Integer(1..3);
 # {ct, st}::Symbol;
