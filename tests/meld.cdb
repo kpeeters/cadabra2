@@ -623,6 +623,17 @@ def tab33b():
 
 tab33b()
 
+def test34():
+   __cdbkernel__=create_scope()
+   ex:= a B^{i} B^{j} S^{m n} D_{i j} D_{m n} + b B^{i} B^{j} S^{m n} D_{m n} D_{i j};
+   S^{i j}::Symmetric;
+   D_{i j}::Symmetric;
+   meld(ex);
+   tst:= (a + b) B^{i} B^{j} S^{m n} D_{i j} D_{m n} - @(ex);
+   assert(tst==0)
+   print("Test 34 passed")
+
+test34()
 
 # {a,b,c,i,j,k}::Indices;
 # {a,b,c,i,j,k}::Integer(1..3);

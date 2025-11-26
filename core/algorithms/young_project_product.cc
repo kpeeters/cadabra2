@@ -133,13 +133,7 @@ Algorithm::result_t young_project_product::apply(iterator& it)
 
 	if(res==result_t::l_applied) {
 		it=tr.replace(it, rep.begin());
-		// FIXME: this canonicalise should really not be necessary
-		//		 txtout << "WHOOAAH " << *it->name << std::endl;
-		//		 tr.print_recursive_treeform(txtout, it);
-		//		 canonicalise can(tr, tr.end());
-		//		 can.apply_recursive(it, false);
-
-		cleanup_dispatch(kernel, tr, it);
+//		cleanup_dispatch(kernel, tr, it);
 		}
 
 	return res;

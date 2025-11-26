@@ -140,3 +140,21 @@ def test08():
     print("Test 08 passed")
 
 test08()
+
+def test09():
+    __cdbkernel__=create_scope()
+
+{m,n,p,q}::Indices();
+R_{m n p q}::RiemannTensor;
+B_{m n}::AntiSymmetric;
+ex1:= a R_{m n p q} R_{m p n q} + b B_{m n} B_{m n};
+ex2 = ex1.copy()
+zoom(ex1, $a Q??$);
+young_project_product(ex1);
+take_match(ex2, $a Q??$);
+young_project_product(ex2);
+
+{m,n,p,q}::Indices();
+R_{m n p q}::RiemannTensor;
+ex1:= a R_{m n p q} R_{m p n q} + Q + b R_{m n p q} R_{m p n q};
+young_project_product(ex1);

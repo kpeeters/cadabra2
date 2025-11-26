@@ -292,6 +292,15 @@ bool meld::apply_tableaux(iterator it)
 			auto& term = terms[term_idx];
 			symmetrize(term, symmetrizers);
 
+#ifdef DEBUG			
+      // Claude:
+      std::cerr << "Term " << term_idx << " projection:" << std::endl;
+      for (const auto& kv : term.projection) {
+          std::cerr << "  " << kv.first << " : " << kv.second << std::endl;
+      }
+      std::cerr << "  Total terms: " << term.projection.size() << std::endl;
+#endif
+
 			if (term.projection.empty()) {
 #ifdef DEBUG
 				std::cout << "term is identically zero after projection" << std::endl;
@@ -1048,67 +1057,128 @@ void meld::symmetrize_as_product(ProjectedTerm& projterm, const std::vector<symm
 	// the symmetrizers replacing index positions with their dummy equivalents if this points to
 	// a lower slot and then look for cancellations.
 
-	// Find first two unapplied terms
-	auto first_not_applied = std::find(applied.begin(), applied.end(), false);
-	auto second_not_applied = first_not_applied == applied.end()
-		? applied.end()
-		: std::find(first_not_applied + 1, applied.end(), false);
+//	// Find first two unapplied terms
+//	auto first_not_applied = std::find(applied.begin(), applied.end(), false);
+//	auto second_not_applied = first_not_applied == applied.end()
+//		? applied.end()
+//		: std::find(first_not_applied + 1, applied.end(), false);
+//
+//	if (second_not_applied != applied.end()) {
+//		auto remove_dummies = [seed](Adjform::value_type idx) { return (seed[idx] < idx && seed[idx] >= 0) ? (size_t)seed[idx] : idx; };
+//
+//		// Remove dummies from first term
+//		size_t first_idx = std::distance(applied.begin(), first_not_applied);
+//		const auto& first = symmetrizers[first_idx];
+//		std::vector<size_t> first_nd(first.indices.size());
+//		std::transform(first.indices.begin(), first.indices.end(), first_nd.begin(), remove_dummies);
+//		std::sort(first_nd.begin(), first_nd.end());
+//
+//		// Remove dummies from second term
+//		size_t second_idx = std::distance(applied.begin(), second_not_applied);
+//		const auto& second = symmetrizers[second_idx];
+//		std::vector<size_t>second_nd(second.indices.size());
+//		std::transform(second.indices.begin(), second.indices.end(), second_nd.begin(), remove_dummies);
+//		std::sort(second_nd.begin(), second_nd.end());
+//
+//		// Get intersection and union
+//		std::vector<size_t> uni, inter;
+//		std::set_union(first_nd.begin(), first_nd.end(), second_nd.begin(), second_nd.end(), std::back_inserter(uni));
+//		std::set_intersection(first_nd.begin(), first_nd.end(), second_nd.begin(), second_nd.end(), std::back_inserter(inter));
+//		if (first.antisymmetric == second.antisymmetric) {
+//			// Both symmetric/antisymmetric: can be combined if one is a subset of the other.
+//			if (first_nd == uni || second_nd == uni) {
+//				if (first_nd.size() < second_nd.size())
+//					*first_not_applied = true;
+//				else
+//					*second_not_applied = true;
+//				}
+//			}
+//		else {
+//			// One is symmetric and the other antisymmetric: if they overlap by more than one index
+//			// then the whole projection is identically zero
+//			if (inter.size() > 1) {
+//#ifdef DEBUG
+//				for(const auto& aa: inter)
+//					std::cerr << aa << std::endl;
+//				std::cerr << "meld::symmetrize_as_product: overlapping symmetric/anti-symmetric symmetriser" << std::endl;
+//#endif
+//				// FIXME: the logic here is incorrect.
+////				return;
+//				}
+//			}
+//		}
+	
 
-	if (second_not_applied != applied.end()) {
-		auto remove_dummies = [seed](Adjform::value_type idx) { return (seed[idx] < idx && seed[idx] >= 0) ? (size_t)seed[idx] : idx; };
-
-		// Remove dummies from first term
-		size_t first_idx = std::distance(applied.begin(), first_not_applied);
-		const auto& first = symmetrizers[first_idx];
-		std::vector<size_t> first_nd(first.indices.size());
-		std::transform(first.indices.begin(), first.indices.end(), first_nd.begin(), remove_dummies);
-		std::sort(first_nd.begin(), first_nd.end());
-
-		// Remove dummies from second term
-		size_t second_idx = std::distance(applied.begin(), second_not_applied);
-		const auto& second = symmetrizers[second_idx];
-		std::vector<size_t>second_nd(second.indices.size());
-		std::transform(second.indices.begin(), second.indices.end(), second_nd.begin(), remove_dummies);
-		std::sort(second_nd.begin(), second_nd.end());
-
-		// Get intersection and union
-		std::vector<size_t> uni, inter;
-		std::set_union(first_nd.begin(), first_nd.end(), second_nd.begin(), second_nd.end(), std::back_inserter(uni));
-		std::set_intersection(first_nd.begin(), first_nd.end(), second_nd.begin(), second_nd.end(), std::back_inserter(inter));
-		if (first.antisymmetric == second.antisymmetric) {
-			// Both symmetric/antisymmetric: can be combined if one is a subset of the other.
-			if (first_nd == uni || second_nd == uni) {
-				if (first_nd.size() < second_nd.size())
-					*first_not_applied = true;
-				else
-					*second_not_applied = true;
-				}
-			}
-		else {
-			// One is symmetric and the other antisymmetric: if they overlap by more than one index
-			// then the whole projection is identically zero
-			if (inter.size() > 1) {
-#ifdef DEBUG
-				for(const auto& aa: inter)
-					std::cerr << aa << std::endl;
-				std::cerr << "meld::symmetrize_as_product: overlapping symmetric/anti-symmetric symmetriser" << std::endl;
-#endif
-				// FIXME: the logic here is incorrect.
-//				return;
-				}
-			}
-		}
-
-	// Seed the symmetrized expression
+	// CLAUDE:
+   // Shared-dummy optimization: check ALL pairs of unapplied symmetrizers for
+   // redundancy due to contracted indices. Two symmetrizers are redundant if
+   // their indices are fully contracted with each other (i.e., swapping one
+   // set has the same effect as swapping the other due to the contraction).
+//	for (size_t i = 0; i < symmetrizers.size(); ++i) {
+//		if (applied[i]) continue;
+//		
+//		for (size_t j = i + 1; j < symmetrizers.size(); ++j) {
+//			if (applied[j]) continue;
+//			
+//			const auto& sym_i = symmetrizers[i];
+//			const auto& sym_j = symmetrizers[j];
+//			
+//			// Must be same type (both symmetric or both antisymmetric)
+//			if (sym_i.antisymmetric != sym_j.antisymmetric) continue;
+//			
+//			// Must have same number of indices
+//			if (sym_i.indices.size() != sym_j.indices.size()) continue;
+//			
+//			// Check if all indices of sym_i are contracted with indices of sym_j
+//			std::set<size_t> j_indices(sym_j.indices.begin(), sym_j.indices.end());
+//			bool all_contracted = true;
+//			
+//			for (size_t idx_i : sym_i.indices) {
+//            // Get what this index is contracted with
+//            auto contracted_with = seed[idx_i];
+//            // Must be a dummy (contracted) index pointing to sym_j's indices
+//            if (contracted_with < 0 || 
+//                j_indices.find(contracted_with) == j_indices.end()) {
+//					all_contracted = false;
+//					break;
+//					}
+//				}
+//			
+//			if (all_contracted) {
+//            // These symmetrizers are redundant, skip the later one
+//            applied[j] = true;
+//				}
+//			}
+//		}
+	
+	
+   // Seed the symmetrized expression
 	projterm.projection.add(seed, seed_value);
-
+	
 	// Go over the rest of the symmetrizers and apply them as normal
 	for (size_t i = 0; i < symmetrizers.size(); ++i) {
 		if (!applied[i]) {
 			projterm.projection.apply_young_symmetry(symmetrizers[i].indices, symmetrizers[i].antisymmetric);
+#ifdef DEBUG
+			// Claude
+			std::cerr << "After symmetrizer " << i << " (indices:";
+			for (auto idx : symmetrizers[i].indices) std::cerr << " " << idx;
+			std::cerr << ", antisym=" << symmetrizers[i].antisymmetric << "):" << std::endl;
+			for (const auto& kv : projterm.projection) {
+            std::cerr << "  " << kv.first << " : " << kv.second << std::endl;
+				}
+#endif
 			}
 		}
 
+#ifdef DEBUG
+   // Claude:
+	std::cerr << "After Young symmetries, before ident:" << std::endl;
+	for (const auto& kv : projterm.projection) {
+		std::cerr << "  " << kv.first << " : " << kv.second << std::endl;
+		}
+#endif
+	
 	// Symmetrize in identical tensors and we're done!
 	symmetrize_idents(projterm);
 	}
