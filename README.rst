@@ -22,12 +22,16 @@ Cadabra
 .. image:: https://github.com/kpeeters/cadabra2/workflows/FreeBSD/badge.svg
    :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3AFreeBSD
 
+.. image:: https://deepwiki.com/badge.svg
+   :target: https://deepwiki.com/kpeeters/cadabra2
+	    
 *A field-theory motivated approach to computer algebra.*
 
 Kasper Peeters <info@cadabra.science>
 
 - End-user documentation at https://cadabra.science/
 - Source code documentation at https://cadabra.science/doxygen/html
+- AI generated documentation at https://deepwiki.com/kpeeters/cadabra2
 
 This repository holds the 2.x series of the Cadabra computer algebra
 system. It supersedes the 1.x series, which can still be found at
