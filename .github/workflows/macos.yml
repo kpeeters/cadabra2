@@ -52,5 +52,8 @@ jobs:
         env:
           CTEST_OUTPUT_ON_FAILURE: 1
         run: |
-          source .venv/bin/activate
-          cd build && ctest ARGS="-V"
+          SITE=$(.venv/bin/python3 -c \
+            "import site; print(site.getsitepackages()[0])")
+          export PYTHONPATH="${PYTHONPATH:+$PYTHONPATH:}$SITE"
+          cd build && ctest --output-on-failure
+
