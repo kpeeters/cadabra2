@@ -9,8 +9,17 @@ on: [push]
 jobs:
   build:
 
-    runs-on: macos-latest
-    
+   strategy:
+      matrix:
+        include:
+          - os: macos-15
+            name: macos-15
+            display-name: "macOS 15 Sequoia"
+          - os: macos-26
+            name: macos-26
+            display-name: "macOS 26 Tahoe"
+    runs-on: ${{ matrix.os }}
+     
     steps:
     - uses: actions/checkout@v4
 
