@@ -25,10 +25,10 @@ jobs:
 
       - name: get dependencies
         run: |
-          brew install cmake ninja boost pcre gmp python \
+          brew install cmake ninja boost pcre gmp python python@3.13 \
                        pkgconfig gtkmm3 adwaita-icon-theme \
                        catch2 tbb
-          python3 -m venv .venv
+          python3.13 -m venv .venv
           source .venv/bin/activate
           CFLAGS="-I/opt/homebrew/include" \
           LDFLAGS="-L/opt/homebrew/lib" \
@@ -40,6 +40,8 @@ jobs:
           mkdir build && cd build && cmake -G Ninja -DENABLE_MATHEMATICA=OFF \
               -DPython_ROOT_DIR="$VIRTUAL_ENV" \
               -DPython_FIND_VIRTUALENV=ONLY \
+              -DPython_CDB_EXECUTABLE=${VIRTUAL_ENV}/bin/python3.13 \
+              -DPYTHON_SITE_PATH=${VIRTUAL_ENV}/lib/python3.13/site-packages/
               ..
 
       - name: build
