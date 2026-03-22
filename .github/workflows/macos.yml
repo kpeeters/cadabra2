@@ -25,7 +25,7 @@ jobs:
 
       - name: get dependencies
         run: |
-          brew install cmake ninja boost pcre gmp python@3.13 \
+          brew install cmake ninja boost pcre gmp python \
                        pkgconfig gtkmm3 adwaita-icon-theme \
                        catch2 tbb
           python3 -m venv .venv
@@ -37,9 +37,7 @@ jobs:
       - name: configure
         run: |
           source .venv/bin/activate
-          mkdir build && cd build && cmake -G Ninja \
-                                              -DENABLE_MATHEMATICA=OFF \
-                                              -DPython_EXECUTABLE=python3.12 ..
+          mkdir build && cd build && cmake -G Ninja -DENABLE_MATHEMATICA=OFF  ..
 
       - name: build
         run: |
