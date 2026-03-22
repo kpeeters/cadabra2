@@ -41,7 +41,7 @@ jobs:
               -DPython_ROOT_DIR="$VIRTUAL_ENV" \
               -DPython_FIND_VIRTUALENV=ONLY \
               -DPython_CDB_EXECUTABLE=${VIRTUAL_ENV}/bin/python3.13 \
-              -DPYTHON_SITE_PATH=${VIRTUAL_ENV}/lib/python3.13/site-packages/
+              -DPYTHON_SITE_PATH=${VIRTUAL_ENV}/lib/python3.13/site-packages/ \
               ..
 
       - name: build
