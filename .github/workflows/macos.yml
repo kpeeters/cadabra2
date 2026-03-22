@@ -24,17 +24,30 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: get dependencies
-        run: brew install cmake ninja boost pcre gmp python@3.13 pkgconfig gtkmm3 adwaita-icon-theme catch2 tbb && python3 -m pip install --break-system-packages --user --global-option=build_ext --global-option="-I/opt/homebrew/include/" --global-option="-L/opt/homebrew/lib/" sympy gmpy2 numpy
+        run: |
+          brew install cmake ninja boost pcre gmp python@3.13 \
+                       pkgconfig gtkmm3 adwaita-icon-theme \
+                       catch2 tbb
+          python3 -m venv .venv
+          source .venv/bin/activate
+          CFLAGS="-I/opt/homebrew/include" \
+          LDFLAGS="-L/opt/homebrew/lib" \
+          pip install sympy gmpy2 numpy
 
       - name: configure
-        run: mkdir build && cd build && cmake -G Ninja \
+        run: |
+          source .venv/bin/activate
+          mkdir build && cd build && cmake -G Ninja \
                                               -DENABLE_MATHEMATICA=OFF \
                                               -DPython_EXECUTABLE=python3.12 ..
 
       - name: build
-        run: cd build && cmake --build .
+        run: |
+          cd build && cmake --build .
 
       - name: test
         env:
           CTEST_OUTPUT_ON_FAILURE: 1
-        run: cd build && ctest ARGS="-V"
+        run: |
+          source .venv/bin/activate
+          cd build && ctest ARGS="-V"
