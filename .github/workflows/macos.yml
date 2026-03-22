@@ -37,7 +37,10 @@ jobs:
       - name: configure
         run: |
           source .venv/bin/activate
-          mkdir build && cd build && cmake -G Ninja -DENABLE_MATHEMATICA=OFF  ..
+          mkdir build && cd build && cmake -G Ninja -DENABLE_MATHEMATICA=OFF \
+              -DPython_ROOT_DIR="$VIRTUAL_ENV" \
+              -DPython_FIND_VIRTUALENV=ONLY \
+              ..
 
       - name: build
         run: |
