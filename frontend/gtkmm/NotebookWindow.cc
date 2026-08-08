@@ -1026,6 +1026,12 @@ void NotebookWindow::resize_codeinput_texview_all(int width)
 void NotebookWindow::resize_codeinput_texview(DTree::iterator it, int width)
 	{
 	// std::cerr << "resizing cell to " << width << std::endl;
+
+	// `last_configure_width` is 0 until the first configure event arrives, and
+	// cells can be added before that. Resizing to a non-positive width would
+	// hand negative widths to size_allocate()/set_size_request(); there is
+	// nothing sensible to lay out to, so wait for a real width instead.
+	if(width <= 20) return;
 	if(it->cell_type==DataCell::CellType::python || it->cell_type==DataCell::CellType::latex) {
 		for(unsigned int i=0; i<canvasses.size(); ++i) {
 			auto fnd = canvasses[i]->visualcells.find(&(*it));

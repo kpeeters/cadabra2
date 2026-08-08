@@ -7,6 +7,7 @@
 #include <giomm/resource.h>
 #include <gdkmm/general.h> // set_source_pixbuf()
 #include <regex>
+#include <algorithm>
 
 // MicroTeX
 #include "cairo/graphic_cairo.h"
@@ -14,10 +15,14 @@
 using namespace cadabra;
 
 TeXView::TeXView(TeXEngine& eng, DTree::iterator it, bool use_microtex_, int hmargin)
-	: content(0)
+	:
+#ifdef USE_GTK4
+	  TeXViewBase(cdb::ORIENT_VERTICAL),
+#endif
+	  content(0)
 	, datacell(it)
-	, vbox(Gtk::Orientation::ORIENTATION_VERTICAL, 10)
-	, hbox(Gtk::Orientation::ORIENTATION_HORIZONTAL, hmargin)
+	, vbox(cdb::ORIENT_VERTICAL, 10)
+	, hbox(cdb::ORIENT_HORIZONTAL, hmargin)
 	, image(use_microtex_, this)
 	, engine(eng)
 	, use_microtex(use_microtex_)
@@ -42,9 +47,12 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, bool use_microtex_, int hma
 
 //	vbox.pack_start(hbox, true, 0);
 	image._text_size = text_size();
-	add(image);
+	cdb::add_child(*this, image);
 
+#ifndef USE_GTK4
+	// GTK4 has no event masks; controllers subscribe to what they need.
 	add_events( Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK );
+#endif
 	set_can_focus(true);
 
 	click_gesture = cdb::add_click_gesture(*this);
@@ -102,54 +110,135 @@ void TeXView::on_show()
 	{
 	// std::cerr << "**** show called" << std::endl;
 	convert();
-	Gtk::EventBox::on_show();
+	TeXViewBase::on_show();
 	}
 
 Gtk::SizeRequestMode TeXView::TeXArea::get_request_mode_vfunc() const
 	{
-	return Gtk::SizeRequestMode::SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+	return cdb::SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 	}
 
-void TeXView::TeXArea::get_preferred_height_for_width_vfunc(int width,
-																				int& minimum_height, int& natural_height) const
+/// The MicroTeX height-for-width computation, shared between gtkmm-3's
+/// get_preferred_height_for_width_vfunc and GTK4's measure_vfunc. Returns
+/// false when the caller should defer to the base class instead.
+
+bool TeXView::TeXArea::measure_height_for_width(int width,
+															  int& minimum_height, int& natural_height) const
 	{
-	if(use_microtex) {
-		if(width==1) {
-			minimum_height=9999;
-			natural_height=9999;
-			// std::cerr << "**** skipped bogus width" << std::endl;
-			}
-		else {
-			// If we are given a width which is not the window_width - 20, force the
-			// width. This should not happen, but alas, it does.
-			// std::cerr << width << " > " << owner->window_width - 20 << "?" << std::endl;
-			if(owner->window_width != 0) {
-				if(width > owner->window_width - 20)
-					width = owner->window_width - 20;
-				}
-			int remember = rendering_width;
-			rendering_width = width - 2*padding_x;
-			layout_latex();
-			if(_render!=nullptr) {
-				minimum_height = _render->getHeight() + 2*padding_y;
-				natural_height = _render->getHeight() + 2*padding_y;
-				//		std::cerr << "**** computed for width " << width << " height as " << natural_height << std::endl;
-				}
-			if(rendering_width==9999)
-				rendering_width = remember;
-			}
-      // std::cerr << "**** asked height for width " << width << ", replied " << minimum_height << std::endl;
+	if(!use_microtex) return false;
+
+	if(width==1) {
+		minimum_height=9999;
+		natural_height=9999;
+		// std::cerr << "**** skipped bogus width" << std::endl;
 		}
 	else {
-		Gtk::Widget::get_preferred_height_for_width_vfunc(width, minimum_height, natural_height);
+		// If we are given a width which is not the window_width - 20, force the
+		// width. This should not happen, but alas, it does.
+		// std::cerr << width << " > " << owner->window_width - 20 << "?" << std::endl;
+		if(owner->window_width != 0) {
+			if(width > owner->window_width - 20)
+				width = owner->window_width - 20;
+			}
+		int remember = rendering_width;
+		// Never go negative: MicroTeX cannot lay out to it, and it would
+		// propagate into set_size_request() further down.
+		rendering_width = std::max(0, width - 2*padding_x);
+		layout_latex();
+		if(_render!=nullptr) {
+			minimum_height = _render->getHeight() + 2*padding_y;
+			natural_height = _render->getHeight() + 2*padding_y;
+			//		std::cerr << "**** computed for width " << width << " height as " << natural_height << std::endl;
+			}
+		if(rendering_width==9999)
+			rendering_width = remember;
+		}
+	// std::cerr << "**** asked height for width " << width << ", replied " << minimum_height << std::endl;
+	return true;
+	}
+
+/// The re-layout that follows a new allocation, shared between gtkmm-3's
+/// on_size_allocate and GTK4's size_allocate_vfunc.
+
+void TeXView::TeXArea::relayout_for_allocation(int width, int height)
+	{
+	if(!use_microtex) return;
+
+	if(width != rendering_width + 2*padding_x) {
+//		std::cerr << "**** need to rerender" << std::endl;
+		rendering_width = std::max(0, width - 2*padding_x);
+		layout_latex();
+		}
+	// Some truly undocumented behaviour is happening when messing with
+	// size allocation in gtk-3.0. In any case, if we need a new height,
+	// we need to request a new size as below.
+	if(_render==nullptr) return;
+	int extra = (int) (padding_y * 2);
+	int my_height = _render->getHeight() + extra;
+	if(height != my_height) {
+		// std::cerr << "*** need new height " << my_height << std::endl;
+		set_size_request(rendering_width, my_height);
+		queue_resize();
+		// queue_draw();
 		}
 	}
 
 int TeXView::TeXArea::need_height(int width) const
 	{
-	int h1, h2;
-	get_preferred_height_for_width_vfunc(width, h1, h2);
+	int h1=0, h2=0;
+	if(measure_height_for_width(width, h1, h2))
+		return h1;
+
+	// Non-MicroTeX: defer to the base class, as the old
+	// get_preferred_height_for_width_vfunc did.
+#ifdef USE_GTK4
+	int minimum_baseline=-1, natural_baseline=-1;
+	Gtk::DrawingArea::measure_vfunc(cdb::ORIENT_VERTICAL, width, h1, h2,
+											  minimum_baseline, natural_baseline);
+#else
+	Gtk::Widget::get_preferred_height_for_width_vfunc(width, h1, h2);
+#endif
 	return h1;
+	}
+
+#ifdef USE_GTK4
+
+void TeXView::TeXArea::measure_vfunc(Gtk::Orientation orientation, int for_size,
+												 int& minimum, int& natural,
+												 int& minimum_baseline, int& natural_baseline) const
+	{
+	minimum_baseline = -1;
+	natural_baseline = -1;
+
+	if(orientation==cdb::ORIENT_VERTICAL) {
+		// GTK4 passes -1 for an unconstrained width; gtkmm-3 used 1 as its
+		// sentinel for a bogus width, so map onto that.
+		const int width = (for_size < 0) ? 1 : for_size;
+		if(measure_height_for_width(width, minimum, natural))
+			return;
+		}
+
+	// FIXME: the gtkmm-3 path additionally forces its own allocation width to
+	// owner->window_width - 20 in on_size_allocate. A GTK4 widget cannot
+	// override the size its parent gives it, so that would have to be reported
+	// from here (HORIZONTAL) instead. Falling through to the base class for now.
+	Gtk::DrawingArea::measure_vfunc(orientation, for_size, minimum, natural,
+											  minimum_baseline, natural_baseline);
+	}
+
+void TeXView::TeXArea::size_allocate_vfunc(int width, int height, int baseline)
+	{
+	Gtk::DrawingArea::size_allocate_vfunc(width, height, baseline);
+	relayout_for_allocation(width, height);
+	}
+
+#else
+
+void TeXView::TeXArea::get_preferred_height_for_width_vfunc(int width,
+																				int& minimum_height, int& natural_height) const
+	{
+	if(!measure_height_for_width(width, minimum_height, natural_height))
+		Gtk::Widget::get_preferred_height_for_width_vfunc(width, minimum_height, natural_height);
 	}
 
 void TeXView::TeXArea::get_preferred_width_for_height_vfunc(int height,
@@ -157,7 +246,7 @@ void TeXView::TeXArea::get_preferred_width_for_height_vfunc(int height,
 	{
 	Gtk::Widget::get_preferred_width_for_height_vfunc(height, minimum_width, natural_width);
 	return;
-	
+
 //	if(height==0) {
 //		minimum_width = 99999;
 //		natural_width = 99999;
@@ -180,25 +269,10 @@ void TeXView::TeXArea::on_size_allocate(Gtk::Allocation& allocation)
 	// std::cerr << "**** offered allocation " << allocation.get_width()
 	// 			 << " x " << allocation.get_height() << std::endl;
 
-	if(use_microtex) {
-		if(allocation.get_width() != rendering_width + 2*padding_x) {
-//		std::cerr << "**** need to rerender" << std::endl;
-			rendering_width = allocation.get_width() - 2*padding_x;
-			layout_latex();
-			}
-		// Some truly undocumented behaviour is happening when messing with
-		// size allocation in gtk-3.0. In any case, if we need a new height,
-		// we need to request a new size as below.
-		int extra = (int) (padding_y * 2);
-		int my_height = _render->getHeight() + extra;
-		if(allocation.get_height() != my_height) {
-			// std::cerr << "*** need new height " << my_height << std::endl;
-			set_size_request(rendering_width, my_height);
-			queue_resize();
-			// queue_draw();
-			}
-		}
+	relayout_for_allocation(allocation.get_width(), allocation.get_height());
 	}
+
+#endif
 
 void TeXView::convert()
 	{
@@ -339,7 +413,19 @@ guint32 color_from_rgba(Gdk::RGBA color)
 		(guint8)(color.get_blue()*255);
 	}
 
+#ifndef USE_GTK4
 bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
+	{
+	return draw_impl(cr);
+	}
+#else
+void TeXView::TeXArea::draw(const Cairo::RefPtr<Cairo::Context>& cr, int /* width */, int /* height */)
+	{
+	draw_impl(cr);
+	}
+#endif
+
+bool TeXView::TeXArea::draw_impl(const Cairo::RefPtr<Cairo::Context>& cr)
 	{
 	if(use_microtex) {
 		auto style_context = get_style_context();
@@ -566,6 +652,10 @@ TeXView::TeXArea::TeXArea(bool use_microtex_, TeXView *owner_)
 	{
 	set_hexpand(true);
 	set_name("TeXArea");
+#ifdef USE_GTK4
+	// GTK4 removed the on_draw vfunc in favour of a draw callback.
+	set_draw_func(sigc::mem_fun(*this, &TeXArea::draw));
+#endif
 	cdb::set_accessible_name(*this, "TeXArea");
 	cdb::set_accessible_role(*this, cdb::AccessibleRole::math);
 	set_focus_on_click(true);

@@ -6,6 +6,9 @@
 #include <gtkmm/box.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/separator.h>
+#ifdef USE_GTK4
+#include <gtkmm/snapshot.h>
+#endif
 
 namespace cadabra {
 
@@ -34,8 +37,11 @@ namespace cadabra {
 						 Glib::RefPtr<Gtk::Adjustment>);
 
 
+#ifndef USE_GTK4
+			// Chains to the base class only; not needed under GTK4.
 			virtual void on_size_allocate(Gtk::Allocation& allocation) override;
-			
+#endif
+
 			/// The actual text widget used by CodeInput.
 
 			class exp_input_tv : public Gtk::TextView {
@@ -45,16 +51,32 @@ namespace cadabra {
 									 double display_scale,
 									 Glib::RefPtr<Gtk::Adjustment>);
 					virtual bool on_key_press_event(GdkEventKey*) override;
-					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) override;
 					virtual bool on_focus_in_event(GdkEventFocus *) override;
 					virtual bool on_focus_out_event(GdkEventFocus *) override;
+					virtual bool on_motion_notify_event(GdkEventMotion *event) override;
 					virtual void on_show() override;
 
 					virtual Gtk::SizeRequestMode get_request_mode_vfunc() const override;
+
+					/// Paint the coloured bar down the left-hand side of the
+					/// cell, on top of the TextView's own rendering.
+					void draw_gutter(const Cairo::RefPtr<Cairo::Context>& cr, int height);
+
+					/// Width logic for LaTeX cells, shared between the toolkits;
+					/// returns false when the base class should decide instead.
+					bool measure_width_for_height(int& minimum_width, int& natural_width) const;
+
+#ifdef USE_GTK4
+					void snapshot_vfunc(const Glib::RefPtr<Gtk::Snapshot>& snapshot) override;
+					void measure_vfunc(Gtk::Orientation orientation, int for_size,
+											 int& minimum, int& natural,
+											 int& minimum_baseline, int& natural_baseline) const override;
+#else
+					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) override;
 					virtual void get_preferred_width_for_height_vfunc(int height, int& minimum_width, int& natural_width) const  override;
-					virtual bool on_motion_notify_event(GdkEventMotion *event) override;
 					virtual void on_size_allocate(Gtk::Allocation& allocation) override;
-					
+#endif
+
 					void         shift_enter_pressed();
 					void         on_textbuf_change();
 

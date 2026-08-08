@@ -22,7 +22,10 @@
 #include <gtkmm/gesturemultipress.h>
 #endif
 #include <gtkmm/widget.h>
+#include <gtkmm/textview.h>
 #include <giomm/application.h>
+#include <pangomm/attributes.h>
+#include <pangomm/tabarray.h>
 #include <glibmm/main.h>
 #include <glibmm/ustring.h>
 #include <glibmm/value.h>
@@ -65,6 +68,14 @@ namespace cdb {
 	constexpr auto POLICY_ALWAYS    = Gtk::PolicyType::ALWAYS;
 	constexpr auto POLICY_AUTOMATIC = Gtk::PolicyType::AUTOMATIC;
 	constexpr auto POLICY_NEVER     = Gtk::PolicyType::NEVER;
+
+	constexpr auto SIZE_REQUEST_HEIGHT_FOR_WIDTH = Gtk::SizeRequestMode::HEIGHT_FOR_WIDTH;
+	constexpr auto SIZE_REQUEST_WIDTH_FOR_HEIGHT = Gtk::SizeRequestMode::WIDTH_FOR_HEIGHT;
+
+	constexpr auto TEXT_WINDOW_TEXT       = Gtk::TextWindowType::TEXT;
+	// pangomm-2.48 goes with gtkmm-4, pangomm-1.4 with gtkmm-3.
+	constexpr auto PANGO_TAB_LEFT         = Pango::TabAlign::LEFT;
+	constexpr auto PANGO_UNDERLINE_ERROR  = Pango::Underline::ERROR;
 #else
 	constexpr auto ORIENT_HORIZONTAL = Gtk::ORIENTATION_HORIZONTAL;
 	constexpr auto ORIENT_VERTICAL   = Gtk::ORIENTATION_VERTICAL;
@@ -77,6 +88,13 @@ namespace cdb {
 	constexpr auto POLICY_ALWAYS    = Gtk::POLICY_ALWAYS;
 	constexpr auto POLICY_AUTOMATIC = Gtk::POLICY_AUTOMATIC;
 	constexpr auto POLICY_NEVER     = Gtk::POLICY_NEVER;
+
+	constexpr auto SIZE_REQUEST_HEIGHT_FOR_WIDTH = Gtk::SizeRequestMode::SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+	constexpr auto SIZE_REQUEST_WIDTH_FOR_HEIGHT = Gtk::SizeRequestMode::SIZE_REQUEST_WIDTH_FOR_HEIGHT;
+
+	constexpr auto TEXT_WINDOW_TEXT       = Gtk::TEXT_WINDOW_TEXT;
+	constexpr auto PANGO_TAB_LEFT         = Pango::TAB_LEFT;
+	constexpr auto PANGO_UNDERLINE_ERROR  = Pango::Underline::UNDERLINE_ERROR;
 #endif
 
 	/// GTK4 dissolved pack_start's three arguments into properties on the child:

@@ -27,7 +27,10 @@ CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::Text
 												  Glib::RefPtr<Gtk::Adjustment> vadjustment_)
 	: Gtk::TextView(tb), scale_(scale), display_scale_(display_scale), datacell(it), vadjustment(vadjustment_)
 	{
+#ifndef USE_GTK4
+	// GTK4 has no event masks; controllers subscribe to what they need.
 	set_events(Gdk::STRUCTURE_MASK);
+#endif
 	//	get_buffer()->signal_insert().connect(sigc::mem_fun(this, &exp_input_tv::on_my_insert), false);
 	//	get_buffer()->signal_erase().connect(sigc::mem_fun(this, &exp_input_tv::on_my_erase), false);
 	get_buffer()->signal_changed().connect(sigc::mem_fun(this, &exp_input_tv::on_textbuf_change), false);
@@ -38,7 +41,7 @@ CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::Text
 
 CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double s, double ds, const Prefs& prefs,
 							Glib::RefPtr<Gtk::Adjustment> vadjustment)
-	: Gtk::Box(Gtk::Orientation::ORIENTATION_VERTICAL)
+	: Gtk::Box(cdb::ORIENT_VERTICAL)
 	, buffer(tb)
 	, edit(it, tb, s, ds, vadjustment)
 	{
@@ -47,7 +50,7 @@ CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, doubl
 
 CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s, double ds, const Prefs& prefs,
 							Glib::RefPtr<Gtk::Adjustment> vadjustment)
-	: Gtk::Box(Gtk::Orientation::ORIENTATION_VERTICAL)
+	: Gtk::Box(cdb::ORIENT_VERTICAL)
 	, buffer(Gtk::TextBuffer::create())
 	, edit(it, buffer, s, ds, vadjustment)
 	{
@@ -55,6 +58,9 @@ CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s, doubl
 	init(prefs, ds);
 	}
 
+#ifndef USE_GTK4
+// This override does nothing but chain to the base class; under GTK4 (where it
+// would have to become size_allocate_vfunc) it is simply not needed.
 void CodeInput::on_size_allocate(Gtk::Allocation& allocation)
 	{
 //	allocation.set_width(edit.window_width); // Fixed width
@@ -72,33 +78,68 @@ void CodeInput::on_size_allocate(Gtk::Allocation& allocation)
 //
 	Gtk::Box::on_size_allocate(allocation);
 	}
+#endif
 
 
 Gtk::SizeRequestMode CodeInput::exp_input_tv::get_request_mode_vfunc() const
 	{
-	return Gtk::SizeRequestMode::SIZE_REQUEST_WIDTH_FOR_HEIGHT;
+	return cdb::SIZE_REQUEST_WIDTH_FOR_HEIGHT;
 	}
+
+/// LaTeX cells are forced to the window width. Shared between gtkmm-3's
+/// get_preferred_width_for_height_vfunc and GTK4's measure_vfunc; returns false
+/// when the caller should defer to the base class.
+
+bool CodeInput::exp_input_tv::measure_width_for_height(int& minimum_width, int& natural_width) const
+	{
+	if(datacell->cell_type!=DataCell::CellType::latex) return false;
+
+	minimum_width = window_width-20;
+	natural_width = window_width-20;
+	// std::cerr << "requested widths for " << datacell->textbuf.substr(0, 20) << ": " << window_width << std::endl;
+	return true;
+	}
+
+#ifdef USE_GTK4
+
+void CodeInput::exp_input_tv::measure_vfunc(Gtk::Orientation orientation, int for_size,
+														  int& minimum, int& natural,
+														  int& minimum_baseline, int& natural_baseline) const
+	{
+	minimum_baseline = -1;
+	natural_baseline = -1;
+
+	if(orientation==cdb::ORIENT_HORIZONTAL) {
+		if(measure_width_for_height(minimum, natural))
+			return;
+		}
+	Gtk::TextView::measure_vfunc(orientation, for_size, minimum, natural,
+										  minimum_baseline, natural_baseline);
+	}
+
+// Note: no size_allocate_vfunc override is needed here. The gtkmm-3 path forces
+// its own allocation width, which a GTK4 widget cannot do; but measure_vfunc
+// above already reports window_width-20 for LaTeX cells, which is what the
+// forcing was for.
+
+#else
 
 void CodeInput::exp_input_tv::get_preferred_width_for_height_vfunc(int height,
 																						 int& minimum_width, int& natural_width) const
 	{
-	if(datacell->cell_type==DataCell::CellType::latex) {
-		minimum_width = window_width-20;
-		natural_width = window_width-20;
-		// std::cerr << "requested widths for " << datacell->textbuf.substr(0, 20) << ": " << window_width << std::endl;
-		}
-	else {
-		return Gtk::TextView::get_preferred_width_for_height_vfunc(height, minimum_width, natural_width);
-		}
+	if(!measure_width_for_height(minimum_width, natural_width))
+		Gtk::TextView::get_preferred_width_for_height_vfunc(height, minimum_width, natural_width);
 	}
 
 void CodeInput::exp_input_tv::on_size_allocate(Gtk::Allocation& allocation)
 	{
 	// std::cerr << "allocation requested for " << datacell->textbuf.substr(0, 20) << ": " << allocation.get_width() << std::endl;
-	if(datacell->cell_type==DataCell::CellType::latex) 
+	if(datacell->cell_type==DataCell::CellType::latex)
 		allocation.set_width(window_width-20);
 	Gtk::TextView::on_size_allocate(allocation);
 	}
+
+#endif
 
 void CodeInput::init(const Prefs& prefs, double display_scale)
 	{
@@ -135,7 +176,7 @@ void CodeInput::init(const Prefs& prefs, double display_scale)
 	edit.set_accepts_tab(true);
 	Pango::TabArray tabs(10);
 	for(int i=0; i<10; ++i)
-		tabs.set_tab(i, Pango::TAB_LEFT, 3*space_width*i);
+		tabs.set_tab(i, cdb::PANGO_TAB_LEFT, 3*space_width*i);
 	edit.set_tabs(tabs);
 
 	edit.signal_button_press_event().connect(sigc::mem_fun(this, &CodeInput::handle_button_press), false);
@@ -157,12 +198,17 @@ void CodeInput::init(const Prefs& prefs, double display_scale)
 
 	edit.set_can_focus(true);
 
+#ifndef USE_GTK4
+	// Gtk::TextView::set_focus_hadjustment() is removed in GTK4.
 	auto dummy_adj = Gtk::Adjustment::create(0,0,0);
 	edit.set_focus_hadjustment(dummy_adj);
+#endif
 
-	add(edit);
+	cdb::add_child(*this, edit);
 	//	set_border_width(3);
-	show_all();
+	// Children are shown as they are added (see cdb::add_child), so this only
+	// has to show the widget itself. show_all() is removed in GTK4.
+	set_visible(true);
 	}
 
 gunichar deref(Gtk::TextBuffer::iterator it, size_t n)
@@ -535,7 +581,7 @@ void CodeInput::enable_highlighting(DataCell::CellType cell_type, const Prefs& p
 	// Error tag
 	if (!edit.get_buffer()->get_tag_table()->lookup("error")) {
 		auto error_tag = edit.get_buffer()->create_tag("error");
-		error_tag->property_underline() = Pango::Underline::UNDERLINE_ERROR;
+		error_tag->property_underline() = cdb::PANGO_UNDERLINE_ERROR;
 #if GTKMM_MAJOR_VERSION>3 || (GTKMM_MAJOR_VERSION==3 && GTKMM_MINOR_VERSION>=20)
 		error_tag->property_underline_rgba() = Gdk::RGBA("red");
 #endif
@@ -740,9 +786,24 @@ bool CodeInput::handle_button_press(GdkEventButton* button)
 	return true;
 	}
 
+#ifdef USE_GTK4
+
+// GTK4 has no on_draw vfunc to chain onto: rendering goes through snapshot.
+// Let the TextView render itself, then append a Cairo node for the gutter.
+void CodeInput::exp_input_tv::snapshot_vfunc(const Glib::RefPtr<Gtk::Snapshot>& snapshot)
+	{
+	Gtk::TextView::snapshot_vfunc(snapshot);
+
+	const int h = get_height();
+	auto cr = snapshot->append_cairo(Gdk::Rectangle(0, 0, get_width(), h));
+	draw_gutter(cr, h);
+	}
+
+#else
+
 bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	{
-	Glib::RefPtr<Gdk::Window> win = Gtk::TextView::get_window(Gtk::TEXT_WINDOW_TEXT);
+	Glib::RefPtr<Gdk::Window> win = Gtk::TextView::get_window(cdb::TEXT_WINDOW_TEXT);
 
 	// std::cerr << "on draw for " << get_buffer()->get_text() << std::endl;
 
@@ -751,6 +812,19 @@ bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	int w, h, x, y;
 	win->get_geometry(x,y,w,h);
 
+	draw_gutter(cr, h);
+
+	return ret;
+	}
+
+#endif
+
+/// Paint the coloured bar down the left-hand side of an input cell, which
+/// indicates the cell type and whether it is running. Drawn on top of the
+/// TextView's own rendering by both toolkits.
+
+void CodeInput::exp_input_tv::draw_gutter(const Cairo::RefPtr<Cairo::Context>& cr, int h)
+	{
 	// paint the background
 	cr->set_source_rgba(1.0, 1.0, 1.0, 1.0);
 	//	cr->rectangle(5,3,8,h-3);
@@ -785,9 +859,6 @@ bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 		cr->line_to(5+rem,  h-rem);
 		cr->stroke();
 		}
-
-
-	return ret;
 	}
 
 bool CodeInput::exp_input_tv::on_focus_in_event(GdkEventFocus *event)

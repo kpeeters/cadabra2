@@ -30,7 +30,15 @@ namespace cadabra {
 	/// See gtkmm custom widget documentation at:
 	/// https://developer-old.gnome.org/gtkmm-tutorial/3.24/sec-custom-widgets.html.en
 
-	class TeXView : public Gtk::EventBox {
+	/// Gtk::EventBox is removed in GTK4 (every widget can receive events
+	/// there); a plain Gtk::Box takes its place.
+#ifdef USE_GTK4
+	using TeXViewBase = Gtk::Box;
+#else
+	using TeXViewBase = Gtk::EventBox;
+#endif
+
+	class TeXView : public TeXViewBase {
 		public:
 			TeXView(TeXEngine&, DTree::iterator, bool use_microtex_, int hmargin=25);
 			virtual ~TeXView();
@@ -61,7 +69,15 @@ namespace cadabra {
 					TeXArea(bool use_microtex, TeXView *owner_);
 					~TeXArea();
 
+					/// The actual painting, shared between the two toolkits.
+					/// gtkmm-3 reaches it through the on_draw vfunc, GTK4
+					/// through the callback registered with set_draw_func().
+					bool draw_impl(const Cairo::RefPtr<Cairo::Context>& cr);
+#ifdef USE_GTK4
+					void draw(const Cairo::RefPtr<Cairo::Context>& cr, int width, int height);
+#else
 					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
+#endif
 
 					/// Update the visible image from the pixbuf. Call this in order to propagate
 					/// changes to the pixbuf (e.g. from re-running the TeXRequest) to the
@@ -91,12 +107,27 @@ namespace cadabra {
 					int need_height(int width) const;
 				protected:
 					Gtk::SizeRequestMode get_request_mode_vfunc() const override;
+
+					/// The MicroTeX size logic, shared between the two toolkits.
+					/// measure_height_for_width returns false when the caller
+					/// should defer to the base class.
+					bool measure_height_for_width(int width, int& minimum_height,
+														   int& natural_height) const;
+					void relayout_for_allocation(int width, int height);
+
+#ifdef USE_GTK4
+					void measure_vfunc(Gtk::Orientation orientation, int for_size,
+											 int& minimum, int& natural,
+											 int& minimum_baseline, int& natural_baseline) const override;
+					void size_allocate_vfunc(int width, int height, int baseline) override;
+#else
 					void get_preferred_height_for_width_vfunc(int width, int& minimum_height,
 																			int& natural_height) const  override;
 					void get_preferred_width_for_height_vfunc(int height, int& minimum_width,
 																			int& natural_width) const  override;
 					void on_size_allocate(Gtk::Allocation& allocation) override;
-					
+#endif
+
 				private:
 					TeXView        *owner;
 					mutable int     rendering_width;
