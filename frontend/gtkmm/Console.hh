@@ -3,6 +3,9 @@
 #include <queue>
 #include <list>
 #include <gtkmm.h>
+#ifdef USE_GTK4
+#include <gtkmm/eventcontrollerkey.h>
+#endif
 #include "nlohmann/json.hpp"
 #include "../common/TeXEngine.hh"
 #include "DataCell.hh"
@@ -50,14 +53,37 @@ namespace cadabra {
 			class TextViewProxy : public Gtk::TextView {
 			public:
 				TextViewProxy(Console& parent);
+
+				/// The keys the console interprets itself (Return, Up, Down).
+				/// Returns true when consumed; false lets the TextView edit its
+				/// own buffer. gtkmm-3 reaches this through the
+				/// on_key_press_event vfunc, GTK4 through an
+				/// Gtk::EventControllerKey on this widget.
+				bool handle_key_press(guint keyval, Gdk::ModifierType state);
+
+				/// Mirror this (model) buffer and its selection into the
+				/// parent's visible buffer.
+				void sync_to_view();
+
+#ifndef USE_GTK4
 				bool on_key_press_event(GdkEventKey* key_event) override;
+#endif
 				size_t history_max_length;
 
 			private:
+				void set_text_quietly(const Glib::ustring& text);
+				void remember_partial_input();
+
 				Console& parent;
 				std::string temp_in;
 				std::list<std::string> history;
 				std::list<std::string>::iterator history_ptr;
+				/// Set while we rewrite the buffer ourselves, so that the GTK4
+				/// buffer-changed handler does not mistake it for user editing.
+				bool updating_buffer = false;
+#ifdef USE_GTK4
+				Glib::RefPtr<Gtk::EventControllerKey> key_controller;
+#endif
 			};
 
 			// Set the current prompt to particular text
@@ -80,7 +106,16 @@ namespace cadabra {
 			// Handle current incoming messages
 			void process_message_queue();
 
-			virtual bool on_configure_event(GdkEventConfigure* cfg) override;
+			/// The widget that carries the keyboard focus: on gtkmm-3 the
+			/// visible view, which forwards to the proxy; on GTK4 the proxy
+			/// itself, which handles its own keys.
+			Gtk::Widget& focus_widget();
+
+#ifdef USE_GTK4
+			/// gtkmm-3 uses tv.signal_size_allocate() for this; GTK4 has no
+			/// such signal.
+			void size_allocate_vfunc(int width, int height, int baseline) override;
+#endif
 
 			Glib::Dispatcher dispatch_message; // callback attached to process_message_queue
 			Glib::Dispatcher run; // initialized by run_slot, callback when cell needs running

@@ -16,6 +16,11 @@
 #include <gtkmm/box.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/paned.h>
+#include <gtkmm/textbuffer.h>
+#include <gdkmm/pixbuf.h>
+#ifdef USE_GTK4
+#include <gdkmm/texture.h>
+#endif
 #ifdef USE_GTK4
 #include <gtkmm/gestureclick.h>
 #else
@@ -80,6 +85,8 @@ namespace cdb {
 	constexpr auto SIZE_REQUEST_WIDTH_FOR_HEIGHT = Gtk::SizeRequestMode::WIDTH_FOR_HEIGHT;
 
 	constexpr auto TEXT_WINDOW_TEXT       = Gtk::TextWindowType::TEXT;
+	constexpr auto WRAP_WORD_CHAR         = Gtk::WrapMode::WORD_CHAR;
+	constexpr auto COLORSPACE_RGB         = Gdk::Colorspace::RGB;
 	// pangomm-2.48 goes with gtkmm-4, pangomm-1.4 with gtkmm-3.
 	constexpr auto PANGO_TAB_LEFT         = Pango::TabAlign::LEFT;
 	constexpr auto PANGO_UNDERLINE_ERROR  = Pango::Underline::ERROR;
@@ -100,9 +107,25 @@ namespace cdb {
 	constexpr auto SIZE_REQUEST_WIDTH_FOR_HEIGHT = Gtk::SizeRequestMode::SIZE_REQUEST_WIDTH_FOR_HEIGHT;
 
 	constexpr auto TEXT_WINDOW_TEXT       = Gtk::TEXT_WINDOW_TEXT;
+	constexpr auto WRAP_WORD_CHAR         = Gtk::WRAP_WORD_CHAR;
+	constexpr auto COLORSPACE_RGB         = Gdk::COLORSPACE_RGB;
 	constexpr auto PANGO_TAB_LEFT         = Pango::TAB_LEFT;
 	constexpr auto PANGO_UNDERLINE_ERROR  = Pango::Underline::UNDERLINE_ERROR;
 #endif
+
+	/// GTK4 replaced Gtk::TextBuffer::insert_pixbuf() with insert_paintable();
+	/// a Gdk::Pixbuf has to be wrapped in a Gdk::Texture to become one.
+
+	inline Gtk::TextBuffer::iterator insert_image(const Glib::RefPtr<Gtk::TextBuffer>& buffer,
+																 const Gtk::TextBuffer::iterator& pos,
+																 const Glib::RefPtr<Gdk::Pixbuf>& pixbuf)
+		{
+#ifdef USE_GTK4
+		return buffer->insert_paintable(pos, Gdk::Texture::create_for_pixbuf(pixbuf));
+#else
+		return buffer->insert_pixbuf(pos, pixbuf);
+#endif
+		}
 
 	/// GTK4 dissolved pack_start's three arguments into properties on the child:
 	/// `expand` became set_h/vexpand, `fill` became the h/valign (FILL is the

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <gdk/gdkkeysyms.h>
 #include "Console.hh"
+#include "GtkCompat.hh"
 #include "Config.hh"
 #include <internal/uuid.h>
 
@@ -25,19 +26,42 @@ Console::TextViewProxy::TextViewProxy(Console& parent)
 	, parent(parent)
 	, history_ptr(history.begin())
 	{
+#ifdef USE_GTK4
+	// GTK4 cannot invoke another widget's default key handler, so instead of
+	// having the visible view forward events here, this proxy takes the
+	// keyboard focus itself and edits its own buffer natively. Only the keys
+	// the console interprets are intercepted; everything else is ordinary
+	// TextView editing, mirrored to the view when the buffer changes.
+	key_controller = Gtk::EventControllerKey::create();
+	key_controller->signal_key_pressed().connect(
+	   [this](guint keyval, guint /* keycode */, Gdk::ModifierType state) {
+		return handle_key_press(keyval, state);
+		}, false);
+	add_controller(key_controller);
 
+	get_buffer()->signal_changed().connect([this]() {
+		if(updating_buffer) return;
+		remember_partial_input();
+		sync_to_view();
+		});
+#endif
 	}
 
-bool Console::TextViewProxy::on_key_press_event(GdkEventKey* key_event)
+/// Handle the keys the console interprets itself: Return submits, Up/Down walk
+/// the history. Returns true when the key was consumed; false means the
+/// TextView's own editing should run. Shared between gtkmm-3's
+/// on_key_press_event vfunc and GTK4's Gtk::EventControllerKey.
+
+bool Console::TextViewProxy::handle_key_press(guint keyval, Gdk::ModifierType /* state */)
 	{
 	auto buf = get_buffer();
 
 	parent.scroll_to_bottom();
 
 	// Run command if return key is pressed
-	if (key_event->keyval == GDK_KEY_Return) {
+	if (keyval == GDK_KEY_Return) {
 		std::string code = buf->get_text();
-		buf->set_text("");
+		set_text_quietly("");
 		temp_in.clear();
 		parent.send_input(code);
 		history.push_back(code);
@@ -47,39 +71,64 @@ bool Console::TextViewProxy::on_key_press_event(GdkEventKey* key_event)
 		return true;
 		}
 
-	bool ret;
-
-	if (key_event->keyval == GDK_KEY_Up) {
+	if (keyval == GDK_KEY_Up) {
 		// Move up the history
 		if (history_ptr == history.begin()) {
 			// Do nothing
 			}
 		else {
 			--history_ptr;
-			buf->set_text(*history_ptr);
+			set_text_quietly(*history_ptr);
 			}
-		ret = true;
+		// Note: temp_in is deliberately *not* refreshed here; it holds the
+		// partially typed line that Down restores at the end of the history.
+		sync_to_view();
+		return true;
 		}
-	else if (key_event->keyval == GDK_KEY_Down) {
+
+	if (keyval == GDK_KEY_Down) {
 		// Move down the history
 		if (history_ptr == history.end()) {
-			buf->set_text("");
+			set_text_quietly("");
 			}
 		else {
 			++history_ptr;
 			if (history_ptr == history.end())
-				buf->set_text(temp_in);
+				set_text_quietly(temp_in);
 			else
-				buf->set_text(*history_ptr);
+				set_text_quietly(*history_ptr);
 			}
-		ret = true;
+		sync_to_view();
+		return true;
 		}
-	else {
-		// Process the keystroke
-		ret = Gtk::TextView::on_key_press_event(key_event);
-		if (history_ptr == history.end())
-			temp_in = buf->get_text();
-		}
+
+	return false;
+	}
+
+/// Replace the buffer contents without it counting as user editing.
+
+void Console::TextViewProxy::set_text_quietly(const Glib::ustring& text)
+	{
+	updating_buffer = true;
+	get_buffer()->set_text(text);
+	updating_buffer = false;
+	}
+
+/// Remember the partially typed line, so that walking down off the end of the
+/// history can restore it.
+
+void Console::TextViewProxy::remember_partial_input()
+	{
+	if (history_ptr == history.end())
+		temp_in = get_buffer()->get_text();
+	}
+
+/// Mirror this (model) buffer, and its selection, into the parent's visible
+/// buffer.
+
+void Console::TextViewProxy::sync_to_view()
+	{
+	auto buf = get_buffer();
 
 	// Update the position of the insertion point
 	Gtk::TextBuffer::iterator range_start, range_end;
@@ -91,11 +140,27 @@ bool Console::TextViewProxy::on_key_press_event(GdkEventKey* key_event)
 	   std::distance(buf->begin(), range_start),
 	   std::distance(buf->begin(), range_end)
 	);
+	}
 
+#ifndef USE_GTK4
+
+bool Console::TextViewProxy::on_key_press_event(GdkEventKey* key_event)
+	{
+	if (handle_key_press(key_event->keyval, static_cast<Gdk::ModifierType>(key_event->state)))
+		return true;
+
+	// Let the (hidden) TextView edit its own buffer, then mirror the result.
+	bool ret = Gtk::TextView::on_key_press_event(key_event);
+	remember_partial_input();
+	sync_to_view();
+
+	// Defensive: the proxy must never become visible.
 	set_visible(false);
 
 	return ret;
 	}
+
+#endif
 
 Console::Console(sigc::slot<void> run_slot)
 	: needs_focus(false)
@@ -131,13 +196,20 @@ Console::Console(sigc::slot<void> run_slot)
 	prompt_tag->property_foreground() = "blue";
 	tag_table->add(prompt_tag);
 
-	win.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
+	win.set_policy(cdb::POLICY_NEVER, cdb::POLICY_ALWAYS);
 
-	tv.set_wrap_mode(Gtk::WRAP_WORD_CHAR);
+	tv.set_wrap_mode(cdb::WRAP_WORD_CHAR);
 	tv.set_hexpand(true);
 	tv.set_vexpand(true);
 	tv.set_monospace(true);
 
+	// NOTE: tv is deliberately left editable. Making it non-editable would be
+	// an improvement -- the scrollback is currently protected only by the key
+	// handler below swallowing every keystroke, so paste and drag-and-drop can
+	// still corrupt it -- but it is not needed for the port, so it is left for
+	// the console rework rather than risked here.
+
+#ifndef USE_GTK4
 	tv.signal_key_press_event().connect(
 	   sigc::mem_fun(&input, &TextViewProxy::on_key_press_event),
 	   false);
@@ -145,15 +217,51 @@ Console::Console(sigc::slot<void> run_slot)
 	tv.signal_size_allocate().connect([this](Gtk::Allocation& ) {
 		scroll_to_bottom();
 		});
+#endif
 
-	add(input);
-	input.set_visible(false);
-	add(win);
-	win.add(tv);
-	show_all_children();
+	cdb::add_child(*this, input);
+	cdb::add_child(*this, win);
+	cdb::add_child(win, tv);
+
+#ifdef USE_GTK4
+	// The proxy takes the keyboard focus rather than being fed forwarded
+	// events, so it has to be a real, focusable widget; it is kept visually
+	// out of the way instead of hidden.
+	input.set_size_request(0, 0);
+	input.set_can_focus(true);
+	tv.set_can_focus(false);
+#else
+	// The proxy is deliberately left visible here. It must be realized before
+	// it can insert any text: Gtk::TextView routes key presses through an IM
+	// context, and an IM context with no client window commits nothing. So it
+	// is shown until the first key press, which hides it again (see
+	// on_key_press_event) -- hiding unmaps but does not unrealize, so it keeps
+	// working from then on.
+	//
+	// This was previously the accidental result of show_all_children() undoing
+	// an earlier set_visible(false); it is now explicit. Hiding it here instead
+	// makes the console silently reject all typed input.
+#endif
 
 	set_sensitive(false);
 	}
+
+Gtk::Widget& Console::focus_widget()
+	{
+#ifdef USE_GTK4
+	return input;
+#else
+	return tv;
+#endif
+	}
+
+#ifdef USE_GTK4
+void Console::size_allocate_vfunc(int width, int height, int baseline)
+	{
+	Gtk::Box::size_allocate_vfunc(width, height, baseline);
+	scroll_to_bottom();
+	}
+#endif
 
 void Console::initialize()
 	{
@@ -298,7 +406,7 @@ void Console::insert_graphic(uint64_t cell_id, const std::string& bytes)
 		auto pixbuf = Gdk::Pixbuf::create_from_stream_at_scale(str, 400, -1, true);
 
 		buffer->insert(buffer->get_iter_at_mark(mark), "\n");
-		buffer->insert_pixbuf(buffer->get_iter_at_mark(mark), pixbuf);
+		cdb::insert_image(buffer, buffer->get_iter_at_mark(mark), pixbuf);
 	}
 	catch (const std::exception& err) {
 		insert_text(cell_id, err.what(), error_tag);
@@ -309,21 +417,21 @@ void Console::insert_tex(uint64_t cell_id, const std::shared_ptr<TeXEngine::TeXR
 {
 	auto& mark = cells.at(cell_id);
 	auto pixbuf = Gdk::Pixbuf::create_from_data(
-		content->image().data(), Gdk::COLORSPACE_RGB,
+		content->image().data(), cdb::COLORSPACE_RGB,
 		true,
 		8,
 		content->width(), content->height(),
 		4 * content->width());
 
 	buffer->insert(buffer->get_iter_at_mark(mark), "\n");
-	buffer->insert_pixbuf(buffer->get_iter_at_mark(mark), pixbuf);
+	cdb::insert_image(buffer, buffer->get_iter_at_mark(mark), pixbuf);
 }
 
 void Console::process_message_queue()
 {
 	using namespace nlohmann;
 
-	if (tv.has_focus())
+	if (focus_widget().has_focus())
 		needs_focus = true;
 	set_sensitive(false);
 
@@ -372,7 +480,7 @@ void Console::process_message_queue()
 		else if (msg_type == "latex_view") {
 			try {
 				auto request = tex_engine.checkin(output, "", "");
-				tex_engine.set_geometry(get_allocation().get_width());
+				tex_engine.set_geometry(get_width());
 				tex_engine.convert_all();
 				insert_tex(source_id, request);
 			}
@@ -400,13 +508,7 @@ void Console::process_message_queue()
 
 	set_sensitive(true);
 	if (needs_focus)
-		tv.grab_focus();
+		focus_widget().grab_focus();
 	needs_focus = false;
 }
 
-bool Console::on_configure_event(GdkEventConfigure* cfg)
-{
-	bool res = Gtk::Box::on_configure_event(cfg);
-	tv.set_size_request(cfg->width, cfg->height);
-	return res;
-}
