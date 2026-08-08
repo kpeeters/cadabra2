@@ -1,5 +1,6 @@
 
 #include "ImageView.hh"
+#include "GtkCompat.hh"
 #include <giomm/memoryinputstream.h>
 #include <glibmm/base64.h>
 
@@ -64,7 +65,7 @@ void ImageView::on_save_as() const
 	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
 
-	int result=dialog.run();
+	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {

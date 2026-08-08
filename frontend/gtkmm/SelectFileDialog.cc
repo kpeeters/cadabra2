@@ -1,4 +1,5 @@
 #include "SelectFileDialog.hh"
+#include "GtkCompat.hh"
 
 SelectFileDialog::SelectFileDialog(const Glib::ustring& title, Gtk::Window& parent, bool modal)
 	: Gtk::Dialog(title, parent, modal)
@@ -45,6 +46,6 @@ void SelectFileDialog::choose_dialog()
 	fc.add_button("Cancel", Gtk::RESPONSE_CANCEL);
 	fc.add_button("Select", Gtk::RESPONSE_OK);
 
-	if (fc.run() == Gtk::RESPONSE_OK)
+	if (cdb::dialog_run(fc) == Gtk::RESPONSE_OK)
 		entry.set_text(fc.get_filename());
 	}

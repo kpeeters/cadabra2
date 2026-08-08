@@ -1,5 +1,6 @@
 
 #include "TeXView.hh"
+#include "GtkCompat.hh"
 #include <iostream>
 #include <cairo/cairo.h>
 #include <cairomm/context.h>
@@ -565,9 +566,8 @@ TeXView::TeXArea::TeXArea(bool use_microtex_, TeXView *owner_)
 	{
 	set_hexpand(true);
 	set_name("TeXArea");
-	auto obj = get_accessible();
-	obj->set_name("TeXArea");
-	obj->set_role(Atk::ROLE_MATH);
+	cdb::set_accessible_name(*this, "TeXArea");
+	cdb::set_accessible_role(*this, cdb::AccessibleRole::math);
 	set_focus_on_click(true);
 	}
 

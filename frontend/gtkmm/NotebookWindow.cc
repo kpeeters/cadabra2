@@ -4,6 +4,7 @@
 #include "Functional.hh"
 #include "Cadabra.hh"
 #include "Config.hh"
+#include "GtkCompat.hh"
 #include "InstallPrefix.hh"
 #include "NotebookWindow.hh"
 #include "DataCell.hh"
@@ -695,15 +696,15 @@ void NotebookWindow::on_realize()
 							  40/display_scale, display_scale,
 							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-cancel"+ICONEXT,
 							  false));
-		tool_stop.get_accessible()->set_name("Stop");
+		cdb::set_accessible_name(tool_stop, "Stop");
 
 		// Run button.
 		auto img_run = Gtk::make_managed<ImageArea>(40/display_scale, display_scale,
 																  install_prefix()+"/share/cadabra2/cdb-icons/cdb-run"+ICONEXT,
 																  false);
-		img_run->get_accessible()->set_role(Atk::ROLE_PUSH_BUTTON);
+		cdb::set_accessible_role(*img_run, cdb::AccessibleRole::push_button);
 		tool_run.add(*img_run);
-		tool_run.get_accessible()->set_name("Run");
+		cdb::set_accessible_name(tool_run, "Run");
 		//		tool_run.set_label("run all");
 
 		// Restart button.
@@ -711,35 +712,35 @@ void NotebookWindow::on_realize()
 								  40/display_scale, display_scale,
 								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart"+ICONEXT,
 								  false));
-		tool_restart.get_accessible()->set_name("Restart kernel");
+		cdb::set_accessible_name(tool_restart, "Restart kernel");
 
 		// Restart-and-run-all button.
 		tool_restart_and_run_all.add(*Gtk::make_managed<ImageArea>(
 												  40/display_scale, display_scale,
 												  install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart-and-run-all"+ICONEXT,
 												  false));
-		tool_restart_and_run_all.get_accessible()->set_name("Restart kernel and run notebook");
+		cdb::set_accessible_name(tool_restart_and_run_all, "Restart kernel and run notebook");
 
 		// Open button.
 		tool_open.add(*Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
 								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-open"+ICONEXT,
 								  false));
-		tool_open.get_accessible()->set_name("Open");
+		cdb::set_accessible_name(tool_open, "Open");
 
 		// Save button.
 		tool_save.add(*Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
 								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save"+ICONEXT,
 								  false));
-		tool_save.get_accessible()->set_name("Save");
+		cdb::set_accessible_name(tool_save, "Save");
 
 		// Save as button.
 		tool_save_as.add(*Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
 								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save-as"+ICONEXT,
 								  false));
-		tool_save_as.get_accessible()->set_name("Save as");
+		cdb::set_accessible_name(tool_save_as, "Save as");
 
 		tool_stop.set_size_request(70/display_scale, 70/display_scale);
 		tool_run.set_size_request(70/display_scale, 70/display_scale);
@@ -1114,7 +1115,7 @@ void NotebookWindow::handle_thread_tex_error()
 bool NotebookWindow::on_unhandled_error(const std::exception& err)
 {
 	Gtk::MessageDialog md(*this, err.what(), false, Gtk::MessageType::MESSAGE_ERROR, Gtk::ButtonsType::BUTTONS_OK, true);
-	md.run();
+	cdb::dialog_run(md);
 	return true;
 }
 
@@ -1325,7 +1326,7 @@ void NotebookWindow::process_todo_queue()
 		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 		md.set_secondary_text("The kernel crashed unexpectedly, and has been restarted. You will need to re-run all cells.");
 		md.signal_response().connect(sigc::mem_fun(*this, &NotebookWindow::on_crash_window_closed));
-		md.run();
+		cdb::dialog_run(md);
 
 		nlohmann::json req;
 		req["msg_type"] = "exit";
@@ -2246,7 +2247,7 @@ bool NotebookWindow::on_tex_error(const std::string& str, DTree::iterator it)
 		
 		sw.set_size_request(geometry.get_width()/4, geometry.get_width()/4);
 		sw.show_all();
-		md.run();
+		cdb::dialog_run(md);
 		}
 	
 	return true;
@@ -2293,7 +2294,7 @@ void NotebookWindow::on_file_open()
 	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
 
-	int result=dialog.run();
+	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
@@ -2363,7 +2364,7 @@ void NotebookWindow::on_file_save()
 			md.set_transient_for(*this);
 			md.set_secondary_text(res);
 			md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
-			md.run();
+			cdb::dialog_run(md);
 			}
 		else {
 			modified=false;
@@ -2383,7 +2384,7 @@ void NotebookWindow::on_file_save_as()
 	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
 
-	int result=dialog.run();
+	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
 	case(Gtk::RESPONSE_OK): {
@@ -2398,7 +2399,7 @@ void NotebookWindow::on_file_save_as()
 				md.set_transient_for(*this);
 				md.set_secondary_text(res);
 				md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
-				md.run();
+				cdb::dialog_run(md);
 				}
 			else {
 				modified=false;
@@ -2420,7 +2421,7 @@ void NotebookWindow::on_file_save_as_jupyter()
 	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
 
-	int result=dialog.run();
+	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
@@ -2436,7 +2437,7 @@ void NotebookWindow::on_file_save_as_jupyter()
 //				md.set_transient_for(*this);
 //				md.set_secondary_text(res);
 //				md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
-//				md.run();
+//				cdb::dialog_run(md);
 //				}
 		break;
 		}
@@ -2453,7 +2454,7 @@ void NotebookWindow::on_file_export_html()
 	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
 
-	int result=dialog.run();
+	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
@@ -2474,7 +2475,7 @@ void NotebookWindow::on_file_export_latex()
 	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
 
-	int result=dialog.run();
+	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
@@ -2502,7 +2503,7 @@ void NotebookWindow::on_file_export_python()
 	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
 
-	int result=dialog.run();
+	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
@@ -2527,7 +2528,7 @@ void NotebookWindow::on_file_export_html_segment()
 	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
 
-	int result=dialog.run();
+	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
@@ -2590,7 +2591,7 @@ bool NotebookWindow::quit_safeguard(bool quit)
 			md.add_button("No need to save, quit now",3);
 		else
 			md.add_button("No need to save", 3);
-		int action=md.run();
+		int action=cdb::dialog_run(md);
 		switch(action) {
 			case 1:
 				on_file_save();
@@ -2925,7 +2926,7 @@ void NotebookWindow::on_help() const
 		//		md.set_transient_for(*this);
 		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 		md.set_secondary_text("No help available for '"+help_topic+"'.\nNot all algorithms and properties have manual pages yet, sorry.");
-		md.run();
+		cdb::dialog_run(md);
 		}
 	}
 
@@ -2962,7 +2963,7 @@ void NotebookWindow::on_help_about()
 	special.push_back("Software Sustainability Institute");
 	special.push_back("Institute of Advanced Study (for a Christopherson/Knott fellowship)");
 	about.add_credit_section("Special thanks", special);
-	about.run();
+	cdb::dialog_run(about);
 	}
 
 void NotebookWindow::on_help_register()
@@ -3042,7 +3043,7 @@ void NotebookWindow::on_help_register()
 		md.hide();
 		});
 	box->show_all();
-	md.run();
+	cdb::dialog_run(md);
 	action_register->set_enabled(!prefs.is_registered);
 	}
 
@@ -3075,7 +3076,7 @@ void NotebookWindow::select_git_path()
 	dialog.set_transient_for(*this);
 	dialog.set_text(prefs.git_path);
 
-	if (dialog.run() == Gtk::RESPONSE_OK)
+	if (cdb::dialog_run(dialog) == Gtk::RESPONSE_OK)
 		prefs.git_path = dialog.get_text();
 	}
 
@@ -3085,7 +3086,7 @@ void NotebookWindow::compare_to_file()
 
 	SelectFileDialog dialog("Select file to compare", *this, true);
 	dialog.set_transient_for(*this);
-	if (dialog.run() == Gtk::RESPONSE_OK)
+	if (cdb::dialog_run(dialog) == Gtk::RESPONSE_OK)
 		filename = dialog.get_text();
 	else
 		return;
@@ -3094,7 +3095,7 @@ void NotebookWindow::compare_to_file()
 	if (!a.is_open()) {
 		Gtk::MessageDialog error_dialog(*this, "The file '" + filename + "' could not be opened for reading", false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 		error_dialog.set_title("Could not open file");
-		error_dialog.run();
+		cdb::dialog_run(error_dialog);
 		return;
 
 		std::stringstream b;
@@ -3162,7 +3163,7 @@ void NotebookWindow::compare_git_latest()
 		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 		error_dialog.set_transient_for(*this);
 		error_dialog.set_title("Git error");
-		error_dialog.run();
+		cdb::dialog_run(error_dialog);
 		}
 	}
 
@@ -3223,7 +3224,7 @@ void NotebookWindow::compare_git_choose()
 		select_dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
 		select_dialog.show_all();
 
-		if (select_dialog.run() == Gtk::RESPONSE_OK)
+		if (cdb::dialog_run(select_dialog) == Gtk::RESPONSE_OK)
 			commit_hash = tree_view.get_selection()->get_selected()->get_value(columns.commit_hash);
 		else
 			return;
@@ -3234,7 +3235,7 @@ void NotebookWindow::compare_git_choose()
 		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 		error_dialog.set_transient_for(*this);
 		error_dialog.set_title("Git error");
-		error_dialog.run();
+		cdb::dialog_run(error_dialog);
 		}
 	}
 
@@ -3250,7 +3251,7 @@ void NotebookWindow::compare_git_specific()
 		entry_dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
 		entry_dialog.show_all();
 
-		if (entry_dialog.run() == Gtk::RESPONSE_OK)
+		if (cdb::dialog_run(entry_dialog) == Gtk::RESPONSE_OK)
 			commit_hash = entry.get_text();
 		else
 			return;
@@ -3261,7 +3262,7 @@ void NotebookWindow::compare_git_specific()
 		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 		error_dialog.set_transient_for(*this);
 		error_dialog.set_title("Git error");
-		error_dialog.run();
+		cdb::dialog_run(error_dialog);
 		}
 	}
 
@@ -3399,7 +3400,7 @@ void NotebookWindow::on_prefs_microtex(bool on)
 	md.set_resizable(false);
 	md.set_transient_for(*this);
 	md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
-	md.run();
+	cdb::dialog_run(md);
 	
 // 	for (auto& canvas : canvasses) {
 // 		for (auto& visualcell : canvas->visualcells) {
@@ -3422,7 +3423,7 @@ void NotebookWindow::on_prefs_microtex(bool on)
 void NotebookWindow::on_prefs_choose_colours()
 	{
 	cadabra::ChooseColoursDialog dialog(prefs, *this);
-	dialog.run();
+	cdb::dialog_run(dialog);
 	prefs.save();
 	}
 
@@ -3431,7 +3432,7 @@ void NotebookWindow::on_prefs_use_defaults()
 	Gtk::MessageDialog sure("Use Default settings?", false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO, true);
 	sure.set_transient_for(*this);
 	sure.set_secondary_text("This will effect font size and colour schemes.");
-	int response = sure.run();
+	int response = cdb::dialog_run(sure);
 	if (response == Gtk::RESPONSE_YES) {
 		prefs = Prefs(true);
 		for (auto& action : default_actions)
@@ -3488,7 +3489,7 @@ void NotebookWindow::on_tools_options()
 	auto tab_completion = add_checkbox("Show possible completions with TAB", prefs.tab_completion);
 	auto sep2 = add_sep();
 	options.show_all();
-	int res = options.run();
+	int res = cdb::dialog_run(options);
 
 	// Options menu closed, run any updates
 	if (res == Gtk::RESPONSE_APPLY) {
@@ -3498,7 +3499,7 @@ void NotebookWindow::on_tools_options()
 			md.set_title("Python Path Changed");
 			md.set_modal();
 			md.set_position(Gtk::WindowPosition::WIN_POS_CENTER);
-			int res = md.run();
+			int res = cdb::dialog_run(md);
 			if (res == Gtk::RESPONSE_YES) {
 				on_kernel_restart();
 			}
@@ -3545,7 +3546,7 @@ void NotebookWindow::on_tools_clear_cache()
 		: "Failed to remove cached library files. You can manually remove them by deleting the cadabra_packages folder in your config directory"
 	);
 
-	prog.run();
+	cdb::dialog_run(prog);
 }
 
 void NotebookWindow::refresh_highlighting()
