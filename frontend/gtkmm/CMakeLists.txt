@@ -171,6 +171,14 @@ add_definitions(
   "-Wno-reorder"
 )
 
+# USE_GTK4 is passed as a compile definition rather than going through
+# core/Config.hh, because Config.hh is generated into the *source* tree and is
+# therefore shared by every build directory: a GTK4 build would otherwise leave
+# USE_GTK4 defined for a parallel GTK3 build dir.
+if(USE_GTK4)
+  add_definitions("-DUSE_GTK4")
+endif()
+
 #---------------------------------------------------------------------------
 # Targets.
 #---------------------------------------------------------------------------

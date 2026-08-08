@@ -7,7 +7,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/menu.h>
-#if GTKMM_MINOR_VERSION>=10
+#if GTKMM_MAJOR_VERSION>3 || (GTKMM_MAJOR_VERSION==3 && GTKMM_MINOR_VERSION>=10)
 #include <gtkmm/revealer.h>
 #endif
 

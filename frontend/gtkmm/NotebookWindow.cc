@@ -20,7 +20,7 @@
 #include <glib/gstdio.h>
 
 #include <gtkmm/entry.h>
-#if GTKMM_MINOR_VERSION < 10
+#if GTKMM_MAJOR_VERSION==3 && GTKMM_MINOR_VERSION<10
 #include <gtkmm/main.h>
 #endif
 #include "Snoop.hh"
@@ -1460,7 +1460,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				newcell.outbox->show_hide_requested.connect(
 				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_toggle_visibility), i ) );
 
-#if GTKMM_MINOR_VERSION>=10
+#if GTKMM_MAJOR_VERSION>3 || (GTKMM_MAJOR_VERSION==3 && GTKMM_MINOR_VERSION>=10)
 				to_reveal.push_back(&newcell.outbox->rbox);
 #endif
 
@@ -3535,7 +3535,7 @@ void NotebookWindow::refresh_highlighting()
 
 bool NotebookWindow::idle_handler()
 	{
-#if GTKMM_MINOR_VERSION>=10
+#if GTKMM_MAJOR_VERSION>3 || (GTKMM_MAJOR_VERSION==3 && GTKMM_MINOR_VERSION>=10)
 	for(auto& reveal: to_reveal) {
 		reveal->set_reveal_child(true);
 		}

@@ -183,16 +183,24 @@ void ComputeThread::try_spawn_server()
 	// See https://bugs.launchpad.net/inkscape/+bug/1662531 for things related to
 	// the 'envp' argument in the call below.
 	try {
-#ifdef _WIN32
-		Glib::SpawnFlags flags = Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH | Glib::SpawnFlags::SPAWN_STDERR_TO_DEV_NULL;
+		// Note: 'DO_NOT_REAP_CHILD' is required on all platforms, because we
+		// call Glib::spawn_close_pid() on the pid ourselves (see terminate()).
+#if GLIBMM_MAJOR_VERSION > 2 || (GLIBMM_MAJOR_VERSION == 2 && GLIBMM_MINOR_VERSION >= 68)
+  #ifdef _WIN32
+		Glib::SpawnFlags flags = Glib::SpawnFlags::DO_NOT_REAP_CHILD | Glib::SpawnFlags::SEARCH_PATH
+			| Glib::SpawnFlags::STDERR_TO_DEV_NULL;
+  #else
+		Glib::SpawnFlags flags = Glib::SpawnFlags::DO_NOT_REAP_CHILD | Glib::SpawnFlags::SEARCH_PATH;
+  #endif
 #else
-  #if GLIBMM_MAJOR_VERSION > 2 || (GLIBMM_MAJOR_VERSION == 2 && GLIBMM_MINOR_VERSION >= 68)
-		Glib::SpawnFlags flags = Glib::SpawnFlags::DEFAULT | Glib::SpawnFlags::SEARCH_PATH,
+  #ifdef _WIN32
+		Glib::SpawnFlags flags = Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH
+			| Glib::SPAWN_STDERR_TO_DEV_NULL;
   #else
 		Glib::SpawnFlags flags = Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH;
   #endif
 #endif
-		
+
 		Glib::spawn_async_with_pipes(wd, argv, /* envp, WITH envp, Fedora 27 fails to start python properly */
 											  flags,
 		                             sigc::slot<void()>(),
@@ -201,19 +209,6 @@ void ComputeThread::try_spawn_server()
 		                             &server_stdout,
 		                             0); // We need to see stderr on the console
 		//										  &server_stderr);
-
-//#if GLIBMM_MAJOR_VERSION > 2 || (GLIBMM_MAJOR_VERSION == 2 && GLIBMM_MINOR_VERSION >= 68)
-//											  Glib::SpawnFlags::DEFAULT | Glib::SpawnFlags::SEARCH_PATH,
-//		                             sigc::slot<void()>(),
-//#else
-//		                             flags,
-//		                             sigc::slot<void>([](){ FreeConsole(); }),
-//#endif
-//		                             &pid,
-//		                             0,
-//		                             &server_stdout,
-//		                             0); // We need to see stderr on the console
-//		//										  &server_stderr);
 
 		char buffer[100];
 		FILE *f = fdopen(server_stdout, "r");

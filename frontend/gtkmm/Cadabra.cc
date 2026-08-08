@@ -4,7 +4,7 @@
 #include <fstream>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/entry.h>
-#if GTKMM_MINOR_VERSION < 10
+#if GTKMM_MAJOR_VERSION==3 && GTKMM_MINOR_VERSION<10
 #include <gtkmm/main.h>
 #endif
 #include <gtkmm/settings.h>
@@ -18,7 +18,7 @@ cadabra::NotebookWindow *signal_window;
 
 void signal_handler(int)
 	{
-#if GTKMM_MINOR_VERSION >= 10
+#if GTKMM_MAJOR_VERSION>3 || (GTKMM_MAJOR_VERSION==3 && GTKMM_MINOR_VERSION>=10)
 	signal_window->close();
 #else
 	Gtk::Main::quit();

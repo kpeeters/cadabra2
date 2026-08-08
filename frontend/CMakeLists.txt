@@ -21,12 +21,11 @@ FILE(GLOB man_properties "${PROJECT_SOURCE_DIR}/../core/properties/*.cnb")
 # Locate libraries.
 #---------------------------------------------------------------------------
 
-# find_package(GTKMM3)
-# if(GTKMM_FOUND)
+# Toolkit detection lives in gtkmm/CMakeLists.txt, which selects between
+# FindGTKMM3 and FindGTKMM4 depending on USE_GTK4. Both use
+# pkg_check_modules(... REQUIRED ...), so a missing gtkmm already aborts
+# the configure step with a clear message; there is nothing to check here.
 add_subdirectory(gtkmm)
-# else()
-#   message(FATAL_ERROR "ENABLE_FRONTEND is set to ON, but no supported frontend libraries were found")
-# endif()
 
 # if(APPLE)
 #    subdirs(osx)

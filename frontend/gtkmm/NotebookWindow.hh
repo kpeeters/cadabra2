@@ -346,7 +346,7 @@ namespace cadabra {
 				action_stop, action_register, action_console, action_microtex;
 
 			// Transition animations.
-#if GTKMM_MINOR_VERSION>=10
+#if GTKMM_MAJOR_VERSION>3 || (GTKMM_MAJOR_VERSION==3 && GTKMM_MINOR_VERSION>=10)
 			std::vector<Gtk::Revealer *> to_reveal;
 #endif
 			bool idle_handler();

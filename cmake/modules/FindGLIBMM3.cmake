@@ -1,7 +1,9 @@
-if(WIN33)
-  windows_find_library(GLIBMM3_LIBRARIES REQUIRED glibmm sigc glib gobject)
-  if (GLIBMM3_LIBRARIES)
-    set(GLIBMM3_FOUND TRUE)
+# Note: use MSVC, not WIN32, to match FindGTKMM3/FindGTKMM4; MSYS2/mingw sets
+# WIN32 but does have working pkg-config, so it must take the branch below.
+if(MSVC)
+  windows_find_library(GLIBMM_LIBRARIES REQUIRED glibmm sigc glib gobject)
+  if (GLIBMM_LIBRARIES)
+    set(GLIBMM_FOUND TRUE)
   endif()
 else()
   find_package(PkgConfig REQUIRED)
@@ -20,6 +22,8 @@ else()
 endif()
 
 if (GLIBMM_FOUND)
+  # find_package(GLIBMM3 REQUIRED) checks GLIBMM3_FOUND, not GLIBMM_FOUND.
+  set(GLIBMM3_FOUND TRUE)
   message(STATUS "Found glibmm; include path ${GLIBMM_INCLUDE_DIRS}")
   message(STATUS "Found glibmm; lib ${GLIBMM_LIBRARIES}")
 endif()
