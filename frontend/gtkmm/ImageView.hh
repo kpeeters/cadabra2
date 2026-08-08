@@ -4,6 +4,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>
 #include <gtkmm/menu.h>
+#include <gtkmm/gesturemultipress.h>
 #ifndef USE_GTK4
 #include <gtkmm/eventbox.h>
 #endif
@@ -57,9 +58,13 @@ namespace cadabra {
 			virtual ~ImageView();
 			
 			virtual bool on_motion_notify_event(GdkEventMotion *event) override;
-			virtual bool on_button_press_event(GdkEventButton *event) override;
-			virtual bool on_button_release_event(GdkEventButton *event) override;
 			void on_save_as() const;
+
+			/// Button handling goes through a gesture controller rather than the
+			/// on_button_{press,release}_event vfuncs, which are removed in GTK4.
+			/// Motion is still a vfunc: gtkmm-3 has no EventControllerMotion.
+			void on_button_pressed(int n_press, double x, double y);
+			void on_button_released(int n_press, double x, double y);
 			
 			void set_image_from_base64(const std::string& b64);
 			void set_image_from_svg(const std::string& svg);
@@ -73,6 +78,8 @@ namespace cadabra {
 
 			Gtk::Menu     context_menu;
 			Gtk::MenuItem item_save_as;
+
+			Glib::RefPtr<Gtk::GestureMultiPress> click_gesture;
 	};
 	
 };

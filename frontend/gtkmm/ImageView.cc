@@ -36,6 +36,11 @@ ImageView::ImageView(double display_scale_, int logical_width_)
 	           | Gdk::BUTTON_RELEASE_MASK
 	           | Gdk::POINTER_MOTION_MASK);
 
+	click_gesture = Gtk::GestureMultiPress::create(*this);
+	click_gesture->set_button(0);   // react to any button; we dispatch ourselves
+	click_gesture->signal_pressed().connect(sigc::mem_fun(*this, &ImageView::on_button_pressed));
+	click_gesture->signal_released().connect(sigc::mem_fun(*this, &ImageView::on_button_released));
+
 	context_menu.append(item_save_as);
 	item_save_as.set_label("Save as SVG...");
 	context_menu.show_all();
@@ -80,31 +85,32 @@ bool ImageView::on_motion_notify_event(GdkEventMotion *event)
 	return true;
 	}
 
-bool ImageView::on_button_press_event(GdkEventButton *event)
+void ImageView::on_button_pressed(int n_press, double x, double y)
 	{
-	if(event->type==GDK_BUTTON_PRESS) {
-		if(event->button == 1) {
-			sizing=true;
-			prev_x=event->x;
-			prev_y=event->y;
-			width_at_press=area.pixbuf->get_width()/area.display_scale;
-			// std::cerr << "width_at_press = " << width_at_press << std::endl;
-			height_at_press=area.pixbuf->get_height()/area.display_scale;
-			}
-		else if(event->button == 3) {
-			context_menu.popup_at_pointer((GdkEvent*)event);
-			}
+	// Only a single (not double/triple) press, matching the old
+	// event->type==GDK_BUTTON_PRESS test.
+	if(n_press != 1) return;
+
+	const guint button = click_gesture->get_current_button();
+	if(button == 1) {
+		sizing=true;
+		prev_x=x;
+		prev_y=y;
+		width_at_press=area.pixbuf->get_width()/area.display_scale;
+		// std::cerr << "width_at_press = " << width_at_press << std::endl;
+		height_at_press=area.pixbuf->get_height()/area.display_scale;
 		}
-	return true;
+	else if(button == 3) {
+		// nullptr means 'the event currently being processed'.
+		context_menu.popup_at_pointer(nullptr);
+		}
+	click_gesture->set_state(Gtk::EVENT_SEQUENCE_CLAIMED);
 	}
 
-bool ImageView::on_button_release_event(GdkEventButton *event)
+void ImageView::on_button_released(int /* n_press */, double /* x */, double /* y */)
 	{
-	if(event->type==GDK_BUTTON_RELEASE) {
-		sizing=false;
-		}
-
-	return true;
+	sizing=false;
+	click_gesture->set_state(Gtk::EVENT_SEQUENCE_CLAIMED);
 	}
 
 void ImageView::set_image_from_base64(const std::string& b64)

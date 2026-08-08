@@ -46,6 +46,11 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, bool use_microtex_, int hma
 	add_events( Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK );
 	set_can_focus(true);
 
+	click_gesture = Gtk::GestureMultiPress::create(*this);
+	click_gesture->set_button(0);   // react to any button; we dispatch ourselves
+	click_gesture->signal_pressed().connect(sigc::mem_fun(*this, &TeXView::on_button_pressed));
+	click_gesture->signal_released().connect(sigc::mem_fun(*this, &TeXView::on_button_released));
+
 	context_menu.append(item_copy_as_latex);
 	item_copy_as_latex.set_label("Copy as LaTeX");
 	context_menu.show_all();
@@ -223,24 +228,28 @@ void TeXView::dim(bool d)
 	else  image.set_opacity(1.0);
 	}
 
-bool TeXView::on_button_release_event(GdkEventButton *event)
+void TeXView::on_button_released(int /* n_press */, double /* x */, double /* y */)
 	{
-	if(event->button == 1) {
+	if(click_gesture->get_current_button() == 1) {
 		show_hide_requested.emit(datacell);
-		return true;
+		click_gesture->set_state(Gtk::EVENT_SEQUENCE_CLAIMED);
 		}
-	return false;
 	}
 
-bool TeXView::on_button_press_event(GdkEventButton *event)
+void TeXView::on_button_pressed(int n_press, double /* x */, double /* y */)
 	{
-	if(event->type==GDK_BUTTON_PRESS) {
-		if(event->button == 3) {
-			context_menu.popup_at_pointer((GdkEvent*)event);
-			return true;
-			}
+	// Only a single (not double/triple) press, matching the old
+	// event->type==GDK_BUTTON_PRESS test.
+	if(n_press != 1) return;
+
+	if(click_gesture->get_current_button() == 3) {
+		// nullptr means 'the event currently being processed'.
+		context_menu.popup_at_pointer(nullptr);
+		click_gesture->set_state(Gtk::EVENT_SEQUENCE_CLAIMED);
 		}
-	return false;
+	else {
+		select_requested.emit();
+		}
 	}
 
 void TeXView::update_image()

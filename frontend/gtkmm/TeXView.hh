@@ -7,6 +7,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/menu.h>
+#include <gtkmm/gesturemultipress.h>
 #if GTKMM_MAJOR_VERSION>3 || (GTKMM_MAJOR_VERSION==3 && GTKMM_MINOR_VERSION>=10)
 #include <gtkmm/revealer.h>
 #endif
@@ -36,6 +37,12 @@ namespace cadabra {
 			std::shared_ptr<TeXEngine::TeXRequest> content;
 
 			sigc::signal1<bool, DTree::iterator>   show_hide_requested;
+
+			/// Emitted on a button press which is not the context-menu button, so
+			/// that the owner can select this cell. Previously this was done by
+			/// connecting to signal_button_press_event() and relying on the
+			/// default handler having already swallowed right-clicks.
+			sigc::signal0<void>                    select_requested;
 
 			void set_use_microtex(bool);
 
@@ -118,9 +125,12 @@ namespace cadabra {
 			sigc::signal0<bool>              signal_on_copy_as_latex;
 			
 		protected:
-			virtual bool on_button_release_event(GdkEventButton *) override;
-			virtual bool on_button_press_event(GdkEventButton *event) override;
 			virtual void on_show() override;
+
+			/// Button handling goes through a gesture controller rather than the
+			/// on_button_{press,release}_event vfuncs, which are removed in GTK4.
+			void on_button_pressed(int n_press, double x, double y);
+			void on_button_released(int n_press, double x, double y);
 
 			void convert();
 
@@ -133,6 +143,8 @@ namespace cadabra {
 			
 			Gtk::Menu     context_menu;
 			Gtk::MenuItem item_copy_as_latex;
+
+			Glib::RefPtr<Gtk::GestureMultiPress> click_gesture;
 
 			float text_size() const;
 		};

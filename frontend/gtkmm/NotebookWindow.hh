@@ -124,7 +124,7 @@ namespace cadabra {
 			virtual bool on_configure_event(GdkEventConfigure *cfg) override;
 			virtual bool on_unhandled_error(const std::exception& err) override;
 
-			bool handle_outbox_select(GdkEventButton *, DTree::iterator it);
+			void handle_outbox_select(DTree::iterator it);
 			DTree::iterator selected_cell;
 			void unselect_output_cell();
 			void on_outbox_copy(Glib::RefPtr<Gtk::Clipboard> refClipboard, DTree::iterator it);

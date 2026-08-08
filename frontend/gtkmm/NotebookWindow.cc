@@ -1465,7 +1465,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 #endif
 
 				w=newcell.outbox;
-				newcell.outbox->signal_button_press_event().connect(
+				newcell.outbox->select_requested.connect(
 				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::handle_outbox_select), it ) );
 				break;
 				}
@@ -3559,7 +3559,7 @@ void NotebookWindow::unselect_output_cell()
 	action_copy->set_enabled(false);
 	}
 
-bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
+void NotebookWindow::handle_outbox_select(DTree::iterator it)
 	{
 	// std::cerr << "handle_outbox_select " << it->textbuf << std::endl;
 	unselect_output_cell();
@@ -3581,7 +3581,6 @@ bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
 	// We now require that the user ctrl-c's this before copying to the clipboard.
 	// Glib::RefPtr<Gtk::Clipboard> clipboard = Gtk::Clipboard::get(GDK_SELECTION_PRIMARY);
 	// on_outbox_copy(clipboard, selected_cell);
-	return true;
 	}
 
 void NotebookWindow::on_outbox_copy(Glib::RefPtr<Gtk::Clipboard> refClipboard, DTree::iterator it)
