@@ -35,8 +35,8 @@ int main(int argc, char **argv)
 #endif
 	
 	try {
-		auto application = Cadabra::create(argc, argv);
-		const int status = application->run();
+		auto application = Cadabra::create();
+		const int status = application->run(argc, argv);
 		return status;
 		}
 	catch (Glib::Error& er) {
@@ -79,8 +79,8 @@ int main(int argc, char **argv)
 // //	}
 // 
 // 	try {
-// 		auto application = Cadabra::create(__argc, __argv);
-// 		const int status = application->run();
+// 		auto application = Cadabra::create();
+// 		const int status = application->run(__argc, __argv);
 // 		return status;
 // 		}
 // 	catch (Glib::Error& er) {

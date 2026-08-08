@@ -92,7 +92,7 @@ bool Console::TextViewProxy::on_key_press_event(GdkEventKey* key_event)
 	   std::distance(buf->begin(), range_end)
 	);
 
-	hide();
+	set_visible(false);
 
 	return ret;
 	}
@@ -147,7 +147,7 @@ Console::Console(sigc::slot<void> run_slot)
 		});
 
 	add(input);
-	input.hide();
+	input.set_visible(false);
 	add(win);
 	win.add(tv);
 	show_all_children();

@@ -15,11 +15,34 @@
 
 #include <gtkmm/dialog.h>
 #include <gtkmm/widget.h>
+#include <giomm/application.h>
 #include <glibmm/main.h>
 #include <glibmm/ustring.h>
 #include <glibmm/value.h>
 
 namespace cdb {
+
+	/// Unscoped gtkmm-3 enumerators became scoped enum classes in gtkmm-4, so
+	/// the spellings differ even though the values do not. Declared once here
+	/// and used unqualified at the call sites.
+
+#ifdef USE_GTK4
+	constexpr auto APP_HANDLES_OPEN         = Gio::Application::Flags::HANDLES_OPEN;
+	constexpr auto APP_HANDLES_COMMAND_LINE = Gio::Application::Flags::HANDLES_COMMAND_LINE;
+	constexpr auto APP_NON_UNIQUE           = Gio::Application::Flags::NON_UNIQUE;
+
+	constexpr auto OPTION_TYPE_BOOL   = Gio::Application::OptionType::BOOL;
+	constexpr auto OPTION_TYPE_INT    = Gio::Application::OptionType::INT;
+	constexpr auto OPTION_TYPE_STRING = Gio::Application::OptionType::STRING;
+#else
+	constexpr auto APP_HANDLES_OPEN         = Gio::APPLICATION_HANDLES_OPEN;
+	constexpr auto APP_HANDLES_COMMAND_LINE = Gio::APPLICATION_HANDLES_COMMAND_LINE;
+	constexpr auto APP_NON_UNIQUE           = Gio::APPLICATION_NON_UNIQUE;
+
+	constexpr auto OPTION_TYPE_BOOL   = Gio::Application::OptionType::OPTION_TYPE_BOOL;
+	constexpr auto OPTION_TYPE_INT    = Gio::Application::OptionType::OPTION_TYPE_INT;
+	constexpr auto OPTION_TYPE_STRING = Gio::Application::OptionType::OPTION_TYPE_STRING;
+#endif
 
 	/// Show `dialog` modally, block until the user responds, and return the
 	/// response id.

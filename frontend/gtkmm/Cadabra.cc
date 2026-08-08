@@ -1,5 +1,6 @@
 
 #include "Cadabra.hh"
+#include "GtkCompat.hh"
 #include <signal.h>
 #include <fstream>
 #include <gtkmm/messagedialog.h>
@@ -25,16 +26,20 @@ void signal_handler(int)
 #endif
 	}
 
-Glib::RefPtr<Cadabra> Cadabra::create(int argc, char **argv)
+Glib::RefPtr<Cadabra> Cadabra::create()
 	{
-	return Glib::RefPtr<Cadabra>( new Cadabra(argc, argv) );
+	return Glib::RefPtr<Cadabra>( new Cadabra() );
 	}
 
-Cadabra::Cadabra(int argc, char **argv)
-	: Gtk::Application(argc, argv, "science.cadabra.cadabra2-gtk",
-	                   Gio::APPLICATION_HANDLES_OPEN |
-							 Gio::APPLICATION_HANDLES_COMMAND_LINE |
-	                   Gio::APPLICATION_NON_UNIQUE),
+// GTK4 removed the Gtk::Application(argc, argv, ...) constructor; the
+// (id, flags) one exists in both, and argc/argv are instead handed to
+// run(argc, argv) from main().
+
+Cadabra::Cadabra()
+	: Gtk::Application("science.cadabra.cadabra2-gtk",
+	                   cdb::APP_HANDLES_OPEN |
+							 cdb::APP_HANDLES_COMMAND_LINE |
+	                   cdb::APP_NON_UNIQUE),
 	  compute(0), compute_thread(0),
 	  server_port(0), server_ip_address("127.0.0.1"),
 	  no_registration(false)
@@ -47,32 +52,32 @@ Cadabra::Cadabra(int argc, char **argv)
 
 	//https://github.com/GNOME/gtkmm-documentation/blob/master/examples/book/application/command_line_handling/exampleapplication.cc
 
-	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_INT,
+	add_main_option_entry(cdb::OPTION_TYPE_INT,
 	                      "server-port",
 	                      's',
 	                      "Connect to running server on given port.",
 	                      "number");
-	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_STRING,
+	add_main_option_entry(cdb::OPTION_TYPE_STRING,
 	                      "geometry",
 	                      'g',
 	                      "Specify the window size (and optionally the position).",
 	                      "string");
-	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_STRING,
+	add_main_option_entry(cdb::OPTION_TYPE_STRING,
 	                      "title",
 	                      'w',
 	                      "Specify the window title.",
 	                      "string");
-	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_STRING,
+	add_main_option_entry(cdb::OPTION_TYPE_STRING,
 	                      "server-ip-address",
 	                      'a',
 	                      "Connect to running server on given ip address.",
 	                      "string");
-	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_STRING,
+	add_main_option_entry(cdb::OPTION_TYPE_STRING,
 	                      "token",
 	                      't',
 	                      "Use the given authentication token to connect to the server.",
 	                      "string");
-	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_BOOL,
+	add_main_option_entry(cdb::OPTION_TYPE_BOOL,
 	                      "no-registration",
 	                      'n',
 	                      "Do not show the registration dialog.",
@@ -183,7 +188,7 @@ void Cadabra::on_activate()
 	signal(SIGINT, signal_handler);
 
 	add_window(*nw);
-	nw->show();
+	nw->set_visible(true);   // show() is deprecated in GTK4
 
 	// Start the script handler so external programs can talk to us.
 	script = new cadabra::ScriptThread(nw, nw);
@@ -250,7 +255,7 @@ bool Cadabra::open_help(const std::string& nm, const std::string& title)
 		std::stringstream buffer;
 		buffer << fl.rdbuf();
 		nw->load_from_string(buffer.str());
-		nw->show();
+		nw->set_visible(true);   // show() is deprecated in GTK4
 		return true;
 		}
 	else return false;

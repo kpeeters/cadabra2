@@ -11,12 +11,15 @@
 
 class Cadabra : public Gtk::Application {
 	public:
-		static Glib::RefPtr<Cadabra> create(int, char **);
+		/// Note: argc/argv are not passed here. GTK4 removed the
+		/// Gtk::Application(argc, argv, ...) constructor, so they go to
+		/// run(argc, argv) in main() instead, which works on both toolkits.
+		static Glib::RefPtr<Cadabra> create();
 
 		bool open_help(const std::string& filename, const std::string& title);
 
 	protected:
-		Cadabra(int, char**);
+		Cadabra();
 		virtual ~Cadabra();
 
 		virtual void on_startup() override;

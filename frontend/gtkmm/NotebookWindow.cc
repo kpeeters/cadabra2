@@ -864,11 +864,11 @@ void NotebookWindow::on_realize()
 	//	engine.set_geometry(screen->get_width()/2 - 2*30);
 	update_title();
 	show_all();
-	kernel_spinner.hide();
+	kernel_spinner.set_visible(false);
 	if(read_only) {
-		statusbarbox.hide();
-		progressbar.hide();
-//		toolbar->hide();
+		statusbarbox.set_visible(false);
+		progressbar.set_visible(false);
+//		toolbar->set_visible(false);
 		}
 	else {
 		// Buttons
@@ -972,13 +972,13 @@ void NotebookWindow::on_prefs_set_cv(int npos)
 	action_console->set_state(Glib::Variant<int>::create(npos));
 	Console::Position pos=static_cast<Console::Position>(npos);
 	// Unparent from whatever we're currently a child of
-	console.hide();
+	console.set_visible(false);
 	if (console.get_parent() == &dragbox) {
 		dragbox.remove(console);
 		}
 	else if (console.get_parent() == console_win.get_content_area()) {
 		console_win.get_content_area()->remove(console);
-		console_win.hide();
+		console_win.set_visible(false);
 		}
 
 	// Reparent onto something new
@@ -986,14 +986,14 @@ void NotebookWindow::on_prefs_set_cv(int npos)
 		dragbox.set_orientation(Gtk::Orientation::ORIENTATION_HORIZONTAL);
 		dragbox.set_position(dragbox.get_allocation().get_width() / 2);
 		dragbox.add2(console);
-		console.show();
+		console.set_visible(true);
 		}
 	else if (pos == Console::Position::DockedV) {
 		dragbox.set_orientation(Gtk::Orientation::ORIENTATION_VERTICAL);
 		dragbox.set_position(dragbox.get_allocation().get_height() / 2);
 		dragbox.add2(console);
 		console.set_size_request(-1, 200);
-		console.show();
+		console.set_visible(true);
 		}
 	else if (pos == Console::Position::Floating) {
 		console_win.set_transient_for(*this);
@@ -1302,12 +1302,12 @@ void NotebookWindow::process_todo_queue()
 			mainbox.set_sensitive(compute->kernel_is_connected());
 
 		if(kernel_spinner_status) {
-			kernel_spinner.show();
+			kernel_spinner.set_visible(true);
 			kernel_spinner.start();
 			}
 		else {
 			kernel_spinner.stop();
-			kernel_spinner.hide();
+			kernel_spinner.set_visible(false);
 			}
 		}
 
@@ -2031,7 +2031,7 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int )
 //							resize_codeinput_texview(it, get_width());
 ////							w->queue_resize();							
 //							}, 50);
-					(*vis).second.inbox->edit.hide();
+					(*vis).second.inbox->edit.set_visible(false);
 					unselect_output_cell();
 //					auto vis2 = canvasses[i]->visualcells.find(&(*it));
 //					if(vis2==canvasses[i]->visualcells.end()) {
@@ -2187,7 +2187,7 @@ void NotebookWindow::hide_visual_cells(DTree::iterator it)
 			throw std::logic_error("Cannot find visual cell.");
 			}
 		else {
-			(*vis).second.inbox->edit.hide();
+			(*vis).second.inbox->edit.set_visible(false);
 			it->hidden=true;
 			}
 		}
@@ -2269,7 +2269,7 @@ void NotebookWindow::on_file_new()
 void NotebookWindow::on_file_close()
 	{
 	if(quit_safeguard(true))
-		hide();
+		set_visible(false);
 	}
 
 Glib::RefPtr<Gtk::FileFilter> create_filter(const Glib::ustring& name, const Glib::ustring& pattern)
@@ -2612,7 +2612,7 @@ void NotebookWindow::on_file_quit()
 	// FIXME: this needs to not just close the current window, but also all
 	// other ones.
 	if (quit_safeguard(true))
-		hide();
+		set_visible(false);
 	}
 
 void NotebookWindow::on_edit_undo(const Glib::VariantBase&)
@@ -3028,19 +3028,19 @@ void NotebookWindow::on_help_register()
 		prefs.is_anonymous = false;
 		prefs.is_registered = true;
 		prefs.save();
-		md.hide();
+		md.set_visible(false);
 		});
 	nothanks.signal_clicked().connect([&]() {
 		prefs.is_anonymous = true;
 		prefs.is_registered = false;
 		prefs.save();
-		md.hide();
+		md.set_visible(false);
 		});
 	alreadyset.signal_clicked().connect([&]() {
 		prefs.is_registered = true;
 		prefs.is_anonymous = false;
 		prefs.save();
-		md.hide();
+		md.set_visible(false);
 		});
 	box->show_all();
 	cdb::dialog_run(md);
@@ -3307,11 +3307,11 @@ void NotebookWindow::propagate_global_hide_flag()
 					}
 				else {
 					if(doc.hide_input_cells) {
-						(*vis).second.inbox->edit.hide();
+						(*vis).second.inbox->edit.set_visible(false);
 						}
 					else {
 						if(!ch->hidden)
-							(*vis).second.inbox->edit.show();
+							(*vis).second.inbox->edit.set_visible(true);
 						}
 					}
 				}
