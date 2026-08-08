@@ -8,6 +8,9 @@
 #include <gtkmm/separator.h>
 #ifdef USE_GTK4
 #include <gtkmm/snapshot.h>
+#include <gtkmm/eventcontrollerkey.h>
+#include <gtkmm/eventcontrollerfocus.h>
+#include <gtkmm/eventcontrollermotion.h>
 #endif
 
 namespace cadabra {
@@ -50,11 +53,26 @@ namespace cadabra {
 									 double scale,
 									 double display_scale,
 									 Glib::RefPtr<Gtk::Adjustment>);
+					virtual void on_show() override;
+
+					/// Key handling, shared between the toolkits. Returns true
+					/// when the key was consumed; false lets the TextView's own
+					/// default handling run. gtkmm-3 reaches it through the
+					/// on_key_press_event vfunc, GTK4 through an
+					/// Gtk::EventControllerKey, which has the same contract.
+					bool handle_key_press(guint keyval, Gdk::ModifierType state);
+
+					/// Side effects of focus and pointer motion, likewise shared.
+					void on_focus_entered();
+					void on_focus_left();
+					void on_pointer_motion();
+
+#ifndef USE_GTK4
 					virtual bool on_key_press_event(GdkEventKey*) override;
 					virtual bool on_focus_in_event(GdkEventFocus *) override;
 					virtual bool on_focus_out_event(GdkEventFocus *) override;
 					virtual bool on_motion_notify_event(GdkEventMotion *event) override;
-					virtual void on_show() override;
+#endif
 
 					virtual Gtk::SizeRequestMode get_request_mode_vfunc() const override;
 
@@ -95,6 +113,11 @@ namespace cadabra {
 					DTree::iterator               datacell;
 					Glib::RefPtr<Gtk::Adjustment> vadjustment;
 					double                        previous_value = -99.0;
+#ifdef USE_GTK4
+					Glib::RefPtr<Gtk::EventControllerKey>    key_controller;
+					Glib::RefPtr<Gtk::EventControllerFocus>  focus_controller;
+					Glib::RefPtr<Gtk::EventControllerMotion> motion_controller;
+#endif
 				};
 
 			/// Set highlighting modes.

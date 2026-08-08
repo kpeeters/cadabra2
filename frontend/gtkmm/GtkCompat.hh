@@ -23,6 +23,13 @@
 #endif
 #include <gtkmm/widget.h>
 #include <gtkmm/textview.h>
+// Gdk::ModifierType moved between headers: gdkmm/types.h in gdkmm-3,
+// gdkmm/enums.h in gdkmm-4.
+#ifdef USE_GTK4
+#include <gdkmm/enums.h>
+#else
+#include <gdkmm/types.h>
+#endif
 #include <giomm/application.h>
 #include <pangomm/attributes.h>
 #include <pangomm/tabarray.h>
@@ -141,6 +148,22 @@ namespace cdb {
 		               0);
 		child.show();
 #endif
+		}
+
+	/// Gdk::ModifierType became a scoped enum in GTK4, so both the enumerator
+	/// spellings and the way a mask is tested differ.
+
+#ifdef USE_GTK4
+	constexpr auto MOD_SHIFT   = Gdk::ModifierType::SHIFT_MASK;
+	constexpr auto MOD_CONTROL = Gdk::ModifierType::CONTROL_MASK;
+#else
+	constexpr auto MOD_SHIFT   = Gdk::SHIFT_MASK;
+	constexpr auto MOD_CONTROL = Gdk::CONTROL_MASK;
+#endif
+
+	inline bool has_modifier(Gdk::ModifierType state, Gdk::ModifierType modifier)
+		{
+		return (state & modifier) == modifier;
 		}
 
 	/// Gtk::GestureMultiPress was renamed Gtk::GestureClick in GTK4, and the way

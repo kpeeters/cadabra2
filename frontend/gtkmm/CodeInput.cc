@@ -37,6 +37,27 @@ CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::Text
 	set_name("CodeInput"); // to be able to style it with CSS
 	cdb::set_accessible_name(*this, "CodeInput");
 	cdb::set_accessible_role(*this, cdb::AccessibleRole::text);
+
+#ifdef USE_GTK4
+	// gtkmm-3 has no EventControllerKey/Focus/Motion wrappers, so on GTK3 these
+	// stay as the vfunc overrides further down.
+	key_controller = Gtk::EventControllerKey::create();
+	key_controller->signal_key_pressed().connect(
+	   [this](guint keyval, guint /* keycode */, Gdk::ModifierType state) {
+		return handle_key_press(keyval, state);
+		}, false);
+	add_controller(key_controller);
+
+	focus_controller = Gtk::EventControllerFocus::create();
+	focus_controller->signal_enter().connect(sigc::mem_fun(*this, &exp_input_tv::on_focus_entered));
+	focus_controller->signal_leave().connect(sigc::mem_fun(*this, &exp_input_tv::on_focus_left));
+	add_controller(focus_controller);
+
+	motion_controller = Gtk::EventControllerMotion::create();
+	motion_controller->signal_motion().connect(
+	   [this](double, double) { on_pointer_motion(); });
+	add_controller(motion_controller);
+#endif
 	}
 
 CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double s, double ds, const Prefs& prefs,
@@ -622,20 +643,19 @@ void CodeInput::relay_cursor_pos(std::function<void(int, int)> callback)
 		});
 	}
 
-bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
+/// Handle a key press. Returns true when the key was consumed; false means the
+/// TextView's own default handling should run. Shared between gtkmm-3's
+/// on_key_press_event vfunc and GTK4's Gtk::EventControllerKey, which has the
+/// same true/false contract.
+
+bool CodeInput::exp_input_tv::handle_key_press(guint keyval, Gdk::ModifierType state)
 	{
-	// The key symbols are in /usr/include/gtk-3.0/gdk/gdkkeysyms.h
-	bool is_shift_return = get_editable() && event->keyval==GDK_KEY_Return && (event->state&Gdk::SHIFT_MASK);
-	//	bool is_shift_tab    = get_editable() && event->keyval==GDK_KEY_Tab && (event->state&Gdk::SHIFT_MASK);
-	bool is_tab = get_editable() && event->keyval==GDK_KEY_Tab;
-	bool is_ctrl_k = get_editable() && event->keyval==GDK_KEY_k && (event->state&Gdk::CONTROL_MASK);
-	bool is_ctrl_a = get_editable() && event->keyval==GDK_KEY_a && (event->state&Gdk::CONTROL_MASK);
-	bool is_ctrl_e = get_editable() && event->keyval==GDK_KEY_e && (event->state&Gdk::CONTROL_MASK);
-	bool is_ctrl_qm = get_editable() && event->keyval==GDK_KEY_question && (event->state&Gdk::CONTROL_MASK);
-	
-	bool retval=false;
-//	std::cerr << event->keyval << ", " << event->state << " pressed, focus = " << has_focus()
-//	 			 << ", editable = " << get_editable() << ", is_shift_return = " << is_shift_return << std::endl;
+	// The key symbols are in gdk/gdkkeysyms.h
+	bool is_shift_return = get_editable() && keyval==GDK_KEY_Return && cdb::has_modifier(state, cdb::MOD_SHIFT);
+	bool is_tab = get_editable() && keyval==GDK_KEY_Tab;
+	bool is_ctrl_k = get_editable() && keyval==GDK_KEY_k && cdb::has_modifier(state, cdb::MOD_CONTROL);
+	bool is_ctrl_a = get_editable() && keyval==GDK_KEY_a && cdb::has_modifier(state, cdb::MOD_CONTROL);
+	bool is_ctrl_e = get_editable() && keyval==GDK_KEY_e && cdb::has_modifier(state, cdb::MOD_CONTROL);
 
 
 	Glib::RefPtr<Gtk::TextBuffer> textbuf=get_buffer();
@@ -673,10 +693,8 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 			Gtk::TextBuffer::iterator it=textbuf->get_iter_at_mark(ins);
 			int ipos=textbuf->get_slice(textbuf->begin(), it).bytes();
 			
-			if(complete_request(datacell, ipos))
-				return true;
-			else
-				retval=Gtk::TextView::on_key_press_event(event);
+			// Not completing: let the TextView insert the tab itself.
+			return complete_request(datacell, ipos);
 			}
 		}
 	else if(is_ctrl_a) {
@@ -708,9 +726,6 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 		get_buffer()->erase(line_start, line_end);		
 		return true;
 		}
-	else {
-		retval=Gtk::TextView::on_key_press_event(event);
-		}
 	
 	//	else {
 	//		// If this was a real key press (i.e. not just SHIFT or ALT or similar), emit a
@@ -725,8 +740,17 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	//		return retval;
 	//		}
 
-	return retval;
+	return false;
 	}
+
+#ifndef USE_GTK4
+bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
+	{
+	if(handle_key_press(event->keyval, static_cast<Gdk::ModifierType>(event->state)))
+		return true;
+	return Gtk::TextView::on_key_press_event(event);
+	}
+#endif
 
 void CodeInput::exp_input_tv::shift_enter_pressed()
 	{
@@ -861,29 +885,52 @@ void CodeInput::exp_input_tv::draw_gutter(const Cairo::RefPtr<Cairo::Context>& c
 		}
 	}
 
-bool CodeInput::exp_input_tv::on_focus_in_event(GdkEventFocus *event)
+/// The side effects of gaining focus, losing focus and pointer motion. Shared
+/// between gtkmm-3's vfuncs and GTK4's Gtk::EventControllerFocus /
+/// Gtk::EventControllerMotion, neither of which gtkmm-3 wraps.
+
+void CodeInput::exp_input_tv::on_focus_entered()
 	{
 	// std::cerr << "FOCUS IN" << std::endl;
 	cell_got_focus(datacell);
-	if(previous_value>=0) 
+	if(previous_value>=0)
 		vadjustment->set_value(previous_value);
+	}
+
+void CodeInput::exp_input_tv::on_focus_left()
+	{
+	// std::cerr << "FOCUS OUT" << std::endl;
+	previous_value = -99.0;
+	}
+
+void CodeInput::exp_input_tv::on_pointer_motion()
+	{
+	// static int count=0;
+   //	std::cerr << "MOTION " << ++count << std::endl;
+	previous_value = vadjustment->get_value();
+	}
+
+#ifndef USE_GTK4
+
+bool CodeInput::exp_input_tv::on_focus_in_event(GdkEventFocus *event)
+	{
+	on_focus_entered();
 	return Gtk::TextView::on_focus_in_event(event);
 	}
 
 bool CodeInput::exp_input_tv::on_focus_out_event(GdkEventFocus *event)
 	{
-	// std::cerr << "FOCUS OUT" << std::endl;
-	previous_value = -99.0;
+	on_focus_left();
 	return Gtk::TextView::on_focus_out_event(event);
 	}
 
 bool CodeInput::exp_input_tv::on_motion_notify_event(GdkEventMotion* event)
 	{
-	// static int count=0;
-   //	std::cerr << "MOTION " << ++count << std::endl;
-	previous_value = vadjustment->get_value();
+	on_pointer_motion();
 	return Gtk::TextView::on_motion_notify_event(event);
 	}
+
+#endif
 
 // bool CodeInput::exp_input_tv::on_move_cursor_event(Glib::RefPtr<Gtk::TextBuffer::Mark> iter, Gtk::MovementStep step, bool extend_selection)
 // 	{
