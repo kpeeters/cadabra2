@@ -1,13 +1,14 @@
 
 #pragma once
 
+#include "GtkCompat.hh"
+
 #ifndef USE_GTK4
 #include <gtkmm/eventbox.h>
 #endif
 #include <gtkmm/box.h>
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/menu.h>
-#include <gtkmm/gesturemultipress.h>
 #if GTKMM_MAJOR_VERSION>3 || (GTKMM_MAJOR_VERSION==3 && GTKMM_MINOR_VERSION>=10)
 #include <gtkmm/revealer.h>
 #endif
@@ -144,7 +145,7 @@ namespace cadabra {
 			Gtk::Menu     context_menu;
 			Gtk::MenuItem item_copy_as_latex;
 
-			Glib::RefPtr<Gtk::GestureMultiPress> click_gesture;
+			Glib::RefPtr<cdb::ClickGesture>     click_gesture;
 
 			float text_size() const;
 		};

@@ -1,19 +1,28 @@
 
 #include "NotebookCanvas.hh"
 #include "NotebookWindow.hh"
+#include "GtkCompat.hh"
 #include <gtkmm/box.h>
+#ifdef USE_GTK4
+#include <gtkmm/eventcontrollerscroll.h>
+#endif
 #include <iostream>
 
 using namespace cadabra;
 
 NotebookCanvas::NotebookCanvas()
-	: Gtk::Paned(Gtk::Orientation::ORIENTATION_VERTICAL)
+	: Gtk::Paned(cdb::ORIENT_VERTICAL)
 	, scroller(scroll.get_vadjustment())
 	{
 	// Pack the scroll widget with all document cells into the top pane.
-	pack1(scroll, true, true);
-	scroll.set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);
-	scroll.set_border_width(1);
+	cdb::paned_set_start(*this, scroll, true, true);
+	scroll.set_policy(cdb::POLICY_ALWAYS, cdb::POLICY_ALWAYS);
+	// set_border_width() is removed in GTK4; margins are the replacement and
+	// exist in both.
+	scroll.set_margin_start(1);
+	scroll.set_margin_end(1);
+	scroll.set_margin_top(1);
+	scroll.set_margin_bottom(1);
 
 	// Do NOT do the following. This will create areas at the top
 	// and bottom where the content of the scrolledwindow is
@@ -47,15 +56,35 @@ void NotebookCanvas::connect_scroll_listener()
 	// the smooth scroller).
 
 	// Scrollbar drag.
+#ifndef USE_GTK4
 	scroll.get_vscrollbar()->signal_change_value().connect(
 		[this](Gtk::ScrollType, double) {
 		scroller.stop();
 		scroll_event();
 		return false;
 		});
+#else
+	// FIXME: no GTK4 equivalent yet. Gtk::Scrollbar no longer derives from
+	// Gtk::Range there, so signal_change_value() is gone, and watching the
+	// adjustment instead would also fire for the smooth scroller's own
+	// programmatic updates and thus immediately stop it. Needs either a
+	// Gtk::GestureDrag on the scrollbar or a suppression flag around
+	// SmoothScroller's writes.
+#endif
 
 	// Catch mousewheel / trackpad scrolls.
 	if (auto viewport = dynamic_cast<Gtk::Viewport*>(scroll.get_child())) {
+#ifdef USE_GTK4
+		auto scroll_controller = Gtk::EventControllerScroll::create();
+		scroll_controller->set_flags(Gtk::EventControllerScroll::Flags::BOTH_AXES);
+		scroll_controller->signal_scroll().connect(
+			[this](double, double) -> bool {
+			scroller.stop();
+			scroll_event();
+			return false;
+			}, false);
+		viewport->add_controller(scroll_controller);
+#else
 		viewport->add_events(Gdk::SCROLL_MASK | Gdk::SMOOTH_SCROLL_MASK);
 		viewport->signal_scroll_event().connect(
 			[this](GdkEventScroll* event) -> bool {
@@ -63,6 +92,7 @@ void NotebookCanvas::connect_scroll_listener()
 			scroll_event();
 			return false;
 			});
+#endif
 		}
 
 	}

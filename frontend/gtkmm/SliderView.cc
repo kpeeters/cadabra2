@@ -1,5 +1,6 @@
 
 #include "SliderView.hh"
+#include "GtkCompat.hh"
 #include <giomm/memoryinputstream.h>
 #include <glibmm/base64.h>
 #include <iostream>
@@ -25,6 +26,7 @@ int compute_scale_digits(double step_increment) {
 }
 
 SliderView::SliderView(std::string config)
+	: vbox(cdb::ORIENT_VERTICAL)
 	{
 	// Extract the settings from the JSON string.
 	nlohmann::json settings = nlohmann::json::parse(config);
@@ -34,7 +36,7 @@ SliderView::SliderView(std::string config)
 	variable  = settings.value("variable", "");
 	step_size = settings.value("step_size", 0.1);
 
-	add(vbox);
+	cdb::add_child(*this, vbox);
 	adjustment = Gtk::Adjustment::create(
 		value,       // value
 		min_value,   // lower
@@ -48,9 +50,11 @@ SliderView::SliderView(std::string config)
 	scale.set_digits(compute_scale_digits(step_size));
 	scale.set_margin_start(20);
 	scale.set_margin_end(20);
-	vbox.pack_start(scale, Gtk::PACK_SHRINK);
+	cdb::box_append(vbox, scale);
 	set_name("SliderView"); // to be able to style it with CSS
-	show_all();
+	// Children are shown as they are added (see cdb::box_append), so this only
+	// has to show the widget itself. show_all() is removed in GTK4.
+	set_visible(true);
 	}
 
 SliderView::~SliderView()

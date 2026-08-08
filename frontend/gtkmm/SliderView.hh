@@ -34,7 +34,7 @@ namespace cadabra {
 			Glib::RefPtr<Gtk::Adjustment> adjustment;
 
 		private:
-			Gtk::VBox   vbox;
+			Gtk::Box    vbox;   // Gtk::VBox is removed in GTK4
 			Gtk::Scale  scale;
 
 			double value, min_value, max_value, step_size;

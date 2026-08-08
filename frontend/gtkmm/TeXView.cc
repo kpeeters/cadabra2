@@ -47,7 +47,7 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, bool use_microtex_, int hma
 	add_events( Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK );
 	set_can_focus(true);
 
-	click_gesture = Gtk::GestureMultiPress::create(*this);
+	click_gesture = cdb::add_click_gesture(*this);
 	click_gesture->set_button(0);   // react to any button; we dispatch ourselves
 	click_gesture->signal_pressed().connect(sigc::mem_fun(*this, &TeXView::on_button_pressed));
 	click_gesture->signal_released().connect(sigc::mem_fun(*this, &TeXView::on_button_released));
@@ -233,7 +233,7 @@ void TeXView::on_button_released(int /* n_press */, double /* x */, double /* y 
 	{
 	if(click_gesture->get_current_button() == 1) {
 		show_hide_requested.emit(datacell);
-		click_gesture->set_state(Gtk::EVENT_SEQUENCE_CLAIMED);
+		click_gesture->set_state(cdb::SEQ_CLAIMED);
 		}
 	}
 
@@ -246,7 +246,7 @@ void TeXView::on_button_pressed(int n_press, double /* x */, double /* y */)
 	if(click_gesture->get_current_button() == 3) {
 		// nullptr means 'the event currently being processed'.
 		context_menu.popup_at_pointer(nullptr);
-		click_gesture->set_state(Gtk::EVENT_SEQUENCE_CLAIMED);
+		click_gesture->set_state(cdb::SEQ_CLAIMED);
 		}
 	else {
 		select_requested.emit();

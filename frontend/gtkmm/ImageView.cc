@@ -18,26 +18,30 @@
 using namespace cadabra;
 
 ImageView::ImageView(double display_scale_, int logical_width_)
-	: area(logical_width_, display_scale_)
+	:
 #ifdef USE_GTK4
-	, Gtk::Box(Gtk::Orientation::ORIENTATION_VERTICAL)
+	  Gtk::Box(cdb::ORIENT_VERTICAL),
 #endif
+	  area(logical_width_, display_scale_)
 	, sizing(false)
 	, prev_x(0)
 	, prev_y(0)
 	, height_at_press(0)
 	, width_at_press(0)
 	{
-	area.set_halign(Gtk::ALIGN_START);
-	add(area);
-	
+	area.set_halign(cdb::ALIGN_START);
+	cdb::add_child(*this, area);
+
+#ifndef USE_GTK4
+	// GTK4 has no event masks; controllers subscribe to what they need.
 	set_events(Gdk::ENTER_NOTIFY_MASK
 	           | Gdk::LEAVE_NOTIFY_MASK
 	           | Gdk::BUTTON_PRESS_MASK
 	           | Gdk::BUTTON_RELEASE_MASK
 	           | Gdk::POINTER_MOTION_MASK);
+#endif
 
-	click_gesture = Gtk::GestureMultiPress::create(*this);
+	click_gesture = cdb::add_click_gesture(*this);
 	click_gesture->set_button(0);   // react to any button; we dispatch ourselves
 	click_gesture->signal_pressed().connect(sigc::mem_fun(*this, &ImageView::on_button_pressed));
 	click_gesture->signal_released().connect(sigc::mem_fun(*this, &ImageView::on_button_released));
@@ -48,7 +52,9 @@ ImageView::ImageView(double display_scale_, int logical_width_)
 	item_save_as.signal_activate().connect(sigc::mem_fun(*this, &ImageView::on_save_as));
 	 
 	set_name("ImageView"); // to be able to style it with CSS
-	show_all();
+	// Children are shown as they are added (see cdb::add_child), so this only
+	// has to show the widget itself. show_all() is removed in GTK4.
+	set_visible(true);
 	}
 
 ImageView::~ImageView()
@@ -105,13 +111,13 @@ void ImageView::on_button_pressed(int n_press, double x, double y)
 		// nullptr means 'the event currently being processed'.
 		context_menu.popup_at_pointer(nullptr);
 		}
-	click_gesture->set_state(Gtk::EVENT_SEQUENCE_CLAIMED);
+	click_gesture->set_state(cdb::SEQ_CLAIMED);
 	}
 
 void ImageView::on_button_released(int /* n_press */, double /* x */, double /* y */)
 	{
 	sizing=false;
-	click_gesture->set_state(Gtk::EVENT_SEQUENCE_CLAIMED);
+	click_gesture->set_state(cdb::SEQ_CLAIMED);
 	}
 
 void ImageView::set_image_from_base64(const std::string& b64)
@@ -164,8 +170,12 @@ void ImageArea::rerender(int width)
 ImageArea::ImageArea(int logical_width_, double display_scale_)
 	: is_raster(false), logical_width(logical_width_), display_scale(display_scale_)
 	{
-	set_halign(Gtk::ALIGN_CENTER);
-	set_valign(Gtk::ALIGN_CENTER);
+	set_halign(cdb::ALIGN_CENTER);
+	set_valign(cdb::ALIGN_CENTER);
+#ifdef USE_GTK4
+	// GTK4 removed the on_draw vfunc in favour of a draw callback.
+	set_draw_func(sigc::mem_fun(*this, &ImageArea::draw));
+#endif
 	}
 
 std::string readFile(const std::string& filename)
@@ -188,11 +198,18 @@ ImageArea::ImageArea(int logical_width_, double display_scale_,
 	rerender(logical_width);
 	}
 
-bool ImageArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
+void ImageArea::draw(const Cairo::RefPtr<Cairo::Context>& cr, int /* width */, int /* height */)
 	{
 	cr->scale(1.0/display_scale, 1.0/display_scale);
 	Gdk::Cairo::set_source_pixbuf(cr, pixbuf, 0, 0);
 	cr->paint();
+	}
+
+#ifndef USE_GTK4
+bool ImageArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
+	{
+	draw(cr, get_allocated_width(), get_allocated_height());
 	return true;
 	}
+#endif
 

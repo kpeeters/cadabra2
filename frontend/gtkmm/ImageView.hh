@@ -1,10 +1,11 @@
 
 #pragma once
 
+#include "GtkCompat.hh"
+
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>
 #include <gtkmm/menu.h>
-#include <gtkmm/gesturemultipress.h>
 #ifndef USE_GTK4
 #include <gtkmm/eventbox.h>
 #endif
@@ -32,7 +33,13 @@ namespace cadabra {
 			
 			friend ImageView;
 		protected:
+			/// The actual painting. Shared between the two toolkits: gtkmm-3
+			/// reaches it through the on_draw vfunc, GTK4 through the draw
+			/// callback registered with set_draw_func().
+			void draw(const Cairo::RefPtr<Cairo::Context>& cr, int width, int height);
+#ifndef USE_GTK4
 			virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
+#endif
 
 		private:
 			Glib::RefPtr<Gdk::Pixbuf> pixbuf;
@@ -79,7 +86,7 @@ namespace cadabra {
 			Gtk::Menu     context_menu;
 			Gtk::MenuItem item_save_as;
 
-			Glib::RefPtr<Gtk::GestureMultiPress> click_gesture;
+			Glib::RefPtr<cdb::ClickGesture>     click_gesture;
 	};
 	
 };

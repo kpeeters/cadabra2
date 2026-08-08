@@ -13,12 +13,21 @@
 /// it deliberately does *not* come from Config.hh, which is generated into the
 /// source tree and shared between build directories.
 
+#include <gtkmm/box.h>
 #include <gtkmm/dialog.h>
+#include <gtkmm/paned.h>
+#ifdef USE_GTK4
+#include <gtkmm/gestureclick.h>
+#else
+#include <gtkmm/gesturemultipress.h>
+#endif
 #include <gtkmm/widget.h>
 #include <giomm/application.h>
 #include <glibmm/main.h>
 #include <glibmm/ustring.h>
 #include <glibmm/value.h>
+
+#include <type_traits>
 
 namespace cdb {
 
@@ -43,6 +52,145 @@ namespace cdb {
 	constexpr auto OPTION_TYPE_INT    = Gio::Application::OptionType::OPTION_TYPE_INT;
 	constexpr auto OPTION_TYPE_STRING = Gio::Application::OptionType::OPTION_TYPE_STRING;
 #endif
+
+#ifdef USE_GTK4
+	constexpr auto ORIENT_HORIZONTAL = Gtk::Orientation::HORIZONTAL;
+	constexpr auto ORIENT_VERTICAL   = Gtk::Orientation::VERTICAL;
+
+	constexpr auto ALIGN_FILL   = Gtk::Align::FILL;
+	constexpr auto ALIGN_START  = Gtk::Align::START;
+	constexpr auto ALIGN_END    = Gtk::Align::END;
+	constexpr auto ALIGN_CENTER = Gtk::Align::CENTER;
+
+	constexpr auto POLICY_ALWAYS    = Gtk::PolicyType::ALWAYS;
+	constexpr auto POLICY_AUTOMATIC = Gtk::PolicyType::AUTOMATIC;
+	constexpr auto POLICY_NEVER     = Gtk::PolicyType::NEVER;
+#else
+	constexpr auto ORIENT_HORIZONTAL = Gtk::ORIENTATION_HORIZONTAL;
+	constexpr auto ORIENT_VERTICAL   = Gtk::ORIENTATION_VERTICAL;
+
+	constexpr auto ALIGN_FILL   = Gtk::ALIGN_FILL;
+	constexpr auto ALIGN_START  = Gtk::ALIGN_START;
+	constexpr auto ALIGN_END    = Gtk::ALIGN_END;
+	constexpr auto ALIGN_CENTER = Gtk::ALIGN_CENTER;
+
+	constexpr auto POLICY_ALWAYS    = Gtk::POLICY_ALWAYS;
+	constexpr auto POLICY_AUTOMATIC = Gtk::POLICY_AUTOMATIC;
+	constexpr auto POLICY_NEVER     = Gtk::POLICY_NEVER;
+#endif
+
+	/// GTK4 dissolved pack_start's three arguments into properties on the child:
+	/// `expand` became set_h/vexpand, `fill` became the h/valign (FILL is the
+	/// default, and no live call site used PACK_EXPAND_PADDING), and per-child
+	/// `padding` became margins.
+	///
+	/// These helpers speak GTK4 vocabulary and let the gtkmm-3 branch reproduce
+	/// it. That branch sets both the pack option *and* the expand property, so
+	/// it does not depend on whether gtkmm-3's GtkBox folds
+	/// gtk_widget_compute_expand() into its own allocation.
+	///
+	/// The gtkmm-3 branch also shows the child, normalising gtkmm-3's "widgets
+	/// start hidden" to GTK4's "widgets start visible". Anything that should
+	/// stay hidden therefore needs an explicit set_visible(false) -- which GTK4
+	/// would require anyway.
+
+	enum class Expand { no, yes };
+
+	inline void box_append(Gtk::Box& box, Gtk::Widget& child,
+	                       Expand expand = Expand::no, int padding = 0)
+		{
+		const bool vertical = (box.get_orientation() == ORIENT_VERTICAL);
+
+		if(expand == Expand::yes) {
+			if(vertical) child.set_vexpand(true);
+			else         child.set_hexpand(true);
+			}
+		if(padding > 0) {
+			if(vertical) {
+				child.set_margin_top(padding);
+				child.set_margin_bottom(padding);
+				}
+			else {
+				child.set_margin_start(padding);
+				child.set_margin_end(padding);
+				}
+			}
+#ifdef USE_GTK4
+		box.append(child);
+#else
+		box.pack_start(child,
+		               expand==Expand::yes ? Gtk::PACK_EXPAND_WIDGET : Gtk::PACK_SHRINK,
+		               0);
+		child.show();
+#endif
+		}
+
+	/// Gtk::GestureMultiPress was renamed Gtk::GestureClick in GTK4, and the way
+	/// a controller is attached to a widget changed: gtkmm-3 passes the widget
+	/// to create(), GTK4 uses Gtk::Widget::add_controller().
+
+#ifdef USE_GTK4
+	using ClickGesture = Gtk::GestureClick;
+	constexpr auto SEQ_CLAIMED = Gtk::EventSequenceState::CLAIMED;
+#else
+	using ClickGesture = Gtk::GestureMultiPress;
+	constexpr auto SEQ_CLAIMED = Gtk::EVENT_SEQUENCE_CLAIMED;
+#endif
+
+	inline Glib::RefPtr<ClickGesture> add_click_gesture(Gtk::Widget& widget)
+		{
+#ifdef USE_GTK4
+		auto gesture = ClickGesture::create();
+		widget.add_controller(gesture);
+		return gesture;
+#else
+		return ClickGesture::create(widget);
+#endif
+		}
+
+	/// GTK4 replaced Gtk::Paned::pack1/pack2 with set_start_child/set_end_child
+	/// plus separate resize/shrink setters.
+
+	inline void paned_set_start(Gtk::Paned& paned, Gtk::Widget& child, bool resize, bool shrink)
+		{
+#ifdef USE_GTK4
+		paned.set_start_child(child);
+		paned.set_resize_start_child(resize);
+		paned.set_shrink_start_child(shrink);
+#else
+		paned.pack1(child, resize, shrink);
+#endif
+		}
+
+	inline void paned_set_end(Gtk::Paned& paned, Gtk::Widget& child, bool resize, bool shrink)
+		{
+#ifdef USE_GTK4
+		paned.set_end_child(child);
+		paned.set_resize_end_child(resize);
+		paned.set_shrink_end_child(shrink);
+#else
+		paned.pack2(child, resize, shrink);
+#endif
+		}
+
+	/// Put `child` inside `parent`. gtkmm-3 has Gtk::Container::add() for every
+	/// container; GTK4 removed it in favour of append() on Gtk::Box and
+	/// set_child() on the single-child containers, so the right call depends on
+	/// the concrete parent type.
+
+	template<typename Parent>
+	inline void add_child(Parent& parent, Gtk::Widget& child)
+		{
+#ifdef USE_GTK4
+		if constexpr (std::is_base_of_v<Gtk::Box, Parent>)
+			parent.append(child);
+		else
+			parent.set_child(child);
+#else
+		parent.add(child);
+		child.show();
+#endif
+		}
 
 	/// Show `dialog` modally, block until the user responds, and return the
 	/// response id.
