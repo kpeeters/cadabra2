@@ -11,8 +11,11 @@ SelectFileDialog::SelectFileDialog(const Glib::ustring& title, Gtk::Window& pare
 	choose.signal_clicked().connect(sigc::mem_fun(*this, &SelectFileDialog::choose_dialog));
 	choose.set_hexpand(false);
 
-	hbox.pack_start(entry);
-	hbox.pack_end(choose);
+	// 'entry' expands, so packing 'choose' after it puts it hard right, which is
+	// what pack_end used to do. GTK4 has no pack_end.
+	entry.set_hexpand(true);
+	hbox.pack_start(entry, Gtk::PACK_EXPAND_WIDGET);
+	hbox.pack_start(choose, Gtk::PACK_SHRINK);
 
 	get_content_area()->pack_start(hbox);
 	add_button("Ok", Gtk::RESPONSE_OK);

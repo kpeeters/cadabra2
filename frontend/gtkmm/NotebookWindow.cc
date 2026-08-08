@@ -765,8 +765,11 @@ void NotebookWindow::on_realize()
 		toolbar.pack_start(tool_stop, Gtk::PACK_SHRINK);
 		toolbar.pack_start(tool_restart, Gtk::PACK_SHRINK);
 		toolbar.pack_start(tool_restart_and_run_all, Gtk::PACK_SHRINK);
-		toolbar.pack_start(top_label);
-		toolbar.pack_end(kernel_spinner, Gtk::PACK_SHRINK);
+		// 'top_label' expands, so packing the spinner after it keeps the spinner
+		// hard right, which is what pack_end used to do. GTK4 has no pack_end.
+		top_label.set_hexpand(true);
+		toolbar.pack_start(top_label, Gtk::PACK_EXPAND_WIDGET);
+		toolbar.pack_start(kernel_spinner, Gtk::PACK_SHRINK);
 		kernel_spinner.set_size_request(50/display_scale, 50/display_scale);
 		kernel_spinner.set_margin_end(10/display_scale);
 		}
@@ -795,9 +798,15 @@ void NotebookWindow::on_realize()
 	mainbox.set_name("mainbox");
 	searchbar.add(search_hbox);
 //	searchbar.set_halign(Gtk::ALIGN_START);
-	search_hbox.pack_start(searchentry, Gtk::PACK_EXPAND_WIDGET, 10);
+	// Per-child padding is replaced by margins on the child; GTK4 has no padding
+	// argument. In a horizontal box, padding applied to both sides == start/end margins.
+	searchentry.set_margin_start(10);
+	searchentry.set_margin_end(10);
+	search_hbox.pack_start(searchentry, Gtk::PACK_EXPAND_WIDGET);
 	searchentry.set_size_request(200, -1);
-	search_hbox.pack_start(search_case_insensitive, Gtk::PACK_SHRINK, 10);
+	search_case_insensitive.set_margin_start(10);
+	search_case_insensitive.set_margin_end(10);
+	search_hbox.pack_start(search_case_insensitive, Gtk::PACK_SHRINK);
 	search_case_insensitive.set_active(true);
 
 	// Status bar
@@ -1437,7 +1446,11 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				spacer->set_size_request(-1, 200); // Minimum height for scrollable space
 				spacer->set_vexpand(true);
 				spacer->set_valign(Gtk::ALIGN_FILL);
-				docbox->pack_end(*spacer, Gtk::PACK_EXPAND_WIDGET);
+				// Packed at the start rather than the end (GTK4 has no pack_end).
+				// Cells are inserted with pack_start followed by an explicit
+				// reorder_child() to their DTree index, which always leaves the
+				// spacer as the last child, so it stays at the bottom.
+				docbox->pack_start(*spacer, Gtk::PACK_EXPAND_WIDGET);
 				break;
 				}
 			case DataCell::CellType::output:
@@ -2994,11 +3007,21 @@ void NotebookWindow::on_help_register()
 	grid.attach(affiliation, 1, 2, 1, 1);
 
 	Gtk::Box hbox(Gtk::Orientation::ORIENTATION_HORIZONTAL);
-	box->pack_end(hbox, Gtk::PACK_SHRINK);
+	// 'txt' and 'grid' above are packed at the start, so packing hbox at the start
+	// too leaves it last, which is where pack_end put it. GTK4 has no pack_end.
+	box->pack_start(hbox, Gtk::PACK_SHRINK);
 	Gtk::Button reg("Register my support"), nothanks("I prefer to stay anonymous"), alreadyset("I am already registered");
-	hbox.pack_end(reg, Gtk::PACK_SHRINK, 10);
-	hbox.pack_start(nothanks, Gtk::PACK_SHRINK, 10);
-	hbox.pack_start(alreadyset, Gtk::PACK_SHRINK, 10);
+	// Padding becomes start/end margins; GTK4 has no padding argument.
+	for(auto* b : {&nothanks, &alreadyset, &reg}) {
+		b->set_margin_start(10);
+		b->set_margin_end(10);
+		}
+	hbox.pack_start(nothanks, Gtk::PACK_SHRINK);
+	hbox.pack_start(alreadyset, Gtk::PACK_SHRINK);
+	// 'reg' was pack_end'ed, i.e. hard right. Give it the leftover space and align
+	// the button itself to the end of that space.
+	reg.set_halign(Gtk::ALIGN_END);
+	hbox.pack_start(reg, Gtk::PACK_EXPAND_WIDGET);
 	reg.signal_clicked().connect([&]() {
 		set_user_details(name.get_text(), email.get_text(), affiliation.get_text());
 		prefs.is_anonymous = false;
