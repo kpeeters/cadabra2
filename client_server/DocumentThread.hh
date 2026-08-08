@@ -138,7 +138,6 @@ namespace cadabra {
 					std::string python_path;
 					bool move_into_new_cell;
 					bool tab_completion;
-					bool microtex;
 					bool auto_close_latex;
 				private:
 					nlohmann::json data;

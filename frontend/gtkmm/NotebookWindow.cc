@@ -71,7 +71,6 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry, std::s
 	, read_only(ro)
 	, crash_window_hidden(true)
 	, last_configure_width(0)
-	, tex_running(false), tex_need_width(0)
 	, last_find_location(doc.end(), std::string::npos)
 	, is_configured(false)
 	, run_all_after_restart(false)
@@ -85,7 +84,6 @@ void NotebookWindow::on_realize()
 	// Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 	dispatch_refresh.connect(sigc::mem_fun(*this, &NotebookWindow::refresh_after_tex_engine_run));
-	dispatch_tex_error.connect(sigc::mem_fun(*this, &NotebookWindow::handle_thread_tex_error));
 	dispatch_update_status.connect(sigc::mem_fun(*this, &NotebookWindow::update_status));
 
 	// Set the window icon.
@@ -274,9 +272,6 @@ void NotebookWindow::on_realize()
 	action_highlight = actiongroup->add_action_radio_integer( "HighlightSyntax",
 																				 sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax),
 																				 prefs.highlight );	
-	action_microtex = actiongroup->add_action_radio_integer( "MicroTeX",
-																				 sigc::mem_fun(*this, &NotebookWindow::on_prefs_microtex),
-																				 prefs.microtex );	
 	actiongroup->add_action( "HighlightChoose",       sigc::mem_fun(*this, &NotebookWindow::on_prefs_choose_colours) );		
 	actiongroup->add_action( "ViewUseDefaultSettings",sigc::mem_fun(*this, &NotebookWindow::on_prefs_use_defaults) );		
 
@@ -528,25 +523,6 @@ void NotebookWindow::on_realize()
 		"           </item>"
 		"        </section>"
 			"      </submenu>";
-		const char *appdir = getenv("APPDIR");
-		if(!appdir) {
-			ui_info+=
-				"      <submenu>"
-				"        <attribute name='label'>Maths rendering</attribute>"
-				"        <section>"
-				"           <item>"
-				"              <attribute name='label'>LaTeX (external)</attribute>"
-				"              <attribute name='action'>cdb.MicroTeX</attribute>"
-				"              <attribute name='target' type='i'>0</attribute>"
-				"           </item>"
-				"           <item>"
-				"              <attribute name='label'>MicroTeX (internal)</attribute>"
-				"              <attribute name='action'>cdb.MicroTeX</attribute>"
-				"              <attribute name='target' type='i'>1</attribute>"
-				"           </item>"
-				"        </section>"
-				"      </submenu>";
-			}
 	   ui_info +=
 		"      <item>"
 		"         <attribute name='label'>Use default settings</attribute>"
@@ -1082,24 +1058,8 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	bool ret=Gtk::Window::on_configure_event(cfg);
 
 	if(cfg->width != last_configure_width) {
-		if(prefs.microtex) {
-			resize_codeinput_texview_all(cfg->width);
-			last_configure_width = cfg->width;
-			}
-		else {
-			// Re-run latex.
-			std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
-			if(tex_running) {
-				tex_need_width = cfg->width;
-				}
-			else {
-				tex_need_width = cfg->width;
-				// std::cerr << "Attempting to run" << std::endl;
-			tex_run_async();
-			// std::cerr << "OK, running" << std::endl;
-				}
-			last_configure_width = cfg->width;
-			}
+		resize_codeinput_texview_all(cfg->width);
+		last_configure_width = cfg->width;
 		}
 
 	return ret;
@@ -1109,13 +1069,6 @@ void NotebookWindow::refresh_after_tex_engine_run()
 	{
 	for(unsigned int i=0; i<canvasses.size(); ++i)
 		canvasses[i]->refresh_all();
-	}
-
-void NotebookWindow::handle_thread_tex_error()
-	{
-	on_tex_error(tex_error_string, doc.end());
-	// std::cerr << "clicked away" << std::endl;
-	tex_error_string="";
 	}
 
 bool NotebookWindow::on_unhandled_error(const std::exception& err)
@@ -1235,59 +1188,6 @@ void NotebookWindow::on_kernel_runstatus(bool running)
 		}
 	// FIXME: WHY would we need to process the queue here?
 	dispatcher.emit();
-	}
-
-void NotebookWindow::tex_run_async()
-	{
-	if(prefs.microtex==false) {
-		if(tex_error_string!="")
-			return;
-		
-		// Run TeX on a separate thread; it'll take a while and
-		// we don't want to block the UI thread.
-		// FIXME: join properly when exiting the program, otherwise
-		// we get a 'terminate called without active exception' message.
-		auto tex_code = [this]() {
-			try {
-				for(;;) {
-					{  std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
-						engine.invalidate_all();
-						engine.set_geometry(tex_need_width-2*30);
-						}
-					
-					engine.convert_all();
-					dispatch_refresh.emit();
-					
-					{  std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
-						if(tex_need_width-2*30 == engine.get_geometry()) {
-							tex_running=false;
-							break;
-							}
-						}
-					}
-				}
-			catch(TeXEngine::TeXException& ex) {
-				// Display the error in the main thread.
-				std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
-				tex_error_string=ex.what();
-				tex_running=false;
-				dispatch_refresh.emit();
-				dispatch_tex_error.emit();
-				}
-			};
-		
-		std::lock_guard<std::recursive_mutex> guard(tex_need_width_mutex);
-		tex_running=true;
-		
-		// Join any thread which may still exist.
-		if(tex_thread)
-			tex_thread->join();
-		
-		tex_thread = std::make_unique<std::thread>( tex_code );
-		}
-	else {
-		dispatch_refresh.emit();
-		}
 	}
 
 void NotebookWindow::process_todo_queue()
@@ -1466,7 +1366,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			case DataCell::CellType::latex_view: {
 				// FIXME: would be good to share the input and output of TeXView too.
 				// Right now nothing is shared...
-				newcell.outbox = manage( new TeXView(engine, it, prefs.microtex) );
+				newcell.outbox = manage( new TeXView(engine, it) );
 				if(it->cell_type==DataCell::CellType::error)
 					newcell.outbox->set_is_error(true);
 				
@@ -2225,36 +2125,6 @@ bool NotebookWindow::on_tex_error(const std::string& str, DTree::iterator it)
 			}
 		}
 
-	if(!prefs.microtex) {
-		// Show the error in a dialog.
-		Gtk::MessageDialog md("Generic TeX error", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
-		md.set_resizable(true);
-		//	Gtk::Button ok(Gtk::Stock::OK);
-		md.set_transient_for(*this);
-		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
-		auto box = md.get_message_area();
-		//	md.add_button(Gtk::Stock::OK, 1);
-		Gtk::ScrolledWindow sw;
-		Gtk::TextView tv;
-		auto buffer = tv.get_buffer();
-		buffer->set_text(str);
-		//	auto iter = buffer->get_iter_at_offset(0);
-		//	buffer->insert(iter, str);
-		tv.set_editable(false);
-		box->add(sw);
-		sw.add(tv);
-		auto context = tv.get_style_context();
-		context->add_class("error");
-
-		auto display = Gdk::Display::get_default();
-		auto monitor = display->get_primary_monitor();
-		Gdk::Rectangle geometry;
-		monitor->get_geometry(geometry);
-		
-		sw.set_size_request(geometry.get_width()/4, geometry.get_width()/4);
-		sw.show_all();
-		cdb::dialog_run(md);
-		}
 	
 	return true;
 	}
@@ -3066,7 +2936,7 @@ void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 		std::cout << "cadabra-client: total scaling-factor = " << scale << std::endl;
 		engine.set_scale(scale, gdk_window->get_scale_factor());
 		engine.invalidate_all();
-		tex_run_async();
+		dispatch_refresh.emit();
 
 		//remove_all_cells();
 		//build_visual_representation();
@@ -3343,7 +3213,7 @@ void NotebookWindow::on_prefs_font_size(int num)
 		// on_configure_event signal; that will come after us and then we will
 		// have to run all again.
 		engine.invalidate_all();
-		tex_run_async();
+		dispatch_refresh.emit();
 
 		//for(auto& canvas: canvasses) {
 		//	for(auto& visualcell: canvas->visualcells) {
@@ -3392,38 +3262,6 @@ void NotebookWindow::on_prefs_highlight_syntax(bool on)
 				}
 			}
 		}
-	}
-
-void NotebookWindow::on_prefs_microtex(bool on)
-	{
-	if (prefs.microtex == on) return;
-	prefs.microtex = on;
-	prefs.save();
-	action_microtex->set_state(Glib::Variant<int>::create(on));
-
-	Gtk::MessageDialog md("Restart Cadabra to make the rendering setting take effect",
-								 false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
-	md.set_resizable(false);
-	md.set_transient_for(*this);
-	md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
-	cdb::dialog_run(md);
-	
-// 	for (auto& canvas : canvasses) {
-// 		for (auto& visualcell : canvas->visualcells) {
-// 			// Need to be careful to only try and do this on latex or
-// 			// python cells to avoid an exception being raised when
-// 			// trying to edit an immutable cell type
-// 			switch (visualcell.first->cell_type) {
-// 				// Fallthrough
-// 				case DataCell::CellType::python:
-// 				case DataCell::CellType::latex:
-// 					visualcell.second.outbox->set_use_microtex(prefs.microtex);
-// 					break;
-// 				default:
-// 					break;
-// 				}
-// 			}
-// 		}
 	}
 
 void NotebookWindow::on_prefs_choose_colours()

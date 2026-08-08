@@ -40,7 +40,7 @@ namespace cadabra {
 
 	class TeXView : public TeXViewBase {
 		public:
-			TeXView(TeXEngine&, DTree::iterator, bool use_microtex_, int hmargin=25);
+			TeXView(TeXEngine&, DTree::iterator, int hmargin=25);
 			virtual ~TeXView();
 
 			std::shared_ptr<TeXEngine::TeXRequest> content;
@@ -53,8 +53,6 @@ namespace cadabra {
 			/// default handler having already swallowed right-clicks.
 			sigc::signal0<void>                    select_requested;
 
-			void set_use_microtex(bool);
-
 			void set_is_error(bool);
 					
 			DTree::iterator           datacell;
@@ -66,7 +64,7 @@ namespace cadabra {
 
 			class TeXArea : public Gtk::DrawingArea {
 				public:
-					TeXArea(bool use_microtex, TeXView *owner_);
+					TeXArea(TeXView *owner_);
 					~TeXArea();
 
 					/// The actual painting, shared between the two toolkits.
@@ -79,18 +77,11 @@ namespace cadabra {
 					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
 #endif
 
-					/// Update the visible image from the pixbuf. Call this in order to propagate
-					/// changes to the pixbuf (e.g. from re-running the TeXRequest) to the
-					/// visible widget itself.
+					/// Propagate a change in the TeXRequest (i.e. a new LaTeX
+					/// string) through to the visible widget.
 
-					void update_image(std::shared_ptr<TeXEngine::TeXRequest>, double scale);
+					void update_image(std::shared_ptr<TeXEngine::TeXRequest>);
 
-					/// The actual image is stored in the image referenced by pixbuf.
-					/// FIXME: This pointer is not yet shared among instances which show the
-					/// same content.
-
-					Glib::RefPtr<Gdk::Pixbuf> pixbuf;
-					double                    scale_;
 					float                     _text_size;
 
 					/// MicroTeX: set the LaTeX string and
@@ -102,16 +93,12 @@ namespace cadabra {
 					/// not draw.
 					void layout_latex() const;
 
-					bool                    use_microtex;
-
 					int need_height(int width) const;
 				protected:
 					Gtk::SizeRequestMode get_request_mode_vfunc() const override;
 
 					/// The MicroTeX size logic, shared between the two toolkits.
-					/// measure_height_for_width returns false when the caller
-					/// should defer to the base class.
-					bool measure_height_for_width(int width, int& minimum_height,
+					void measure_height_for_width(int width, int& minimum_height,
 														   int& natural_height) const;
 					void relayout_for_allocation(int width, int height);
 
@@ -170,7 +157,6 @@ namespace cadabra {
 
 		private:
 			TeXEngine& engine;
-			bool use_microtex;
 			bool is_error;
 			
 			Gtk::Menu     context_menu;

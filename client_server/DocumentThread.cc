@@ -380,17 +380,7 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	python_path        = data.value("python_path", "");
 	move_into_new_cell = data.value("move_into_new_cell", false);
 	tab_completion     = data.value("tab_completion", true);
-	microtex           = data.value("microtex", true);
 	auto_close_latex   = data.value("auto_close_latex", true);
-
-	// Force microtex when this is an AppImage.
-	const char *appdir = getenv("APPDIR");
-	if(appdir)
-		microtex=true;
-	// Force microtex when we are on Windows.
-#if(_WIN32)
-	microtex = true;
-#endif
 
 	if(git_path=="")
 		git_path="/usr/bin/git";
@@ -432,7 +422,6 @@ void DocumentThread::Prefs::save()
 		data["python_path"] = python_path;
 		data["move_into_new_cell"] = move_into_new_cell;
 		data["tab_completion"] = tab_completion;
-		data["microtex"] = microtex;
 		data["auto_close_latex"] = auto_close_latex;
 		for (const auto& lang : colours) {
 			for (const auto& kw : lang.second)

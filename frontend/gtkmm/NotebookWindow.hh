@@ -190,7 +190,7 @@ namespace cadabra {
 			// Functions which get called on the compute thread can signal to
 			// the GUI thread that elements need to be updated, by sending
 			// signals using the following dispatchers.
-			Glib::Dispatcher               dispatch_update_status, dispatch_refresh, dispatch_tex_error;
+			Glib::Dispatcher               dispatch_update_status, dispatch_refresh;
 
 			// Update the status line and progress bar. This should only
 			// be called on the GUI thread, so typically gets called
@@ -200,7 +200,6 @@ namespace cadabra {
 
 			// Run the TeX engine on a separate thread, then call
 			// `dispatch_refresh` to update the display.
-			void tex_run_async();
 
 			// Name and modification data.
 			void             update_title();
@@ -248,7 +247,6 @@ namespace cadabra {
 			void on_prefs_hide_input_cells(const Glib::VariantBase& vb);			
 			void on_prefs_font_size(int num);
 			void on_prefs_highlight_syntax(bool on);
-			void on_prefs_microtex(bool on);
 			void on_prefs_choose_colours();
 			void on_prefs_use_defaults();
 
@@ -284,10 +282,6 @@ namespace cadabra {
 			/// on completion triggers `dispatcher_refresh`, which calls this function
 			/// on the main thread.
 			void refresh_after_tex_engine_run();
-
-			/// Handle a TeX error which occurred on a threaded TeX run (activated by
-			/// `tex_run_async`) and is stored in `tex_error_string`.
-			void handle_thread_tex_error();
 
 			void on_crash_window_closed(int);
 			bool crash_window_hidden;
@@ -326,11 +320,6 @@ namespace cadabra {
 			int             last_configure_width;
 
 			// Mutex to protect the variables below.
-			std::recursive_mutex         tex_need_width_mutex;
-			std::unique_ptr<std::thread> tex_thread;
-			bool                         tex_running;
-			int                          tex_need_width;
-			std::string                  tex_error_string;
 
 			std::pair<DTree::iterator, size_t> last_find_location;
 			std::string                        last_find_string;
@@ -343,7 +332,7 @@ namespace cadabra {
 			Glib::RefPtr<Gio::SimpleAction> action_copy, action_undo, action_redo,
 				action_paste, action_view_close, action_fontsize, action_highlight,
 				action_auto_close_latex, action_hide_input_cells,
-				action_stop, action_register, action_console, action_microtex;
+				action_stop, action_register, action_console;
 
 			// Transition animations.
 #if GTKMM_MAJOR_VERSION>3 || (GTKMM_MAJOR_VERSION==3 && GTKMM_MINOR_VERSION>=10)
