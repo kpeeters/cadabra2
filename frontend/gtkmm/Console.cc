@@ -162,7 +162,7 @@ bool Console::TextViewProxy::on_key_press_event(GdkEventKey* key_event)
 
 #endif
 
-Console::Console(sigc::slot<void> run_slot)
+Console::Console(sigc::slot<void()> run_slot)
 	: needs_focus(false)
 	, input(*this)
 	{
@@ -173,7 +173,7 @@ Console::Console(sigc::slot<void> run_slot)
 	prompt_begin = buffer->create_mark(buffer->begin());
 
 	run.connect(run_slot);
-	dispatch_message.connect(sigc::mem_fun(this, &Console::process_message_queue));
+	dispatch_message.connect(sigc::mem_fun(*this, &Console::process_message_queue));
 
 	auto tag_table = tv.get_buffer()->get_tag_table();
 	input_tag = Gtk::TextTag::create();
@@ -211,7 +211,7 @@ Console::Console(sigc::slot<void> run_slot)
 
 #ifndef USE_GTK4
 	tv.signal_key_press_event().connect(
-	   sigc::mem_fun(&input, &TextViewProxy::on_key_press_event),
+	   sigc::mem_fun(input, &TextViewProxy::on_key_press_event),
 	   false);
 
 	tv.signal_size_allocate().connect([this](Gtk::Allocation& ) {

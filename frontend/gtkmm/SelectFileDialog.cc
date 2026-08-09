@@ -47,5 +47,5 @@ void SelectFileDialog::choose_dialog()
 	fc.add_button("Select", cdb::RESPONSE_OK);
 
 	if (cdb::dialog_run(fc) == cdb::RESPONSE_OK)
-		entry.set_text(fc.get_filename());
+		entry.set_text(fc.get_file()->get_path());
 	}

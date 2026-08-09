@@ -28,7 +28,7 @@ void signal_handler(int)
 
 Glib::RefPtr<Cadabra> Cadabra::create()
 	{
-	return Glib::RefPtr<Cadabra>( new Cadabra() );
+	return cdb::refptr_for_instance<Cadabra>( new Cadabra() );
 	}
 
 // GTK4 removed the Gtk::Application(argc, argv, ...) constructor; the

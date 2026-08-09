@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "GtkCompat.hh"
 #include "DataCell.hh"
 #include "DocumentThread.hh"
 #include <gtkmm/box.h>
@@ -98,12 +99,12 @@ namespace cadabra {
 					void         shift_enter_pressed();
 					void         on_textbuf_change();
 
-					sigc::signal1<bool, DTree::iterator>                   content_execute;
-					sigc::signal1<bool, DTree::iterator>                   content_changed;
-					sigc::signal3<bool, std::string, int, DTree::iterator> content_insert;
-					sigc::signal3<bool, int, int, DTree::iterator>         content_erase;
-					sigc::signal1<bool, DTree::iterator>                   cell_got_focus;
-					sigc::signal2<bool, DTree::iterator, int>              complete_request;
+					sigc::signal<bool(DTree::iterator)>                   content_execute;
+					sigc::signal<bool(DTree::iterator)>                   content_changed;
+					sigc::signal<bool(std::string, int, DTree::iterator)> content_insert;
+					sigc::signal<bool(int, int, DTree::iterator)>         content_erase;
+					sigc::signal<bool(DTree::iterator)>                   cell_got_focus;
+					sigc::signal<bool(DTree::iterator, int)>              complete_request;
 
 					friend CodeInput;
 
@@ -129,7 +130,11 @@ namespace cadabra {
 
 			/// Handle mouse buttons.
 
+			/// Middle-click paste of the PRIMARY selection.
+			void handle_middle_click(double x, double y);
+#ifndef USE_GTK4
 			bool handle_button_press(GdkEventButton *);
+#endif
 
 			/// Handle an insert event, which can consist of one or more
 			/// inserted characters. This function will just massage that
@@ -166,6 +171,12 @@ namespace cadabra {
 			exp_input_tv                  edit;
 
 		private:
+#ifdef USE_GTK4
+			/// Middle-click paste. On gtkmm-3 this goes through
+			/// handle_button_press() connected before the default handler.
+			Glib::RefPtr<cdb::ClickGesture> paste_gesture;
+#endif
+
 			void init(const Prefs& prefs, double display_scale);
 
 			void highlight_python();

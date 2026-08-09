@@ -44,13 +44,13 @@ namespace cadabra {
 
 			std::shared_ptr<TeXEngine::TeXRequest> content;
 
-			sigc::signal1<bool, DTree::iterator>   show_hide_requested;
+			sigc::signal<bool(DTree::iterator)>   show_hide_requested;
 
 			/// Emitted on a button press which is not the context-menu button, so
 			/// that the owner can select this cell. Previously this was done by
 			/// connecting to signal_button_press_event() and relying on the
 			/// default handler having already swallowed right-clicks.
-			sigc::signal0<void>                    select_requested;
+			sigc::signal<void()>                    select_requested;
 
 			void set_is_error(bool);
 					
@@ -139,8 +139,8 @@ namespace cadabra {
 
 			void dim(bool);
 
-			sigc::signal1<bool, std::string> tex_error;
-			sigc::signal0<bool>              signal_on_copy_as_latex;
+			sigc::signal<bool(std::string)> tex_error;
+			sigc::signal<bool()>              signal_on_copy_as_latex;
 			
 		protected:
 			virtual void on_show() override;

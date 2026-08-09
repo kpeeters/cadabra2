@@ -27,9 +27,6 @@ class Cadabra : public Gtk::Application {
 		virtual void on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint) override;
 		virtual int on_command_line(const Glib::RefPtr<Gio::ApplicationCommandLine>& cmd) override;
 
-
-		int on_handle_local_options(const Glib::RefPtr<Glib::VariantDict> &);
-
 	private:
 		cadabra::ComputeThread                *compute;
 		std::thread                           *compute_thread;

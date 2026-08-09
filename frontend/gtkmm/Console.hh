@@ -27,7 +27,7 @@ namespace cadabra {
 			// run_slot is the callback which should be run when the console sends input to
 			// be run. This callback should call console.grab_input to get a line of input,
 			// process it and then send the output block back to the console.
-			Console(sigc::slot<void> run_slot);
+			Console(sigc::slot<void()> run_slot);
 
 			// Display welcome message and first prompt
 			void initialize();

@@ -6,7 +6,6 @@
 
 #include <gtkmm/image.h>
 #include <gdkmm/pixbuf.h>
-#include <gdkmm/window.h>
 #include <gdkmm/general.h> // set_source_pixbuf()
 #include <cairomm/surface.h>
 #include <cairomm/context.h>
@@ -69,10 +68,10 @@ ImageView::~ImageView()
 void ImageView::on_save_as() const
 	{
 	Gtk::FileChooserDialog dialog("Please enter a file name for the SVG image",
-	                              Gtk::FILE_CHOOSER_ACTION_SAVE);
+	                              cdb::FILE_CHOOSER_ACTION_SAVE);
 
 //	dialog.set_transient_for(*this);
-	dialog.set_do_overwrite_confirmation(true);
+	cdb::file_chooser_confirm_overwrite(dialog);
 	dialog.add_button("_Cancel", cdb::RESPONSE_CANCEL);
 	dialog.add_button("Select", cdb::RESPONSE_OK);
 
@@ -80,7 +79,7 @@ void ImageView::on_save_as() const
 
 	switch(result) {
 		case(cdb::RESPONSE_OK): {
-			std::string name = dialog.get_filename();
+			std::string name = dialog.get_file()->get_path();
 			std::ofstream temp(name);
 			temp << area.decoded;
 			}

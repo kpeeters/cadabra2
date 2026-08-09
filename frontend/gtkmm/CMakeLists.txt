@@ -163,13 +163,27 @@ endif()
 add_definitions(
   "-D_WEBSOCKETPP_CPP11_STL_"
   "-DBOOST_LOG_DYN_LINK"
-  "-DGTKMM_DISABLE_DEPRECATED"
-  "-DGDKMM_DISABLE_DEPRECATED"
-  "-DGLIBMM_DISABLE_DEPRECATED"
-  "-DGIOMM_DISABLE_DEPRECATED"
   "-DBUILD_GTK"
   "-Wno-reorder"
 )
+
+if(USE_GTK4)
+  # NOTE: *_DISABLE_DEPRECATED cannot be used with gtkmm-4.10. It does not
+  # merely warn: the whole of messagedialog.h, filechooser.h,
+  # filechooserdialog.h, stylecontext.h, treeview.h and liststore.h is wrapped
+  # in `#ifndef GTKMM_DISABLE_DEPRECATED` there, so Gtk::MessageDialog,
+  # Gtk::FileChooser(Dialog), Gtk::StyleContext, Gtk::TreeView and
+  # Gtk::ListStore disappear entirely. All of those are still in use; replacing
+  # them (Gtk::AlertDialog, Gtk::FileDialog, Gtk::ColumnView, CSS) is a
+  # separate job from the port itself.
+else()
+  add_definitions(
+    "-DGTKMM_DISABLE_DEPRECATED"
+    "-DGDKMM_DISABLE_DEPRECATED"
+    "-DGLIBMM_DISABLE_DEPRECATED"
+    "-DGIOMM_DISABLE_DEPRECATED"
+  )
+endif()
 
 # USE_GTK4 is passed as a compile definition rather than going through
 # core/Config.hh, because Config.hh is generated into the *source* tree and is

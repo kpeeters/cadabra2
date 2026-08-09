@@ -16,7 +16,11 @@
 #include <gtkmm/box.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/messagedialog.h>
+#include <gtkmm/aboutdialog.h>
+#include <gtkmm/label.h>
+#include <gtkmm/filechooser.h>
 #include <gtkmm/paned.h>
+#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/window.h>
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/stylecontext.h>
@@ -32,6 +36,16 @@
 #include <gtkmm/textbuffer.h>
 #include <gdkmm/pixbuf.h>
 #include <giomm/menu.h>
+#include <giomm/inputstream.h>
+#ifdef USE_GTK4
+#include <gdkmm/clipboard.h>
+#include <gdkmm/contentprovider.h>
+#include <gdkmm/contentformats.h>
+#else
+#include <gtkmm/clipboard.h>
+#include <gtkmm/selectiondata.h>
+#include <gtkmm/targetentry.h>
+#endif
 #include <giomm/simpleactiongroup.h>
 #ifdef USE_GTK4
 #include <gtkmm/popovermenu.h>
@@ -64,6 +78,10 @@
 #include <glibmm/value.h>
 
 #include <type_traits>
+#include <memory>
+#include <functional>
+#include <string>
+#include <vector>
 
 namespace cdb {
 
@@ -127,6 +145,10 @@ namespace cdb {
 	constexpr auto BUTTONS_NONE   = Gtk::ButtonsType::NONE;
 	constexpr auto BUTTONS_OK     = Gtk::ButtonsType::OK;
 	constexpr auto BUTTONS_YES_NO = Gtk::ButtonsType::YES_NO;
+
+	constexpr auto FILE_CHOOSER_ACTION_OPEN = Gtk::FileChooser::Action::OPEN;
+	constexpr auto FILE_CHOOSER_ACTION_SAVE = Gtk::FileChooser::Action::SAVE;
+	constexpr auto LICENSE_GPL_3_0          = Gtk::License::GPL_3_0;
 	// pangomm-2.48 goes with gtkmm-4, pangomm-1.4 with gtkmm-3.
 	constexpr auto PANGO_TAB_LEFT         = Pango::TabAlign::LEFT;
 	constexpr auto PANGO_UNDERLINE_ERROR  = Pango::Underline::ERROR;
@@ -168,6 +190,10 @@ namespace cdb {
 	constexpr auto BUTTONS_NONE   = Gtk::BUTTONS_NONE;
 	constexpr auto BUTTONS_OK     = Gtk::BUTTONS_OK;
 	constexpr auto BUTTONS_YES_NO = Gtk::BUTTONS_YES_NO;
+
+	constexpr auto FILE_CHOOSER_ACTION_OPEN = Gtk::FILE_CHOOSER_ACTION_OPEN;
+	constexpr auto FILE_CHOOSER_ACTION_SAVE = Gtk::FILE_CHOOSER_ACTION_SAVE;
+	constexpr auto LICENSE_GPL_3_0          = Gtk::License::LICENSE_GPL_3_0;
 	constexpr auto PANGO_TAB_LEFT         = Pango::TAB_LEFT;
 	constexpr auto PANGO_UNDERLINE_ERROR  = Pango::Underline::UNDERLINE_ERROR;
 #endif
@@ -271,6 +297,137 @@ namespace cdb {
 #endif
 		}
 
+	/// Clipboard.
+	///
+	/// This is the one area with no common subset: gtkmm-3 has Gtk::Clipboard
+	/// with X11 target atoms and *synchronous* reads, GTK4 has Gdk::Clipboard
+	/// with mime types, Gdk::ContentProvider and asynchronous reads only. Both
+	/// are hidden behind the two calls below.
+	///
+	/// Cadabra puts two things on the clipboard: the rendered text, and (when
+	/// available) the cell's input form under a private "cadabra" name, so that
+	/// pasting between Cadabra instances round-trips the input rather than the
+	/// LaTeX. The same string is used as the gtkmm-3 target atom and the GTK4
+	/// mime type, which keeps a GTK3 and a GTK4 build interoperable.
+
+	inline const char *CADABRA_CLIPBOARD_TARGET = "cadabra";
+
+	namespace clipboard_detail {
+
+		inline std::string& text_payload()    { static std::string s; return s; }
+		inline std::string& cadabra_payload() { static std::string s; return s; }
+
+#ifndef USE_GTK4
+		inline void on_get(Gtk::SelectionData& selection_data, guint)
+			{
+			if(selection_data.get_target() == CADABRA_CLIPBOARD_TARGET)
+				selection_data.set(CADABRA_CLIPBOARD_TARGET, cadabra_payload());
+			else
+				selection_data.set_text(text_payload());
+			}
+
+		inline void on_clear() {}
+#endif
+		}
+
+	/// Put `text` on the clipboard, plus `cadabra` under the private target if
+	/// it is non-empty.
+
+	inline void clipboard_set(Gtk::Widget& widget, const std::string& text, const std::string& cadabra)
+		{
+		clipboard_detail::text_payload()    = text;
+		clipboard_detail::cadabra_payload() = cadabra;
+
+#ifdef USE_GTK4
+		std::vector<Glib::RefPtr<Gdk::ContentProvider>> providers;
+		if(!cadabra.empty())
+			providers.push_back(
+			   Gdk::ContentProvider::create(CADABRA_CLIPBOARD_TARGET,
+													  Glib::Bytes::create(cadabra.data(), cadabra.size())));
+
+		Glib::Value<Glib::ustring> value;
+		value.init(Glib::Value<Glib::ustring>::value_type());
+		value.set(text);
+		providers.push_back(Gdk::ContentProvider::create(value));
+
+		widget.get_clipboard()->set_content(Gdk::ContentProvider::create(providers));
+#else
+		(void)widget;
+		std::vector<Gtk::TargetEntry> targets;
+		if(!cadabra.empty())
+			targets.push_back(Gtk::TargetEntry(CADABRA_CLIPBOARD_TARGET));
+		targets.push_back(Gtk::TargetEntry("UTF8_STRING"));
+		targets.push_back(Gtk::TargetEntry("TEXT"));
+
+		Gtk::Clipboard::get(GDK_SELECTION_CLIPBOARD)->set(
+		   targets,
+		   sigc::ptr_fun(&clipboard_detail::on_get),
+		   sigc::ptr_fun(&clipboard_detail::on_clear));
+#endif
+		}
+
+	/// Read the clipboard and hand the result to `on_received`. Prefers the
+	/// private Cadabra target, falling back to plain text.
+	///
+	/// Always asynchronous. gtkmm-3 could read synchronously, but GTK4 cannot,
+	/// so both paths defer; callers must not assume the callback has run by the
+	/// time this returns.
+
+	inline void clipboard_read(Gtk::Widget& widget, bool primary,
+										const std::function<void(const std::string&)>& on_received)
+		{
+#ifdef USE_GTK4
+		auto clipboard = primary ? widget.get_primary_clipboard() : widget.get_clipboard();
+
+		if(clipboard->get_formats()->contain_mime_type(CADABRA_CLIPBOARD_TARGET)) {
+			clipboard->read_async(
+			   std::vector<Glib::ustring>{ CADABRA_CLIPBOARD_TARGET }, Glib::PRIORITY_DEFAULT,
+			   [clipboard, on_received](const Glib::RefPtr<Gio::AsyncResult>& result) {
+				try {
+					Glib::ustring mime_type;
+					auto stream = clipboard->read_finish(result, mime_type);
+					if(!stream) return;
+
+					std::string content;
+					char buffer[4096];
+					gssize n;
+					while((n = stream->read(buffer, sizeof(buffer))) > 0)
+						content.append(buffer, n);
+					on_received(content);
+					}
+				catch(const Glib::Error&) { /* nothing on the clipboard for us */ }
+				});
+			return;
+			}
+
+		clipboard->read_text_async(
+		   [clipboard, on_received](const Glib::RefPtr<Gio::AsyncResult>& result) {
+			try {
+				on_received(clipboard->read_text_finish(result));
+				}
+			catch(const Glib::Error&) { }
+			});
+#else
+		(void)widget;
+		auto clipboard = Gtk::Clipboard::get(primary ? GDK_SELECTION_PRIMARY : GDK_SELECTION_CLIPBOARD);
+		clipboard->request_targets(
+		   [clipboard, on_received](const std::vector<Glib::ustring>& targets) {
+			std::string target;
+			for(const auto& t : targets) {
+				if(t == CADABRA_CLIPBOARD_TARGET) { target = t; break; }
+				if(target.empty() && (t == "UTF8_STRING" || t == "TEXT" || t == "STRING"))
+					target = t;
+				}
+			if(target.empty()) return;
+
+			clipboard->request_contents(target,
+			   [on_received](const Gtk::SelectionData& data) {
+				on_received(data.get_data_as_string());
+				});
+			});
+#endif
+		}
+
 	/// A right-click context menu.
 	///
 	/// gtkmm-3 builds one from Gtk::Menu + Gtk::MenuItem and pops it up at the
@@ -355,6 +512,210 @@ namespace cdb {
 			Gtk::Menu menu;
 #endif
 		};
+
+	/// glibmm-2.68 made Glib::RefPtr an alias for std::shared_ptr, which dropped
+	/// the static RefPtr<T>::cast_dynamic().
+
+	template<typename T, typename U>
+	inline Glib::RefPtr<T> refptr_dynamic_cast(const Glib::RefPtr<U>& ptr)
+		{
+#ifdef USE_GTK4
+		return std::dynamic_pointer_cast<T>(ptr);
+#else
+		return Glib::RefPtr<T>::cast_dynamic(ptr);
+#endif
+		}
+
+	/// Gtk::Window::set_position() is removed in GTK4, where placement is left
+	/// to the compositor. (Gtk::Paned::set_position() is unrelated and fine.)
+
+	inline void window_centre_on_parent(Gtk::Window& window)
+		{
+#ifdef USE_GTK4
+		(void)window;
+#else
+		window.set_position(Gtk::WIN_POS_CENTER);
+#endif
+		}
+
+	/// Gtk::Label::set_line_wrap() is set_wrap() in GTK4.
+
+	inline void label_set_wrap(Gtk::Label& label, bool wrap = true)
+		{
+#ifdef USE_GTK4
+		label.set_wrap(wrap);
+#else
+		label.set_line_wrap(wrap);
+#endif
+		}
+
+	/// GTK4 has no single "margin" property, only the four sides. Both toolkits
+	/// have the individual setters, so this needs no conditional.
+
+	inline void set_margin_all(Gtk::Widget& widget, int margin)
+		{
+		widget.set_margin_start(margin);
+		widget.set_margin_end(margin);
+		widget.set_margin_top(margin);
+		widget.set_margin_bottom(margin);
+		}
+
+	/// GTK4 added a baseline argument to Gtk::Widget::size_allocate().
+
+	inline void widget_size_allocate(Gtk::Widget& widget, const Gtk::Allocation& allocation)
+		{
+#ifdef USE_GTK4
+		widget.size_allocate(allocation, -1);
+#else
+		widget.size_allocate(allocation);
+#endif
+		}
+
+	/// Gtk::AboutDialog derives from Gtk::Dialog on gtkmm-3 but from Gtk::Window
+	/// on GTK4, so it has no ::response signal there and cannot go through
+	/// dialog_run(). On GTK4 it is simply presented and dismissed by the user.
+
+	inline void about_dialog_run(Gtk::AboutDialog& about)
+		{
+#ifdef USE_GTK4
+		about.set_modal(true);
+		about.set_visible(true);
+#else
+		dialog_run(about);
+#endif
+		}
+
+	/// GTK4's Gtk::AboutDialog::set_logo() takes a Gdk::Paintable rather than a
+	/// Gdk::Pixbuf.
+
+	inline void about_dialog_set_logo(Gtk::AboutDialog& about, const Glib::RefPtr<Gdk::Pixbuf>& logo)
+		{
+#ifdef USE_GTK4
+		about.set_logo(Gdk::Texture::create_for_pixbuf(logo));
+#else
+		about.set_logo(logo);
+#endif
+		}
+
+	/// Wrap a freshly-constructed Glib::Object subclass in a RefPtr.
+	///
+	/// glibmm-2.68 made Glib::RefPtr an alias for std::shared_ptr, so
+	/// `Glib::RefPtr<T>(new T())` is no longer merely old-fashioned but wrong:
+	/// the object is already reference-counted by GObject, and the shared_ptr
+	/// would add a second, independent count and double-free. glibmm-2.68
+	/// provides make_refptr_for_instance() for this; glibmm-2.4 does not have
+	/// it, but there the plain constructor is correct.
+
+	template<typename T>
+	inline Glib::RefPtr<T> refptr_for_instance(T* object)
+		{
+#ifdef USE_GTK4
+		return Glib::make_refptr_for_instance<T>(object);
+#else
+		return Glib::RefPtr<T>(object);
+#endif
+		}
+
+	/// Gtk::CssProvider::load_from_data() returns bool on gtkmm-3 but void on
+	/// GTK4, where a parse failure is reported through ::parsing-error instead.
+
+	inline bool css_load_from_data(const Glib::RefPtr<Gtk::CssProvider>& provider,
+											 const std::string& data)
+		{
+#ifdef USE_GTK4
+		provider->load_from_data(data);
+		return true;
+#else
+		return provider->load_from_data(data);
+#endif
+		}
+
+	/// gtkmm-3's Gtk::Container API for inspecting and reordering children is
+	/// gone in GTK4: there is no get_children(), and reorder_child(child, n)
+	/// became reorder_child_after(child, sibling).
+
+	inline unsigned int box_child_count(Gtk::Box& box)
+		{
+#ifdef USE_GTK4
+		unsigned int n = 0;
+		for(auto *child = box.get_first_child(); child; child = child->get_next_sibling())
+			++n;
+		return n;
+#else
+		return box.get_children().size();
+#endif
+		}
+
+	/// Move `child` to absolute position `index` among `box`'s children.
+
+	inline void box_reorder_child(Gtk::Box& box, Gtk::Widget& child, unsigned int index)
+		{
+#ifdef USE_GTK4
+		if(index==0) {
+			box.reorder_child_at_start(child);
+			return;
+			}
+		// Find the sibling that should end up just before `child`, skipping
+		// `child` itself so the index refers to the list without it.
+		Gtk::Widget *sibling = nullptr;
+		unsigned int seen = 0;
+		for(auto *c = box.get_first_child(); c; c = c->get_next_sibling()) {
+			if(c == &child) continue;
+			sibling = c;
+			if(++seen == index) break;
+			}
+		if(sibling)
+			box.reorder_child_after(child, *sibling);
+#else
+		box.reorder_child(child, index);
+#endif
+		}
+
+	/// Detaching a child. gtkmm-3 has Gtk::Container::remove(); GTK4 dropped it
+	/// for the single-child containers, where the child is a property instead.
+
+	inline void scrolled_window_unset_child(Gtk::ScrolledWindow& sw)
+		{
+#ifdef USE_GTK4
+		sw.unset_child();
+#else
+		sw.remove();
+#endif
+		}
+
+	inline void paned_unset_end(Gtk::Paned& paned)
+		{
+#ifdef USE_GTK4
+		paned.property_end_child() = nullptr;
+#else
+		if(auto *child = paned.get_child2())
+			paned.remove(*child);
+#endif
+		}
+
+	/// Gtk::Widget::show_now() is removed in GTK4; there is no way (nor need)
+	/// to force a synchronous map.
+
+	inline void show_now(Gtk::Widget& widget)
+		{
+#ifdef USE_GTK4
+		widget.set_visible(true);
+#else
+		widget.show_now();
+#endif
+		}
+
+	/// GTK4 removed Gtk::FileChooser::set_do_overwrite_confirmation(): a save
+	/// dialog there always confirms an overwrite.
+
+	inline void file_chooser_confirm_overwrite(Gtk::FileChooser& chooser)
+		{
+#ifdef USE_GTK4
+		(void)chooser;
+#else
+		chooser.set_do_overwrite_confirmation(true);
+#endif
+		}
 
 	/// Gdk::Screen is gone in GTK4; style providers attach to a Gdk::Display.
 

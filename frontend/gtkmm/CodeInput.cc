@@ -31,9 +31,9 @@ CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::Text
 	// GTK4 has no event masks; controllers subscribe to what they need.
 	set_events(Gdk::STRUCTURE_MASK);
 #endif
-	//	get_buffer()->signal_insert().connect(sigc::mem_fun(this, &exp_input_tv::on_my_insert), false);
-	//	get_buffer()->signal_erase().connect(sigc::mem_fun(this, &exp_input_tv::on_my_erase), false);
-	get_buffer()->signal_changed().connect(sigc::mem_fun(this, &exp_input_tv::on_textbuf_change), false);
+	//	get_buffer()->signal_insert().connect(sigc::mem_fun(*this, &exp_input_tv::on_my_insert), false);
+	//	get_buffer()->signal_erase().connect(sigc::mem_fun(*this, &exp_input_tv::on_my_erase), false);
+	get_buffer()->signal_changed().connect(sigc::mem_fun(*this, &exp_input_tv::on_textbuf_change), false);
 	set_name("CodeInput"); // to be able to style it with CSS
 	cdb::set_accessible_name(*this, "CodeInput");
 	cdb::set_accessible_role(*this, cdb::AccessibleRole::text);
@@ -200,9 +200,24 @@ void CodeInput::init(const Prefs& prefs, double display_scale)
 		tabs.set_tab(i, cdb::PANGO_TAB_LEFT, 3*space_width*i);
 	edit.set_tabs(tabs);
 
-	edit.signal_button_press_event().connect(sigc::mem_fun(this, &CodeInput::handle_button_press), false);
-	edit.get_buffer()->signal_insert().connect(sigc::mem_fun(this, &CodeInput::handle_insert), true /* run before default handler */);
-	edit.get_buffer()->signal_erase().connect(sigc::mem_fun(this, &CodeInput::handle_erase), false);
+#ifdef USE_GTK4
+	// A bubble-phase gesture would run *after* Gtk::TextView's own middle-click
+	// paste and we would paste twice; the capture phase runs first, and
+	// claiming the sequence stops the default handling.
+	paste_gesture = cdb::add_click_gesture(edit);
+	paste_gesture->set_button(2);
+	paste_gesture->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
+	paste_gesture->signal_pressed().connect(
+	   [this](int n_press, double x, double y) {
+		if(n_press!=1) return;
+		handle_middle_click(x, y);
+		paste_gesture->set_state(cdb::SEQ_CLAIMED);
+		});
+#else
+	edit.signal_button_press_event().connect(sigc::mem_fun(*this, &CodeInput::handle_button_press), false);
+#endif
+	edit.get_buffer()->signal_insert().connect(sigc::mem_fun(*this, &CodeInput::handle_insert), true /* run before default handler */);
+	edit.get_buffer()->signal_erase().connect(sigc::mem_fun(*this, &CodeInput::handle_erase), false);
 	if (prefs.highlight) {
 		using namespace std::string_literals;
 		switch (edit.datacell->cell_type) {
@@ -770,45 +785,43 @@ void CodeInput::exp_input_tv::on_textbuf_change()
 	content_changed(datacell);
 	}
 
+/// Middle-click paste of the PRIMARY selection, preferring Cadabra's own
+/// clipboard target over plain text.
+///
+/// Note: asynchronous on both toolkits. gtkmm-3 could read the clipboard
+/// synchronously (wait_for_contents), but GTK4 cannot, so the insertion now
+/// happens once the data arrives. The insertion point is captured from the
+/// click, so it lands where the user clicked either way.
+
+void CodeInput::handle_middle_click(double x, double y)
+	{
+	cdb::clipboard_read(edit, true, [this, x, y](const std::string& content) {
+		if(content.empty()) return;
+
+		// Figure out where the mouse cursor was, so we know where to insert.
+		Gtk::TextBuffer::iterator insertpos;
+		int trailing;
+		edit.get_iter_at_position(insertpos, trailing,
+										  static_cast<int>(x), static_cast<int>(y));
+		if(insertpos!=edit.get_buffer()->end())
+			++insertpos;
+		insertpos=edit.get_buffer()->insert(insertpos, content);
+		edit.get_buffer()->place_cursor(insertpos);
+		});
+	}
+
+#ifndef USE_GTK4
+
+// Connected *before* the default handler and returning true, so that
+// Gtk::TextView's own middle-click paste does not also fire.
 bool CodeInput::handle_button_press(GdkEventButton* button)
 	{
 	if(button->button!=2 || button->type!=GDK_BUTTON_PRESS) return false;
-
-	Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get(GDK_SELECTION_PRIMARY);
-
-	std::vector<Glib::ustring> sah=refClipboard->wait_for_targets();
-	bool hascadabra=false;
-	bool hastext=false;
-	bool hasstring=false;
-	Gtk::SelectionData sd;
-
-	for(unsigned int i=0; i<sah.size(); ++i) {
-		if(sah[i]=="cadabra") {
-			hascadabra=true;
-			break;
-			}
-		else if(sah[i]=="TEXT")
-			hastext=true;
-		else if(sah[i]=="STRING")
-			hasstring=true;
-		}
-
-	if(hascadabra)     sd=refClipboard->wait_for_contents("cadabra");
-	else if(hastext)   sd=refClipboard->wait_for_contents("TEXT");
-	else if(hasstring) sd=refClipboard->wait_for_contents("STRING");
-	if(hascadabra || hastext || hasstring) {
-		// Figure out where the mouse cursor is, so we know where to insert.
-		Gtk::TextBuffer::iterator insertpos;
-		int somenumber;
-		edit.get_iter_at_position(insertpos, somenumber, button->x, button->y);
-		if(insertpos!=edit.get_buffer()->end())
-			++insertpos;
-		insertpos=edit.get_buffer()->insert(insertpos, sd.get_data_as_string());
-		edit.get_buffer()->place_cursor(insertpos);
-		}
-
+	handle_middle_click(button->x, button->y);
 	return true;
 	}
+
+#endif
 
 #ifdef USE_GTK4
 

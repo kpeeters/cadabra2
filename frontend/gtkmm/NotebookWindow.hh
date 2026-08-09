@@ -144,10 +144,16 @@ namespace cadabra {
 			void handle_outbox_select(DTree::iterator it);
 			DTree::iterator selected_cell;
 			void unselect_output_cell();
-			void on_outbox_copy(Glib::RefPtr<Gtk::Clipboard> refClipboard, DTree::iterator it);
+			void on_outbox_copy(DTree::iterator it);
 
 		private:
-			Glib::RefPtr<Cadabra> cdbapp;
+			/// The application object, owned by main() for the lifetime of the
+			/// process; this is a borrowed pointer, not a reference-counted one.
+			/// It must not be a Glib::RefPtr: constructing one from a raw
+			/// pointer *takes ownership* (it does not add a reference) on
+			/// glibmm-2.4, and on glibmm-2.68, where RefPtr is std::shared_ptr,
+			/// it would install a second, independent refcount.
+			Cadabra *cdbapp;
 
 			std::vector<Glib::RefPtr<Gio::SimpleAction>> default_actions;
 
@@ -284,8 +290,6 @@ namespace cadabra {
 			void on_search_text_changed();
 
 			/// Clipboard handling
-			void on_clipboard_get(Gtk::SelectionData&, guint info);
-			void on_clipboard_clear();
 			std::string clipboard_txt, clipboard_cdb;
 
 			// FIXME: move to DocumentThread

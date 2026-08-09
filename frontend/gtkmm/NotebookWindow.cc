@@ -14,7 +14,6 @@
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/aboutdialog.h>
-#include <gtkmm/radioaction.h>
 #include <gtkmm/scrollbar.h>
 #include <giomm/actiongroup.h>
 #include <fstream>
@@ -59,7 +58,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry, std::s
 	, search_hbox(cdb::ORIENT_HORIZONTAL)
 	, statusbarbox(cdb::ORIENT_HORIZONTAL)
 	, search_case_insensitive("Case insensitive", true)
-	, console(sigc::mem_fun(this, &NotebookWindow::interactive_execute))
+	, console(sigc::mem_fun(*this, &NotebookWindow::interactive_execute))
 	, current_canvas(0)
 	, kernel_spinner_status(false)
 	, progress_frac(0)
@@ -638,9 +637,9 @@ void NotebookWindow::on_realize()
 	uimanager->add_from_string(ui_info);
 
 	// Main box structure dividing the window.
-	add(topbox);
+	cdb::add_child(*this, topbox);
 	Glib::RefPtr<Glib::Object> menubar_obj = uimanager->get_object("MenuBar");
-	Glib::RefPtr<Gio::Menu> gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(menubar_obj);
+	Glib::RefPtr<Gio::Menu> gmenu = cdb::refptr_dynamic_cast<Gio::Menu>(menubar_obj);
 	// Gtk::MenuBar is removed in GTK4; Gtk::PopoverMenuBar takes the same
 	// Gio::Menu model.
 #ifdef USE_GTK4
@@ -883,11 +882,20 @@ void NotebookWindow::load_css()
 
 	// https://stackoverflow.com/questions/35045469/default-gtk-css-color-scheme
 	
+	// -GtkWidget-cursor-aspect-ratio is a widget *style property*, and GTK4
+	// removed style properties altogether; there is no equivalent, so the
+	// text cursor keeps its default width there.
+#ifdef USE_GTK4
+	const std::string cursor_aspect = "";
+#else
+	const std::string cursor_aspect = "-GtkWidget-cursor-aspect-ratio: 0.2; ";
+#endif
+
 	data += "scrolledwindow { background-color: @theme_base_color; }\n";
-	data += "textview text { color: "+text_colour+"; background-color: @theme_base_color; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
+	data += "textview text { color: "+text_colour+"; background-color: @theme_base_color; "+cursor_aspect+"}\n";
 	data += "textview *:focus { background-color: #eee; }\n";
 	data += ".view text selection { color: #fff; background-color: #888; }\n";
-	data += "textview.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
+	data += "textview.error { background: transparent; "+cursor_aspect+"color: @theme_fg_color; }\n";
 	data += "#ImageView { transition-property: padding, background-color; transition-duration: 1s; }\n";
 	data += "#CodeInput { font-family: monospace; font-size: "+std::to_string((100.0+(prefs.font_step*10.0)))+"%; }\n";
 	data += "#Console   { padding: 2px; }\n";
@@ -944,7 +952,7 @@ void NotebookWindow::load_css()
 
 	//	data += "scrolledwindow { kinetic-scrolling: false; }\n";
 
-	if(!css_provider->load_from_data(data)) {
+	if(!cdb::css_load_from_data(css_provider, data)) {
 		std::cerr << "Cannot parse internal CSS." << std::endl;
 		throw std::logic_error("Failed to parse widget CSS information.");
 		}
@@ -978,7 +986,7 @@ void NotebookWindow::on_prefs_set_cv(int npos)
 	// Unparent from whatever we're currently a child of
 	console.set_visible(false);
 	if (console.get_parent() == &dragbox) {
-		dragbox.remove(console);
+		cdb::paned_unset_end(dragbox);
 		}
 	else if (console.get_parent() == console_win.get_content_area()) {
 		console_win.get_content_area()->remove(console);
@@ -1044,7 +1052,7 @@ void NotebookWindow::resize_codeinput_texview(DTree::iterator it, int width)
 				//	code_input->edit.set_size_request(width, -1);  seems unnecessary
 				Gtk::Allocation allocation = code_input->edit.get_allocation();
 				allocation.set_width(width);
-				code_input->edit.size_allocate(allocation);
+				cdb::widget_size_allocate(code_input->edit, allocation);
 				code_input->edit.queue_draw();
 				code_input->edit.window_width = width;
 				code_input->update_buffer();
@@ -1066,7 +1074,7 @@ void NotebookWindow::resize_codeinput_texview(DTree::iterator it, int width)
 				int need_height = tex_view->image.need_height(width - 20);
 				// std::cerr << "Need height " << need_height << std::endl;
 				allocation.set_height(need_height+100);
-				tex_view->image.size_allocate(allocation);
+				cdb::widget_size_allocate(tex_view->image, allocation);
 				
 				tex_view->queue_draw();
 				Glib::signal_timeout().connect_once([tex_view]()
@@ -1433,12 +1441,12 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				newcell.outbox->window_width = last_configure_width;
 				// std::cerr << "Add widget " << newcell.outbox << " for cell " << it->id().id << std::endl;
 				newcell.outbox->tex_error.connect(
-				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_tex_error), it ) );
+				   sigc::bind( sigc::mem_fun(*this, &NotebookWindow::on_tex_error), it ) );
 				newcell.outbox->signal_on_copy_as_latex.connect(
-					sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_copy_as_latex), it ) );
+					sigc::bind( sigc::mem_fun(*this, &NotebookWindow::on_copy_as_latex), it ) );
 
 				newcell.outbox->show_hide_requested.connect(
-				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_toggle_visibility), i ) );
+				   sigc::bind( sigc::mem_fun(*this, &NotebookWindow::cell_toggle_visibility), i ) );
 
 #if GTKMM_MAJOR_VERSION>3 || (GTKMM_MAJOR_VERSION==3 && GTKMM_MINOR_VERSION>=10)
 				to_reveal.push_back(&newcell.outbox->rbox);
@@ -1446,7 +1454,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 
 				w=newcell.outbox;
 				newcell.outbox->select_requested.connect(
-				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::handle_outbox_select), it ) );
+				   sigc::bind( sigc::mem_fun(*this, &NotebookWindow::handle_outbox_select), it ) );
 				break;
 				}
 			case DataCell::CellType::python:
@@ -1468,18 +1476,18 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 				ci->edit.content_changed.connect(
-				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), i ) );
+				   sigc::bind( sigc::mem_fun(*this, &NotebookWindow::cell_content_changed), i ) );
 				ci->edit.content_insert.connect(
-				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_insert), i ) );
+				   sigc::bind( sigc::mem_fun(*this, &NotebookWindow::cell_content_insert), i ) );
 				ci->edit.content_erase.connect(
-				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_erase), i ) );
+				   sigc::bind( sigc::mem_fun(*this, &NotebookWindow::cell_content_erase), i ) );
 
 				ci->edit.content_execute.connect(
-				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), true ) );
+				   sigc::bind( sigc::mem_fun(*this, &NotebookWindow::cell_content_execute), true ) );
 				ci->edit.complete_request.connect(
-				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_complete_request), i ) );
+				   sigc::bind( sigc::mem_fun(*this, &NotebookWindow::cell_complete_request), i ) );
 				ci->edit.cell_got_focus.connect(
-				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_got_focus), i ) );
+				   sigc::bind( sigc::mem_fun(*this, &NotebookWindow::cell_got_focus), i ) );
 
 				newcell.inbox = manage( ci );
 				w=newcell.inbox;
@@ -1571,15 +1579,15 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			//		std::cout << "adding cell to canvas " << i << std::endl;
 			cdb::box_append(*parentbox, *w);
 			unsigned int index    =tr.index(it)+offset;
-			unsigned int index_gui=parentbox->get_children().size()-1;
+			unsigned int index_gui=cdb::box_child_count(*parentbox)-1;
 			//		std::cout << "is index " << index << " vs " << index_gui << std::endl;
 			if(index!=index_gui) {
 				//			std::cout << "need to re-order" << std::endl;
-				parentbox->reorder_child(*w, index);
+				cdb::box_reorder_child(*parentbox, *w, index);
 				}
 			if(visible) {
 				cdb::show_all(*w);
-				w->show_now();
+				cdb::show_now(*w);
 				}
 
 			if(follow_mode) {
@@ -1748,7 +1756,7 @@ void NotebookWindow::remove_all_cells()
 	
 	// Simply removing the document cell should do the trick.
 	for(unsigned int i=0; i<canvasses.size(); ++i) {
-		canvasses[i]->scroll.remove();
+		cdb::scrolled_window_unset_child(canvasses[i]->scroll);
 		canvasses[i]->visualcells.clear();
 		}
 	engine.checkout_all();
@@ -2161,8 +2169,7 @@ void NotebookWindow::hide_visual_cells(DTree::iterator it)
 
 bool NotebookWindow::on_copy_as_latex(const DTree::iterator it)
 	{
-	Glib::RefPtr<Gtk::Clipboard> clipboard = Gtk::Clipboard::get(GDK_SELECTION_CLIPBOARD);
-	on_outbox_copy(clipboard, it);
+	on_outbox_copy(it);
 	return true;
 	}
 
@@ -2222,7 +2229,7 @@ void NotebookWindow::on_file_open()
 		return;
 
 	Gtk::FileChooserDialog dialog("Please choose a Cadabra notebook (.cnb file) to open",
-	                              Gtk::FILE_CHOOSER_ACTION_OPEN);
+	                              cdb::FILE_CHOOSER_ACTION_OPEN);
 
 	dialog.set_transient_for(*this);
 	dialog.add_filter(create_filter("Cadabra notebooks (*.cnb)", "*.cnb"));
@@ -2234,7 +2241,7 @@ void NotebookWindow::on_file_open()
 
 	switch(result) {
 		case(cdb::RESPONSE_OK): {
-			name = dialog.get_filename();
+			name = dialog.get_file()->get_path();
 			snoop::log("open") << "menu" << snoop::flush;
 			std::ifstream file(name);
 			std::string content, line;
@@ -2262,7 +2269,7 @@ void NotebookWindow::load_from_string(const std::string& notebook_contents)
 		// UI elements, in particular the `mainbox`, have been
 		// added to the window. This happens in `on_realize`,
 		// and so we have to ensure that this has run.
-		realize();
+		Gtk::Widget::realize();
 		}
 
 	mainbox.set_sensitive(false);
@@ -2313,9 +2320,9 @@ void NotebookWindow::on_file_save()
 void NotebookWindow::on_file_save_as()
 	{
 	Gtk::FileChooserDialog dialog("Please choose a file name to save this notebook",
-	                              Gtk::FILE_CHOOSER_ACTION_SAVE);
+	                              cdb::FILE_CHOOSER_ACTION_SAVE);
 
-	dialog.set_do_overwrite_confirmation(true);
+	cdb::file_chooser_confirm_overwrite(dialog);
 	dialog.set_transient_for(*this);
 	dialog.add_button("_Cancel", cdb::RESPONSE_CANCEL);
 	dialog.add_button("Select", cdb::RESPONSE_OK);
@@ -2325,7 +2332,7 @@ void NotebookWindow::on_file_save_as()
 	switch(result) {
 	case(cdb::RESPONSE_OK): {
 			std::string old_name = name;
-			name = dialog.get_filename();
+			name = dialog.get_file()->get_path();
 			size_t dotpos = name.rfind(".");
 			if(dotpos==std::string::npos)
 				name += ".cnb";
@@ -2350,9 +2357,9 @@ void NotebookWindow::on_file_save_as()
 void NotebookWindow::on_file_save_as_jupyter()
 	{
 	Gtk::FileChooserDialog dialog("Please choose a file name to export as Jupyter notebook",
-	                              Gtk::FILE_CHOOSER_ACTION_SAVE);
+	                              cdb::FILE_CHOOSER_ACTION_SAVE);
 
-	dialog.set_do_overwrite_confirmation(true);
+	cdb::file_chooser_confirm_overwrite(dialog);
 	dialog.set_transient_for(*this);
 	dialog.add_button("_Cancel", cdb::RESPONSE_CANCEL);
 	dialog.add_button("Select", cdb::RESPONSE_OK);
@@ -2361,7 +2368,7 @@ void NotebookWindow::on_file_save_as_jupyter()
 
 	switch(result) {
 		case(cdb::RESPONSE_OK): {
-			std::string ipynb_name = dialog.get_filename();
+			std::string ipynb_name = dialog.get_file()->get_path();
 			std::string out = JSON_serialise(doc);
 			nlohmann::json json=nlohmann::json::parse(out);
 			auto ipynb = cnb2ipynb(json);
@@ -2383,9 +2390,9 @@ void NotebookWindow::on_file_save_as_jupyter()
 void NotebookWindow::on_file_export_html()
 	{
 	Gtk::FileChooserDialog dialog("Please enter a file name for the HTML document",
-	                              Gtk::FILE_CHOOSER_ACTION_SAVE);
+	                              cdb::FILE_CHOOSER_ACTION_SAVE);
 
-	dialog.set_do_overwrite_confirmation(true);
+	cdb::file_chooser_confirm_overwrite(dialog);
 	dialog.set_transient_for(*this);
 	dialog.add_button("_Cancel", cdb::RESPONSE_CANCEL);
 	dialog.add_button("Select", cdb::RESPONSE_OK);
@@ -2394,7 +2401,7 @@ void NotebookWindow::on_file_export_html()
 
 	switch(result) {
 		case(cdb::RESPONSE_OK): {
-			std::string name = dialog.get_filename();
+			std::string name = dialog.get_file()->get_path();
 			std::ofstream temp(name);
 			temp << export_as_HTML(doc);
 			}
@@ -2404,9 +2411,9 @@ void NotebookWindow::on_file_export_html()
 void NotebookWindow::on_file_export_latex()
 	{
 	Gtk::FileChooserDialog dialog("Please enter a file name for the LaTeX document",
-	                              Gtk::FILE_CHOOSER_ACTION_SAVE);
+	                              cdb::FILE_CHOOSER_ACTION_SAVE);
 
-	dialog.set_do_overwrite_confirmation(true);	
+	cdb::file_chooser_confirm_overwrite(dialog);	
 	dialog.set_transient_for(*this);
 	dialog.add_button("_Cancel", cdb::RESPONSE_CANCEL);
 	dialog.add_button("Select", cdb::RESPONSE_OK);
@@ -2415,7 +2422,7 @@ void NotebookWindow::on_file_export_latex()
 
 	switch(result) {
 		case(cdb::RESPONSE_OK): {
-			std::string name = dialog.get_filename();
+			std::string name = dialog.get_file()->get_path();
 			size_t dotpos = name.rfind(".");
 			if(dotpos==std::string::npos) {
 				name += ".tex";
@@ -2432,9 +2439,9 @@ void NotebookWindow::on_file_export_latex()
 void NotebookWindow::on_file_export_python()
 	{
 	Gtk::FileChooserDialog dialog("Please enter a file name for the Python/Cadabra document",
-	                              Gtk::FILE_CHOOSER_ACTION_SAVE);
+	                              cdb::FILE_CHOOSER_ACTION_SAVE);
 
-	dialog.set_do_overwrite_confirmation(true);
+	cdb::file_chooser_confirm_overwrite(dialog);
 	dialog.set_transient_for(*this);
 	dialog.add_button("_Cancel", cdb::RESPONSE_CANCEL);
 	dialog.add_button("Select", cdb::RESPONSE_OK);
@@ -2443,7 +2450,7 @@ void NotebookWindow::on_file_export_python()
 
 	switch(result) {
 		case(cdb::RESPONSE_OK): {
-			std::string name = dialog.get_filename();
+			std::string name = dialog.get_file()->get_path();
 			size_t dotpos = name.rfind(".");
 			if(dotpos==std::string::npos)
 				name += ".py";
@@ -2457,9 +2464,9 @@ void NotebookWindow::on_file_export_html_segment()
 	{
 	// FIXME: merge with on_file_export_html.
 	Gtk::FileChooserDialog dialog("Please enter a file name for the HTML segment",
-	                              Gtk::FILE_CHOOSER_ACTION_SAVE);
+	                              cdb::FILE_CHOOSER_ACTION_SAVE);
 
-	dialog.set_do_overwrite_confirmation(true);
+	cdb::file_chooser_confirm_overwrite(dialog);
 	dialog.set_transient_for(*this);
 	dialog.add_button("_Cancel", cdb::RESPONSE_CANCEL);
 	dialog.add_button("Select", cdb::RESPONSE_OK);
@@ -2468,7 +2475,7 @@ void NotebookWindow::on_file_export_html_segment()
 
 	switch(result) {
 		case(cdb::RESPONSE_OK): {
-			std::string name = dialog.get_filename();
+			std::string name = dialog.get_file()->get_path();
 			size_t dotpos = name.rfind(".");
 			if(dotpos==std::string::npos)
 				name += ".html";
@@ -2564,8 +2571,7 @@ void NotebookWindow::on_edit_redo(const Glib::VariantBase&)
 void NotebookWindow::on_edit_copy(const Glib::VariantBase&)
 	{
 	if(selected_cell!=doc.end()) {
-		Glib::RefPtr<Gtk::Clipboard> clipboard = Gtk::Clipboard::get(GDK_SELECTION_CLIPBOARD);
-		on_outbox_copy(clipboard, selected_cell);
+		on_outbox_copy(selected_cell);
 		}
 	if(current_cell!=doc.end()) {
 //		std::cerr << "copy called for non-outbox cell" << std::endl;
@@ -2575,43 +2581,18 @@ void NotebookWindow::on_edit_copy(const Glib::VariantBase&)
 
 void NotebookWindow::on_edit_paste()
 	{
-	if(current_cell!=doc.end()) {
-		// std::cerr << "paste: " << std::endl;
-      Glib::RefPtr<Gtk::Clipboard> clipboard = Gtk::Clipboard::get(GDK_SELECTION_CLIPBOARD);
-      clipboard->request_targets( [clipboard, this](const std::vector<Glib::ustring>& targets) {
-			// Figure out which formats we can request.
-			bool have_cadabra=false, have_utf8_string=false, have_text=false;
-			for(const auto& t: targets) {
-				// std::cerr << t << std::endl;
-				if(t=="cadabra")
-					have_cadabra=true;
-				else if(t=="UTF8_STRING")
-					have_utf8_string=true;
-				else if(t=="TEXT")
-					have_text=true;
-				}
-			// Now insert.
-			std::string target;
-			if(have_cadabra)   target="cadabra";
-			else if(have_utf8_string) target="UTF8_STRING";
-			else if(have_text)        target="TEXT";
-			else return;
+	if(current_cell==doc.end()) return;
 
-			// std::cerr << "requesting target " << target << std::endl;
-			clipboard->request_contents(target, [this](const Gtk::SelectionData& data) {
-				std::string content = data.get_data_as_string();
-				auto vis = canvasses[current_canvas]->visualcells.find(&(*current_cell));
-				if(vis!=canvasses[current_canvas]->visualcells.end()) {
-					// std::cerr << "inserting " << content << std::endl;
-					CodeInput *inbox = (*vis).second.inbox;
-					inbox->edit.get_buffer()->insert_at_cursor(content);
-					}
-//				else {
-//					std::cerr << "cannot find cell to insert into" << std::endl;
-//					}
-				});
-			});
-		}
+	// Note: asynchronous. GTK4 has no synchronous clipboard read, so the
+	// insertion happens once the data arrives rather than before we return.
+	cdb::clipboard_read(*this, false, [this](const std::string& content) {
+		if(current_cell==doc.end()) return;
+		auto vis = canvasses[current_canvas]->visualcells.find(&(*current_cell));
+		if(vis!=canvasses[current_canvas]->visualcells.end()) {
+			CodeInput *inbox = (*vis).second.inbox;
+			inbox->edit.get_buffer()->insert_at_cursor(content);
+			}
+		});
 	}
 
 void NotebookWindow::on_edit_insert_above()
@@ -2765,7 +2746,7 @@ void NotebookWindow::on_view_close(const Glib::VariantBase&)
 	{
 	// FIXME: this always removes the last canvas, not the current one.
 	if(canvasses.size()>1) {
-		canvasses[canvasses.size()-2]->remove(*canvasses.back());
+		cdb::paned_unset_end(*canvasses[canvasses.size()-2]);
 		NotebookCanvas *oldcanvas = canvasses.back();
 		canvasses.pop_back();
 		delete oldcanvas;
@@ -2885,10 +2866,10 @@ void NotebookWindow::on_help_about()
 	authors.push_back("Kasper Peeters");
 	about.set_authors(authors);
 	about.set_copyright(std::string("\xC2\xA9 ")+COPYRIGHT_YEARS+std::string(" Kasper Peeters"));
-	about.set_license_type(Gtk::License::LICENSE_GPL_3_0);
+	about.set_license_type(cdb::LICENSE_GPL_3_0);
 	about.set_website("http://cadabra.science");
 	about.set_website_label("cadabra.science");
-	about.set_logo(logo);
+	cdb::about_dialog_set_logo(about, logo);
 	std::vector<Glib::ustring> special;
 	special.push_back("José M. Martín-García (for the xPerm canonicalisation code)");
 	special.push_back("Dominic Price (for many additions, e.g. the conversion to pybind and the meld algorithm)");
@@ -2899,18 +2880,18 @@ void NotebookWindow::on_help_about()
 	special.push_back("Software Sustainability Institute");
 	special.push_back("Institute of Advanced Study (for a Christopherson/Knott fellowship)");
 	about.add_credit_section("Special thanks", special);
-	cdb::dialog_run(about);
+	cdb::about_dialog_run(about);
 	}
 
 void NotebookWindow::on_help_register()
 	{
-	Gtk::Dialog md("Welcome to Cadabra!", *this, cdb::MESSAGE_WARNING);
+	Gtk::Dialog md("Welcome to Cadabra!", *this, true /* modal */);
 	md.set_transient_for(*this);
 	cdb::set_dialog_type_hint(md);
 	Gtk::Box *box = md.get_content_area();
 	Gtk::Label txt;
 	txt.set_markup("<span font_size=\"large\" font_weight=\"bold\">Welcome to Cadabra!</span>\n\nWriting this software takes an incredible amount of spare time,\nand it is extremely difficult to get funding for its development.\n\nPlease show your support by registering your email address,\nso I can convince the bean-counters that this software is of interest.\n\nI will only use this address to count users and to email you,\nroughly once every half a year, with a bit of news about Cadabra.\n\nMany thanks for your support!\n\nKasper Peeters, <a href=\"mailto:info@cadabra.science\">info@cadabra.science</a>");
-	txt.set_line_wrap();
+	cdb::label_set_wrap(txt);
 	txt.set_margin_top(10);
 	txt.set_margin_start(10);
 	txt.set_margin_end(10);
@@ -3350,7 +3331,7 @@ void NotebookWindow::on_tools_options()
 	// Create the dialog box
 	Gtk::Dialog options("Options", false);
 	options.set_transient_for(*this);
-	options.get_content_area()->property_margin() = 5;
+	cdb::set_margin_all(*options.get_content_area(), 5);
 	options.add_button("Apply", cdb::RESPONSE_APPLY);
 	options.add_button("Cancel", cdb::RESPONSE_CANCEL);
 
@@ -3364,7 +3345,7 @@ void NotebookWindow::on_tools_options()
 	};
 	auto add_sep = [&options]() {
 		auto sep = std::make_unique<Gtk::Separator>();
-		sep->property_margin() = 5;
+		cdb::set_margin_all(*sep, 5);
 		cdb::add_child(*options.get_content_area(), *sep);
 		return sep;
 	};
@@ -3395,12 +3376,12 @@ void NotebookWindow::on_tools_options()
 
 	// Options menu closed, run any updates
 	if (res == cdb::RESPONSE_APPLY) {
-		if (prefs.python_path != pypath->get_text()) {
+		if (prefs.python_path != pypath->get_text().raw()) {
 			prefs.python_path = pypath->get_text();
 			Gtk::MessageDialog md(*this, "Changes to python path won't take effect until kernel is restarted; restart now?", false, cdb::MESSAGE_WARNING, cdb::BUTTONS_YES_NO, true);
 			md.set_title("Python Path Changed");
 			md.set_modal();
-			md.set_position(Gtk::WindowPosition::WIN_POS_CENTER);
+			cdb::window_centre_on_parent(md);
 			int res = cdb::dialog_run(md);
 			if (res == cdb::RESPONSE_YES) {
 				on_kernel_restart();
@@ -3509,7 +3490,7 @@ void NotebookWindow::handle_outbox_select(DTree::iterator it)
 	// on_outbox_copy(clipboard, selected_cell);
 	}
 
-void NotebookWindow::on_outbox_copy(Glib::RefPtr<Gtk::Clipboard> refClipboard, DTree::iterator it)
+void NotebookWindow::on_outbox_copy(DTree::iterator it)
 	{
 	std::string cpystring=(*it).textbuf;
 	std::regex begin_dmath(R"(\\begin\{dmath\*\}\{\})");
@@ -3517,7 +3498,6 @@ void NotebookWindow::on_outbox_copy(Glib::RefPtr<Gtk::Clipboard> refClipboard, D
 
 	// Find the child cell which contains the input_form data.
 	auto sib=doc.begin(it);
-//	std::cerr << "Finding children of " << it->textbuf << std::endl;
 	while(sib!=doc.end(it)) {
 		if(sib->cell_type==DataCell::CellType::input_form) {
 			clipboard_cdb = sib->textbuf;
@@ -3528,35 +3508,10 @@ void NotebookWindow::on_outbox_copy(Glib::RefPtr<Gtk::Clipboard> refClipboard, D
 		++sib;
 		}
 
-	// Setup clipboard handling
 	clipboard_txt = cpystring;
 	clipboard_txt = std::regex_replace(clipboard_txt, begin_dmath, "");
 	clipboard_txt = std::regex_replace(clipboard_txt, end_dmath, "");
-	std::vector<Gtk::TargetEntry> listTargets;
-	if(clipboard_cdb.size()>0) {
-//		std::cerr << "let them know we have cadabra format" << std::endl;
-		listTargets.push_back( Gtk::TargetEntry("cadabra") );
-		}
-	listTargets.push_back( Gtk::TargetEntry("UTF8_STRING") );
-	listTargets.push_back( Gtk::TargetEntry("TEXT") );
-	refClipboard->set( listTargets,
-	                   sigc::mem_fun(this, &NotebookWindow::on_clipboard_get),
-	                   sigc::mem_fun(this, &NotebookWindow::on_clipboard_clear) );
+
+	cdb::clipboard_set(*this, clipboard_txt, clipboard_cdb);
 	}
 
-void NotebookWindow::on_clipboard_get(Gtk::SelectionData& selection_data, guint )
-	{
-	const Glib::ustring target = selection_data.get_target();
-
-	if(target == "cadabra") {
-//		std::cerr << "received request for target cadabra: " << clipboard_cdb << std::endl;
-		selection_data.set("cadabra", clipboard_cdb);
-		}
-	else if(target == "UTF8_STRING" || target=="TEXT") {
-		selection_data.set_text(clipboard_txt);
-		}
-	}
-
-void NotebookWindow::on_clipboard_clear()
-	{
-	}

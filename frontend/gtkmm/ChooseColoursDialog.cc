@@ -50,7 +50,7 @@ namespace cadabra {
 				auto kw_button = std::make_unique<Gtk::ColorButton>();
 				kw_button->property_rgba() = Gdk::RGBA(jt->second);
 				kw_button->set_title("Choosing colours for "s + capitalize_first(it->first) + ": " + capitalize_first(jt->first));
-				kw_button->signal_color_set().connect(sigc::mem_fun(this, &ChooseColoursDialog::on_color_set));
+				kw_button->signal_color_set().connect(sigc::mem_fun(*this, &ChooseColoursDialog::on_color_set));
 				sec_grid->attach(*kw_label, 0, row, 1, 1);
 				sec_grid->attach(*kw_button, 1, row, 1, 1);
 				anonymous_widgets.push_back(std::move(kw_label));

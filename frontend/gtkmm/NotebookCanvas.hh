@@ -109,7 +109,7 @@ namespace cadabra {
 			/// event will fire. The canvas will make sure that
 			/// any scroll animation will stop, but NotebookWindow
 			/// may still want to stop any cell following.
-			sigc::signal0<bool>       scroll_event;
+			sigc::signal<bool()>       scroll_event;
 			
 			void refresh_all();
 
