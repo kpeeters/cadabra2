@@ -10,6 +10,12 @@
 #include "InstallPrefix.hh"
 #include "popen2.hh"
 #include <sys/types.h>
+#include <chrono>
+#if defined(_WIN32) || defined(_WIN64)
+#include <windows.h>       // TerminateProcess, in kill_server()
+#else
+#include <sys/wait.h>      // waitpid, in kill_server()
+#endif
 #include <glibmm/spawn.h>
 #include "internal/unistd.h"
 #include "CdbPython.hh"
@@ -30,14 +36,7 @@ ComputeThread::ComputeThread(int server_port, std::string token, std::string ip_
 
 ComputeThread::~ComputeThread()
 	{
-	if(server_stdout!=0) {
-		close(server_stdout);
-		// close(server_stderr);
-		Glib::spawn_close_pid(server_pid);
-		server_pid=0;
-		server_stdout=0;
-		server_stderr=0;
-		}
+	kill_server();
 	}
 
 void ComputeThread::set_master(GUIBase *b, DocumentThread *d)
@@ -81,6 +80,49 @@ void ComputeThread::run()
 	wsclient.run();
 	}
 
+void ComputeThread::kill_server()
+	{
+	if(server_stdout!=0) {
+		close(server_stdout);
+		// close(server_stderr);
+		server_stdout=0;
+		server_stderr=0;
+		}
+
+	// Zero means we never spawned anything -- e.g. --server-port was used and
+	// the server belongs to someone else. Never touch that one.
+	if(server_pid==0)
+		return;
+
+#if defined(_WIN32) || defined(_WIN64)
+	TerminateProcess(reinterpret_cast<HANDLE>(server_pid), 1);
+#else
+	// The child was spawned with DO_NOT_REAP_CHILD and Glib::spawn_close_pid()
+	// does not wait on Unix, so we have to reap it ourselves or leave a zombie
+	// behind for every server we ever started.
+	//
+	// Ask politely first: a server that is still connected is already shutting
+	// down (Server::run() defaults to exit_on_disconnect=true), and one that
+	// never accepted a connection will not go away on its own. Insist only if
+	// it has not gone within half a second.
+	bool reaped=false;
+	::kill(server_pid, SIGTERM);
+	for(int i=0; i<50 && !reaped; ++i) {
+		if(::waitpid(server_pid, nullptr, WNOHANG)==server_pid)
+			reaped=true;
+		else
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		}
+	if(!reaped) {
+		::kill(server_pid, SIGKILL);
+		::waitpid(server_pid, nullptr, 0);
+		}
+#endif
+
+	Glib::spawn_close_pid(server_pid);
+	server_pid=0;
+	}
+
 void ComputeThread::terminate()
 	{
 	wsclient.stop();
@@ -89,21 +131,11 @@ void ComputeThread::terminate()
 	// not leave mess behind.
 	// http://riccomini.name/posts/linux/2012-09-25-kill-subprocesses-linux-bash/
 
-	if(server_pid!=0) {
-		std::cerr << "cadabra-client: killing server" << std::endl;
-
-		if(server_stdout!=0) {
-			close(server_stdout);
-			// close(server_stderr);
-			Glib::spawn_close_pid(server_pid);
-			server_pid=0;
-			server_stdout=0;
-			server_stderr=0;
-			}
-		//		kill(server_pid, SIGKILL);
-		// 		if(server_stdout)
-		//			pclose2(server_stdout, server_pid);
-		}
+	// A connected server is already on its way out (Server::run() defaults to
+	// exit_on_disconnect=true and wsclient.stop() above closed the connection),
+	// but one that never accepted a connection would linger forever, so make
+	// sure of it either way.
+	kill_server();
 	}
 
 bool ComputeThread::kernel_is_connected() const
@@ -132,19 +164,15 @@ void ComputeThread::on_fail(const boost::beast::error_code& ec)
 		}
 	connection_is_open=false;
 	all_cells_nonrunning();
-	if(gui && server_pid!=0) {
-		// When a kernel restart is in progress, server_pid will be zero
-		// and this block never runs.
-		close(server_stdout);
-		// close(server_stderr);
-		// std::cerr << "closing connetion to terminated server" << std::endl;
-		Glib::spawn_close_pid(server_pid);
-		//		kill(server_pid, SIGKILL);
-		server_pid=0;
-		server_stdout=0;
-		server_stderr=0;
+	// Whatever server we started is not usable, and try_spawn_server() below
+	// will start another; get rid of this one first or every retry leaks a
+	// process. A no-op when the server is not ours (--server-port).
+	kill_server();
+
+	// Not during a kernel restart: losing the connection is expected there and
+	// on_close() has already told the GUI what is going on.
+	if(gui && !restarting_kernel)
 		gui->on_network_error();
-		}
 
 	try_spawn_server();
 	try_connect();
@@ -180,7 +208,6 @@ void ComputeThread::try_spawn_server()
 		argv.push_back("cadabra-server");
 		}
 #endif
-	Glib::Pid pid;
 	std::string wd("");
 
 	// See https://bugs.launchpad.net/inkscape/+bug/1662531 for things related to
@@ -207,7 +234,7 @@ void ComputeThread::try_spawn_server()
 		Glib::spawn_async_with_pipes(wd, argv, /* envp, WITH envp, Fedora 27 fails to start python properly */
 											  flags,
 		                             sigc::slot<void()>(),
-		                             &pid,
+		                             &server_pid,
 		                             0,
 		                             &server_stdout,
 		                             0); // We need to see stderr on the console
@@ -661,7 +688,6 @@ void ComputeThread::stop()
 
 	//	std::cerr << str.str() << std::endl;
 
-	server_pid=0;
 	if(getenv("CADABRA_SHOW_SENT")) {
 		std::cerr << "SENT: " << req.dump(3) << std::endl;
 		}
@@ -741,7 +767,6 @@ bool ComputeThread::complete(DTree::iterator it, int pos, int alternative)
 
 	// std::cerr << str.str() << std::endl;
 
-	server_pid=0;
 	if(getenv("CADABRA_SHOW_SENT")) {
 		std::cerr << "SENT: " << req.dump(3) << std::endl;
 		}

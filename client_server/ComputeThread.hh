@@ -137,6 +137,12 @@ namespace cadabra {
 
 			std::set<uint64_t> interactive_cells;
 
+			/// Terminate the server we spawned ourselves, if any, and release
+			/// its handles. Safe to call repeatedly, and a no-op when we did not
+			/// start the server (--server-port), so we never kill someone
+			/// else's process.
+			void kill_server();
+
 			// Self-started server
 			Glib::Pid       server_pid;
 			int             server_stdout, server_stderr;

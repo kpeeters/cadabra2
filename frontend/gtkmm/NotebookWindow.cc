@@ -1722,11 +1722,20 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 		// std::cerr << "Removing " << actual.imagebox << std::endl;
 		parentbox->remove(*actual.imagebox);
 
-		// The above does not delete the Gtk widget, despite having been
-		// wrapped in manage at construction. So we have to delete it
-		// ourselves. Fortunately the container does not try to delete
-		// it again in its destructor.
+		// Ownership after remove() differs between the two toolkits.
+		//
+		// gtkmm-3 leaves the widget alive, despite it having been wrapped in
+		// manage() at construction, so we own it and have to delete it here.
+		// The container does not try to delete it again in its destructor.
+		//
+		// GTK4 has no Gtk::Container: remove() drops the parent's reference,
+		// and for a managed widget that is the only one, so the C object is
+		// finalised and gtkmm deletes the C++ wrapper for us -- along with the
+		// wrappers of the whole subtree below it. Deleting it here as well is
+		// a double free.
+#ifndef USE_GTK4
 		delete actual.imagebox;
+#endif
 
 		// The above removes the entire Gtk tree corresponding to the cell at
 		// 'it' and the subtree below it. In order to remove all these from
