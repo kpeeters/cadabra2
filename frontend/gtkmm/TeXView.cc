@@ -91,12 +91,34 @@ float TeXView::text_size() const
 	return ret;
 	}
 
+// convert() is what turns the cell's TeXRequest into the LaTeX string MicroTeX
+// lays out, so it has to run before the first draw.
+//
+// gtkmm-3 hangs this off ::show, which works there because widgets start
+// hidden and show_all() makes them visible. GTK4 widgets are visible from
+// construction, so set_visible(true) is a no-op and ::show is never emitted --
+// on_show() would simply never run, leaving `fixed` empty and every output cell
+// blank. ::map is the equivalent hook there: it fires when the cell actually
+// reaches the screen.
+
+#ifdef USE_GTK4
+
+void TeXView::on_map()
+	{
+	convert();
+	TeXViewBase::on_map();
+	}
+
+#else
+
 void TeXView::on_show()
 	{
 	// std::cerr << "**** show called" << std::endl;
 	convert();
 	TeXViewBase::on_show();
 	}
+
+#endif
 
 Gtk::SizeRequestMode TeXView::TeXArea::get_request_mode_vfunc() const
 	{
@@ -156,7 +178,16 @@ void TeXView::TeXArea::relayout_for_allocation(int width, int height)
 	int my_height = _render->getHeight() + extra;
 	if(height != my_height) {
 		// std::cerr << "*** need new height " << my_height << std::endl;
+#ifdef USE_GTK4
+		// Only pin the height. set_size_request() is a *minimum*, and GTK takes
+		// the larger of it and what measure_vfunc() reports -- so pinning the
+		// width here would leave a stale floor from the previous layout and the
+		// cell could never shrink again when the window is narrowed. The width
+		// is reported by measure_vfunc() instead.
+		set_size_request(-1, my_height);
+#else
 		set_size_request(rendering_width, my_height);
+#endif
 		queue_resize();
 		// queue_draw();
 		}
@@ -186,10 +217,17 @@ void TeXView::TeXArea::measure_vfunc(Gtk::Orientation orientation, int for_size,
 		return;
 		}
 
-	// FIXME: the gtkmm-3 path additionally forces its own allocation width to
-	// owner->window_width - 20 in on_size_allocate. A GTK4 widget cannot
-	// override the size its parent gives it, so that would have to be reported
-	// from here (HORIZONTAL) instead. Falling through to the base class for now.
+	// The gtkmm-3 path forces its own allocation width to window_width-20 from
+	// on_size_allocate. A GTK4 widget cannot override the size its parent gives
+	// it, so the width has to be reported from here instead. Without this,
+	// Gtk::DrawingArea reports its default width of 0, the height-for-width
+	// computation above then lays MicroTeX out to nothing, and every output
+	// cell comes out empty.
+	if(owner->window_width > 20) {
+		minimum = natural = owner->window_width - 20;
+		return;
+		}
+
 	Gtk::DrawingArea::measure_vfunc(orientation, for_size, minimum, natural,
 											  minimum_baseline, natural_baseline);
 	}

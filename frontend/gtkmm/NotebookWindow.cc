@@ -893,6 +893,15 @@ void NotebookWindow::load_css()
 
 	data += "scrolledwindow { background-color: @theme_base_color; }\n";
 	data += "textview text { color: "+text_colour+"; background-color: @theme_base_color; "+cursor_aspect+"}\n";
+	// CodeInput's text widget is a gtkmm *subclass* of Gtk::TextView and so has
+	// its own GType. GTK4 names its CSS node after that derived type instead of
+	// inheriting "textview" from the parent class, so none of the "textview ..."
+	// rules match it there (plain, non-subclassed TextViews are unaffected).
+	// Target it by the id that set_name("CodeInput") gives it, which matches on
+	// both toolkits; `color` is inherited, so setting it on the widget node
+	// reaches the text node inside. On gtkmm-3 the more specific rule above
+	// still wins for the text node, so this changes nothing there.
+	data += "#CodeInput { color: "+text_colour+"; }\n";
 	data += "textview *:focus { background-color: #eee; }\n";
 	data += ".view text selection { color: #fff; background-color: #888; }\n";
 	data += "textview.error { background: transparent; "+cursor_aspect+"color: @theme_fg_color; }\n";

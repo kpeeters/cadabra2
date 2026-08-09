@@ -241,6 +241,16 @@ void CodeInput::init(const Prefs& prefs, double display_scale)
 #endif
 
 	cdb::add_child(*this, edit);
+
+	// Apply the cell's collapsed state explicitly. gtkmm-3 gets this from
+	// exp_input_tv::on_show(), which refuses to chain to the base class when
+	// datacell->hidden -- but GTK4 widgets are visible from construction, so
+	// set_visible(true) is a no-op, ::show is never emitted and that override
+	// never runs. Doing it here is equivalent on gtkmm-3 (add_child has just
+	// shown the widget, and this hides it again for a collapsed cell) and is
+	// the only thing that works on GTK4.
+	edit.set_visible(!edit.datacell->hidden);
+
 	//	set_border_width(3);
 	// Children are shown as they are added (see cdb::add_child), so this only
 	// has to show the widget itself. show_all() is removed in GTK4.

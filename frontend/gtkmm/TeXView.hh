@@ -143,7 +143,13 @@ namespace cadabra {
 			sigc::signal<bool()>              signal_on_copy_as_latex;
 			
 		protected:
+#ifdef USE_GTK4
+			// See the comment on the definition: GTK4 never emits ::show for
+			// these cells, so the initial conversion hangs off ::map instead.
+			void on_map() override;
+#else
 			virtual void on_show() override;
+#endif
 
 			/// Button handling goes through a gesture controller rather than the
 			/// on_button_{press,release}_event vfuncs, which are removed in GTK4.
