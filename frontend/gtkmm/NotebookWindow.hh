@@ -11,6 +11,12 @@
 #include <gtkmm/button.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/cssprovider.h>
+#ifdef USE_GTK4
+#include <gtkmm/popovermenubar.h>
+#include <gtkmm/eventcontrollerkey.h>
+#else
+#include <gtkmm/menubar.h>
+#endif
 // #include <gtkmm/toolbar.h>
 #include <glibmm/dispatcher.h>
 #include <giomm/settings.h>
@@ -85,7 +91,7 @@ namespace cadabra {
 			// editing that cell). We can only do that once all size info is
 			// known, which is when the scrolledwindow gets its size_allocate
 			// signal. Here's the handler for it.
-			void on_scroll_size_allocate(Gtk::Allocation&);
+			void on_scroll_size_allocated();
 
 			// Ensure that the current cell is visible. This will assume
 			// that all size allocations of widgets inside the scrolled window
@@ -119,9 +125,20 @@ namespace cadabra {
 			virtual void on_interactive_output(const nlohmann::json& msg) override;
 			virtual void set_progress(const std::string& msg, int cur_step, int total_steps) override;
 		protected:
+			/// Window-level handlers shared between the toolkits. `handle_key_press`
+			/// returns true when the key was consumed; `handle_close_request`
+			/// returns true to *block* the close, as GTK4's ::close-request does.
+			bool handle_key_press(guint keyval, Gdk::ModifierType state);
+			bool handle_close_request();
+			void handle_width_change(int width);
+
+#ifdef USE_GTK4
+			void size_allocate_vfunc(int width, int height, int baseline) override;
+#else
 			virtual bool on_key_press_event(GdkEventKey*) override;
 			virtual bool on_delete_event(GdkEventAny*) override;
 			virtual bool on_configure_event(GdkEventConfigure *cfg) override;
+#endif
 			virtual bool on_unhandled_error(const std::exception& err) override;
 
 			void handle_outbox_select(DTree::iterator it);
@@ -141,6 +158,10 @@ namespace cadabra {
 			Glib::Dispatcher dispatcher;
 
 			// GUI elements.
+
+#ifdef USE_GTK4
+			Glib::RefPtr<Gtk::EventControllerKey> window_key_controller;
+#endif
 
 			Glib::RefPtr<Gio::SimpleActionGroup> actiongroup;
 			Glib::RefPtr<Gtk::Builder>           uimanager;

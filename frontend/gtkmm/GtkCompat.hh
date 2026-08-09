@@ -15,7 +15,20 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/dialog.h>
+#include <gtkmm/messagedialog.h>
 #include <gtkmm/paned.h>
+#include <gtkmm/window.h>
+#include <gtkmm/cssprovider.h>
+#include <gtkmm/stylecontext.h>
+#include <gdkmm/display.h>
+// display.h only forward-declares Monitor, and monitor_geometry() below calls
+// through it.
+#include <gdkmm/monitor.h>
+#include <gdkmm/rectangle.h>
+#ifdef USE_GTK4
+// Likewise Gdk::Surface, which get_monitor_at_surface() takes.
+#include <gdkmm/surface.h>
+#endif
 #include <gtkmm/textbuffer.h>
 #include <gdkmm/pixbuf.h>
 #ifdef USE_GTK4
@@ -86,7 +99,26 @@ namespace cdb {
 
 	constexpr auto TEXT_WINDOW_TEXT       = Gtk::TextWindowType::TEXT;
 	constexpr auto WRAP_WORD_CHAR         = Gtk::WrapMode::WORD_CHAR;
+	constexpr auto WRAP_NONE              = Gtk::WrapMode::NONE;
 	constexpr auto COLORSPACE_RGB         = Gdk::Colorspace::RGB;
+
+	constexpr auto STATE_FLAG_NORMAL   = Gtk::StateFlags::NORMAL;
+	constexpr auto STATE_FLAG_SELECTED = Gtk::StateFlags::SELECTED;
+
+	constexpr auto RESPONSE_OK     = Gtk::ResponseType::OK;
+	constexpr auto RESPONSE_CANCEL = Gtk::ResponseType::CANCEL;
+	constexpr auto RESPONSE_CLOSE  = Gtk::ResponseType::CLOSE;
+	constexpr auto RESPONSE_YES    = Gtk::ResponseType::YES;
+	constexpr auto RESPONSE_APPLY  = Gtk::ResponseType::APPLY;
+
+	constexpr auto MESSAGE_INFO     = Gtk::MessageType::INFO;
+	constexpr auto MESSAGE_WARNING  = Gtk::MessageType::WARNING;
+	constexpr auto MESSAGE_QUESTION = Gtk::MessageType::QUESTION;
+	constexpr auto MESSAGE_ERROR    = Gtk::MessageType::ERROR;
+
+	constexpr auto BUTTONS_NONE   = Gtk::ButtonsType::NONE;
+	constexpr auto BUTTONS_OK     = Gtk::ButtonsType::OK;
+	constexpr auto BUTTONS_YES_NO = Gtk::ButtonsType::YES_NO;
 	// pangomm-2.48 goes with gtkmm-4, pangomm-1.4 with gtkmm-3.
 	constexpr auto PANGO_TAB_LEFT         = Pango::TabAlign::LEFT;
 	constexpr auto PANGO_UNDERLINE_ERROR  = Pango::Underline::ERROR;
@@ -108,7 +140,26 @@ namespace cdb {
 
 	constexpr auto TEXT_WINDOW_TEXT       = Gtk::TEXT_WINDOW_TEXT;
 	constexpr auto WRAP_WORD_CHAR         = Gtk::WRAP_WORD_CHAR;
+	constexpr auto WRAP_NONE              = Gtk::WRAP_NONE;
 	constexpr auto COLORSPACE_RGB         = Gdk::COLORSPACE_RGB;
+
+	constexpr auto STATE_FLAG_NORMAL   = Gtk::STATE_FLAG_NORMAL;
+	constexpr auto STATE_FLAG_SELECTED = Gtk::STATE_FLAG_SELECTED;
+
+	constexpr auto RESPONSE_OK     = Gtk::RESPONSE_OK;
+	constexpr auto RESPONSE_CANCEL = Gtk::RESPONSE_CANCEL;
+	constexpr auto RESPONSE_CLOSE  = Gtk::RESPONSE_CLOSE;
+	constexpr auto RESPONSE_YES    = Gtk::RESPONSE_YES;
+	constexpr auto RESPONSE_APPLY  = Gtk::RESPONSE_APPLY;
+
+	constexpr auto MESSAGE_INFO     = Gtk::MESSAGE_INFO;
+	constexpr auto MESSAGE_WARNING  = Gtk::MESSAGE_WARNING;
+	constexpr auto MESSAGE_QUESTION = Gtk::MESSAGE_QUESTION;
+	constexpr auto MESSAGE_ERROR    = Gtk::MESSAGE_ERROR;
+
+	constexpr auto BUTTONS_NONE   = Gtk::BUTTONS_NONE;
+	constexpr auto BUTTONS_OK     = Gtk::BUTTONS_OK;
+	constexpr auto BUTTONS_YES_NO = Gtk::BUTTONS_YES_NO;
 	constexpr auto PANGO_TAB_LEFT         = Pango::TAB_LEFT;
 	constexpr auto PANGO_UNDERLINE_ERROR  = Pango::Underline::UNDERLINE_ERROR;
 #endif
@@ -212,6 +263,52 @@ namespace cdb {
 #endif
 		}
 
+	/// Gdk::Screen is gone in GTK4; style providers attach to a Gdk::Display.
+
+	inline void add_css_provider_for_default_display(const Glib::RefPtr<Gtk::CssProvider>& provider,
+																	 guint priority)
+		{
+#ifdef USE_GTK4
+		Gtk::StyleContext::add_provider_for_display(Gdk::Display::get_default(), provider, priority);
+#else
+		Gtk::StyleContext::add_provider_for_screen(Gdk::Screen::get_default(), provider, priority);
+#endif
+		}
+
+	/// The geometry of the monitor the window is on. gtkmm-3 looks this up from
+	/// the window's Gdk::Window, GTK4 from its Gdk::Surface.
+
+	inline Gdk::Rectangle monitor_geometry(Gtk::Window& window)
+		{
+		auto display = Gdk::Display::get_default();
+		if(!display)
+			throw std::logic_error("cdb::monitor_geometry: cannot get default display.");
+
+#ifdef USE_GTK4
+		auto monitor = display->get_monitor_at_surface(window.get_surface());
+#else
+		auto monitor = display->get_monitor_at_window(window.get_window());
+#endif
+		if(!monitor)
+			throw std::logic_error("cdb::monitor_geometry: cannot get monitor for window.");
+
+		Gdk::Rectangle geometry;
+		monitor->get_geometry(geometry);
+		return geometry;
+		}
+
+	/// Gtk::Window::set_type_hint() is removed in GTK4; the window manager is
+	/// told what a dialog is via its transient-for and modal state instead.
+
+	inline void set_dialog_type_hint(Gtk::Window& window)
+		{
+#ifdef USE_GTK4
+		(void)window;
+#else
+		window.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+#endif
+		}
+
 	/// GTK4 replaced Gtk::Paned::pack1/pack2 with set_start_child/set_end_child
 	/// plus separate resize/shrink setters.
 
@@ -234,6 +331,34 @@ namespace cdb {
 		paned.set_shrink_end_child(shrink);
 #else
 		paned.pack2(child, resize, shrink);
+#endif
+		}
+
+	/// GTK4 removed show_all(). There, widgets are visible by default and
+	/// cdb::add_child/box_append show each child as it is added, so making the
+	/// widget itself visible is all that remains. On gtkmm-3 this stays a
+	/// literal show_all(), so behaviour is unchanged.
+
+	inline void show_all(Gtk::Widget& widget)
+		{
+#ifdef USE_GTK4
+		widget.set_visible(true);
+#else
+		widget.show_all();
+#endif
+		}
+
+	/// As above, but the gtkmm-3 form that shows the descendants *without*
+	/// showing the widget itself. Under GTK4 there is nothing to do: the
+	/// children were shown as they were added.
+
+	template<typename Container>
+	inline void show_all_children(Container& container)
+		{
+#ifdef USE_GTK4
+		(void)container;
+#else
+		container.show_all_children();
 #endif
 		}
 

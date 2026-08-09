@@ -1,4 +1,5 @@
 #include "ChooseColoursDialog.hh"
+#include "GtkCompat.hh"
 #include <gtkmm/label.h>
 #include <gtkmm/colorbutton.h>
 #include <gtkmm/messagedialog.h>
@@ -21,8 +22,8 @@ namespace cadabra {
 	ChooseColoursDialog::ChooseColoursDialog(DocumentThread::Prefs& prefs, NotebookWindow& parent)
 		: Gtk::Dialog("Choose syntax highlighting colours", parent, true)
 		, prefs(prefs)
-		, main_vbox(Gtk::Orientation::ORIENTATION_VERTICAL)
-		, bottom_button_box(Gtk::Orientation::ORIENTATION_HORIZONTAL)
+		, main_vbox(cdb::ORIENT_VERTICAL)
+		, bottom_button_box(cdb::ORIENT_HORIZONTAL)
 		, button_ok("Ok")
 		, parent(parent)
 		{
@@ -73,7 +74,7 @@ namespace cadabra {
 			close();
 			} );
 
-		main_vbox.show_all();
+		cdb::show_all(main_vbox);
 		}
 
 	void ChooseColoursDialog::on_color_set()

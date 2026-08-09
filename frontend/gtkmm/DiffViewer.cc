@@ -2,6 +2,7 @@
 #include <internal/string_tools.h>
 
 #include "DiffViewer.hh"
+#include "GtkCompat.hh"
 #include "nlohmann/json.hpp"
 
 const Gdk::RGBA color_insert("rgb(200, 255, 200)");
@@ -35,8 +36,8 @@ CellDiff::CellDiff(const std::string& a, const std::string& b)
 	grid.set_column_homogeneous(true);
 	add(grid);
 
-	sw_lhs.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_NEVER);
-	sw_rhs.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_NEVER);
+	sw_lhs.set_policy(cdb::POLICY_AUTOMATIC, cdb::POLICY_NEVER);
+	sw_rhs.set_policy(cdb::POLICY_AUTOMATIC, cdb::POLICY_NEVER);
 	sw_lhs.add(tv_lhs);
 	sw_rhs.add(tv_rhs);
 
@@ -46,7 +47,7 @@ CellDiff::CellDiff(const std::string& a, const std::string& b)
 
 	compare(a, b);
 
-	show_all_children();
+	cdb::show_all_children(*this);
 	}
 
 void CellDiff::compare(const std::string& a_, const std::string& b_)
@@ -127,7 +128,7 @@ void CellDiff::compare(const std::string& a_, const std::string& b_)
 
 DiffViewer::DiffViewer(std::istream& a, std::istream& b, Gtk::Window& parent)
 	: Gtk::Dialog("Comparing notebooks", parent)
-	, box(Gtk::ORIENTATION_VERTICAL)
+	, box(cdb::ORIENT_VERTICAL)
 	{
 	set_border_width(5);
 	set_default_size(1000, 600);
@@ -136,12 +137,12 @@ DiffViewer::DiffViewer(std::istream& a, std::istream& b, Gtk::Window& parent)
 
 	scrolled_window.add(box);
 	scrolled_window.set_vexpand(true);
-	scrolled_window.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
-	add_button("Close", Gtk::RESPONSE_CLOSE);
+	scrolled_window.set_policy(cdb::POLICY_NEVER, cdb::POLICY_ALWAYS);
+	add_button("Close", cdb::RESPONSE_CLOSE);
 
 	populate(a, b);
 
-	show_all();
+	cdb::show_all(*this);
 	}
 
 void DiffViewer::run_noblock()

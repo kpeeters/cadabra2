@@ -68,13 +68,13 @@ void ImageView::on_save_as() const
 
 //	dialog.set_transient_for(*this);
 	dialog.set_do_overwrite_confirmation(true);
-	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
-	dialog.add_button("Select", Gtk::RESPONSE_OK);
+	dialog.add_button("_Cancel", cdb::RESPONSE_CANCEL);
+	dialog.add_button("Select", cdb::RESPONSE_OK);
 
 	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
-		case(Gtk::RESPONSE_OK): {
+		case(cdb::RESPONSE_OK): {
 			std::string name = dialog.get_filename();
 			std::ofstream temp(name);
 			temp << area.decoded;

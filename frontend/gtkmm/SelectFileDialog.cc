@@ -4,7 +4,7 @@
 SelectFileDialog::SelectFileDialog(const Glib::ustring& title, Gtk::Window& parent, bool modal)
 	: Gtk::Dialog(title, parent, modal)
 	, choose("...")
-	, hbox(Gtk::Orientation::ORIENTATION_HORIZONTAL)
+	, hbox(cdb::ORIENT_HORIZONTAL)
 	{
 	set_resizable(false);
 	entry.set_width_chars(60);
@@ -19,9 +19,9 @@ SelectFileDialog::SelectFileDialog(const Glib::ustring& title, Gtk::Window& pare
 	hbox.pack_start(choose, Gtk::PACK_SHRINK);
 
 	get_content_area()->pack_start(hbox);
-	add_button("Ok", Gtk::RESPONSE_OK);
+	add_button("Ok", cdb::RESPONSE_OK);
 
-	show_all();
+	cdb::show_all(*this);
 	}
 
 void SelectFileDialog::set_text(const Glib::ustring& text)
@@ -43,9 +43,9 @@ void SelectFileDialog::choose_dialog()
 	{
 	Gtk::FileChooserDialog fc("Select a file...");
 	fc.set_transient_for(*this);
-	fc.add_button("Cancel", Gtk::RESPONSE_CANCEL);
-	fc.add_button("Select", Gtk::RESPONSE_OK);
+	fc.add_button("Cancel", cdb::RESPONSE_CANCEL);
+	fc.add_button("Select", cdb::RESPONSE_OK);
 
-	if (cdb::dialog_run(fc) == Gtk::RESPONSE_OK)
+	if (cdb::dialog_run(fc) == cdb::RESPONSE_OK)
 		entry.set_text(fc.get_filename());
 	}

@@ -52,12 +52,12 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro, std::string geometry, std::s
 	: Gtk::ApplicationWindow()
 	, DocumentThread(this)
 	, cdbapp(c)
-	, topbox(Gtk::Orientation::ORIENTATION_VERTICAL)
-	, toolbar(Gtk::Orientation::ORIENTATION_HORIZONTAL)
-	, supermainbox(Gtk::Orientation::ORIENTATION_HORIZONTAL)
-	, mainbox(Gtk::Orientation::ORIENTATION_VERTICAL)
-	, search_hbox(Gtk::Orientation::ORIENTATION_HORIZONTAL)
-	, statusbarbox(Gtk::Orientation::ORIENTATION_HORIZONTAL)
+	, topbox(cdb::ORIENT_VERTICAL)
+	, toolbar(cdb::ORIENT_HORIZONTAL)
+	, supermainbox(cdb::ORIENT_HORIZONTAL)
+	, mainbox(cdb::ORIENT_VERTICAL)
+	, search_hbox(cdb::ORIENT_HORIZONTAL)
+	, statusbarbox(cdb::ORIENT_HORIZONTAL)
 	, search_case_insensitive("Case insensitive", true)
 	, console(sigc::mem_fun(this, &NotebookWindow::interactive_execute))
 	, current_canvas(0)
@@ -93,23 +93,11 @@ void NotebookWindow::on_realize()
 	// Query high-dpi settings. For all systems we can probe the
 	// HiDPI scale, and for some window managers we also probe the
 	// text scale factor.
-	auto gdk_window = get_window();
-	auto display = Gdk::Display::get_default();
-	if(!display)
-		throw std::logic_error("NotebookWindow::on_realize: cannot get default display.");
-	
-	auto screen = Gdk::Screen::get_default();
-	if(!screen)
-		throw std::logic_error("NotebookWindow::on_realize: cannot get default screen.");
-	
-	auto monitor = display->get_monitor_at_window(gdk_window);
-	if(!monitor)
-		throw std::logic_error("NotebookWindow::on_realize: cannot get monitor at window.");
-	
-	Gdk::Rectangle monitor_geometry;
-	monitor->get_geometry(monitor_geometry);
-	
-	scale = gdk_window->get_scale_factor();
+	Gdk::Rectangle monitor_geometry = cdb::monitor_geometry(*this);
+
+	// Gtk::Widget::get_scale_factor() gives the same number as the Gdk window's
+	// on gtkmm-3, and is the only form that exists on GTK4.
+	scale = get_scale_factor();
 	display_scale = scale;
 //	std::cerr << "Monitor scale factor = " << display_scale << std::endl;
 #ifndef __APPLE__
@@ -210,7 +198,7 @@ void NotebookWindow::on_realize()
 
 	//	auto screen = Gdk::Screen::get_default();
 	//	std::cerr << "cadabra-client: scale = " << screen->get_monitor_scale_factor(0) << std::endl;
-	Gtk::StyleContext::add_provider_for_screen(screen, css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	cdb::add_css_provider_for_default_display(css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
 	// Setup menu.
 	actiongroup = Gio::SimpleActionGroup::create();
@@ -653,8 +641,14 @@ void NotebookWindow::on_realize()
 	add(topbox);
 	Glib::RefPtr<Glib::Object> menubar_obj = uimanager->get_object("MenuBar");
 	Glib::RefPtr<Gio::Menu> gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(menubar_obj);
-	Gtk::MenuBar* pMenuBar = Gtk::make_managed<Gtk::MenuBar>(gmenu);
-	topbox.pack_start(*pMenuBar, Gtk::PACK_SHRINK);
+	// Gtk::MenuBar is removed in GTK4; Gtk::PopoverMenuBar takes the same
+	// Gio::Menu model.
+#ifdef USE_GTK4
+	auto* pMenuBar = Gtk::make_managed<Gtk::PopoverMenuBar>(gmenu);
+#else
+	auto* pMenuBar = Gtk::make_managed<Gtk::MenuBar>(gmenu);
+#endif
+	cdb::box_append(topbox, *pMenuBar);
 
 	auto get_icon = [this](const std::string& nm) {
 		Glib::RefPtr<Gio::File> ff = Gio::File::create_for_path(nm);
@@ -663,12 +657,26 @@ void NotebookWindow::on_realize()
 		return pb;
 		};
 	
+#ifdef USE_GTK4
+	// gtkmm-3 uses the on_key_press_event / on_delete_event vfuncs, which GTK4
+	// removed in favour of controllers and ::close-request.
+	window_key_controller = Gtk::EventControllerKey::create();
+	window_key_controller->signal_key_pressed().connect(
+	   [this](guint keyval, guint /* keycode */, Gdk::ModifierType state) {
+		return handle_key_press(keyval, state);
+		}, false);
+	add_controller(window_key_controller);
+
+	signal_close_request().connect(
+	   sigc::mem_fun(*this, &NotebookWindow::handle_close_request), false);
+#endif
+
 	// Setup the toolbar and buttons in it.
 	if(!read_only) {
 		toolbar.set_size_request(-1, 70/display_scale);
 
 		// Stop button.
-		tool_stop.add(*Gtk::make_managed<ImageArea>(
+		cdb::add_child(tool_stop, *Gtk::make_managed<ImageArea>(
 							  40/display_scale, display_scale,
 							  install_prefix()+"/share/cadabra2/cdb-icons/cdb-cancel"+ICONEXT,
 							  false));
@@ -679,40 +687,40 @@ void NotebookWindow::on_realize()
 																  install_prefix()+"/share/cadabra2/cdb-icons/cdb-run"+ICONEXT,
 																  false);
 		cdb::set_accessible_role(*img_run, cdb::AccessibleRole::push_button);
-		tool_run.add(*img_run);
+		cdb::add_child(tool_run, *img_run);
 		cdb::set_accessible_name(tool_run, "Run");
 		//		tool_run.set_label("run all");
 
 		// Restart button.
-		tool_restart.add(*Gtk::make_managed<ImageArea>(
+		cdb::add_child(tool_restart, *Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
 								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart"+ICONEXT,
 								  false));
 		cdb::set_accessible_name(tool_restart, "Restart kernel");
 
 		// Restart-and-run-all button.
-		tool_restart_and_run_all.add(*Gtk::make_managed<ImageArea>(
+		cdb::add_child(tool_restart_and_run_all, *Gtk::make_managed<ImageArea>(
 												  40/display_scale, display_scale,
 												  install_prefix()+"/share/cadabra2/cdb-icons/cdb-restart-and-run-all"+ICONEXT,
 												  false));
 		cdb::set_accessible_name(tool_restart_and_run_all, "Restart kernel and run notebook");
 
 		// Open button.
-		tool_open.add(*Gtk::make_managed<ImageArea>(
+		cdb::add_child(tool_open, *Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
 								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-open"+ICONEXT,
 								  false));
 		cdb::set_accessible_name(tool_open, "Open");
 
 		// Save button.
-		tool_save.add(*Gtk::make_managed<ImageArea>(
+		cdb::add_child(tool_save, *Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
 								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save"+ICONEXT,
 								  false));
 		cdb::set_accessible_name(tool_save, "Save");
 
 		// Save as button.
-		tool_save_as.add(*Gtk::make_managed<ImageArea>(
+		cdb::add_child(tool_save_as, *Gtk::make_managed<ImageArea>(
 								  40/display_scale, display_scale,
 								  install_prefix()+"/share/cadabra2/cdb-icons/cdb-save-as"+ICONEXT,
 								  false));
@@ -734,19 +742,19 @@ void NotebookWindow::on_realize()
 		tool_save.set_tooltip_text("Save notebook");
 		tool_save_as.set_tooltip_text("Save notebook as...");
 	
-		topbox.pack_start(toolbar, Gtk::PACK_SHRINK);
-		toolbar.pack_start(tool_open, Gtk::PACK_SHRINK);
-		toolbar.pack_start(tool_save, Gtk::PACK_SHRINK);
-		toolbar.pack_start(tool_save_as, Gtk::PACK_SHRINK);
-		toolbar.pack_start(tool_run, Gtk::PACK_SHRINK);
-		toolbar.pack_start(tool_stop, Gtk::PACK_SHRINK);
-		toolbar.pack_start(tool_restart, Gtk::PACK_SHRINK);
-		toolbar.pack_start(tool_restart_and_run_all, Gtk::PACK_SHRINK);
+		cdb::box_append(topbox, toolbar);
+		cdb::box_append(toolbar, tool_open);
+		cdb::box_append(toolbar, tool_save);
+		cdb::box_append(toolbar, tool_save_as);
+		cdb::box_append(toolbar, tool_run);
+		cdb::box_append(toolbar, tool_stop);
+		cdb::box_append(toolbar, tool_restart);
+		cdb::box_append(toolbar, tool_restart_and_run_all);
 		// 'top_label' expands, so packing the spinner after it keeps the spinner
 		// hard right, which is what pack_end used to do. GTK4 has no pack_end.
 		top_label.set_hexpand(true);
-		toolbar.pack_start(top_label, Gtk::PACK_EXPAND_WIDGET);
-		toolbar.pack_start(kernel_spinner, Gtk::PACK_SHRINK);
+		cdb::box_append(toolbar, top_label, cdb::Expand::yes);
+		cdb::box_append(toolbar, kernel_spinner);
 		kernel_spinner.set_size_request(50/display_scale, 50/display_scale);
 		kernel_spinner.set_margin_end(10/display_scale);
 		}
@@ -766,33 +774,33 @@ void NotebookWindow::on_realize()
 //	
 //	Gtk::Widget *toolbar=0;
 //	uimanager->get_widget("/ToolBar", toolbar);
-//	topbox.pack_start(*toolbar, Gtk::PACK_SHRINK);
-	topbox.pack_start(supermainbox, true, true);
-	topbox.pack_start(statusbarbox, false, false);
-	supermainbox.pack_start(dragbox, true, true);
-	dragbox.add1(mainbox);
-	mainbox.pack_start(searchbar, false, false);
+//	cdb::box_append(topbox, *toolbar);
+	cdb::box_append(topbox, supermainbox, cdb::Expand::yes);
+	cdb::box_append(topbox, statusbarbox);
+	cdb::box_append(supermainbox, dragbox, cdb::Expand::yes);
+	cdb::paned_set_start(dragbox, mainbox, false, true);
+	cdb::box_append(mainbox, searchbar);
 	mainbox.set_name("mainbox");
-	searchbar.add(search_hbox);
-//	searchbar.set_halign(Gtk::ALIGN_START);
+	cdb::add_child(searchbar, search_hbox);
+//	searchbar.set_halign(cdb::ALIGN_START);
 	// Per-child padding is replaced by margins on the child; GTK4 has no padding
 	// argument. In a horizontal box, padding applied to both sides == start/end margins.
 	searchentry.set_margin_start(10);
 	searchentry.set_margin_end(10);
-	search_hbox.pack_start(searchentry, Gtk::PACK_EXPAND_WIDGET);
+	cdb::box_append(search_hbox, searchentry, cdb::Expand::yes);
 	searchentry.set_size_request(200, -1);
 	search_case_insensitive.set_margin_start(10);
 	search_case_insensitive.set_margin_end(10);
-	search_hbox.pack_start(search_case_insensitive, Gtk::PACK_SHRINK);
+	cdb::box_append(search_hbox, search_case_insensitive);
 	search_case_insensitive.set_active(true);
 
 	// Status bar
 	kernel_label.set_text("Server: not connected");
 	statusbarbox.set_size_request(-1,50/display_scale);
 	statusbarbox.set_homogeneous(false);
-	statusbarbox.pack_start(status_label, false, false, 0);
-	statusbarbox.pack_start(kernel_label, false, false, 0);
-	statusbarbox.pack_start(progressbar, true, true, 0);
+	cdb::box_append(statusbarbox, status_label);
+	cdb::box_append(statusbarbox, kernel_label);
+	cdb::box_append(statusbarbox, progressbar, cdb::Expand::yes);
 	status_label.set_size_request(300,-1);
 	kernel_label.set_size_request(300,-1);
 	// status_label.set_halign(Gtk::Align::ALIGN_START);
@@ -809,15 +817,24 @@ void NotebookWindow::on_realize()
 	searchentry.signal_search_changed().connect(sigc::mem_fun(*this, &NotebookWindow::on_search_text_changed));
 
 	// The three main widgets
-	//	mainbox.pack_start(buttonbox, Gtk::PACK_SHRINK, 0);
+	//	cdb::box_append(mainbox, buttonbox);
 
 	// We always have at least one canvas.
 	canvasses.push_back(manage( new NotebookCanvas() ));
-	mainbox.pack_start(*canvasses[0], Gtk::PACK_EXPAND_WIDGET, 0);
+	cdb::box_append(mainbox, *canvasses[0], cdb::Expand::yes);
 
 	// FIXME: need to do this for every canvas.
+#ifdef USE_GTK4
+	// GTK4 has no signal_size_allocate. The vadjustment's ::changed fires when
+	// the scrolled window's bounds are recomputed, i.e. after it has been laid
+	// out, which is what this hook actually needs.
+	// FIXME: an approximation; revisit if auto-scroll misbehaves under GTK4.
+	canvasses[0]->scroll.get_vadjustment()->signal_changed().connect(
+	   sigc::mem_fun(*this, &NotebookWindow::on_scroll_size_allocated));
+#else
 	canvasses[0]->scroll.signal_size_allocate().connect(
-	   sigc::mem_fun(*this, &NotebookWindow::on_scroll_size_allocate));
+	   [this](Gtk::Allocation&) { on_scroll_size_allocated(); });
+#endif
 
 	canvasses[0]->scroll_event.connect(sigc::mem_fun(*this, &NotebookWindow::on_scroll_changed));
 
@@ -839,7 +856,7 @@ void NotebookWindow::on_realize()
 	// is estimated but should be computed.
 	//	engine.set_geometry(screen->get_width()/2 - 2*30);
 	update_title();
-	show_all();
+	cdb::show_all(*this);
 	kernel_spinner.set_visible(false);
 	if(read_only) {
 		statusbarbox.set_visible(false);
@@ -933,15 +950,26 @@ void NotebookWindow::load_css()
 		}
 	}
 
-bool NotebookWindow::on_delete_event(GdkEventAny* event)
+/// Returns true to *block* the close, matching GTK4's ::close-request. On
+/// gtkmm-3 the delete-event vfunc below has the same convention.
+
+bool NotebookWindow::handle_close_request()
 	{
 	if (quit_safeguard(true)) {
 		prefs.save();
-		return Gtk::Window::on_delete_event(event);
+		return false;
 		}
-	else
-		return true;
+	return true;
 	}
+
+#ifndef USE_GTK4
+bool NotebookWindow::on_delete_event(GdkEventAny* event)
+	{
+	if(handle_close_request())
+		return true;
+	return Gtk::Window::on_delete_event(event);
+	}
+#endif
 
 void NotebookWindow::on_prefs_set_cv(int npos)
 	{
@@ -959,15 +987,15 @@ void NotebookWindow::on_prefs_set_cv(int npos)
 
 	// Reparent onto something new
 	if (pos == Console::Position::DockedH) {
-		dragbox.set_orientation(Gtk::Orientation::ORIENTATION_HORIZONTAL);
+		dragbox.set_orientation(cdb::ORIENT_HORIZONTAL);
 		dragbox.set_position(dragbox.get_allocation().get_width() / 2);
-		dragbox.add2(console);
+		cdb::paned_set_end(dragbox, console, true, true);
 		console.set_visible(true);
 		}
 	else if (pos == Console::Position::DockedV) {
-		dragbox.set_orientation(Gtk::Orientation::ORIENTATION_VERTICAL);
+		dragbox.set_orientation(cdb::ORIENT_VERTICAL);
 		dragbox.set_position(dragbox.get_allocation().get_height() / 2);
-		dragbox.add2(console);
+		cdb::paned_set_end(dragbox, console, true, true);
 		console.set_size_request(-1, 200);
 		console.set_visible(true);
 		}
@@ -976,13 +1004,13 @@ void NotebookWindow::on_prefs_set_cv(int npos)
 		console_win.set_resizable(true);
 		console_win.set_default_size(900, 300);
 		console_win.set_title("Interactive Console");
-		console_win.get_content_area()->add(console);
+		cdb::add_child(*console_win.get_content_area(), console);
 		// Reflect hidden state in menu when the floating
 		// console is closed.
 		console_win.signal_response().connect( [this](int) {
 			this->on_prefs_set_cv(0);
 			});
-		console_win.show_all();
+		cdb::show_all(console_win);
 		}
 	}
 
@@ -1050,20 +1078,39 @@ void NotebookWindow::resize_codeinput_texview(DTree::iterator it, int width)
 		}
 	}
 
+/// Re-layout the cells when the window width changes. gtkmm-3 learns about this
+/// from configure-event; GTK4 removed that, so the window's own size allocation
+/// is used instead.
+
+void NotebookWindow::handle_width_change(int width)
+	{
+	is_configured=true;
+
+	if(width != last_configure_width) {
+		resize_codeinput_texview_all(width);
+		last_configure_width = width;
+		}
+	}
+
+#ifdef USE_GTK4
+
+void NotebookWindow::size_allocate_vfunc(int width, int height, int baseline)
+	{
+	Gtk::ApplicationWindow::size_allocate_vfunc(width, height, baseline);
+	handle_width_change(width);
+	}
+
+#else
+
 bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	{
 	// std::cerr << "cadabra-client: on_configure_event " << cfg->width << " x " << cfg->height << std::endl;
-	is_configured=true;
-
 	bool ret=Gtk::Window::on_configure_event(cfg);
-
-	if(cfg->width != last_configure_width) {
-		resize_codeinput_texview_all(cfg->width);
-		last_configure_width = cfg->width;
-		}
-
+	handle_width_change(cfg->width);
 	return ret;
 	}
+
+#endif
 
 void NotebookWindow::refresh_after_tex_engine_run()
 	{
@@ -1073,7 +1120,7 @@ void NotebookWindow::refresh_after_tex_engine_run()
 
 bool NotebookWindow::on_unhandled_error(const std::exception& err)
 {
-	Gtk::MessageDialog md(*this, err.what(), false, Gtk::MessageType::MESSAGE_ERROR, Gtk::ButtonsType::BUTTONS_OK, true);
+	Gtk::MessageDialog md(*this, err.what(), false, cdb::MESSAGE_ERROR, cdb::BUTTONS_OK, true);
 	cdb::dialog_run(md);
 	return true;
 }
@@ -1227,9 +1274,9 @@ void NotebookWindow::process_todo_queue()
 
 	if(crash_window_hidden && kernel_string=="not connected") {
 		crash_window_hidden=false;
-		Gtk::MessageDialog md("Kernel crashed", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+		Gtk::MessageDialog md("Kernel crashed", false, cdb::MESSAGE_WARNING, cdb::BUTTONS_OK, true);
 		md.set_transient_for(*this);
-		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+		cdb::set_dialog_type_hint(md);
 		md.set_secondary_text("The kernel crashed unexpectedly, and has been restarted. You will need to re-run all cells.");
 		md.signal_response().connect(sigc::mem_fun(*this, &NotebookWindow::on_crash_window_closed));
 		cdb::dialog_run(md);
@@ -1247,14 +1294,18 @@ void NotebookWindow::on_crash_window_closed(int)
 	crash_window_hidden=true;
 	}
 
-bool NotebookWindow::on_key_press_event(GdkEventKey* event)
+/// Window-level key handling. Returns true when the key was consumed; false
+/// lets the default handling run. Shared between gtkmm-3's on_key_press_event
+/// vfunc and GTK4's Gtk::EventControllerKey, which have the same contract.
+
+bool NotebookWindow::handle_key_press(guint keyval, Gdk::ModifierType state)
 	{
-	bool is_ctrl_up    = event->keyval==GDK_KEY_Up   && (event->state&Gdk::CONTROL_MASK);
-	bool is_ctrl_down  = event->keyval==GDK_KEY_Down && (event->state&Gdk::CONTROL_MASK);
-	bool is_ctrl_home  = event->keyval==GDK_KEY_Home && (event->state&Gdk::CONTROL_MASK);
-	bool is_ctrl_end   = event->keyval==GDK_KEY_End  && (event->state&Gdk::CONTROL_MASK);
-	bool is_pagedown   = event->keyval==GDK_KEY_Page_Down;
-	bool is_pageup     = event->keyval==GDK_KEY_Page_Up;
+	bool is_ctrl_up    = keyval==GDK_KEY_Up   && cdb::has_modifier(state, cdb::MOD_CONTROL);
+	bool is_ctrl_down  = keyval==GDK_KEY_Down && cdb::has_modifier(state, cdb::MOD_CONTROL);
+	bool is_ctrl_home  = keyval==GDK_KEY_Home && cdb::has_modifier(state, cdb::MOD_CONTROL);
+	bool is_ctrl_end   = keyval==GDK_KEY_End  && cdb::has_modifier(state, cdb::MOD_CONTROL);
+	bool is_pagedown   = keyval==GDK_KEY_Page_Down;
+	bool is_pageup     = keyval==GDK_KEY_Page_Up;
 
 	bool have_current_cell = current_cell != doc.end();
 
@@ -1307,9 +1358,18 @@ bool NotebookWindow::on_key_press_event(GdkEventKey* event)
 		return true;
 		}
 	else {
-		return Gtk::Window::on_key_press_event(event);
+		return false;
 		}
 	}
+
+#ifndef USE_GTK4
+bool NotebookWindow::on_key_press_event(GdkEventKey* event)
+	{
+	if(handle_key_press(event->keyval, static_cast<Gdk::ModifierType>(event->state)))
+		return true;
+	return Gtk::Window::on_key_press_event(event);
+	}
+#endif
 
 void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 	{
@@ -1345,19 +1405,19 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 		Gtk::Widget *w=0;
 		switch(it->cell_type) {
 			case DataCell::CellType::document: {
-				Gtk::Box *docbox = manage( new Gtk::Box(Gtk::Orientation::ORIENTATION_VERTICAL) );
+				Gtk::Box *docbox = manage( new Gtk::Box(cdb::ORIENT_VERTICAL) );
 				newcell.document = docbox;
 				w=newcell.document;
 				// Add spacer so we can scroll a bit further than the bottom cell.
-				Gtk::Box* spacer = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+				Gtk::Box* spacer = Gtk::manage(new Gtk::Box(cdb::ORIENT_VERTICAL));
 				spacer->set_size_request(-1, 200); // Minimum height for scrollable space
 				spacer->set_vexpand(true);
-				spacer->set_valign(Gtk::ALIGN_FILL);
+				spacer->set_valign(cdb::ALIGN_FILL);
 				// Packed at the start rather than the end (GTK4 has no pack_end).
 				// Cells are inserted with pack_start followed by an explicit
 				// reorder_child() to their DTree index, which always leaves the
 				// spacer as the last child, so it stays at the bottom.
-				docbox->pack_start(*spacer, Gtk::PACK_EXPAND_WIDGET);
+				cdb::box_append(*docbox, *spacer, cdb::Expand::yes);
 				break;
 				}
 			case DataCell::CellType::output:
@@ -1476,9 +1536,9 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			// Document cells are easy; just add. They have no parent in the DTree.
 
 			if(it->cell_type==DataCell::CellType::document) {
-				canvasses[i]->scroll.add(*w);
+				cdb::add_child(canvasses[i]->scroll, *w);
 
-				w->show_all(); // FIXME: if you drop this, the whole document remains invisible
+				cdb::show_all(*w); // FIXME: if you drop this, the whole document remains invisible
 
 				canvasses[i]->connect_scroll_listener();
 				continue;
@@ -1509,7 +1569,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				}
 
 			//		std::cout << "adding cell to canvas " << i << std::endl;
-			parentbox->pack_start(*w, false, false);
+			cdb::box_append(*parentbox, *w);
 			unsigned int index    =tr.index(it)+offset;
 			unsigned int index_gui=parentbox->get_children().size()-1;
 			//		std::cout << "is index " << index << " vs " << index_gui << std::endl;
@@ -1518,7 +1578,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				parentbox->reorder_child(*w, index);
 				}
 			if(visible) {
-				w->show_all();
+				cdb::show_all(*w);
 				w->show_now();
 				}
 
@@ -1895,7 +1955,7 @@ void NotebookWindow::on_slider_changed(std::string variable, double value)
  	// std::cerr << "Variable " << variable << " changed to value " << value << std::endl;
 	}
 
-void NotebookWindow::on_scroll_size_allocate(Gtk::Allocation& )
+void NotebookWindow::on_scroll_size_allocated()
 	{
 	// The auto-scroll logic is as follows. Whenever a cell is ran (by
 	// user pressing shift-enter only, not by full run), we set to
@@ -1950,7 +2010,7 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int )
 					}
 				else {
 					CodeInput *w = (*vis).second.inbox;
-					w->edit.show_all();
+					cdb::show_all(w->edit);
 					// The very first time a widget is toggled to visible,
 					// the TextView will have a height which is incorrect
 					// (looks like it computes the maximal height if the
@@ -2119,7 +2179,7 @@ bool NotebookWindow::on_tex_error(const std::string& str, DTree::iterator it)
 			// Probably a bug: if we call show() without the delay below, we can have
 			// the hide() and show() happen very quickly after each other, which does not
 			// work (widget stays hidden).
-			Glib::signal_timeout().connect_once([&w]() { w.show_all(); }, 50);
+			Glib::signal_timeout().connect_once([&w]() { cdb::show_all(w); }, 50);
 
 			pit->hidden=false;
 			}
@@ -2167,13 +2227,13 @@ void NotebookWindow::on_file_open()
 	dialog.set_transient_for(*this);
 	dialog.add_filter(create_filter("Cadabra notebooks (*.cnb)", "*.cnb"));
 	dialog.add_filter(create_filter("All files", "*"));
-	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
-	dialog.add_button("Select", Gtk::RESPONSE_OK);
+	dialog.add_button("_Cancel", cdb::RESPONSE_CANCEL);
+	dialog.add_button("Select", cdb::RESPONSE_OK);
 
 	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
-		case(Gtk::RESPONSE_OK): {
+		case(cdb::RESPONSE_OK): {
 			name = dialog.get_filename();
 			snoop::log("open") << "menu" << snoop::flush;
 			std::ifstream file(name);
@@ -2209,7 +2269,7 @@ void NotebookWindow::load_from_string(const std::string& notebook_contents)
 
 	DocumentThread::load_from_string(notebook_contents);
 
-	mainbox.show_all();
+	cdb::show_all(mainbox);
 	modified=false;
 	update_title();
 
@@ -2239,7 +2299,7 @@ void NotebookWindow::on_file_save()
 			Gtk::MessageDialog md("Error saving notebook "+name);
 			md.set_transient_for(*this);
 			md.set_secondary_text(res);
-			md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+			cdb::set_dialog_type_hint(md);
 			cdb::dialog_run(md);
 			}
 		else {
@@ -2257,13 +2317,13 @@ void NotebookWindow::on_file_save_as()
 
 	dialog.set_do_overwrite_confirmation(true);
 	dialog.set_transient_for(*this);
-	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
-	dialog.add_button("Select", Gtk::RESPONSE_OK);
+	dialog.add_button("_Cancel", cdb::RESPONSE_CANCEL);
+	dialog.add_button("Select", cdb::RESPONSE_OK);
 
 	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
-	case(Gtk::RESPONSE_OK): {
+	case(cdb::RESPONSE_OK): {
 			std::string old_name = name;
 			name = dialog.get_filename();
 			size_t dotpos = name.rfind(".");
@@ -2274,7 +2334,7 @@ void NotebookWindow::on_file_save_as()
 				Gtk::MessageDialog md("Error saving notebook "+name);
 				md.set_transient_for(*this);
 				md.set_secondary_text(res);
-				md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+				cdb::set_dialog_type_hint(md);
 				cdb::dialog_run(md);
 				}
 			else {
@@ -2294,13 +2354,13 @@ void NotebookWindow::on_file_save_as_jupyter()
 
 	dialog.set_do_overwrite_confirmation(true);
 	dialog.set_transient_for(*this);
-	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
-	dialog.add_button("Select", Gtk::RESPONSE_OK);
+	dialog.add_button("_Cancel", cdb::RESPONSE_CANCEL);
+	dialog.add_button("Select", cdb::RESPONSE_OK);
 
 	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
-		case(Gtk::RESPONSE_OK): {
+		case(cdb::RESPONSE_OK): {
 			std::string ipynb_name = dialog.get_filename();
 			std::string out = JSON_serialise(doc);
 			nlohmann::json json=nlohmann::json::parse(out);
@@ -2312,7 +2372,7 @@ void NotebookWindow::on_file_save_as_jupyter()
 //				Gtk::MessageDialog md("Error saving Jupyter notebook "+name);
 //				md.set_transient_for(*this);
 //				md.set_secondary_text(res);
-//				md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+//				cdb::set_dialog_type_hint(md);
 //				cdb::dialog_run(md);
 //				}
 		break;
@@ -2327,13 +2387,13 @@ void NotebookWindow::on_file_export_html()
 
 	dialog.set_do_overwrite_confirmation(true);
 	dialog.set_transient_for(*this);
-	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
-	dialog.add_button("Select", Gtk::RESPONSE_OK);
+	dialog.add_button("_Cancel", cdb::RESPONSE_CANCEL);
+	dialog.add_button("Select", cdb::RESPONSE_OK);
 
 	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
-		case(Gtk::RESPONSE_OK): {
+		case(cdb::RESPONSE_OK): {
 			std::string name = dialog.get_filename();
 			std::ofstream temp(name);
 			temp << export_as_HTML(doc);
@@ -2348,13 +2408,13 @@ void NotebookWindow::on_file_export_latex()
 
 	dialog.set_do_overwrite_confirmation(true);	
 	dialog.set_transient_for(*this);
-	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
-	dialog.add_button("Select", Gtk::RESPONSE_OK);
+	dialog.add_button("_Cancel", cdb::RESPONSE_CANCEL);
+	dialog.add_button("Select", cdb::RESPONSE_OK);
 
 	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
-		case(Gtk::RESPONSE_OK): {
+		case(cdb::RESPONSE_OK): {
 			std::string name = dialog.get_filename();
 			size_t dotpos = name.rfind(".");
 			if(dotpos==std::string::npos) {
@@ -2376,13 +2436,13 @@ void NotebookWindow::on_file_export_python()
 
 	dialog.set_do_overwrite_confirmation(true);
 	dialog.set_transient_for(*this);
-	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
-	dialog.add_button("Select", Gtk::RESPONSE_OK);
+	dialog.add_button("_Cancel", cdb::RESPONSE_CANCEL);
+	dialog.add_button("Select", cdb::RESPONSE_OK);
 
 	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
-		case(Gtk::RESPONSE_OK): {
+		case(cdb::RESPONSE_OK): {
 			std::string name = dialog.get_filename();
 			size_t dotpos = name.rfind(".");
 			if(dotpos==std::string::npos)
@@ -2401,13 +2461,13 @@ void NotebookWindow::on_file_export_html_segment()
 
 	dialog.set_do_overwrite_confirmation(true);
 	dialog.set_transient_for(*this);
-	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
-	dialog.add_button("Select", Gtk::RESPONSE_OK);
+	dialog.add_button("_Cancel", cdb::RESPONSE_CANCEL);
+	dialog.add_button("Select", cdb::RESPONSE_OK);
 
 	int result=cdb::dialog_run(dialog);
 
 	switch(result) {
-		case(Gtk::RESPONSE_OK): {
+		case(cdb::RESPONSE_OK): {
 			std::string name = dialog.get_filename();
 			size_t dotpos = name.rfind(".");
 			if(dotpos==std::string::npos)
@@ -2457,10 +2517,10 @@ bool NotebookWindow::quit_safeguard(bool quit)
 			if(name.size()>0) mes="Save changes to "+name+" before continuing?";
 			else              mes="Save changes before continuing?";
 			}
-		Gtk::MessageDialog md(mes, false, Gtk::MESSAGE_WARNING,
-		                      Gtk::BUTTONS_NONE, true);
+		Gtk::MessageDialog md(mes, false, cdb::MESSAGE_WARNING,
+		                      cdb::BUTTONS_NONE, true);
 		md.set_transient_for(*this);
-		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+		cdb::set_dialog_type_hint(md);
 		md.add_button("Save before continuing",1);
 		md.add_button("Cancel",2);
 		if(quit)
@@ -2695,9 +2755,9 @@ void NotebookWindow::on_view_split()
 	{
 	canvasses.push_back(new NotebookCanvas());
 	// Add the new canvas into the bottom pane of the last visible canvas.
-	canvasses[canvasses.size()-2]->pack2(*canvasses.back(), true, true);
+	cdb::paned_set_end(*canvasses[canvasses.size()-2], *canvasses.back(), true, true);
 	build_visual_representation();
-	canvasses.back()->show_all();
+	cdb::show_all(*canvasses.back());
 	canvasses[canvasses.size()-2]->set_position(canvasses[canvasses.size()-2]->get_height()/2.0);
 	}
 
@@ -2797,10 +2857,10 @@ void NotebookWindow::on_help() const
 		ret=cdbapp->open_help(pref+"properties/"+help_topic+".cnb", help_topic);
 
 	if(!ret) {
-		Gtk::MessageDialog md("No help available", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+		Gtk::MessageDialog md("No help available", false, cdb::MESSAGE_WARNING, cdb::BUTTONS_OK, true);
 		std::cerr << "NotebookWindow::on_help: did not find help in " << pref << std::endl;
 		//		md.set_transient_for(*this);
-		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+		cdb::set_dialog_type_hint(md);
 		md.set_secondary_text("No help available for '"+help_topic+"'.\nNot all algorithms and properties have manual pages yet, sorry.");
 		cdb::dialog_run(md);
 		}
@@ -2844,9 +2904,9 @@ void NotebookWindow::on_help_about()
 
 void NotebookWindow::on_help_register()
 	{
-	Gtk::Dialog md("Welcome to Cadabra!", *this, Gtk::MESSAGE_WARNING);
+	Gtk::Dialog md("Welcome to Cadabra!", *this, cdb::MESSAGE_WARNING);
 	md.set_transient_for(*this);
-	md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+	cdb::set_dialog_type_hint(md);
 	Gtk::Box *box = md.get_content_area();
 	Gtk::Label txt;
 	txt.set_markup("<span font_size=\"large\" font_weight=\"bold\">Welcome to Cadabra!</span>\n\nWriting this software takes an incredible amount of spare time,\nand it is extremely difficult to get funding for its development.\n\nPlease show your support by registering your email address,\nso I can convince the bean-counters that this software is of interest.\n\nI will only use this address to count users and to email you,\nroughly once every half a year, with a bit of news about Cadabra.\n\nMany thanks for your support!\n\nKasper Peeters, <a href=\"mailto:info@cadabra.science\">info@cadabra.science</a>");
@@ -2855,14 +2915,14 @@ void NotebookWindow::on_help_register()
 	txt.set_margin_start(10);
 	txt.set_margin_end(10);
 	txt.set_margin_bottom(10);
-	box->pack_start(txt, Gtk::PACK_EXPAND_WIDGET);
+	cdb::box_append(*box, txt, cdb::Expand::yes);
 
 	Gtk::Grid grid;
 	grid.set_column_homogeneous(false);
 	grid.set_hexpand(true);
 	grid.set_margin_start(10);
 	grid.set_margin_end(10);
-	box->pack_start(grid, Gtk::PACK_EXPAND_WIDGET);
+	cdb::box_append(*box, grid, cdb::Expand::yes);
 
 	Gtk::Label name_label("Name:");
 	Gtk::Entry name;
@@ -2883,22 +2943,22 @@ void NotebookWindow::on_help_register()
 	grid.attach(affiliation_label, 0, 2, 1, 1);
 	grid.attach(affiliation, 1, 2, 1, 1);
 
-	Gtk::Box hbox(Gtk::Orientation::ORIENTATION_HORIZONTAL);
+	Gtk::Box hbox(cdb::ORIENT_HORIZONTAL);
 	// 'txt' and 'grid' above are packed at the start, so packing hbox at the start
 	// too leaves it last, which is where pack_end put it. GTK4 has no pack_end.
-	box->pack_start(hbox, Gtk::PACK_SHRINK);
+	cdb::box_append(*box, hbox);
 	Gtk::Button reg("Register my support"), nothanks("I prefer to stay anonymous"), alreadyset("I am already registered");
 	// Padding becomes start/end margins; GTK4 has no padding argument.
 	for(auto* b : {&nothanks, &alreadyset, &reg}) {
 		b->set_margin_start(10);
 		b->set_margin_end(10);
 		}
-	hbox.pack_start(nothanks, Gtk::PACK_SHRINK);
-	hbox.pack_start(alreadyset, Gtk::PACK_SHRINK);
+	cdb::box_append(hbox, nothanks);
+	cdb::box_append(hbox, alreadyset);
 	// 'reg' was pack_end'ed, i.e. hard right. Give it the leftover space and align
 	// the button itself to the end of that space.
-	reg.set_halign(Gtk::ALIGN_END);
-	hbox.pack_start(reg, Gtk::PACK_EXPAND_WIDGET);
+	reg.set_halign(cdb::ALIGN_END);
+	cdb::box_append(hbox, reg, cdb::Expand::yes);
 	reg.signal_clicked().connect([&]() {
 		set_user_details(name.get_text(), email.get_text(), affiliation.get_text());
 		prefs.is_anonymous = false;
@@ -2918,7 +2978,7 @@ void NotebookWindow::on_help_register()
 		prefs.save();
 		md.set_visible(false);
 		});
-	box->show_all();
+	cdb::show_all(*box);
 	cdb::dialog_run(md);
 	action_register->set_enabled(!prefs.is_registered);
 	}
@@ -2929,12 +2989,10 @@ void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 	std::cerr << key << std::endl;
 #endif
 	if(key=="text-scaling-factor" || key=="scaling-factor") {
-		auto gdk_window = get_window();
-		auto screen = Gdk::Screen::get_default();
 		scale   = settings->get_double("text-scaling-factor");
-		scale  *= gdk_window->get_scale_factor();
+		scale  *= get_scale_factor();
 		std::cout << "cadabra-client: total scaling-factor = " << scale << std::endl;
-		engine.set_scale(scale, gdk_window->get_scale_factor());
+		engine.set_scale(scale, get_scale_factor());
 		engine.invalidate_all();
 		dispatch_refresh.emit();
 
@@ -2952,7 +3010,7 @@ void NotebookWindow::select_git_path()
 	dialog.set_transient_for(*this);
 	dialog.set_text(prefs.git_path);
 
-	if (cdb::dialog_run(dialog) == Gtk::RESPONSE_OK)
+	if (cdb::dialog_run(dialog) == cdb::RESPONSE_OK)
 		prefs.git_path = dialog.get_text();
 	}
 
@@ -2962,14 +3020,14 @@ void NotebookWindow::compare_to_file()
 
 	SelectFileDialog dialog("Select file to compare", *this, true);
 	dialog.set_transient_for(*this);
-	if (cdb::dialog_run(dialog) == Gtk::RESPONSE_OK)
+	if (cdb::dialog_run(dialog) == cdb::RESPONSE_OK)
 		filename = dialog.get_text();
 	else
 		return;
 
 	std::ifstream a(filename);
 	if (!a.is_open()) {
-		Gtk::MessageDialog error_dialog(*this, "The file '" + filename + "' could not be opened for reading", false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+		Gtk::MessageDialog error_dialog(*this, "The file '" + filename + "' could not be opened for reading", false, cdb::MESSAGE_ERROR, cdb::BUTTONS_OK, true);
 		error_dialog.set_title("Could not open file");
 		cdb::dialog_run(error_dialog);
 		return;
@@ -3036,7 +3094,7 @@ void NotebookWindow::compare_git_latest()
 		compare_git(trim(commit));
 		}
 	catch (const std::exception& ex) {
-		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+		Gtk::MessageDialog error_dialog(ex.what(), false, cdb::MESSAGE_ERROR, cdb::BUTTONS_OK, true);
 		error_dialog.set_transient_for(*this);
 		error_dialog.set_title("Git error");
 		cdb::dialog_run(error_dialog);
@@ -3089,18 +3147,18 @@ void NotebookWindow::compare_git_choose()
 		tree_view.append_column("Description", columns.description);
 
 		Gtk::ScrolledWindow scrolled_window;
-		scrolled_window.add(tree_view);
-		scrolled_window.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+		cdb::add_child(scrolled_window, tree_view);
+		scrolled_window.set_policy(cdb::POLICY_NEVER, cdb::POLICY_AUTOMATIC);
 		scrolled_window.set_min_content_height(400);
 
 		Gtk::Dialog select_dialog("Select a commit to compare", *this, true);
 		select_dialog.set_transient_for(*this);
-		select_dialog.get_content_area()->add(scrolled_window);
-		select_dialog.add_button("Compare", Gtk::RESPONSE_OK);
-		select_dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
-		select_dialog.show_all();
+		cdb::add_child(*select_dialog.get_content_area(), scrolled_window);
+		select_dialog.add_button("Compare", cdb::RESPONSE_OK);
+		select_dialog.add_button("Cancel", cdb::RESPONSE_CANCEL);
+		cdb::show_all(select_dialog);
 
-		if (cdb::dialog_run(select_dialog) == Gtk::RESPONSE_OK)
+		if (cdb::dialog_run(select_dialog) == cdb::RESPONSE_OK)
 			commit_hash = tree_view.get_selection()->get_selected()->get_value(columns.commit_hash);
 		else
 			return;
@@ -3108,7 +3166,7 @@ void NotebookWindow::compare_git_choose()
 		compare_git(trim(commit_hash));
 		}
 	catch (const std::exception& ex) {
-		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+		Gtk::MessageDialog error_dialog(ex.what(), false, cdb::MESSAGE_ERROR, cdb::BUTTONS_OK, true);
 		error_dialog.set_transient_for(*this);
 		error_dialog.set_title("Git error");
 		cdb::dialog_run(error_dialog);
@@ -3122,12 +3180,12 @@ void NotebookWindow::compare_git_specific()
 		Gtk::Entry entry;
 		Gtk::Dialog entry_dialog("Enter hash of commit to compare against", *this, true);
 		entry_dialog.set_transient_for(*this);
-		entry_dialog.get_content_area()->add(entry);
-		entry_dialog.add_button("Compare", Gtk::RESPONSE_OK);
-		entry_dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
-		entry_dialog.show_all();
+		cdb::add_child(*entry_dialog.get_content_area(), entry);
+		entry_dialog.add_button("Compare", cdb::RESPONSE_OK);
+		entry_dialog.add_button("Cancel", cdb::RESPONSE_CANCEL);
+		cdb::show_all(entry_dialog);
 
-		if (cdb::dialog_run(entry_dialog) == Gtk::RESPONSE_OK)
+		if (cdb::dialog_run(entry_dialog) == cdb::RESPONSE_OK)
 			commit_hash = entry.get_text();
 		else
 			return;
@@ -3135,7 +3193,7 @@ void NotebookWindow::compare_git_specific()
 		compare_git(trim(commit_hash));
 		}
 	catch (const std::exception& ex) {
-		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+		Gtk::MessageDialog error_dialog(ex.what(), false, cdb::MESSAGE_ERROR, cdb::BUTTONS_OK, true);
 		error_dialog.set_transient_for(*this);
 		error_dialog.set_title("Git error");
 		cdb::dialog_run(error_dialog);
@@ -3273,11 +3331,11 @@ void NotebookWindow::on_prefs_choose_colours()
 
 void NotebookWindow::on_prefs_use_defaults()
 	{
-	Gtk::MessageDialog sure("Use Default settings?", false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO, true);
+	Gtk::MessageDialog sure("Use Default settings?", false, cdb::MESSAGE_QUESTION, cdb::BUTTONS_YES_NO, true);
 	sure.set_transient_for(*this);
 	sure.set_secondary_text("This will effect font size and colour schemes.");
 	int response = cdb::dialog_run(sure);
-	if (response == Gtk::RESPONSE_YES) {
+	if (response == cdb::RESPONSE_YES) {
 		prefs = Prefs(true);
 		for (auto& action : default_actions)
 			action->activate();
@@ -3293,58 +3351,58 @@ void NotebookWindow::on_tools_options()
 	Gtk::Dialog options("Options", false);
 	options.set_transient_for(*this);
 	options.get_content_area()->property_margin() = 5;
-	options.add_button("Apply", Gtk::RESPONSE_APPLY);
-	options.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+	options.add_button("Apply", cdb::RESPONSE_APPLY);
+	options.add_button("Cancel", cdb::RESPONSE_CANCEL);
 
 	// Helper functions for making option widgets
 	auto add_label = [&options](const char* text, Gtk::Align alignment) {
 		auto label = std::make_unique<Gtk::Label>();
 		label->set_markup(text);
 		label->set_halign(alignment);
-		options.get_content_area()->add(*label);
+		cdb::add_child(*options.get_content_area(), *label);
 		return label;
 	};
 	auto add_sep = [&options]() {
 		auto sep = std::make_unique<Gtk::Separator>();
 		sep->property_margin() = 5;
-		options.get_content_area()->add(*sep);
+		cdb::add_child(*options.get_content_area(), *sep);
 		return sep;
 	};
 	auto add_checkbox = [&options](const char* label, bool active) {
 		auto cb = std::make_unique<Gtk::CheckButton>(label);
 		cb->set_active(active);
-		options.get_content_area()->add(*cb);
+		cdb::add_child(*options.get_content_area(), *cb);
 		return cb;
 	};
 	auto add_entry = [&options](const Glib::ustring& val) {
 		auto entry = std::make_unique<Gtk::Entry>();
 		entry->set_text(val);
-		options.get_content_area()->add(*entry);
+		cdb::add_child(*options.get_content_area(), *entry);
 		return entry;
 	};
 
 	// Add widgets & display
-	auto py_opts = add_label("<b>Cadabra/Python Options</b>", Gtk::ALIGN_CENTER);
-	auto pypath_label = add_label("Default Python Path (semicolon separated):", Gtk::ALIGN_START);
+	auto py_opts = add_label("<b>Cadabra/Python Options</b>", cdb::ALIGN_CENTER);
+	auto pypath_label = add_label("Default Python Path (semicolon separated):", cdb::ALIGN_START);
 	auto pypath = add_entry(prefs.python_path);
 	auto sep1 = add_sep();
-	auto gui_opts = add_label("<b>GUI Options</b>", Gtk::ALIGN_CENTER);
+	auto gui_opts = add_label("<b>GUI Options</b>", cdb::ALIGN_CENTER);
 	auto auto_move = add_checkbox("Automatically move into a created cell", prefs.move_into_new_cell);
 	auto tab_completion = add_checkbox("Show possible completions with TAB", prefs.tab_completion);
 	auto sep2 = add_sep();
-	options.show_all();
+	cdb::show_all(options);
 	int res = cdb::dialog_run(options);
 
 	// Options menu closed, run any updates
-	if (res == Gtk::RESPONSE_APPLY) {
+	if (res == cdb::RESPONSE_APPLY) {
 		if (prefs.python_path != pypath->get_text()) {
 			prefs.python_path = pypath->get_text();
-			Gtk::MessageDialog md(*this, "Changes to python path won't take effect until kernel is restarted; restart now?", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_YES_NO, true);
+			Gtk::MessageDialog md(*this, "Changes to python path won't take effect until kernel is restarted; restart now?", false, cdb::MESSAGE_WARNING, cdb::BUTTONS_YES_NO, true);
 			md.set_title("Python Path Changed");
 			md.set_modal();
 			md.set_position(Gtk::WindowPosition::WIN_POS_CENTER);
 			int res = cdb::dialog_run(md);
-			if (res == Gtk::RESPONSE_YES) {
+			if (res == cdb::RESPONSE_YES) {
 				on_kernel_restart();
 			}
 		}
@@ -3377,10 +3435,10 @@ bool remove_recursive(const gchar* path)
 
 void NotebookWindow::on_tools_clear_cache()
 {
-	Gtk::MessageDialog prog("Removing cached library files, please wait...", false, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
+	Gtk::MessageDialog prog("Removing cached library files, please wait...", false, cdb::MESSAGE_INFO, cdb::BUTTONS_OK, true);
 	prog.set_transient_for(*this);
 	prog.set_title("Clearing cache");
-	prog.show_all();
+	cdb::show_all(prog);
 
 	auto config_dir = Glib::ustring(g_get_user_config_dir()) + "/cadabra_packages";
 	bool success = remove_recursive(config_dir.c_str());
@@ -3419,7 +3477,7 @@ void NotebookWindow::unselect_output_cell()
 	for(unsigned int i=0; i<canvasses.size(); ++i) {
 		if(canvasses[i]->visualcells.find(&(*selected_cell))!=canvasses[i]->visualcells.end()) {
 			auto& outbox = canvasses[i]->visualcells[&(*selected_cell)].outbox;
-			outbox->image.set_state_flags(Gtk::STATE_FLAG_NORMAL);
+			outbox->image.set_state_flags(cdb::STATE_FLAG_NORMAL);
 			outbox->queue_draw();
 			}
 		}
@@ -3436,7 +3494,7 @@ void NotebookWindow::handle_outbox_select(DTree::iterator it)
 	for(int i=0; i<(int)canvasses.size(); ++i) {
 		if(canvasses[i]->visualcells.find(&(*it))!=canvasses[i]->visualcells.end()) {
 			auto& outbox = canvasses[i]->visualcells[&(*it)].outbox;
-			outbox->image.set_state_flags(Gtk::STATE_FLAG_SELECTED);
+			outbox->image.set_state_flags(cdb::STATE_FLAG_SELECTED);
 			outbox->queue_draw();
 			if(i==current_canvas) {
 				outbox->grab_focus();

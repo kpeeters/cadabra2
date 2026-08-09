@@ -166,8 +166,8 @@ void CodeInput::init(const Prefs& prefs, double display_scale)
 	{
 	//	scroll_.set_size_request(-1,200);
 	//	scroll_.set_border_width(1);
-	//	scroll_.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
-//	edit.set_wrap_mode(Gtk::WRAP_NONE); // WRAP_WORD_CHAR); wrapping leads to weird effects
+	//	scroll_.set_policy(cdb::POLICY_NEVER, cdb::POLICY_ALWAYS);
+//	edit.set_wrap_mode(cdb::WRAP_NONE); // WRAP_WORD_CHAR); wrapping leads to weird effects
 	edit.set_pixels_above_lines(1);
 	edit.set_pixels_below_lines(1);
 	edit.set_pixels_inside_wrap(1);
@@ -970,12 +970,12 @@ void CodeInput::update_buffer()
 	switch (edit.datacell->cell_type) {
 		case DataCell::CellType::latex:
 			edit.set_hexpand(false);
-			edit.set_wrap_mode(Gtk::WRAP_WORD_CHAR);
+			edit.set_wrap_mode(cdb::WRAP_WORD_CHAR);
 			// std::cerr << "enabled word wrapping" << std::endl;
 			break;
 		case DataCell::CellType::python:
 			edit.set_hexpand(true);
-			edit.set_wrap_mode(Gtk::WRAP_NONE);
+			edit.set_wrap_mode(cdb::WRAP_NONE);
 			break;
 		default:
 			break;
