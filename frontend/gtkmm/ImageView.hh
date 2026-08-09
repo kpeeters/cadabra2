@@ -5,11 +5,13 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>
-#include <gtkmm/menu.h>
 #ifndef USE_GTK4
 #include <gtkmm/eventbox.h>
 #endif
 #include <gtkmm/drawingarea.h>
+#ifdef USE_GTK4
+#include <gtkmm/eventcontrollermotion.h>
+#endif
 
 namespace cadabra {
 
@@ -64,8 +66,13 @@ namespace cadabra {
 			ImageView(double display_scale, int logical_width);
 			virtual ~ImageView();
 			
-			virtual bool on_motion_notify_event(GdkEventMotion *event) override;
 			void on_save_as() const;
+
+			/// Drag-to-resize, shared between the toolkits.
+			void on_pointer_motion(double x, double y);
+#ifndef USE_GTK4
+			virtual bool on_motion_notify_event(GdkEventMotion *event) override;
+#endif
 
 			/// Button handling goes through a gesture controller rather than the
 			/// on_button_{press,release}_event vfuncs, which are removed in GTK4.
@@ -83,10 +90,12 @@ namespace cadabra {
 			double    prev_x, prev_y;
 			int       height_at_press, width_at_press;
 
-			Gtk::Menu     context_menu;
-			Gtk::MenuItem item_save_as;
+			cdb::ContextMenu context_menu;
 
 			Glib::RefPtr<cdb::ClickGesture>     click_gesture;
+#ifdef USE_GTK4
+			Glib::RefPtr<Gtk::EventControllerMotion> motion_controller;
+#endif
 	};
 	
 };

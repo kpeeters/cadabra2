@@ -31,8 +31,8 @@ namespace cadabra {
 
 		set_transient_for(parent);
 		set_modal(true);
-		get_content_area()->pack_start(main_vbox);
-		main_vbox.pack_start(main_grid);
+		cdb::box_append(*get_content_area(), main_vbox);
+		cdb::box_append(main_vbox, main_grid);
 		int col = 0;
 		for (auto it = prefs.colours.begin(); it != prefs.colours.end(); ++it, ++col) {
 			// Display the name of the language to highlight for
@@ -67,8 +67,8 @@ namespace cadabra {
 		main_grid.set_margin_top(10);
 		main_grid.set_margin_bottom(10);
 
-		main_vbox.pack_start(bottom_button_box);
-		bottom_button_box.pack_start(button_ok);
+		cdb::box_append(main_vbox, bottom_button_box);
+		cdb::box_append(bottom_button_box, button_ok);
 
 		button_ok.signal_clicked().connect( [&]() {
 			close();

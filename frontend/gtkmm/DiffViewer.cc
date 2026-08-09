@@ -16,7 +16,10 @@ DiffTextView::DiffTextView()
 	buffer->create_tag("insert")->property_background_rgba() = color_insert;
 	buffer->create_tag("delete")->property_background_rgba() = color_delete;
 
-	set_border_width(5);
+	set_margin_start(5);
+	set_margin_end(5);
+	set_margin_top(5);
+	set_margin_bottom(5);
 	set_editable(false);
 	set_hexpand(true);
 	set_monospace(true);
@@ -24,7 +27,10 @@ DiffTextView::DiffTextView()
 
 CellDiff::CellDiff(const std::string& a, const std::string& b)
 	{
-	set_border_width(5);
+	set_margin_start(5);
+	set_margin_end(5);
+	set_margin_top(5);
+	set_margin_bottom(5);
 	set_margin_top(5);
 	set_margin_bottom(5);
 	set_margin_start(5);
@@ -34,12 +40,12 @@ CellDiff::CellDiff(const std::string& a, const std::string& b)
 	grid.attach(sw_lhs, 1, 0, 1, 1);
 	grid.attach(sw_rhs, 3, 0, 1, 1);
 	grid.set_column_homogeneous(true);
-	add(grid);
+	cdb::add_child(*this, grid);
 
 	sw_lhs.set_policy(cdb::POLICY_AUTOMATIC, cdb::POLICY_NEVER);
 	sw_rhs.set_policy(cdb::POLICY_AUTOMATIC, cdb::POLICY_NEVER);
-	sw_lhs.add(tv_lhs);
-	sw_rhs.add(tv_rhs);
+	cdb::add_child(sw_lhs, tv_lhs);
+	cdb::add_child(sw_rhs, tv_rhs);
 
 			// FIXME: reinstate using css
 //	tv_lhs.override_background_color(color_offwhite);
@@ -130,12 +136,15 @@ DiffViewer::DiffViewer(std::istream& a, std::istream& b, Gtk::Window& parent)
 	: Gtk::Dialog("Comparing notebooks", parent)
 	, box(cdb::ORIENT_VERTICAL)
 	{
-	set_border_width(5);
+	set_margin_start(5);
+	set_margin_end(5);
+	set_margin_top(5);
+	set_margin_bottom(5);
 	set_default_size(1000, 600);
 
-	get_content_area()->add(scrolled_window);
+	cdb::add_child(*get_content_area(), scrolled_window);
 
-	scrolled_window.add(box);
+	cdb::add_child(scrolled_window, box);
 	scrolled_window.set_vexpand(true);
 	scrolled_window.set_policy(cdb::POLICY_NEVER, cdb::POLICY_ALWAYS);
 	add_button("Close", cdb::RESPONSE_CLOSE);
@@ -179,7 +188,7 @@ void DiffViewer::populate(std::istream& a, std::istream& b)
 		}
 
 	for (auto& cell : cells)
-		box.add(cell);
+		cdb::add_child(box, cell);
 	}
 
 DiffViewer::Cells DiffViewer::make_cells(std::istream& stream)

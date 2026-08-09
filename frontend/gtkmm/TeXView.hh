@@ -8,7 +8,6 @@
 #endif
 #include <gtkmm/box.h>
 #include <gtkmm/drawingarea.h>
-#include <gtkmm/menu.h>
 #if GTKMM_MAJOR_VERSION>3 || (GTKMM_MAJOR_VERSION==3 && GTKMM_MINOR_VERSION>=10)
 #include <gtkmm/revealer.h>
 #endif
@@ -159,8 +158,7 @@ namespace cadabra {
 			TeXEngine& engine;
 			bool is_error;
 			
-			Gtk::Menu     context_menu;
-			Gtk::MenuItem item_copy_as_latex;
+			cdb::ContextMenu context_menu;
 
 			Glib::RefPtr<cdb::ClickGesture>     click_gesture;
 

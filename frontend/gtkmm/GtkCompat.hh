@@ -31,6 +31,14 @@
 #endif
 #include <gtkmm/textbuffer.h>
 #include <gdkmm/pixbuf.h>
+#include <giomm/menu.h>
+#include <giomm/simpleactiongroup.h>
+#ifdef USE_GTK4
+#include <gtkmm/popovermenu.h>
+#else
+#include <gtkmm/menu.h>
+#include <gtkmm/menuitem.h>
+#endif
 #ifdef USE_GTK4
 #include <gdkmm/texture.h>
 #endif
@@ -262,6 +270,91 @@ namespace cdb {
 		return ClickGesture::create(widget);
 #endif
 		}
+
+	/// A right-click context menu.
+	///
+	/// gtkmm-3 builds one from Gtk::Menu + Gtk::MenuItem and pops it up at the
+	/// pointer. Both of those classes are gone in GTK4, where a menu is a
+	/// Gio::Menu *model* whose items name actions, shown through a
+	/// Gtk::PopoverMenu parented to the widget. This wrapper hides the
+	/// difference so the call sites read the same on both.
+
+	class ContextMenu {
+		public:
+			ContextMenu() = default;
+			ContextMenu(const ContextMenu&) = delete;
+			ContextMenu& operator=(const ContextMenu&) = delete;
+
+			~ContextMenu()
+				{
+#ifdef USE_GTK4
+				// A Gtk::Popover attached with set_parent() must be unparented
+				// before it goes away.
+				if(popover) {
+					popover->unparent();
+					delete popover;
+					}
+#endif
+				}
+
+			/// Call once, before add_item(). `action_prefix` only has to be
+			/// unique within `widget`.
+			void attach_to(Gtk::Widget& widget, const Glib::ustring& action_prefix)
+				{
+#ifdef USE_GTK4
+				prefix  = action_prefix;
+				model   = Gio::Menu::create();
+				actions = Gio::SimpleActionGroup::create();
+				widget.insert_action_group(prefix, actions);
+
+				popover = new Gtk::PopoverMenu(model);
+				popover->set_parent(widget);
+				popover->set_has_arrow(false);
+#else
+				(void)widget;
+				(void)action_prefix;
+#endif
+				}
+
+			void add_item(const Glib::ustring& label, const sigc::slot<void()>& callback)
+				{
+#ifdef USE_GTK4
+				const Glib::ustring name = "item" + Glib::ustring::format(next_id++);
+				actions->add_action(name, callback);
+				model->append(label, prefix + "." + name);
+#else
+				auto* item = Gtk::make_managed<Gtk::MenuItem>(label);
+				item->signal_activate().connect(callback);
+				menu.append(*item);
+				item->show();
+#endif
+				}
+
+			/// `x`, `y` are relative to the widget passed to attach_to().
+			void popup_at(double x, double y)
+				{
+#ifdef USE_GTK4
+				popover->set_pointing_to(Gdk::Rectangle(static_cast<int>(x), static_cast<int>(y), 1, 1));
+				popover->popup();
+#else
+				(void)x;
+				(void)y;
+				// nullptr means 'the event currently being processed'.
+				menu.popup_at_pointer(nullptr);
+#endif
+				}
+
+		private:
+#ifdef USE_GTK4
+			Glib::ustring                        prefix;
+			Glib::RefPtr<Gio::Menu>              model;
+			Glib::RefPtr<Gio::SimpleActionGroup> actions;
+			Gtk::PopoverMenu                    *popover = nullptr;
+			int                                  next_id = 0;
+#else
+			Gtk::Menu menu;
+#endif
+		};
 
 	/// Gdk::Screen is gone in GTK4; style providers attach to a Gdk::Display.
 

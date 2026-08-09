@@ -41,15 +41,20 @@ ImageView::ImageView(double display_scale_, int logical_width_)
 	           | Gdk::POINTER_MOTION_MASK);
 #endif
 
+#ifdef USE_GTK4
+	motion_controller = Gtk::EventControllerMotion::create();
+	motion_controller->signal_motion().connect(
+	   sigc::mem_fun(*this, &ImageView::on_pointer_motion));
+	add_controller(motion_controller);
+#endif
+
 	click_gesture = cdb::add_click_gesture(*this);
 	click_gesture->set_button(0);   // react to any button; we dispatch ourselves
 	click_gesture->signal_pressed().connect(sigc::mem_fun(*this, &ImageView::on_button_pressed));
 	click_gesture->signal_released().connect(sigc::mem_fun(*this, &ImageView::on_button_released));
 
-	context_menu.append(item_save_as);
-	item_save_as.set_label("Save as SVG...");
-	context_menu.show_all();
-	item_save_as.signal_activate().connect(sigc::mem_fun(*this, &ImageView::on_save_as));
+	context_menu.attach_to(*this, "imageview");
+	context_menu.add_item("Save as SVG...", sigc::mem_fun(*this, &ImageView::on_save_as));
 	 
 	set_name("ImageView"); // to be able to style it with CSS
 	// Children are shown as they are added (see cdb::add_child), so this only
@@ -82,15 +87,24 @@ void ImageView::on_save_as() const
 		}
 	}
 
-bool ImageView::on_motion_notify_event(GdkEventMotion *event)
+/// Drag-to-resize. Shared between gtkmm-3's on_motion_notify_event vfunc and
+/// GTK4's Gtk::EventControllerMotion, which gtkmm-3 does not wrap.
+
+void ImageView::on_pointer_motion(double x, double /* y */)
 	{
-	//	std::cerr << event->x << ", " << event->y << std::endl;
 	if(sizing) {
-		area.logical_width = width_at_press  + (event->x - prev_x);
+		area.logical_width = width_at_press + (x - prev_x);
 		area.rerender(area.logical_width);
 		}
+	}
+
+#ifndef USE_GTK4
+bool ImageView::on_motion_notify_event(GdkEventMotion *event)
+	{
+	on_pointer_motion(event->x, event->y);
 	return true;
 	}
+#endif
 
 void ImageView::on_button_pressed(int n_press, double x, double y)
 	{
@@ -108,8 +122,7 @@ void ImageView::on_button_pressed(int n_press, double x, double y)
 		height_at_press=area.pixbuf->get_height()/area.display_scale;
 		}
 	else if(button == 3) {
-		// nullptr means 'the event currently being processed'.
-		context_menu.popup_at_pointer(nullptr);
+		context_menu.popup_at(x, y);
 		}
 	click_gesture->set_state(cdb::SEQ_CLAIMED);
 	}

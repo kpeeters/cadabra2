@@ -15,10 +15,10 @@ SelectFileDialog::SelectFileDialog(const Glib::ustring& title, Gtk::Window& pare
 	// 'entry' expands, so packing 'choose' after it puts it hard right, which is
 	// what pack_end used to do. GTK4 has no pack_end.
 	entry.set_hexpand(true);
-	hbox.pack_start(entry, Gtk::PACK_EXPAND_WIDGET);
-	hbox.pack_start(choose, Gtk::PACK_SHRINK);
+	cdb::box_append(hbox, entry, cdb::Expand::yes);
+	cdb::box_append(hbox, choose);
 
-	get_content_area()->pack_start(hbox);
+	cdb::box_append(*get_content_area(), hbox);
 	add_button("Ok", cdb::RESPONSE_OK);
 
 	cdb::show_all(*this);

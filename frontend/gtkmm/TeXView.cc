@@ -56,10 +56,8 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, int hmargin)
 	click_gesture->signal_pressed().connect(sigc::mem_fun(*this, &TeXView::on_button_pressed));
 	click_gesture->signal_released().connect(sigc::mem_fun(*this, &TeXView::on_button_released));
 
-	context_menu.append(item_copy_as_latex);
-	item_copy_as_latex.set_label("Copy as LaTeX");
-	context_menu.show_all();
-	item_copy_as_latex.signal_activate().connect(sigc::mem_fun(*this, &TeXView::on_copy_as_latex));
+	context_menu.attach_to(*this, "texview");
+	context_menu.add_item("Copy as LaTeX", sigc::mem_fun(*this, &TeXView::on_copy_as_latex));
 	}
 
 TeXView::~TeXView()
@@ -271,15 +269,14 @@ void TeXView::on_button_released(int /* n_press */, double /* x */, double /* y 
 		}
 	}
 
-void TeXView::on_button_pressed(int n_press, double /* x */, double /* y */)
+void TeXView::on_button_pressed(int n_press, double x, double y)
 	{
 	// Only a single (not double/triple) press, matching the old
 	// event->type==GDK_BUTTON_PRESS test.
 	if(n_press != 1) return;
 
 	if(click_gesture->get_current_button() == 3) {
-		// nullptr means 'the event currently being processed'.
-		context_menu.popup_at_pointer(nullptr);
+		context_menu.popup_at(x, y);
 		click_gesture->set_state(cdb::SEQ_CLAIMED);
 		}
 	else {
