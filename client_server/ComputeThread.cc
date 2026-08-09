@@ -64,11 +64,7 @@ void ComputeThread::try_connect()
 	uristr << "ws://" << (forced_server_ip_address.empty() ? "127.0.0.1" : forced_server_ip_address) << ":" << port;
 	wsclient.connect(uristr.str());
 
-	// TEMP DEBUG (remove once the GTK4 connection problem is understood)
-	std::cerr << "[dbg] ComputeThread::try_connect uri=" << uristr.str()
-	          << " forced_port=" << forced_server_port
-	          << " port=" << port
-	          << " forced_ip='" << forced_server_ip_address << "'" << std::endl;
+	// std::cerr << "cadabra-client: connect done" << std::endl;
 	}
 
 void ComputeThread::run()
