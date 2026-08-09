@@ -1,6 +1,7 @@
 
 #include <string>
 #include <iostream>
+#include <locale>
 #include <sstream>
 #include "ComputeThread.hh"
 #include "DocumentThread.hh"
@@ -58,10 +59,16 @@ void ComputeThread::try_connect()
 	wsclient.set_message_handler(std::bind(&ComputeThread::on_message, this, std::placeholders::_1));
 
 	std::ostringstream uristr;
+	// Never let the global locale group the digits of a port number.
+	uristr.imbue(std::locale::classic());
 	uristr << "ws://" << (forced_server_ip_address.empty() ? "127.0.0.1" : forced_server_ip_address) << ":" << port;
 	wsclient.connect(uristr.str());
 
-	// std::cerr << "cadabra-client: connect done" << std::endl;
+	// TEMP DEBUG (remove once the GTK4 connection problem is understood)
+	std::cerr << "[dbg] ComputeThread::try_connect uri=" << uristr.str()
+	          << " forced_port=" << forced_server_port
+	          << " port=" << port
+	          << " forced_ip='" << forced_server_ip_address << "'" << std::endl;
 	}
 
 void ComputeThread::run()

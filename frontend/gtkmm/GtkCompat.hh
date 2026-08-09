@@ -575,6 +575,8 @@ namespace cdb {
 	/// on GTK4, so it has no ::response signal there and cannot go through
 	/// dialog_run(). On GTK4 it is simply presented and dismissed by the user.
 
+	inline int dialog_run(Gtk::Dialog& dialog);   // defined further down
+
 	inline void about_dialog_run(Gtk::AboutDialog& about)
 		{
 #ifdef USE_GTK4

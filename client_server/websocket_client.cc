@@ -99,6 +99,12 @@ void websocket_client::connect(const std::string& uri_string)
 		ws_stream_->read_message_max(64 * 1024 * 1024);  // 64MB max message size
 		}
 	
+	// TEMP DEBUG (remove once the GTK4 connection problem is understood)
+	std::cerr << "[dbg] websocket_client::connect uri=" << uri_string
+	          << " protocol=" << uri.protocol
+	          << " host=" << host_ << " port=" << port_ << " path=" << path_
+	          << " ssl=" << is_ssl_ << std::endl;
+
 	// Start the connection process
 	resolver_.async_resolve(host_, port_,
 									[this](const boost::beast::error_code& ec,
@@ -110,6 +116,15 @@ void websocket_client::connect(const std::string& uri_string)
 void websocket_client::on_resolve(const boost::beast::error_code& ec,
 											 boost::asio::ip::tcp::resolver::results_type results)
 	{
+	// TEMP DEBUG (remove once the GTK4 connection problem is understood)
+	if(ec) {
+		std::cerr << "[dbg] on_resolve FAILED: " << ec.message() << std::endl;
+		}
+	else {
+		for(const auto& r : results)
+			std::cerr << "[dbg] on_resolve endpoint " << r.endpoint() << std::endl;
+		}
+
 	if (ec) return fail(ec);
 	
 	if (is_ssl_) {
@@ -300,6 +315,11 @@ void websocket_client::on_close(const boost::beast::error_code& ec)
 
 void websocket_client::fail(const boost::beast::error_code& ec)
 	{
+	// TEMP DEBUG (remove once the GTK4 connection problem is understood)
+	std::cerr << "[dbg] websocket_client::fail: " << ec.message()
+	          << " (category=" << ec.category().name() << " value=" << ec.value() << ")"
+	          << std::endl;
+
 	if (fail_handler_) {
 		fail_handler_(ec);
 		}

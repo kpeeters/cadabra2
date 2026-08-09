@@ -5,6 +5,7 @@
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/label.h>
 #include <glibmm/spawn.h>
+#include <glibmm/init.h>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -34,6 +35,16 @@ int main(int argc, char **argv)
 	FreeConsole();
 #endif
 	
+	// glibmm-2.68 changed Glib::init() -- which Gtk::Application's constructor
+	// calls -- to set the C *and C++* global locale to the user's preferred one
+	// by default; glibmm-2.4 never did. That makes every std::ostringstream
+	// group digits, so a port number serialises as "43,559" and mathematical
+	// output and notebook serialisation would pick up separators too. Cadabra
+	// wants the classic locale for all of that, so opt out.
+#if GLIBMM_MAJOR_VERSION > 2 || (GLIBMM_MAJOR_VERSION == 2 && GLIBMM_MINOR_VERSION >= 68)
+	Glib::set_init_to_users_preferred_locale(false);
+#endif
+
 	try {
 		auto application = Cadabra::create();
 		const int status = application->run(argc, argv);
