@@ -600,17 +600,40 @@ namespace cdb {
 #endif
 		}
 
+	/// Show the about box and block until the user dismisses it.
+	///
 	/// Gtk::AboutDialog derives from Gtk::Dialog on gtkmm-3 but from Gtk::Window
 	/// on GTK4, so it has no ::response signal there and cannot go through
-	/// dialog_run(). On GTK4 it is simply presented and dismissed by the user.
+	/// dialog_run(). It still has to *block*, though: the callers construct the
+	/// dialog on the stack, so returning immediately destroys it before it is
+	/// ever presented and nothing appears at all. So we spin a nested main loop
+	/// here too, quitting on ::hide.
+	///
+	/// set_hide_on_close() is what makes ::hide the signal to wait for. Without
+	/// it a GTK4 window is *destroyed* when closed, which for a stack-allocated
+	/// dialog would dispose the underlying GObject while the C++ wrapper is
+	/// still alive.
 
 	inline int dialog_run(Gtk::Dialog& dialog);   // defined further down
 
 	inline void about_dialog_run(Gtk::AboutDialog& about)
 		{
 #ifdef USE_GTK4
+		auto loop = Glib::MainLoop::create(false);
+
+		about.set_hide_on_close(true);
+		auto conn_hide = about.signal_hide().connect(
+		   [loop]() {
+			if(loop->is_running())
+				loop->quit();
+			});
+
 		about.set_modal(true);
 		about.set_visible(true);
+		loop->run();
+
+		conn_hide.disconnect();
+		about.set_visible(false);
 #else
 		dialog_run(about);
 #endif

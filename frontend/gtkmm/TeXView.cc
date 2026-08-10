@@ -359,10 +359,28 @@ void TeXView::TeXArea::update_image(std::shared_ptr<TeXEngine::TeXRequest> conte
 
 void TeXView::TeXArea::layout_latex() const
 	{
+	// MicroTeX::parse() is expensive, and GTK4 measures far more often than
+	// gtkmm-3 did: opening a menu popover triggers a layout pass over the
+	// whole window, which measured -- and so re-parsed -- every output cell in
+	// the document, taking about a second on a notebook of any size.
+	//
+	// The three members tested here are precisely the arguments below that
+	// vary, so identical values mean an identical render. Everything else
+	// (colour) is applied at draw time.
+	if(_render!=nullptr
+	   && rendering_width==_laid_out_width
+	   && _text_size==_laid_out_text_size
+	   && fixed==_laid_out_text)
+		return;
+
 	if(_render) {
 		delete _render;
 		_render = nullptr;
 		}
+
+	_laid_out_text      = fixed;
+	_laid_out_width     = rendering_width;
+	_laid_out_text_size = _text_size;
 
 //	std::cerr << "running layout with text_size = " << _text_size << std::endl;
 	try {

@@ -123,6 +123,14 @@ namespace cadabra {
 					mutable microtex::Render* _render;
 					std::string               unfixed, fixed;
 
+					// What _render was built from, so that layout_latex() can
+					// skip a re-parse when nothing has changed. These are
+					// exactly the arguments MicroTeX::parse() varies over, so
+					// they capture the whole of its input.
+					mutable std::string       _laid_out_text;
+					mutable int               _laid_out_width = -1;
+					mutable float             _laid_out_text_size = -1.f;
+
 					// Return a string in which backslashes, curly braces,
 					// underscores and tildes are properly backslashed, so they
 					// typeset as if we are in a verbatim environment.
