@@ -571,6 +571,35 @@ namespace cdb {
 #endif
 		}
 
+	/// Position of a point in `src`'s coordinate space, expressed in `dest`'s.
+	/// Returns false if the two have no common ancestor, in which case nothing
+	/// is stored.
+	///
+	/// Needed because get_allocation() does not mean the same thing in the two
+	/// toolkits: gtkmm-3 reports a widget's position within the GdkWindow it
+	/// draws on -- which, inside a Gtk::ScrolledWindow, is the scrolled bin
+	/// window, so allocations come out directly in document coordinates. GTK4
+	/// has no such windows and get_allocation() is relative to the immediate
+	/// parent, so anything comparing a cell's position against a scroll
+	/// adjustment has to translate explicitly. The signature also differs:
+	/// gtkmm-3 takes and returns ints, GTK4 doubles.
+
+	inline bool translate_widget_coords(Gtk::Widget& src, Gtk::Widget& dest,
+													double src_x, double src_y,
+													double& dest_x, double& dest_y)
+		{
+#ifdef USE_GTK4
+		return src.translate_coordinates(dest, src_x, src_y, dest_x, dest_y);
+#else
+		int dx = 0, dy = 0;
+		if(!src.translate_coordinates(dest, static_cast<int>(src_x), static_cast<int>(src_y), dx, dy))
+			return false;
+		dest_x = dx;
+		dest_y = dy;
+		return true;
+#endif
+		}
+
 	/// Gtk::AboutDialog derives from Gtk::Dialog on gtkmm-3 but from Gtk::Window
 	/// on GTK4, so it has no ::response signal there and cannot go through
 	/// dialog_run(). On GTK4 it is simply presented and dismissed by the user.

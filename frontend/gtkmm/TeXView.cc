@@ -131,6 +131,11 @@ Gtk::SizeRequestMode TeXView::TeXArea::get_request_mode_vfunc() const
 void TeXView::TeXArea::measure_height_for_width(int width,
 															  int& minimum_height, int& natural_height) const
 	{
+	// Nothing below assigns these when there is no render yet, and they are
+	// raw out-parameters, so start from something defined.
+	minimum_height=0;
+	natural_height=0;
+
 	if(width==1) {
 		minimum_height=9999;
 		natural_height=9999;
@@ -210,9 +215,21 @@ void TeXView::TeXArea::measure_vfunc(Gtk::Orientation orientation, int for_size,
 	natural_baseline = -1;
 
 	if(orientation==cdb::ORIENT_VERTICAL) {
-		// GTK4 passes -1 for an unconstrained width; gtkmm-3 used 1 as its
-		// sentinel for a bogus width, so map onto that.
-		const int width = (for_size < 0) ? 1 : for_size;
+		// GTK4 passes for_size==-1 when it wants an unconstrained height.
+		// gtkmm-3 answered that from a *separate* get_preferred_height_vfunc(),
+		// which we never overrode, so it came back as the height pinned by
+		// set_size_request() and was always right; only the height-for-width
+		// query reached measure_height_for_width(). GTK4 routes both here, so
+		// mapping -1 onto that function's width==1 "bogus width" sentinel makes
+		// every cell claim 9999px of natural height. The document box then gives
+		// each cell its correct height-for-width and dumps the whole surplus
+		// into its only vexpand child, the spacer at the bottom.
+		//
+		// We already know the width we will be given -- we report it ourselves
+		// in the horizontal branch below -- so answer for that.
+		int width = for_size;
+		if(width < 0)
+			width = (owner->window_width > 20) ? owner->window_width - 20 : 1;
 		measure_height_for_width(width, minimum, natural);
 		return;
 		}

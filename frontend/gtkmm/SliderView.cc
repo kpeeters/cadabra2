@@ -26,7 +26,16 @@ int compute_scale_digits(double step_increment) {
 }
 
 SliderView::SliderView(std::string config)
-	: vbox(cdb::ORIENT_VERTICAL)
+	:
+#ifdef USE_GTK4
+	  // Vertical, as for TeXView and ImageView. gtkmm-3's Gtk::EventBox is a
+	  // Gtk::Bin and hands its single child the whole allocation, but a
+	  // Gtk::Box only does that along its cross axis: left horizontal (the
+	  // Gtk::Box default) it would give vbox nothing but the scale's minimum
+	  // width, a few pixels, since nothing inside asks to expand.
+	  Gtk::Box(cdb::ORIENT_VERTICAL),
+#endif
+	  vbox(cdb::ORIENT_VERTICAL)
 	{
 	// Extract the settings from the JSON string.
 	nlohmann::json settings = nlohmann::json::parse(config);

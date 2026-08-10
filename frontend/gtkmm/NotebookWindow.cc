@@ -1791,6 +1791,13 @@ void NotebookWindow::update_cell(const DTree&, DTree::iterator it)
 		if(it->cell_type==DataCell::CellType::python || it->cell_type==DataCell::CellType::latex) {
 			vc.inbox->update_buffer();
 			vc.inbox->queue_draw();
+			// The cell-type/running marker down the left edge is drawn by the
+			// TextView, not by the box around it. gtkmm-3 gets away with
+			// invalidating just the box because the two share a GdkWindow, but
+			// GTK4 caches a render node per widget and reuses the child's
+			// unless the child itself is invalidated -- so the marker would not
+			// repaint until something else forced the TextView to redraw.
+			vc.inbox->edit.queue_draw();
 			}
 		else if(it->cell_type==DataCell::CellType::latex_view
 				  || it->cell_type==DataCell::CellType::verbatim
@@ -1924,22 +1931,44 @@ void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 
 //	if(focusbox.inbox==0) return;
 
-	Gtk::Allocation               al;
+	Gtk::Widget *cellw=0;
 	if(cell->cell_type==DataCell::CellType::python ||
 		cell->cell_type==DataCell::CellType::latex)
-		al=focusbox.inbox->edit.get_allocation();
+		cellw=&focusbox.inbox->edit;
 	else if(cell->cell_type==DataCell::CellType::latex_view ||
 			  cell->cell_type==DataCell::CellType::output ||
 			  cell->cell_type==DataCell::CellType::error ||
 			  cell->cell_type==DataCell::CellType::verbatim)
-		al=focusbox.outbox->get_allocation();
+		cellw=focusbox.outbox;
 	else if(cell->cell_type==DataCell::CellType::image_png)
-		al=focusbox.imagebox->get_allocation();
+		cellw=focusbox.imagebox;
 	else if(cell->cell_type==DataCell::CellType::image_svg)
-		al=focusbox.imagebox->get_allocation();
+		cellw=focusbox.imagebox;
 	else if(cell->cell_type==DataCell::CellType::slider)
-		al=focusbox.slider->get_allocation();
+		cellw=focusbox.slider;
 	else
+		return;
+
+	// Where the cell sits in *document* coordinates, i.e. in the space the
+	// vertical adjustment addresses. We cannot read this off get_allocation():
+	// on gtkmm-3 that is relative to the scrolled bin window and so happens to
+	// be document coordinates already, but on GTK4 it is relative to the
+	// immediate parent, which for a cell nested inside an input box is a small
+	// number unrelated to the scroll position.
+	//
+	// Translate into the document box -- the viewport's child, which spans the
+	// whole content -- rather than into the viewport itself. Position within
+	// the document box is document coordinates by construction, whereas the
+	// offset between the two is the scroll position and it is up to the
+	// toolkit whether that shows up as a child allocation or is applied at
+	// paint time.
+	auto *viewport = dynamic_cast<Gtk::Viewport*>(canvasses[current_canvas]->scroll.get_child());
+	if(viewport==0) return;
+	Gtk::Widget *docbox = viewport->get_child();
+	if(docbox==0) return;
+
+	double cell_x=0, cell_y=0;
+	if(!cdb::translate_widget_coords(*cellw, *docbox, 0, 0, cell_x, cell_y))
 		return;
 
 	Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
@@ -1954,13 +1983,13 @@ void NotebookWindow::scroll_cell_into_view(DTree::iterator cell)
 	// should make sure that busybox.y+busybox.height+editbox.height is at the bottom
 	// of the scrollbox.
 //	std::cerr << "viewport = " << upper_visible << " - " << lower_visible << std::endl;
-//	std::cerr << "cell to show = " << al.get_y() << " height " << al.get_height() << std::endl;
+//	std::cerr << "cell to show = " << cell_y << " height " << cellw->get_allocation().get_height() << std::endl;
 
-	double should_be_visible = al.get_y()+al.get_height()+10;
+	double should_be_visible = cell_y+cellw->get_allocation().get_height()+10;
 	double shift = should_be_visible - lower_visible;
 //	std::cerr << "position " << should_be_visible << " should be visible" << std::endl;
 //	std::cerr << "shift = " << shift << std::endl;
-	if(shift>0 || (-shift)>va->get_page_size()) {
+	if(shift>0 || (-shift)>page_size) {
 //		va->set_value( upper_visible + shift);
 		// std::cerr << "SCROLLING " << follow_mode << " scroll from " << upper_visible
 		//			 << " to " << upper_visible + shift << std::endl;
