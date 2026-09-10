@@ -5,7 +5,11 @@ if(WIN33)
   endif()
 else()
   find_package(PkgConfig REQUIRED)
-  if(MACOS)
+  if(DEFINED ENV{NIX_BUILD_TOP} OR DEFINED ENV{IN_NIX_SHELL})
+    # Nix sets up the correct pkg-config paths for us; never override
+    # them with Homebrew-specific paths.
+    message(STATUS "Nix build detected, using Nix-provided PKG_CONFIG_PATH")
+  elseif(MACOS)
     execute_process(COMMAND brew --prefix glibmm@2.64  OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE GLIBMM_PREFIX)
     execute_process(COMMAND brew --prefix cairomm@1.14 OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE CAIROMM_PREFIX)
     execute_process(COMMAND brew --prefix pangomm@2.42 OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE PANGOMM_PREFIX)
