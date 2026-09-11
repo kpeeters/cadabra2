@@ -97,7 +97,9 @@ message(STATUS "Build type = ${CMAKE_BUILD_TYPE}")
 
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
-if (APPLE)
+if (DEFINED ENV{NIX_BUILD_TOP} OR DEFINED ENV{IN_NIX_SHELL})
+    message(STATUS "Nix build detected, using Nix-provided PKG_CONFIG_PATH")
+elseif (APPLE)
    set(ENV{PKG_CONFIG_PATH} "/usr/local/opt/libffi/lib/pkgconfig:")
 endif()
 
