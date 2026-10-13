@@ -23,7 +23,10 @@ class CadabraRemote:
         self.open_condition = threading.Condition()
         self.close_condition = threading.Condition()
         self.name = "cadabra2-gtk"
-        self.received_msg = {} # FIXME: need to keep a stack of messages?
+        self.received_msg = {} # last reply returned by _request
+        self.replies = {}      # serial -> reply, for requests being waited on
+        self.waiting = set()   # serials of requests someone is waiting on
+        self.closed = False
         self.stderr_thread = None
         self.is_open = False
         self.open_error = None
@@ -90,17 +93,26 @@ class CadabraRemote:
         print("Websocket handler going into main loop")
         self.ws.run_forever()
         print("Websocket handler exited")
+        with self.condition:
+            self.closed = True
+            self.condition.notify_all()
         with self.close_condition:
             self.close_condition.notify()
         
     def on_message(self, ws, message):
         try:
-            with self.condition:
-                self.received_msg = json.loads(message)
-                print(f"Received completion message {self.received_msg}")
-                self.condition.notify()
+            msg = json.loads(message)
         except Exception as ex:
             print(f"Cannot parse message {message}: {ex}")
+            return
+        print(f"Received completion message {msg}")
+        with self.condition:
+            # Store the reply rather than just notifying: a notify is lost
+            # if the requester has not yet started waiting.
+            serial = msg.get("serial")
+            if serial in self.waiting:
+                self.replies[serial] = msg
+            self.condition.notify_all()
 
     def on_open(self, ws):
         print("Connection open.")
@@ -110,6 +122,9 @@ class CadabraRemote:
 
     def on_close(self, ws, v1, v2):
         print(f"Connection closed: {v1}, {v2}")
+        with self.condition:
+            self.closed = True
+            self.condition.notify_all()
         # remaining_stdout = self.process.stdout.read()
         # remaining_stderr = self.process.stderr.read()
         # print(remaining_stdout)
@@ -126,76 +141,76 @@ class CadabraRemote:
         # print(remaining_stdout)
         # print(remaining_stderr)
             
+    def _request(self, msg, wait):
+        """ Send a request to the notebook. If `wait` is true, block until
+        the reply with the matching serial arrives and return it."""
+        with self.condition:
+            self.serial += 1
+            serial = self.serial
+            msg["serial"] = serial
+            # Register before sending, so that even an immediate reply
+            # gets stored by on_message.
+            if wait:
+                self.waiting.add(serial)
+        try:
+            self.ws.send( json.dumps(msg) )
+        except Exception as ex:
+            with self.condition:
+                self.waiting.discard(serial)
+            raise CadabraRemoteException(f"Cannot send to Cadabra notebook: {ex}")
+        if not wait:
+            return None
+        with self.condition:
+            # wait_for checks the predicate before sleeping, so a reply
+            # which arrived before we got here is not missed.
+            self.condition.wait_for(lambda: serial in self.replies or self.closed)
+            self.waiting.discard(serial)
+            if serial not in self.replies:
+                raise CadabraRemoteException("Connection to Cadabra notebook closed while waiting for reply.")
+            self.received_msg = self.replies.pop(serial)
+            return self.received_msg
+
     def open(self, notebook, wait=True):
-        self.serial += 1
         msg = { "action":   "open",
-                "notebook": notebook,
-                "serial":   self.serial
+                "notebook": notebook
                }
         print("Loading notebook")
-        self.ws.send( json.dumps(msg) )
-        if wait:
-            with self.condition:
-                self.condition.wait()
+        self._request(msg, wait)
 
     def run_all_cells(self, wait=True):
-        self.serial += 1
-        msg = { "action":   "run_all_cells",
-                "serial":   self.serial
+        msg = { "action":   "run_all_cells"
                }
-        try:
-            print("Running cells")
-            self.ws.send( json.dumps(msg) )
-            if wait:
-                with self.condition:
-                    self.condition.wait()
-        except:
-            raise CadabraRemoteException("Connection to Cadabra notebook not open.")
+        print("Running cells")
+        self._request(msg, wait)
 
     def run_cell(self, cell_id, wait=True):
-        self.serial += 1
         msg = { "action":   "run_cell",
-                "cell_id":  cell_id,
-                "serial":   self.serial
+                "cell_id":  cell_id
                }
-        try:
-            print(f"Running cell {cell_id}")
-            self.ws.send( json.dumps(msg) )
-            if wait:
-                with self.condition:
-                    self.condition.wait()
-        except:
-            raise CadabraRemoteException("Connection to Cadabra notebook not open.")
+        print(f"Running cell {cell_id}")
+        self._request(msg, wait)
 
     def add_cell(self, content, cell_id=0, wait=True):
         """ Add a cell to the notebook. If `cell_id` is non-zero,
         and a cell with that id already exists, just update the content."""
-        self.serial += 1
         msg = { "action":   "add_cell",
                 "cell_id":  cell_id,
-                "serial":   self.serial,
                 "content":  content
                }
-        self.ws.send( json.dumps(msg) )
-        if wait:
-            with self.condition:
-                self.condition.wait()
-            return self.received_msg["cell_id"]
+        reply = self._request(msg, wait)
+        if reply:
+            return reply.get("cell_id", 0)
         return 0
 
     def insert_text(self, content, cell_id=0, wait=True):
         """ Add a text to the given cell. """
-        self.serial += 1
         msg = { "action":   "insert_text",
                 "cell_id":  cell_id,
-                "serial":   self.serial,
                 "content":  content
                }
-        self.ws.send( json.dumps(msg) )
-        if wait:
-            with self.condition:
-                self.condition.wait()
-            return self.received_msg.get("cell_id", 0)
+        reply = self._request(msg, wait)
+        if reply:
+            return reply.get("cell_id", 0)
         return 0
 
     def wait(self):
