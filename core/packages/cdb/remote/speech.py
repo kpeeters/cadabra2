@@ -66,7 +66,7 @@ def say_async(fname, delay):
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
 
-def say(text, subtitle=True, subtext="", delay=0, block=False, bottom=20):
+def say(text, subtitle=True, subtext="", delay=0, block=False, bottom=None):
     """
     Say a text. This will do the text-to-speech, then play the audio
     async. So it returns immediately after the playing starts.

@@ -10,10 +10,23 @@ print_header("Configuring tests")
 
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 
+# The tests run cadabra2-cli, which embeds Python; when the interpreter
+# was found inside a virtual environment, the embedded interpreter does
+# not see that venv's site-packages (e.g. sympy). So add the site
+# directories of the interpreter we configured against explicitly. They
+# go last so that the cadabra2 module from the build tree takes precedence.
 if(WIN32)
-  set(PYTHONPATH "$ENV{PYTHONPATH}\\;${CMAKE_SOURCE_DIR}/libs/appdirs\\;${CMAKE_SOURCE_DIR}/core/packages\\;${CMAKE_SOURCE_DIR}/core\\;${CMAKE_BINARY_DIR}/core/packages\\;${CMAKE_BINARY_DIR}/core;${CMAKE_BINARY_DIR}/core/${CADABRA_BUILD_TYPE}\\;${CMAKE_SOURCE_DIR}/tests")
+  set(PYTHON_TEST_SITE "\\;${Python_SITEARCH}")
+  if(NOT "${Python_SITELIB}" STREQUAL "${Python_SITEARCH}")
+    set(PYTHON_TEST_SITE "${PYTHON_TEST_SITE}\\;${Python_SITELIB}")
+  endif()
+  set(PYTHONPATH "$ENV{PYTHONPATH}\\;${CMAKE_SOURCE_DIR}/libs/appdirs\\;${CMAKE_SOURCE_DIR}/core/packages\\;${CMAKE_SOURCE_DIR}/core\\;${CMAKE_BINARY_DIR}/core/packages\\;${CMAKE_BINARY_DIR}/core\\;${CMAKE_BINARY_DIR}/core/${CADABRA_BUILD_TYPE}\\;${CMAKE_SOURCE_DIR}/tests${PYTHON_TEST_SITE}")
 else()
-  set(PYTHONPATH "$ENV{PYTHONPATH}:${CMAKE_SOURCE_DIR}/libs/appdirs:${CMAKE_BINARY_DIR}/core/packages:${CMAKE_SOURCE_DIR}/core/packages:${CMAKE_SOURCE_DIR}/core:${CMAKE_BINARY_DIR}/core/${CADABRA_BUILD_TYPE}:${CMAKE_BINARY_DIR}/core/:${CMAKE_SOURCE_DIR}/tests")
+  set(PYTHON_TEST_SITE ":${Python_SITEARCH}")
+  if(NOT "${Python_SITELIB}" STREQUAL "${Python_SITEARCH}")
+    set(PYTHON_TEST_SITE "${PYTHON_TEST_SITE}:${Python_SITELIB}")
+  endif()
+  set(PYTHONPATH "$ENV{PYTHONPATH}:${CMAKE_SOURCE_DIR}/libs/appdirs:${CMAKE_BINARY_DIR}/core/packages:${CMAKE_SOURCE_DIR}/core/packages:${CMAKE_SOURCE_DIR}/core:${CMAKE_BINARY_DIR}/core/${CADABRA_BUILD_TYPE}:${CMAKE_BINARY_DIR}/core/:${CMAKE_SOURCE_DIR}/tests${PYTHON_TEST_SITE}")
 endif()
 message("-- Set PYTHONPATH for testing to ${PYTHONPATH}")
 

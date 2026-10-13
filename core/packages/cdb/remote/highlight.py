@@ -8,10 +8,57 @@ import pyatspi
 import cairo
 from Xlib import display as xdisplay, X
 import sys
+import os
+import faulthandler
+import threading
 from threading import Thread
 import time
 import math
 import textwrap
+
+# Print the Python stack of all threads if we ever segfault.
+faulthandler.enable()
+
+# Distance in pixels between the bottom of the subtitle and the bottom
+# of the notebook window; large enough to clear the status bar.
+subtitle_bottom = 100
+
+# Print the numbers which go into positioning a highlight.
+debug = os.environ.get("CADABRA_HIGHLIGHT_DEBUG", "") not in ("", "0")
+
+# All GTK, AT-SPI and X work happens on a single thread running the
+# GLib main loop; none of those libraries are thread-safe. The public
+# functions below hand their work to that thread with _run_on_loop.
+_loop = None
+_loop_thread = None
+
+def _start_loop():
+    global _loop, _loop_thread
+    if _loop_thread is None:
+        _loop = GLib.MainLoop()
+        _loop_thread = Thread(target=_loop.run, daemon=True)
+        _loop_thread.start()
+
+def _run_on_loop(fn, *args):
+    """Run fn(*args) on the GLib loop thread, wait for it to finish,
+    and return its result (or re-raise its exception)."""
+    _start_loop()
+    if threading.current_thread() is _loop_thread:
+        return fn(*args)
+    done = threading.Event()
+    result = {}
+    def task():
+        try:
+            result["value"] = fn(*args)
+        except BaseException as ex:
+            result["error"] = ex
+        done.set()
+        return False # run once
+    GLib.idle_add(task)
+    done.wait()
+    if "error" in result:
+        raise result["error"]
+    return result.get("value")
 
 class WidgetHighlighter:
     def __init__(self, window_name):
@@ -21,10 +68,10 @@ class WidgetHighlighter:
         self.subtitle_window = None
         self.subtitle_x = 0
         self.subtitle_y = 0
-        self.subtitle_bottom = 20
+        self.subtitle_target = (0, 0, 0, 0)
+        self.subtitle_bottom = subtitle_bottom
         self.subtitle_large = False
         self.label = None
-        self.loop = None
         self.xdisplay = None
         self.xwindow = None
         self.target_window = self.find_window(self.window_name)
@@ -38,7 +85,6 @@ class WidgetHighlighter:
         win = Gtk.Window(type=Gtk.WindowType.POPUP)
         win.set_app_paintable(True)
         win.set_visual(win.get_screen().get_rgba_visual())
-        print(x,y,width,height)
         win.resize(width + 4, height + 4)
         win.move(x - 2, y - 2)
         
@@ -96,6 +142,12 @@ class WidgetHighlighter:
         report screen coordinates over AT-SPI (it returns 0,0), only
         coordinates relative to the window, so get the window position
         from the X server instead."""
+        x, y, w, h = self.window_rect()
+        return x, y
+
+    def window_rect(self):
+        """Screen position and size (x, y, w, h) of the target window's
+        content, excluding any client-side shadow."""
         if self.xdisplay is None:
             self.xdisplay = xdisplay.Display()
         d = self.xdisplay
@@ -110,7 +162,8 @@ class WidgetHighlighter:
             if self.xwindow is None:
                 raise Exception("X window "+self.window_name+" not found")
         pos = root.translate_coords(self.xwindow, 0, 0)
-        x, y = pos.x, pos.y
+        geom = self.xwindow.get_geometry()
+        x, y, w, h = pos.x, pos.y, geom.width, geom.height
         # GTK windows with client-side decorations include their shadow
         # in the X window; widget coordinates start inside it.
         extents = self.xwindow.get_full_property(d.intern_atom("_GTK_FRAME_EXTENTS"),
@@ -119,7 +172,9 @@ class WidgetHighlighter:
             left, right, top, bottom = extents.value
             x += left
             y += top
-        return x, y
+            w -= left + right
+            h -= top + bottom
+        return x, y, w, h
 
     def _find_xwindow(self, win, name):
         d = self.xdisplay
@@ -146,25 +201,35 @@ class WidgetHighlighter:
             return
             
         component = button.queryComponent()
-        print(component)
         bx, by = component.getPosition(pyatspi.WINDOW_COORDS)
         wx, wy = self.window_origin()
         x, y = wx + bx, wy + by
         w, h = component.getSize()
-        # print(x,y,w,h)
+        if debug:
+            self.print_debug(button, bx, by, w, h, x, y)
         
         # Create highlight overlay
         self.create_highlight_window(x, y, w, h)
-        
-        # Start GTK main loop in a separate thread
-        if not self.loop:
-            self.loop = GLib.MainLoop()
-            thread = Thread(target=self._run_loop)
-            thread.daemon = True
-            thread.start()
 
-    def _run_loop(self):
-        self.loop.run()
+    def print_debug(self, button, bx, by, w, h, x, y):
+        print(f"highlight '{button.name}': atspi window-coords pos=({bx},{by}) size=({w},{h})")
+        try:
+            top = self.target_window.queryComponent()
+            print(f"  atspi toplevel '{self.target_window.name}': "
+                  f"window-coords extents={tuple(top.getExtents(pyatspi.WINDOW_COORDS))} "
+                  f"size={tuple(top.getSize())}")
+        except Exception as ex:
+            print(f"  atspi toplevel: {ex}")
+        d = self.xdisplay
+        root = d.screen().root
+        pos = root.translate_coords(self.xwindow, 0, 0)
+        geom = self.xwindow.get_geometry()
+        ext = self.xwindow.get_full_property(d.intern_atom("_GTK_FRAME_EXTENTS"),
+                                             X.AnyPropertyType)
+        print(f"  X window 0x{self.xwindow.id:x}: root origin=({pos.x},{pos.y}) "
+              f"size=({geom.width},{geom.height}) border={geom.border_width}")
+        print(f"  _GTK_FRAME_EXTENTS (l,r,t,b)={tuple(ext.value) if ext else None}")
+        print(f"  screen box=({x},{y},{w},{h})")
 
     def find_window(self, name):
         desktop = pyatspi.Registry.getDesktop(0)
@@ -227,37 +292,26 @@ class WidgetHighlighter:
                            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
         win.add(self.label)
-        win.connect('draw', self.draw_subtitle)
+        # Look up where the target window is once; the subtitle is then
+        # (re)positioned whenever GTK settles its size.
+        self.subtitle_target = self.window_rect()
+        self.subtitle_x = self.subtitle_y = None # new window: always move
+        win.connect('size-allocate', self.position_subtitle)
+        win.connect('draw', self.draw_subtitle_background)
         win.show_all()
-        self.startloop()
 
-    def startloop(self):
-        # Start GTK main loop if not already running
-        if not self.loop:
-            self.loop = GLib.MainLoop()
-            thread = Thread(target=self._run_loop)
-            thread.daemon = True
-            thread.start()
-
-    def draw_subtitle(self, widget, cr):
-        # Size and position the window
-        monitor = Gdk.Display.get_default().get_primary_monitor()
-        geometry = monitor.get_geometry()
-
-        # Get natural size of label
-        label_width, label_height = self.label.get_preferred_size()[1].width, \
-            self.label.get_preferred_size()[1].height
-        # print("LABEL:", label_width, label_height)
-        
-        component = self.target_window.queryComponent()
-        wx, wy = self.window_origin()
-        ww, wh = component.getSize()
-        self.subtitle_x = wx + (ww - label_width) // 2 
-        self.subtitle_y = wy + wh - label_height - self.subtitle_bottom
-        # print(wx, wy, ww, wh, label_width, label_height, self.subtitle_x, self.subtitle_y)
-        
-        self.subtitle_window.move(self.subtitle_x, self.subtitle_y)
-        self.draw_subtitle_background(widget, cr) #connect('draw', self.draw_subtitle_background)
+    def position_subtitle(self, widget, allocation):
+        """Centre the subtitle window near the bottom of the target
+        window, using the subtitle's actual allocated size."""
+        wx, wy, ww, wh = self.subtitle_target
+        x = wx + (ww - allocation.width) // 2
+        y = wy + wh - allocation.height - self.subtitle_bottom
+        if debug:
+            print(f"subtitle: target window=({wx},{wy},{ww},{wh}) "
+                  f"subtitle size=({allocation.width},{allocation.height}) pos=({x},{y})")
+        if (x, y) != (self.subtitle_x, self.subtitle_y):
+            self.subtitle_x, self.subtitle_y = x, y
+            widget.move(x, y)
         
     
     def draw_subtitle_background(self, widget, cr):
@@ -316,28 +370,34 @@ highlighter = None
 def init_highlight(title="Cadabra"):
     global highlighter
     if highlighter == None:
-        highlighter = WidgetHighlighter(title)
+        highlighter = _run_on_loop(WidgetHighlighter, title)
     
 
-def mark(label=""):
-    global highlighter
-
+def _mark(label):
     if label=="":
         highlighter.remove_highlight()
     else:
         obj = highlighter.find_button_by_label("cadabra2-gtk", label)
         if obj:
-            print("FOUND", obj)
             highlighter.highlight_button(obj)
+        else:
+            print(f"mark: no widget named '{label}' found")
 
-def subtitle(txt="", large=False, bottom=20):
-    global highlighter
+def mark(label=""):
+    _run_on_loop(_mark, label)
 
-    highlighter.subtitle_bottom = bottom
+def _subtitle(txt, large, bottom):
+    highlighter.subtitle_bottom = subtitle_bottom if bottom is None else bottom
     if txt=="":
         highlighter.remove_subtitle()
     else:
         highlighter.subtitle(txt, large)
+
+def subtitle(txt="", large=False, bottom=None):
+    """Show a subtitle, or remove it if `txt` is empty. `bottom` is the
+    distance from the bottom of the window; None means the module-wide
+    default `subtitle_bottom`."""
+    _run_on_loop(_subtitle, txt, large, bottom)
 
 DBusGMainLoop(set_as_default=True)
         
