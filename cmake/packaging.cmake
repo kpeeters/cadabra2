@@ -1,6 +1,22 @@
 # Logic to build packages (RPM/DEB) using CPack; see https://cmake.org/Wiki/CMake:Packaging_With_CPack
 # 
 
+# Runtime gtkmm package names for the currently supported distributions,
+# depending on whether we build for GTK4 or GTK3. Ubuntu 22.04 and the older
+# (unsupported) distributions below do not ship gtkmm4, so they have to be
+# built with -DUSE_GTK4=OFF and keep their GTK3 names. Fedora 40-42 do
+# have gtkmm4 but are still packaged with GTK3 (-DUSE_GTK4=OFF in their
+# fedora-NN-package.yml); newer Fedoras use GTK4 (fedora-package.yml).
+if(USE_GTK4)
+  set(GTKMM_FEDORA     "gtkmm4.0")
+  set(GTKMM_TUMBLEWEED "libgtkmm-4_0-0")
+  set(GTKMM_NOBLE      "libgtkmm-4.0-0")
+else()
+  set(GTKMM_FEDORA     "gtkmm30")
+  set(GTKMM_TUMBLEWEED "libgtkmm-3_0-1")
+  set(GTKMM_NOBLE      "libgtkmm-3.0-1t64")
+endif()
+
 set(LINUX_NAME "")
 set(IS_DEBIAN_PACKAGE FALSE)
 if(EXISTS "/etc/redhat-release")
@@ -28,7 +44,7 @@ if(EXISTS "/etc/redhat-release")
       message(FATAL_ERROR "-- This is Fedora ${FEDORA_VERSION}. Packaging is supported for Fedora 40 and later only.")
     endif()
     message("-- This is a Fedora ${FEDORA_VERSION} system")
-    set(CPACK_RPM_PACKAGE_REQUIRES   "python3, python3-libs, gmp, libuuid, sqlite, gtkmm30, openssl, boost-system, boost-filesystem, boost-program-options, boost-regex, libstdc++, python3-matplotlib, python3-sympy")
+    set(CPACK_RPM_PACKAGE_REQUIRES   "python3, python3-libs, gmp, libuuid, sqlite, ${GTKMM_FEDORA}, openssl, boost-system, boost-filesystem, boost-program-options, boost-regex, libstdc++, python3-matplotlib, python3-sympy")
     set(CPACK_SYSTEM_NAME "fedora${FEDORA_VERSION}-${STANDARD_ARCH_NAME}")
   endif()
 else()
@@ -44,7 +60,7 @@ else()
       set(CPACK_SYSTEM_NAME "tumbleweed")
       set(CPACK_GENERATOR   "RPM")
       message("-- This is an openSUSE Tumbleweed system")
-      set(CPACK_RPM_PACKAGE_REQUIRES   "libpython3_13-1_0, libgmp10, libuuid1, libgtkmm-3_0-1, openssl, libboost_system1_88_0, libboost_filesystem1_88_0, libboost_program_options1_88_0, libboost_regex1_88_0, libstdc++6, python313-matplotlib, python313-sympy")
+      set(CPACK_RPM_PACKAGE_REQUIRES   "libpython3_13-1_0, libgmp10, libuuid1, ${GTKMM_TUMBLEWEED}, openssl, libboost_system1_88_0, libboost_filesystem1_88_0, libboost_program_options1_88_0, libboost_regex1_88_0, libstdc++6, python313-matplotlib, python313-sympy")
     endif()
   endif()
   if(EXISTS "/etc/issue")
@@ -104,7 +120,7 @@ else()
       endif()
       if(LINUX_ISSUE MATCHES "24.04")
    	set(CPACK_SYSTEM_NAME "ubuntu-24.04-noble-${STANDARD_ARCH_NAME}")
-	set(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, libtbb12, libgmpxx4ldbl, libssl3, libboost-system1.83.0, libboost-filesystem1.83.0, libboost-program-options1.83.0, libboost-regex1.83.0, libstdc++6, uuid-runtime, libgtkmm-3.0-1t64, librsvg2-2, librsvg2-common, python3-matplotlib, python3-mpmath, python3-sympy, python3-gmpy2")
+	set(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, libtbb12, libgmpxx4ldbl, libssl3, libboost-system1.83.0, libboost-filesystem1.83.0, libboost-program-options1.83.0, libboost-regex1.83.0, libstdc++6, uuid-runtime, ${GTKMM_NOBLE}, librsvg2-2, librsvg2-common, python3-matplotlib, python3-mpmath, python3-sympy, python3-gmpy2")
    	message("-- This is an Ubuntu 24.04 system")
       endif()
     endif()

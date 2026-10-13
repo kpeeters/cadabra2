@@ -1,4 +1,5 @@
-# Create a Fedora 40 package on a github release event.
+# Create a Fedora 40 package (GTK3) on a github release event.
+# Newer Fedoras are built with GTK4 by fedora-package.yml.
 # This assumes that the cadabra version is the same as the
 # release name, and it will attempt to add the .rpm file
 # to the release assets.
@@ -56,7 +57,7 @@ jobs:
              pip3 install sympy 
              mkdir build 
              cd build 
-             cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr .. 
+             cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DUSE_GTK4=OFF -DCMAKE_INSTALL_PREFIX=/usr .. 
              make 
              cpack 
            "
