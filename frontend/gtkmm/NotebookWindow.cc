@@ -664,6 +664,10 @@ void NotebookWindow::on_realize()
 	   [this](guint keyval, guint /* keycode */, Gdk::ModifierType state) {
 		return handle_key_press(keyval, state);
 		}, false);
+	// Run before the focused TextView, matching gtkmm-3 where the window's
+	// on_key_press_event saw keys first; otherwise GtkTextView's own
+	// Ctrl-Up/Down (paragraph movement) bindings swallow them.
+	window_key_controller->set_propagation_phase(Gtk::PropagationPhase::CAPTURE);
 	add_controller(window_key_controller);
 
 	signal_close_request().connect(
