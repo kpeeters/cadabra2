@@ -51,7 +51,7 @@ jobs:
              zypper update
              zypper -n install --no-recommends rpmbuild git cmake python313-devel gcc-c++ \
                   gmp-devel libuuid-devel  \
-                  gtkmm3-devel sqlite3-devel \
+                  gtkmm4-devel sqlite3-devel \
                   python313-matplotlib libopenssl-devel \
                   libboost_system-devel libboost_filesystem-devel \
                   libboost_date_time-devel libboost_program_options-devel             
@@ -104,9 +104,12 @@ jobs:
              printf 'import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n' > tst.cdb
              cadabra2 tst.cdb
              
+             # GTK4 picks a GL/Vulkan renderer by default, which fails
+             # under Xvfb; force the cairo fallback.
+             export GSK_RENDERER=cairo
              xvfb-run -a cadabra2-gtk &
              APP_PID=\$!
-             sleep 10
+             sleep 20
              if kill -0 \$APP_PID 2>/dev/null; then
                 echo 'cadabra2-gtk started successfully'
                 kill \$APP_PID
