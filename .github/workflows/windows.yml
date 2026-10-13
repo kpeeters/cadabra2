@@ -62,7 +62,7 @@ jobs:
           git
           mingw-w64-${{ matrix.midfix }}-gcc
           mingw-w64-${{ matrix.midfix }}-python
-          mingw-w64-${{ matrix.midfix }}-gtkmm3
+          mingw-w64-${{ matrix.midfix }}-gtkmm4
           mingw-w64-${{ matrix.midfix }}-boost    
           mingw-w64-${{ matrix.midfix }}-sqlite3
           mingw-w64-${{ matrix.midfix }}-cmake

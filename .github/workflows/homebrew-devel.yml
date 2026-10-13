@@ -38,7 +38,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
     - name: Get dependencies
-      run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install git cmake jq python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev libmpfr-dev libmpc-dev
+      run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install git cmake jq python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev libgtkmm-4.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev libmpfr-dev libmpc-dev
 
     - name: Configure
       run:  mkdir build && cd build && cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
