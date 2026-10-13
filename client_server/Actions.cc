@@ -25,6 +25,16 @@ bool ActionBase::undoable() const
 	return true;
 	}
 
+DataCell::id_t ActionBase::ref_cell_id() const
+	{
+	if(ref.node==0) {
+		DataCell::id_t id;
+		id.id=0;
+		return id;
+		}
+	return ref->id();
+	}
+
 void ActionBase::execute(DocumentThread& cl, GUIBase& )
 	{
 	if(ref_id.id==0) {

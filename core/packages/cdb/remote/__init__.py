@@ -6,10 +6,11 @@ import subprocess
 import websocket
 import threading
 import time
+import re
 
 class CadabraRemoteException(Exception):
     def __init__(self, msg):
-        pass
+        super().__init__(msg)
         
 class CadabraRemote:
     def __init__(self):
@@ -23,25 +24,52 @@ class CadabraRemote:
         self.close_condition = threading.Condition()
         self.name = "cadabra2-gtk"
         self.received_msg = {} # FIXME: need to keep a stack of messages?
+        self.stderr_thread = None
+        self.is_open = False
+        self.open_error = None
+        self.verbose = False # echo the notebook's stderr output
 
-    def start(self, extra_args=[]):
+    def start(self, extra_args=[], timeout=30):
         args = [self.name]
         args.extend(extra_args)
-        self.process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         try:
-            info = self.process.stderr.readline()
-            while not info:
-                time.sleep(0.1)
-                info = self.process.stderr.readline()
-            print(f"Socket at {info}")
-            self.url = info[16:-1]
-            print(f"URL {self.url}")
-            self.connect()
-            with self.open_condition:
-                self.open_condition.wait()
-                print("Notebook up and communicating ***")
+            self.process = subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
         except Exception as ex:
-            raise CadabraRemoteException(f"Failed to start cadabra2-gtk: {ex}")
+            raise CadabraRemoteException(f"Failed to start {self.name}: {ex}")
+        # The notebook prints 'control channel ws://...' on stderr, but
+        # GTK/GLib may print other messages before that, so scan for it.
+        preamble = []
+        while True:
+            info = self.process.stderr.readline()
+            if not info:
+                code = self.process.wait()
+                raise CadabraRemoteException(f"{self.name} exited with code {code} before "
+                                             f"announcing control channel; stderr: {''.join(preamble)}")
+            m = re.search(r'control channel (ws://\S+)', info)
+            if m:
+                break
+            preamble.append(info)
+        for line in preamble:
+            print(f"{self.name}: {line}", end="")
+        self.url = m.group(1)
+        print(f"URL {self.url}")
+        # Keep draining stderr, otherwise the pipe fills up and the
+        # notebook blocks on its next write.
+        self.stderr_thread = threading.Thread(target=self.drain_stderr)
+        self.stderr_thread.daemon = True
+        self.stderr_thread.start()
+        with self.open_condition:
+            self.connect()
+            if not self.open_condition.wait_for(lambda: self.is_open or self.open_error is not None, timeout):
+                raise CadabraRemoteException(f"Timeout connecting to control channel {self.url}")
+            if not self.is_open:
+                raise CadabraRemoteException(f"Failed to connect to control channel {self.url}: {self.open_error}")
+            print("Notebook up and communicating ***")
+
+    def drain_stderr(self):
+        for line in self.process.stderr:
+            if self.verbose:
+                print(f"{self.name}: {line}", end="")
 
     def connect(self):
         print("Starting thread...")
@@ -77,6 +105,7 @@ class CadabraRemote:
     def on_open(self, ws):
         print("Connection open.")
         with self.open_condition:
+            self.is_open = True
             self.open_condition.notify()
 
     def on_close(self, ws, v1, v2):
@@ -88,6 +117,10 @@ class CadabraRemote:
 
     def on_error(self, ws, message):
         print(f"Connection error {message}.")
+        with self.open_condition:
+            if not self.is_open:
+                self.open_error = message
+                self.open_condition.notify()
         # remaining_stdout = self.process.stdout.read()
         # remaining_stderr = self.process.stderr.read()
         # print(remaining_stdout)
@@ -162,7 +195,7 @@ class CadabraRemote:
         if wait:
             with self.condition:
                 self.condition.wait()
-            return self.received_msg["cell_id"]
+            return self.received_msg.get("cell_id", 0)
         return 0
 
     def wait(self):

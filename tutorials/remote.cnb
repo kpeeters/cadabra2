@@ -1,0 +1,86 @@
+{
+	"cell_id": 7192647972744330558,
+	"cells": [
+		{
+			"cell_id": 6055647952665058635,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 10722304601328475439,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Cadabra remote control}\n\nWith the \\verb|cdb.remote| python module that ships with Cadabra, it is possible to launch and control a notebook window using a python script. This is used by the Cadabra project to automatically generate tutorial videos."
+				}
+			],
+			"hidden": true,
+			"source": "\\section*{Cadabra remote control}\n\nWith the \\verb|cdb.remote| python module that ships with Cadabra, it is possible to launch and control a notebook window using a python script. This is used by the Cadabra project to automatically generate tutorial videos."
+		},
+		{
+			"cell_id": 12658185966805854221,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "from cdb.remote import *"
+		},
+		{
+			"cell_id": 1460758599569178469,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "cdb = CadabraRemote()"
+		},
+		{
+			"cell_id": 4380379857718442149,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 9135206911172565430,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Start a new empty notebook process by calling \\verb|start|."
+				}
+			],
+			"hidden": true,
+			"source": "Start a new empty notebook process by calling \\verb|start|."
+		},
+		{
+			"cell_id": 5438787913071073998,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14754943062841231348,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}Socket at control channel ws://localhost:40927/69b9e859-320e-4f33-915c-722b2987ebf5\n\nURL ws://localhost:40927/69b9e859-320e-4f33-915c-722b2987ebf5\nStarting thread...\nThread started\nConnecting to control socket ws://localhost:40927/69b9e859-320e-4f33-915c-722b2987ebf5...\nWebsocket handler going into main loop\nConnection open.\nNotebook up and communicating ***\n\\end{verbatim}"
+				}
+			],
+			"source": "cdb.start()"
+		},
+		{
+			"cell_id": 339052387233699598,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 8378782325235358264,
+					"cell_origin": "server",
+					"cell_type": "output",
+					"source": "\\begin{verbatim}Running cells\nReceived completion message {'action': 'run_all_cells', 'serial': 100, 'status': 'completed'}\n\\end{verbatim}"
+				}
+			],
+			"source": "cdb.run_all_cells()"
+		},
+		{
+			"cell_id": 12346524031395816379,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
+	"version": 1.0
+}

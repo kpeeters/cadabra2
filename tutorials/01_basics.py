@@ -19,8 +19,8 @@ try:
    cdb.start(["--geometry", "1920x1080", "--title", "Cadabra tutorial 1"])
    time.sleep(1)
    
-   setup_region_capture("Cadabra tutorial 1", password)
-   start_record()
+   #setup_region_capture("Cadabra tutorial 1", password)
+   #start_record()
    
    init_highlight("Cadabra tutorial 1")
    
@@ -29,7 +29,9 @@ try:
    time.sleep(4)
    subtitle()
 
+   print("HERE 1")
    cdb.insert_text("ex:= \cos(x)**2 + \sin(x)**2;")
+   print("HERE 2")
    
    say("In this tutorial, you will learn the basics of the Cadabra computer-algebra system.")
    say("You will get a flavour of how you can setup computations with it, and how you can manipulate maths expressions.")

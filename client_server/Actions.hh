@@ -51,6 +51,10 @@ namespace cadabra {
 			/// Can this action be undone?
 			virtual bool undoable() const;
 
+			/// The id of the cell this action acted on. Only valid after
+			/// `execute` has run; returns a zero id otherwise.
+			DataCell::id_t ref_cell_id() const;
+
 			DataCell::id_t  ref_id;
 
 			/// If you want a callback once this action has finished,

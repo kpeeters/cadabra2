@@ -2,6 +2,7 @@
 #pragma once
 
 #include "websocket_server.hh"
+#include <future>
 
 
 namespace cadabra {
@@ -45,9 +46,11 @@ namespace cadabra {
 
 			// Authentication token, needs to be sent along with any message.
 			// Gets shown when we start up.
-			mutable std::mutex url_mutex;
 			std::string        authentication_token;
 			uint16_t           local_port;
+			// Fulfilled by run() once local_port is known.
+			std::promise<void>       url_promise;
+			std::shared_future<void> url_ready;
 	};
 	
 }

@@ -16,19 +16,14 @@
 using namespace cadabra;
 
 ScriptThread::ScriptThread(DocumentThread *d, GUIBase *g)
-	: document(d), gui(g), local_port(0)
+	: document(d), gui(g), local_port(0), url_ready(url_promise.get_future().share())
 	{
-	// Lock the URL (port and auth token) until the thread is
-	// properly spun up.
-	url_mutex.lock();
-	
 	boost::uuids::uuid authentication_uuid = boost::uuids::random_generator()();
 	authentication_token = boost::uuids::to_string( authentication_uuid );
 	}
 
 ScriptThread::~ScriptThread()
 	{
-	url_mutex.unlock();
 	}
 
 void ScriptThread::on_open(websocket_server::id_type ws_id)
@@ -117,13 +112,17 @@ void ScriptThread::on_message(websocket_server::id_type ws_id, const std::string
 		else if(msg_action=="insert_text") {
 			std::string content = jmsg.value("content", "");
 			DataCell::id_t id;
-			id.id=0;
+			id.id=jmsg.value("cell_id", uint64_t(0)); // zero means current cell
 			std::shared_ptr<ActionBase> action = std::make_shared<ActionInsertText>(id, 0, content);
-			action->callback = [this, ws_id, msg_serial, msg_action]() {
+			// Raw pointer to avoid a reference cycle; the callback runs
+			// while the action queue still holds the action.
+			ActionBase *ap = action.get();
+			action->callback = [this, ws_id, msg_serial, msg_action, ap]() {
 				nlohmann::json msg;
 				msg["status"]="completed";
 				msg["serial"]=msg_serial;
 				msg["action"]=msg_action;
+				msg["cell_id"]=ap->ref_cell_id().id;
 				wserver.send(ws_id, msg.dump());
 				};
 			document->queue_action(action);
@@ -167,22 +166,28 @@ void ScriptThread::run()
 	wserver.set_connect_handler(std::bind(&ScriptThread::on_open, this,     std::placeholders::_1));
 	wserver.set_disconnect_handler(std::bind(&ScriptThread::on_close, this, std::placeholders::_1));
 	
-	wserver.listen(0); 
-	local_port = wserver.get_local_port();
-	
-	url_mutex.unlock();
+	try {
+		wserver.listen(0);
+		local_port = wserver.get_local_port();
+		}
+	catch(...) {
+		url_promise.set_exception(std::current_exception());
+		return;
+		}
+	// Release anyone waiting in get_local_port().
+	url_promise.set_value();
 	wserver.run();
 	}
 
 uint16_t ScriptThread::get_local_port() const
 	{
-	std::lock_guard<std::mutex> guard(url_mutex);
+	// Blocks until run() has the server listening; rethrows if that failed.
+	url_ready.get();
 	return local_port;
 	}
 
 std::string ScriptThread::get_authentication_token() const
 	{
-	std::lock_guard<std::mutex> guard(url_mutex);
 	return authentication_token;
 	}
 

@@ -111,7 +111,7 @@ def setup_region_capture(window_name, password):
         # print(f"Capture region: {json.dumps(geometry, indent=2)}")
         
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error setting up OBS: {e}")
 #     finally:
 #         ws.disconnect()
 
