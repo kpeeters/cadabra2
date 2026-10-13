@@ -76,11 +76,15 @@ jobs:
       run:  printf "ex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n" > tst.cdb && cadabra2 tst.cdb
 
     - name: test gtk app launch
+      # Ignored by the GTK3 build, but the stable formula switches to GTK4 at
+      # the next release; see the note in homebrew-devel.yml.
+      env:
+        GSK_RENDERER: cairo
       run: |
         cadabra2-gtk &
         APP_PID=$!
-        sleep 10
-        
+        sleep 20
+
         if kill -0 $APP_PID 2>/dev/null; then
           echo "Application started successfully"
           kill $APP_PID

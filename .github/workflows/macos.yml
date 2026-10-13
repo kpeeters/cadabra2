@@ -1,6 +1,7 @@
 # This is a build which gets triggered on every commit push, to
 # ensure that we get some warnings when we push code that does
-# not build on macOS.
+# not build on macOS. GTK4 only; the GTK3 build is still covered
+# by the Linux workflow.
 
 name: macOS
 
@@ -26,7 +27,7 @@ jobs:
       - name: get dependencies
         run: |
           brew install cmake ninja boost pcre gmp python python@3.13 \
-                       pkgconfig gtkmm3 adwaita-icon-theme \
+                       pkgconfig gtkmm4 adwaita-icon-theme \
                        catch2 tbb
           python3.13 -m venv .venv
           source .venv/bin/activate
@@ -38,6 +39,7 @@ jobs:
         run: |
           source .venv/bin/activate
           mkdir build && cd build && cmake -G Ninja -DENABLE_MATHEMATICA=OFF \
+              -DUSE_GTK4=ON \
               -DPython_ROOT_DIR="$VIRTUAL_ENV" \
               -DPython_FIND_VIRTUALENV=ONLY \
               -DPython_CDB_EXECUTABLE=${VIRTUAL_ENV}/bin/python3.13 \

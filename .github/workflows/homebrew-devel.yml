@@ -80,11 +80,16 @@ jobs:
       run:  printf "import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n" > tst.cdb && cadabra2 tst.cdb
     
     - name: test gtk app launch
+      # GTK4 picks a GL/Vulkan renderer by default, which is the thing most
+      # likely to fail on a headless CI VM. Force the cairo fallback so that
+      # this step tests the application rather than the runner's GPU stack.
+      env:
+        GSK_RENDERER: cairo
       run: |
         cadabra2-gtk &
         APP_PID=$!
-        sleep 10
-        
+        sleep 20
+
         if kill -0 $APP_PID 2>/dev/null; then
           echo "cadabra2-gtk started successfully"
           kill $APP_PID

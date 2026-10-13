@@ -7,14 +7,12 @@ if(MSVC)
   endif()
 else()
   find_package(PkgConfig REQUIRED)
-  if(MACOS)
-    execute_process(COMMAND brew --prefix glibmm@2.68  OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE GLIBMM_PREFIX)
-    execute_process(COMMAND brew --prefix cairomm@1.16 OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE CAIROMM_PREFIX)
-    execute_process(COMMAND brew --prefix pangomm@2.48 OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE PANGOMM_PREFIX)
-    execute_process(COMMAND brew --prefix atkmm@2.28   OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE ATKMM_PREFIX)
-    set( ENV{PKG_CONFIG_PATH} "${GLIBMM_PREFIX}/lib/pkgconfig:${CAIROMM_PREFIX}/lib/pkgconfig:${PANGOMM_PREFIX}/lib/pkgconfig:${ATKMM_PREFIX}/lib/pkgconfig:$ENV{PKG_CONFIG_PATH}" )
-    message(STATUS "Using PKG_CONFIG_PATH = $ENV{PKG_CONFIG_PATH}")
-  endif()
+  # No PKG_CONFIG_PATH fixup is needed on macOS: the glibmm-2.68 /
+  # cairomm-1.16 / pangomm-2.48 API versions that GTK4 wants are supplied by
+  # Homebrew's *unversioned* glibmm, cairomm and pangomm formulae, and none of
+  # those are keg-only, so pkg-config finds them on the default path.
+  # (FindGLIBMM3 does have such a block, because gtkmm3 pulls in the keg-only
+  # glibmm@2.66 / cairomm@1.14 / pangomm@2.46.)
   pkg_check_modules(GLIBMM REQUIRED glibmm-2.68)
   include_directories(${GLIBMM_INCLUDE_DIRS})
   link_directories(${GLIBMM_LIBRARY_DIRS})
