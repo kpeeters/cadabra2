@@ -6,6 +6,7 @@ import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 import pyatspi
 import cairo
+from Xlib import display as xdisplay, X
 import sys
 from threading import Thread
 import time
@@ -24,6 +25,8 @@ class WidgetHighlighter:
         self.subtitle_large = False
         self.label = None
         self.loop = None
+        self.xdisplay = None
+        self.xwindow = None
         self.target_window = self.find_window(self.window_name)
 
     def create_highlight_window(self, x, y, width, height):
@@ -60,24 +63,82 @@ class WidgetHighlighter:
             self.current_highlight = None
 
     def find_button_by_label(self, app_name, button_label):
+        """Find a widget by its accessible name. An exact (case-insensitive)
+        match wins; otherwise the first widget whose name contains the
+        label is returned."""
+        label = button_label.lower()
+        partial = []
         desktop = pyatspi.Registry.getDesktop(0)
         for app in desktop:
-            if app and app_name.lower() in app.name.lower():
+            if app and app_name.lower() in (app.name or "").lower():
                 for window in app:
-                    button = self._find_button_recursive(window, button_label)
+                    button = self._find_button_recursive(window, label, partial)
                     if button:
                         return button
-        return None
+        return partial[0] if partial else None
     
-    def _find_button_recursive(self, obj, label):
+    def _find_button_recursive(self, obj, label, partial):
         if not obj.getRole() == pyatspi.ROLE_MENU_ITEM:
-            if label.lower() in obj.name.lower():
+            name = (obj.name or "").lower()
+            if name == label:
                 return obj
+            if label in name:
+                partial.append(obj)
                 
         for child in obj:
-            result = self._find_button_recursive(child, label)
+            result = self._find_button_recursive(child, label, partial)
             if result:
                 return result
+        return None
+
+    def window_origin(self):
+        """Screen position of the target window's content. GTK4 does not
+        report screen coordinates over AT-SPI (it returns 0,0), only
+        coordinates relative to the window, so get the window position
+        from the X server instead."""
+        if self.xdisplay is None:
+            self.xdisplay = xdisplay.Display()
+        d = self.xdisplay
+        root = d.screen().root
+        if self.xwindow is not None:
+            try:
+                self.xwindow.get_geometry()
+            except Exception:
+                self.xwindow = None
+        if self.xwindow is None:
+            self.xwindow = self._find_xwindow(root, self.window_name.lower())
+            if self.xwindow is None:
+                raise Exception("X window "+self.window_name+" not found")
+        pos = root.translate_coords(self.xwindow, 0, 0)
+        x, y = pos.x, pos.y
+        # GTK windows with client-side decorations include their shadow
+        # in the X window; widget coordinates start inside it.
+        extents = self.xwindow.get_full_property(d.intern_atom("_GTK_FRAME_EXTENTS"),
+                                                 X.AnyPropertyType)
+        if extents and len(extents.value) == 4:
+            left, right, top, bottom = extents.value
+            x += left
+            y += top
+        return x, y
+
+    def _find_xwindow(self, win, name):
+        d = self.xdisplay
+        try:
+            prop = win.get_full_property(d.intern_atom("_NET_WM_NAME"),
+                                         d.intern_atom("UTF8_STRING"))
+            title = prop.value if prop else win.get_wm_name()
+            if isinstance(title, bytes):
+                title = title.decode("utf-8", "replace")
+            if title and name in title.lower() \
+               and win.get_attributes().map_state == X.IsViewable:
+                return win
+            children = win.query_tree().children
+        except Exception:
+            return None # window went away while we were looking
+        for child in children:
+            found = self._find_xwindow(child, name)
+            if found is not None:
+                return found
         return None
     
     def highlight_button(self, button):
@@ -86,7 +147,9 @@ class WidgetHighlighter:
             
         component = button.queryComponent()
         print(component)
-        x, y = component.getPosition(pyatspi.DESKTOP_COORDS)
+        bx, by = component.getPosition(pyatspi.WINDOW_COORDS)
+        wx, wy = self.window_origin()
+        x, y = wx + bx, wy + by
         w, h = component.getSize()
         # print(x,y,w,h)
         
@@ -187,7 +250,7 @@ class WidgetHighlighter:
         # print("LABEL:", label_width, label_height)
         
         component = self.target_window.queryComponent()
-        wx, wy = component.getPosition(pyatspi.WINDOW_COORDS)
+        wx, wy = self.window_origin()
         ww, wh = component.getSize()
         self.subtitle_x = wx + (ww - label_width) // 2 
         self.subtitle_y = wy + wh - label_height - self.subtitle_bottom

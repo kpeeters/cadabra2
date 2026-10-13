@@ -29,9 +29,7 @@ try:
    time.sleep(4)
    subtitle()
 
-   print("HERE 1")
-   cdb.insert_text("ex:= \cos(x)**2 + \sin(x)**2;")
-   print("HERE 2")
+   # cdb.insert_text("ex:= \cos(x)**2 + \sin(x)**2;")
    
    say("In this tutorial, you will learn the basics of the Cadabra computer-algebra system.")
    say("You will get a flavour of how you can setup computations with it, and how you can manipulate maths expressions.")
@@ -109,18 +107,16 @@ try:
    say("Of course, we can for instance tell it to distribute the product.", block=True)
    cell_id = cdb.add_cell("distribute( ex );")
    
-#    time.sleep(2)
-#    say("You can plot expressions like these, by importing the plotting functionality from a package.", block=True)
-#    time.sleep(2)
-#    cdb.add_cell("from cdb.graphics.plot import *\nplot(ex, ($y$,0,10));");
-#    time.sleep(2)
-#    subtitle()
-#    cdb.run_all_cells()
-#    time.sleep(2)
-#    say("Documentation for all packages is available from the web site.", block=True)
-#    time.sleep(2)
-
-   
+   time.sleep(2)
+   say("You can plot expressions like these, by importing the plotting functionality from a package.", block=True)
+   time.sleep(2)
+   cdb.add_cell("from cdb.graphics.plot import *\nplot(ex, ($y$,0,10));");
+   time.sleep(2)
+   subtitle()
+   cdb.run_all_cells()
+   time.sleep(2)
+   say("Documentation for all packages is available from the web site.", block=True)
+   time.sleep(2)
 
    subtitle()
    mark()

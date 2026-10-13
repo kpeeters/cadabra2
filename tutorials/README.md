@@ -13,6 +13,11 @@
 
         pip install obs-websocket-py --break-system-packages
 	 
+* Install python-xlib, used to locate the notebook window on screen
+  for highlights and subtitles (X11 only),
+
+        sudo apt install python3-xlib
+	 
 * Start OBS.
 
 	

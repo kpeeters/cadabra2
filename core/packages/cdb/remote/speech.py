@@ -1,23 +1,49 @@
+"""
+Text-to-speech for scripted tutorials.
+
+By default this talks to a local OpenAI-compatible TTS server (e.g. Kokoro)
+at http://localhost:8880/v1. Environment variables:
+
+  CADABRA_TTS=openai     use OpenAI's hosted TTS; needs OPENAI_API_KEY
+  CADABRA_TTS=local      use the local server (default)
+  CADABRA_TTS_MODEL=...  override the model (openai default: tts-1-hd)
+  CADABRA_TTS_VOICE=...  override the voice (openai default: fable)
+"""
 
 import io
+import os
 import wave
 import time
 import tempfile
 import cdb.remote.highlight
 import openai
 import subprocess
-import time
 
 initialised=False
-model    = None
 warping  = False
 client   = None
+tts_model = None
+tts_voice = None
 say_proc = None
 say_num  = 0
 
-def init(url="http://localhost:8880/v1"):
-    global client
-    client=openai.OpenAI(base_url=url, api_key="not-needed")
+def init(url=None, backend=None):
+    global client, tts_model, tts_voice
+    if backend is None:
+        backend = os.environ.get("CADABRA_TTS", "local")
+    backend = backend.lower()
+    if backend == "openai":
+        if not os.environ.get("OPENAI_API_KEY"):
+            raise RuntimeError("CADABRA_TTS=openai requires OPENAI_API_KEY to be set.")
+        client=openai.OpenAI(base_url=url) if url else openai.OpenAI()
+        tts_model, tts_voice = "tts-1-hd", "fable"
+    elif backend == "local":
+        client=openai.OpenAI(base_url=url or "http://localhost:8880/v1", api_key="not-needed")
+        tts_model, tts_voice = "kokoro", "bm_fable"
+    else:
+        raise ValueError(f"Unknown CADABRA_TTS backend '{backend}'; use 'local' or 'openai'.")
+    tts_model = os.environ.get("CADABRA_TTS_MODEL", tts_model)
+    tts_voice = os.environ.get("CADABRA_TTS_VOICE", tts_voice)
 
 def warp(w=True):
     global warping
@@ -26,9 +52,9 @@ def warp(w=True):
 def tts(txt, fname):
     # print(f"calling api for {txt}...")
     with client.audio.speech.with_streaming_response.create(
-            model="kokoro",
+            model=tts_model,
             speed=1.1,
-            voice="bm_fable", #single or multiple voicepack combo
+            voice=tts_voice,
             input=txt
     ) as response:
         response.stream_to_file(fname)
@@ -49,7 +75,7 @@ def say(text, subtitle=True, subtext="", delay=0, block=False, bottom=20):
     If another text is still being spoken, this function always
     blocks until that previous text is finished.
     """
-    global model, warping, say_num, say_proc
+    global warping, say_num, say_proc
     
     if client == None:
         init()
