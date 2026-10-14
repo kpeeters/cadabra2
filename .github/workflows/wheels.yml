@@ -1,0 +1,74 @@
+# Build PyPI wheels of the cadabra2 Python module (module, packages,
+# Jupyter kernel and IPython extension only; see pyproject.toml), and
+# on a release, publish them to TestPyPI.
+#
+# Publishing uses PyPI 'trusted publishing', which requires a one-time
+# setup on test.pypi.org: add this repository and the workflow file
+# 'wheels.yml' (environment 'testpypi') as a trusted publisher of the
+# 'cadabra2' project. Once the TestPyPI wheels have been tried by hand,
+# switch 'repository-url' below to real PyPI (and do the same setup
+# on pypi.org).
+
+name: Wheels
+
+# on: [push]
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  build_wheels:
+    name: Wheels ${{ matrix.name }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-24.04,     name: x86_64 }
+          - { os: ubuntu-24.04-arm, name: arm64 }
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build wheels
+      uses: pypa/cibuildwheel@v3.2.1
+      env:
+        CIBW_BUILD:             "cp310-* cp311-* cp312-* cp313-* cp314-*"
+        CIBW_SKIP:              "*-musllinux_*"
+        CIBW_MANYLINUX_X86_64_IMAGE:  manylinux_2_28
+        CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
+        CIBW_BEFORE_ALL_LINUX:  bash {project}/.github/wheels/build-deps.sh
+        CIBW_BUILD_VERBOSITY:   1
+        CIBW_TEST_COMMAND:      python {project}/.github/wheels/smoke-test.py
+
+    - name: Upload wheels as build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: wheels-${{ matrix.name }}
+        path: wheelhouse/*.whl
+
+  publish:
+    name: Publish to TestPyPI
+    needs: build_wheels
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    environment: testpypi
+    permissions:
+      id-token: write
+
+    steps:
+    - name: Download all wheels
+      uses: actions/download-artifact@v4
+      with:
+        pattern: wheels-*
+        merge-multiple: true
+        path: dist
+
+    - name: Publish
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        repository-url: https://test.pypi.org/legacy/
+        skip-existing: true

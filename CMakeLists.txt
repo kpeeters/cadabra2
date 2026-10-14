@@ -218,6 +218,21 @@ endif()
 
 option(ENABLE_FRONTEND    "Enable the UI frontend" ON)
 
+# Build only the Python module, the packages and the Jupyter
+# integration, for distribution as a PyPI wheel (driven by
+# scikit-build-core through pyproject.toml).
+option(PYPI_WHEEL "Build only the Python module and Jupyter integration, for a PyPI wheel" OFF)
+if(PYPI_WHEEL)
+  message(STATUS "Building for a PyPI wheel (module, packages and Jupyter integration only)")
+  set(ENABLE_FRONTEND    OFF)
+  set(ENABLE_MATHEMATICA OFF)
+  set(ENABLE_JUPYTER     OFF)
+  set(ENABLE_PY_JUPYTER  ON)
+  set(BUILD_TESTS        OFF)
+  # Link Boost statically so that the wheel is self-contained.
+  set(Boost_USE_STATIC_LIBS ON)
+endif()
+
 option(ENABLE_SYSTEM_JSONCPP "Use the system-provided jsoncpp library" OFF)
 
 option(INSTALL_TARGETS_ONLY "Only install targets; skipping icons, shared libraries etc..." OFF)
@@ -350,7 +365,13 @@ print_header("Configuring Python")
 include(GNUInstallDirs)
 
 set(Python_POSTFIX "3")
-find_package(Python REQUIRED COMPONENTS Interpreter Development)
+if(PYPI_WHEEL)
+  # The manylinux build images do not ship libpython, and extension
+  # modules should not link to it anyway.
+  find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
+else()
+  find_package(Python REQUIRED COMPONENTS Interpreter Development)
+endif()
 set(PYTHON_EXECUTABLE ${Python_EXECUTABLE} CACHE INTERNAL "")
 set(PYBIND11_PYTHON_VERSION ${Python_VERSION} CACHE INTERNAL "")
 find_package(pybind11 CONFIG)
@@ -370,7 +391,12 @@ message(STATUS "Python version is ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR
 # only. It is ideally a path relative to CMAKE_INSTALL_PREFIX, not an
 # absolute path which uses this variable explictly. See the CMake docs
 # for `install`.
-if(WIN32)
+if(PYPI_WHEEL)
+  # scikit-build-core sets CMAKE_INSTALL_PREFIX to the wheel's platlib
+  # directory, so the module goes at the top of that.
+  set(PYTHON_SITE_PATH .)
+  set(CDB_BIN_PATH bin)
+elseif(WIN32)
   set(PYTHON_SITE_PATH lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
   # NOTE: if you change the CDB_BIN_PATH, you also need to change the stripping
   # logic in InstallPrefix.cc. Note that CDB_BIN_PATH needs to be a relative path.
@@ -507,7 +533,9 @@ if(ENABLE_PY_JUPYTER)
 endif()
 
 # Core/packages
-add_subdirectory(client_server)
+if(NOT PYPI_WHEEL)
+  add_subdirectory(client_server)
+endif()
 add_subdirectory(core)
 
 # Frontend
@@ -525,7 +553,9 @@ if(BUILD_TESTS)
   add_subdirectory(tests)
 endif()
 
-add_subdirectory(web2 EXCLUDE_FROM_ALL)
+if(NOT PYPI_WHEEL)
+  add_subdirectory(web2 EXCLUDE_FROM_ALL)
+endif()
 
 # Generate the core/Config.hh file; this needs to come as late as possible
 # in this CMakeLists.txt to ensure that all variables have been set.

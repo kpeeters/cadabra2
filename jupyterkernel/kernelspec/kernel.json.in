@@ -1,6 +1,6 @@
 {
   "argv": [
-     "@Python_EXECUTABLE@", "-Xfrozen_modules=off", "-m", "cadabra2_jupyter", "-f", "{connection_file}"
+     "@KERNEL_PYTHON_EXECUTABLE@", "-Xfrozen_modules=off", "-m", "cadabra2_jupyter", "-f", "{connection_file}"
   ],
   "display_name":"Cadabra2",
   "language":"python"

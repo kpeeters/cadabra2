@@ -1,2 +1,13 @@
 __version__ = "@CADABRA_VERSION_SEM@"
 
+# Hooks for '%load_ext cadabra2_jupyter', which enables Cadabra input
+# and output in a standard IPython/Jupyter Python kernel. Imported
+# lazily so that the Cadabra kernel itself does not pay for it.
+
+def load_ipython_extension(ip):
+    from cadabra2_jupyter.extension import load
+    load(ip)
+
+def unload_ipython_extension(ip):
+    from cadabra2_jupyter.extension import unload
+    unload(ip)

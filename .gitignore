@@ -9,6 +9,7 @@ doxygen
 build
 build4
 build-lib
+build-wheel
 jbuild
 install
 .ipynb_checkpoints

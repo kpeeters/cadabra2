@@ -37,20 +37,20 @@ configure_file(
 find_package(Boost 1.71.0 COMPONENTS filesystem REQUIRED)
 message(STATUS "Boost version ${Boost_VERSION}")
 
-# Find glibmm (for base64)
-if(USE_GTK4)
-  find_package(GLIBMM4  REQUIRED)
-else()
-  find_package(GLIBMM3  REQUIRED)
+# Find glibmm (for base64); only the command-line tools need it,
+# and those are not part of a PyPI wheel build.
+if(NOT PYPI_WHEEL)
+  if(USE_GTK4)
+    find_package(GLIBMM4  REQUIRED)
+  else()
+    find_package(GLIBMM3  REQUIRED)
+  endif()
 endif()
 
 # GMPXX
-# In order to distribute as a PyPl wheel, we need to link
-# statically; the line below picks up the right library,
-# but then things fail because gmp/gmpxx are not built
-# with -fPIC. Postponed for now.
-# set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-#find_package(GMPXX REQUIRED STATIC)
+# For a PyPI wheel, the build workflow (.github/workflows/wheels.yml)
+# provides only static, -fPIC versions of gmp/gmpxx, so these get
+# linked into the module.
 find_package(GMPXX REQUIRED STATIC)
 
 message(STATUS "Linking to GMP   library ${GMP_LIBRARIES}")
@@ -364,6 +364,9 @@ if(MATHEMATICA_FOUND)
    target_link_libraries(cadabra2 PRIVATE ${Mathematica_WSTP_LIBRARIES})
 endif()
 
+# The command-line tools and C++ tests are not part of a PyPI wheel.
+if(NOT PYPI_WHEEL)
+
 # cadabra2 CLI
 add_executable(cadabra2-cli
    cadabra2-cli.cc
@@ -503,6 +506,8 @@ else()
   )
 endif()
 
+endif() # NOT PYPI_WHEEL
+
 
 # Profiling mode
 if(CMAKE_BUILD_TYPE STREQUAL "Profile")
@@ -556,6 +561,7 @@ if(WIN32)
   install(DIRECTORY ${WINPYTHON} DESTINATION lib)
 endif()
 
+if(NOT PYPI_WHEEL)
 install(TARGETS cadabra2-cli DESTINATION ${CDB_BIN_PATH})
 install(TARGETS cdb-nbtool DESTINATION ${CDB_BIN_PATH})
 message(STATUS "Triple-check binary install path ${CMAKE_INSTALL_PREFIX}/${CDB_BIN_PATH}")
@@ -574,8 +580,9 @@ if(NOT WIN32)
     )
    ")
 endif()
+endif() # NOT PYPI_WHEEL
 install(
-   FILES 
+   FILES
       "${PROJECT_BINARY_DIR}/packages/cadabra2_defaults.py" 
       "${CADABRA_LIBS_DIR}/appdirs/cdb_appdirs.py"
    DESTINATION 
@@ -590,6 +597,7 @@ install(
 #     ${CDB_BIN_PATH}
 # )
 
+if(NOT PYPI_WHEEL)
 # cadabra2python
 install(
   TARGETS 
@@ -638,6 +646,7 @@ if(NOT WIN32)
     share/man/man1
     )
 endif()
+endif() # NOT PYPI_WHEEL
 
 # if(APPIMAGE_MODE)
 #   # Install sympy. Matplotlib would be nice, but that pulls in blas and fortran and zillions of other things,
