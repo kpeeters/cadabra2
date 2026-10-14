@@ -7,6 +7,19 @@
 #include <glibmm/spawn.h>
 #include "websocket_client.hh"
 
+#ifdef _WIN32
+// Boost.Asio (via websocket_client.hh) pulls in <windows.h>, which defines
+// macros that clash with enum member names in gtkmm4
+// (Gio::Converter::Result::ERROR, Gtk::MessageType::ERROR,
+// Gdk::TitlebarGesture::DOUBLE_CLICK, Gsk::BlendMode::DIFFERENCE,
+// Gsk::FillRule::WINDING, ...). Nothing in Cadabra uses these macros, so
+// drop them here; websocket_client.hh itself is kept as upstream ships it.
+#undef ERROR
+#undef DIFFERENCE
+#undef DOUBLE_CLICK
+#undef WINDING
+#endif
+
 #include "DataCell.hh"
 
 namespace cadabra {
