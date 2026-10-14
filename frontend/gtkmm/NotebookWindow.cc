@@ -1322,10 +1322,10 @@ void NotebookWindow::on_crash_window_closed(int)
 
 bool NotebookWindow::handle_key_press(guint keyval, Gdk::ModifierType state)
 	{
-	bool is_ctrl_up    = keyval==GDK_KEY_Up   && cdb::has_modifier(state, cdb::MOD_CONTROL);
-	bool is_ctrl_down  = keyval==GDK_KEY_Down && cdb::has_modifier(state, cdb::MOD_CONTROL);
-	bool is_ctrl_home  = keyval==GDK_KEY_Home && cdb::has_modifier(state, cdb::MOD_CONTROL);
-	bool is_ctrl_end   = keyval==GDK_KEY_End  && cdb::has_modifier(state, cdb::MOD_CONTROL);
+	bool is_ctrl_up    = keyval==GDK_KEY_Up   && cdb::has_modifier(state, cdb::MODIFIER_CONTROL);
+	bool is_ctrl_down  = keyval==GDK_KEY_Down && cdb::has_modifier(state, cdb::MODIFIER_CONTROL);
+	bool is_ctrl_home  = keyval==GDK_KEY_Home && cdb::has_modifier(state, cdb::MODIFIER_CONTROL);
+	bool is_ctrl_end   = keyval==GDK_KEY_End  && cdb::has_modifier(state, cdb::MODIFIER_CONTROL);
 	bool is_pagedown   = keyval==GDK_KEY_Page_Down;
 	bool is_pageup     = keyval==GDK_KEY_Page_Up;
 

@@ -262,11 +262,11 @@ namespace cdb {
 	/// spellings and the way a mask is tested differ.
 
 #ifdef USE_GTK4
-	constexpr auto MOD_SHIFT   = Gdk::ModifierType::SHIFT_MASK;
-	constexpr auto MOD_CONTROL = Gdk::ModifierType::CONTROL_MASK;
+	constexpr auto MODIFIER_SHIFT   = Gdk::ModifierType::SHIFT_MASK;
+	constexpr auto MODIFIER_CONTROL = Gdk::ModifierType::CONTROL_MASK;
 #else
-	constexpr auto MOD_SHIFT   = Gdk::SHIFT_MASK;
-	constexpr auto MOD_CONTROL = Gdk::CONTROL_MASK;
+	constexpr auto MODIFIER_SHIFT   = Gdk::SHIFT_MASK;
+	constexpr auto MODIFIER_CONTROL = Gdk::CONTROL_MASK;
 #endif
 
 	inline bool has_modifier(Gdk::ModifierType state, Gdk::ModifierType modifier)

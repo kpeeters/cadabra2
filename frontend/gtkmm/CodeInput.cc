@@ -676,11 +676,11 @@ void CodeInput::relay_cursor_pos(std::function<void(int, int)> callback)
 bool CodeInput::exp_input_tv::handle_key_press(guint keyval, Gdk::ModifierType state)
 	{
 	// The key symbols are in gdk/gdkkeysyms.h
-	bool is_shift_return = get_editable() && keyval==GDK_KEY_Return && cdb::has_modifier(state, cdb::MOD_SHIFT);
+	bool is_shift_return = get_editable() && keyval==GDK_KEY_Return && cdb::has_modifier(state, cdb::MODIFIER_SHIFT);
 	bool is_tab = get_editable() && keyval==GDK_KEY_Tab;
-	bool is_ctrl_k = get_editable() && keyval==GDK_KEY_k && cdb::has_modifier(state, cdb::MOD_CONTROL);
-	bool is_ctrl_a = get_editable() && keyval==GDK_KEY_a && cdb::has_modifier(state, cdb::MOD_CONTROL);
-	bool is_ctrl_e = get_editable() && keyval==GDK_KEY_e && cdb::has_modifier(state, cdb::MOD_CONTROL);
+	bool is_ctrl_k = get_editable() && keyval==GDK_KEY_k && cdb::has_modifier(state, cdb::MODIFIER_CONTROL);
+	bool is_ctrl_a = get_editable() && keyval==GDK_KEY_a && cdb::has_modifier(state, cdb::MODIFIER_CONTROL);
+	bool is_ctrl_e = get_editable() && keyval==GDK_KEY_e && cdb::has_modifier(state, cdb::MODIFIER_CONTROL);
 
 
 	Glib::RefPtr<Gtk::TextBuffer> textbuf=get_buffer();
