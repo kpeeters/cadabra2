@@ -63,7 +63,7 @@ jobs:
           git
           mingw-w64-${{ matrix.midfix }}-gcc
           mingw-w64-${{ matrix.midfix }}-python
-          mingw-w64-${{ matrix.midfix }}-gtkmm3
+          mingw-w64-${{ matrix.midfix }}-gtkmm-4.0
           mingw-w64-${{ matrix.midfix }}-boost    
           mingw-w64-${{ matrix.midfix }}-sqlite3
           mingw-w64-${{ matrix.midfix }}-cmake
@@ -107,7 +107,8 @@ jobs:
 
     - name: Upload release assets
       run: |
-        gh release upload "${{ env.GIT_TAG_VERSION }}" build/cadabra2-${{ env.VERSION }}-win64.msi --clobber
+        mv build/cadabra2-${{ env.VERSION }}-win64.msi build/cadabra2-${{ env.GIT_TAG_VERSION }}-windows-${{ matrix.name }}.msi
+        gh release upload "${{ env.GIT_TAG_VERSION }}" build/cadabra2-${{ env.GIT_TAG_VERSION }}-windows-${{ matrix.name }}.msi --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
