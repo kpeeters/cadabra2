@@ -20,9 +20,9 @@ jobs:
       with:
         usesh: true
         prepare: |
-          pkg install -y curl cmake python311 gettext-runtime pkgconf boost-libs
+          pkg install -y curl cmake python312 gettext-runtime pkgconf boost-libs
           pkg install -y fontconfig harfbuzz pcre jsoncpp gmp atkmm cairomm glibmm gtkmm40 pangomm
-          pkg install -y git py311-sympy py311-numpy
+          pkg install -y git py312-sympy py312-numpy
 
         run: |
           pwd
