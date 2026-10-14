@@ -1,6 +1,7 @@
 # Modern AppImage build using AppImageBuilder
 # Supports both x86_64 and arm64 architectures on current GitHub runners
-# Uses Ubuntu 22.04 base for maximum compatibility
+# Uses Ubuntu 22.04 base for maximum compatibility; since 22.04 does
+# not ship gtkmm-4.0, the AppImage is built with GTK3 (-DUSE_GTK4=OFF).
 
 name: AppImage (Modern)
 
@@ -174,6 +175,9 @@ jobs:
             # Install directly from the main branch of the appimage-builder repository,
             # to deal with the issue reported in
             # https://github.com/AppImageCrafters/appimage-builder/pull/281
+            # Upgrade setuptools first, as the setuptools_scm pulled in by
+            # appimage-builder does not work with the 22.04 system setuptools.
+            pip3 install --upgrade pip setuptools wheel
             pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git@main
 
             # Patch mpmath (bug fixed only in ubuntu-22.04)
@@ -188,6 +192,7 @@ jobs:
                   -DCMAKE_BUILD_TYPE=Release \
                   -DENABLE_MATHEMATICA=OFF \
                   -DAPPIMAGE_MODE=ON \
+                  -DUSE_GTK4=OFF \
                   ..
 
             VERSION=\$(cat /workspace/build/VERSION)
