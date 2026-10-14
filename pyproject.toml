@@ -1,0 +1,63 @@
+# Build configuration for the PyPI wheel of the cadabra2 Python module.
+# This only packages the module, the Cadabra packages, the Jupyter kernel
+# and the IPython extension ('%load_ext cadabra2_jupyter'); the notebook
+# front-end and command-line tools are available from the native packages.
+# The CMake option PYPI_WHEEL selects this subset; the wheels themselves
+# are built by .github/workflows/wheels.yml.
+
+[build-system]
+requires = ["scikit-build-core>=0.10"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "cadabra2"
+dynamic = ["version"]
+description = "A field-theory motivated approach to computer algebra"
+readme = "README.rst"
+license = { text = "GPL-3.0-or-later" }
+authors = [{ name = "Kasper Peeters" }]
+requires-python = ">=3.10"
+dependencies = [
+  "sympy",
+  "mpmath",
+  "matplotlib",
+  "ipykernel",
+]
+classifiers = [
+  "Programming Language :: C++",
+  "Programming Language :: Python :: 3",
+  "Operating System :: POSIX :: Linux",
+  "Topic :: Scientific/Engineering :: Mathematics",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Framework :: Jupyter",
+]
+
+[project.urls]
+Homepage = "https://cadabra.science"
+Source = "https://github.com/kpeeters/cadabra2"
+Issues = "https://github.com/kpeeters/cadabra2/issues"
+
+[tool.scikit-build]
+minimum-version = "0.10"
+cmake.version = ">=3.18"
+cmake.build-type = "Release"
+build-dir = "build-wheel/{wheel_tag}"
+# Everything is installed by CMake; no Python packages to pick up here.
+wheel.packages = []
+
+[tool.scikit-build.cmake.define]
+PYPI_WHEEL = "ON"
+
+# Take the version from cmake/version.cmake, turning e.g. MAJOR=2, MINOR=5,
+# PATCH=16, RC="2" into "2.5.16rc2" (and into "2.5.16" when RC is empty).
+[tool.scikit-build.metadata.version]
+provider = "scikit_build_core.metadata.regex"
+input = "cmake/version.cmake"
+regex = '''(?sx)
+  set\(CADABRA_VERSION_MAJOR \s+ (?P<major>\d+) \) .*?
+  set\(CADABRA_VERSION_MINOR \s+ (?P<minor>\d+) \) .*?
+  set\(CADABRA_VERSION_PATCH \s+ (?P<patch>\d+) \) .*?
+  set\(CADABRA_VERSION_RC    \s+ "(?P<rc>\d*)" \)
+'''
+result = "{major}.{minor}.{patch}rc{rc}"
+remove = "rc$"
