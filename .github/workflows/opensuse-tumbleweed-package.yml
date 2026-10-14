@@ -15,8 +15,15 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-24.04
-    
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+          - { os: ubuntu-24.04,     name: x86_64 }
+          - { os: ubuntu-24.04-arm, name: arm64 }
+    runs-on: ${{ matrix.arch.os }}
+    name: Tumbleweed ${{ matrix.arch.name }}
+
     steps:
     - uses: actions/checkout@v3
 
@@ -71,7 +78,7 @@ jobs:
 
     - name: Upload Release Assets
       run: |
-        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-tumbleweed.rpm --clobber
+        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-tumbleweed-${{ matrix.arch.name }}.rpm --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -99,7 +106,7 @@ jobs:
              zypper se -s libboost_filesystem
              zypper -n install xvfb-run wget curl jq
              export VERSION=\$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
-             export RPMNAME=cadabra2-\${VERSION}-tumbleweed.rpm
+             export RPMNAME=cadabra2-\${VERSION}-tumbleweed-x86_64.rpm
              wget https://github.com/kpeeters/cadabra2/releases/download/\${VERSION}/\${RPMNAME}
              zypper --no-gpg-checks -n install \${RPMNAME}
              printf 'import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n' > tst.cdb
