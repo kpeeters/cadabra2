@@ -1,3 +1,40 @@
+Using Cadabra in Jupyter
+=======================
+
+Installing from PyPI
+--------------------
+
+On Linux (x86_64 and arm64, Python 3.10 or later), the Cadabra Python
+module and its Jupyter integration can be installed with pip, without
+compiling anything::
+
+    pip install cadabra2
+
+This does *not* include the Cadabra notebook interface (cadabra2-gtk)
+or the command-line client; install one of the native packages for
+those.
+
+There are then two ways to use Cadabra in Jupyter:
+
+* Choose the *Cadabra2* kernel when creating a new notebook. The pip
+  package registers this kernel automatically, in whichever Python
+  environment it was installed into.
+
+* Use an ordinary *Python* notebook and load the Cadabra extension
+  in the first cell::
+
+      %load_ext cadabra2_jupyter
+
+  after which cells accept Cadabra notation, e.g.::
+
+      ex:=(A+B) (C+D);
+      distribute(ex);
+
+  This works in environments where you cannot install extra kernels,
+  such as Google Colab, Kaggle or VS Code notebooks. In Google Colab,
+  run ``!pip install cadabra2`` in a cell first.
+
+
 Building the Cadabra Jupyter kernel
 ===================================
 

@@ -27,8 +27,8 @@
   for <a href="https://github.com/kpeeters/cadabra2/releases/latest">download
   from github</a>. These are generated automatically on every
   release. Installation on macOS can be done through HomeBrew or
-  MacPorts; see below. There is also a Docker image if you only want
-  to use Cadabra via Jupyter.
+  MacPorts; see below. There is also a Docker image and a pip package
+  if you only want to use Cadabra via Jupyter.
 </p>
 <p>
   Use these packages at your own risk. Because of time constraints
@@ -140,6 +140,22 @@
       for both AMD64 and ARM64 architectures. Be aware that you will
       miss out on some of the goodies of the Cadabra notebook
       interface.
+    </div>
+  </div>
+
+  <div class="distrotype">
+    <div class="distronum">Python / Jupyter (pip)</div>
+    <div class="distrotxt">
+      On Linux (x86_64 and arm64), the Cadabra Python module and its
+      Jupyter integration can be installed straight from PyPI, with
+      <code>pip install cadabra2</code>
+      This does not include the Cadabra notebook interface or the
+      command-line client. In Jupyter, either pick the <tt>Cadabra2</tt>
+      kernel, or, in an ordinary Python notebook (for instance on
+      Google Colab, where you cannot add kernels), load the Cadabra
+      extension in the first cell with
+      <code>%load_ext cadabra2_jupyter</code>
+      after which cells accept Cadabra notation.
     </div>
   </div>
 

@@ -1,13 +1,16 @@
 # Build PyPI wheels of the cadabra2 Python module (module, packages,
-# Jupyter kernel and IPython extension only; see pyproject.toml), and
-# on a release, publish them to TestPyPI.
+# Jupyter kernel and IPython extension only; see pyproject.toml).
+# On a pre-release, publish them to TestPyPI; on a full release,
+# publish them to the real PyPI.
 #
 # Publishing uses PyPI 'trusted publishing', which requires a one-time
-# setup on test.pypi.org: add this repository and the workflow file
-# 'wheels.yml' (environment 'testpypi') as a trusted publisher of the
-# 'cadabra2' project. Once the TestPyPI wheels have been tried by hand,
-# switch 'repository-url' below to real PyPI (and do the same setup
-# on pypi.org).
+# setup on *both* test.pypi.org and pypi.org (separate sites, separate
+# accounts): add this repository and the workflow file 'wheels.yml' as
+# a trusted publisher of the 'cadabra2' project, with environment
+# 'testpypi' on TestPyPI and environment 'pypi' on PyPI.
+#
+# Note that uploads to PyPI are permanent: a version number can never
+# be uploaded again, even after deleting it.
 
 name: Wheels
 
@@ -52,10 +55,10 @@ jobs:
         name: wheels-${{ matrix.name }}
         path: wheelhouse/*.whl
 
-  publish:
+  publish_testpypi:
     name: Publish to TestPyPI
     needs: build_wheels
-    if: github.event_name == 'release'
+    if: github.event_name == 'release' && github.event.release.prerelease
     runs-on: ubuntu-latest
     environment: testpypi
     permissions:
@@ -74,3 +77,23 @@ jobs:
       with:
         repository-url: https://test.pypi.org/legacy/
         skip-existing: true
+
+  publish_pypi:
+    name: Publish to PyPI
+    needs: build_wheels
+    if: github.event_name == 'release' && !github.event.release.prerelease
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+
+    steps:
+    - name: Download all wheels
+      uses: actions/download-artifact@v4
+      with:
+        pattern: wheels-*
+        merge-multiple: true
+        path: dist
+
+    - name: Publish
+      uses: pypa/gh-action-pypi-publish@release/v1

@@ -10,11 +10,9 @@
 if(USE_GTK4)
   set(GTKMM_FEDORA     "gtkmm4.0")
   set(GTKMM_TUMBLEWEED "libgtkmm-4_0-0")
-  set(GTKMM_NOBLE      "libgtkmm-4.0-0")
 else()
   set(GTKMM_FEDORA     "gtkmm30")
   set(GTKMM_TUMBLEWEED "libgtkmm-3_0-1")
-  set(GTKMM_NOBLE      "libgtkmm-3.0-1t64")
 endif()
 
 set(LINUX_NAME "")
@@ -128,7 +126,10 @@ else()
       endif()
       if(LINUX_ISSUE MATCHES "24.04")
    	set(CPACK_SYSTEM_NAME "ubuntu-24.04-noble-${STANDARD_ARCH_NAME}")
-	set(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, libtbb12, libgmpxx4ldbl, libssl3, libboost-system1.83.0, libboost-filesystem1.83.0, libboost-program-options1.83.0, libboost-regex1.83.0, libstdc++6, uuid-runtime, ${GTKMM_NOBLE}, librsvg2-2, librsvg2-common, python3-matplotlib, python3-mpmath, python3-sympy, python3-gmpy2")
+	# Let dpkg-shlibdeps work out the shared library dependencies, so we do
+	# not have to track the exact Boost/TBB/gtkmm/libssl/libpython package names.
+	set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+	set(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, uuid-runtime, librsvg2-common, python3-matplotlib, python3-mpmath, python3-sympy, python3-gmpy2")
    	message("-- This is an Ubuntu 24.04 system")
       endif()
       if(LINUX_ISSUE MATCHES "26.04")
