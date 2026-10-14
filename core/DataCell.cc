@@ -3,6 +3,7 @@
 #include "Config.hh"
 #include "DataCell.hh"
 #include "Exceptions.hh"
+#include <cstdlib>
 #include <sstream>
 #include <fstream>
 #include <regex>

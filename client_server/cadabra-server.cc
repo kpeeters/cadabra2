@@ -2,6 +2,7 @@
 #include "Config.hh"
 #include "Snoop.hh"
 #include "Server.hh"
+#include <cstdlib>
 #include <glibmm/miscutils.h>
 
 #define NDEBUG 1

@@ -5,6 +5,7 @@
 #include "Exceptions.hh"
 #include "properties/Accent.hh"
 #include "NTensor.hh"
+#include <cstdlib>
 #include <variant>
 
 using namespace cadabra;

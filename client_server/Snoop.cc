@@ -1,6 +1,7 @@
 
 #include "Snoop.hh"
 
+#include <cstdlib>
 #include <iostream>
 #include <string.h>
 #include <regex>

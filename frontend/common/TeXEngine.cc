@@ -3,6 +3,7 @@
 #include "Config.hh"
 #include "InstallPrefix.hh"
 
+#include <cstdlib>
 #include <iostream>
 #include <cstdio>
 #include <boost/algorithm/string.hpp>

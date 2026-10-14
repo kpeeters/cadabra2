@@ -6,6 +6,7 @@
 #include "properties/Symbol.hh"
 #include "properties/Coordinate.hh"
 #include "properties/IndexInherit.hh"
+#include <cstdlib>
 #include <sstream>
 
 // #define DEBUG 1

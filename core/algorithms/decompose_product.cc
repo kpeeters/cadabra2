@@ -4,6 +4,7 @@
 #include "Exceptions.hh"
 #include "algorithms/decompose_product.hh"
 #include "properties/Integer.hh"
+#include <cstdlib>
 
 using namespace cadabra;
 
