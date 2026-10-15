@@ -9,6 +9,8 @@ namespace cadabra {
 	/// Convert a Cadabra notebook file to a python package which can be imported
 	/// using standard 'import' notation. Doing this will ignore all cells
 	/// which are labelled `ignore_on_import`.
+	/// The import hook calling this is registered by `import cadabra2`
+	/// (see cdb_package_compiler.py).
 
 	void compile_package(const std::string& in_name, const std::string& out_name);
 

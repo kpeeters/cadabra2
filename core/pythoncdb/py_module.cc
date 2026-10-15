@@ -44,6 +44,17 @@ namespace cadabra {
 		init_tableau(m);
 		init_algorithms(m);
 		init_properties(m);
+
+		// Register the import hook which makes notebooks importable
+		// as Python modules (see cdb_package_compiler.py).
+		try {
+			py::module::import("cdb_package_compiler").attr("install")(m.attr("compile_package__"));
+			}
+		catch(py::error_already_set& ex) {
+			std::string msg = std::string("Cadabra notebook import hook not available: ") + ex.what();
+			if(PyErr_WarnEx(PyExc_RuntimeWarning, msg.c_str(), 1) < 0)
+				throw py::error_already_set();
+			}
 		}
 
 	}

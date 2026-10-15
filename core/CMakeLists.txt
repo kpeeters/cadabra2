@@ -585,6 +585,7 @@ install(
    FILES
       "${PROJECT_BINARY_DIR}/packages/cadabra2_defaults.py" 
       "${CADABRA_LIBS_DIR}/appdirs/cdb_appdirs.py"
+      "${PROJECT_SOURCE_DIR}/cdb_package_compiler.py"
    DESTINATION 
       "${PYTHON_SITE_PATH}"
 )
