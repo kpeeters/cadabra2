@@ -19,8 +19,23 @@ those from the native packages at <https://cadabra.science/download.html>.
 ## Installation
 
 ```
+python3 -m venv .venv
+source .venv/bin/activate
 pip install cadabra2
 ```
+
+or, with [uv](https://docs.astral.sh/uv/):
+
+```
+uv venv
+source .venv/bin/activate
+uv pip install cadabra2
+```
+
+Note that a venv created by `uv venv` has no `pip` of its own, so a
+plain `pip install` in it runs the system pip, which installs into
+`~/.local` instead of the venv. Use `uv pip`, or create the venv with
+`uv venv --seed`.
 
 Wheels are available for Linux (x86_64 and arm64) and Python 3.10 or later.
 
