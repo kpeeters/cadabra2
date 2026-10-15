@@ -649,6 +649,25 @@ if(NOT WIN32)
 endif()
 endif() # NOT PYPI_WHEEL
 
+# Manual pages (.cnb), from which read_manual() in pythoncdb/py_helpers.cc
+# produces the Python docstrings; it looks for them in
+# <site-packages>/../../../share/cadabra2/manual. In a wheel they go into
+# the data directory, which pip installs at the environment root.
+if(PYPI_WHEEL)
+  set(INSTALL_MAN_DIR "${SKBUILD_DATA_DIR}/share/cadabra2/manual")
+else()
+  set(INSTALL_MAN_DIR "share/cadabra2/manual")
+endif()
+if(NOT INSTALL_TARGETS_ONLY)
+  file(GLOB man_algorithms "${CMAKE_CURRENT_SOURCE_DIR}/algorithms/*.cnb")
+  file(GLOB man_properties "${CMAKE_CURRENT_SOURCE_DIR}/properties/*.cnb")
+  install_directory_permissions("${INSTALL_MAN_DIR}")
+  install_directory_permissions("${INSTALL_MAN_DIR}/algorithms")
+  install_directory_permissions("${INSTALL_MAN_DIR}/properties")
+  install(FILES ${man_algorithms} DESTINATION "${INSTALL_MAN_DIR}/algorithms")
+  install(FILES ${man_properties} DESTINATION "${INSTALL_MAN_DIR}/properties")
+endif()
+
 # if(APPIMAGE_MODE)
 #   # Install sympy. Matplotlib would be nice, but that pulls in blas and fortran and zillions of other things,
 #   # which then don't link properly anymore either.

@@ -8,13 +8,8 @@ project(Cadabra)
 
 print_header("Configuring native notebook frontend")
 
+# The manual pages are installed by core/CMakeLists.txt.
 set(INSTALL_LATEX_DIR    "share/cadabra2/latex")
-set(INSTALL_MAN_DIR      "share/cadabra2/manual")
-set(INSTALL_MAN_ALGO_DIR "share/cadabra2/manual/algorithms")
-set(INSTALL_MAN_PROP_DIR "share/cadabra2/manual/properties")
-
-FILE(GLOB man_algorithms "${PROJECT_SOURCE_DIR}/../core/algorithms/*.cnb")
-FILE(GLOB man_properties "${PROJECT_SOURCE_DIR}/../core/properties/*.cnb")
 
 
 #---------------------------------------------------------------------------
@@ -43,12 +38,7 @@ if (NOT INSTALL_TARGETS_ONLY)
 	message(STATUS "Installing LaTeX style files in ${INSTALL_LATEX_DIR}")
 
 	install_directory_permissions("${INSTALL_LATEX_DIR}")
-	install_directory_permissions("${INSTALL_MAN_DIR}")
-	install_directory_permissions("${INSTALL_MAN_ALGO_DIR}")
-	install_directory_permissions("${INSTALL_MAN_PROP_DIR}")
 
 #	install(FILES ${PROJECT_SOURCE_DIR}/latex/tableaux.sty  DESTINATION ${INSTALL_LATEX_DIR})
 	install(FILES ${PROJECT_SOURCE_DIR}/common/preamble.tex DESTINATION ${INSTALL_LATEX_DIR})
-	install(FILES ${man_algorithms} DESTINATION ${INSTALL_MAN_ALGO_DIR})
-	install(FILES ${man_properties} DESTINATION ${INSTALL_MAN_PROP_DIR})
 endif()

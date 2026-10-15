@@ -1,11 +1,16 @@
 # Smoke test for a freshly built cadabra2 wheel (CIBW_TEST_COMMAND).
-# Checks the Python module, the Jupyter kernelspec and the IPython
-# extension, without needing a running notebook server.
+# Checks the Python module, its manual pages, the Jupyter kernelspec
+# and the IPython extension, without needing a running notebook server.
 
 import cadabra2
 
 ex = cadabra2.Ex(r"A_{m n} + B_{m n}")
 print("Module OK:", ex)
+
+# The docstrings are read from the manual pages in the wheel's data directory.
+doc = cadabra2.distribute.__doc__ or ""
+assert "Failed to collect help" not in doc, doc
+print("Manual pages OK")
 
 from jupyter_client.kernelspec import KernelSpecManager
 
