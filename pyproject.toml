@@ -3,7 +3,8 @@
 # and the IPython extension ('%load_ext cadabra2_jupyter'); the notebook
 # front-end and command-line tools are available from the native packages.
 # The CMake option PYPI_WHEEL selects this subset; the wheels themselves
-# are built by .github/workflows/wheels.yml.
+# are built by .github/workflows/wheels.yml. The project description
+# shown on PyPI is PYPI.md (not README.rst, which is for GitHub).
 
 [build-system]
 requires = ["scikit-build-core>=0.10"]
@@ -13,7 +14,7 @@ build-backend = "scikit_build_core.build"
 name = "cadabra2"
 dynamic = ["version"]
 description = "A field-theory motivated approach to computer algebra"
-readme = "README.rst"
+readme = "PYPI.md"
 license = { text = "GPL-3.0-or-later" }
 authors = [{ name = "Kasper Peeters" }]
 requires-python = ">=3.10"

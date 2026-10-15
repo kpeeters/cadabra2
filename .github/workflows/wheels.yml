@@ -1,7 +1,19 @@
 # Build PyPI wheels of the cadabra2 Python module (module, packages,
 # Jupyter kernel and IPython extension only; see pyproject.toml).
-# On a pre-release, publish them to TestPyPI; on a full release,
-# publish them to the real PyPI.
+# On every push to devel (and on a manual run on devel), publish them
+# to TestPyPI with a development version X.Y.Z.devN, where N is the
+# number of commits ('git rev-list --count HEAD'); the job summary
+# shows which commit a given N corresponds to. On a pre-release,
+# publish them to TestPyPI with the release version; on a full
+# release, publish them to the real PyPI.
+#
+# To install the latest development build:
+#
+#    pip install -i https://test.pypi.org/simple/ \
+#        --extra-index-url https://pypi.org/simple/ --pre cadabra2
+#
+# (the extra index is needed because the dependencies are not on
+# TestPyPI).
 #
 # Publishing uses PyPI 'trusted publishing', which requires a one-time
 # setup on *both* test.pypi.org and pypi.org (separate sites, separate
@@ -37,6 +49,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # Every upload needs a new version number, and PyPI does not accept
+    # local versions ('+sha'), so use the commit count as .devN.
+    - name: Set development version
+      if: github.event_name != 'release'
+      run: |
+        N=$(git rev-list --count HEAD)
+        sed -i "s/^result = .*/result = \"{major}.{minor}.{patch}.dev${N}\"/" pyproject.toml
+        grep '^result' pyproject.toml
+        echo "Development version .dev${N} is commit ${GITHUB_SHA}" >> "$GITHUB_STEP_SUMMARY"
 
     - name: Build wheels
       uses: pypa/cibuildwheel@v3.2.1
@@ -58,7 +82,9 @@ jobs:
   publish_testpypi:
     name: Publish to TestPyPI
     needs: build_wheels
-    if: github.event_name == 'release' && github.event.release.prerelease
+    if: >-
+      (github.event_name == 'release' && github.event.release.prerelease) ||
+      (github.event_name != 'release' && github.ref == 'refs/heads/devel')
     runs-on: ubuntu-latest
     environment: testpypi
     permissions:
