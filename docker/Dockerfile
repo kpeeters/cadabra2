@@ -18,12 +18,12 @@ USER root
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y \
     git cmake pkgconf libpython3-dev python3-dev g++ \
-    libgmp3-dev libglibmm-2.4-dev libboost-all-dev libssl-dev libgmp-dev libsqlite3-dev uuid-dev  \
+    libgmp3-dev libglibmm-2.68-dev libboost-all-dev libssl-dev libgmp-dev libsqlite3-dev uuid-dev  \
     python3-matplotlib python3-mpmath python3-sympy python3-gmpy2 python3-pip
 RUN pip install jupyter
 RUN git clone -b "master" --depth 1 https://github.com/kpeeters/cadabra2 && \
     mkdir -p cadabra2/build && cd cadabra2/build && \
-    cmake .. -DENABLE_FRONTEND=&& \
+    cmake .. -DENABLE_FRONTEND=OFF && \
     make -j `nproc` && \
     make install
 
@@ -33,6 +33,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y \
     libgmp10 \
     libgmpxx4ldbl \
+    libglibmm-2.68-1 \
     libsqlite3-0 \
     python3 \
     python3-gmpy2 \
