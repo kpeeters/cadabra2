@@ -1,5 +1,5 @@
 #include <iostream>
-#include <gdk/gdkkeysyms.h>
+#include <gdk/gdk.h>
 #include "Console.hh"
 #include "GtkCompat.hh"
 #include "Config.hh"

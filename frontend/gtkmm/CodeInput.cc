@@ -2,7 +2,7 @@
 #include "GtkCompat.hh"
 #include <gdkmm/general.h>
 #include <gtkmm/messagedialog.h>
-#include <gdk/gdkkeysyms.h>
+#include <gdk/gdk.h>
 #include <gdkmm/rgba.h>
 //#include <gdkmm/root.h>
 #include <iostream>
