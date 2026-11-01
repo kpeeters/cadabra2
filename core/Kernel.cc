@@ -112,7 +112,7 @@ Kernel::~Kernel()
 	//	std::cerr << "~Kernel() " << this << std::endl;
 	}
 
-void Kernel::inject_property(property *prop, std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
+const property* Kernel::inject_property(property *prop, std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
 	{
 	Ex::iterator it=ex->begin();
 
@@ -124,7 +124,7 @@ void Kernel::inject_property(property *prop, std::shared_ptr<Ex> ex, std::shared
 		}
 	// Validate and insert a copy of the property.
 	prop->validate(*this, ex);
-	properties.master_insert(Ex(it), prop);
+	return properties.master_insert(Ex(it), prop);
 	}
 
 std::shared_ptr<cadabra::Ex> Kernel::ex_from_string(const std::string& s)
