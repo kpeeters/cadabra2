@@ -20,6 +20,9 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 			{"\\cos", "cos"},
 			{"\\sin", "sin"},
 			{"\\tan", "tan"},
+			{"\\cot", "cot"},
+			{"\\sec", "sec"},
+			{"\\csc", "csc"},
 			{"\\arccos", "acos"},
 			{"\\arcsin", "asin"},
 			{"\\arctan", "atan"},
@@ -108,7 +111,10 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 			{"N", "sympyN"},
 			{"O", "sympyO"},
 			{"S", "sympyS"},
-			{"Q", "sympyQ"}
+			{"Q", "sympyQ"},
+			{"RR", "sympyRR"},
+			{"QQ", "sympyQQ"},
+			{"ZZ", "sympyZZ"}
 		};
 
 	regex_map = {

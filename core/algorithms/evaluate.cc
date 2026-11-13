@@ -7,6 +7,8 @@
 #include "algorithms/evaluate.hh"
 #include "algorithms/simplify.hh"
 #include "algorithms/substitute.hh"
+#include "DisplaySympy.hh"
+#include <sstream>
 #include "algorithms/collect_terms.hh"
 #include "properties/EpsilonTensor.hh"
 #include "properties/PartialDerivative.hh"
@@ -20,8 +22,10 @@
 
 using namespace cadabra;
 
-evaluate::evaluate(const Kernel& k, Ex& tr, const Ex& c, bool rhs, bool simplify)
-	: Algorithm(k, tr), components(c), only_rhs(rhs), call_sympy(simplify)
+evaluate::evaluate(const Kernel& k, Ex& tr, const Ex& c, bool rhs, bool simplify,
+                   const std::string& simplifier_)
+	: Algorithm(k, tr), components(c), only_rhs(rhs), call_sympy(simplify),
+	  simplifier(simplifier_)
 	{
 	}
 
@@ -226,6 +230,11 @@ Ex::iterator evaluate::handle_sum(iterator it)
 		merge_components(sib1, sib2);
 		sib2=tr.erase(sib2);
 		}
+	// Simplify once, after all terms have been merged, rather than
+	// after every pairwise merge (which re-simplifies the accumulated
+	// components repeatedly).
+	if(call_sympy)
+		simplify_components(sib1, true);
 	cleanup_components(sib1);
 
 	it=tr.flatten_and_erase(it);
@@ -625,9 +634,8 @@ void evaluate::merge_components(iterator it1, iterator it2)
 		return true;
 		});
 
-
-	if(call_sympy)
-		simplify_components(it1, true);
+	// No simplification here: callers (handle_sum, collect_components)
+	// simplify once after all merges are done.
 	}
 
 void evaluate::cleanup_components(iterator it)
@@ -1137,7 +1145,7 @@ void evaluate::simplify_components(iterator it, bool run_sympy)
 	--lst;
 
 	cadabra::collect_terms collect(kernel, tr);
-	cadabra::simplify simp(kernel, tr);
+	cadabra::simplify simp(kernel, tr, simplifier);
 	simp.set_progress_monitor(pm);
 
 	cadabra::do_list(tr, lst, [&](Ex::iterator eqs) {
@@ -1151,7 +1159,41 @@ void evaluate::simplify_components(iterator it, bool run_sympy)
 		if(run_sympy && !nd->is_zero()) {
 			ScopedProgressGroup group(pm, "scalar_backend");
 			// std::cerr << "simplify at " << Ex(nd) << std::endl;
+
+			// Only components the backend accepts are cached; the
+			// others are left alone, exactly as before.
+			bool cacheable = simp.can_apply(nd);
+
+			// We cache everything that we simplify, because often
+			// the same expression appears multiple times. 
+			// Key on the exact sympy text of the component (this is
+			// what the sympy backend receives). If it cannot be
+			// printed in that form, simply do not cache.
+			std::string key;
+			if(cacheable) {
+				try {
+					std::ostringstream str;
+					DisplaySympy ds(kernel, tr);
+					ds.output(str, nd);
+					key = str.str();
+					}
+				catch(const std::exception&) {
+					cacheable = false;
+					}
+				}
+			if(cacheable) {
+				auto fnd = simplify_cache.find(key);
+				if(fnd != simplify_cache.end()) {
+					nd = tr.replace(nd, fnd->second.begin());
+					if(nd->is_zero()) tr.erase(eqs);
+					return true;
+					}
+				}
+
 			simp.apply_generic(nd, false, false, 0);
+
+			if(cacheable)
+				simplify_cache[key] = Ex(nd);
 			}
 		if(nd->is_zero()) {
 			// std::cerr << "component zero " << nd << std::endl;

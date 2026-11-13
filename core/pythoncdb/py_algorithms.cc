@@ -130,7 +130,28 @@ namespace cadabra {
 		def_algo<young_project_tensor, bool>(m, "young_project_tensor", true, false, 0, py::arg("modulo_monoterm") = false);
 		def_algo<join_gamma, bool, bool>(m, "join_gamma", true, false, 0, py::arg("expand") = true, py::arg("use_gendelta") = false);
 		def_algo<einsteinify, Ex>(m, "einsteinify", true, false, 0, py::arg("metric") = Ex{});
-		def_algo<evaluate, Ex, bool, bool>(m, "evaluate", false, false, 0, py::arg("components") = Ex{}, py::arg("rhsonly") = false, py::arg("simplify") = true);
+		// 'simplify' is either a bool (True: backend's generic simplify,
+		// False: none) or the name of a scalar-backend function to apply
+		// to each component instead, e.g. simplify="cancel".
+		m.def("evaluate",
+		      [](Ex_ptr ex, Ex components, bool rhsonly, py::object simplify,
+		         bool deep, bool repeat, unsigned int depth) {
+		         bool run = true;
+		         std::string fn;
+		         if(py::isinstance<py::str>(simplify))
+			         fn = simplify.cast<std::string>();
+		         else
+			         run = simplify.cast<bool>();
+		         evaluate algo(*get_kernel_from_scope(), *ex, components,
+		                       rhsonly, run, fn);
+		         return apply_algo_base(algo, ex, deep, repeat, depth, false);
+		         },
+		      py::arg("ex"), py::arg("components") = Ex{},
+		      py::arg("rhsonly") = false, py::arg("simplify") = true,
+		      py::arg("deep") = false, py::arg("repeat") = false,
+		      py::arg("depth") = 0,
+		      py::doc(read_manual(m, "algorithms", "evaluate").c_str()),
+		      py::return_value_policy::reference_internal);
 		def_algo<keep_terms, std::vector<int>>(m, "keep_terms", true, false, 0, py::arg("terms"));
 		def_algo<young_project, std::vector<int>, std::vector<int>>(m, "young_project", true, false, 0, py::arg("shape"), py::arg("indices"));
 		def_algo<simplify>(m, "simplify", false, false, 0);

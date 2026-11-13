@@ -3,6 +3,8 @@
 
 #include "Compare.hh"
 #include "IndexClassifier.hh"
+#include <map>
+#include <string>
 
 /// \ingroup algorithms
 ///
@@ -94,7 +96,15 @@ namespace cadabra {
 
 	class evaluate : public Algorithm {
 		public:
-			evaluate(const Kernel&, Ex&, const Ex& component_values, bool rhs=false, bool simplify=true);
+			/// If 'simplify' is true, each component is simplified with the
+			/// scalar backend after every intermediate step. By default this
+			/// uses the backend's generic simplification ('simplify' for
+			/// sympy, 'FullSimplify' for Mathematica); a non-empty
+			/// 'simplifier' names a backend function to use instead, e.g.
+			/// "cancel" or "factor" for rational components (see the
+			/// 'simplify' algorithm).
+			evaluate(const Kernel&, Ex&, const Ex& component_values, bool rhs=false,
+			         bool simplify=true, const std::string& simplifier="");
 
 			virtual bool     can_apply(iterator) override;
 			virtual result_t apply(iterator&) override;
@@ -113,6 +123,15 @@ namespace cadabra {
 		private:
 			const Ex& components;
 			bool only_rhs, call_sympy;
+			std::string simplifier;
+
+			/// Results of scalar-backend simplification, keyed on the
+			/// exact expression sent to the backend. Identical component
+			/// values occur frequently (derivatives of the same metric
+			/// component in several terms, symmetric index pairs), so this
+			/// avoids repeated and often expensive backend calls. Lives
+			/// for the duration of one evaluate call.
+			std::map<std::string, Ex> simplify_cache;
 
 			bool is_component(iterator it) const;
 			bool is_scalar_function(iterator it) const;

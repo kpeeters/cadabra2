@@ -54,7 +54,9 @@ Algorithm::result_t collect_components::apply(iterator& st)
 #ifdef DEBUG
 		std::cerr << "collect_components::apply: merged components node now " << s1 << std::endl;
 #endif
-		eval.simplify_components(s1, false);
+		// merge_components no longer simplifies after each merge; do
+		// it once here (evaluate's default is to run the scalar backend).
+		eval.simplify_components(s1, true);
 		auto comma=tr.end(s1);
 		--comma;
 		if(tr.number_of_children(comma)==0)

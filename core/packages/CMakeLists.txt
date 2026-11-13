@@ -21,6 +21,7 @@ set(PACKAGES
   core/manip
   core/solve
   core/trace
+  core/trigrat
   interact/slider
   numeric/integrate
   numeric/evaluate

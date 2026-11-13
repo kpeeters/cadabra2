@@ -1,0 +1,415 @@
+{
+	"cell_id": 6466232524087558650,
+	"cells": [
+		{
+			"cell_id": 6903638965184882636,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 8999565782447401964,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\package{cdb.core.trigrat}{Canonical simplification of expressions in sines and cosines}\n\nThis package simplifies expressions which are rational functions of sines and\ncosines (and of tan, cot, sec and csc), of any number of angles. Such\nexpressions appear for instance in the components of metrics in polar or\nspheroidal coordinates. Unlike Sympy's generic \\verb|simplify| or\n\\verb|trigsimp|, it brings expressions into a \\emph{canonical form}: expressions\nwhich are equal because of identities such as $\\sin^2 x + \\cos^2 x = 1$ or the\naddition formulas are mapped to identical results, and an expression which\nvanishes is always recognised as zero. It is also much faster on large\nexpressions.\n\nUse it with \\verb|from cdb.core.trigrat import trigrat|. Importing the package\nalso makes the function available under the name \\verb|\"trigrat\"| to\n\\algo{map_sympy}, and to \\algo{evaluate} through its \\verb|simplify| argument."
+				}
+			],
+			"hidden": true,
+			"source": "\\package{cdb.core.trigrat}{Canonical simplification of expressions in sines and cosines}\n\nThis package simplifies expressions which are rational functions of sines and\ncosines (and of tan, cot, sec and csc), of any number of angles. Such\nexpressions appear for instance in the components of metrics in polar or\nspheroidal coordinates. Unlike Sympy's generic \\verb|simplify| or\n\\verb|trigsimp|, it brings expressions into a \\emph{canonical form}: expressions\nwhich are equal because of identities such as $\\sin^2 x + \\cos^2 x = 1$ or the\naddition formulas are mapped to identical results, and an expression which\nvanishes is always recognised as zero. It is also much faster on large\nexpressions.\n\nUse it with \\verb|from cdb.core.trigrat import trigrat|. Importing the package\nalso makes the function available under the name \\verb|\"trigrat\"| to\n\\algo{map_sympy}, and to \\algo{evaluate} through its \\verb|simplify| argument."
+		},
+		{
+			"cell_id": 8860517885698923525,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6724469250479491219,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{trigrat(ex: Ex) -> Ex}{Bring sines and cosines into canonical form.}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{trigrat(ex: Ex) -> Ex}{Bring sines and cosines into canonical form.}"
+		},
+		{
+			"cell_id": 8887067849862511141,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "from cdb.utils.develop import inherit_kernel\n\ndef _drop_zero_components(ex):\n    # Remove entries with value zero from all \\components nodes; a node\n    # with no entries left is replaced by zero.\n    while True:\n        found = False\n        for comp in ex[r'\\components']:\n            lst = None\n            for part in comp.args():\n                lst = part\n            empty = True\n            for eq in lst.args():\n                empty = False\n                for j, side in enumerate(eq.args()):\n                    if j == 1 and side.ex() == 0:\n                        found = True\n                if found:\n                    eq.erase()\n                    break\n            if empty:\n                comp.replace(Ex(\"0\"))\n                found = True\n            if found:\n                break\n        if not found:\n            return ex\n\ndef trigrat(ex):\n    \"\"\"Bring all sines and cosines in ex into canonical form.\"\"\"\n    if not isinstance(ex, Ex):\n        return trigrat_sympy(ex)\n    # Use the caller's kernel, so that its properties (Coordinate, ...)\n    # are seen by map_sympy.\n    kernel = inherit_kernel()\n    if kernel is not None:\n        __cdbkernel__ = kernel\n    map_sympy(ex, \"trigrat\")\n    return _drop_zero_components(ex)"
+		},
+		{
+			"cell_id": 4119880365883813269,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 7229623059532238221,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Acts on all scalar parts of \\verb|ex|, including the values of tensor\ncomponents produced by \\algo{evaluate}. Components which simplify to zero are\nremoved; if no components remain, the components node is replaced by zero. The\nexpression is modified in place and returned. Given a Sympy expression instead\nof a Cadabra expression, it returns the result of \\verb|trigrat_sympy|."
+				}
+			],
+			"hidden": true,
+			"source": "Acts on all scalar parts of \\verb|ex|, including the values of tensor\ncomponents produced by \\algo{evaluate}. Components which simplify to zero are\nremoved; if no components remain, the components node is replaced by zero. The\nexpression is modified in place and returned. Given a Sympy expression instead\nof a Cadabra expression, it returns the result of \\verb|trigrat_sympy|."
+		},
+		{
+			"cell_id": 884200565297917060,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"ignore_on_import": true,
+			"source": "from cdb.core.trigrat import trigrat"
+		},
+		{
+			"cell_id": 8080774717906024560,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 5443529552374224913,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5113219437295131703,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "1"
+						}
+					],
+					"source": "1"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "trigrat($\\sin(x)**2 + \\cos(x)**2$);"
+		},
+		{
+			"cell_id": 7563826893913350105,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 902681149556634890,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3715250125268989242,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\sin(y) \\cos(x)"
+						}
+					],
+					"source": "\\sin{y} \\cos{x}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "trigrat($\\sin(x+y) - \\sin(x) \\cos(y)$);"
+		},
+		{
+			"cell_id": 1357344499596572252,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 1483136991987650276,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4208015708900848433,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0"
+						}
+					],
+					"source": "0\\,"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "trigrat($\\sin(x) - 2 \\sin(x/2) \\cos(x/2)$);"
+		},
+		{
+			"cell_id": 5350275460846185656,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 6294249245249414743,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7532066894602245903,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(\\sin(x) \\cos(x))**(-1)"
+						}
+					],
+					"source": "{\\left(\\sin{x} \\cos{x}\\right)}^{-\\,1}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "trigrat($\\tan(x) + 1/\\tan(x)$);"
+		},
+		{
+			"cell_id": 7444151390257445157,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 3408272803871843536,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Denominators are made free of sines, so the following is rewritten:"
+				}
+			],
+			"hidden": true,
+			"source": "Denominators are made free of sines, so the following is rewritten:"
+		},
+		{
+			"cell_id": 8099763812441902501,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3848245994849469394,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4090333177402333093,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(1-\\sin(x)) (\\cos(x))**(-2)"
+						}
+					],
+					"source": "\\left(1\\discretionary{}{}{}-\\,\\sin{x}\\right) {\\left(\\cos{x}\\right)}^{-2\\,}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "trigrat($1/(1+\\sin(x))$);"
+		},
+		{
+			"cell_id": 8488681285142299656,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 4411267033706691625,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "A typical use is the simplification of tensor components. Below are the\nChristoffel symbols of a sphere of radius $R$. Switching off the built-in\nsimplification of \\algo{evaluate} and calling \\verb|trigrat| afterwards is\noften much faster than the default simplification."
+				}
+			],
+			"hidden": true,
+			"source": "A typical use is the simplification of tensor components. Below are the\nChristoffel symbols of a sphere of radius $R$. Switching off the built-in\nsimplification of \\algo{evaluate} and calling \\verb|trigrat| afterwards is\noften much faster than the default simplification."
+		},
+		{
+			"cell_id": 4873686569147346344,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3312325274872545207,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\text{Property Coordinate attached to~}\\left[\\theta, \\discretionary{}{}{}\\phi\\right]."
+				},
+				{
+					"cell_id": 3548375482923855472,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\text{Property Indices(position=fixed, values=\\{{\\theta}\n, {\\phi}\n\\}) attached to~}\\left[a, \\discretionary{}{}{}b, \\discretionary{}{}{}c, \\discretionary{}{}{}d\\right]."
+				},
+				{
+					"cell_id": 8920213285869787618,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\text{Property PartialDerivative attached to~}\\backslash\\texttt{partial}\\{\\#\\}."
+				}
+			],
+			"ignore_on_import": true,
+			"source": "{\\theta,\\phi}::Coordinate;\n{a,b,c,d}::Indices(values={\\theta,\\phi}, position=fixed);\n\\partial{#}::PartialDerivative;\ng_{a b}::Metric.\ng^{a b}::InverseMetric."
+		},
+		{
+			"cell_id": 6161270763981700860,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 1066877906715483480,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4817485766224812582,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "{g_{\\theta \\theta} = (R)**2, g_{\\phi \\phi} = (R)**2 (\\sin(\\theta))**2, g^{\\theta \\theta} = (R)**(-2), g^{\\phi \\phi} = ((R)**2 (\\sin(\\theta))**2)**(-1)}"
+						}
+					],
+					"source": "\\left[g_{\\theta \\theta} = {R}^{2\\,}, \\discretionary{}{}{}g_{\\phi \\phi} = {R}^{2\\,} {\\left(\\sin{\\theta}\\right)}^{2\\,}, \\discretionary{}{}{}g^{\\theta \\theta} = {R}^{-2\\,}, \\discretionary{}{}{}g^{\\phi \\phi} = {\\left({R}^{2\\,} {\\left(\\sin{\\theta}\\right)}^{2\\,}\\right)}^{-\\,1}\\right]"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "sph:= { g_{\\theta\\theta} = R**2, g_{\\phi\\phi} = R**2 \\sin(\\theta)**2 }.\ncomplete(sph, $g^{a b}$);"
+		},
+		{
+			"cell_id": 7447026327600228357,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 1983705792608824369,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 903666508262285101,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\Gamma^{a}_{b c} =  1/2 g^{a d} (\\partial_{c}(g_{b d}) + \\partial_{b}(g_{c d})-\\partial_{d}(g_{b c}))"
+						}
+					],
+					"source": "\\Gamma^{a}\\,_{b c} = \\frac{1}{2}\\,g^{a d} \\left(\\partial_{c}{g_{b d}}\\discretionary{}{}{}+\\partial_{b}{g_{c d}}\\discretionary{}{}{}-\\,\\partial_{d}{g_{b c}}\\right)"
+				},
+				{
+					"cell_id": 5434622006240575435,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 700837440590611128,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\Gamma^{a}_{b c} = \\components_{b c}^{a}({{\\phi, \\theta, \\phi} = \\cos(\\theta) (\\sin(\\theta))**(-1), {\\theta, \\phi, \\phi} = \\cos(\\theta) (\\sin(\\theta))**(-1), {\\phi, \\phi, \\theta} = -\\sin(\\theta) \\cos(\\theta)})"
+						}
+					],
+					"source": "\\Gamma^{a}\\,_{b c} = \\square{}_{b}{}_{c}{}^{a}\\left\\{\\begin{aligned}\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}& = \\square{}_{\\theta}{}_{\\phi}{}^{\\phi} = \\cos{\\theta} {\\left(\\sin{\\theta}\\right)}^{-\\,1}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}& = -\\,\\sin{\\theta} \\cos{\\theta}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "ch:= \\Gamma^{a}_{b c} = 1/2 g^{a d} ( \\partial_{c}{g_{b d}}\n                                     +\\partial_{b}{g_{c d}}\n                                     -\\partial_{d}{g_{b c}} ):\nevaluate(ch, sph, rhsonly=True, simplify=False)\ntrigrat(ch);"
+		},
+		{
+			"cell_id": 1093602419145125321,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6736271716914452437,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Alternatively, \\verb|trigrat| can be used for the simplification steps\ninside \\algo{evaluate}:"
+				}
+			],
+			"hidden": true,
+			"source": "Alternatively, \\verb|trigrat| can be used for the simplification steps\ninside \\algo{evaluate}:"
+		},
+		{
+			"cell_id": 952871291568821846,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 5964592977170971214,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2718676777605892304,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\Gamma^{a}_{b c} =  1/2 g^{a d} (\\partial_{c}(g_{b d}) + \\partial_{b}(g_{c d})-\\partial_{d}(g_{b c}))"
+						}
+					],
+					"source": "\\Gamma^{a}\\,_{b c} = \\frac{1}{2}\\,g^{a d} \\left(\\partial_{c}{g_{b d}}\\discretionary{}{}{}+\\partial_{b}{g_{c d}}\\discretionary{}{}{}-\\,\\partial_{d}{g_{b c}}\\right)"
+				},
+				{
+					"cell_id": 131415972572404668,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7867924568118862305,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\Gamma^{a}_{b c} = \\components_{b c}^{a}({{\\phi, \\theta, \\phi} = \\cos(\\theta) (\\sin(\\theta))**(-1), {\\theta, \\phi, \\phi} = \\cos(\\theta) (\\sin(\\theta))**(-1), {\\phi, \\phi, \\theta} = -\\sin(\\theta) \\cos(\\theta)})"
+						}
+					],
+					"source": "\\Gamma^{a}\\,_{b c} = \\square{}_{b}{}_{c}{}^{a}\\left\\{\\begin{aligned}\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}& = \\square{}_{\\theta}{}_{\\phi}{}^{\\phi} = \\cos{\\theta} {\\left(\\sin{\\theta}\\right)}^{-\\,1}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}& = -\\,\\sin{\\theta} \\cos{\\theta}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "ch2:= \\Gamma^{a}_{b c} = 1/2 g^{a d} ( \\partial_{c}{g_{b d}}\n                                      +\\partial_{b}{g_{c d}}\n                                      -\\partial_{d}{g_{b c}} ):\nevaluate(ch2, sph, rhsonly=True, simplify=\"trigrat\");"
+		},
+		{
+			"cell_id": 8944912593181026980,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 8770850141358915459,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\algorithm{trigrat_sympy(expr) -> sympy expression}{Canonical form of a Sympy expression in sines and cosines.}"
+				}
+			],
+			"hidden": true,
+			"source": "\\algorithm{trigrat_sympy(expr) -> sympy expression}{Canonical form of a Sympy expression in sines and cosines.}"
+		},
+		{
+			"cell_id": 8809328353509863265,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "import sympy\n\n_RECIPROCAL = {\n    sympy.tan: lambda u: sympy.sin(u)/sympy.cos(u),\n    sympy.cot: lambda u: sympy.cos(u)/sympy.sin(u),\n    sympy.sec: lambda u: 1/sympy.cos(u),\n    sympy.csc: lambda u: 1/sympy.sin(u),\n}\n\ndef _to_sin_cos(e):\n    for f, rep in _RECIPROCAL.items():\n        e = e.replace(f, rep)\n    return e\n\ndef _hide_opaque(e, table):\n    # Subexpressions which are not rational in sin and cos (other\n    # functions, non-integer powers) are treated as opaque symbols, after\n    # bringing their arguments into canonical form.\n    if e.is_Atom or isinstance(e, (sympy.sin, sympy.cos)):\n        return e\n    if isinstance(e, (sympy.Add, sympy.Mul)):\n        return e.func(*[_hide_opaque(a, table) for a in e.args])\n    if isinstance(e, sympy.Pow) and e.exp.is_Integer:\n        return sympy.Pow(_hide_opaque(e.base, table), e.exp)\n    inner = e.func(*[trigrat_sympy(a) for a in e.args])\n    if inner.is_number or inner.is_Atom or not inner.has(sympy.sin, sympy.cos):\n        return inner\n    table[inner] = None\n    return inner\n\ndef _angle_groups(angles):\n    # Angles q*t with rational q are grouped by t; within a group all\n    # angles are integer multiples of the base angle t/L.\n    groups = {}\n    for a in angles:\n        q, t = a.as_coeff_Mul()\n        if not q.is_Rational:\n            q, t = sympy.Integer(1), a\n        groups.setdefault(t, set()).add(q)\n    out = []\n    for t in sorted(groups, key=sympy.default_sort_key):\n        L = 1\n        for q in groups[t]:\n            L = sympy.ilcm(L, q.q)\n        out.append((t, sympy.Integer(L), groups[t]))\n    return out\n\ndef _reduce(p, svars, cvars):\n    # Reduce a polynomial modulo s_k**2 + c_k**2 - 1, leaving it of\n    # degree at most one in each s_k.\n    p = sympy.expand(p)\n    if not svars or p == 0:\n        return p\n    out = []\n    for mon, coeff in sympy.Poly(p, *svars).terms():\n        term = coeff\n        for e, s, c in zip(mon, svars, cvars):\n            term *= (1 - c**2)**(e // 2) * s**(e % 2)\n        out.append(term)\n    return sympy.expand(sympy.Add(*out))\n\ndef _pretty(p, svars, cvars):\n    # Factor p, writing factors c_k**2 - 1 as -s_k**2. This is a fixed\n    # function of p, so the result stays unique.\n    pre = sympy.Integer(1)\n    for s, c in zip(svars, cvars):\n        if not p.has(c):\n            continue\n        rel = sympy.Poly(c**2 - 1, c)\n        while True:\n            q, r = sympy.div(sympy.Poly(p, c), rel)\n            if not r.is_zero:\n                break\n            p = q.as_expr()\n            pre *= -s**2\n    return pre * sympy.factor(p)\n\ndef trigrat_sympy(expr):\n    \"\"\"Canonical form of a rational function of sines and cosines (and\n    tan, cot, sec, csc) of any number of angles.\"\"\"\n    e = _to_sin_cos(sympy.sympify(expr))\n    if not e.has(sympy.sin, sympy.cos):\n        return sympy.factor(sympy.cancel(e))\n\n    table = {}\n    e = _hide_opaque(e, table)\n    hidden = sorted(table, key=sympy.default_sort_key)\n    hsyms = [sympy.Symbol('_trigrat_h%d' % i) for i in range(len(hidden))]\n    e = e.xreplace(dict(zip(hidden, hsyms)))\n\n    e = sympy.expand_trig(e)\n    angles = {f.args[0] for f in e.atoms(sympy.sin, sympy.cos)}\n    groups = _angle_groups(angles)\n    svars = [sympy.Symbol('_trigrat_s%d' % k) for k in range(len(groups))]\n    cvars = [sympy.Symbol('_trigrat_c%d' % k) for k in range(len(groups))]\n    u = sympy.Dummy('u')\n    rep, bases = {}, []\n    for (t, L, qs), s, c in zip(groups, svars, cvars):\n        bases.append(t / L)\n        for q in qs:\n            for f in (sympy.sin, sympy.cos):\n                rep[f(q * t)] = sympy.expand_trig(f(q * L * u)).xreplace(\n                    {sympy.sin(u): s, sympy.cos(u): c})\n    e = e.xreplace(rep)\n\n    n, d = sympy.fraction(sympy.together(e))\n    n, d = _reduce(n, svars, cvars), _reduce(d, svars, cvars)\n    for s, c in zip(svars, cvars):\n        d0, d1 = d.coeff(s, 0), d.coeff(s, 1)\n        if d1 != 0:\n            n = _reduce(n * (d0 - d1 * s), svars, cvars)\n            d = _reduce(d0**2 - d1**2 * (1 - c**2), svars, cvars)\n    if n == 0:\n        return sympy.Integer(0)\n\n    terms = sympy.Poly(n, *svars).terms() if svars else [((), n)]\n    coeffs = [cf for _, cf in terms]\n    g = sympy.gcd_list(coeffs + [d])\n    coeffs = [sympy.cancel(cf / g) for cf in coeffs]\n    d = sympy.cancel(d / g)\n    gens = sorted(d.free_symbols, key=sympy.default_sort_key)\n    # Fix the overall sign: denominator with more positive than negative\n    # coefficients, or a positive leading coefficient in case of a tie.\n    dc = sympy.Poly(d, *gens).coeffs() if gens else [d]\n    neg = sum(1 for k in dc if k < 0)\n    if 2 * neg > len(dc) or (2 * neg == len(dc) and dc[0] < 0):\n        coeffs, d = [-cf for cf in coeffs], -d\n    num = sympy.Add(*[_pretty(cf, svars, cvars)\n                      * sympy.Mul(*[s**k for s, k in zip(svars, mon)])\n                      for (mon, _), cf in zip(terms, coeffs)])\n    res = num / _pretty(d, svars, cvars)\n\n    back = dict(zip(hsyms, hidden))\n    for s, c, b in zip(svars, cvars, bases):\n        back[s], back[c] = sympy.sin(b), sympy.cos(b)\n    return res.xreplace(back)\n\n# Make the function available by name to map_sympy and evaluate.\nsympy.trigrat = trigrat_sympy\nif 'trigrat' not in sympy.__all__:\n    sympy.__all__.append('trigrat')\n\n__all__ = ['trigrat', 'trigrat_sympy']"
+		},
+		{
+			"cell_id": 3314000619374477810,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 8517920598384638527,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The function behind \\verb|trigrat|, acting on a Sympy expression."
+				}
+			],
+			"hidden": true,
+			"source": "The function behind \\verb|trigrat|, acting on a Sympy expression."
+		},
+		{
+			"cell_id": 4968603282305905910,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 5498073345896235905,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\cos^{2}{\\left(x \\right)}\\end{dmath*}"
+				}
+			],
+			"ignore_on_import": true,
+			"source": "from cdb.core.trigrat import trigrat_sympy\nimport sympy\nx, y = sympy.symbols('x y')\ntrigrat_sympy(sympy.cos(x+y)**2 + sympy.sin(x+y)**2 - sympy.sin(x)**2);"
+		},
+		{
+			"cell_id": 3677440129964776725,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 1296525972971847520,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Method}\n\nSums and integer multiples of angles are first expanded, and angles which are\nrational multiples of each other ($x$ and $x/2$, say) are written as integer\nmultiples of a common base angle. After that, every sine and cosine is\n$s_k=\\sin\\theta_k$ or $c_k=\\cos\\theta_k$ of an independent base angle\n$\\theta_k$, and the expression is a rational function of the $s_k$, $c_k$ and\nthe remaining symbols, taken modulo the relations $s_k^2+c_k^2=1$. Numerator\nand denominator are reduced to degree at most one in each $s_k$, and the\ndenominator is made independent of all $s_k$ by multiplying numerator and\ndenominator with its conjugate in each $s_k$ in turn. The result\n\\begin{equation*}\n\\frac{\\sum_S A_S(c)\\,\\prod_{k\\in S} s_k}{D(c)}\\,,\n\\end{equation*}\nwith common factors of the $A_S$ and $D$ removed and a fixed overall sign, is\nunique. For display, factors $c_k^2-1$ in the factorised $A_S$ and $D$ are\nwritten as $-\\sin^2\\theta_k$.\n\nOther functions (square roots, exponentials, \\ldots) are treated as opaque\nsymbols, after their arguments have themselves been brought into canonical\nform.\n\nThe form is canonical with respect to the angles which occur in the\nexpression: $\\sin x - 2 \\sin(x/2)\\cos(x/2)$ simplifies to zero, but\n\\verb|trigrat| applied separately to $\\sin x$ and to\n$2\\sin(x/2)\\cos(x/2)$ gives two different (equivalent) forms. Hyperbolic\nfunctions are not handled.\n\nMaxima has a function of the same name and purpose (by D.~Lazard), which uses\na different normal form: it linearises products into sines and cosines of\nsums of angles. The form used here keeps powers of $\\cos\\theta_k$, which is\ncloser to how, for instance, metrics are usually written."
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{Method}\n\nSums and integer multiples of angles are first expanded, and angles which are\nrational multiples of each other ($x$ and $x/2$, say) are written as integer\nmultiples of a common base angle. After that, every sine and cosine is\n$s_k=\\sin\\theta_k$ or $c_k=\\cos\\theta_k$ of an independent base angle\n$\\theta_k$, and the expression is a rational function of the $s_k$, $c_k$ and\nthe remaining symbols, taken modulo the relations $s_k^2+c_k^2=1$. Numerator\nand denominator are reduced to degree at most one in each $s_k$, and the\ndenominator is made independent of all $s_k$ by multiplying numerator and\ndenominator with its conjugate in each $s_k$ in turn. The result\n\\begin{equation*}\n\\frac{\\sum_S A_S(c)\\,\\prod_{k\\in S} s_k}{D(c)}\\,,\n\\end{equation*}\nwith common factors of the $A_S$ and $D$ removed and a fixed overall sign, is\nunique. For display, factors $c_k^2-1$ in the factorised $A_S$ and $D$ are\nwritten as $-\\sin^2\\theta_k$.\n\nOther functions (square roots, exponentials, \\ldots) are treated as opaque\nsymbols, after their arguments have themselves been brought into canonical\nform.\n\nThe form is canonical with respect to the angles which occur in the\nexpression: $\\sin x - 2 \\sin(x/2)\\cos(x/2)$ simplifies to zero, but\n\\verb|trigrat| applied separately to $\\sin x$ and to\n$2\\sin(x/2)\\cos(x/2)$ gives two different (equivalent) forms. Hyperbolic\nfunctions are not handled.\n\nMaxima has a function of the same name and purpose (by D.~Lazard), which uses\na different normal form: it linearises products into sines and cosines of\nsums of angles. The form used here keeps powers of $\\cos\\theta_k$, which is\ncloser to how, for instance, metrics are usually written."
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

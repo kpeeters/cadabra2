@@ -12,8 +12,8 @@
 
 using namespace cadabra;
 
-simplify::simplify(const Kernel& k, Ex& tr)
-	: Algorithm(k, tr)
+simplify::simplify(const Kernel& k, Ex& tr, const std::string& function)
+	: Algorithm(k, tr), function_(function)
 	{
 	}
 
@@ -110,7 +110,7 @@ Algorithm::result_t simplify::apply(iterator& it)
 		// std::cerr << "Feeding to sympy " << prod << std::endl;
 		switch(kernel.scalar_backend) {
 			case Kernel::scalar_backend_t::sympy:
-				wrap.push_back("simplify");
+				wrap.push_back(function_.empty() ? "simplify" : function_);
 					{
 					ScopedProgressGroup group(pm, "sympy");
 					sympy::apply(kernel, prod, top, wrap, args_, "");
@@ -118,7 +118,7 @@ Algorithm::result_t simplify::apply(iterator& it)
 				break;
 			case Kernel::scalar_backend_t::mathematica:
 #ifdef MATHEMATICA_FOUND
-				wrap.push_back("FullSimplify");
+				wrap.push_back(function_.empty() ? "FullSimplify" : function_);
 				//				args_.push_back("Trig -> False");
 				{
 					ScopedProgressGroup(pm, "mathematica");
@@ -140,14 +140,14 @@ Algorithm::result_t simplify::apply(iterator& it)
 	else {
 		switch(kernel.scalar_backend) {
 			case Kernel::scalar_backend_t::sympy:
-				wrap.push_back("simplify");
+				wrap.push_back(function_.empty() ? "simplify" : function_);
 				if(pm) pm->group("sympy");
 				sympy::apply(kernel, tr, it, wrap, args_, "");
 				if(pm) pm->group();
 				break;
 			case Kernel::scalar_backend_t::mathematica:
 #ifdef MATHEMATICA_FOUND
-				wrap.push_back("FullSimplify");
+				wrap.push_back(function_.empty() ? "FullSimplify" : function_);
 				//				args_.push_back("Trig -> False");
 				if(pm) pm->group("mathematica");
 				MMA::apply_mma(kernel, tr, it, wrap, args_, "");

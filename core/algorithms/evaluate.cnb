@@ -295,6 +295,21 @@
 			"source": "ex2:= T_{m n} = A_{m p} B_{p n};\nevaluate(ex2, rl, rhsonly=True); "
 		},
 		{
+			"cell_id": 4066903514160721101,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 5613596076881585703,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "By default every component is simplified with the scalar backend (sympy's \\verb|simplify|) after each intermediate step. This can be switched off with \\verb|simplify=False|, after which you would typically use \\algo{map_sympy} on the result. Alternatively, pass the name of a function to use instead, e.g.~\\verb|simplify=\"cancel\"| or \\verb|simplify=\"factor\"| when all components are rational functions; the name refers to a function of the active scalar backend. Identical component values are only sent to the backend once per call of \\algo{evaluate}."
+				}
+			],
+			"hidden": true,
+			"source": "By default every component is simplified with the scalar backend (sympy's \\verb|simplify|) after each intermediate step. This can be switched off with \\verb|simplify=False|, after which you would typically use \\algo{map_sympy} on the result. Alternatively, pass the name of a function to use instead, e.g.~\\verb|simplify=\"cancel\"| or \\verb|simplify=\"factor\"| when all components are rational functions; the name refers to a function of the active scalar backend. Identical component values are only sent to the backend once per call of \\algo{evaluate}."
+		},
+		{
 			"cell_id": 12322892869467590884,
 			"cell_origin": "client",
 			"cell_type": "input",
