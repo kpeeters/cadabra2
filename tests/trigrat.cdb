@@ -1,0 +1,117 @@
+from cdb.core.trigrat import trigrat, trigrat_sympy
+from cdb.core.component import get_component
+import sympy
+
+def test01():
+    __cdbkernel__=create_scope()
+    ex:= \sin(x)**2 + \cos(x)**2 - 1;
+    trigrat(ex)
+    assert(ex==0)
+    print("Test 01 passed")
+
+test01()
+
+def test02():
+    __cdbkernel__=create_scope()
+    # Two independent angles, addition formula.
+    ex:= \sin(x+y) - \sin(x) \cos(y) - \cos(x) \sin(y);
+    trigrat(ex)
+    assert(ex==0)
+    print("Test 02 passed")
+
+test02()
+
+def test03():
+    __cdbkernel__=create_scope()
+    # Commensurate angles x and x/2.
+    ex:= \sin(x) - 2 \sin(x/2) \cos(x/2);
+    trigrat(ex)
+    assert(ex==0)
+    print("Test 03 passed")
+
+test03()
+
+def test04():
+    __cdbkernel__=create_scope()
+    # Reciprocal functions.
+    ex:= \sec(x)**2 - \tan(x)**2 - 1 + \cot(x) \tan(x) - 1;
+    trigrat(ex)
+    assert(ex==0)
+    print("Test 04 passed")
+
+test04()
+
+def test05():
+    __cdbkernel__=create_scope()
+    # Equal expressions in different forms give identical results.
+    ex1:= \sin(x)**2/(1-\cos(x));
+    ex2:= 1+\cos(x);
+    trigrat(ex1)
+    trigrat(ex2)
+    tst:= @(ex1) - @(ex2);
+    assert(tst==0)
+    print("Test 05 passed")
+
+test05()
+
+def test06():
+    __cdbkernel__=create_scope()
+    # Flat plane in polar coordinates: all Riemann components vanish
+    # and the components node is replaced by zero.
+    {r,\theta}::Coordinate;
+    {a,b,c,d,e}::Indices(values={r,\theta}, position=fixed);
+    \partial{#}::PartialDerivative;
+    g_{a b}::Metric.
+    g^{a b}::InverseMetric.
+    fl:= { g_{r r} = 1, g_{\theta\theta} = r**2 \sin(\theta)**2 + r**2 \cos(\theta)**2 }.
+    complete(fl, $g^{a b}$)
+    ch:= \Gamma^{a}_{b c} = 1/2 g^{a d} ( \partial_{c}{g_{b d}} + \partial_{b}{g_{c d}} - \partial_{d}{g_{b c}} ).
+    evaluate(ch, fl, rhsonly=True, simplify=False)
+    trigrat(ch)
+    rm:= R^{a}_{b c d} = \partial_{c}{\Gamma^{a}_{d b}} - \partial_{d}{\Gamma^{a}_{c b}} + \Gamma^{a}_{c e} \Gamma^{e}_{d b} - \Gamma^{a}_{d e} \Gamma^{e}_{c b}.
+    substitute(rm, ch)
+    evaluate(rm, fl, rhsonly=True, simplify=False)
+    trigrat(rm)
+    assert(rhs(rm)==0)
+    print("Test 06 passed")
+
+test06()
+
+def test07():
+    __cdbkernel__=create_scope()
+    # Sphere: trigrat inside evaluate, and component values.
+    {\theta,\phi}::Coordinate;
+    {a,b,c,d}::Indices(values={\theta,\phi}, position=fixed);
+    \partial{#}::PartialDerivative;
+    g_{a b}::Metric.
+    g^{a b}::InverseMetric.
+    sph:= { g_{\theta\theta} = R**2, g_{\phi\phi} = R**2 \sin(\theta)**2 }.
+    complete(sph, $g^{a b}$)
+    ch:= \Gamma^{a}_{b c} = 1/2 g^{a d} ( \partial_{c}{g_{b d}} + \partial_{b}{g_{c d}} - \partial_{d}{g_{b c}} ).
+    evaluate(ch, sph, rhsonly=True, simplify="trigrat")
+    c1 = rhs(get_component(ch, $\theta, \phi, \phi$))
+    tst:= @(c1) + \sin(\theta) \cos(\theta);
+    trigrat(tst)
+    assert(tst==0)
+    c2 = rhs(get_component(ch, $\phi, \theta, \phi$))
+    tst:= @(c2) - \cos(\theta)/\sin(\theta);
+    trigrat(tst)
+    assert(tst==0)
+    print("Test 07 passed")
+
+test07()
+
+def test08():
+    # Sympy level: canonical forms of equal expressions agree.
+    x, y = sympy.symbols('x y')
+    S, C = sympy.sin, sympy.cos
+    pairs = [ (S(x)**2/(1 - C(x)), 1 + C(x)),
+              (S(x+y), S(x)*C(y) + C(x)*S(y)),
+              ((1 - C(2*x))/2, S(x)**2),
+              (1/(S(x) + C(y)), (S(x) - C(y))/(S(x)**2 - C(y)**2)) ]
+    for e1, e2 in pairs:
+        assert(trigrat_sympy(e1) == trigrat_sympy(e2))
+    assert(trigrat_sympy(sympy.sqrt(S(x)**2 + C(x)**2)) == 1)
+    print("Test 08 passed")
+
+test08()
