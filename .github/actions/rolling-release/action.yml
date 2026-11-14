@@ -1,0 +1,83 @@
+name: Rolling devel release
+description: >
+  Publish assets to a rolling prerelease (by default `devel`), creating it if
+  it does not exist and moving its tag to the commit being built.
+
+# Several workflows publish here on every push to devel (the .deb, .rpm,
+# AppImage and Windows packages), and they run concurrently. That is what
+# this action exists for: the create-if-missing and the tag move are subtle
+# enough that copies of them would drift, and a drifted copy does not fail,
+# it silently deletes another workflow's asset.
+#
+# Prerelease matters: `releases/latest` ignores those, so this never displaces
+# a real release as the repository's headline download.
+#
+# Adapted from the same action in kpeeters/gaindrive.
+
+inputs:
+  assets:
+    description: >
+      Files to upload. Expanded as a shell glob, so `dist/*.deb` is fine.
+    required: true
+  stale-suffix:
+    description: >
+      Delete existing assets ending in this before uploading, except the ones
+      being uploaded now. Cadabra's package names carry the version, and
+      `--clobber` only replaces an identical name, so without this every
+      version bump would leave the previous package behind. Several suffixes
+      go space-separated.
+    required: false
+    default: ''
+  tag:
+    description: "Tag of the rolling prerelease."
+    required: false
+    default: devel
+  token:
+    description: "A token with `contents: write` permission."
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        ASSETS: ${{ inputs.assets }}
+        STALE_SUFFIX: ${{ inputs.stale-suffix }}
+        TAG: ${{ inputs.tag }}
+      run: |
+        set -euo pipefail
+        R="$GITHUB_REPOSITORY"
+        NOTES="Development build of \`$GITHUB_SHA\` from the \`$GITHUB_REF_NAME\` branch. These packages are not an official release; they are replaced by the next push to $GITHUB_REF_NAME."
+
+        # Succeeds on the first run ever and fails harmlessly on every other,
+        # including the one where a sibling workflow won the race a second
+        # ago. Both outcomes leave the release existing.
+        gh release create "$TAG" --repo "$R" --prerelease \
+          --target "$GITHUB_SHA" --title "Development build ($GITHUB_REF_NAME)" \
+          --notes "$NOTES" || :
+
+        # `gh release create` ignores --target once the tag exists, so move
+        # the tag explicitly. Deleting and recreating the release instead
+        # would take the sibling workflows' assets with it.
+        gh api -X PATCH "repos/$R/git/refs/tags/$TAG" \
+          -f sha="$GITHUB_SHA" -F force=true >/dev/null
+
+        # The notes name the commit, so rewrite them every run.
+        gh release edit "$TAG" --repo "$R" --notes "$NOTES"
+
+        # Unquoted on purpose: the input arrives as the literal glob.
+        set -- $ASSETS
+        keep=""
+        for f in "$@"; do keep="$keep $(basename "$f")"; done
+
+        for s in $STALE_SUFFIX; do
+          gh release view "$TAG" --repo "$R" --json assets \
+            --jq ".assets[].name | select(endswith(\"$s\"))" \
+          | while read -r a; do
+              case " $keep " in *" $a "*) continue;; esac
+              gh release delete-asset "$TAG" "$a" --repo "$R" --yes
+            done
+        done
+
+        gh release upload "$TAG" "$@" --clobber --repo "$R"

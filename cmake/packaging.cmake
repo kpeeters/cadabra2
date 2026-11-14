@@ -237,6 +237,19 @@ set(CPACK_PACKAGE_VERSION_MAJOR  "${CADABRA_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR  "${CADABRA_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH  "${CADABRA_VERSION_PATCH}")
 set(CPACK_PACKAGE_VERSION        "${CADABRA_VERSION_SEM}")
+# Packages built from the devel branch (published as the rolling 'devel'
+# prerelease by the CI) get a package version which sorts before the
+# eventual release, e.g. 2.6.1~dev4321 < 2.6.1, so that apt/dnf upgrade
+# from a devel package to the release. The file name is unchanged.
+option(DEVEL_PACKAGE "Give the package a pre-release version X.Y.Z~devN" OFF)
+if(DEVEL_PACKAGE)
+  if(NOT GIT_COMMIT_SERIAL)
+	 message(FATAL_ERROR "-DDEVEL_PACKAGE=ON requires a git checkout with full history")
+  endif()
+  set(CPACK_DEBIAN_PACKAGE_VERSION "${CADABRA_VERSION_SEM}~dev${GIT_COMMIT_SERIAL}")
+  set(CPACK_RPM_PACKAGE_VERSION    "${CADABRA_VERSION_SEM}~dev${GIT_COMMIT_SERIAL}")
+  message("-- Devel package version ${CADABRA_VERSION_SEM}~dev${GIT_COMMIT_SERIAL}")
+endif()
 set(CPACK_PACKAGE_VENDOR         "Kasper Peeters")
 set(CPACK_PACKAGE_CONTACT        "Kasper Peeters <info@cadabra.science>")
 set(CPACK_STRIP_FILES            ON)
