@@ -1,7 +1,9 @@
-# Create GTK4 Ubuntu, Debian and Linux Mint packages on a github release
-# event, for all distributions listed in the 'dist' matrices below (add new
-# releases to both the 'build' and 'test' lists). Linux Mint only exists
-# for x86_64, so its arm64 build is excluded. Ubuntu 22.04 is
+# Create GTK4 Ubuntu and Debian packages on a github release event,
+# for all distributions listed in the 'dist' matrices below (add new
+# releases to both the 'build' and 'test' lists). Linux Mint 22.x users
+# can install the Ubuntu 24.04 package: Mint 22 is built on noble, and
+# a build in the linuxmintd/mint22.3-amd64 image produces the identical
+# package (that image is a stock Ubuntu 24.04). Ubuntu 22.04 is
 # built with GTK3 by the separate ubuntu-22.04-package.yml file.
 # This assumes that the cadabra version is the same as the
 # release name, and it will attempt to add the .deb files
@@ -31,13 +33,9 @@ jobs:
           - { image: "ubuntu:24.04", tag: "ubuntu-24.04-noble" }
           - { image: "ubuntu:26.04", tag: "ubuntu-26.04-resolute" }
           - { image: "debian:13",    tag: "debian-13-trixie" }
-          - { image: "linuxmintd/mint22.3-amd64", tag: "linuxmint-22.3-zena" }
         arch:
           - { os: ubuntu-24.04,     name: x86_64 }
           - { os: ubuntu-24.04-arm, name: arm64 }
-        exclude:
-          - dist: { image: "linuxmintd/mint22.3-amd64", tag: "linuxmint-22.3-zena" }
-            arch: { os: ubuntu-24.04-arm, name: arm64 }
     runs-on: ${{ matrix.arch.os }}
     name: ${{ matrix.dist.tag }} ${{ matrix.arch.name }}
 
@@ -133,7 +131,6 @@ jobs:
           -ubuntu-24.04-noble-x86_64.deb -ubuntu-24.04-noble-arm64.deb
           -ubuntu-26.04-resolute-x86_64.deb -ubuntu-26.04-resolute-arm64.deb
           -debian-13-trixie-x86_64.deb -debian-13-trixie-arm64.deb
-          -linuxmint-22.3-zena-x86_64.deb
         token: ${{ github.token }}
 
   # Installs the package just built (not the one on the release page)
@@ -149,7 +146,6 @@ jobs:
           - { image: "ubuntu:24.04", tag: "ubuntu-24.04-noble" }
           - { image: "ubuntu:26.04", tag: "ubuntu-26.04-resolute" }
           - { image: "debian:13",    tag: "debian-13-trixie" }
-          - { image: "linuxmintd/mint22.3-amd64", tag: "linuxmint-22.3-zena" }
     name: Test ${{ matrix.dist.tag }}
 
     steps:
