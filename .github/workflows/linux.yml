@@ -1,10 +1,15 @@
 # This is a build which gets triggered on every commit push, to
 # ensure that we get some warnings when we push code that does
-# not build on Linux.
+# not build on Linux. On devel it is not triggered directly but
+# called from devel.yml, which only builds the devel packages
+# once this has passed.
 
 name: Linux
 
-on: [push]
+on:
+  push:
+    branches-ignore: [devel]
+  workflow_call:
 
 jobs:
   build:

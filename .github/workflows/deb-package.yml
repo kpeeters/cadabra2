@@ -7,9 +7,10 @@
 # release name, and it will attempt to add the .deb files
 # to the release assets.
 #
-# On every push to devel the same packages are built with a
-# pre-release package version (X.Y.Z~devN, see DEVEL_PACKAGE in
-# cmake/packaging.cmake) and published to the rolling 'devel'
+# On every push to devel, devel.yml calls this workflow (once
+# linux.yml has passed) to build the same packages with a pre-release
+# package version (X.Y.Z~devN, see DEVEL_PACKAGE in
+# cmake/packaging.cmake) and publish them to the rolling 'devel'
 # prerelease, https://github.com/kpeeters/cadabra2/releases/tag/devel,
 # through .github/actions/rolling-release.
 
@@ -18,14 +19,7 @@ name: Ubuntu/Debian package (GTK4)
 on:
   release:
     types: [created]
-  push:
-    branches: [devel]
-  workflow_dispatch:
-
-# A series of quick pushes only builds the last one.
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  workflow_call:
 
 jobs:
   build:

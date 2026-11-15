@@ -1,0 +1,34 @@
+# Runs on every push to devel. First does the clean-machine build and
+# test of linux.yml; only if that passes are the packages built and
+# published to the rolling 'devel' prerelease,
+#
+#   https://github.com/kpeeters/cadabra2/releases/tag/devel
+#
+# The package workflows are reusable workflows (workflow_call) which
+# also still run by themselves on a release event. Add new package
+# workflows here as a job with 'needs: linux'.
+
+name: Devel build and packages
+
+on:
+  push:
+    branches: [devel]
+  workflow_dispatch:
+
+# A series of quick pushes only builds the last one. This lives here
+# and not in the called workflows, as those run in the context of
+# this one.
+concurrency:
+  group: devel-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    uses: ./.github/workflows/linux.yml
+
+  deb:
+    needs: linux
+    uses: ./.github/workflows/deb-package.yml
+    permissions:
+      contents: write
+    secrets: inherit
