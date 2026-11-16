@@ -246,27 +246,46 @@ a.button.secondary:hover {
 a.button.large { padding: 13px 22px; font-size: 16px; }
 a.button.secondary.large { padding: 12px 21px; }
 
-/* Google custom search, made compact */
-#search { width: 240px; }
-#search .gsc-control-cse {
-  padding: 0;
-  border: 0;
-  background: transparent;
+/* Search box: a plain form posting to Google programmable search.
+   Input and button are as tall as a.button (15px * 1.3 + 2 * 9px). */
+#search {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  width: 220px;
+  height: 38px;
+  margin: 0;
 }
-#search form.gsc-search-box,
-#search table.gsc-search-box { margin: 0; }
-#search .gsc-input-box {
+#search input[type="search"] {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0 10px;
+  border: 1px solid var(--rule-strong);
   border-radius: 6px;
-  border-color: var(--rule-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
 }
-#search .gsc-search-button-v2 {
+#search input[type="search"]:focus {
+  outline: none;
+  border-color: var(--green);
+}
+#search button {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0 12px;
+  border: 0;
   border-radius: 6px;
   background: var(--green-text);
-  border-color: var(--green-text);
-  padding: 8px 12px;
+  color: #FFFFFF;
+  cursor: pointer;
 }
-#gsc-i-id1 { font-size: 14px; }
-#gs_tti50 { padding-top: 0 !important; }
+#search button:hover { background: var(--green-dark); }
 
 
 /* ---------- 4. Page frame, sidebar, footer ---------- */

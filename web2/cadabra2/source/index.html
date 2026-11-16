@@ -3,311 +3,183 @@
 {% block title %}Cadabra: a field-theory motivated approach to computer algebra{% endblock %}
 
 {% block head %}
-<meta name="description" content="Cadabra is a symbolic computer
-											 algebra system designed to solve
-											 problems in classical and quantum
-											 field theory." />
+<meta name="description" content="Cadabra is a symbolic computer algebra system designed to solve problems in classical and quantum field theory." />
 {%- endblock %}
 
 {% block main %}
 
-<h1>News</h1>
-<p>See the <a href="changelog.html">change log</a> for latest changes
-  only available on github.</p>
-<p><div id="cloud">
-    <img class="running_image" src="/static/icons/cadabra2-cloud.png">
-    <div>
-      Now available: Cadabra in the
-      cloud, from your
-      browser. Email <a href="mailto:cloud@cadabra.science?Subject=Cadabra%20Cloud%20access&Body=I%20would%20like%20to%20register%20for%20beta%20access%20to%20Cadabra%20Cloud.">cloud@cadabra.science</a>
-      if you want to get access (please provide some details about
-      what you want to use it for).
+<section class="hero">
+  <div class="hero-text">
+    <p class="eyebrow">a field-theory motivated
+      approach to computer algebra</p>
+    <h1>Cadabra</h1>
+    <p  class="hyphenate">
+      Cadabra is a symbolic computer algebra system designed
+      specifically for the solution of problems encountered in field
+      theory. It has extensive functionality for tensor computer
+      algebra and <a href="/notebooks/tensor_monomials.html">tensor
+	polynomial simplification</a> including multi-term symmetries like the Bianchi
+      identity. It supports fermions and anti-commuting
+      variables, <a href="/notebooks/gamma_matrix_algebra.html">Clifford
+	algebras</a> and <a href="/notebooks/fierz.html">Fierz
+	transformations</a>. It can do abstract as well as
+      <a href="/notebooks/schwarzschild.html">component computations</a>,
+      and handles implicit coordinate dependence, multiple index
+      types, vielbeine, covarant and contravariant indices, partial and
+      covariant derivatives and many more. The input format is a subset of TeX.</p>
+
+    <p class="hyphenate">
+      Both a command-line and a graphical notebook interface are
+      available, and you can also use Cadabra from Jupyter by using the
+      <a href="jupyter.html">Cadabra Jupyter kernel</a>, or
+      from <a href="https://www.texmacs.org">TeXmacs</a>. Extensive
+      functionality is available for plotting and interactive graphics.
+    </p>
+
+    <p>Cadabra is programmable using Python, but also usable as
+      a <a href="notebooks/ref_c++_library.html">standalone library
+	from C++</a>.
+    </p>
+
+    <p>The software has been used and cited
+      by <a href="papers.html">hundreds of papers</a> and has several
+      thousand registered users. Available for free on all platforms and
+    in the cloud.</p>
+
+    <div class="hero-actions">
+      <a class="button large" href="download.html">
+        Download</a>
+      <a class="button secondary large"
+         href="notebooks/quickstart.html">Quick start</a>
+      <a class="button secondary large"
+         href="jupyter.html">Jupyter</a>
     </div>
   </div>
-</p>
-<dl>
-  <dt>14 October 2026</dt>
-  <dd>Release of 2.6.0 (<a href="changelog.html#2.6.0">changes</a>).
-    The notebook now uses GTK4 to future-proof development. Some other minor
-    bug fixes included as well, plus packages for Debian and an option to
-    install using <tt>pip</tt>.
-  </dd>
-  <dt>31 July 2025</dt>
-  <dd>Release of 2.5.14 (<a href="changelog.html#2.5.14">changes</a>).
-    Various plotting improvements and fixes, improvements to the SymPy
-    bridge and component computations, fixes for a number of binary
-    packages, and speedups.
-  </dd>
-  <dt>7 May 2025</dt>
-  <dd>Release of 2.5.12 (<a href="changelog.html#2.5.12">changes</a>).
-    Many new features and usability improvements.
-  </dd>
-  <dt>24 December 2024</dt>
-  <dd>Release of 2.5.10 (<a href="changelog.html#2.5.10">changes</a>).
-    Various improvements to the notebook interface including dynamical
-    graphics and better typesetting. Speedups for <tt>substitute</tt> (Daniel).
-    Internal changes and improvements to the CI pipeline.
-  </dd>
-<!--  <dt>25 October 2024</dt>
-  <dd>Release of 2.5.8 (<a href="changelog.html#2.5.8">changes</a>).
-    Mostly bug fixes and some improvements to the notebook interface.
-  </dd>
-  <dt>24 September 2024</dt>
-  <dd>Windows installer now available again, get it from the
-    <a href="https://github.com/kpeeters/cadabra2/releases/latest">github release page</a>.
-    Please report any issues.
-  </dd>
-  <dt>15 June 2024</dt>
-  <dd>Release of 2.5.2 (<a href="changelog.html#2.5.2">changes</a>).
-    Cadabra now
-    uses <a href="https://github.com/NanoMichael/MicroTeX">MicroTeX</a>
-    to do the maths typesetting in the notebook interface. This is not
-    only much faster, but also means that LaTeX is no longer a
-    dependency, and we can distribute Cadabra as an AppImage. The GUI
-    has been updated and there are many new features, such as full
-    UTF-8 support, dynamical cell updates and plot animations.
-  </dd>
-  <dt>20 Sep 2023</dt>
-  <dd>Release of 2.4.4 (<a href="changelog.html#2.4.4">changes</a>).
-    Many new features for numerical evaluation and plotting of expressions
-    using <tt>nevaluate</tt> (see
-    the <a href="https://cadabra.science/notebooks/ref_numerical.html">numerical
-    evaluation</a> chapter in the book) and many bug fixes.
-  </dd>
-  <dt>25 Aug 2022</dt>
-  <dd>Release of 2.4.0 (<a href="changelog.html#2.4.0">changes</a>).
-    Update to accompany the release of
-    the <a href="http://arxiv.org/abs/2208.11946">paper about the meld
-    algorithm</a>.  Many bug fixes and various functionality
-    improvements and UI enhancements.</dd>
+
+  <figure class="screenshot">
+    <img src="/static/images/screenshot.png" alt="[screenshot]"/>
+  </figure>
+
+</section>
     
-  <dt>21 Nov 2021</dt>
-  <dd>Release of 2.3.8 (<a href="changelog.html#2.3.8">changes</a>).
-	 Update to make Cadabra build on Apple silicon, and many bugfixes
-	 and small enhancements throughout.</dd>
-
-  <dt>30 Dec 2020</dt>
-  <dd>Release of 2.3.6 (<a href="changelog.html#2.3.6">changes</a>).
-	 Various bug fixes.
-  <dt>08 Dec 2020</dt>
-  <dd>New Windows installer, for version 2.3.5, now available from the
-    <a href="download.html#windows">download page</a>. Please provide feedback if you want the Windows
-    version to receive regular updates.
-  </dd>
-  
-  <dt>16 Nov 2020</dt>
-  <dd>Release of 2.3.4 (<a href="changelog.html#2.3.4">changes</a>).
-    Mostly a bug-fix release. Also contains functionality to save
-    Cadabra notebooks as Jupyter notebooks, to make it easier to
-    exchange them between the native app and Jupyter.
-  </dd>
-
-  <dt>31 Oct 2020</dt>
-  <dd>Release of 2.3.2 (<a href="changelog.html#2.3.2">changes</a>).
-	 Various new features and fixes, and a new Jupyter kernel
-	 which is installed by default, thanks to Fergus Baker. 
-  </dd>
-
-  <dt>11 June 2020</dt>
-  <dd>Release of 2.3.0 (<a href="changelog.html#2.3.0">changes</a>).
-	 Various new features and fixes. Available on Linux,
-	 macOS and Windows. 
-    Now also available through conda-forge, from which you can also
-	 install the <a href="jupyter.html">Cadabra Jupyter kernel</a>.
-  </dd>
-
-  <dt>01 April 2020</dt>
-  <dd>No, this is not an April fools joke. There is now
-    an <a href="jupyter.html">Anaconda package for the Cadabra
-    Jupyter kernel</a>. Only for Linux for now.
-  </dd> 
-  <dt>10 December 2019</dt>
-  <dd>Release of 2.2.8 (<a href="changelog.html#2.2.8">changes</a>).
-	 Various new features, long overdue release. Available on Linux,
-	 macOS and Windows. 
-  </dd>
-  <dt>11 November 2019</dt>
-  <dd>New Windows installer. Thanks to feedback from many users, there
-  is now a new Windows installer which hopefully takes care of many of
-  the installation problems encountered with earlier versions. 
-  <a href="/packages/windows/cadabra-2.2.7g-installer.exe">Download the Windows installer (2.2.7)</a>.
-  </dd>
-  <dt>18 April 2019</dt>
-  <dd>Release of 2.2.6
-  (<a href="changelog.html#2.2.6">changes</a>). Many features for
-  implicit indices, possibility to build as Jupyter kernel)</dd>
-  <dt>3 March 2019</dt>
-  <dd>There is now an experimental Jupyter kernel for Cadabra. For the
-  time being you will have to build this from source, but hopefully
-	 there will soon be a way to run this on a cloud service. See
-	 <a href="https://github.com/kpeeters/cadabra2/blob/master/JUPYTER.rst">build
-	 instructions</a> for more details.
-  </dd>
-  <dt>20 January 2019</dt>
-  <dd>
-	 Cadabra can now be used on-line (without installing it on your
-	 own computer) through the <a href="https://cocalc.com">CoCalc</a>
-	 service. CoCalc is the successor to SageMathCloud, and allows you
-	 to run a large variety of mathematics software in the cloud. To
-	 use Cadabra there, create a 'X11 desktop' session and then run
-	 <tt>cadabra2-gtk</tt>.
-  </dd>
-   <dt>19 December 2018</dt>
-  <dd>Release of 2.2.4
-	 (<a href="changelog.html#2.2.4">changes</a>).
-	 Loads of new features, available on Linux, macOS and Windows.
-  </dd>
- <dt>15 February 2018</dt>
-  <dd>Preparing for 2.2.0 (<a href="changelog.html#master">changes</a>).</dd>
-  <dt>6 August 2017</dt>
-  <dd>Version 2.1.5 released (<a href="changelog.html#2.1.5">changes</a>).</dd>
-  <dt>14 April 2017</dt>
-  <dd>Version 2.1.4 released (<a href="changelog.html#2.1.4">changes</a>).</dd>
-  <dt>4 January 2017</dt>
-  <dd>Version 2.1.2 released (<a href="changelog.html#2.1.2">changes</a>).</dd>
-  <dt>3 January 2017</dt>
-  <dd>Version 2.1.0 released
-  (<a href="changelog.html#2.1.0">changes</a>).</dd>
--->
-<!--
-  <dt>3 January 2017</dt>
-  <dd>The old site has been turned off. Cadabra 1.x will still be
-	 supported with bug fixes, and it will continue to be available
-	 via Debian-based distros, but all further development will take
-	 place on the 2.x versions.</dd>
-  <dt>6 November 2016</dt>
-  <dd>We are now generating packages for all major Linux distributions
-	 automatically so they track the latest release available on
-	 github. Get them from the <a href="download.html">download
-	 page</a>.</dd> -->
-</dl>
-
-<h1>What is Cadabra?</h1>
-<p  class="hyphenate">
-  Cadabra is a symbolic computer algebra system (CAS) designed
-  specifically for the solution of problems encountered in field
-  theory. It has extensive functionality for tensor computer
-  algebra, <a href="/notebooks/tensor_monomials.html">tensor
-  polynomial simplification</a> including multi-term symmetries,
-  fermions and anti-commuting
-  variables, <a href="/notebooks/gamma_matrix_algebra.html">Clifford
-  algebras</a> and <a href="/notebooks/fierz.html">Fierz
-  transformations</a>, <a href="/notebooks/schwarzschild.html">component computations</a>,
-  implicit coordinate dependence, multiple index
-  types and many more. The input format is a subset of TeX.</p>
-
-<p class="hyphenate">
-  Both a command-line and a graphical notebook interface are
-  available, and you can also use Cadabra from Jupyter by using the
-  <a href="jupyter.html">Cadabra Jupyter kernel</a>, or
-  from <a href="https://www.texmacs.org">TeXmacs</a>.
-</p>
-
-  <div class="splash_image">
-	 <img src="/static/images/screenshot.png" alt="[screenshot]"/>
+<section class="band">
+  <div class="news">
+    <div class="news-main">
+      <div class="news-head">
+	<h2>News</h2>
+        <p> See the <a href="changelog.html">change log</a> for latest changes
+	  only available on github.</p>
+	<dl class="releases">
+	  <dt>14 October 2026</dt>
+	  <dd>Release of 2.6.0 (<a href="changelog.html#2.6.0">changes</a>).
+	    The notebook now uses GTK4 to future-proof development. Some other minor
+	    bug fixes included as well, plus packages for Debian and an option to
+	    install using <tt>pip</tt>.
+	  </dd>
+	  <dt>31 July 2025</dt>
+	  <dd>Release of 2.5.14 (<a href="changelog.html#2.5.14">changes</a>).
+	    Various plotting improvements and fixes, improvements to the SymPy
+	    bridge and component computations, fixes for a number of binary
+	    packages, and speedups.
+	  </dd>
+	  <dt>7 May 2025</dt>
+	  <dd>Release of 2.5.12 (<a href="changelog.html#2.5.12">changes</a>).
+	    Many new features and usability improvements.
+	  </dd>
+	  <dt>24 December 2024</dt>
+	  <dd>Release of 2.5.10 (<a href="changelog.html#2.5.10">changes</a>).
+	    Various improvements to the notebook interface including dynamical
+	    graphics and better typesetting. Speedups for <tt>substitute</tt> (Daniel).
+	    Internal changes and improvements to the CI pipeline.
+	  </dd>
+	</dl>
+      </div>
+      <div id="cloud">
+	<img class="running_image" src="/static/icons/cadabra2-cloud.png">
+	<div>
+	  Now available: Cadabra in the
+	  cloud, from your
+	  browser. Email <a href="mailto:cloud@cadabra.science?Subject=Cadabra%20Cloud%20access&Body=I%20would%20like%20to%20register%20for%20beta%20access%20to%20Cadabra%20Cloud.">cloud@cadabra.science</a>
+	  if you want to get access (please provide some details about
+	  what you want to use it for).
+	</div>
+      </div>
+    </div>
   </div>
-  <ul class="hyphenate">
-	 <li>
-		Designed for field-theory problems, with handling of
-		anti-commuting and non-commuting objects without special notations
-		for their products, gamma matrix algebra, Fierz identities, Dirac
-		conjugation, vielbeine, flat and curved, covariant and
-		contravariant indices, implicit dependence of tensors on
-		coordinates, partial and covariant derivatives...
-	 </li>
-	 <li>
-		Powerful tensor simplification algorithms, not just for
-		mono-term symmetries but also for multi-terms symmetries like
-		the Bianchi identity, or dimensionally-dependent symmetries like
-		the Schouten identity.
-	 </li>
-	 <li>
-		Allows for both abstract and component computations.
-	 </li>
-	 <li>
-		A standalone graphical notebook interface which can also be
-		used as a front-end for SymPy.
-	 </li>
-	 <li>
-		Input and output using a subset of LaTeX notation.
-	 </li>
-	 <li>
-		Programmable using Python, but also usable as
-		a <a href="notebooks/ref_c++_library.html">standalone library
-		from C++</a>.
-	 </li>
-  </ul>
-<br/>
+</section>
 
-<h1>Cadabra's design philosophy</h1>
-<p  class="hyphenate">
-  Cadabra is built around the fact that many computations do not have
-  one single and unique path between the starting point and the end
-  result. When we do computations on paper, we often take bits of an
-  expression apart, do some manipulations on them, stick them back
-  into the main expression, and so on. Often, the manipulations that
-  we do are far from uniquely determined by the problem, and often
-  there is no way even in principle for a computer to figure out what
-  is 'the best' thing to do. 
-</p>
-<p  class="hyphenate">
-  What we need the computer to do, in such a case, is to be good at
-  performing simple but tedious steps, without enforcing on the user
-  how to do a particular computation. In other words, we want the
-  computer algebra system to be a scratchpad, leaving us in control of
-  which steps to take, not forcing us to return to a 'canonical'
-  expression at every stage.
-</p>
-<p  class="hyphenate">
-  Most existing computer algebra systems allow for this kind of work
-  flow only by requiring to stick clumsy 'inert' or 'hold' arguments
-  onto expressions, by default always 'simplifying' every input to
-  some form they think is best. Cadabra starts from the other end of
-  the spectrum, and as a general rule keeps your expression untouched, 
-  unless you explicitly ask for something to be done to it.
-</p>
-<p  class="hyphenate">
-  Another key issue in the design of symbolic computer algebra systems has
-  always been whether or not there should be a distinction between the
-  'data language' (the language used to write down mathematical
-  expressions), the 'manipulation language' (the language used to write
-  down what you want to do with those expressions) and the
-  'implementation language' (the language used to implement algorithms
-  which act on mathematical expressions). Many computer algebra systems
-  take the approach in which these languages are the same (Axiom,
-  Reduce, Sympy) or mostly the same apart from a small core which uses a
-  different implementation language (Mathematica, Maple). The Cadabra
-  project is rooted in the idea that for many applications, it is better
-  to keep a clean distinction between these three languages. Cadabra
-  writes mathematics using LaTeX, is programmable in Python, and is
-  under the hood largely written in C++.
-</p>
-<br/>
-
-<h1>History</h1>
-<p class="hyphenate">
-  Cadabra was originally written around 2001 to
-  solve <a href="https://arxiv.org/abs/hep-th/0010167">a
-  number</a> <a href="https://arxiv.org/abs/hep-th/0307298">of
-  problems</a> related to higher-derivative supergravity. It was then
-  expanded and polished, and first saw its public
-  release <a href="https://arxiv.org/abs/hep-th/0701238">in 2007</a>.
-  During the years that followed, it became clear that several design
-  decisions were not ideal, such as the use of a custom programming
-  language and the lack of functionality for component computations. Over
-  the course of 2015-2016 a large rewrite took place, which resulted
-  in Cadabra 2.x.  This new version is programmable in Python and does
-  both abstract and component computations. This new web site, with
-  new tutorials and all manual pages accessible online, will also
-  hopefully help to make Cadabra easier to use.
-</p>
-<p class="hyphenate">
-  Since 2018 Cadabra is available on all major platforms (Linux,
-  MacOS, Windows, BSD). Visit the <a href="/qa">Q&amp;A forum</a> for
-  help using it.
-</p>
-
-<br/>
+<div class="two-col">
+  <section class="col-main">
+    <h2>Cadabra's design philosophy</h2>
+    <p  class="hyphenate">
+      Cadabra is built around the fact that many computations do not have
+      one single and unique path between the starting point and the end
+      result. When we do computations on paper, we often take bits of an
+      expression apart, do some manipulations on them, stick them back
+      into the main expression, and so on. Often, the manipulations that
+      we do are far from uniquely determined by the problem, and often
+      there is no way even in principle for a computer to figure out what
+      is &ldquo;the best&rdquo; thing to do. 
+    </p>
+    <p  class="hyphenate">
+      What we need the computer to do, in such a case, is to be good at
+      performing simple but tedious steps, without enforcing on the user
+      how to do a particular computation. In other words, we want the
+      computer algebra system to be a scratchpad, leaving us in control of
+      which steps to take, not forcing us to return to a 'canonical'
+      expression at every stage.
+    </p>
+    <p  class="hyphenate">
+      Most existing computer algebra systems allow for this kind of
+      work flow only by requiring to stick clumsy &ldquo;inert&rdquo;
+      or &ldquo;hold&rdquo; arguments onto expressions, by default
+      always &ldquo;simplifying&rdquo; every input to some form they think is
+      best. Cadabra starts from the other end of the spectrum, and as
+      a general rule keeps your expression untouched, unless you
+      explicitly ask for something to be done to it.
+    </p>
+    <p  class="hyphenate">
+      Another key issue in the design of symbolic computer algebra
+      systems has always been whether or not there should be a
+      distinction between the &ldquo;data language&rdquo; (the
+      language used to write down mathematical expressions), the
+      &ldquo;manipulation language&rdquo; (the language used to write
+      down what you want to do with those expressions) and the
+      &ldquo;implementation language&rdquo; (the language used to implement
+      algorithms which act on mathematical expressions). Many computer
+      algebra systems take the approach in which these languages are
+      the same (Axiom, Reduce, Sympy) or mostly the same, apart from a
+      small core which uses a different implementation language
+      (Mathematica, Maple). The Cadabra project is rooted in the idea
+      that for many applications, it is better to keep a clean
+      distinction between these three languages. Cadabra writes
+      mathematics using LaTeX, is programmable in Python, and is under
+      the hood largely written in C++.
+    </p>
+  </section>
+  <section class="col-side">
+    <h2>History</h2>
+    <p class="hyphenate">
+      Cadabra was originally written around 2001 to
+      solve <a href="https://arxiv.org/abs/hep-th/0010167">a
+	number</a> <a href="https://arxiv.org/abs/hep-th/0307298">of
+	problems</a> related to higher-derivative supergravity. It was then
+      expanded and polished, and first saw its public
+      release <a href="https://arxiv.org/abs/hep-th/0701238">in 2007</a>.
+      During the years that followed, it became clear that several design
+      decisions were not ideal, such as the use of a custom programming
+      language and the lack of functionality for component computations. Over
+      the course of 2015-2016 a large rewrite took place, which resulted
+      in Cadabra 2.x.  This series is programmable in Python and does
+      both abstract and component computations. 
+    </p>
+    <p class="hyphenate">
+      Since 2018 Cadabra is available on all major platforms (Linux,
+      MacOS, Windows, BSD). Visit the <a href="/qa">Q&amp;A forum</a> for
+      help using&nbsp;it.
+    </p>
+  </section>
+</div>
 
 {%- endblock %}
 

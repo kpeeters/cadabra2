@@ -107,27 +107,29 @@
         </nav>
 
         <div class="topbar-end">
-          <div id="search">
-<script>
-  (function() {
-    var cx = '016915739931163127408:1ha2sk1dyg0';
-    var gcse = document.createElement('script');
-    gcse.type = 'text/javascript';
-    gcse.async = true;
-    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(gcse, s);
-  })();
-</script>
-<gcse:search></gcse:search>
-          </div>
+          <!-- Plain form submitting to our Google programmable
+               search engine; results open on Google's hosted page. -->
+          <form id="search" action="https://cse.google.com/cse" method="get"
+                role="search">
+            <input type="hidden" name="cx" value="016915739931163127408:1ha2sk1dyg0">
+            <input type="search" name="q" placeholder="Search"
+                   aria-label="Search this site">
+            <button type="submit" aria-label="Search">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2.5"
+                   stroke-linecap="round" aria-hidden="true">
+                <circle cx="10.5" cy="10.5" r="7"/>
+                <line x1="15.5" y1="15.5" x2="21" y2="21"/>
+              </svg>
+            </button>
+          </form>
           <a class="plain" href="https://github.com/kpeeters/cadabra2/">
             Source</a>
           <a class="button" href="/download.html">Download</a>
         </div>
       </div>
     </header>
-
+    
     <!-- ============ PAGE ============ -->
     <!-- If a page fills the 'sidebar' block (e.g. a table of
          contents for a notebook), the page gets two columns.
@@ -150,7 +152,7 @@
       <div class="footer-inner">
         <div class="footer-brand">
           <span class="footer-name">Cadabra</span>
-          <span>Copyright &copy; 2001-2025 Kasper Peeters</span>
+          <span>Copyright &copy; 2001-2026 Kasper Peeters</span>
           <span>Questions?
             <a href="mailto:info@cadabra.science">info@cadabra.science</a>
           </span>
