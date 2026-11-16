@@ -5,14 +5,20 @@
 # This assumes that the cadabra version is the same as the
 # release name, and it will attempt to add the .rpm files
 # to the release assets.
+#
+# On every push to devel, devel.yml calls this workflow (once
+# linux.yml has passed) to build the same packages with a pre-release
+# package version (X.Y.Z~devN, see DEVEL_PACKAGE in
+# cmake/packaging.cmake) and publish them to the rolling 'devel'
+# prerelease, https://github.com/kpeeters/cadabra2/releases/tag/devel,
+# through .github/actions/rolling-release.
 
 name: Fedora package (GTK4)
-
-# on: [push]
 
 on:
   release:
     types: [created]
+  workflow_call:
 
 jobs:
   build:
@@ -28,7 +34,11 @@ jobs:
     name: Fedora ${{ matrix.fedora }} ${{ matrix.arch.name }}
 
     steps:
-    - uses: actions/checkout@v3
+    # Full history, so that 'git rev-list --count' in cmake/version.cmake
+    # gives the real commit serial.
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@master
@@ -58,7 +68,8 @@ jobs:
              pip3 install sympy
              mkdir build
              cd build
-             cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
+             cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr \
+                   -DDEVEL_PACKAGE=${{ github.event_name == 'release' && 'OFF' || 'ON' }} ..
              make
              cpack
            "
@@ -75,17 +86,42 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    # Used by the devel-release and test jobs below.
     - name: Store package as build artifact
       uses: actions/upload-artifact@v4
-      if:   github.event_name == 'push'
       with:
-        name: cadabra2-fedora${{ matrix.fedora }}-${{ matrix.arch.name }}.rpm
+        name: rpm-fedora${{ matrix.fedora }}-${{ matrix.arch.name }}
         path: build/cadabra2-${{ env.VERSION }}-fedora${{ matrix.fedora }}-${{ matrix.arch.name }}.rpm
+        if-no-files-found: error
 
+  # Package names carry the version, so stale-suffix lists every
+  # combination of the build matrix; it removes the package of a
+  # previous version once a new one is uploaded.
+  devel-release:
+    needs: build
+    if: github.event_name != 'release' && github.ref == 'refs/heads/devel'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: rpm-fedora*
+        merge-multiple: true
+        path: dist
+    - uses: ./.github/actions/rolling-release
+      with:
+        assets: dist/*.rpm
+        stale-suffix: >-
+          -fedora43-x86_64.rpm -fedora43-arm64.rpm -fedora44-x86_64.rpm -fedora44-arm64.rpm
+        token: ${{ github.token }}
+
+  # Installs the package just built (not the one on the release page)
+  # in a fresh container, for release and devel builds alike.
   test:
     needs: build
     runs-on: ubuntu-latest
-    if:   github.event_name == 'release' # only test release builds
 
     strategy:
       fail-fast: false
@@ -100,18 +136,20 @@ jobs:
     - name: Pull Fedora image
       run: docker pull fedora:${{ matrix.fedora }}
 
-    - name: Download package and run inside Fedora container
+    - uses: actions/download-artifact@v4
+      with:
+        name: rpm-fedora${{ matrix.fedora }}-x86_64
+        path: dist
+
+    - name: Install package and run inside Fedora container
       run: |
         docker run --rm \
            -v ${{ github.workspace }}:/workspace \
            -w /workspace \
            fedora:${{ matrix.fedora }} \
            bash -c "
-             dnf install -y xorg-x11-server-Xvfb wget curl jq
-             export VERSION=\$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
-             export RPMNAME=cadabra2-\${VERSION}-fedora${{ matrix.fedora }}-x86_64.rpm
-             wget https://github.com/kpeeters/cadabra2/releases/download/\${VERSION}/\${RPMNAME}
-             dnf install -y \${RPMNAME}
+             dnf install -y xorg-x11-server-Xvfb
+             dnf install -y ./dist/cadabra2-*.rpm
              printf 'import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n' > tst.cdb
              cadabra2 tst.cdb
 

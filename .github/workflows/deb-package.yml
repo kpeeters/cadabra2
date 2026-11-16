@@ -104,7 +104,7 @@ jobs:
     - name: Store package as build artifact
       uses: actions/upload-artifact@v4
       with:
-        name: pkg-${{ matrix.dist.tag }}-${{ matrix.arch.name }}
+        name: deb-${{ matrix.dist.tag }}-${{ matrix.arch.name }}
         path: build/cadabra2-${{ env.VERSION }}-${{ matrix.dist.tag }}-${{ matrix.arch.name }}.deb
         if-no-files-found: error
 
@@ -121,7 +121,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: actions/download-artifact@v4
       with:
-        pattern: pkg-*
+        pattern: deb-*
         merge-multiple: true
         path: dist
     - uses: ./.github/actions/rolling-release
@@ -157,7 +157,7 @@ jobs:
 
     - uses: actions/download-artifact@v4
       with:
-        name: pkg-${{ matrix.dist.tag }}-x86_64
+        name: deb-${{ matrix.dist.tag }}-x86_64
         path: dist
 
     - name: Install package and run inside container

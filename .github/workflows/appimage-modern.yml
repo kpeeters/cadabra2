@@ -2,15 +2,18 @@
 # Supports both x86_64 and arm64 architectures on current GitHub runners
 # Uses Ubuntu 22.04 base for maximum compatibility; since 22.04 does
 # not ship gtkmm-4.0, the AppImage is built with GTK3 (-DUSE_GTK4=OFF).
+#
+# On every push to devel, devel.yml calls this workflow (once
+# linux.yml has passed) and the result is published to the rolling
+# 'devel' prerelease, https://github.com/kpeeters/cadabra2/releases/tag/devel,
+# through .github/actions/rolling-release.
 
 name: AppImage (Modern)
 
 on:
   release:
     types: [created]
-  # Uncomment for testing
-  #push:
-  #  branches: [devel]
+  workflow_call:
 
 jobs:
   build:
@@ -34,8 +37,12 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      # Full history, so that 'git rev-list --count' in cmake/version.cmake
+      # gives the real commit serial.
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install AppImageBuilder
         run: |
@@ -243,6 +250,7 @@ jobs:
           name: cadabra2-appimage-${{ matrix.arch }}
           path: Cadabra_*_${{ matrix.arch }}.AppImage
           retention-days: 7
+          if-no-files-found: error
 
       - name: Upload to release
         if: github.event_name == 'release'
@@ -267,3 +275,26 @@ jobs:
 #           fi
 #         env:
 #           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Package names carry the version, so stale-suffix lists every
+  # combination of the build matrix; it removes the package of a
+  # previous version once a new one is uploaded.
+  devel-release:
+    needs: build
+    if: github.event_name != 'release' && github.ref == 'refs/heads/devel'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: cadabra2-appimage-*
+        merge-multiple: true
+        path: dist
+    - uses: ./.github/actions/rolling-release
+      with:
+        assets: dist/*.AppImage
+        stale-suffix: >-
+          _x86_64.AppImage _arm64.AppImage
+        token: ${{ github.token }}

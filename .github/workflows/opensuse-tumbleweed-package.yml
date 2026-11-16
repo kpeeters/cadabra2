@@ -2,15 +2,20 @@
 # This assumes that the cadabra version is the same as the
 # release name, and it will attempt to add the .rpm file
 # to the release assets.
+#
+# On every push to devel, devel.yml calls this workflow (once
+# linux.yml has passed) to build the same packages with a pre-release
+# package version (X.Y.Z~devN, see DEVEL_PACKAGE in
+# cmake/packaging.cmake) and publish them to the rolling 'devel'
+# prerelease, https://github.com/kpeeters/cadabra2/releases/tag/devel,
+# through .github/actions/rolling-release.
 
 name: OpenSUSE-Tumbleweed package
-
-# on: [push]
 
 on:
   release:
     types: [created]
-
+  workflow_call:
 
 jobs:
   build:
@@ -25,12 +30,12 @@ jobs:
     name: Tumbleweed ${{ matrix.arch.name }}
 
     steps:
-    - uses: actions/checkout@v3
+    # Full history, so that 'git rev-list --count' in cmake/version.cmake
+    # gives the real commit serial.
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
-#    - name: Exit if not on devel branch
-#      if: github.ref != 'refs/heads/devel'
-#      run: exit 1
-      
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@master
 
@@ -66,7 +71,8 @@ jobs:
              git config --global --add safe.directory /workspace
              mkdir build 
              cd build 
-             cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr .. 
+             cmake -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DCMAKE_INSTALL_PREFIX=/usr \
+                   -DDEVEL_PACKAGE=${{ github.event_name == 'release' && 'OFF' || 'ON' }} ..
              make 
              cpack 
            "
@@ -77,11 +83,45 @@ jobs:
         echo "VERSION=$VER" >> $GITHUB_ENV
 
     - name: Upload Release Assets
+      if:   github.event_name == 'release'
       run: |
         gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-tumbleweed-${{ matrix.arch.name }}.rpm --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    # Used by the devel-release and test jobs below.
+    - name: Store package as build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: rpm-tumbleweed-${{ matrix.arch.name }}
+        path: build/cadabra2-${{ env.VERSION }}-tumbleweed-${{ matrix.arch.name }}.rpm
+        if-no-files-found: error
+
+  # Package names carry the version, so stale-suffix lists every
+  # combination of the build matrix; it removes the package of a
+  # previous version once a new one is uploaded.
+  devel-release:
+    needs: build
+    if: github.event_name != 'release' && github.ref == 'refs/heads/devel'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: rpm-tumbleweed-*
+        merge-multiple: true
+        path: dist
+    - uses: ./.github/actions/rolling-release
+      with:
+        assets: dist/*.rpm
+        stale-suffix: >-
+          -tumbleweed-x86_64.rpm -tumbleweed-arm64.rpm
+        token: ${{ github.token }}
+
+  # Installs the package just built (not the one on the release page)
+  # in a fresh container, for release and devel builds alike.
   test:
     needs: build
     runs-on: ubuntu-24.04
@@ -93,7 +133,12 @@ jobs:
     - name: Pull OpenSUSE image
       run: docker pull opensuse/tumbleweed:latest
 
-    - name: Download package and run inside OpenSUSE container
+    - uses: actions/download-artifact@v4
+      with:
+        name: rpm-tumbleweed-x86_64
+        path: dist
+
+    - name: Install package and run inside OpenSUSE container
       run: |
         docker run --rm \
            -v ${{ github.workspace }}:/workspace \
@@ -104,11 +149,8 @@ jobs:
              zypper refresh
              zypper -n update
              zypper se -s libboost_filesystem
-             zypper -n install xvfb-run wget curl jq
-             export VERSION=\$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
-             export RPMNAME=cadabra2-\${VERSION}-tumbleweed-x86_64.rpm
-             wget https://github.com/kpeeters/cadabra2/releases/download/\${VERSION}/\${RPMNAME}
-             zypper --no-gpg-checks -n install \${RPMNAME}
+             zypper -n install xvfb-run
+             zypper --no-gpg-checks -n install ./dist/cadabra2-*.rpm
              printf 'import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n' > tst.cdb
              cadabra2 tst.cdb
              
