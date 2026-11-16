@@ -213,6 +213,15 @@ body.about     #nav-about     > summary {
   gap: 20px;
 }
 .topbar-end a.plain { color: var(--ink); }
+/* same box height as a.button, icon centred in it */
+.topbar-end a.github {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  height: 38px;
+}
+.topbar-end a.github svg { display: block; }
+.topbar-end a.github:hover { color: var(--green-text); }
 
 .button,
 a.button {
