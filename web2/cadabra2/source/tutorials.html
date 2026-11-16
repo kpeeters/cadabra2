@@ -2,10 +2,16 @@
 
 {% block title %}Cadabra: Tutorials{% endblock %}
 
-{% block head %}{%- endblock %}
+{% block section %}learn{% endblock %}
+
+{% block breadcrumb %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">Home</a>Tutorials
+</nav>
+{% endblock %}
 
 {% block main %}
-<h1>Cadabra tutorials</h1>
+<h1>Tutorials</h1>
 <p>
   The tutorials listed below are meant to illustrate Cadabra concepts
   at the level of simple examples; for research-level applications of
@@ -14,64 +20,95 @@
 <p>
   The pages linked below are produced from actual Cadabra
   notebooks. Instead of reading them on-line, you can also download
-  the notebooks and play with them inside Cadabra. These notebooks all
-  require the new 2.x version of the software and will not work with
-  the old version 1.x. If you have a nice notebook that you think
-  would help others to learn Cadabra,
+  the notebooks and play with them inside Cadabra. If you have a nice
+  notebook that you think would help others to learn Cadabra,
   please <a href="mailto:info@cadabra.science">get in touch</a>.
 </p>
 
-<h2>Absolute beginners</h2>
+<!-- <div class="start-here">
+  <h2>New to Cadabra? Start here</h2>
+  <ol>
+    <li><a href="notebooks/quickstart.html">
+      <span class="step">1</span>
+      <span><strong>Quick start</strong>
+        <small>...</small></span></a></li>
+    <li><a href="notebooks/beginners.html">
+      <span class="step">2</span>
+      <span><strong>Beginners tutorial</strong>
+        <small>...</small></span></a></li>
+    <li><a href="notebooks/tensor_monomials.html">
+      <span class="step">3</span>
+      <span><strong>Tensor monomials</strong>
+        <small>...</small></span></a></li>
+  </ol>
+</div> -->
 
-<p>
-  This notebook explains how to enter expressions, how to do simple
-  substitutions on them, how to use wildcards. It also explains how the
-  new Python functionality works. If you have never used Cadabra
-  before, start here. 
-</p>
-<div class="view_options">
-  <span>Beginners tutorial:</span>
-  <a href="notebooks/beginners.html">read online</a>
-  <a href="notebooks/beginners.cnb">download notebook</a>
-</div>
-<p>
-  For a bit more advanced material, try one of the following tutorials.
-</p>
-<div class="view_options">
-  <span>Tensor monomials:</span>
-  <a href="notebooks/tensor_monomials.html">read online</a>
-  <a href="notebooks/tensor_monomials.cnb">download notebook</a>
-</div>
-<p>
-  If you have used old versions of Cadabra but are new to series 2.x,
-  give the following notebook a shot.
-</p>
-<div class="view_options">
-  <span>Tutorial for 1.x users:</span>
-  <a href="notebooks/for_previous_users.html">read online</a>
-  <a href="notebooks/for_previous_users.cnb">download notebook</a>
-</div>
+<nav class="chips" aria-label="Topics">
+  <a href="#start">Getting started</a>
+  <a href="#packages">Programming Cadabra</a>
+  <a href="#gr">Abstract GR</a>
+  ...
+</nav>
 
-<h2>Writing packages for Cadabra</h2>
-<p>
-  One of the key reasons for the rewrite of Cadabra was to make it
-  much easier for users to contribute small bits of functionality. As
-  all of its internals are available via Python, it becomes much
-  easier to write small add-on packages, just like you can for other
-  computer algebra systems. 
-</p>
-<p>
-  A more step-by-step tutorial for writing packages will follow; for
-  the time being here are some smaller tutorials describing a number of
-  Cadabra programming concepts.
-</p>
-<div class="view_options">
-  <span>Convergence of operations:</span>
-  <a href="notebooks/converge.html">read online</a>
-  <a href="notebooks/converge.cnb">download notebook</a>
-</div>
+<section class="tut-group" id="start">
+  <div class="tut-group-head">
+    <h2>Getting started</h2>
+    <p>For new users of Cadabra, to get you started with the input
+      format and basic symbolic manipulations.</p>
+   
+    <div class="cards">
+      <article class="card">
+	<span class="level beginner">Beginner</span>
+	<h3><a href="notebooks/beginners.html">
+            Beginners tutorial</a></h3>
+	<p>Learn how to enter expressions, how to do simple
+	  substitutions, how to use wildcards and how to tie everything
+	  together using Python.</p>
+	<div class="card-links">
+          <a href="notebooks/beginners.html">Read online</a>
+          <a class="dl" href="notebooks/beginners.cnb">.cnb</a>
+	</div>
+      </article>
+      
+      <article class="card">
+	<span class="level beginner">Beginner</span>
+	<h3><a href="notebooks/beginners.html">
+            Tensor polynomials</a></h3>
+	<p>Manipulate tensor polynomials, canonicalise expressions
+	using index symmetries and dealing with multi-term
+	symmetries.</p>
+	<div class="card-links">
+          <a href="notebooks/tensor_monomials.html">Read online</a>
+          <a class="dl" href="notebooks/tensor_monomials.cnb">.cnb</a>
+	</div>
+      </article>
 
+    </div>
+  </div>
+</section>
 
+<section class="tut-group" id="start">
+  <div class="tut-group-head">
+    <h2>Programming Cadabra</h2>
+    <p>Learn how to do more complicated things, by combining
+      Cadabra algorithms into your own Python programs and
+      storing these in modules.</p>
+
+    <div class="cards">
+      <article class="card">
+	<span class="level intermediate">Intermediate</span>
+	<h3><a href="notebooks/converge.html">
+            Convergence of operations</a></h3>
+	<p>How to apply operators on expressions until they no longer
+	  change.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/converge.html">Read online</a>
+          <a class="dl" href="notebooks/converge.cnb">.cnb</a>
+	</div>
+      </article>
+    </div>
+</section>
 
 
 <h2>Actions, equations of motion, variational derivatives</h2>
@@ -84,42 +121,56 @@
   <a href="notebooks/fierz.cnb">download notebook</a>
 </div>
 
+<section class="tut-group" id="start">
+  <div class="tut-group-head">
+    <h2>Quantum mechanics, groups and algebras</h2>
+    <p>About using operators and other non-commuting objects,
+      together with their commutation relations.</p>
 
-<h2>Quantum mechanics, groups and algebras</h2>
-<p>
-  Dirac gamma matrix algebra is very simple with Cadabra, and it can
-  handle them in arbitrary dimensions.
-</p>
-<div class="view_options">
-  <span>Gamma matrix algebra:</span>
-  <a href="notebooks/gamma_matrix_algebra.html">read online</a>
-  <a href="notebooks/gamma_matrix_algebra.cnb">download notebook</a>
-</div>
-<p>
-  An frequently asked question is how to do commutator algebra with
-  Cadabra. The following notebook shows how this works by verifying
-  the invariance of the two quadratic Casimirs of the Poincaré
-  algebra. It shows how to make good use of <code>post_process</code> to
-  simplify expressions automatically.
-</p>
-<div class="view_options">
-  <span>Poincaré algebra Casimirs:</span>
-  <a href="notebooks/poincare_algebra.html">read online</a>
-  <a href="notebooks/poincare_algebra.cnb">download notebook</a>
-</div>
-<p>
-  Because of fact that you can use natural LaTeX notation and because
-  Cadabra understand non-commuting objects, many tedious operator
-  algebra computations in quantum mechanics become relatively
-  simple. Here is an example from string theory, in which we verify
-  that certain states satisfy the quantum string constraints.
-</p>
-<div class="view_options">
-  <span>String states:</span>
-  <a href="notebooks/string_states.html">read online</a>
-  <a href="notebooks/string_states.cnb">download notebook</a>
-</div>
+    <div class="cards">
+      <article class="card">
+	<span class="level intermediate">Beginner</span>
+	<h3><a href="notebooks/gamma_matrix_algebra.html">
+            Gamma matrix algebra</a></h3>
+	<p>Handle Dirac gamma matrix algebra in arbitrary dimensions.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/gamma_matrix_algebra.html">Read online</a>
+          <a class="dl" href="notebooks/gamma_matrix_algebra.cnb">.cnb</a>
+	</div>
+      </article>
+    
+      <article class="card">
+	<span class="level intermediate">Intermediate</span>
+	<h3><a href="notebooks/gamma_matrix_algebra.html">
+            Commutator algebra</a></h3>
+	<p>Verify the invariance of the two quadratic Casimirs of the
+	  Poincaré algebra and learn about automatic
+	  expression post-processing.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/poincare_algebra.html">Read online</a>
+          <a class="dl" href="notebooks/poincare_algebra.cnb">.cnb</a>
+	</div>
+      </article>
 
+      <article class="card">
+	<span class="level intermediate">Intermediate</span>
+	<h3><a href="notebooks/string_states.html">
+            Physical string states</a></h3>
+	<p>Obtain the conditions that determine the physical
+	  states of the bosonic string by imposing the Virasoro
+	  constraints.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/string_states.html">Read online</a>
+          <a class="dl" href="notebooks/string_states.cnb">.cnb</a>
+	</div>
+      </article>
+    </div>
+  </div>
+</section>
+      
 <h2>Abstract general relativity and differential geometry</h2>
 <p>
   Cadabra was originally written in order to facilitate computations
