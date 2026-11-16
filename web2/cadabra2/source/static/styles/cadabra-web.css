@@ -89,7 +89,9 @@ hr {
 
 code, tt, kbd {
   font-family: var(--mono);
-  font-size: 0.85em;
+  /* JetBrains Mono at 0.9em has roughly the cap height of STIX Two
+     at 1em; 0.85em looked visibly too small next to the prose. */
+  font-size: 1em;
 }
 
 .hyphenate { hyphens: auto; }
@@ -576,15 +578,22 @@ pre {
 }
 
 /* screenshot frame (old .splash_image still works too) */
-.screenshot {
-  margin: 0;
+.screenshot { margin: 0; }
+.screenshot img {
+  display: block;
+  width: 100%;
   background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: 12px;
   box-shadow: 0 20px 48px rgba(20, 60, 20, 0.08);
-  overflow: hidden;
 }
-.screenshot img { display: block; width: 100%; }
+.screenshot figcaption {
+  padding-top: 14px;
+  color: var(--muted);
+  font-size: 14px;
+  font-style: italic;
+  text-align: center;
+}
 
 div.splash_image {
   width: 50%;
@@ -667,8 +676,9 @@ div.splash_image img {
 #cloud {
   flex: 1 1 300px;
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
   padding: 22px 24px;
   background: var(--surface);
   border: 1px solid var(--rule);
@@ -678,6 +688,7 @@ div.splash_image img {
   line-height: 1.6;
 }
 .running_image {
+  flex: 0 0 auto;
   width: 48px;
   height: 48px;
 }
