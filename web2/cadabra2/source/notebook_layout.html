@@ -6,6 +6,17 @@
    cadabra2html; tell them apart by their location. 'request.path' is
    'manual/canonicalise.html' or 'manual/cdb/core/manip.html' when
    building, with an extra leading '/' in 'clay run'. #}
+{% block title %}
+{%- set page = request.path.rsplit(".", 1)[0] -%}
+{%- if "manual/" in page -%}
+{{ page.split("manual/")[-1].replace("/", ".") }} - Cadabra manual
+{%- elif "notebooks/" in page -%}
+{{ page.split("/")[-1].replace("_", " ") | capitalize }} - Cadabra tutorials
+{%- else -%}
+Cadabra
+{%- endif -%}
+{% endblock %}
+
 {% block breadcrumb %}
 {% set page = request.path.rsplit(".", 1)[0] %}
 {% if "manual/" in page %}

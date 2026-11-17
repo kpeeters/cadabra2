@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!-- Source of the 1200x630 link-preview image (og:image) of the web
+     site, static/images/og-card.png. It is not part of the site
+     itself. To re-render it, from this directory:
+
+     firefox --headless --window-size=1200,630 \
+        --screenshot cadabra2/source/static/images/og-card.png \
+        file://$PWD/og-card.html
+
+     The fonts are loaded from Google Fonts, as on the site itself
+     (see layout.html). -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cadabra link-preview card</title>
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@600&family=Inter:wght@500;600&display=block">
+<style>
+  html, body {
+    margin: 0;
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    background: #FAFBFA;
+    color: #1B1F1C;
+  }
+  .bar { height: 10px; background: #209020; }
+  .card {
+    box-sizing: border-box;
+    height: 620px;
+    padding: 0 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 56px;
+  }
+  .brand img {
+    width: 230px;
+    height: 230px;
+    border-radius: 14px;
+  }
+  .name {
+    font-family: "STIX Two Text", serif;
+    font-weight: 600;
+    font-size: 124px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .tagline {
+    margin-top: 22px;
+    max-width: 660px;
+    line-height: 1.25;
+    font-family: "Inter", sans-serif;
+    font-size: 36px;
+    font-weight: 500;
+    color: #3C433D;
+  }
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 70px;
+    padding-top: 26px;
+    border-top: 2px solid #DDE3DD;
+    font-family: "Inter", sans-serif;
+    font-size: 28px;
+    color: #586059;
+  }
+  .footer .url { color: #1A7A1A; font-weight: 600; }
+</style>
+</head>
+<body>
+  <div class="bar"></div>
+  <div class="card">
+    <div class="brand">
+      <img src="../images/cadabra2-gtk.svg" alt="">
+      <div>
+        <div class="name">Cadabra</div>
+        <div class="tagline">A field-theory motivated approach<br>to computer algebra</div>
+      </div>
+    </div>
+    <div class="footer">
+      <span>Free and open source software</span>
+      <span class="url">cadabra.science</span>
+    </div>
+  </div>
+</body>
+</html>

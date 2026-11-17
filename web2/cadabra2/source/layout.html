@@ -4,16 +4,37 @@
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width,initial-scale=1">
-    <meta name="robots" content="index, follow" />
-
-    <meta keywords="cadabra, computer algebra, symbolic computer
-    algebra, cas, tensors, general relativity, relativity, metric,
-    field theory, quantum field theory, mathematica, maple, xact,
-    grtensor, sheep" />
-
-    <meta name="copyright" content="Kasper Peeters" />
+    <meta name="author" content="Kasper Peeters" />
+    <meta name="theme-color" content="#209020" />
     <title>{% block title %}{% endblock %}</title>
-    <link rel="shortcut icon" type="image/png"
+
+    <!-- A page can set its own one-sentence description, used by
+         search engines and link previews, with the 'description'
+         block; otherwise this default is used. -->
+    {% if false %}{% block description %}Cadabra is a symbolic computer
+    algebra system for field theory problems, with tensors, spinors,
+    Young tableaux and more, and input in TeX notation.{% endblock %}{% endif %}
+    {% set page_title = self.title() | striptags | trim %}
+    {% set page_description = self.description() | striptags | trim | replace("\n", " ") %}
+    {% set page_path = request.path.lstrip("/") %}
+    {% set page_url = "https://cadabra.science/" ~ ("" if page_path == "index.html" else page_path) %}
+    <meta name="description" content="{{ page_description | e }}" />
+    <link rel="canonical" href="{{ page_url }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Cadabra" />
+    <meta property="og:title" content="{{ page_title | e }}" />
+    <meta property="og:description" content="{{ page_description | e }}" />
+    <meta property="og:url" content="{{ page_url }}" />
+    <!-- The preview image is rendered from web2/og-card.html. -->
+    <meta property="og:image" content="https://cadabra.science/static/images/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Cadabra: a field-theory motivated approach to computer algebra" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" type="image/png"
+          href="/static/icons/cadabra2.png">
+    <link rel="apple-touch-icon"
           href="/static/icons/cadabra2.png">
 
     <script type="text/javascript"
@@ -198,6 +219,19 @@
       "@type": "Organization",
       "url": "https://cadabra.science",
       "logo": "https://cadabra.science/static/icons/cadabra2.png"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+      "@context": "http://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Cadabra",
+      "url": "https://cadabra.science",
+      "description": "A symbolic computer algebra system for field theory problems.",
+      "applicationCategory": "Scientific",
+      "operatingSystem": "Linux, macOS, Windows",
+      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
       }
     </script>
     <script type="text/javascript" src="/static/js/cadabra.js"></script>

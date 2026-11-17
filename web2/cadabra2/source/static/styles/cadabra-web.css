@@ -54,7 +54,16 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { height: 100%; }
+html {
+  height: 100%;
+  /* In-page links (e.g. the topic pills on the tutorials page and
+     the reference manual) scroll smoothly, and stop below the sticky
+     top bar instead of underneath it. */
+  scroll-padding-top: 84px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
 
 body {
   margin: 0;
@@ -1332,6 +1341,7 @@ div.github-link a img { width: 100%; }
   :root { --gutter: 16px; }
 
   .topbar { position: static; }
+  html { scroll-padding-top: 0; }
   .topbar-inner { gap: 0 18px; }
   .mainnav { order: 3; width: 100%; gap: 0 18px; }
   .topbar-end { gap: 14px; }

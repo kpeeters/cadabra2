@@ -195,6 +195,31 @@ std::string cadabra::latex_to_html(const std::string& str)
 	return res;
 	}
 
+namespace {
+	// Find the summary of the first \algorithm, \property or \package in
+	// a notebook, as plain text, for use as the page description on the
+	// web site. Returns an empty string if there is none (e.g. for
+	// tutorials).
+	std::string page_description(const cadabra::DTree& doc)
+		{
+		std::regex command(R"(\\(?:algorithm|property|package)\{(?:[^{}]|\{[^{}]*\})*\}\{((?:[^{}]|\{[^{}]*\})*)\})");
+		for(auto it=doc.begin(); it!=doc.end(); ++it) {
+			if(it->cell_type!=cadabra::DataCell::CellType::latex)
+				continue;
+			std::smatch match;
+			if(std::regex_search(it->textbuf, match, command)) {
+				std::string res=match[1];
+				res = std::regex_replace(res, std::regex(R"(\\(?:texttt|algo|prop)\{([^{}]*)\})"), "$1");
+				res = std::regex_replace(res, std::regex(R"(\\verb\|([^\|]*)\|)"), "$1");
+				res = std::regex_replace(res, std::regex(R"(\\_)"), "_");
+				res = std::regex_replace(res, std::regex(R"([\s~]+)"), " ");
+				return res;
+				}
+			}
+		return "";
+		}
+	}
+
 void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str,
                            const std::string& preamble_string,
                            bool for_embedding, bool strip_code,
@@ -212,11 +237,13 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 				str << preamble_string << "\n<body>\n";
 				}
 			else {
-				str << "{% extends \"notebook_layout.html\" %}\n"
-				    << "{% block head %}\n"
-				    << " <meta name=\"keywords\" content=\"cadabra, manual\"/>\n"
-				    << "{%- endblock %}\n"
-				    << "{% block main %}\n"
+				// The page title and breadcrumb are set by notebook_layout.html,
+				// based on where the page lives on the site.
+				str << "{% extends \"notebook_layout.html\" %}\n";
+				std::string description=page_description(doc);
+				if(description!="")
+					str << "{% block description %}" << description << "{% endblock %}\n";
+				str << "{% block main %}\n"
 				    << "{% raw %}\n";
 				}
 			break;
@@ -302,8 +329,7 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 				}
 			else {
 				str << "{% endraw %}\n"
-				    << "{%- endblock %}\n"
-				    << "{% block title %}" << title << "{% endblock %}\n";
+				    << "{%- endblock %}\n";
 				}
 			break;
 		case DataCell::CellType::python:
