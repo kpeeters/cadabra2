@@ -89,9 +89,10 @@ hr {
 
 code, tt, kbd {
   font-family: var(--mono);
-  /* JetBrains Mono at 0.9em has roughly the cap height of STIX Two
-     at 1em; 0.85em looked visibly too small next to the prose. */
-  font-size: 1em;
+  /* JetBrains Mono has a much larger x-height than STIX Two; at
+     0.85em its lowercase letters match the prose, at 1em inline
+     code looks visibly too big. */
+  font-size: 0.85em;
 }
 
 .hyphenate { hyphens: auto; }
@@ -463,6 +464,12 @@ a.button.secondary.large { padding: 12px 21px; }
 #main ol { padding-left: 1.3em; }
 #main li { margin-bottom: 0.35em; }
 
+/* change log: long lists of short items, keep them compact */
+.page.changelog #main li {
+  margin-bottom: 0.1em;
+  line-height: 1.5;
+}
+
 #main dl dt {
   font-family: var(--sans);
   font-size: 14px;
@@ -478,10 +485,11 @@ a.button.secondary.large { padding: 12px 21px; }
   color: var(--ink-2);
 }
 
-.quote {
-  width: 80%;
-  margin-left: auto !important;
-  margin-right: auto !important;
+/* indented equally on both sides within the prose column */
+#main > p.quote {
+  max-width: calc(var(--measure) - 5em);
+  margin-left: 2.5em;
+  margin-right: 2.5em;
 }
 
 div.summary {
@@ -896,6 +904,14 @@ ul.features li {
   line-height: 1.5;
   color: var(--muted);
 }
+/* author line under a card title, e.g. on user_notebooks.html */
+.card p.card-by {
+  flex-grow: 0;
+  margin-top: -4px !important;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
 .card-links {
   display: flex;
   gap: 18px;
@@ -958,6 +974,16 @@ ul.features li {
 
 /* ---------- 8. Notebooks (generated pages) ---------- */
 
+/* single centred column, cells use its full width */
+.page.notebook #main {
+  max-width: 880px;
+  margin: 0 auto;
+}
+.page.notebook div.latex_view,
+.page.notebook div.python {
+  max-width: none;
+}
+
 /* prose and maths cells */
 div.latex_view {
   max-width: var(--measure);
@@ -1013,6 +1039,9 @@ div.output {
   white-space: pre;
   color: var(--ink);
 }
+/* command blocks between paragraphs on ordinary pages */
+#main > div.output { margin-bottom: 1em; }
+#main li > div.output { margin: 0.4em 0; }
 pre.output {
   margin-left: 0;
   font-size: 14px;

@@ -1,69 +1,163 @@
 {
-	"cells" : 
-	[
+	"cell_id": 12383058060961103832,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "{\\mu,\\nu,\\rho}::Indices(curved, position=fixed).\n{m,n,p,q,r,s,t,u,v}::Indices(flat, position=independent).\n{m,n,p,q,r,s,t,u,v}::Integer(0..10).\nT^{#{\\mu}}::AntiSymmetric.\n\\psi_{\\mu}::SelfAntiCommuting.\n\\psi_{\\mu}::Spinor(dimension=11, type=Majorana).\n\\theta::Spinor(dimension=11, type=Majorana).\n\\epsilon::Spinor(dimension=11, type=Majorana).\n{\\theta,\\epsilon,\\psi_{\\mu}}::AntiCommuting.\n\\bar{#}::DiracBar.\n\\delta^{m n}::KroneckerDelta.\n\\Gamma^{#{m}}::GammaMatrix(metric=\\delta)."
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 5818161413464387748,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s} \\psi_{\\rho} \\bar{\\psi_{\\mu}} \\Gamma^{r} \\epsilon\\end{dmath*}"
+					"cell_id": 374603230979294926,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Fierz transformations}\n\nThis notebook verifies a Fierz identity for Majorana spinors in eleven dimensions, used in B.~de~Wit, K.~Peeters and J.~Plefka, ``Superspace geometry for supermembrane backgrounds'', Nucl.~Phys.~B532 (1998) 99, arXiv:hep-th/9803209. It is also discussed in the original Cadabra paper, arXiv:hep-th/0701238.\n\nWe first declare the properties of all symbols. The anti-symmetric tensor $T^{\\mu\\nu\\rho}$ is used to implement the anti-symmetrisation in the curved indices."
 				}
 			],
-			"source" : "obj:= T^{\\mu\\nu\\rho} e_{\\nu}^{s}\n     \\bar{\\theta} \\Gamma^{r s} \\psi_{\\rho}\n     \\bar{\\psi_{\\mu}} \\Gamma^{r} \\epsilon;"
+			"hidden": true,
+			"source": "\\section*{Fierz transformations}\n\nThis notebook verifies a Fierz identity for Majorana spinors in eleven dimensions, used in B.~de~Wit, K.~Peeters and J.~Plefka, ``Superspace geometry for supermembrane backgrounds'', Nucl.~Phys.~B532 (1998) 99, arXiv:hep-th/9803209. It is also discussed in the original Cadabra paper, arXiv:hep-th/0701238.\n\nWe first declare the properties of all symbols. "
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 6178197692205519126,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "{\\mu,\\nu,\\rho}::Indices(curved, position=fixed).\n{m,n,p,q,r,s,t,u,v}::Indices(flat, position=independent).\n{m,n,p,q,r,s,t,u,v}::Integer(0..10).\nT^{#{\\mu}}::AntiSymmetric.\n\\psi_{\\mu}::SelfAntiCommuting.\n\\psi_{\\mu}::Spinor(dimension=11, type=Majorana).\n\\theta::Spinor(dimension=11, type=Majorana).\n\\epsilon::Spinor(dimension=11, type=Majorana).\n{\\theta,\\epsilon,\\psi_{\\mu}}::AntiCommuting.\n\\bar{#}::DiracBar.\n\\delta^{m n}::KroneckerDelta.\n\\Gamma^{#{m}}::GammaMatrix(metric=\\delta)."
+		},
+		{
+			"cell_id": 13522896109580698869,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} - \\frac{1}{32}T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\psi_{\\rho} - \\frac{1}{32}T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{m} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{m} \\psi_{\\rho} - \\frac{1}{64}T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{m n} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{n m} \\psi_{\\rho} - \\frac{1}{192}T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{m n p} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{p n m} \\psi_{\\rho} - \\frac{1}{768}T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{m n p q} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{q p n m} \\psi_{\\rho} - \\frac{1}{3840}T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{m n p q t} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{t q p n m} \\psi_{\\rho}\\end{dmath*}"
+					"cell_id": 2368159790116453256,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The expression we want to transform is the following (the anti-symmetric tensor $T^{\\mu\\nu\\rho}$ is used to implement anti-symmetrisation in the curved indices). We want to use a Fierz transformation so that the spinors are paired as $(\\bar{\\theta}, \\epsilon)$ and $(\\bar{\\psi_{\\mu}}, \\psi_{\\rho})$. "
 				}
 			],
-			"source" : "fierz(_, $\\theta, \\epsilon, \\psi_{\\mu}, \\psi_{\\rho}$ );"
+			"hidden": true,
+			"source": "The expression we want to transform is the following (the anti-symmetric tensor $T^{\\mu\\nu\\rho}$ is used to implement anti-symmetrisation in the curved indices). We want to use a Fierz transformation so that the spinors are paired as $(\\bar{\\theta}, \\epsilon)$ and $(\\bar{\\psi_{\\mu}}, \\psi_{\\rho})$. "
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 16727547252378502731,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\frac{1}{4}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma_{m}\\,^{n} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma^{n} \\psi_{\\rho}+\\frac{5}{16}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{m} \\psi_{\\rho}+\\frac{3}{32}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma_{m}\\,^{n p} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{n}\\,^{p} \\psi_{\\rho}+\\frac{1}{4}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{n} \\bar{\\theta} \\Gamma^{m} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{n m} \\psi_{\\rho}+\\frac{1}{384}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{r} \\bar{\\theta} \\Gamma^{m n p q} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{r m n p q} \\psi_{\\rho}\\end{dmath*}"
+					"cell_id": 12111048794064707505,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 12645149357394057971,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "T^{\\mu \\nu \\rho} e_{\\nu}^{s} \\bar{\\theta} \\Gamma^{r s} \\psi_{\\rho} \\bar{\\psi_{\\mu}} \\Gamma^{r} \\epsilon"
+						}
+					],
+					"source": "\\begin{dmath*}{}T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s} \\psi_{\\rho} \\bar{\\psi_{\\mu}} \\Gamma^{r} \\epsilon\\end{dmath*}"
 				}
 			],
-			"source" : "converge(obj):\n   join_gamma(_)\n   distribute(_)\n   eliminate_kronecker(_)\ncanonicalise(_)\nrename_dummies(_);"
+			"source": "obj:= T^{\\mu\\nu\\rho} e_{\\nu}^{s}\n     \\bar{\\theta} \\Gamma^{r s} \\psi_{\\rho}\n     \\bar{\\psi_{\\mu}} \\Gamma^{r} \\epsilon;"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 10538033764004303751,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\frac{1}{4}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma^{m n} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{n} \\psi_{\\rho}+\\frac{5}{16}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{m} \\psi_{\\rho}+\\frac{3}{32}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma^{m n p} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{n p} \\psi_{\\rho}+\\frac{1}{4}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma^{n} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{m n} \\psi_{\\rho}+\\frac{1}{384}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma^{n p q r} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{m n p q r} \\psi_{\\rho}\\end{dmath*}"
+					"cell_id": 14833953047924469708,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The reorganisation of the spinors is done with a single command, which states the spinors in the order in which we want to have them."
 				}
 			],
-			"source" : "tst:=1/4 T^{\\mu \\nu \\rho} e_{\\mu}^{m} \\bar{\\theta} \\Gamma^{m n}\n\\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{n} \\psi_{\\rho} \n+ 5/16 T^{\\mu \\nu \\rho} e_{\\mu}^{m} \\bar{\\theta} \\epsilon\n\\bar{\\psi_{\\nu}} \\Gamma_{m} \\psi_{\\rho} \n+ 3/32 T^{\\mu \\nu \\rho} e_{\\mu}^{m} \\bar{\\theta} \\Gamma^{m n p} \\epsilon\n\\bar{\\psi_{\\nu}} \\Gamma_{n p} \\psi_{\\rho} \n+ 1/4 T^{\\mu \\nu \\rho} e_{\\mu}^{m} \\bar{\\theta} \\Gamma^{n}\n\\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{m n} \\psi_{\\rho} \n+ 1/384 T^{\\mu \\nu \\rho} e_{\\mu}^{m} \\bar{\\theta}\n\\Gamma^{n p q r} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{m n p q r} \\psi_{\\rho};"
+			"hidden": true,
+			"source": "The reorganisation of the spinors is done with a single command, which states the spinors in the order in which we want to have them."
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 15512380192979936512,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9729948344765917271,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11532564964785017468,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/32 T^{\\mu \\nu \\rho} e_{\\nu}^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\psi_{\\rho} -  1/32 T^{\\mu \\nu \\rho} e_{\\nu}^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{m} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{m} \\psi_{\\rho} -  1/64 T^{\\mu \\nu \\rho} e_{\\nu}^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{m n} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{n m} \\psi_{\\rho} -  1/192 T^{\\mu \\nu \\rho} e_{\\nu}^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{m n p} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{p n m} \\psi_{\\rho} -  1/768 T^{\\mu \\nu \\rho} e_{\\nu}^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{m n p q} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{q p n m} \\psi_{\\rho} -  1/3840 T^{\\mu \\nu \\rho} e_{\\nu}^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{m n p q t} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{t q p n m} \\psi_{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{32}\\,T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\psi_{\\rho}\\discretionary{}{}{} - \\frac{1}{32}\\,T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{m} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{m} \\psi_{\\rho}\\discretionary{}{}{} - \\frac{1}{64}\\,T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{m n} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{n m} \\psi_{\\rho}\\discretionary{}{}{} - \\frac{1}{192}\\,T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{m n p} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{p n m} \\psi_{\\rho}\\discretionary{}{}{} - \\frac{1}{768}\\,T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{m n p q} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{q p n m} \\psi_{\\rho}\\discretionary{}{}{} - \\frac{1}{3840}\\,T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s} \\Gamma^{m n p q t} \\Gamma^{r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{t q p n m} \\psi_{\\rho}\\end{dmath*}"
+				}
+			],
+			"source": "fierz(_, $\\theta, \\epsilon, \\psi_{\\mu}, \\psi_{\\rho}$ );"
+		},
+		{
+			"cell_id": 6073125484011095287,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 7327984862601819922,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Now we can still rewrite this in terms of fully anti-symmetrised gamma matrix products. The only thing we need to do is to repeatedly write gamma products in terms of fully-antisymmetrised products using \\verb|join_gamma|, and then distribute the product and eliminate contractions."
+				}
+			],
+			"hidden": true,
+			"source": "Now we can still rewrite this in terms of fully anti-symmetrised gamma matrix products. The only thing we need to do is to repeatedly write gamma products in terms of fully-antisymmetrised products using \\verb|join_gamma|, and then distribute the product and eliminate contractions."
+		},
+		{
+			"cell_id": 2606154811173578100,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15530362612267911274,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9324980141379008743,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/4 T^{\\mu \\nu \\rho} e_{\\mu}^{m} \\bar{\\theta} \\Gamma_{m}^{n} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma^{n} \\psi_{\\rho} +  5/16 T^{\\mu \\nu \\rho} e_{\\mu}^{m} \\bar{\\theta} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{m} \\psi_{\\rho} +  3/32 T^{\\mu \\nu \\rho} e_{\\mu}^{m} \\bar{\\theta} \\Gamma_{m}^{n p} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{n}^{p} \\psi_{\\rho} +  1/4 T^{\\mu \\nu \\rho} e_{\\mu}^{n} \\bar{\\theta} \\Gamma^{m} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{n m} \\psi_{\\rho} +  1/384 T^{\\mu \\nu \\rho} e_{\\mu}^{r} \\bar{\\theta} \\Gamma^{m n p q} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{r m n p q} \\psi_{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{4}\\,T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma_{m}\\,^{n} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma^{n} \\psi_{\\rho}\\discretionary{}{}{}+\\frac{5}{16}\\,T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{m} \\psi_{\\rho}\\discretionary{}{}{}+\\frac{3}{32}\\,T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma_{m}\\,^{n p} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{n}\\,^{p} \\psi_{\\rho}\\discretionary{}{}{}+\\frac{1}{4}\\,T^{\\mu \\nu \\rho} e_{\\mu}\\,^{n} \\bar{\\theta} \\Gamma^{m} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{n m} \\psi_{\\rho}\\discretionary{}{}{}+\\frac{1}{384}\\,T^{\\mu \\nu \\rho} e_{\\mu}\\,^{r} \\bar{\\theta} \\Gamma^{m n p q} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{r m n p q} \\psi_{\\rho}\\end{dmath*}"
+				}
+			],
+			"source": "converge(obj):\n   join_gamma(_)\n   distribute(_)\n   eliminate_kronecker(_)\ncanonicalise(_)\nrename_dummies(_);"
+		},
+		{
+			"cell_id": 2215526980241546696,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 12823585003254067495,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "This agrees with (5.86) in K.~Peeters, \"Geometrical aspects of supersymmetry\" (1998) University of Utrecht."
+				}
+			],
+			"hidden": true,
+			"source": "This agrees with (5.86) in K.~Peeters, \"Geometrical aspects of supersymmetry\" (1998) University of Utrecht."
+		},
+		{
+			"cell_id": 5615237323884863807,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
+	"version": 1.0
 }

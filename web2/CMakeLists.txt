@@ -18,9 +18,11 @@ set(TUTORIALS
   quickstart
   beginners
   tensor_monomials
+  calculus
   for_previous_users
   converge
   fierz
+  variational_derivatives
   gamma_matrix_algebra
   poincare_algebra
   string_states
@@ -28,6 +30,7 @@ set(TUTORIALS
   automatic_multiterm
   sphere
   schwarzschild
+  frw
   kerr
   kerr_newman_cos
   exterior

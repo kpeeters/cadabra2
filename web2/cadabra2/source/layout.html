@@ -137,9 +137,12 @@
     <!-- ============ PAGE ============ -->
     <!-- If a page fills the 'sidebar' block (e.g. a table of
          contents for a notebook), the page gets two columns.
-         Otherwise the content uses the full width. -->
+         Otherwise the content uses the full width. A page can add
+         its own class to the frame with the 'page_class' block. -->
     {% set sidebar_html = self.sidebar() | trim %}
-    <div class="page{% if sidebar_html %} has-sidebar{% endif %}">
+    {% if false %}{% block page_class %}{% endblock %}{% endif %}
+    {% set page_class = self.page_class() | trim %}
+    <div class="page{% if sidebar_html %} has-sidebar{% endif %}{% if page_class %} {{ page_class }}{% endif %}">
       {% if sidebar_html %}
       <aside class="sidebar">
         {% block sidebar %}{% endblock %}
