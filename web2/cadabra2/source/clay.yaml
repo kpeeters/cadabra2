@@ -7,7 +7,6 @@ exclude:
   - "webassets-cache/*"
   - ".webassets-cache"
   - "layout.html"
-  - "*.nb.html"
   - "README.txt"
 #  - "static/*"
   - "notebooks/README*"

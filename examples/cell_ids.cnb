@@ -22,12 +22,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 689965496974128564,
+					"cell_id": 12037930858092795239,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 9610737522023299257,
+							"cell_id": 15149070331861890032,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "A_{m n}"
@@ -36,12 +36,12 @@
 					"source": "\\begin{dmath*}{}A_{m n}\\end{dmath*}"
 				},
 				{
-					"cell_id": 2823807190979596582,
+					"cell_id": 10048138426115444096,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 15966417375204997629,
+							"cell_id": 15423062794890750629,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "B_{p q}"
@@ -58,12 +58,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 12160042253445624459,
+					"cell_id": 18118579595293254773,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 4777631753974189465,
+							"cell_id": 17500595712974585214,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "A_{m n}"
@@ -80,15 +80,15 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 9350841598844205305,
+					"cell_id": 7435138108750833772,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 10397374464617081800,
+							"cell_id": 12259305173775275252,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": "B_{p q}"
+							"source": "hello"
 						}
 					],
 					"source": "\\begin{dmath*}{}B_{p q}\\end{dmath*}"
@@ -112,34 +112,41 @@
 			"source": "The above used the default \\verb|cell_id| parameter of \\verb|display| (zero), which led to the \ncreation of a new output cell. However, if we pass this ID to the \\verb|display| function, we \ncan overwrite an existing output cell:"
 		},
 		{
-			"cell_id": 14484998934473877948,
+			"cell_id": 8275081251400994477,
 			"cell_origin": "client",
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 10270840374210630885,
+					"cell_id": 7653331921799692777,
 					"cell_origin": "server",
-					"cell_type": "latex_view",
-					"cells": [
-						{
-							"cell_id": 2471321157843722375,
-							"cell_origin": "server",
-							"cell_type": "input_form",
-							"source": "A_{m n}"
-						}
-					],
-					"source": "\\begin{dmath*}{}A_{m n}\\end{dmath*}"
+					"cell_type": "output",
+					"source": "\\begin{verbatim}12259305173775275252\n\\end{verbatim}"
 				}
 			],
-			"source": "display(ex, cell_id=c2)"
+			"source": "print(c2)"
+		},
+		{
+			"cell_id": 14484998934473877948,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "display(ex, c2)"
 		},
 		{
 			"cell_id": 13671896224003488670,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "display($hello$, c2)"
+		},
+		{
+			"cell_id": 6872525595036867697,
 			"cell_origin": "client",
 			"cell_type": "input",
 			"source": ""
 		}
 	],
 	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
 	"version": 1.0
 }

@@ -123,8 +123,12 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex bigO(R"(\\bigO)");
 	std::regex latex(R"(\\LaTeX\{\})");
 	std::regex tex(R"(\\TeX\{\})");
-	std::regex algorithm(R"(\\algorithm\{([^\}]*)\}\{([^\}]*)\})");
-	std::regex property(R"(\\property\{([^\}]*)\}\{([^\}]*)\})");
+	// The heading gets an id with the bare name (no 'class ', no
+	// signature), so that the manual index can link to functions in
+	// package pages; this has to match bare_name in web2/scan.py. The
+	// summary may contain one level of nested braces.
+	std::regex algorithm(R"(\\algorithm\{((?:class )?)([A-Za-z0-9_\\]*)((?:[^{}]|\{[^{}]*\})*)\}\{((?:[^{}]|\{[^{}]*\})*)\})");
+	std::regex property(R"(\\property\{([A-Za-z0-9_\\]*)((?:[^{}]|\{[^{}]*\})*)\}\{((?:[^{}]|\{[^{}]*\})*)\})");
 	std::regex package(R"(\\package\{([^\}]*)\}\{([^\}]*)\})");
 	std::regex algo(R"(\\algo\{([^\}]*)\})");
 	std::regex prop(R"(\\prop\{([^\}]*)\})");
@@ -164,8 +168,8 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = std::regex_replace(res, verb, "<code>$1</code>");
 		res = std::regex_replace(res, url, "<a href=\"$1\">$1</a>");
 		res = std::regex_replace(res, href, "<a href=\"$1\">$2</a>");
-		res = std::regex_replace(res, algorithm, "<h2>$1</h2><div class=\"summary\">$2</div>");
-		res = std::regex_replace(res, property, "<h2>$1</h2><div class=\"summary\">$2</div>");
+		res = std::regex_replace(res, algorithm, "<h2 id=\"$2\">$1$2$3</h2><div class=\"summary\">$4</div>");
+		res = std::regex_replace(res, property, "<h2 id=\"$1\">$1$2</h2><div class=\"summary\">$3</div>");
 		res = std::regex_replace(res, package, "<h1>$1</h1><div class=\"summary\">$2</div>");
 		res = std::regex_replace(res, algo, "<a href=\"/manual/$1.html\"><code>$1</code></a>");
 		res = std::regex_replace(res, prop, "<a href=\"/manual/$1.html\"><code>$1</code></a>");
@@ -191,6 +195,31 @@ std::string cadabra::latex_to_html(const std::string& str)
 	return res;
 	}
 
+namespace {
+	// Find the summary of the first \algorithm, \property or \package in
+	// a notebook, as plain text, for use as the page description on the
+	// web site. Returns an empty string if there is none (e.g. for
+	// tutorials).
+	std::string page_description(const cadabra::DTree& doc)
+		{
+		std::regex command(R"(\\(?:algorithm|property|package)\{(?:[^{}]|\{[^{}]*\})*\}\{((?:[^{}]|\{[^{}]*\})*)\})");
+		for(auto it=doc.begin(); it!=doc.end(); ++it) {
+			if(it->cell_type!=cadabra::DataCell::CellType::latex)
+				continue;
+			std::smatch match;
+			if(std::regex_search(it->textbuf, match, command)) {
+				std::string res=match[1];
+				res = std::regex_replace(res, std::regex(R"(\\(?:texttt|algo|prop)\{([^{}]*)\})"), "$1");
+				res = std::regex_replace(res, std::regex(R"(\\verb\|([^\|]*)\|)"), "$1");
+				res = std::regex_replace(res, std::regex(R"(\\_)"), "_");
+				res = std::regex_replace(res, std::regex(R"([\s~]+)"), " ");
+				return res;
+				}
+			}
+		return "";
+		}
+	}
+
 void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str,
                            const std::string& preamble_string,
                            bool for_embedding, bool strip_code,
@@ -208,11 +237,13 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 				str << preamble_string << "\n<body>\n";
 				}
 			else {
-				str << "{% extends \"notebook_layout.html\" %}\n"
-				    << "{% block head %}\n"
-				    << " <meta name=\"keywords\" content=\"cadabra, manual\"/>\n"
-				    << "{%- endblock %}\n"
-				    << "{% block main %}\n"
+				// The page title and breadcrumb are set by notebook_layout.html,
+				// based on where the page lives on the site.
+				str << "{% extends \"notebook_layout.html\" %}\n";
+				std::string description=page_description(doc);
+				if(description!="")
+					str << "{% block description %}" << description << "{% endblock %}\n";
+				str << "{% block main %}\n"
 				    << "{% raw %}\n";
 				}
 			break;
@@ -298,8 +329,7 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 				}
 			else {
 				str << "{% endraw %}\n"
-				    << "{%- endblock %}\n"
-				    << "{% block title %}" << title << "{% endblock %}\n";
+				    << "{%- endblock %}\n";
 				}
 			break;
 		case DataCell::CellType::python:

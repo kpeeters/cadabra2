@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="utf-8" />
-<title>cadabra_in_ipython.nb</title>
+<title>cadabra_in_ipython.ipynb</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -177,7 +177,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Cadabra-inside-IPython/Jupyter">Cadabra inside IPython/Jupyter<a class="anchor-link" href="#Cadabra-inside-IPython/Jupyter">&#182;</a></h1><p>This is a short and simple Jupyter notebook shows how to use Cadabra functionality from with Jupyter. The first thing to do is to import the cadabra2 module. To save typing, we will import everything into the global namespace.</p>
+<h1 id="Cadabra-inside-IPython/Jupyter">Cadabra inside IPython/Jupyter<a class="anchor-link" href="#Cadabra-inside-IPython/Jupyter">&#182;</a></h1><p><strong>You probably do not need this notebook.</strong> The normal way to use Cadabra in Jupyter is either the Cadabra2 kernel, or an ordinary Python notebook with the Cadabra extension loaded through <code>%load_ext cadabra2_jupyter</code>. Both let you write standard Cadabra notation, just like in Cadabra's own notebook interface; see <a href="https://cadabra.science/jupyter.html">Cadabra in Jupyter</a> for details.</p>
+<p>This notebook is only relevant if you can use neither the kernel nor the extension, and instead rely on accessing Cadabra's expression and property objects directly, through the <code>cadabra2</code> Python module, from plain Python code. It shows the absolute basics. The first thing to do is to import the cadabra2 module. To save typing, we will import everything into the global namespace.</p>
 
 </div>
 </div>
@@ -224,7 +225,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Printing is still a bit messy in IPython/Jupyter, but you can get the nicely typeset form of the expression using the following:</p>
+<p>Without the Cadabra kernel or extension, expressions are not typeset automatically. You can get the nicely typeset form of an expression through IPython's display functions:</p>
 
 </div>
 </div>
@@ -274,7 +275,7 @@ $$A_{m n} B^{m n}$$
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">Symmetric</span><span class="p">(</span><span class="n">Ex</span><span class="p">(</span><span class="s">r&quot;A_{m n}&quot;</span><span class="p">))</span>
-<span class="n">AntiSymmetric</span><span class="p">(</span><span class="n">Ex</span><span class="p">(</span><span class="s">r&quot;B_{m n&quot;</span><span class="p">))</span>
+<span class="n">AntiSymmetric</span><span class="p">(</span><span class="n">Ex</span><span class="p">(</span><span class="s">r&quot;B_{m n}&quot;</span><span class="p">))</span>
 </pre></div>
 
 </div>
@@ -383,7 +384,7 @@ $$D_{m r} D^{r}\,_{n} B^{m p} C_{p q}$$
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>If you are interested in more of this, get in touch by emailing me at info@cadabra.science !</p>
+<p>For anything beyond this, the Cadabra kernel or the Cadabra extension (see <a href="https://cadabra.science/jupyter.html">Cadabra in Jupyter</a>) is a much more convenient way to work. Questions can be sent to info@cadabra.science.</p>
 
 </div>
 </div>

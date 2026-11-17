@@ -7,14 +7,14 @@
 			"cell_type": "latex",
 			"cells": [
 				{
-					"cell_id": 16204355368752002978,
+					"cell_id": 849547814219720497,
 					"cell_origin": "client",
 					"cell_type": "latex_view",
-					"source": "This notebook illustrates how the automatic multi-term simplification algorithm \\algo{meld} can\nbe used in a \\verb|post_process| function to simplify expressions immediately."
+					"source": "\\section*{Automatic multi-term simplification}\n\nThis notebook illustrates how the automatic multi-term simplification algorithm \\algo{meld} can\nbe used in a \\verb|post_process| function to simplify expressions immediately. For simpler computations,\nor computations that are already working and for which you do not want to show these simplifications\nat every step, this can be useful."
 				}
 			],
 			"hidden": true,
-			"source": "This notebook illustrates how the automatic multi-term simplification algorithm \\algo{meld} can\nbe used in a \\verb|post_process| function to simplify expressions immediately."
+			"source": "\\section*{Automatic multi-term simplification}\n\nThis notebook illustrates how the automatic multi-term simplification algorithm \\algo{meld} can\nbe used in a \\verb|post_process| function to simplify expressions immediately. For simpler computations,\nor computations that are already working and for which you do not want to show these simplifications\nat every step, this can be useful."
 		},
 		{
 			"cell_id": 16589852709921553693,
@@ -28,7 +28,7 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 3984991681506874828,
+					"cell_id": 11544389263806478421,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property TableauSymmetry attached to~}R_{a b c d}.\\end{dmath*}"
@@ -37,26 +37,56 @@
 			"source": "R_{a b c d}::RiemannTensor;"
 		},
 		{
+			"cell_id": 12533871357581158101,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6517669635204007728,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "By the first Bianchi identity, the sum of cyclic permutations of three indices is zero:"
+				}
+			],
+			"hidden": true,
+			"source": "By the first Bianchi identity, the sum of cyclic permutations of three indices is zero:"
+		},
+		{
 			"cell_id": 10442559150589961051,
 			"cell_origin": "client",
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 16272566471204925814,
+					"cell_id": 1797005253894748205,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 1708705026185000243,
+							"cell_id": 3565135340958588219,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": "R_{a b c d} + R_{b c a d} + R_{c a b d}"
+							"source": "0"
 						}
 					],
-					"source": "\\begin{dmath*}{}R_{a b c d}+R_{b c a d}+R_{c a b d}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}0\\,\\end{dmath*}"
 				}
 			],
 			"source": "ex:=R_{a b c d} + R_{b c a d} + R_{c a b d};"
+		},
+		{
+			"cell_id": 12629315822287932510,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 3563831100510488754,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Let's define a fully anti-symmetric tensor $A^{a b c}$ and a fully symmetric tensor $S^{a b c}$:"
+				}
+			],
+			"hidden": true,
+			"source": "Let's define a fully anti-symmetric tensor $A^{a b c}$ and a fully symmetric tensor $S^{a b c}$:"
 		},
 		{
 			"cell_id": 17665426107502293019,
@@ -64,7 +94,7 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 4864102099047927703,
+					"cell_id": 11474805042065934960,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property AntiSymmetric attached to~}A^{a b c}.\\end{dmath*}"
@@ -78,7 +108,7 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 775906003630772013,
+					"cell_id": 490281229518119505,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\text{Property Symmetric attached to~}S_{a b c}.\\end{dmath*}"
@@ -87,23 +117,38 @@
 			"source": "S_{a b c}::Symmetric;"
 		},
 		{
+			"cell_id": 3333087813958793321,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6469369898920164541,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Contracting a fully anti-symmetric tensor with the Riemann tensor leads to the first Bianchi identity again, so should vanish:"
+				}
+			],
+			"hidden": true,
+			"source": "Contracting a fully anti-symmetric tensor with the Riemann tensor leads to the first Bianchi identity again, so should vanish:"
+		},
+		{
 			"cell_id": 15440997254477550604,
 			"cell_origin": "client",
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 228473189702070848,
+					"cell_id": 11001196856597142214,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 9500934661811827513,
+							"cell_id": 25436067523302231,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": "R_{a b c d} A^{a b c}"
+							"source": "0"
 						}
 					],
-					"source": "\\begin{dmath*}{}R_{a b c d} A^{a b c}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}0\\,\\end{dmath*}"
 				}
 			],
 			"source": "ex:=R_{a b c d} A^{a b c};"
@@ -114,21 +159,36 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 16452054599630373227,
+					"cell_id": 45661992972395886,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 17144787782815941213,
+							"cell_id": 17689866166143150878,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": "(A^{a b c} + A^{c a b}) S_{a b c}"
+							"source": "2A^{a b c} S_{a b c}"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\left(A^{a b c}+A^{c a b}\\right) S_{a b c}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}2\\,A^{a b c} S_{a b c}\\end{dmath*}"
 				}
 			],
 			"source": "ex:= (A^{a b c} + A^{c a b}) S_{a b c};"
+		},
+		{
+			"cell_id": 16876922475692815709,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 13624571496100903213,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Note that the post-processing function only applies the meld algorithm once, so the best it could do was to combine\nthe two anti-symmetric tensors. If you apply meld again, it sees the zero:"
+				}
+			],
+			"hidden": true,
+			"source": "Note that the post-processing function only applies the meld algorithm once, so the best it could do was to combine\nthe two anti-symmetric tensors. If you apply meld again, it sees the zero:"
 		},
 		{
 			"cell_id": 14929753163657422384,
@@ -136,21 +196,51 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 1137671033037866650,
+					"cell_id": 13490810205934188663,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 1039654011058708309,
+							"cell_id": 13659847992161685603,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": "2A^{a b c} S_{a b c}"
+							"source": "0"
 						}
 					],
-					"source": "\\begin{dmath*}{}2A^{a b c} S_{a b c}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}0\\,\\end{dmath*}"
 				}
 			],
 			"source": "meld(ex, repeat=True);"
+		},
+		{
+			"cell_id": 18386348912926115865,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 7327223332453054829,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "You could have achieved the above by instead using a \\verb|converge| construction inside the post-processing function."
+				}
+			],
+			"hidden": true,
+			"source": "You could have achieved the above by instead using a \\verb|converge| construction inside the post-processing function."
+		},
+		{
+			"cell_id": 18005777072927410222,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 7023982170874905829,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Some other assorted examples now. Meld will automatically factor out scalar expressions:"
+				}
+			],
+			"hidden": true,
+			"source": "Some other assorted examples now. Meld will automatically factor out scalar expressions:"
 		},
 		{
 			"cell_id": 10182337157813236277,
@@ -158,21 +248,36 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 16001156654425651111,
+					"cell_id": 8263710583809205595,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 15399389374269644662,
+							"cell_id": 15033314569842213967,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "(a-b) A^{a b c}"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\left(a-b\\right) A^{a b c}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\left(a\\discretionary{}{}{}-\\,b\\right) A^{a b c}\\end{dmath*}"
 				}
 			],
 			"source": "ex:= a A^{a b c} + b A^{b a c};"
+		},
+		{
+			"cell_id": 5732189980976377100,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 7912009819955371159,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Not all expressions quadratic in the Riemann tensor are independent:"
+				}
+			],
+			"hidden": true,
+			"source": "Not all expressions quadratic in the Riemann tensor are independent:"
 		},
 		{
 			"cell_id": 2655562479605535632,
@@ -180,29 +285,75 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 3165433391968790005,
+					"cell_id": 13560884064948886027,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 14527276633063001349,
+							"cell_id": 14509520962086721391,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": " 3/2 R_{a b c d} R_{a b c d}"
 						}
 					],
-					"source": "\\begin{dmath*}{}\\frac{3}{2}R_{a b c d} R_{a b c d}\\end{dmath*}"
+					"source": "\\begin{dmath*}{}\\frac{3}{2}\\,R_{a b c d} R_{a b c d}\\end{dmath*}"
 				}
 			],
 			"source": "ex:=R_{a b c d} R_{a b c d} + R_{a b c d} R_{a c b d};"
 		},
 		{
+			"cell_id": 9623870541375570432,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 13170459948790425030,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Here's an example that appears in a separate notebook elsewhere, now reduced to a single line."
+				}
+			],
+			"hidden": true,
+			"source": "Here's an example that appears in a separate notebook elsewhere, now reduced to a single line."
+		},
+		{
 			"cell_id": 12588425984072827898,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "W_{m n p q}::WeylTensor."
+		},
+		{
+			"cell_id": 11431165958746591053,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 7157178214904563227,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6465587795030309523,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0"
+						}
+					],
+					"source": "\\begin{dmath*}{}0\\,\\end{dmath*}"
+				}
+			],
+			"source": "ex:= W_{p q r s} W_{p t r u} W_{t v q w} W_{u v s w} \n  - W_{p q r s} W_{p q t u} W_{r v t w} W_{s v u w}\n  - W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a}\n  + (1/4) W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c};"
+		},
+		{
+			"cell_id": 9299896884748914849,
 			"cell_origin": "client",
 			"cell_type": "input",
 			"source": ""
 		}
 	],
 	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
 	"version": 1.0
 }

@@ -2,43 +2,59 @@
 
 {% block title %}Cadabra: Manual pages{% endblock %}
 
+{% block description %}Reference manual for Cadabra: every algorithm, property and package function, grouped by topic and with examples.{% endblock %}
+
 {% block head %}{%- endblock %}
+
+{% block breadcrumb %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">Home</a>Reference manual
+</nav>
+{% endblock %}
 
 {% block main %}
 
-<h1>Manual pages</h1>
-<p>
-  Every algorithm and every property has a manual page with examples,
-  which you can view online here, or by pressing <code>F1</code> in
-  the Cadabra notebook interface when your cursor is located on an
-  algorithm or property name. Consider this the "dry" version of the
-  documentation: to-the-point, but not very useful if you do not have
-  an understanding of the big picture yet.
-</p>
-<p>
-  For a more introductory description of the basics of Cadabra, you
-  may be better off first reading or skimming through
+<h1>Reference manual</h1>
+<p class="hyphenate">
+  Every algorithm, property and package function has a manual page
+  with examples; in the Cadabra notebook interface you can also
+  press <code>F1</code> with the cursor on a name. These pages are
+  to-the-point; for the big picture, start with
   the <a href="tutorials.html">tutorials</a> or
   the <a href="help.html">Cadabra book</a>.
 </p>
-<h2>Packages</h2>
-<p>
-  Cadabra comes with various add-on packages, which can be imported in
-  the usual Python way with <code>import</code>. Their content is
-  listed below.
-</p>
-  <table class="package-toc-table">
-	 {% include "packages_toc.html" %}
-  </table>
 
-<h2>Core algorithms</h2>
-  <table>
-	 {% include "algo_toc.html" %}
-  </table>
+<div class="man-filter">
+  <input type="search" id="man-filter" placeholder="Filter by name or description, e.g. 'indices'"
+         aria-label="Filter the manual" autocomplete="off"/>
+</div>
+<nav class="chips" aria-label="Sections">
+  <a href="#algorithms">Algorithms</a>
+  <a href="#properties">Properties</a>
+  <a href="#packages">Packages</a>
+  <a href="#a-z">A&ndash;Z index</a>
+</nav>
+<p class="man-noresults" hidden>Nothing matches; try a shorter word, or
+  look through the <a href="#a-z">A&ndash;Z index</a>.</p>
 
-<h2>Core properties</h2>
-  <table>
-	 {% include "prop_toc.html" %}
-  </table>
+<h2 id="algorithms">Algorithms</h2>
+<p class="man-section-desc">Functions which transform an expression in place,
+  e.g. <code>canonicalise(ex)</code>.</p>
+{% include "algo_toc.html" %}
+
+<h2 id="properties">Properties</h2>
+<p class="man-section-desc">Declarations which tell Cadabra what kind of
+  object a symbol is, e.g. <code>A_{m n}::Symmetric.</code></p>
+{% include "prop_toc.html" %}
+
+<h2 id="packages">Packages</h2>
+<p class="man-section-desc">Add-on functionality, imported in the usual
+  Python way.</p>
+{% include "packages_toc.html" %}
+
+<section id="a-z" class="man-az">
+<h2>A&ndash;Z index</h2>
+{% include "az_toc.html" %}
+</section>
 
 {%- endblock %}

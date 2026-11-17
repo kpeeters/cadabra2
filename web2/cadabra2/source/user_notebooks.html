@@ -1,30 +1,63 @@
 {% extends "layout.html" %}
 
-{% block title %}Cadabra: User contributed notebooks{% endblock %}
+{% block title %}Cadabra: User-contributed notebooks{% endblock %}
 
-{% block head %}{%- endblock %}
+{% block description %}Cadabra notebooks contributed by users, on gravity and differential geometry.{% endblock %}
+
+{% block section %}learn{% endblock %}
+
+{% block breadcrumb %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">Home</a>User notebooks
+</nav>
+{% endblock %}
 
 {% block main %}
-
-<h1>User contributed notebooks</h1>
+<h1>User-contributed notebooks</h1>
 <p>
   This page contains a number of user-contributed notebooks. Do you
   have a computation done with Cadabra that you think other people
   could benefit from? Please get in touch directly via email
   at <a href="mailto:info@cadabra.science">info@cadabra.science</a>.
 </p>
-<h2>Notebooks</h2>
-<p>
-</p>
-<div class="view_options">
-  <span>Einstein equations:</span>
-  <a href="notebooks/einstein_equations.html">read online</a>
-  <a href="notebooks/einstein_equations.cnb">download notebook</a>
-</div>
-<div class="view_options">
-  <span>Structure equations and Bianchi ids:</span>
-  <a href="notebooks/structure_equations_and_bianchi.html">read online</a>
-  <a href="notebooks/structure_equations_and_bianchi.cnb">download notebook</a>
-</div>
+
+<section class="tut-group" id="gr">
+  <div class="tut-group-head">
+    <h2>Gravity and differential geometry</h2>
+    <p></p>
+
+    <div class="cards">
+      <article class="card">
+	<span class="level intermediate">Intermediate</span>
+	<h3><a href="notebooks/einstein_equations.html">
+            Einstein equations</a></h3>
+	<p class="card-by">By Mattia Scomparin</p>
+	<p>Derive the Einstein equations from the Einstein-Hilbert
+	  action, by requiring that its variational derivative with
+	  respect to the metric vanishes.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/einstein_equations.html">Read online</a>
+          <a class="dl" href="notebooks/einstein_equations.cnb">.cnb</a>
+	</div>
+      </article>
+
+      <article class="card">
+	<span class="level intermediate">Intermediate</span>
+	<h3><a href="notebooks/structure_equations_and_bianchi.html">
+            Structure equations and Bianchi identities</a></h3>
+	<p class="card-by">By Oscar Castillo-Felisola</p>
+	<p>Use the Cartan structural equations for the vielbein and
+	  spin connection to derive the Bianchi identities in the
+	  language of differential forms.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/structure_equations_and_bianchi.html">Read online</a>
+          <a class="dl" href="notebooks/structure_equations_and_bianchi.cnb">.cnb</a>
+	</div>
+      </article>
+    </div>
+  </div>
+</section>
 
 {%- endblock %}

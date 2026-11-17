@@ -1,124 +1,187 @@
 {
-	"cells" : 
-	[
+	"cell_id": 6059298225678034921,
+	"cells": [
 		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
+			"cell_id": 11854662755822632707,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
 				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\section*{Variational derivatives}\n\nThis notebook shows how to do variational derivatives of actions in order to compute equations \nof motion. We first start with a simple scalar field."
+					"cell_id": 17299305040594046445,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Variational derivatives}\n\nThis notebook shows how to do variational derivatives of an action for a scalar field,\nin order to compute equations of motion, also introducing how to do integration by parts. \nThis is of course a trivial example but the same logic applies to more complicated situations. "
 				}
 			],
-			"hidden" : true,
-			"source" : "\\section*{Variational derivatives}\n\nThis notebook shows how to do variational derivatives of actions in order to compute equations \nof motion. We first start with a simple scalar field."
+			"hidden": true,
+			"source": "\\section*{Variational derivatives}\n\nThis notebook shows how to do variational derivatives of an action for a scalar field,\nin order to compute equations of motion, also introducing how to do integration by parts. \nThis is of course a trivial example but the same logic applies to more complicated situations. "
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 7839319759512403769,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}x.\\end{dmath*}"
+					"cell_id": 6232659916088330594,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Coordinate attached to~}x.\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\phi.\\end{dmath*}"
+					"cell_id": 4360870423187993735,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Depends attached to~}\\phi.\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\delta\\left(\\phi\\right).\\end{dmath*}"
+					"cell_id": 4855762526634553694,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Depends attached to~}\\delta\\left(\\phi\\right).\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+					"cell_id": 17517744314558416699,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property PartialDerivative attached to~}\\backslash\\texttt{partial}\\{\\#\\}.\\end{dmath*}"
 				},
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int{}\\partial_{\\mu}{\\phi} \\partial^{\\mu}{\\phi}%\n+m^{2} \\phi^{2}\\, {\\rm d}x\\end{dmath*}"
+					"cell_id": 4595369384354271525,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 15348445816878228905,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 \\int{\\partial_{\\mu}(\\phi) \\partial^{\\mu}(\\phi) + (m)**2 (\\phi)**2}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,\\int \\left(\\partial_{\\mu}{\\phi} \\partial^{\\mu}{\\phi}\\discretionary{}{}{}+{m}^{2\\,} {\\phi}^{2\\,}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
 				}
 			],
-			"source" : "x::Coordinate;\n\\phi::Depends(x);\n\\delta{\\phi}::Depends(x);\n\\partial{#}::PartialDerivative;\n\nex:= -1/2 \\int{\\partial_{\\mu}{\\phi} \\partial^{\\mu}{\\phi} + m**2 \\phi**2}{x};"
+			"source": "x::Coordinate;\n\\phi::Depends(x);\n\\delta{\\phi}::Depends(x);\n\\partial{#}::PartialDerivative;\n\nex:= -1/2 \\int{\\partial_{\\mu}{\\phi} \\partial^{\\mu}{\\phi} + m**2 \\phi**2}{x};"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 4697388330036244391,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int{}\\partial_{\\mu}{\\delta\\left(\\phi\\right)} \\partial^{\\mu}{\\phi}%\n+\\partial_{\\mu}{\\phi} \\partial^{\\mu}{\\delta\\left(\\phi\\right)}%\n+2m^{2} \\phi \\delta\\left(\\phi\\right)\\, {\\rm d}x\\end{dmath*}"
+					"cell_id": 10414062067124639167,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7816375507564280061,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 \\int{\\partial_{\\mu}(\\delta(\\phi)) \\partial^{\\mu}(\\phi) + \\partial_{\\mu}(\\phi) \\partial^{\\mu}(\\delta(\\phi)) + 2(m)**2 \\phi \\delta(\\phi)}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,\\int \\left(\\partial_{\\mu}{\\delta\\left(\\phi\\right)} \\partial^{\\mu}{\\phi}\\discretionary{}{}{}+\\partial_{\\mu}{\\phi} \\partial^{\\mu}{\\delta\\left(\\phi\\right)}\\discretionary{}{}{}+2\\,{m}^{2\\,} \\phi \\delta\\left(\\phi\\right)\\right)\\,\\,{\\rm d}x\\end{dmath*}"
 				}
 			],
-			"source" : "vary(_, $\\phi -> \\delta{\\phi}$);"
+			"source": "vary(_, $\\phi -> \\delta{\\phi}$);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 1503624990390176698,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int{}-\\delta\\left(\\phi\\right) \\partial_{\\mu}\\,^{\\mu}{\\phi}%\n-\\partial^{\\mu}\\,_{\\mu}{\\phi} \\delta\\left(\\phi\\right)%\n+2m^{2} \\phi \\delta\\left(\\phi\\right)\\, {\\rm d}x\\end{dmath*}"
+					"cell_id": 2691316035164864390,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7808524237724921290,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 \\int{-\\delta(\\phi) \\partial_{\\mu}^{\\mu}(\\phi)-\\partial^{\\mu}_{\\mu}(\\phi) \\delta(\\phi) + 2(m)**2 \\phi \\delta(\\phi)}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,\\int \\left(-\\,\\delta\\left(\\phi\\right) \\partial_{\\mu}\\,^{\\mu}{\\phi}\\discretionary{}{}{}-\\,\\partial^{\\mu}\\,_{\\mu}{\\phi} \\delta\\left(\\phi\\right)\\discretionary{}{}{}+2\\,{m}^{2\\,} \\phi \\delta\\left(\\phi\\right)\\right)\\,\\,{\\rm d}x\\end{dmath*}"
 				}
 			],
-			"source" : "integrate_by_parts(_, $\\delta{\\phi}$);"
+			"source": "integrate_by_parts(_, $\\delta{\\phi}$);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 13853565174634430685,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int{}-\\delta\\left(\\phi\\right) \\partial_{\\mu}\\,^{\\mu}{\\phi}%\n-\\delta\\left(\\phi\\right) \\partial^{\\mu}\\,_{\\mu}{\\phi}%\n+2\\delta\\left(\\phi\\right) \\phi m^{2}\\, {\\rm d}x\\end{dmath*}"
+					"cell_id": 13287402603416346879,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 18248701337456614879,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 \\int{-\\delta(\\phi) \\partial_{\\mu}^{\\mu}(\\phi)-\\delta(\\phi) \\partial^{\\mu}_{\\mu}(\\phi) + 2\\delta(\\phi) \\phi (m)**2}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,\\int \\left(-\\,\\delta\\left(\\phi\\right) \\partial_{\\mu}\\,^{\\mu}{\\phi}\\discretionary{}{}{}-\\,\\delta\\left(\\phi\\right) \\partial^{\\mu}\\,_{\\mu}{\\phi}\\discretionary{}{}{}+2\\,\\delta\\left(\\phi\\right) \\phi {m}^{2\\,}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
 				}
 			],
-			"source" : "sort_product(_);"
+			"source": "sort_product(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 4602797043183977608,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int{}-2\\delta\\left(\\phi\\right) \\partial^{\\mu}\\,_{\\mu}{\\phi}%\n+2\\delta\\left(\\phi\\right) \\phi m^{2}\\, {\\rm d}x\\end{dmath*}"
+					"cell_id": 16651671564117705739,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 181731864192848700,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 \\int{-2\\delta(\\phi) \\partial^{\\mu}_{\\mu}(\\phi) + 2\\delta(\\phi) \\phi (m)**2}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,\\int \\left(-2\\,\\delta\\left(\\phi\\right) \\partial^{\\mu}\\,_{\\mu}{\\phi}\\discretionary{}{}{}+2\\,\\delta\\left(\\phi\\right) \\phi {m}^{2\\,}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
 				}
 			],
-			"source" : "canonicalise(_);"
+			"source": "canonicalise(_);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+			"cell_id": 12594683476806522853,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
 				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int{}\\delta\\left(\\phi\\right) \\left(-2\\partial^{\\mu}\\,_{\\mu}{\\phi}%\n+2\\phi m^{2}\\right)\\, {\\rm d}x\\end{dmath*}"
+					"cell_id": 15638137400881573207,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 133093235326950876,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 \\int{\\delta(\\phi) (-2\\partial^{\\mu}_{\\mu}(\\phi) + 2\\phi (m)**2)}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,\\int \\delta\\left(\\phi\\right) \\left(-2\\,\\partial^{\\mu}\\,_{\\mu}{\\phi}\\discretionary{}{}{}+2\\,\\phi {m}^{2\\,}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
 				}
 			],
-			"source" : "factor_out(_, $\\delta{\\phi}$);"
+			"source": "factor_out(_, $\\delta{\\phi}$);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
+			"cell_id": 4034980599661072534,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
-	"description" : "Cadabra JSON notebook format",
-	"version" : 1
+	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
+	"version": 1.0
 }

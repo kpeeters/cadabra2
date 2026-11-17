@@ -12,7 +12,7 @@
 					"cell_id" : 6317143617777149814,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\property{Tableau}{A Young-tableau object with unlabelled boxes.}\n\nDeclares that the object carrying this property is used to label a Young tableau with\nunlabelled boxes (Young diagram). The arguments of such objects denote the lenghts of the rows.\nThe \\verb|dimension| argument of the property sets the dimension.\n\nCan be used in combination with the \\verb|lr_tensor| and \\verb|tab_dimension| algorithms\nto compute tensor product representations."
+					"source" : "\\property{FilledTableau}{A Young-tableau object with labelled boxes.}\n\nDeclares that the object carrying this property is used to label a Young tableau with\nlabelled boxes. The arguments of such objects are comma-separated lists of the contents\nof the boxes in each row. The \\verb|dimension| argument of the property sets the dimension.\n\nCan be used in combination with the \\verb|lr_tensor| and \\verb|tab_dimension| algorithms\nto compute tensor product representations."
 				}
 			],
 			"hidden" : true,

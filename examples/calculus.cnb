@@ -2,17 +2,47 @@
 	"cell_id": 3856175165489560631,
 	"cells": [
 		{
+			"cell_id": 17180462780522905417,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 11156177059169692913,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Basic calculus}\n\nBecause Cadabra started as a tool for tensor manipulations, it has its own logic to manipulate mathematical expressions that contain tensors. However, it can use SymPy algorithms to manipulate the scalar parts of these expressions, and you can therefore combine the power of both in the same unified \\LaTeX{} notation."
+				}
+			],
+			"hidden": true,
+			"source": "\\section*{Basic calculus}\n\nBecause Cadabra started as a tool for tensor manipulations, it has its own logic to manipulate mathematical expressions that contain tensors. However, it can use SymPy algorithms to manipulate the scalar parts of these expressions, and you can therefore combine the power of both in the same unified \\LaTeX{} notation."
+		},
+		{
+			"cell_id": 11238867689466879086,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 1616315857539762704,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Let's see this at the level of some simple computations. First, a Taylor series expansion done using SymPy, fed into Cadabra plotting functionality. We start from $\\sin(x)$,"
+				}
+			],
+			"hidden": true,
+			"source": "Let's see this at the level of some simple computations. First, a Taylor series expansion done using SymPy, fed into Cadabra plotting functionality. We start from $\\sin(x)$,"
+		},
+		{
 			"cell_id": 10380147558135702280,
 			"cell_origin": "client",
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 16925294887616502399,
+					"cell_id": 4110400812005087262,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 3949047612891729160,
+							"cell_id": 5681035814575820569,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\sin(x)"
@@ -24,10 +54,40 @@
 			"source": "ex:=\\sin(x);"
 		},
 		{
+			"cell_id": 6666024909999998098,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 609613987696624469,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "SymPy's calculus functionality is imported using a Cadabra package,"
+				}
+			],
+			"hidden": true,
+			"source": "SymPy's calculus functionality is imported using a Cadabra package,"
+		},
+		{
 			"cell_id": 2961936357451179205,
 			"cell_origin": "client",
 			"cell_type": "input",
 			"source": "from cdb.sympy.calculus import *"
+		},
+		{
+			"cell_id": 16599635659642530679,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6882938487568157289,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "You can now call SymPy functions on Cadabra \\verb|ex| expressions; here is a series expansion to 10th and 20th order:"
+				}
+			],
+			"hidden": true,
+			"source": "You can now call SymPy functions on Cadabra \\verb|ex| expressions; here is a series expansion to 10th and 20th order:"
 		},
 		{
 			"cell_id": 18269559042526778459,
@@ -35,12 +95,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 12859331785385845751,
+					"cell_id": 13552496578694067113,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 12252880234131188612,
+							"cell_id": 10961540872940349560,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "x -  1/6 (x)**3 +  1/120 (x)**5 -  1/5040 (x)**7 +  1/362880 (x)**9 + \\bigO((x)**10)"
@@ -57,12 +117,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 6616396353966560869,
+					"cell_id": 2609556798166870543,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 2384948619544893831,
+							"cell_id": 7026550856087866162,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "x -  1/6 (x)**3 +  1/120 (x)**5 -  1/5040 (x)**7 +  1/362880 (x)**9 -  1/39916800 (x)**11 +  1/6227020800 (x)**13 -  1/1307674368000 (x)**15 +  1/355687428096000 (x)**17 -  1/121645100408832000 (x)**19 + \\bigO((x)**20)"
@@ -72,6 +132,21 @@
 				}
 			],
 			"source": "s20=series(ex, $x$, 0, 20);"
+		},
+		{
+			"cell_id": 11449133269288203247,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 17325343398953422850,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Cadabra's plotting functionality resides in another package, from which we import \\verb|plot|, which we then use to plot the function and its two approximations,"
+				}
+			],
+			"hidden": true,
+			"source": "Cadabra's plotting functionality resides in another package, from which we import \\verb|plot|, which we then use to plot the function and its two approximations,"
 		},
 		{
 			"cell_id": 15520869516496248848,
@@ -94,17 +169,32 @@
 			"source": "plot([ex, s10, s20], ($x$,0,10), yrange=(-4,4), legend=[\"sin(x)\", \"O(10)\", \"O(20)\"]);"
 		},
 		{
+			"cell_id": 6247064699548728827,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 18299856228579386374,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "You can differentiate just like in SymPy:"
+				}
+			],
+			"hidden": true,
+			"source": "You can differentiate just like in SymPy:"
+		},
+		{
 			"cell_id": 18090115630032161277,
 			"cell_origin": "client",
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 15209302643799387612,
+					"cell_id": 4231783171045131198,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 48576289780121615,
+							"cell_id": 10689079479153330125,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "0"
@@ -121,12 +211,12 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 15190125968267237396,
+					"cell_id": 10257878610762648190,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 16910471736726207201,
+							"cell_id": 955135047157004216,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "9(x)**8 + 20x + 3"
@@ -143,21 +233,36 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 1365032908507358835,
+					"cell_id": 16346483697321518530,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 9883455582895059024,
+							"cell_id": 6870598717561150214,
 							"cell_origin": "server",
 							"cell_type": "input_form",
-							"source": "-x \\exp( -  1/2 (x)**2)"
+							"source": "-\\exp( -  1/2 (x)**2) x"
 						}
 					],
-					"source": "\\begin{dmath*}{}-\\,x \\exp\\left( - \\frac{1}{2}\\,{x}^{2\\,}\\right)\\end{dmath*}"
+					"source": "\\begin{dmath*}{}-\\,\\exp\\left( - \\frac{1}{2}\\,{x}^{2\\,}\\right) x\\end{dmath*}"
 				}
 			],
 			"source": "diff($exp(-1/2  x**2 )$, $x$);"
+		},
+		{
+			"cell_id": 7633734042729469433,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 10529220578321273002,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "or integrate"
+				}
+			],
+			"hidden": true,
+			"source": "or integrate"
 		},
 		{
 			"cell_id": 13053694970718818582,

@@ -2,6 +2,8 @@
 
 {% block title %}Cadabra: use with Jupyter{% endblock %}
 
+{% block description %}How to use Cadabra in Jupyter, through the Cadabra2 kernel or with an extension in an ordinary Python notebook such as Google Colab.{% endblock %}
+
 {% block head %}{%- endblock %}
 
 {% block main %}
@@ -9,11 +11,12 @@
 
 <h2>General</h2>
 <p class="hyphenate">
-  By virtue of the Cadabra kernel for Jupyter, it is possible to use
-  Cadabra from a Jupyter notebook. This allows you to use Cadabra
-  notation in a familiar environment, and make use of
-  e.g.&nbsp;Jupyter widgets for visualisation, or other things which
-  are currently not possible in the Cadabra notebook interface.
+  Cadabra can be used from a Jupyter notebook, either by loading a
+  Cadabra extension into an ordinary Python notebook, or through the
+  dedicated Cadabra2 kernel. This allows you to use Cadabra notation
+  in a familiar environment, and make use of e.g.&nbsp;Jupyter widgets
+  for visualisation, or other things which are currently not possible
+  in the Cadabra notebook interface.
 </p>
   <div class="splash_image">
 	 <img src="/static/images/ss_jupyter.png" alt="[screenshot]"/>
@@ -24,23 +27,82 @@
   to <a href="mailto:cloud@cadabra.science?Subject=Cadabra%20Cloud%20access&Body=I%20would%20like%20to%20register%20for%20beta%20access%20to%20Cadabra%20Cloud.">cloud@cadabra.science</a>
   if you want to get access.
 </p>
-<br/>
 
-<h2>Installation</h2>
+<h2>Using Cadabra in a Python notebook</h2>
 <p class="hyphenate">
-  If you do a standard build from source, or if you obtained Cadabra
-  from a binary package (at least version 2.3.1.15), you will get the
-  Cadabra Jupyter kernel automatically. You should be able to start
-  the Jupyter notebook as usual with
+  The simplest way to use Cadabra in Jupyter is to install it from
+  PyPI (on Linux, x86_64 and arm64, Python 3.10 or later) and load it
+  into an ordinary Python notebook. This works in any Jupyter set-up,
+  including Google Colab, Kaggle and VS Code notebooks, where you
+  cannot add kernels of your own. To install:
 </p>
-<div class="output">  jupyter notebook</div>
+<ul>
+  <li class="hyphenate">
+	 <b>On your own machine</b>, install the package into the
+	 environment in which Jupyter runs, for instance
+	 <div class="output">  python3 -m venv .venv
+  source .venv/bin/activate
+  pip install cadabra2 jupyterlab</div>
+	 If you use <tt>uv</tt>, install with <tt>uv pip install</tt> (or
+	 create the environment with <tt>uv venv --seed</tt>), as a
+	 plain <tt>pip</tt> would otherwise install outside the
+	 environment.
+  </li>
+  <li class="hyphenate">
+	 <b>On Colab or Kaggle</b>, run <tt>!pip install cadabra2</tt> in
+	 a notebook cell.
+  </li>
+</ul>
+</p>
 <p class="hyphenate">
-  The 'New' button in the top-right of the screen should then give you
-  the option of creating a new notebook with a 'Cadabra2' kernel. If
-  that fails, and the error messages produced by Jupyter indicate that
-  it cannot find the Cadabra kernel, you may need
+  Then, in a new Python notebook, put
+</p>
+<div class="output">  %load_ext cadabra2_jupyter</div>
+<p class="hyphenate">
+  in the first cell. After that, cells accept Cadabra notation, e.g.
+</p>
+<div class="output">  ex:=(A+B) (C+D);
+  distribute(ex);</div>
+<p class="hyphenate">
+  Since this is a normal Python notebook, all the usual IPython
+  features keep working: <tt>%magic</tt> commands, <tt>!shell</tt>
+  commands and <tt>?</tt> help. Output from <tt>print</tt> appears
+  while a cell is still running, and errors are reported with
+  IPython's normal tracebacks.
+</p>
+
+<h2>Using the Cadabra2 kernel</h2>
+<p class="hyphenate">
+  The same package also registers a dedicated Cadabra2 kernel, in the
+  environment it was installed into. If you run Jupyter yourself, you
+  can choose the 'Cadabra2' kernel when creating a new notebook,
+  instead of a Python one. Compared to the extension, this gives you
+  Cadabra-specific tab completion, there is no need for
+  a <tt>%load_ext</tt> line, and the notebook is stored as a Cadabra
+  notebook rather than a Python one. On the other hand, IPython magics
+  and shell commands are not available, and <tt>print</tt> output
+  only appears once a cell has finished.
+</p>
+
+<h2>Native packages and source builds</h2>
+<p class="hyphenate">
+  The binary packages for Linux and Windows, the Homebrew and MacPorts
+  packages for macOS, and a standard build from source all install
+  the Cadabra2 kernel and the extension as well. If Jupyter cannot
+  find the Cadabra kernel or module, you may need
   to <a href="faq.html#q_01_01">adjust your <tt>PYTHONPATH</tt></a>.
 </p>
+<p class="hyphenate">
+  Compared to the pip package, the native packages also give you
+</p>
+<ul>
+  <li>the Cadabra notebook interface <tt>cadabra2-gtk</tt>;</li>
+  <li>the command-line tools, such as <tt>cadabra2-cli</tt> and
+	 the <tt>cadabra2ipynb</tt> notebook converter;</li>
+  <li>the option to use Mathematica instead of SymPy for scalar
+	 algebra;</li>
+  <li>support for macOS and Windows.</li>
+</ul>
 
 <h2>Docker version</h2>
 <p class="hyphenate">
@@ -50,29 +112,9 @@
   contains a Jupyter server with the Cadabra kernel. This will not be
   able to see existing Python package installations on your system,
   but has the advantage of being easy to install (and easy to remove,
-  if you ever want to do that).
+  if you ever want to do that). It is also a convenient option on
+  machines for which there is no pip package.
 </p>
-
-  <!--<h2>Old Xeus-based kernel</h2>
-<p>
-  To obtain the Cadabra kernel for Jupyter, you need to either install
-  it from Anaconda,
-  or <a href="https://github.com/kpeeters/cadabra2/JUPYTER.rst">build
-  it yourself</a>. To install, ensure that the required channel is
-  active, and update/install:
-</p>
-<div class="output">  conda config --add channels conda-forge
-  conda update --all
-  conda install cadabra2-jupyter-kernel</div>
-<p>
-  If the above went well, you should now be able to start the Jupyter
-  notebook as usual with
-</p>
-<div class="output">  jupyter notebook</div>
-<p>
-  The 'New' button in the top-right of the screen should then give you
-  the option of creating a new notebook with a Cadabra kernel.
-</p>-->
 
 <h2>Differences with Cadabra's own notebook</h2>
 <p class="hyphenate">
@@ -81,16 +123,17 @@
   that Jupyter notebooks (with extension <tt>.ipynb</tt>) and Cadabra
   notebooks (with extension <tt>.cnb</tt>) are not the same file
   format. You can read notebooks created in Jupyter into the Cadabra
-  <tt>cadabra2-gtk</tt> client, and you can (as of version 2.3.3)
-  export Cadabra notebooks as Jupyter notebooks (or convert them using
-  the <tt>cadabra2ipynb</tt> command-line utility), but it is good to
-  keep this in mind.
+  <tt>cadabra2-gtk</tt> client, and you can export Cadabra notebooks
+  as Jupyter notebooks (or convert them using
+  the <tt>cadabra2ipynb</tt> command-line utility); both of these
+  tools come with the native packages, not with the pip package.
 </p>
 <p class="hyphenate">
   You <em>can</em>, however, make use of Cadabra packages inside the
   Jupyter notebook, so you can still do <tt>import something</tt>
-  where <tt>something.cnb</tt> is a Cadabra notebook.
+  where <tt>something.cnb</tt> is a Cadabra notebook (or
+  <tt>something.ipynb</tt> a Jupyter notebook written in Cadabra
+  notation).
 </p>
 
 {%- endblock %}
-

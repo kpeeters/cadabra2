@@ -1,101 +1,212 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
+# Scan Cadabra manual notebooks for \algorithm{...}{...},
+# \property{...}{...} and \package{...}{...} commands, and use these
+# to output the HTML for the table of contents of the reference
+# manual (man.html). Usage:
+#
+#    scan.py algorithms ALGODIR
+#    scan.py properties PROPDIR
+#    scan.py packages   PACKAGEDIR cdb/core/manip ...
+#    scan.py az         ALGODIR PROPDIR PACKAGEDIR cdb/core/manip ...
+#
+# The first two group the entries by the topics in manual_topics.py;
+# 'az' produces a compact alphabetical index of everything.
+
+import html
 import json
 import os
 import re
 import sys
 
-# Scan one Cadabra notebook file for an \algorithm{...}{...}
-# or \property{...}{...} command and use this to output HTML
-# code to produce a table-of-contents of all manual pages.
-
-# FIXME: the regex expressions below should be exchanged for
-# something that parses latex properly, in order to deal with
-# nested curly bracket situations. At the moment this will fail
-# to correctly detect things like \algorithm{foobar}{Something {in} brackets}.
-
-def scan_file(prevcat, dir, filename, ext):
-    with open(dir+filename+ext) as jsonfile:
-        data = json.load(jsonfile)
-        jsonfile.close()
-
-        # is this a multi-algorithm file?
-        count=0
-        package_name=""
-        for cell in data["cells"]:
-            if not "cells" in cell:
-                continue
-            src = cell["cells"][0]["source"]
-            src = src.replace('\n',' ')
-            m = re.search('\\\\algorithm{(.*)}.*', src)
-            if m:
-                count+=1
-            m = re.search('\\\\property{(.*)}.*', src)
-            if m:
-                count+=1
-            m = re.search('\\\\package{([^}]*)}{([^}]*)}.*', src)
-            if m:
-                package_name=m.group(1)
-                package_desc=m.group(2)
-        is_multi = (package_name!="")
-
-        if is_multi:
-            print('<tbody class="folding">')
-            print('<tr class="package-name"><td colspan=4>'+package_name+'</td></tr>')
-            print('<tr class="package-desc"><td colspan=4>'+package_desc+'</td></tr>')
-        
-        for cell in data["cells"]:
-            if not "cells" in cell:
-                continue
-            src = cell["cells"][0]["source"]
-            src = src.replace('\n',' ')
-            m = re.search('\\\\algorithm{([^}]*)}{([^}]*)}.*', src)
-            if m:
-                algo=m.group(1)
-                desc=m.group(2)
-                cat=algo[0].upper()
-                if cat==prevcat:
-                    cat=''
-                else:
-                    prevcat=cat
-                if is_multi:
-                    cat=''
-                m2 = re.search('([^\(]*)\(.*', algo)
-                if m2:
-                    algo = m2.group(1)
-                print('<tr><td>'+cat+'<td></td><td><a href="manual/'+filename+'.html">'+algo+'</a></td>')
-                print('<td>'+desc+'</td></tr>')
-            m = re.search('\\\\property{([^}]*)}{([^}]*)}', src)
-            if m:
-                algo=m.group(1)
-                desc=m.group(2)
-                cat=algo[0].upper()
-                if cat==prevcat:
-                    cat=''
-                else:
-                    prevcat=cat
-                if is_multi:
-                    cat=''
-                print('<tr><td>'+cat+'<td></td><td><a href="manual/'+filename+'.html">'+algo+'</a></td>')
-                print('<td>'+desc+'</td></tr>')
-
-        if is_multi:
-            print('<tr><td colspan=4>&nbsp;</td></tr></tbody>')
-
-    return prevcat
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from manual_topics import ALGORITHM_TOPICS, PROPERTY_TOPICS
 
 
-# Scan all manual pages for algorithms.
+def brace_group(src, pos):
+    """Return the contents of the {...} group starting at src[pos],
+    allowing for nested braces, and the position just after it."""
+    if pos >= len(src) or src[pos] != '{':
+        return None, pos
+    depth = 0
+    for i in range(pos, len(src)):
+        if src[i] == '{':
+            depth += 1
+        elif src[i] == '}':
+            depth -= 1
+            if depth == 0:
+                return src[pos + 1:i], i + 1
+    return None, pos
 
-#lst=set()
-#for file in os.listdir(dir):
-#    filename, ext = os.path.splitext(file)
-#    if ext=='.cnb':
-#        lst.add( filename )
 
-algodir=sys.argv[1]+"/"
-cat=''
-for nb in sorted(sys.argv[2:]):
-    cat=scan_file(cat, algodir, nb, '.cnb')
+def find_commands(src, command):
+    """Find all \\command{arg1}{arg2} in src, return (arg1, arg2) pairs."""
+    res = []
+    pos = 0
+    tag = '\\' + command + '{'
+    while True:
+        pos = src.find(tag, pos)
+        if pos < 0:
+            return res
+        arg1, nxt = brace_group(src, pos + len(tag) - 1)
+        arg2, nxt = brace_group(src, nxt)
+        if arg1 is not None and arg2 is not None:
+            res.append((arg1, arg2))
+        pos = nxt if nxt > pos else pos + 1
 
 
+def latex_to_html(txt):
+    """Convert the little bit of LaTeX used in summaries to HTML."""
+    txt = html.escape(' '.join(txt.split()), quote=False)
+    txt = txt.replace('\\_', '_').replace('~', ' ')
+    txt = re.sub(r'\\verb\|([^|]*)\|', r'<code>\1</code>', txt)
+    txt = re.sub(r'\\(?:texttt|algo|prop)\{([^{}]*)\}', r'<code>\1</code>', txt)
+    return txt
+
+
+def bare_name(name):
+    """Strip a signature like 'get_lhs(ex: Ex) -> Ex' down to 'get_lhs',
+    and 'class Algorithm' to 'Algorithm'. This has to match the heading
+    ids generated by latex_to_html in core/DataCell.cc."""
+    name = name.split('(')[0].replace('\\_', '_').strip()
+    if name.startswith('class '):
+        name = name[len('class '):]
+    return name
+
+
+def scan_file(path):
+    """Return (package, [(name, summary), ...]) for one notebook; package
+    is None or a (name, description) pair."""
+    with open(path) as f:
+        data = json.load(f)
+    package = None
+    entries = []
+    for cell in data["cells"]:
+        if "cells" not in cell:
+            continue
+        src = cell["cells"][0]["source"]
+        for name, desc in find_commands(src, 'package'):
+            package = (name, desc)
+        for command in ('algorithm', 'property'):
+            for name, desc in find_commands(src, command):
+                entries.append((bare_name(name), latex_to_html(desc)))
+    return package, entries
+
+
+def entry_html(name, summary, href):
+    search = html.escape((name + ' ' + re.sub('<[^>]+>', '', summary)).lower())
+    return ('<div class="man-entry" data-search="' + search + '">'
+            + '<dt><a href="' + href + '"><code>' + name + '</code></a></dt>'
+            + '<dd>' + summary + '</dd></div>')
+
+
+def slug(txt):
+    return re.sub('[^a-z0-9]+', '-', txt.lower()).strip('-')
+
+
+def core_entries(directory):
+    """Return {name: summary} for all manual pages in a directory. A
+    page is listed under the name matching its file name, or under
+    its first entry if there is none."""
+    res = {}
+    for fn in sorted(os.listdir(directory)):
+        base, ext = os.path.splitext(fn)
+        if ext != '.cnb':
+            continue
+        _, entries = scan_file(os.path.join(directory, fn))
+        if not entries:
+            print("scan.py: no \\algorithm or \\property in " + fn, file=sys.stderr)
+            continue
+        summary = dict(entries).get(base, entries[0][1])
+        res[base] = summary
+    return res
+
+
+def print_topics(prefix, topics, entries):
+    seen = set()
+    groups = []
+    for title, names in topics:
+        present = [n for n in names if n in entries]
+        for n in names:
+            if n not in entries:
+                print("scan.py: topic entry '" + n + "' has no manual page", file=sys.stderr)
+        seen.update(present)
+        groups.append((title, present))
+    other = sorted((n for n in entries if n not in seen), key=str.lower)
+    for n in other:
+        print("scan.py: '" + n + "' is not in any topic in manual_topics.py", file=sys.stderr)
+    if other:
+        groups.append(("Other", other))
+
+    for title, names in groups:
+        if not names:
+            continue
+        print('<section class="man-topic" id="' + prefix + '-' + slug(title) + '">')
+        print('<h3>' + html.escape(title) + '</h3>')
+        print('<dl class="man-list">')
+        for n in names:
+            print(entry_html(n, entries[n], 'manual/' + n + '.html'))
+        print('</dl>')
+        print('</section>')
+
+
+def package_data(directory, packages):
+    """Return [(module, description, page, [(name, summary), ...])]."""
+    res = []
+    for pkg in packages:
+        package, entries = scan_file(os.path.join(directory, pkg + '.cnb'))
+        if package is None or not entries:
+            continue
+        res.append((package[0], latex_to_html(package[1]), 'manual/' + pkg + '.html', entries))
+    return sorted(res)
+
+
+def print_packages(directory, packages):
+    for module, desc, page, entries in package_data(directory, packages):
+        print('<section class="man-topic man-package" id="pkg-' + slug(module) + '">')
+        print('<h3><a href="' + page + '">' + module + '</a></h3>')
+        print('<p class="man-package-desc">' + desc + '</p>')
+        print('<div class="output">from ' + module + ' import *</div>')
+        print('<dl class="man-list">')
+        for name, summary in entries:
+            print(entry_html(name, summary, page + '#' + name))
+        print('</dl>')
+        print('</section>')
+
+
+def print_az(algodir, propdir, packagedir, packages):
+    items = []
+    for directory in (algodir, propdir):
+        for name in core_entries(directory):
+            items.append((name, 'manual/' + name + '.html', ''))
+    for module, _, page, entries in package_data(packagedir, packages):
+        for name, _ in entries:
+            items.append((name, page + '#' + name, module))
+    items.sort(key=lambda it: (it[0].lower(), it[2]))
+
+    letter = None
+    for name, href, module in items:
+        first = name[0].upper()
+        if first != letter:
+            if letter is not None:
+                print('</div>')
+            letter = first
+            print('<div class="man-az-letter"><span class="man-az-head">' + letter + '</span>')
+        title = ' title="' + module + '"' if module else ''
+        print('<a href="' + href + '"' + title + '><code>' + name + '</code></a>')
+    if letter is not None:
+        print('</div>')
+
+
+if __name__ == '__main__':
+    mode = sys.argv[1]
+    if mode == 'algorithms':
+        print_topics('algo', ALGORITHM_TOPICS, core_entries(sys.argv[2]))
+    elif mode == 'properties':
+        print_topics('prop', PROPERTY_TOPICS, core_entries(sys.argv[2]))
+    elif mode == 'packages':
+        print_packages(sys.argv[2], sys.argv[3:])
+    elif mode == 'az':
+        print_az(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5:])
+    else:
+        sys.exit("scan.py: unknown mode '" + mode + "'")

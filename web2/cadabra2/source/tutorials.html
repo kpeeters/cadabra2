@@ -2,10 +2,18 @@
 
 {% block title %}Cadabra: Tutorials{% endblock %}
 
-{% block head %}{%- endblock %}
+{% block description %}Tutorials for Cadabra, from first steps to tensor polynomials, general relativity, spinors, components and numerics, all made from Cadabra notebooks.{% endblock %}
+
+{% block section %}learn{% endblock %}
+
+{% block breadcrumb %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">Home</a>Tutorials
+</nav>
+{% endblock %}
 
 {% block main %}
-<h1>Cadabra tutorials</h1>
+<h1>Tutorials</h1>
 <p>
   The tutorials listed below are meant to illustrate Cadabra concepts
   at the level of simple examples; for research-level applications of
@@ -14,232 +22,424 @@
 <p>
   The pages linked below are produced from actual Cadabra
   notebooks. Instead of reading them on-line, you can also download
-  the notebooks and play with them inside Cadabra. These notebooks all
-  require the new 2.x version of the software and will not work with
-  the old version 1.x. If you have a nice notebook that you think
-  would help others to learn Cadabra,
+  the notebooks and play with them inside Cadabra. If you have a nice
+  notebook that you think would help others to learn Cadabra,
   please <a href="mailto:info@cadabra.science">get in touch</a>.
 </p>
 
-<h2>Absolute beginners</h2>
+<!-- <div class="start-here">
+  <h2>New to Cadabra? Start here</h2>
+  <ol>
+    <li><a href="notebooks/quickstart.html">
+      <span class="step">1</span>
+      <span><strong>Quick start</strong>
+        <small>...</small></span></a></li>
+    <li><a href="notebooks/beginners.html">
+      <span class="step">2</span>
+      <span><strong>Beginners tutorial</strong>
+        <small>...</small></span></a></li>
+    <li><a href="notebooks/tensor_monomials.html">
+      <span class="step">3</span>
+      <span><strong>Tensor monomials</strong>
+        <small>...</small></span></a></li>
+  </ol>
+</div> -->
 
-<p>
-  This notebook explains how to enter expressions, how to do simple
-  substitutions on them, how to use wildcards. It also explains how the
-  new Python functionality works. If you have never used Cadabra
-  before, start here. 
-</p>
-<div class="view_options">
-  <span>Beginners tutorial:</span>
-  <a href="notebooks/beginners.html">read online</a>
-  <a href="notebooks/beginners.cnb">download notebook</a>
-</div>
-<p>
-  For a bit more advanced material, try one of the following tutorials.
-</p>
-<div class="view_options">
-  <span>Tensor monomials:</span>
-  <a href="notebooks/tensor_monomials.html">read online</a>
-  <a href="notebooks/tensor_monomials.cnb">download notebook</a>
-</div>
-<p>
-  If you have used old versions of Cadabra but are new to series 2.x,
-  give the following notebook a shot.
-</p>
-<div class="view_options">
-  <span>Tutorial for 1.x users:</span>
-  <a href="notebooks/for_previous_users.html">read online</a>
-  <a href="notebooks/for_previous_users.cnb">download notebook</a>
-</div>
+<nav class="chips" aria-label="Topics">
+  <a href="#start">Getting started</a>
+  <a href="#actions">Actions and equations of motion</a>
+  <a href="#algebra">Quantum mechanics and algebras</a>
+  <a href="#gr">Abstract GR and geometry</a>
+  <a href="#components">Curved space-time</a>
+  <a href="#numerics">Numerics and plotting</a>
+  <a href="#packages">Programming Cadabra</a>
+  <a href="#sympy">SymPy</a>
+</nav>
 
-<h2>Writing packages for Cadabra</h2>
-<p>
-  One of the key reasons for the rewrite of Cadabra was to make it
-  much easier for users to contribute small bits of functionality. As
-  all of its internals are available via Python, it becomes much
-  easier to write small add-on packages, just like you can for other
-  computer algebra systems. 
-</p>
-<p>
-  A more step-by-step tutorial for writing packages will follow; for
-  the time being here are some smaller tutorials describing a number of
-  Cadabra programming concepts.
-</p>
-<div class="view_options">
-  <span>Convergence of operations:</span>
-  <a href="notebooks/converge.html">read online</a>
-  <a href="notebooks/converge.cnb">download notebook</a>
-</div>
+<section class="tut-group" id="start">
+  <div class="tut-group-head">
+    <h2>Getting started</h2>
+    <p>For new users of Cadabra, to get you started with the input
+      format and basic symbolic manipulations.</p>
 
+    <div class="cards">
+      <article class="card">
+	<span class="level beginner">Beginner</span>
+	<h3><a href="notebooks/beginners.html">
+            Beginners tutorial</a></h3>
+	<p>Learn how to enter expressions, how to do simple
+	  substitutions, how to use wildcards and how to tie everything
+	  together using Python.</p>
+	<div class="card-links">
+          <a href="notebooks/beginners.html">Read online</a>
+          <a class="dl" href="notebooks/beginners.cnb">.cnb</a>
+	</div>
+      </article>
 
+      <article class="card">
+	<span class="level beginner">Beginner</span>
+	<h3><a href="notebooks/tensor_monomials.html">
+            Tensor polynomials</a></h3>
+	<p>Manipulate tensor polynomials, canonicalise expressions
+	using index symmetries and dealing with multi-term
+	symmetries.</p>
+	<div class="card-links">
+          <a href="notebooks/tensor_monomials.html">Read online</a>
+          <a class="dl" href="notebooks/tensor_monomials.cnb">.cnb</a>
+	</div>
+      </article>
 
+      <article class="card">
+	<span class="level beginner">Beginner</span>
+	<h3><a href="notebooks/calculus.html">
+            Basic calculus</a></h3>
+	<p>Use SymPy calculus functions such as series expansions on
+	  Cadabra expressions, and plot the results.</p>
+	<div class="card-links">
+          <a href="notebooks/calculus.html">Read online</a>
+          <a class="dl" href="notebooks/calculus.cnb">.cnb</a>
+	</div>
+      </article>
 
-<h2>Actions, equations of motion, variational derivatives</h2>
-<p>
-  
-</p>
-<div class="view_options">
-  <span>Fierz transformations:</span>
-  <a href="notebooks/fierz.html">read online</a>
-  <a href="notebooks/fierz.cnb">download notebook</a>
-</div>
+    </div>
+  </div>
+</section>
 
+<section class="tut-group" id="actions">
+  <div class="tut-group-head">
+    <h2>Actions, equations of motion, variational derivatives</h2>
+    <p></p>
 
-<h2>Quantum mechanics, groups and algebras</h2>
-<p>
-  Dirac gamma matrix algebra is very simple with Cadabra, and it can
-  handle them in arbitrary dimensions.
-</p>
-<div class="view_options">
-  <span>Gamma matrix algebra:</span>
-  <a href="notebooks/gamma_matrix_algebra.html">read online</a>
-  <a href="notebooks/gamma_matrix_algebra.cnb">download notebook</a>
-</div>
-<p>
-  An frequently asked question is how to do commutator algebra with
-  Cadabra. The following notebook shows how this works by verifying
-  the invariance of the two quadratic Casimirs of the Poincaré
-  algebra. It shows how to make good use of <code>post_process</code> to
-  simplify expressions automatically.
-</p>
-<div class="view_options">
-  <span>Poincaré algebra Casimirs:</span>
-  <a href="notebooks/poincare_algebra.html">read online</a>
-  <a href="notebooks/poincare_algebra.cnb">download notebook</a>
-</div>
-<p>
-  Because of fact that you can use natural LaTeX notation and because
-  Cadabra understand non-commuting objects, many tedious operator
-  algebra computations in quantum mechanics become relatively
-  simple. Here is an example from string theory, in which we verify
-  that certain states satisfy the quantum string constraints.
-</p>
-<div class="view_options">
-  <span>String states:</span>
-  <a href="notebooks/string_states.html">read online</a>
-  <a href="notebooks/string_states.cnb">download notebook</a>
-</div>
+    <div class="cards">
+      <article class="card">
+	<span class="level beginner">Beginner</span>
+	<h3><a href="notebooks/variational_derivatives.html">
+            Variational derivatives</a></h3>
+	<p>Compute equations of motion from the action of a scalar
+	  field using variational derivatives and integration by
+	  parts.</p>
+	<div class="card-links">
+          <a href="notebooks/variational_derivatives.html">Read online</a>
+          <a class="dl" href="notebooks/variational_derivatives.cnb">.cnb</a>
+	</div>
+      </article>
+      
+      <article class="card">
+	<span class="level intermediate">Intermediate</span>
+	<h3><a href="notebooks/fierz.html">
+            Fierz transformations</a></h3>
+	<p>Use Fierz transformations to verify an identity for
+	  Majorana spinors in eleven dimensions, taken from
+	  <a href="https://arxiv.org/abs/hep-th/9803209">hep-th/9803209</a>.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/fierz.html">Read online</a>
+          <a class="dl" href="notebooks/fierz.cnb">.cnb</a>
+	</div>
+      </article>
 
-<h2>Abstract general relativity and differential geometry</h2>
-<p>
-  Cadabra was originally written in order to facilitate computations
-  in extensions of general relativity. The following example shows how
-  to prove a particular polynomial identity cubic in the Weyl tensor,
-  by virtue of its multi-term symmetries.
-</p>
-<div class="view_options">
-  <span>Bianchi identities:</span>
-  <a href="notebooks/bianchi_identities.html">read online</a>
-  <a href="notebooks/bianchi_identities.cnb">download notebook</a>
-</div>
-<p>
-  You can also do computations with abstract differential forms and
-  the exterior derivative, as in the example below.
-<div class="view_options">
-  <span>Differential forms:</span>
-  <a href="notebooks/exterior.html">read online</a>
-  <a href="notebooks/exterior.cnb">download notebook</a>
-</div>
-</p>
+    </div>
+  </div>
+</section>
 
-<h2>Component computations</h2>
-<p>
-  From version 2.x you can do abstract as well as component
-  computations with Cadabra. The logic is very simple and based on a
-  few key ideas rooted in Cadabra's substitution engine. Examples of
-  varying difficulty are available below.
-</p>
-<p>
-  The first one is a trivial example of computing the curvature tensor
-  and scalar for a 2-sphere. Easy to do by hand, too, of course.
-</p>
-<div class="view_options">
-  <span>Sphere curvature:</span>
-  <a href="notebooks/sphere.html">read online</a>
-  <a href="notebooks/sphere.cnb">download notebook</a>
-</div>
-<p>
-  The next one computes
-  Christoffel symbols and related for the Schwarzschild metric;
-  definitely a frequently requested feature...
-</p>
-<div class="view_options">
-  <span>Schwarzschild spacetime:</span>
-  <a href="notebooks/schwarzschild.html">read online</a>
-  <a href="notebooks/schwarzschild.cnb">download notebook</a>
-</div>
-<p>
-  Somewhat related to component computations is the concept of 
-  splitting a vector bundle into two parts, like you do in
-  Kaluza-Klein models. The following notebook is also discussed in the
-  original Cadabra
-  paper <a href="http://arxiv.org/abs/hep-th/0701238">hep-th/0701238</a>.
-</p>
-<div class="view_options">
-  <span>Kaluza-Klein:</span>
-  <a href="notebooks/kaluza_klein.html">read online</a>
-  <a href="notebooks/kaluza_klein.cnb">download notebook</a>
-</div>
+<section class="tut-group" id="algebra">
+  <div class="tut-group-head">
+    <h2>Quantum mechanics, groups and algebras</h2>
+    <p>About using operators and other non-commuting objects,
+      together with their commutation relations.</p>
 
-<h2>Numerics and plotting</h2>
+    <div class="cards">
+      <article class="card">
+	<span class="level intermediate">Beginner</span>
+	<h3><a href="notebooks/gamma_matrix_algebra.html">
+            Gamma matrix algebra</a></h3>
+	<p>Handle Dirac gamma matrix algebra in arbitrary dimensions.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/gamma_matrix_algebra.html">Read online</a>
+          <a class="dl" href="notebooks/gamma_matrix_algebra.cnb">.cnb</a>
+	</div>
+      </article>
 
-<p>
-  Cadabra's notebook now displays graphics from a variety of Python
-  sources; see the notebook below for some basic examples.
-</p>
-<div class="view_options">
-  <span>Plotting tutorial:</span>
-  <a href="notebooks/plotting.html">read online</a>
-  <a href="notebooks/plotting.cnb">download notebook</a>
-</div>
-<p>
-  The <tt>ndsolve</tt> algorithm can be used to solve differential
-  equations numerically. You feed it (a system of) differential
-  equations and initial conditions, and get back one or more
-  anonymous (interpolating) functions.
-</p>
-<div class="view_options">
-  <span>Solving differential equations numerically:</span>
-  <a href="notebooks/ndsolve.html">read online</a>
-  <a href="notebooks/ndsolve.cnb">download notebook</a>
-</div>
+      <article class="card">
+	<span class="level intermediate">Intermediate</span>
+	<h3><a href="notebooks/poincare_algebra.html">
+            Commutator algebra</a></h3>
+	<p>Verify the invariance of the two quadratic Casimirs of the
+	  Poincaré algebra and learn about automatic
+	  expression post-processing.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/poincare_algebra.html">Read online</a>
+          <a class="dl" href="notebooks/poincare_algebra.cnb">.cnb</a>
+	</div>
+      </article>
 
+      <article class="card">
+	<span class="level intermediate">Intermediate</span>
+	<h3><a href="notebooks/string_states.html">
+            Physical string states</a></h3>
+	<p>Obtain the conditions that determine the physical
+	  states of the bosonic string by imposing the Virasoro
+	  constraints.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/string_states.html">Read online</a>
+          <a class="dl" href="notebooks/string_states.cnb">.cnb</a>
+	</div>
+      </article>
+    </div>
+  </div>
+</section>
 
-<h2>SymPy users</h2>
-<p>
-  Cadabra relies on <a href="http://www.sympy.org">SymPy</a> for a lot
-  of scalar computer algebra, that is, for algebra on expressions
-  which do not involve indices. Here is a simple notebook to
-  illustrate the basic concepts. This may also be a useful read if you
-  want to use the Cadabra notebook interface just to work with SymPy.
-</p>
-<div class="view_options">
-  <span>SymPy inside Cadabra:</span>
-  <a href="notebooks/scalar_manipulations.html">read online</a>
-  <a href="notebooks/scalar_manipulations.cnb">download notebook</a>
-</div>
+<section class="tut-group" id="gr">
+  <div class="tut-group-head">
+    <h2>Abstract general relativity and differential geometry</h2>
+    <p>Cadabra was originally written in order to facilitate
+      computations in extensions of general relativity.</p>
 
+    <div class="cards">
+      <article class="card">
+	<span class="level intermediate">Intermediate</span>
+	<h3><a href="notebooks/automatic_multiterm.html">
+            Automatic multi-term simplification</a></h3>
+	<p>Use <tt>meld</tt> in a <tt>post_process</tt> function to
+	  simplify expressions with multi-term symmetries, such as the
+	  Bianchi identities, automatically at every step.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/automatic_multiterm.html">Read online</a>
+          <a class="dl" href="notebooks/automatic_multiterm.cnb">.cnb</a>
+	</div>
+      </article>
 
-<h2>Using Cadabra from IPython/Jupyter</h2>
+      <article class="card">
+	<span class="level intermediate">Intermediate</span>
+	<h3><a href="notebooks/exterior.html">
+            Differential forms</a></h3>
+	<p>You can also do computations with abstract differential
+	  forms and the exterior derivative, as in the example below.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/exterior.html">Read online</a>
+          <a class="dl" href="notebooks/exterior.cnb">.cnb</a>
+	</div>
+      </article>
 
-<p>
-  Cadabra now ships with a Jupyter kernel which is installed by
-  default; see <a href="jupyter.html">Cadabra Jupyter kernel</a> for
-  more details. This is the easiest way to use Cadabra in Jupyter as
-  it allows you to use standard Cadabra notation, just like in
-  Cadabra's own notebook interface.
-</p>
-<p>
-  If you do not want to rely on the Cadabra kernel but would like to
-  use the <tt>cadabra2</tt> Python module directly in your Python
-  code, consult the following notebook for some of the absolute
-  basics. 
-</p>
-<div class="view_options">
-  <span>Cadabra inside Jupyter:</span>
-  <a href="static/cadabra_in_ipython.nb.html">read online</a>
-  <a href="static/cadabra_in_ipython.nb">download notebook</a>
-</div>
+      <article class="card">
+	<span class="level advanced">Advanced</span>
+	<h3><a href="notebooks/bianchi_identities.html">
+            Bianchi identities</a></h3>
+	<p>The following example shows how to prove a particular
+	  polynomial identity cubic in the Weyl tensor, by virtue of its
+	  multi-term symmetries.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/bianchi_identities.html">Read online</a>
+          <a class="dl" href="notebooks/bianchi_identities.cnb">.cnb</a>
+	</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="tut-group" id="components">
+  <div class="tut-group-head">
+    <h2>Curved space-time</h2>
+    <p>Learn how to do abstract tensor computations and then
+      compute explicit components, for a number of examples
+      from general relativity.</p>
+
+    <div class="cards">
+      <article class="card">
+	<span class="level beginner">Beginner</span>
+	<h3><a href="notebooks/sphere.html">
+            Sphere curvature</a></h3>
+	<p>Simple example of computing the curvature
+	  tensor and scalar for a 2-sphere, to illustrate the
+	  main Cadabra ingredients.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/sphere.html">Read online</a>
+          <a class="dl" href="notebooks/sphere.cnb">.cnb</a>
+	</div>
+      </article>
+
+      <article class="card">
+	<span class="level beginner">Beginner</span>
+	<h3><a href="notebooks/schwarzschild.html">
+            Schwarzschild spacetime</a></h3>
+	<p>Compute Christoffel symbols, Riemann and Ricci tensor
+	  and the Kretschmann scalar for the Schwarzschild metric.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/schwarzschild.html">Read online</a>
+          <a class="dl" href="notebooks/schwarzschild.cnb">.cnb</a>
+	</div>
+      </article>
+
+      <article class="card">
+	<span class="level beginner">Beginner</span>
+	<h3><a href="notebooks/frw.html">
+            Friedmann-Robertson-Walker</a></h3>
+	<p>Derive the Friedmann equations for a homogeneous and
+	  isotropic universe, starting from the
+	  Friedmann-Robertson-Walker metric.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/frw.html">Read online</a>
+          <a class="dl" href="notebooks/frw.cnb">.cnb</a>
+	</div>
+      </article>
+
+      <article class="card">
+	<span class="level intermediate">Intermediate</span>
+	<h3><a href="notebooks/kerr.html">
+            Kerr spacetime</a></h3>
+	<p>Compute Christoffel symbols, Riemann and Ricci tensor
+	  and the Kretschmann scalar for the Kerr metric, and learn
+	  how to speed up the simplification of components.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/kerr.html">Read online</a>
+          <a class="dl" href="notebooks/kerr.cnb">.cnb</a>
+	</div>
+      </article>
+
+      <article class="card">
+	<span class="level intermediate">Intermediate</span>
+	<h3><a href="notebooks/kerr_newman_cos.html">
+            Kerr-Newman spacetime</a></h3>
+	<p>Compute curvature invariants of a rotating, charged black
+	  hole, using $y=\cos\theta$ as a coordinate so that all
+	  metric components are rational functions.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/kerr_newman_cos.html">Read online</a>
+          <a class="dl" href="notebooks/kerr_newman_cos.cnb">.cnb</a>
+	</div>
+      </article>
+
+      <article class="card">
+	<span class="level advanced">Advanced</span>
+	<h3><a href="notebooks/kaluza_klein.html">
+            Kaluza-Klein</a></h3>
+	<p>Somewhat related to component computations is the concept of
+	  splitting a vector bundle into two parts, like you do in
+	  Kaluza-Klein models. The following notebook is also discussed
+	  in the original Cadabra
+	  paper <a href="http://arxiv.org/abs/hep-th/0701238">hep-th/0701238</a>.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/kaluza_klein.html">Read online</a>
+          <a class="dl" href="notebooks/kaluza_klein.cnb">.cnb</a>
+	</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="tut-group" id="numerics">
+  <div class="tut-group-head">
+    <h2>Numerics and plotting</h2>
+    <p></p>
+
+    <div class="cards">
+      <article class="card">
+	<span class="level beginner">Beginner</span>
+	<h3><a href="notebooks/plotting.html">
+            Plotting tutorial</a></h3>
+	<p>Cadabra's notebook now displays graphics from a variety of
+	  Python sources; see the notebook below for some basic
+	  examples.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/plotting.html">Read online</a>
+          <a class="dl" href="notebooks/plotting.cnb">.cnb</a>
+	</div>
+      </article>
+
+      <article class="card">
+	<span class="level intermediate">Intermediate</span>
+	<h3><a href="notebooks/ndsolve.html">
+            Solving differential equations numerically</a></h3>
+	<p>The <tt>ndsolve</tt> algorithm can be used to solve
+	  differential equations numerically. You feed it (a system of)
+	  differential equations and initial conditions, and get back
+	  one or more anonymous (interpolating) functions.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/ndsolve.html">Read online</a>
+          <a class="dl" href="notebooks/ndsolve.cnb">.cnb</a>
+	</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="tut-group" id="packages">
+  <div class="tut-group-head">
+    <h2>Programming Cadabra</h2>
+    <p>Learn how to do more complicated things, by combining
+      Cadabra algorithms into your own Python programs and
+      storing these in modules.</p>
+
+    <div class="cards">
+      <article class="card">
+	<span class="level intermediate">Intermediate</span>
+	<h3><a href="notebooks/converge.html">
+            Convergence of operations</a></h3>
+	<p>How to apply operators on expressions until they no longer
+	  change.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/converge.html">Read online</a>
+          <a class="dl" href="notebooks/converge.cnb">.cnb</a>
+	</div>
+      </article>
+
+      <article class="card">
+	<span class="level intermediate">Intermediate</span>
+	<h3><a href="static/cadabra_in_ipython.html">
+            Cadabra objects from plain Python</a></h3>
+	<p>Only relevant if you can use neither the Cadabra kernel nor
+	  the <a href="jupyter.html">Jupyter extension</a>, and need to
+	  work with Cadabra's expression and property objects directly
+	  from plain Python code.
+	</p>
+	<div class="card-links">
+          <a href="static/cadabra_in_ipython.html">Read online</a>
+          <a class="dl" href="static/cadabra_in_ipython.ipynb">.ipynb</a>
+	</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="tut-group" id="sympy">
+  <div class="tut-group-head">
+    <h2>SymPy users</h2>
+    <p>Cadabra relies on <a href="http://www.sympy.org">SymPy</a> for
+      a lot of scalar computer algebra, that is, for algebra on
+      expressions which do not involve indices.</p>
+
+    <div class="cards">
+      <article class="card">
+	<span class="level beginner">Beginner</span>
+	<h3><a href="notebooks/scalar_manipulations.html">
+            SymPy inside Cadabra</a></h3>
+	<p>Here is a simple notebook to illustrate the basic
+	  concepts. This may also be a useful read if you want to use the
+	  Cadabra notebook interface just to work with SymPy.
+	</p>
+	<div class="card-links">
+          <a href="notebooks/scalar_manipulations.html">Read online</a>
+          <a class="dl" href="notebooks/scalar_manipulations.cnb">.cnb</a>
+	</div>
+      </article>
+    </div>
+  </div>
+</section>
 
 {%- endblock %}
 
