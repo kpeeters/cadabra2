@@ -25,8 +25,11 @@ set(TUTORIALS
   poincare_algebra
   string_states
   bianchi_identities
+  automatic_multiterm
   sphere
   schwarzschild
+  kerr
+  kerr_newman_cos
   exterior
   kaluza_klein
   plotting
@@ -286,8 +289,17 @@ foreach(TUT ${CONTRIBS})
                      COMMAND cp
                      ARGS    ${CONTRIBDIR}/${TUT}.cnb ${HTMLOUTDIR}/${TUT}.cnb
                      COMMENT "Creating ${TUT}.cnb")
-  add_custom_target("${TUT}_cnb" ALL echo -n DEPENDS ${HTMLOUTDIR}/${TUT}.html ${HTMLOUTDIR}/${TUT}.cnb )		
+  add_custom_target("${TUT}_cnb" ALL echo -n DEPENDS ${HTMLOUTDIR}/${TUT}.html ${HTMLOUTDIR}/${TUT}.cnb )
 endforeach()
+
+# Convert all tutorial and contrib notebooks in one go, without
+# building the book: 'make notebooks'.
+set(NOTEBOOK_TARGETS "")
+foreach(TUT ${TUTORIALS} ${CONTRIBS})
+  list(APPEND NOTEBOOK_TARGETS "${TUT}_cnb")
+endforeach()
+add_custom_target(notebooks)
+add_dependencies(notebooks ${NOTEBOOK_TARGETS})
 
 file(MAKE_DIRECTORY ${BOOKOUTDIR})
 

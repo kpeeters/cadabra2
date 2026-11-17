@@ -973,15 +973,16 @@ div.latex {
 }
 div.latex div.output { display: none; }
 
-/* input cells: tinted block with a small "In" label */
+/* input cells: tinted block at the left margin, with a small
+   "In" label in its top right corner */
 div.python {
   max-width: 52rem;
   margin: 18px 0 6px;
 }
 div.python > div.source {
   position: relative;
-  margin: 0 0 6px 38px;
-  padding: 9px 14px;
+  margin: 0 0 6px 0;
+  padding: 9px 36px 9px 14px;   /* room on the right for the label */
   background: var(--tint);
   border-radius: 6px;
   font-family: var(--mono);
@@ -996,7 +997,7 @@ div.python > div.source {
 div.python > div.source::before {
   content: "In";
   position: absolute;
-  left: -38px;
+  right: 10px;
   top: 11px;
   font-family: var(--sans);
   font-size: 11px;
