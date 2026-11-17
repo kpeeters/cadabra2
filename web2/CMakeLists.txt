@@ -99,108 +99,15 @@ set(CONTRIBS
   structure_equations_and_bianchi
   )
 
-# Manual pages; just add the algorithm or property name to the lists below
-# and the rest will be taken care of automatically.
+# Manual pages: every notebook in core/algorithms and core/properties
+# gets a page. Re-run cmake after adding a new one.
 
-set(ALGOS
-  asym
-  slot_asym
-  canonicalise
-  collect_factors
-  collect_terms
-  combine
-  complete
-  decompose
-  decompose_product
-  distribute
-  drop_weight
-  einsteinify
-  eliminate_kronecker
-  eliminate_metric
-  eliminate_vielbein  
-  epsilon_to_delta
-  evaluate
-  expand
-  expand_delta
-  expand_diracbar
-  expand_power
-  explicit_indices
-  factor_in
-  factor_out
-  fierz
-  integrate_by_parts
-  join_gamma
-  keep_weight
-  lower_free_indices
-  lr_tensor
-  map_sympy
-  meld
-  ndsolve
-  nevaluate
-  nval
-  product_rule
-  raise_free_indices
-  reduce_delta
-  rename_dummies
-  replace_match
-  rewrite_indices
-  simplify
-  sort_product
-  sort_spinors
-  sort_sum
-  split_gamma
-  split_index
-  substitute
-  take_match
-  untrace
-  unwrap
-  vary
-  young_project_product
-  young_project_tensor
-  zoom
-)
-set(PROPS
-  Accent
-  AntiCommuting
-  AntiSymmetric
-  CommutingAsProduct
-  CommutingAsSum
-  Commuting
-  Coordinate
-  DAntiSymmetric
-  Depends
-  Derivative
-  Determinant
-  Diagonal
-  DiracBar
-  Distributable
-  EpsilonTensor
-  FilledTableau
-  GammaMatrix
-  ImplicitIndex
-  IndexInherit
-  Indices
-  Integer
-  InverseMetric
-  KroneckerDelta
-  LaTeXForm
-  Metric
-  NonCommuting
-  PartialDerivative
-  RiemannTensor
-  SatisfiesBianchi
-  SelfAntiCommuting
-  SelfCommuting
-  SelfNonCommuting
-  SortOrder
-  Spinor
-  Symbol
-  Symmetric
-  Tableau
-  TableauSymmetry
-  Weight
-  WeightInherit
-)
+file(GLOB ALGO_CNBS RELATIVE ${ALGODIR} ${ALGODIR}/*.cnb)
+string(REPLACE ".cnb" "" ALGOS "${ALGO_CNBS}")
+list(SORT ALGOS)
+file(GLOB PROP_CNBS RELATIVE ${PROPDIR} ${PROPDIR}/*.cnb)
+string(REPLACE ".cnb" "" PROPS "${PROP_CNBS}")
+list(SORT PROPS)
 
 # Packages
 
@@ -208,6 +115,7 @@ set(PACKAGES
   cdb/core/manip
   cdb/core/component
   cdb/core/trace
+  cdb/core/trigrat
   cdb/utils/develop
   cdb/utils/indices
   cdb/utils/node  
@@ -226,14 +134,17 @@ set(PACKAGES
 set(SCAN ${CMAKE_SOURCE_DIR}/web2/scan.py)
 
 add_custom_target(algo_toc ALL 
-                  COMMAND ${SCAN} ${ALGODIR} ${ALGOS} > ${TOCOUTDIR}/algo_toc.html
+                  COMMAND ${SCAN} algorithms ${ALGODIR} > ${TOCOUTDIR}/algo_toc.html
                   COMMENT "Creating algorithms table-of-contents...")
 add_custom_target(prop_toc ALL 
-                  COMMAND ${SCAN} ${PROPDIR} ${PROPS} > ${TOCOUTDIR}/prop_toc.html
+                  COMMAND ${SCAN} properties ${PROPDIR} > ${TOCOUTDIR}/prop_toc.html
                   COMMENT "Creating properties table-of-contents...")
 add_custom_target(package_toc ALL 
-                  COMMAND ${SCAN} ${PACKAGEDIR} ${PACKAGES} > ${TOCOUTDIR}/packages_toc.html
+                  COMMAND ${SCAN} packages ${PACKAGEDIR} ${PACKAGES} > ${TOCOUTDIR}/packages_toc.html
                   COMMENT "Creating packages table-of-contents...")
+add_custom_target(az_toc ALL 
+                  COMMAND ${SCAN} az ${ALGODIR} ${PROPDIR} ${PACKAGEDIR} ${PACKAGES} > ${TOCOUTDIR}/az_toc.html
+                  COMMENT "Creating alphabetical manual index...")
 
 foreach(ALGO ${ALGOS})
    add_custom_command(OUTPUT  ${MANOUTDIR}/${ALGO}.html

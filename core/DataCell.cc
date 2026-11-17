@@ -123,8 +123,12 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex bigO(R"(\\bigO)");
 	std::regex latex(R"(\\LaTeX\{\})");
 	std::regex tex(R"(\\TeX\{\})");
-	std::regex algorithm(R"(\\algorithm\{([^\}]*)\}\{([^\}]*)\})");
-	std::regex property(R"(\\property\{([^\}]*)\}\{([^\}]*)\})");
+	// The heading gets an id with the bare name (no 'class ', no
+	// signature), so that the manual index can link to functions in
+	// package pages; this has to match bare_name in web2/scan.py. The
+	// summary may contain one level of nested braces.
+	std::regex algorithm(R"(\\algorithm\{((?:class )?)([A-Za-z0-9_\\]*)((?:[^{}]|\{[^{}]*\})*)\}\{((?:[^{}]|\{[^{}]*\})*)\})");
+	std::regex property(R"(\\property\{([A-Za-z0-9_\\]*)((?:[^{}]|\{[^{}]*\})*)\}\{((?:[^{}]|\{[^{}]*\})*)\})");
 	std::regex package(R"(\\package\{([^\}]*)\}\{([^\}]*)\})");
 	std::regex algo(R"(\\algo\{([^\}]*)\})");
 	std::regex prop(R"(\\prop\{([^\}]*)\})");
@@ -164,8 +168,8 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = std::regex_replace(res, verb, "<code>$1</code>");
 		res = std::regex_replace(res, url, "<a href=\"$1\">$1</a>");
 		res = std::regex_replace(res, href, "<a href=\"$1\">$2</a>");
-		res = std::regex_replace(res, algorithm, "<h2>$1</h2><div class=\"summary\">$2</div>");
-		res = std::regex_replace(res, property, "<h2>$1</h2><div class=\"summary\">$2</div>");
+		res = std::regex_replace(res, algorithm, "<h2 id=\"$2\">$1$2$3</h2><div class=\"summary\">$4</div>");
+		res = std::regex_replace(res, property, "<h2 id=\"$1\">$1$2</h2><div class=\"summary\">$3</div>");
 		res = std::regex_replace(res, package, "<h1>$1</h1><div class=\"summary\">$2</div>");
 		res = std::regex_replace(res, algo, "<a href=\"/manual/$1.html\"><code>$1</code></a>");
 		res = std::regex_replace(res, prop, "<a href=\"/manual/$1.html\"><code>$1</code></a>");

@@ -12,11 +12,11 @@
 					"cell_id" : 13263267438977636121,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\property{InverseVeilbein}{Makes a two-index object an inverse vielbein.}\n\nThe partner of \\verb|Vielbein|. See\nthe \\verb|eliminate_vielbein| command for more information on\ntypical usage patterns."
+					"source" : "\\property{InverseVielbein}{Makes a two-index object an inverse vielbein.}\n\nThe partner of \\verb|Vielbein|. See\nthe \\verb|eliminate_vielbein| command for more information on\ntypical usage patterns."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\property{InverseVeilbein}{Makes a two-index object an inverse vielbein.}\n\nThe partner of \\verb|Vielbein|. See\nthe \\verb|eliminate_vielbein| command for more information on\ntypical usage patterns."
+			"source" : "\\property{InverseVielbein}{Makes a two-index object an inverse vielbein.}\n\nThe partner of \\verb|Vielbein|. See\nthe \\verb|eliminate_vielbein| command for more information on\ntypical usage patterns."
 		},
 		{
 			"cell_id" : 421681981131674138,

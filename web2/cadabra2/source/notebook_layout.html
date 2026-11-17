@@ -1,3 +1,20 @@
 {% extends "layout.html" %}
 
 {% block page_class %}notebook{% endblock %}
+
+{# Manual pages and tutorials are both generated from notebooks by
+   cadabra2html; tell them apart by their location. 'request.path' is
+   'manual/canonicalise.html' or 'manual/cdb/core/manip.html' when
+   building, with an extra leading '/' in 'clay run'. #}
+{% block breadcrumb %}
+{% set page = request.path.rsplit(".", 1)[0] %}
+{% if "manual/" in page %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">Home</a><a href="/man.html">Reference manual</a><code>{{ page.split("manual/")[-1].replace("/", ".") }}</code>
+</nav>
+{% elif "notebooks/" in page %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">Home</a><a href="/tutorials.html">Tutorials</a>{{ page.split("/")[-1].replace("_", " ") | capitalize }}
+</nav>
+{% endif %}
+{% endblock %}
