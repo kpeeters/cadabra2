@@ -111,6 +111,13 @@ code, tt, kbd {
   outline-offset: 2px;
 }
 
+/* Selected text: a pale brand green behind the normal text colour,
+   so that long selections stay readable. */
+::selection {
+  background: var(--green-mid);
+  color: var(--ink);
+}
+
 
 /* ---------- 3. Top bar and menus ---------- */
 
@@ -141,7 +148,7 @@ code, tt, kbd {
   color: var(--ink);
 }
 .brand:hover { color: var(--ink); text-decoration: none; }
-.brand img { width: 30px; height: auto; }
+.brand img { width: 30px; height: auto; margin-bottom: 5px; }
 .brand span {
   font-family: var(--serif);
   font-size: 27px;
@@ -1008,8 +1015,9 @@ div.latex {
 }
 div.latex div.output { display: none; }
 
-/* input cells: tinted block at the left margin, with a small
-   "In" label in its top right corner */
+/* input cells: tinted block at the left margin, with a
+   copy-to-clipboard button (added by cadabra.js) in its top right
+   corner */
 div.python {
   max-width: 52rem;
   margin: 18px 0 6px;
@@ -1017,7 +1025,7 @@ div.python {
 div.python > div.source {
   position: relative;
   margin: 0 0 6px 0;
-  padding: 9px 36px 9px 14px;   /* room on the right for the label */
+  padding: 9px 40px 9px 14px;   /* room on the right for the button */
   background: var(--tint);
   border-radius: 6px;
   font-family: var(--mono);
@@ -1029,15 +1037,35 @@ div.python > div.source {
   tab-size: 3;
   -moz-tab-size: 3;
 }
-div.python > div.source::before {
-  content: "In";
+button.copy-code {
   position: absolute;
-  right: 10px;
-  top: 11px;
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 500;
+  top: 5px;
+  right: 5px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity .15s, background .15s, border-color .15s;
+}
+div.python > div.source:hover button.copy-code,
+button.copy-code:focus-visible { opacity: 1; }
+button.copy-code:hover {
+  color: var(--green-text);
+  background: var(--surface);
+  border-color: var(--rule);
+}
+button.copy-code.copied { color: var(--green-text); opacity: 1; }
+button.copy-code svg { width: 16px; height: 16px; }
+@media (hover: none) {
+  button.copy-code { opacity: 1; }
 }
 
 /* outputs: indented, no box */
@@ -1159,7 +1187,8 @@ dl.man-list {
   font-size: 16px;
   line-height: 1.4;
 }
-.man-entry[hidden], .man-topic[hidden], .man-az[hidden] { display: none; }
+.man-entry[hidden], .man-topic[hidden], .man-section[hidden],
+.man-az[hidden], .chips a[hidden] { display: none; }
 #main .man-entry dt {
   font-family: var(--serif);
   font-size: 16px;
@@ -1368,7 +1397,6 @@ div.github-link a img { width: 100%; }
   div.book_cover { width: 60%; }
 
   div.python > div.source { margin-left: 0; }
-  div.python > div.source::before { display: none; }
   div.output,
   pre.output,
   div.verbatim,

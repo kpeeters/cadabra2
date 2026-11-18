@@ -1,0 +1,984 @@
+{
+	"cell_id": 9028834938521568656,
+	"cells": [
+		{
+			"cell_id": 6051822203420875133,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6051822203420875133,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\section*{Local supersymmetry of $N=1$, $d=4$ supergravity}\n\nThis notebook shows that the action of $N=1$ supergravity in four dimensions is\ninvariant under local supersymmetry. It is a more complete version of the example\nin section~3 of hep-th/0701238, and follows the discussion in sections~1.6 and 1.7 of\nP.~van~Nieuwenhuizen, \\emph{Supergravity}, Phys.~Rept.~68 (1981) 189 (referred to as vN below),\nstep by step.\n\nWe use the 1.5 order formalism: the spin connection $\\omega_\\mu{}^{mn}=\\omega_\\mu{}^{mn}(e,\\psi)$\nsolves its own field equation, so its variation never has to be computed and we can set\n$\\delta\\omega=0$. Only the vielbeine and gravitini which appear explicitly in the action are varied.\nConventions: $\\kappa=1$, Pauli metric (so the flat metric is $\\delta_{mn}$), and\n\\begin{equation*}\n\\delta e^m{}_\\mu = \\tfrac{1}{2}\\bar\\epsilon\\Gamma^m\\psi_\\mu\\,,\\qquad\n\\delta\\psi_\\mu = D_\\mu\\epsilon\\,,\\qquad\nD_\\mu\\epsilon = \\partial_\\mu\\epsilon + \\tfrac{1}{4}\\omega_\\mu{}^{mn}\\Gamma_{mn}\\epsilon\\,.\n\\end{equation*}\nThe covariant derivative $D_\\mu$ contains only the spin connection, not a Christoffel\nconnection."
+				}
+			],
+			"hidden": true,
+			"source": "\\section*{Local supersymmetry of $N=1$, $d=4$ supergravity}\n\nThis notebook shows that the action of $N=1$ supergravity in four dimensions is\ninvariant under local supersymmetry. It is a more complete version of the example\nin section~3 of hep-th/0701238, and follows the discussion in sections~1.6 and 1.7 of\nP.~van~Nieuwenhuizen, \\emph{Supergravity}, Phys.~Rept.~68 (1981) 189 (referred to as vN below),\nstep by step.\n\nWe use the 1.5 order formalism: the spin connection $\\omega_\\mu{}^{mn}=\\omega_\\mu{}^{mn}(e,\\psi)$\nsolves its own field equation, so its variation never has to be computed and we can set\n$\\delta\\omega=0$. Only the vielbeine and gravitini which appear explicitly in the action are varied.\nConventions: $\\kappa=1$, Pauli metric (so the flat metric is $\\delta_{mn}$), and\n\\begin{equation*}\n\\delta e^m{}_\\mu = \\tfrac{1}{2}\\bar\\epsilon\\Gamma^m\\psi_\\mu\\,,\\qquad\n\\delta\\psi_\\mu = D_\\mu\\epsilon\\,,\\qquad\nD_\\mu\\epsilon = \\partial_\\mu\\epsilon + \\tfrac{1}{4}\\omega_\\mu{}^{mn}\\Gamma_{mn}\\epsilon\\,.\n\\end{equation*}\nThe covariant derivative $D_\\mu$ contains only the spin connection, not a Christoffel\nconnection."
+		},
+		{
+			"cell_id": 1879326238865626154,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 1879326238865626154,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Declarations}\n\nFlat (tangent space) indices are Latin and curved indices are Greek. Curved indices have\n\\verb|position=independent|, so Cadabra never raises or lowers them by itself, and every\nchange of index type has to go through an explicit vielbein $e^m{}_\\mu$ or inverse\nvielbein $e_m{}^\\mu$. Flat indices are raised and lowered with $\\delta_{mn}$."
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{Declarations}\n\nFlat (tangent space) indices are Latin and curved indices are Greek. Curved indices have\n\\verb|position=independent|, so Cadabra never raises or lowers them by itself, and every\nchange of index type has to go through an explicit vielbein $e^m{}_\\mu$ or inverse\nvielbein $e_m{}^\\mu$. Flat indices are raised and lowered with $\\delta_{mn}$. The range of the flat indices tells \\verb|join_gamma| that we are in four dimensions, so that products of gamma matrices never produce more than four antisymmetrised gammas."
+		},
+		{
+			"cell_id": 686592541403325356,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "{m,n,p,q,r,s,t,u,v,w}::Indices(flat, position=fixed).\n{m,n,p,q,r,s,t,u,v,w}::Integer(1..4).\n{\\mu,\\nu,\\rho,\\sigma,\\kappa,\\lambda,\\alpha,\\beta}::Indices(curved, position=independent).\n\\delta{#}::KroneckerDelta.\n\\delta_{m n}::Metric.\n\\delta^{m n}::InverseMetric.\ne^{m}_{\\mu}::Vielbein.\ne_{m}^{\\mu}::InverseVielbein."
+		},
+		{
+			"cell_id": 6941258417204097291,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 6941258417204097291,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The gravitino $\\psi_\\mu$ and the supersymmetry parameter $\\epsilon$ are anti-commuting Majorana spinors.\nIndex symmetries are attached to the exact index pattern they are declared with\n(the indices are not \\verb|position=free|), so the curvature is declared and used as\n$R_{\\mu\\nu}{}^{mn}$ throughout."
+				}
+			],
+			"hidden": true,
+			"source": "The gravitino $\\psi_\\mu$ and the supersymmetry parameter $\\epsilon$ are anti-commuting Majorana spinors.\nIndex symmetries are attached to the exact index pattern they are declared with\n(the indices are not \\verb|position=free|), so the curvature is declared and used as\n$R_{\\mu\\nu}{}^{mn}$ throughout."
+		},
+		{
+			"cell_id": 2076193461616351723,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "\\partial{#}::PartialDerivative.\nD{#}::Derivative.\n\\bar{#}::DiracBar.\n\\Gamma{#}::GammaMatrix(metric=\\delta).\n{\\epsilon, \\psi_{\\mu}}::Spinor(dimension=4, type=Majorana).\n{\\epsilon, \\psi_{\\mu}}::AntiCommuting.\n\\psi_{\\mu}::SelfAntiCommuting.\n{\\epsilon, \\psi_{\\mu}}::SortOrder.\n\\Gamma{#}::Depends(\\bar{#}).\n\\omega_{\\mu}^{m n}::TableauSymmetry(shape={1,1}, indices={1,2}).\nR_{\\mu\\nu}^{m n}::TableauSymmetry(shape={1,1}, indices={0,1}, shape={1,1}, indices={2,3}).\n{\\epsilon, \\psi_{\\mu}, \\omega_{\\mu}^{m n}}::Depends(\\partial{#})."
+		},
+		{
+			"cell_id": 2915406222861325085,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 2915406222861325085,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Curvature conventions}\n\nEvery sign in what follows depends on the normalisation of the commutator of two covariant\nderivatives, so we check that first. With the covariant derivative given above, we want\n\\begin{equation*}\n[D_\\mu, D_\\nu]\\psi_\\rho = \\tfrac{1}{4} R_{\\mu\\nu}{}^{mn}\\Gamma_{mn}\\psi_\\rho\\,,\n\\end{equation*}\nwhich is vN~1.7 eq.~(3) (with $\\tfrac12\\sigma^{ab} = \\tfrac14\\Gamma^{ab}$).\nNote that $D_\\mu$ acts only on the spinor index of $\\psi_\\rho$."
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{Curvature conventions}\n\nEvery sign in what follows depends on the normalisation of the commutator of two covariant\nderivatives, so we check that first. With the covariant derivative given above, we want\n\\begin{equation*}\n[D_\\mu, D_\\nu]\\psi_\\rho = \\tfrac{1}{4} R_{\\mu\\nu}{}^{mn}\\Gamma_{mn}\\psi_\\rho\\,,\n\\end{equation*}\nwhich is vN~1.7 eq.~(3) (with $\\tfrac12\\sigma^{ab} = \\tfrac14\\Gamma^{ab}$).\nNote that $D_\\mu$ acts only on the spinor index of $\\psi_\\rho$."
+		},
+		{
+			"cell_id": 6486733545005064638,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 7058866463720637668,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5814671559718603462,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "D_{\\mu}(A??) -> \\partial_{\\mu}(A??) +  1/4 \\omega_{\\mu}^{m n} \\Gamma_{m n} A??"
+						}
+					],
+					"source": "\\begin{dmath*}{}D_{\\mu}\\left(A??\\right) \\rightarrow \\partial_{\\mu}\\left(A??\\right)\\discretionary{}{}{}+\\frac{1}{4}\\,\\omega_{\\mu}\\,^{m n} \\Gamma_{m n} A??\\end{dmath*}"
+				},
+				{
+					"cell_id": 4002836190808742296,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3246966802452409535,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "D_{\\mu}(D_{\\nu}(\\psi_{\\rho}))-D_{\\nu}(D_{\\mu}(\\psi_{\\rho}))"
+						}
+					],
+					"source": "\\begin{dmath*}{}D_{\\mu}{D_{\\nu}{\\psi_{\\rho}}}\\discretionary{}{}{}-\\,D_{\\nu}{D_{\\mu}{\\psi_{\\rho}}}\\end{dmath*}"
+				}
+			],
+			"source": "covd:= D_{\\mu}{A??} -> \\partial_{\\mu}{A??} + 1/4 \\omega_{\\mu}^{m n} \\Gamma_{m n} A??;\ncomm:= D_{\\mu}{D_{\\nu}{\\psi_{\\rho}}} - D_{\\nu}{D_{\\mu}{\\psi_{\\rho}}};"
+		},
+		{
+			"cell_id": 6471960420569254721,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16128203795813409030,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13597728067552588782,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/4 \\Gamma_{m n} \\partial_{\\mu}(\\omega_{\\nu}^{m n}) \\psi_{\\rho} -  1/2 \\Gamma^{m n} \\delta^{p q} \\omega_{\\mu m p} \\omega_{\\nu n q} \\psi_{\\rho} -  1/4 \\Gamma_{m n} \\partial_{\\nu}(\\omega_{\\mu}^{m n}) \\psi_{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{4}\\,\\Gamma_{m n} \\partial_{\\mu}{\\omega_{\\nu}\\,^{m n}} \\psi_{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,\\Gamma^{m n} \\delta^{p q} \\omega_{\\mu m p} \\omega_{\\nu n q} \\psi_{\\rho}\\discretionary{}{}{} - \\frac{1}{4}\\,\\Gamma_{m n} \\partial_{\\nu}{\\omega_{\\mu}\\,^{m n}} \\psi_{\\rho}\\end{dmath*}"
+				}
+			],
+			"source": "substitute(comm, covd, repeat=True)\ndistribute(comm)\nproduct_rule(comm)\ndistribute(comm)\nsort_product(comm)\njoin_gamma(comm)\ndistribute(comm)\nunwrap(comm)\ncanonicalise(comm)\nrename_dummies(comm);"
+		},
+		{
+			"cell_id": 2004490190127142813,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 2004490190127142813,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "This should equal $\\tfrac14 R_{\\mu\\nu}{}^{mn}\\Gamma_{mn}\\psi_\\rho$, with the curvature of the spin connection given by"
+				}
+			],
+			"hidden": true,
+			"source": "This should equal $\\tfrac14 R_{\\mu\\nu}{}^{mn}\\Gamma_{mn}\\psi_\\rho$, with the curvature of the spin connection given by"
+		},
+		{
+			"cell_id": 8053229271077692838,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13971251494127343541,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8093380525762945791,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R_{\\mu \\nu}^{m n} -> \\partial_{\\mu}(\\omega_{\\nu}^{m n})-\\partial_{\\nu}(\\omega_{\\mu}^{m n}) + \\omega_{\\mu}^{m q} \\delta_{q p} \\omega_{\\nu}^{p n}-\\omega_{\\nu}^{m q} \\delta_{q p} \\omega_{\\mu}^{p n}"
+						}
+					],
+					"source": "\\begin{dmath*}{}R_{\\mu \\nu}\\,^{m n} \\rightarrow \\partial_{\\mu}{\\omega_{\\nu}\\,^{m n}}\\discretionary{}{}{}-\\,\\partial_{\\nu}{\\omega_{\\mu}\\,^{m n}}\\discretionary{}{}{}+\\omega_{\\mu}\\,^{m q} \\delta_{q p} \\omega_{\\nu}\\,^{p n}\\discretionary{}{}{}-\\,\\omega_{\\nu}\\,^{m q} \\delta_{q p} \\omega_{\\mu}\\,^{p n}\\end{dmath*}"
+				}
+			],
+			"source": "Rdef:= R_{\\mu\\nu}^{m n} -> \\partial_{\\mu}{\\omega_{\\nu}^{m n}} - \\partial_{\\nu}{\\omega_{\\mu}^{m n}}\n         + \\omega_{\\mu}^{m q} \\delta_{q p} \\omega_{\\nu}^{p n} - \\omega_{\\nu}^{m q} \\delta_{q p} \\omega_{\\mu}^{p n};"
+		},
+		{
+			"cell_id": 2114172826559709258,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 10238825755468998861,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10307075342703004462,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/4 \\Gamma_{m n} \\partial_{\\mu}(\\omega_{\\nu}^{m n}) \\psi_{\\rho} -  1/2 \\Gamma^{m n} \\delta^{p q} \\omega_{\\mu m p} \\omega_{\\nu n q} \\psi_{\\rho} -  1/4 \\Gamma_{m n} \\partial_{\\nu}(\\omega_{\\mu}^{m n}) \\psi_{\\rho} -  1/4 R_{\\mu \\nu}^{m n} \\Gamma_{m n} \\psi_{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{4}\\,\\Gamma_{m n} \\partial_{\\mu}{\\omega_{\\nu}\\,^{m n}} \\psi_{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,\\Gamma^{m n} \\delta^{p q} \\omega_{\\mu m p} \\omega_{\\nu n q} \\psi_{\\rho}\\discretionary{}{}{} - \\frac{1}{4}\\,\\Gamma_{m n} \\partial_{\\nu}{\\omega_{\\mu}\\,^{m n}} \\psi_{\\rho}\\discretionary{}{}{} - \\frac{1}{4}\\,R_{\\mu \\nu}\\,^{m n} \\Gamma_{m n} \\psi_{\\rho}\\end{dmath*}"
+				},
+				{
+					"cell_id": 4332017163119509065,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 12622594282158696546,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0"
+						}
+					],
+					"source": "\\begin{dmath*}{}0\\,\\end{dmath*}"
+				}
+			],
+			"source": "chk:= @(comm) - 1/4 R_{\\mu\\nu}^{m n} \\Gamma_{m n} \\psi_{\\rho};\nsubstitute(chk, Rdef)\ndistribute(chk)\nsort_product(chk)\ncanonicalise(chk)\nrename_dummies(chk)\ncollect_terms(chk);"
+		},
+		{
+			"cell_id": 5014460475085604179,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 5014460475085604179,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{The action}\n\nThe action is the sum of the Hilbert action $\\mathcal{L}^{(2)}$ and the Rarita-Schwinger action\n$\\mathcal{L}^{(3/2)}$ (vN~1.7 eq.~(1)). We keep the two parts separate, so we can follow\nwhich terms in the variation cancel against which. In vN the Hilbert action is written\nas $-\\tfrac12 e\\, e^{a\\nu} e^{b\\mu} R_{\\mu\\nu ab}$:"
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{The action}\n\nThe action is the sum of the Hilbert action $\\mathcal{L}^{(2)}$ and the Rarita-Schwinger action\n$\\mathcal{L}^{(3/2)}$ (vN~1.7 eq.~(1)). We keep the two parts separate, so we can follow\nwhich terms in the variation cancel against which. In vN the Hilbert action is written\nas $-\\tfrac12 e\\, e^{a\\nu} e^{b\\mu} R_{\\mu\\nu ab}$:"
+		},
+		{
+			"cell_id": 3413071379190433056,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 2332521986876752520,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8882940155169786358,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 e e_{m}^{\\nu} e_{n}^{\\mu} R_{\\mu \\nu}^{m n}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,e e_{m}\\,^{\\nu} e_{n}\\,^{\\mu} R_{\\mu \\nu}\\,^{m n}\\end{dmath*}"
+				}
+			],
+			"source": "L2:= -1/2 e e_{m}^{\\nu} e_{n}^{\\mu} R_{\\mu\\nu}^{m n};"
+		},
+		{
+			"cell_id": 1920814257899668885,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 1920814257899668885,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "vN writes the gravitino action as\n$-\\tfrac12\\epsilon^{\\mu\\nu\\rho\\sigma}\\bar\\psi_\\mu\\gamma_5\\gamma_\\nu D_\\rho\\psi_\\sigma$.\nIn four dimensions $\\epsilon^{\\mu\\nu\\rho\\sigma}\\gamma_5\\gamma_\\nu$ is proportional to\n$e\\,\\Gamma^{\\mu\\rho\\sigma}$, so we can write the action without $\\gamma_5$ or an epsilon\ntensor. The overall normalisation of this term relative to $\\mathcal{L}^{(2)}$ is checked\nlater, when the Einstein tensor terms of the two parts have to cancel.\nThe curved indices on the gamma matrix are converted to flat ones, so that the vielbeine\nappear explicitly and can be varied."
+				}
+			],
+			"hidden": true,
+			"source": "vN writes the gravitino action as\n$-\\tfrac12\\epsilon^{\\mu\\nu\\rho\\sigma}\\bar\\psi_\\mu\\gamma_5\\gamma_\\nu D_\\rho\\psi_\\sigma$.\nIn four dimensions $\\epsilon^{\\mu\\nu\\rho\\sigma}\\gamma_5\\gamma_\\nu$ is proportional to\n$e\\,\\Gamma^{\\mu\\rho\\sigma}$, so we can write the action without $\\gamma_5$ or an epsilon\ntensor. The overall normalisation of this term relative to $\\mathcal{L}^{(2)}$ is checked\nlater, when the Einstein tensor terms of the two parts have to cancel.\nThe curved indices on the gamma matrix are converted to flat ones, so that the vielbeine\nappear explicitly and can be varied."
+		},
+		{
+			"cell_id": 3279525101560688823,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3966397514781623942,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6022130471651236587,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 e \\bar{\\psi_{\\mu}} \\Gamma^{\\mu \\nu \\rho} D_{\\nu}(\\psi_{\\rho})"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,e \\bar{\\psi_{\\mu}} \\Gamma^{\\mu \\nu \\rho} D_{\\nu}{\\psi_{\\rho}}\\end{dmath*}"
+				},
+				{
+					"cell_id": 14620951963464074780,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5834651223266015881,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\end{dmath*}"
+				}
+			],
+			"source": "L32:= -1/2 e \\bar{\\psi_{\\mu}} \\Gamma^{\\mu\\nu\\rho} D_{\\nu}{\\psi_{\\rho}};\nrewrite_indices(_, $\\Gamma^{m n p}$, $e_{m}^{\\mu}$);"
+		},
+		{
+			"cell_id": 889822531485330783,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 889822531485330783,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Transformation rules}\n\nFrom $\\delta e^m{}_\\mu = \\tfrac12\\bar\\epsilon\\Gamma^m\\psi_\\mu$ and $\\delta(e^m{}_\\mu e_n{}^\\mu)=0$\nit follows that the inverse vielbein transforms as\n$\\delta e_m{}^\\mu = -e_m{}^\\nu\\,(\\delta e^n{}_\\nu)\\, e_n{}^\\mu$. The variation of the\ndeterminant is $\\delta e = e\\, e_m{}^\\mu\\delta e^m{}_\\mu$. These are the explicit\nvielbeine of vN~1.7 eq.~(1). The gravitini are varied separately, later."
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{Transformation rules}\n\nFrom $\\delta e^m{}_\\mu = \\tfrac12\\bar\\epsilon\\Gamma^m\\psi_\\mu$ and $\\delta(e^m{}_\\mu e_n{}^\\mu)=0$\nit follows that the inverse vielbein transforms as\n$\\delta e_m{}^\\mu = -e_m{}^\\nu\\,(\\delta e^n{}_\\nu)\\, e_n{}^\\mu$. The variation of the\ndeterminant is $\\delta e = e\\, e_m{}^\\mu\\delta e^m{}_\\mu$. These are the explicit\nvielbeine of vN~1.7 eq.~(1). The gravitini are varied separately, later."
+		},
+		{
+			"cell_id": 8714237158517167456,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 1556463670173196053,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11659552000276077405,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "{e_{m}^{\\mu} ->  -  1/2 \\bar{\\epsilon} \\Gamma^{n} \\psi_{\\nu} e_{m}^{\\nu} e_{n}^{\\mu}, e ->  1/2 e \\bar{\\epsilon} \\Gamma^{m} \\psi_{\\mu} e_{m}^{\\mu}}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left[e_{m}\\,^{\\mu} \\rightarrow  - \\frac{1}{2}\\,\\bar{\\epsilon} \\Gamma^{n} \\psi_{\\nu} e_{m}\\,^{\\nu} e_{n}\\,^{\\mu}, \\discretionary{}{}{}e \\rightarrow \\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m} \\psi_{\\mu} e_{m}\\,^{\\mu}\\right]\\end{dmath*}"
+				}
+			],
+			"source": "dvb:= { e_{m}^{\\mu} -> -1/2 \\bar{\\epsilon}\\Gamma^{n}\\psi_{\\nu} e_{m}^{\\nu} e_{n}^{\\mu},\n        e -> 1/2 e \\bar{\\epsilon}\\Gamma^{m}\\psi_{\\mu} e_{m}^{\\mu} };"
+		},
+		{
+			"cell_id": 4780283821124169040,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 4780283821124169040,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Variation of the vielbeine in the Hilbert action}\n\nWe start with the variation of the explicit vielbeine in $\\mathcal{L}^{(2)}$, vN~1.7 eq.~(2)."
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{Variation of the vielbeine in the Hilbert action}\n\nWe start with the variation of the explicit vielbeine in $\\mathcal{L}^{(2)}$, vN~1.7 eq.~(2)."
+		},
+		{
+			"cell_id": 3599411224642237442,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 8481275723630444103,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9957732519894068813,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 e e_{m}^{\\nu} e_{n}^{\\mu} R_{\\mu \\nu}^{m n}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,e e_{m}\\,^{\\nu} e_{n}\\,^{\\mu} R_{\\mu \\nu}\\,^{m n}\\end{dmath*}"
+				},
+				{
+					"cell_id": 5546588015077609886,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16547866967076756386,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/4 R_{\\mu \\nu}^{m n} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} -  1/2 R_{\\mu \\nu}^{m n} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e_{m}^{\\mu} e_{n}^{\\rho} e_{p}^{\\nu}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{4}\\,R_{\\mu \\nu}\\,^{m n} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,R_{\\mu \\nu}\\,^{m n} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e_{m}\\,^{\\mu} e_{n}\\,^{\\rho} e_{p}\\,^{\\nu}\\end{dmath*}"
+				}
+			],
+			"source": "dL2:= @(L2);\nvary(dL2, dvb)\ndistribute(dL2)\nsort_product(dL2)\ncanonicalise(dL2)\nrename_dummies(dL2)\ncollect_terms(dL2);"
+		},
+		{
+			"cell_id": 1978409198700377821,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 1978409198700377821,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "This should be equal to\n\\begin{equation*}\n\\delta\\mathcal{L}^{(2)} = \\frac{e}{2}\\big(\\bar\\epsilon\\gamma^\\nu\\psi^a\\big)\\, G_{\\nu a}\\,,\\qquad\nG_{\\nu a} = R_{\\nu a} - \\tfrac12 e_{a\\nu} R\\,,\\qquad R_{\\nu a} = R_{\\mu\\nu ab}\\, e^{b\\mu}\\,.\n\\end{equation*}\nWritten out with all vielbeine explicit, this is"
+				}
+			],
+			"hidden": true,
+			"source": "This should be equal to\n\\begin{equation*}\n\\delta\\mathcal{L}^{(2)} = \\frac{e}{2}\\big(\\bar\\epsilon\\gamma^\\nu\\psi^a\\big)\\, G_{\\nu a}\\,,\\qquad\nG_{\\nu a} = R_{\\nu a} - \\tfrac12 e_{a\\nu} R\\,,\\qquad R_{\\nu a} = R_{\\mu\\nu ab}\\, e^{b\\mu}\\,.\n\\end{equation*}\nWritten out with all vielbeine explicit, this is"
+		},
+		{
+			"cell_id": 2138589404594887461,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 1334700269742162545,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9388366540881573104,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/2 e \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e_{p}^{\\nu} e_{q}^{\\rho} (R_{\\mu \\nu}^{q r} e_{r}^{\\mu} -  1/2 e^{q}_{\\nu} R_{\\sigma \\lambda}^{s t} e_{s}^{\\lambda} e_{t}^{\\sigma})"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e_{p}\\,^{\\nu} e_{q}\\,^{\\rho} \\left(R_{\\mu \\nu}\\,^{q r} e_{r}\\,^{\\mu}\\discretionary{}{}{} - \\frac{1}{2}\\,e^{q}\\,_{\\nu} R_{\\sigma \\lambda}\\,^{s t} e_{s}\\,^{\\lambda} e_{t}\\,^{\\sigma}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 16857450850332051000,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13610419571875062544,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 R_{\\mu \\nu}^{m n} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e_{m}^{\\mu} e_{n}^{\\rho} e_{p}^{\\nu} +  1/4 R_{\\mu \\nu}^{m n} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,R_{\\mu \\nu}\\,^{m n} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e_{m}\\,^{\\mu} e_{n}\\,^{\\rho} e_{p}\\,^{\\nu}\\discretionary{}{}{}+\\frac{1}{4}\\,R_{\\mu \\nu}\\,^{m n} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\end{dmath*}"
+				}
+			],
+			"source": "eins:= 1/2 e \\bar{\\epsilon}\\Gamma^{p}\\psi_{\\rho} e_{p}^{\\nu} e_{q}^{\\rho}\n       ( R_{\\mu\\nu}^{q r} e_{r}^{\\mu} - 1/2 e^{q}_{\\nu} R_{\\sigma\\lambda}^{s t} e_{s}^{\\lambda} e_{t}^{\\sigma} );\ndistribute(eins)\nsubstitute(eins, $e^{q}_{\\nu} e_{q}^{\\rho} -> \\delta_{\\nu}^{\\rho}$)\neliminate_kronecker(eins)\nsort_product(eins)\ncanonicalise(eins)\nrename_dummies(eins);"
+		},
+		{
+			"cell_id": 4557488290435542420,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 4557488290435542420,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "The difference with the result of the variation vanishes:"
+				}
+			],
+			"hidden": true,
+			"source": "The difference with the result of the variation vanishes:"
+		},
+		{
+			"cell_id": 1993750131607482182,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 18025428637321427457,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1397558858697805160,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0"
+						}
+					],
+					"source": "\\begin{dmath*}{}0\\,\\end{dmath*}"
+				},
+				{
+					"cell_id": 17980721536616931953,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13878312914844589174,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0"
+						}
+					],
+					"source": "\\begin{dmath*}{}0\\,\\end{dmath*}"
+				}
+			],
+			"source": "chk2:= @(dL2) - @(eins);\ncanonicalise(chk2)\nrename_dummies(chk2)\ncollect_terms(chk2);"
+		},
+		{
+			"cell_id": 4436317864282661553,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 4436317864282661553,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Only the antisymmetry of $R_{\\mu\\nu}{}^{mn}$ in both index pairs was used here. The pair\nexchange symmetry does not hold, because the connection $\\omega(e,\\psi)$ has torsion."
+				}
+			],
+			"hidden": true,
+			"source": "Only the antisymmetry of $R_{\\mu\\nu}{}^{mn}$ in both index pairs was used here. The pair\nexchange symmetry does not hold, because the connection $\\omega(e,\\psi)$ has torsion."
+		},
+		{
+			"cell_id": 4763711306635414724,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 4763711306635414724,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{Variation of the gravitini}\n\nThe gravitino appears twice in $\\mathcal{L}^{(3/2)}$, so varying it gives two terms:\none with $\\delta\\psi_\\rho = D_\\rho\\epsilon$ and one with\n$\\delta\\bar\\psi_\\mu = \\overline{D_\\mu\\epsilon}$."
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{Variation of the gravitini}\n\nThe gravitino appears twice in $\\mathcal{L}^{(3/2)}$, so varying it gives two terms:\none with $\\delta\\psi_\\rho = D_\\rho\\epsilon$ and one with\n$\\delta\\bar\\psi_\\mu = \\overline{D_\\mu\\epsilon}$."
+		},
+		{
+			"cell_id": 7100106131957779036,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 6283153382889052647,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6275617277741929721,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\psi_{\\mu} -> D_{\\mu}(\\epsilon)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\psi_{\\mu} \\rightarrow D_{\\mu}{\\epsilon}\\end{dmath*}"
+				},
+				{
+					"cell_id": 7872901004653232381,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10668205259124335037,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\end{dmath*}"
+				},
+				{
+					"cell_id": 14893154796701981938,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10062172591858604424,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 e \\bar{D_{\\mu}(\\epsilon)} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} -  1/2 e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}(D_{\\rho}(\\epsilon)) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,e \\bar{D_{\\mu}{\\epsilon}} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}{D_{\\rho}{\\epsilon}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\end{dmath*}"
+				}
+			],
+			"source": "dpsi:= { \\psi_{\\mu} -> D_{\\mu}{\\epsilon} };\ndL32:= @(L32);\nvary(dL32, dpsi);"
+		},
+		{
+			"cell_id": 1999065386350794571,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 1999065386350794571,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "In the first term the two derivatives in $D_\\nu D_\\rho\\epsilon$ are antisymmetrised by\n$\\Gamma^{mnp}e_n{}^\\nu e_p{}^\\rho$, so we can replace them by half the commutator.\n$D_\\mu$ contains no Christoffel connection, so no torsion term appears, and the curvature\ncheck at the top gives $D_\\nu D_\\rho\\epsilon \\to \\tfrac18 R_{\\nu\\rho}{}^{mn}\\Gamma_{mn}\\epsilon$\n(vN~1.7 eq.~(3))."
+				}
+			],
+			"hidden": true,
+			"source": "In the first term the two derivatives in $D_\\nu D_\\rho\\epsilon$ are antisymmetrised by\n$\\Gamma^{mnp}e_n{}^\\nu e_p{}^\\rho$, so we can replace them by half the commutator.\n$D_\\mu$ contains no Christoffel connection, so no torsion term appears, and the curvature\ncheck at the top gives $D_\\nu D_\\rho\\epsilon \\to \\tfrac18 R_{\\nu\\rho}{}^{mn}\\Gamma_{mn}\\epsilon$\n(vN~1.7 eq.~(3))."
+		},
+		{
+			"cell_id": 8723932739694799219,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 11885174235014343986,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9838169647651943456,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 e \\bar{D_{\\mu}(\\epsilon)} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} -  1/2 e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}(D_{\\rho}(\\epsilon)) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,e \\bar{D_{\\mu}{\\epsilon}} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}{D_{\\rho}{\\epsilon}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\end{dmath*}"
+				},
+				{
+					"cell_id": 14092718823566551728,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17305226678677279301,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}(D_{\\rho}(\\epsilon)) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}{D_{\\rho}{\\epsilon}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\end{dmath*}"
+				},
+				{
+					"cell_id": 10753403620558273221,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8767699507930213786,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/16 e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} R_{\\nu \\rho}^{q r} \\Gamma_{q r} \\epsilon e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{16}\\,e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} R_{\\nu \\rho}\\,^{q r} \\Gamma_{q r} \\epsilon e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\end{dmath*}"
+				}
+			],
+			"source": "dpsiu:= @(dL32);\ntake_match(dpsiu, $D_{\\nu}{D_{\\rho}{\\epsilon}} A??$);\nsubstitute(dpsiu, $D_{\\nu}{D_{\\rho}{\\epsilon}} -> 1/8 R_{\\nu\\rho}^{m n} \\Gamma_{m n} \\epsilon$);"
+		},
+		{
+			"cell_id": 190780982038380153,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 190780982038380153,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "In the second term we use $\\overline{D_\\mu\\epsilon} = D_\\mu\\bar\\epsilon\n= \\partial_\\mu\\bar\\epsilon - \\tfrac14\\bar\\epsilon\\,\\omega_\\mu{}^{mn}\\Gamma_{mn}$ (vN~1.7 eq.~(8)),\nand integrate by parts to remove the derivative from $\\bar\\epsilon$. The total derivative is\nthe derivative of a Lorentz scalar, so $D_\\mu=\\partial_\\mu$ on it and we may drop it. Integrating\nby parts needs an integral, so we wrap the expression in one."
+				}
+			],
+			"hidden": true,
+			"source": "In the second term we use $\\overline{D_\\mu\\epsilon} = D_\\mu\\bar\\epsilon\n= \\partial_\\mu\\bar\\epsilon - \\tfrac14\\bar\\epsilon\\,\\omega_\\mu{}^{mn}\\Gamma_{mn}$ (vN~1.7 eq.~(8)),\nand integrate by parts to remove the derivative from $\\bar\\epsilon$. The total derivative is\nthe derivative of a Lorentz scalar, so $D_\\mu=\\partial_\\mu$ on it and we may drop it. Integrating\nby parts needs an integral, so we wrap the expression in one."
+		},
+		{
+			"cell_id": 5217632293539177705,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15212273453268337747,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9929176644204334167,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 e \\bar{D_{\\mu}(\\epsilon)} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} -  1/2 e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}(D_{\\rho}(\\epsilon)) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,e \\bar{D_{\\mu}{\\epsilon}} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}{D_{\\rho}{\\epsilon}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\end{dmath*}"
+				},
+				{
+					"cell_id": 13569458832388587985,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4039880009534905527,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 e \\bar{D_{\\mu}(\\epsilon)} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,e \\bar{D_{\\mu}{\\epsilon}} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\end{dmath*}"
+				},
+				{
+					"cell_id": 16203054358417871738,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5211584870876542387,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 e D_{\\mu}(\\bar{\\epsilon}) \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,e D_{\\mu}\\left(\\bar{\\epsilon}\\right) \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\end{dmath*}"
+				}
+			],
+			"source": "dpsibar:= @(dL32);\ntake_match(dpsibar, $\\bar{D_{\\mu}{\\epsilon}} A??$);\nsubstitute(dpsibar, $\\bar{D_{\\mu}{\\epsilon}} -> D_{\\mu}{\\bar{\\epsilon}}$);"
+		},
+		{
+			"cell_id": 6390312381762449976,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9855233395110943343,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4266047009076541887,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 \\int{e D_{\\mu}(\\bar{\\epsilon}) \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho}}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,\\int e D_{\\mu}\\left(\\bar{\\epsilon}\\right) \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\,\\,{\\rm d}x\\end{dmath*}"
+				},
+				{
+					"cell_id": 9421351350332008693,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9219544252243412841,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " -  1/2 \\int{-D_{\\mu}(e) \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho}-e \\bar{\\epsilon} D_{\\mu}(\\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho})}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{} - \\frac{1}{2}\\,\\int \\left(-\\,D_{\\mu}{e} \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{}-\\,e \\bar{\\epsilon} D_{\\mu}\\left(\\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\right)\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source": "ib:= \\int{ @(dpsibar) }{x};\nintegrate_by_parts(ib, $\\bar{\\epsilon}$);"
+		},
+		{
+			"cell_id": 3338630900317530677,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 3338630900317530677,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "After this the integral sign has done its job, and we remove it again. The derivative $D_\\mu$\nnow acts on the determinant, the inverse vielbeine, the gamma matrix and $D_\\nu\\psi_\\rho$.\nA gamma matrix with flat indices is covariantly constant. The derivatives of the determinant and of\nthe inverse vielbeine can all be written in terms of $D_\\mu e^q{}_\\lambda$. This is not zero,\nbecause $D_\\mu$ contains only the spin connection (see vN~1.4 below eq.~(3)):\n\\begin{equation*}\nD_\\mu e = e\\, e_q{}^\\lambda D_\\mu e^q{}_\\lambda\\,,\\qquad\nD_\\mu e_m{}^\\nu = - e_m{}^\\lambda (D_\\mu e^q{}_\\lambda)\\, e_q{}^\\nu\\,.\n\\end{equation*}"
+				}
+			],
+			"hidden": true,
+			"source": "After this the integral sign has done its job, and we remove it again. The derivative $D_\\mu$\nnow acts on the determinant, the inverse vielbeine, the gamma matrix and $D_\\nu\\psi_\\rho$.\nA gamma matrix with flat indices is covariantly constant. The derivatives of the determinant and of\nthe inverse vielbeine can all be written in terms of $D_\\mu e^q{}_\\lambda$. This is not zero,\nbecause $D_\\mu$ contains only the spin connection (see vN~1.4 below eq.~(3)):\n\\begin{equation*}\nD_\\mu e = e\\, e_q{}^\\lambda D_\\mu e^q{}_\\lambda\\,,\\qquad\nD_\\mu e_m{}^\\nu = - e_m{}^\\lambda (D_\\mu e^q{}_\\lambda)\\, e_q{}^\\nu\\,.\n\\end{equation*}"
+		},
+		{
+			"cell_id": 508726755220153757,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 4169820367212680061,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5577619034957459157,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/2 e e_{q}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} +  1/2 e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}(D_{\\nu}(\\psi_{\\rho})) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} -  1/2 e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) e_{q}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} -  1/2 e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) e_{q}^{\\nu} e_{p}^{\\rho} -  1/2 e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) e_{q}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{2}\\,e e_{q}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{}+\\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{D_{\\nu}{\\psi_{\\rho}}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} e_{q}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} e_{q}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} e_{q}\\,^{\\rho}\\end{dmath*}"
+				}
+			],
+			"source": "substitute(ib, $\\int{A??}{x} -> A??$)\nproduct_rule(ib)\ndistribute(ib)\nsubstitute(ib, $D_{\\mu}{\\Gamma^{m n p}} -> 0$)\nsubstitute(ib, $D_{\\mu}{e} -> e e_{q}^{\\lambda} D_{\\mu}{e^{q}_{\\lambda}}$)\nsubstitute(ib, $D_{\\mu}{e_{m}^{\\nu}} -> - e_{m}^{\\lambda} D_{\\mu}{e^{q}_{\\lambda}} e_{q}^{\\nu}$)\ndistribute(ib);"
+		},
+		{
+			"cell_id": 5610048685071814483,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 5610048685071814483,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "There are two kinds of terms: a commutator of covariant derivatives on the gravitino, and\nterms which contain $D_\\mu e^q{}_\\lambda$ (the terms of vN~1.7 eq.~(9)). We put the second\nkind aside for now."
+				}
+			],
+			"hidden": true,
+			"source": "There are two kinds of terms: a commutator of covariant derivatives on the gravitino, and\nterms which contain $D_\\mu e^q{}_\\lambda$ (the terms of vN~1.7 eq.~(9)). We put the second\nkind aside for now."
+		},
+		{
+			"cell_id": 6253772829039306720,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3931839913488243526,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10014194429867142990,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/2 e e_{q}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} +  1/2 e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}(D_{\\nu}(\\psi_{\\rho})) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} -  1/2 e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) e_{q}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} -  1/2 e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) e_{q}^{\\nu} e_{p}^{\\rho} -  1/2 e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) e_{q}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{2}\\,e e_{q}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{}+\\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{D_{\\nu}{\\psi_{\\rho}}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} e_{q}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} e_{q}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} e_{q}\\,^{\\rho}\\end{dmath*}"
+				},
+				{
+					"cell_id": 1917752406645742459,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6841521759015009571,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/2 e e_{q}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} -  1/2 e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) e_{q}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} -  1/2 e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) e_{q}^{\\nu} e_{p}^{\\rho} -  1/2 e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) e_{q}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{2}\\,e e_{q}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} e_{q}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} e_{q}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} e_{q}\\,^{\\rho}\\end{dmath*}"
+				}
+			],
+			"source": "dDe:= @(ib);\ntake_match(dDe, $D_{\\mu}{e^{q}_{\\lambda}} A??$);"
+		},
+		{
+			"cell_id": 1681132794735794346,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15494625988514412661,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13925126728832692129,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/2 e e_{q}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} +  1/2 e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}(D_{\\nu}(\\psi_{\\rho})) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} -  1/2 e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) e_{q}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} -  1/2 e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) e_{q}^{\\nu} e_{p}^{\\rho} -  1/2 e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}(\\psi_{\\rho}) e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\lambda} D_{\\mu}(e^{q}_{\\lambda}) e_{q}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{2}\\,e e_{q}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{}+\\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{D_{\\nu}{\\psi_{\\rho}}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} e_{q}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} e_{q}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{2}\\,e \\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\lambda} D_{\\mu}{e^{q}\\,_{\\lambda}} e_{q}\\,^{\\rho}\\end{dmath*}"
+				},
+				{
+					"cell_id": 5771372194022960649,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9383321179151735722,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/16 e \\bar{\\epsilon} \\Gamma^{m n p} R_{\\mu \\nu}^{q r} \\Gamma_{q r} \\psi_{\\rho} e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{16}\\,e \\bar{\\epsilon} \\Gamma^{m n p} R_{\\mu \\nu}\\,^{q r} \\Gamma_{q r} \\psi_{\\rho} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\end{dmath*}"
+				}
+			],
+			"source": "curv1:= @(ib);\nsubstitute(curv1, $D_{\\mu}{e^{q}_{\\lambda}} -> 0$)\nsubstitute(curv1, $D_{\\mu}{D_{\\nu}{\\psi_{\\rho}}} -> 1/8 R_{\\mu\\nu}^{m n} \\Gamma_{m n} \\psi_{\\rho}$);"
+		},
+		{
+			"cell_id": 2610188153016264325,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 2610188153016264325,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "\\subsection*{The curvature terms}\n\nWe add the curvature terms of the two gravitino variations and simplify the gamma matrix\nalgebra. The terms with five gamma matrices vanish in four dimensions. To compare the two\npieces, all spinor bilinears are written with $\\bar\\epsilon$ on the left, using the Majorana\nflip relations (vN~1.7 eq.~(5)). The terms with three gamma matrices then cancel, and what\nremains is"
+				}
+			],
+			"hidden": true,
+			"source": "\\subsection*{The curvature terms}\n\nWe add the curvature terms of the two gravitino variations and simplify the gamma matrix\nalgebra. The terms with five gamma matrices vanish in four dimensions. To compare the two\npieces, all spinor bilinears are written with $\\bar\\epsilon$ on the left, using the Majorana\nflip relations (vN~1.7 eq.~(5)). The terms with three gamma matrices then cancel, and what\nremains is"
+		},
+		{
+			"cell_id": 5592596818841507801,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13203090216722834002,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8112226056000670340,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/16 e \\bar{\\epsilon} \\Gamma^{m n p} R_{\\mu \\nu}^{q r} \\Gamma_{q r} \\psi_{\\rho} e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho} -  1/16 e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} R_{\\nu \\rho}^{q r} \\Gamma_{q r} \\epsilon e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{16}\\,e \\bar{\\epsilon} \\Gamma^{m n p} R_{\\mu \\nu}\\,^{q r} \\Gamma_{q r} \\psi_{\\rho} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\discretionary{}{}{} - \\frac{1}{16}\\,e \\bar{\\psi_{\\mu}} \\Gamma^{m n p} R_{\\nu \\rho}\\,^{q r} \\Gamma_{q r} \\epsilon e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\end{dmath*}"
+				},
+				{
+					"cell_id": 13112203270524685386,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16139646407355581323,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": " 1/2 R_{\\mu \\nu}^{m n} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e_{m}^{\\mu} e_{n}^{\\rho} e_{p}^{\\nu} -  1/4 R_{\\mu \\nu}^{m n} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e_{m}^{\\mu} e_{n}^{\\nu} e_{p}^{\\rho}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\frac{1}{2}\\,R_{\\mu \\nu}\\,^{m n} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e_{m}\\,^{\\mu} e_{n}\\,^{\\rho} e_{p}\\,^{\\nu}\\discretionary{}{}{} - \\frac{1}{4}\\,R_{\\mu \\nu}\\,^{m n} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\end{dmath*}"
+				}
+			],
+			"source": "curv:= @(curv1) + @(dpsiu);\ndistribute(curv)\nsort_product(curv)\njoin_gamma(curv)\ndistribute(curv)\neliminate_kronecker(curv)\nsort_spinors(curv)\nsort_product(curv)\ncanonicalise(curv)\nrename_dummies(curv)\ncollect_terms(curv);"
+		},
+		{
+			"cell_id": 4678480926702719961,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 4678480926702719961,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "This is $-\\frac{e}{2}(\\bar\\psi^\\mu\\gamma^a\\epsilon)G_{a\\mu}$, vN~1.7 eq.~(7). It should\ncancel exactly against the variation of the vielbeine in the Hilbert action,"
+				}
+			],
+			"hidden": true,
+			"source": "This is $-\\frac{e}{2}(\\bar\\psi^\\mu\\gamma^a\\epsilon)G_{a\\mu}$, vN~1.7 eq.~(7). It should\ncancel exactly against the variation of the vielbeine in the Hilbert action,"
+		},
+		{
+			"cell_id": 2763069651118378156,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15583478319545646770,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 427150630723600206,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0"
+						}
+					],
+					"source": "\\begin{dmath*}{}0\\,\\end{dmath*}"
+				},
+				{
+					"cell_id": 10395077051382320502,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1483243656652033225,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "0"
+						}
+					],
+					"source": "\\begin{dmath*}{}0\\,\\end{dmath*}"
+				}
+			],
+			"source": "tot:= @(curv) + @(dL2);\nsort_product(tot)\ncanonicalise(tot)\nrename_dummies(tot)\ncollect_terms(tot);"
+		},
+		{
+			"cell_id": 5177686213858675915,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 5177686213858675915,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "This also confirms that $\\mathcal{L}^{(3/2)}$ has the right normalisation and sign relative\nto the Hilbert action, so the $\\Gamma^{\\mu\\nu\\rho}$ form is equivalent to vN's\n$\\epsilon^{\\mu\\nu\\rho\\sigma}\\gamma_5\\gamma_\\nu$ form.\n\nWhat is left is the expression \\verb|dDe| with derivatives of the vielbein, and the\nvariation of the explicit vielbeine in $\\mathcal{L}^{(3/2)}$ (vN~1.7 eq.~(10)).\nTo show that these cancel we need the torsion equation for $D_{[\\mu}e^a{}_{\\nu]}$ and a Fierz\nrearrangement; that comes next."
+				}
+			],
+			"hidden": true,
+			"source": "This also confirms that $\\mathcal{L}^{(3/2)}$ has the right normalisation and sign relative\nto the Hilbert action, so the $\\Gamma^{\\mu\\nu\\rho}$ form is equivalent to vN's\n$\\epsilon^{\\mu\\nu\\rho\\sigma}\\gamma_5\\gamma_\\nu$ form.\n\nWhat is left is the expression \\verb|dDe| with derivatives of the vielbein, and the\nvariation of the explicit vielbeine in $\\mathcal{L}^{(3/2)}$ (vN~1.7 eq.~(10)).\nTo show that these cancel we need the torsion equation for $D_{[\\mu}e^a{}_{\\nu]}$ and a Fierz\nrearrangement; that comes next."
+		},
+		{
+			"cell_id": 1998207676835684400,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
+	"version": 1.0
+}

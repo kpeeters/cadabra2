@@ -65,18 +65,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 5443529552374224913,
+					"cell_id": 13186105388444138649,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 5113219437295131703,
+							"cell_id": 13471376983417611042,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "1"
 						}
 					],
-					"source": "1"
+					"source": "\\begin{dmath*}{}1\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
@@ -88,18 +88,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 902681149556634890,
+					"cell_id": 10346744806171682539,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 3715250125268989242,
+							"cell_id": 7500220232545868163,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\sin(y) \\cos(x)"
 						}
 					],
-					"source": "\\sin{y} \\cos{x}"
+					"source": "\\begin{dmath*}{}\\sin{y} \\cos{x}\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
@@ -111,18 +111,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 1483136991987650276,
+					"cell_id": 17773812195338763581,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 4208015708900848433,
+							"cell_id": 356940157427225056,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "0"
 						}
 					],
-					"source": "0\\,"
+					"source": "\\begin{dmath*}{}0\\,\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
@@ -134,18 +134,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 6294249245249414743,
+					"cell_id": 4231608922878358811,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 7532066894602245903,
+							"cell_id": 12922694824120257622,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "(\\sin(x) \\cos(x))**(-1)"
 						}
 					],
-					"source": "{\\left(\\sin{x} \\cos{x}\\right)}^{-\\,1}"
+					"source": "\\begin{dmath*}{}{\\left(\\sin{x} \\cos{x}\\right)}^{-\\,1}\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
@@ -172,18 +172,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 3848245994849469394,
+					"cell_id": 657219005897329957,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 4090333177402333093,
+							"cell_id": 12364166823973061094,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "(1-\\sin(x)) (\\cos(x))**(-2)"
 						}
 					],
-					"source": "\\left(1\\discretionary{}{}{}-\\,\\sin{x}\\right) {\\left(\\cos{x}\\right)}^{-2\\,}"
+					"source": "\\begin{dmath*}{}\\left(1\\discretionary{}{}{}-\\,\\sin{x}\\right) {\\left(\\cos{x}\\right)}^{-2\\,}\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
@@ -210,22 +210,22 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 3312325274872545207,
+					"cell_id": 10505527243537083921,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
-					"source": "\\text{Property Coordinate attached to~}\\left[\\theta, \\discretionary{}{}{}\\phi\\right]."
+					"source": "\\begin{dmath*}{}\\text{Property Coordinate attached to~}\\left[\\theta, \\discretionary{}{}{}\\phi\\right].\\end{dmath*}"
 				},
 				{
-					"cell_id": 3548375482923855472,
+					"cell_id": 15522486531555746859,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
-					"source": "\\text{Property Indices(position=fixed, values=\\{{\\theta}\n, {\\phi}\n\\}) attached to~}\\left[a, \\discretionary{}{}{}b, \\discretionary{}{}{}c, \\discretionary{}{}{}d\\right]."
+					"source": "\\begin{dmath*}{}\\text{Property Indices(position=fixed, values=\\{{\\theta}\n, {\\phi}\n\\}) attached to~}\\left[a, \\discretionary{}{}{}b, \\discretionary{}{}{}c, \\discretionary{}{}{}d\\right].\\end{dmath*}"
 				},
 				{
-					"cell_id": 8920213285869787618,
+					"cell_id": 5609147394350783587,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
-					"source": "\\text{Property PartialDerivative attached to~}\\backslash\\texttt{partial}\\{\\#\\}."
+					"source": "\\begin{dmath*}{}\\text{Property PartialDerivative attached to~}\\backslash\\texttt{partial}\\{\\#\\}.\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
@@ -237,18 +237,18 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 1066877906715483480,
+					"cell_id": 10323536899784120343,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 4817485766224812582,
+							"cell_id": 360044091399685662,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "{g_{\\theta \\theta} = (R)**2, g_{\\phi \\phi} = (R)**2 (\\sin(\\theta))**2, g^{\\theta \\theta} = (R)**(-2), g^{\\phi \\phi} = ((R)**2 (\\sin(\\theta))**2)**(-1)}"
 						}
 					],
-					"source": "\\left[g_{\\theta \\theta} = {R}^{2\\,}, \\discretionary{}{}{}g_{\\phi \\phi} = {R}^{2\\,} {\\left(\\sin{\\theta}\\right)}^{2\\,}, \\discretionary{}{}{}g^{\\theta \\theta} = {R}^{-2\\,}, \\discretionary{}{}{}g^{\\phi \\phi} = {\\left({R}^{2\\,} {\\left(\\sin{\\theta}\\right)}^{2\\,}\\right)}^{-\\,1}\\right]"
+					"source": "\\begin{dmath*}{}\\left[g_{\\theta \\theta} = {R}^{2\\,}, \\discretionary{}{}{}g_{\\phi \\phi} = {R}^{2\\,} {\\left(\\sin{\\theta}\\right)}^{2\\,}, \\discretionary{}{}{}g^{\\theta \\theta} = {R}^{-2\\,}, \\discretionary{}{}{}g^{\\phi \\phi} = {\\left({R}^{2\\,} {\\left(\\sin{\\theta}\\right)}^{2\\,}\\right)}^{-\\,1}\\right]\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
@@ -260,32 +260,32 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 1983705792608824369,
+					"cell_id": 14241310995050564543,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 903666508262285101,
+							"cell_id": 17742683222426422360,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\Gamma^{a}_{b c} =  1/2 g^{a d} (\\partial_{c}(g_{b d}) + \\partial_{b}(g_{c d})-\\partial_{d}(g_{b c}))"
 						}
 					],
-					"source": "\\Gamma^{a}\\,_{b c} = \\frac{1}{2}\\,g^{a d} \\left(\\partial_{c}{g_{b d}}\\discretionary{}{}{}+\\partial_{b}{g_{c d}}\\discretionary{}{}{}-\\,\\partial_{d}{g_{b c}}\\right)"
+					"source": "\\begin{dmath*}{}\\Gamma^{a}\\,_{b c} = \\frac{1}{2}\\,g^{a d} \\left(\\partial_{c}{g_{b d}}\\discretionary{}{}{}+\\partial_{b}{g_{c d}}\\discretionary{}{}{}-\\,\\partial_{d}{g_{b c}}\\right)\\end{dmath*}"
 				},
 				{
-					"cell_id": 5434622006240575435,
+					"cell_id": 1983102318235674202,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 700837440590611128,
+							"cell_id": 9679665477192387697,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\Gamma^{a}_{b c} = \\components_{b c}^{a}({{\\phi, \\theta, \\phi} = \\cos(\\theta) (\\sin(\\theta))**(-1), {\\theta, \\phi, \\phi} = \\cos(\\theta) (\\sin(\\theta))**(-1), {\\phi, \\phi, \\theta} = -\\sin(\\theta) \\cos(\\theta)})"
 						}
 					],
-					"source": "\\Gamma^{a}\\,_{b c} = \\square{}_{b}{}_{c}{}^{a}\\left\\{\\begin{aligned}\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}& = \\square{}_{\\theta}{}_{\\phi}{}^{\\phi} = \\cos{\\theta} {\\left(\\sin{\\theta}\\right)}^{-\\,1}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}& = -\\,\\sin{\\theta} \\cos{\\theta}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n"
+					"source": "\\begin{dmath*}{}\\Gamma^{a}\\,_{b c} = \\square{}_{b}{}_{c}{}^{a}\\left\\{\\begin{aligned}\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}& = \\square{}_{\\theta}{}_{\\phi}{}^{\\phi} = \\cos{\\theta} {\\left(\\sin{\\theta}\\right)}^{-\\,1}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}& = -\\,\\sin{\\theta} \\cos{\\theta}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
@@ -312,32 +312,32 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 5964592977170971214,
+					"cell_id": 11557083223221252764,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 2718676777605892304,
+							"cell_id": 5623463260917145690,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\Gamma^{a}_{b c} =  1/2 g^{a d} (\\partial_{c}(g_{b d}) + \\partial_{b}(g_{c d})-\\partial_{d}(g_{b c}))"
 						}
 					],
-					"source": "\\Gamma^{a}\\,_{b c} = \\frac{1}{2}\\,g^{a d} \\left(\\partial_{c}{g_{b d}}\\discretionary{}{}{}+\\partial_{b}{g_{c d}}\\discretionary{}{}{}-\\,\\partial_{d}{g_{b c}}\\right)"
+					"source": "\\begin{dmath*}{}\\Gamma^{a}\\,_{b c} = \\frac{1}{2}\\,g^{a d} \\left(\\partial_{c}{g_{b d}}\\discretionary{}{}{}+\\partial_{b}{g_{c d}}\\discretionary{}{}{}-\\,\\partial_{d}{g_{b c}}\\right)\\end{dmath*}"
 				},
 				{
-					"cell_id": 131415972572404668,
+					"cell_id": 15047340125565857196,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"cells": [
 						{
-							"cell_id": 7867924568118862305,
+							"cell_id": 5294793388143551281,
 							"cell_origin": "server",
 							"cell_type": "input_form",
 							"source": "\\Gamma^{a}_{b c} = \\components_{b c}^{a}({{\\phi, \\theta, \\phi} = \\cos(\\theta) (\\sin(\\theta))**(-1), {\\theta, \\phi, \\phi} = \\cos(\\theta) (\\sin(\\theta))**(-1), {\\phi, \\phi, \\theta} = -\\sin(\\theta) \\cos(\\theta)})"
 						}
 					],
-					"source": "\\Gamma^{a}\\,_{b c} = \\square{}_{b}{}_{c}{}^{a}\\left\\{\\begin{aligned}\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}& = \\square{}_{\\theta}{}_{\\phi}{}^{\\phi} = \\cos{\\theta} {\\left(\\sin{\\theta}\\right)}^{-\\,1}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}& = -\\,\\sin{\\theta} \\cos{\\theta}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n"
+					"source": "\\begin{dmath*}{}\\Gamma^{a}\\,_{b c} = \\square{}_{b}{}_{c}{}^{a}\\left\\{\\begin{aligned}\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}& = \\square{}_{\\theta}{}_{\\phi}{}^{\\phi} = \\cos{\\theta} {\\left(\\sin{\\theta}\\right)}^{-\\,1}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}& = -\\,\\sin{\\theta} \\cos{\\theta}\\\\[-.5ex]\n\\end{aligned}\\right\\}\n\\end{dmath*}"
 				}
 			],
 			"ignore_on_import": true,
@@ -385,7 +385,7 @@
 			"cell_type": "input",
 			"cells": [
 				{
-					"cell_id": 5498073345896235905,
+					"cell_id": 8501173271236379020,
 					"cell_origin": "server",
 					"cell_type": "latex_view",
 					"source": "\\begin{dmath*}{}\\cos^{2}{\\left(x \\right)}\\end{dmath*}"
@@ -408,8 +408,17 @@
 			],
 			"hidden": true,
 			"source": "\\subsection*{Method}\n\nSums and integer multiples of angles are first expanded, and angles which are\nrational multiples of each other ($x$ and $x/2$, say) are written as integer\nmultiples of a common base angle. After that, every sine and cosine is\n$s_k=\\sin\\theta_k$ or $c_k=\\cos\\theta_k$ of an independent base angle\n$\\theta_k$, and the expression is a rational function of the $s_k$, $c_k$ and\nthe remaining symbols, taken modulo the relations $s_k^2+c_k^2=1$. Numerator\nand denominator are reduced to degree at most one in each $s_k$, and the\ndenominator is made independent of all $s_k$ by multiplying numerator and\ndenominator with its conjugate in each $s_k$ in turn. The result\n\\begin{equation*}\n\\frac{\\sum_S A_S(c)\\,\\prod_{k\\in S} s_k}{D(c)}\\,,\n\\end{equation*}\nwith common factors of the $A_S$ and $D$ removed and a fixed overall sign, is\nunique. For display, factors $c_k^2-1$ in the factorised $A_S$ and $D$ are\nwritten as $-\\sin^2\\theta_k$.\n\nOther functions (square roots, exponentials, \\ldots) are treated as opaque\nsymbols, after their arguments have themselves been brought into canonical\nform.\n\nThe form is canonical with respect to the angles which occur in the\nexpression: $\\sin x - 2 \\sin(x/2)\\cos(x/2)$ simplifies to zero, but\n\\verb|trigrat| applied separately to $\\sin x$ and to\n$2\\sin(x/2)\\cos(x/2)$ gives two different (equivalent) forms. Hyperbolic\nfunctions are not handled.\n\nMaxima has a function of the same name and purpose (by D.~Lazard), which uses\na different normal form: it linearises products into sines and cosines of\nsums of angles. The form used here keeps powers of $\\cos\\theta_k$, which is\ncloser to how, for instance, metrics are usually written."
+		},
+		{
+			"cell_id": 8061724421679010063,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
 		}
 	],
 	"description": "Cadabra JSON notebook format",
+	"flags": {
+		"hide_input_cells": false
+	},
 	"version": 1.0
 }

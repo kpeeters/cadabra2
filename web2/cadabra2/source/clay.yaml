@@ -12,7 +12,6 @@ exclude:
   - "notebooks/README*"
   - "notebooks/.gitignore"
   - "notebooks/*~"
-  - "notebooks/*.cnb"
   - "notebooks/*segment.html"
   - "*~"
 
@@ -29,5 +28,7 @@ jinja_extensions:
 # Shell-style patterns of files outside `static/` that must be copied
 # as-is instead of trying to interpret them as Jinja templates.
 # Use quotes.
-#binaries:
-#  - "favicon.ico"
+# Cadabra notebooks are offered for download next to the tutorials
+# and manual pages; their LaTeX would trip up Jinja.
+binaries:
+  - "*.cnb"
