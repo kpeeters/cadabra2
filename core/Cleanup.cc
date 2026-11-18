@@ -303,7 +303,9 @@ namespace cadabra {
 			while(s2!=tr.end(it)) {
 				auto ac = k.properties.get<SelfAntiCommuting>(s1);
 				if(ac) {
-					if(subtree_compare(0, s1, s2)==0) {
+					// Wildcards have to be compared literally, otherwise a pattern
+					// like '\psi A??' would be turned into zero.
+					if(subtree_compare(0, s1, s2, -2, true, -2, true)==0) {
 						tr.erase_children(it);
 						zero(it->multiplier);
 						ret=true;
@@ -322,7 +324,7 @@ namespace cadabra {
 			auto s2=s1;
 			++s2;
 			while(s2!=tr.end(it)) {
-				if(subtree_compare(0, s1, s2)==0) {
+				if(subtree_compare(0, s1, s2, -2, true, -2, true)==0) {
 					auto df1 = k.properties.get<DifferentialForm>(s1);
 					auto df2 = k.properties.get<DifferentialForm>(s2);
 					auto mat1 = k.properties.get<Matrix>(s1);

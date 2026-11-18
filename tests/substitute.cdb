@@ -674,3 +674,24 @@ def test133():
 test133()
 
     
+# Patterns with wildcards next to a self-anti-commuting object
+# should not be turned into zero, and should be usable in
+# substitution rules (e.g. to swap two spinor bilinears).
+def test134():
+    __cdbkernel__=create_scope()
+    {m,n}::Indices(flat).
+    {\mu,\nu,\rho}::Indices(curved).
+    {\psi_{\mu}, \epsilon}::Spinor(dimension=4, type=Majorana).
+    {\psi_{\mu}, \epsilon}::AntiCommuting.
+    \psi_{\mu}::SelfAntiCommuting.
+    \bar{#}::DiracBar.
+    \Gamma{#}::GammaMatrix.
+    ex:= \psi_{\mu} A??;
+    assert(not ex==0)
+    ex:= \bar{\psi_{\mu}} \Gamma^{m} \psi_{\nu} \bar{\epsilon} \Gamma^{n} \psi_{\rho};
+    substitute(ex, $\bar{\psi_{\mu}} A?? \psi_{\nu} \bar{\epsilon} B?? C?? -> \bar{\epsilon} B?? C?? \bar{\psi_{\mu}} A?? \psi_{\nu}$)
+    tst:= \bar{\epsilon} \Gamma^{n} \psi_{\rho} \bar{\psi_{\mu}} \Gamma^{m} \psi_{\nu} - @(ex);
+    assert(tst==0)
+    print("Test 134 passed")
+
+test134()
