@@ -958,3 +958,37 @@ def test63():
    print("Test 63c passed")
    
 test63()
+
+# Identical tensors which differ only in index positions should still be
+# exchangeable when position=fixed, so that terms which differ by a
+# raise/lower of dummies plus an exchange get the same normal form.
+def test64():
+   __cdbkernel__=create_scope()
+   {p,q,r,s}::Indices(position=fixed).
+   ex:= A^{p} B^{q} C_{q} B_{p} - A^{p} B_{q} C^{q} B_{p};
+   canonicalise(_)
+   assert(ex==0)
+   print("Test 64a passed")
+   {m,n}::Indices(flat, position=fixed).
+   \delta_{m n}::Metric.
+   \delta^{m n}::InverseMetric.
+   \delta{#}::KroneckerDelta.
+   \Gamma{#}::GammaMatrix(metric=\delta).
+   \bar{#}::DiracBar.
+   \psi{#}::Spinor(dimension=4, type=Majorana).
+   {\psi{#}, \chi}::AntiCommuting.
+   \psi{#}::SelfAntiCommuting.
+   ex:= A^{m}\bar{\psi_{m}}\Gamma^{n}\psi_{n} + A^{m}\bar{\psi^{n}}\Gamma_{n}\psi_{m};
+   canonicalise(_)
+   assert(ex==0)
+   print("Test 64b passed")
+   # Tensors with differently declared symmetries for the two index
+   # positions must not be exchanged.
+   D^{p q}::Symmetric.
+   D_{p q}::AntiSymmetric.
+   ex:= D_{r s} D^{p q};
+   canonicalise(_)
+   assert(ex==$D_{r s} D^{p q}$)
+   print("Test 64c passed")
+
+test64()

@@ -67,9 +67,19 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 
 			comp.clear();
 			auto match = comp.equal_subtree(truetensor2, truetensor);
+			// Tensors which differ only in their index positions can still be
+			// exchanged (the positions move along with the indices), as long as
+			// they have the same commutation, spinor and symmetry properties.
+			bool posmatch=false;
+			if(match==Ex_comparator::match_t::no_match_indexpos_less ||
+			      match==Ex_comparator::match_t::no_match_indexpos_greater) {
+				posmatch = ( properties.get<SelfCommutingBehaviour>(sib, true)==idts[i].comm
+				             && properties.get<Spinor>(sib)==idts[i].spino
+				             && properties.get<TableauBase>(sib)==idts[i].tab );
+				}
 			if(match==Ex_comparator::match_t::subtree_match ||
 			      match==Ex_comparator::match_t::match_index_less ||
-			      match==Ex_comparator::match_t::match_index_greater) {
+			      match==Ex_comparator::match_t::match_index_greater || posmatch) {
 				// If this is a spinor, check that it's connected to the one already stored
 				// by a Gamma matrix, or that it is connected directly.
 				if(idts[i].spino) {
