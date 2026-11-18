@@ -571,8 +571,12 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const nlohmann::j
 
 				// IPython/Jupyter notebooks only have the input LaTeX cell, not the output cell,
 				// which we need.
+				// The generated output cell needs its own id; sharing the id of
+				// the input cell confuses any later lookup by id.
 				if(cell.count("cells")==0) {
-					DataCell dc(id, cadabra::DataCell::CellType::latex_view, res, hide);
+					DataCell::id_t view_id; // generates a fresh id
+					view_id.created_by_client=id.created_by_client;
+					DataCell dc(view_id, cadabra::DataCell::CellType::latex_view, res, hide);
 					doc.append_child(last, dc);
 					}
 				}

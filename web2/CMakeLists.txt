@@ -27,6 +27,7 @@ set(TUTORIALS
   poincare_algebra
   string_states
   bianchi_identities
+  supergravity
   automatic_multiterm
   sphere
   schwarzschild
