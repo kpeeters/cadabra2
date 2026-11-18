@@ -71,4 +71,22 @@ def test04():
     print("Test 04 passed")
 
 test04()
+
+# Anti-commuting spinors in the same list should not be moved
+# through each other by sort_product, as that would break up
+# the spinor bilinears.
+def test05():
+    __cdbkernel__=create_scope()
+    {\epsilon, \psi_{m}}::Spinor(dimension=4, type=Majorana).
+    {\epsilon, \psi_{m}}::AntiCommuting.
+    {\epsilon, \psi_{m}}::SortOrder.
+    \bar{#}::DiracBar.
+    \Gamma{#}::GammaMatrix.
+    ex:= \bar{\psi_{m}} \Gamma_{n p q} \psi_{r} \bar{\epsilon} \Gamma_{s} \psi_{t};
+    sort_product(_)
+    tst:= \bar{\psi_{m}} \Gamma_{n p q} \psi_{r} \bar{\epsilon} \Gamma_{s} \psi_{t} - @(ex);
+    assert(tst==0)
+    print("Test 05 passed")
+
+test05()
         

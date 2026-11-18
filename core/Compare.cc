@@ -1514,36 +1514,36 @@ namespace cadabra {
 		{
 		// std::cerr << "can_swap " << *one->name << " " << *two->name << " " << ignore_implicit_indices << std::endl;
 
-		// Explicitly declared commutation behaviour goes first.
+		// If both objects have implicit indices, we cannot swap the
+		// objects because that would re-order the index line. The sole
+		// exception is when these indices are explicitly stated to be in
+		// different sets. This has to be checked before any explicitly
+		// declared commutation behaviour, because for objects with
+		// implicit indices that behaviour refers to the components
+		// (e.g. anti-commuting spinors), not to the objects as a whole.
+
+		const ImplicitIndex *ii1 = properties.get<ImplicitIndex>(one);
+		const ImplicitIndex *ii2 = properties.get<ImplicitIndex>(two);
+		if(!ignore_implicit_indices && ii1 && ii2) {
+			if(ii1->explicit_form.size()==0 || ii2->explicit_form.size()==0)
+				return 0; // nothing known about explicit form
+			// Check that indices in one and two are in mutually exclusive sets.
+			if(!can_swap_different_indexsets(ii1->explicit_form.begin(), ii2->explicit_form.begin()))
+				return 0;
+			}
+
+		// Explicitly declared commutation behaviour.
 		const CommutingBehaviour *com = properties.get<CommutingBehaviour>(one, two, true);
 		if(com)
 			return com->sign();
 
-
-		// If both objects have implicit indices, we cannot swap the
-		// objects because that would re-order the index line. The sole
-		// exception is when these indices are explicitly stated to be in
-		// different sets.
-
-		const ImplicitIndex *ii1 = properties.get<ImplicitIndex>(one);
-		const ImplicitIndex *ii2 = properties.get<ImplicitIndex>(two);
+		// For the remaining checks, use the explicit form of objects with
+		// implicit indices, if known.
 		if(!ignore_implicit_indices) {
-			if(ii1) {
-				if(ii1->explicit_form.size()==0) {
-					if(ii2) return 0; // nothing known about explicit form
-					}
-				else one=ii1->explicit_form.begin();
-				}
-			if(ii2) {
-				if(ii2->explicit_form.size()==0) {
-					if(ii1) return 0; // nothing known about explicit form
-					}
-				else two=ii2->explicit_form.begin();
-				}
-			// Check that indices in one and two are in mutually exclusive sets.
-			if(ii1 && ii2)
-				if(!can_swap_different_indexsets(one, two))
-					return false;
+			if(ii1 && ii1->explicit_form.size()>0)
+				one=ii1->explicit_form.begin();
+			if(ii2 && ii2->explicit_form.size()>0)
+				two=ii2->explicit_form.begin();
 			}
 
 		// Differential forms in a product cannot be moved through each
