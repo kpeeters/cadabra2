@@ -124,7 +124,9 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 					Ex relabel=ic.get_dummy(dums, &ind_free, &ind_free_up, &ind_dummy_up, &added_dummies);
 					repmap.insert(repmap_t::value_type(Ex(ii),relabel));
 					added_dummies.insert(IndexClassifier::index_map_t::value_type(relabel, ii));
-					if(subtree_compare(&kernel.properties, ii, relabel.begin())!=0) {
+					// Only compare names; the index position is kept by replace_index,
+					// so a different parent relation does not mean that anything changes.
+					if(subtree_compare(&kernel.properties, ii, relabel.begin(), -1)!=0) {
 						res=result_t::l_applied;
 						tr.replace_index(ii, relabel.begin(), true);
 						}

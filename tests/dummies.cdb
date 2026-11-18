@@ -113,3 +113,24 @@ def test07():
    print("Test 07d passed")
 
 test07()
+
+# rename_dummies should not report a change when it does not rename
+# anything, regardless of the position of the dummy indices. Otherwise
+# 'converge' blocks containing rename_dummies never terminate.
+def test08():
+   __cdbkernel__=create_scope()
+   {m,n,p}::Indices(position=fixed).
+   for s in [r"A_{m} B_{m}", r"A^{m} B_{m}", r"A_{m} B^{m}", r"A^{m} B^{m}"]:
+      ex=Ex(s)
+      ex.changed()
+      rename_dummies(ex)
+      assert not ex.changed()
+   ex:= A_{n} B^{n}.
+   ex.changed()
+   rename_dummies(ex)
+   assert ex.changed()
+   tst:= A_{m} B^{m} - @(ex);
+   assert tst==0
+   print("Test 08 passed")
+
+test08()
