@@ -11,16 +11,22 @@
 int main(int argc, char **argv)
 	{
 	if(argc<2) {
-		std::cerr << "Usage: cadabra2ipynb [cadabra notebook] [jupyter notebook]\n\n";
+		std::cerr << "Usage: cadabra2ipynb [--python] [cadabra notebook] [jupyter notebook]\n\n";
 		std::cerr << "Convert a Cadabra notebook to a Jupyter notebook.\n"
-		          << "If the Jupyter notebook name is not given, output goes to standard out.\n";
+		          << "If the Jupyter notebook name is not given, output goes to standard out.\n"
+		          << "With --python, the notebook uses the standard Python kernel and the\n"
+		          << "cadabra2_jupyter IPython extension instead of the Cadabra kernel\n"
+		          << "(for e.g. Google Colab).\n";
 		return -1;
 		}
 
 	std::string cdb_file, python_file;
+	bool for_python_kernel=false;
 	int n=1;
 	while(n<argc) {
-		if(cdb_file=="")
+		if(std::string(argv[n])=="--python")
+			for_python_kernel=true;
+		else if(cdb_file=="")
 			cdb_file=argv[n];
 		else
 			python_file=argv[n];
@@ -42,7 +48,7 @@ int main(int argc, char **argv)
 	nlohmann::json content;
 	file >> content;
 
-	auto python = cadabra::cnb2ipynb(content);
+	auto python = cadabra::cnb2ipynb(content, for_python_kernel);
 
 	if(python_file!="") {
 		std::ofstream pythonfile(python_file);

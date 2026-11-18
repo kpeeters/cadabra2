@@ -195,6 +195,63 @@ std::string cadabra::latex_to_html(const std::string& str)
 	return res;
 	}
 
+std::string cadabra::latex_to_markdown(const std::string& str)
+	{
+	// Jupyter markdown renders $...$ and $$...$$ maths itself, so only
+	// text-mode constructions need converting. Note that '$$' in a
+	// regex_replace format string produces a single '$'.
+	std::regex section(R"(\\section\*\{([^\}]*)\})");
+	std::regex subsection(R"(\\subsection\*\{([^\}]*)\})");
+	std::regex subsubsection(R"(\\subsubsection\*\{([^\}]*)\})");
+	std::regex discretionary(R"(\\discretionary\{\}\{\}\{\})");
+	std::regex emph(R"(\\emph\{([^\}]*)\})");
+	std::regex verb(R"(\\verb\|([^\|]*)\|)");
+	std::regex url(R"(\\url\{([^\}]*)\})");
+	std::regex href(R"(\\href\{([^\}]*)\}\{([^\}]*)\})");
+	std::regex begin_verbatim(R"(\\begin\{verbatim\})");
+	std::regex end_verbatim(R"(\\end\{verbatim\})");
+	std::regex begin_equation(R"(\\begin\{(equation|dmath)\*?\})");
+	std::regex end_equation(R"(\\end\{(equation|dmath)\*?\})");
+	std::regex algo(R"(\\algo\{([^\}]*)\})");
+	std::regex prop(R"(\\prop\{([^\}]*)\})");
+	std::regex latex(R"(\\LaTeX\{\})");
+	std::regex tex(R"(\\TeX\{\})");
+	std::regex e_aigu(R"(\\'e)");
+	std::regex ldots(R"(\\ldots)");
+	std::regex dquote(R"(``([^']*)'')");
+	std::regex tilde("~");
+	std::string res;
+
+	try {
+		res = std::regex_replace(str, discretionary, " ");
+		res = std::regex_replace(res, begin_verbatim, "\n```\n");
+		res = std::regex_replace(res, end_verbatim, "\n```\n");
+		res = std::regex_replace(res, begin_equation, "\n$$$$");
+		res = std::regex_replace(res, end_equation, "$$$$\n");
+		res = std::regex_replace(res, section, "# $1");
+		res = std::regex_replace(res, subsection, "## $1");
+		res = std::regex_replace(res, subsubsection, "### $1");
+		res = std::regex_replace(res, emph, "*$1*");
+		res = std::regex_replace(res, verb, "`$1`");
+		res = std::regex_replace(res, href, "[$2]($1)");
+		res = std::regex_replace(res, url, "<$1>");
+		res = std::regex_replace(res, algo, "[`$1`](https://cadabra.science/manual/$1.html)");
+		res = std::regex_replace(res, prop, "[`$1`](https://cadabra.science/manual/$1.html)");
+		res = std::regex_replace(res, latex, "LaTeX");
+		res = std::regex_replace(res, tex, "TeX");
+		res = std::regex_replace(res, e_aigu, "é");
+		res = std::regex_replace(res, ldots, "...");
+		res = std::regex_replace(res, dquote, "\"$1\"");
+		res = std::regex_replace(res, tilde, " ");
+		}
+	catch(std::regex_error& ex) {
+		std::cerr << "regex error doing latex_to_markdown on " << str << std::endl;
+		res = str;
+		}
+
+	return res;
+	}
+
 namespace {
 	// Find the summary of the first \algorithm, \property or \package in
 	// a notebook, as plain text, for use as the page description on the
@@ -892,30 +949,57 @@ nlohmann::json cadabra::ipynb2cnb(const nlohmann::json& root)
 	return json;
 	}
 
-nlohmann::json cadabra::cnb2ipynb(const nlohmann::json& root)
+nlohmann::json cadabra::cnb2ipynb(const nlohmann::json& root, bool for_python_kernel)
 	{
 	nlohmann::json ipynb, kernelspec, lang;
 
 	ipynb["nbformat"]=4;
 	ipynb["nbformat_minor"]=4;
 
-	kernelspec["display_name"]="Cadabra2";
-	kernelspec["language"]="python";
-	kernelspec["name"]="cadabra2";
+	if(for_python_kernel) {
+		kernelspec["display_name"]="Python 3";
+		kernelspec["language"]="python";
+		kernelspec["name"]="python3";
 
-	lang["codemirror_mode"]="cadabra";
-	lang["file_extension"]=".ipynb";
-	lang["mimetype"]="text/cadabra";
-	lang["name"]="cadabra2";
-	lang["pygments_lexer"]="cadabra";
-	
+		lang["name"]="python";
+		}
+	else {
+		kernelspec["display_name"]="Cadabra2";
+		kernelspec["language"]="python";
+		kernelspec["name"]="cadabra2";
+
+		lang["codemirror_mode"]="cadabra";
+		lang["file_extension"]=".ipynb";
+		lang["mimetype"]="text/cadabra";
+		lang["name"]="cadabra2";
+		lang["pygments_lexer"]="cadabra";
+		}
+
 	ipynb["metadata"] = {
 		{"kernelspec", kernelspec},
 		{"language_info", lang}
 	};
 
 	nlohmann::json cells=nlohmann::json::array();
-	
+
+	// A standard Python kernel needs Cadabra installed and the IPython
+	// extension loaded before any Cadabra input can be used.
+	if(for_python_kernel) {
+		nlohmann::json cell;
+		cell["cell_type"]="code";
+		cell["source"]=nlohmann::json::array();
+		cell["source"].push_back("# Install Cadabra if necessary, and enable Cadabra input in this notebook.\n"
+		                         "try:\n"
+		                         "    import cadabra2\n"
+		                         "except ImportError:\n"
+		                         "    %pip install -q cadabra2\n"
+		                         "%load_ext cadabra2_jupyter");
+		cell["metadata"]=nlohmann::json::object();
+		cell["outputs"]=nlohmann::json::array();
+		cell["execution_count"]={};
+		cells.push_back(cell);
+		}
+
 	// Jupyter notebooks just have a single array of cells; walk
 	// through and setup our cells array.
 
@@ -940,7 +1024,12 @@ nlohmann::json cadabra::cnb2ipynb(const nlohmann::json& root)
 		else if(cdb["cell_type"]=="latex") {
 			cell["cell_type"]="markdown";
 			cell["source"]=nlohmann::json::array();
-			cell["source"].push_back(cdb["source"]);
+			// Keep the LaTeX for the Cadabra kernel, so that ipynb2cnb can
+			// convert back without loss.
+			if(for_python_kernel)
+				cell["source"].push_back(latex_to_markdown(cdb["source"].get<std::string>()));
+			else
+				cell["source"].push_back(cdb["source"]);
 			cell["metadata"]=nlohmann::json::object();
 			}
 

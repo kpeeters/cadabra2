@@ -20,13 +20,22 @@
 .SH NAME
 cadabra2ipynb \- convert Cadabra2 notebooks to Jupyter notebooks
 .SH SYNOPSIS
-.BR "cadabra2cadabra [cadabra notebook file (.cnb)] [Jupyter notebook file (.ipynb)]"
+.BR "cadabra2ipynb [\-\-python] [cadabra notebook file (.cnb)] [Jupyter notebook file (.ipynb)]"
 .SH DESCRIPTION
 .B The Cadabra2-Gtk notebook front\-end for Cadabra2 produces
 notebooks in a JSON format, but these notebooks are not compatible
 with Jupyter notebooks. This command converts Cadabra notebooks to
 Jupyter notebooks, which can be executed using the Cadabra Jupyter
 kernel.
+.SH OPTIONS
+.TP
+.B \-\-python
+Produce a notebook for the standard Python kernel instead of the
+Cadabra kernel. The notebook starts with a cell which installs the
+cadabra2 Python package if necessary and loads the cadabra2_jupyter
+IPython extension, and the LaTeX text cells are converted to
+markdown. Such notebooks run in environments where the Cadabra kernel
+cannot be installed, such as Google Colab.
 
 .SH SEE ALSO
 .BR cadabra2-gtk (1), cadabra2 (1)

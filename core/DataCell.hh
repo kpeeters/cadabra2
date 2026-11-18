@@ -145,6 +145,11 @@ namespace cadabra {
 
 	std::string latex_to_html(const std::string&);
 
+	/// Convert the LaTeX constructions used in text cells (\\section*, \\verb,
+	/// equation environments, ...) to Jupyter markdown; maths is left alone.
+
+	std::string latex_to_markdown(const std::string&);
+
 	/// Export a document to a single self-contained LaTeX file, with the exception of
 	/// images which get saved as separate numbered files.
 
@@ -168,6 +173,11 @@ namespace cadabra {
 	nlohmann::json ipynb2cnb(const nlohmann::json&);
 
 	/// Convert the JSON of a Cadabra notebook to a Jupyter notebook.
+	/// By default the result uses the Cadabra kernel. With
+	/// 'for_python_kernel' set, it uses the standard Python kernel
+	/// instead, and starts with a cell which installs Cadabra if
+	/// necessary and loads the cadabra2_jupyter IPython extension
+	/// (for e.g. Google Colab).
 
-	nlohmann::json cnb2ipynb(const nlohmann::json&);
+	nlohmann::json cnb2ipynb(const nlohmann::json&, bool for_python_kernel=false);
 }
