@@ -1,0 +1,158 @@
+# Convert the tutorial notebooks to Jupyter notebooks for the standard
+# Python kernel (using the cadabra2_jupyter IPython extension), and
+# publish them in the separate repository kpeeters/cadabra2-colab, so
+# that they can be opened with
+#
+#    https://colab.research.google.com/github/kpeeters/cadabra2-colab/blob/main/<name>.ipynb
+#
+# The list of tutorials is taken from the tutorials page of the web
+# site.
+#
+# This workflow cannot write to the cadabra2 repository: its
+# GITHUB_TOKEN is read-only. Publishing uses a deploy key of the
+# cadabra2-colab repository, which gives write access to that
+# repository only. Setup (once):
+#
+#  - Create the public repository kpeeters/cadabra2-colab, with an
+#    initial commit (e.g. a README) on 'main'.
+#  - ssh-keygen -t ed25519 -N "" -C "cadabra2 colab workflow" -f colab_deploy
+#  - Add colab_deploy.pub as a deploy key *with write access* to
+#    cadabra2-colab (Settings -> Deploy keys).
+#  - Add the contents of colab_deploy (the private key) as the
+#    repository secret COLAB_DEPLOY_KEY of cadabra2 (Settings ->
+#    Secrets and variables -> Actions). Then delete both key files.
+#
+# Every notebook is also executed with the cadabra2 wheel from PyPI in
+# a plain Python kernel, so that broken tutorials show up as a failed
+# run (this does not stop the publishing).
+
+name: Colab notebooks
+
+on:
+  push:
+    branches: [devel]
+    paths:
+      - 'examples/*.cnb'
+      - 'web2/cadabra2/source/tutorials.html'
+      - 'core/DataCell.cc'
+      - 'core/cadabra2ipynb.cc'
+      - '.github/workflows/colab.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  convert:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+
+    - name: get dependencies
+      run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install ninja-build git cmake python3-dev g++ libgtkmm-4.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev libmpfr-dev libmpc-dev libtbb-dev catch2
+
+    - name: configure
+      run:  mkdir build && cd build && cmake -G Ninja -DENABLE_MATHEMATICA=OFF ..
+
+    # Only the converter is needed, not the whole of Cadabra.
+    - name: build cadabra2ipynb
+      run:  cd build && cmake --build . --target cadabra2ipynb
+
+    - name: convert tutorials
+      run: |
+        mkdir colab
+        for name in $(grep -o 'notebooks/[A-Za-z0-9_]*\.cnb' web2/cadabra2/source/tutorials.html | sort -u | sed -e 's|notebooks/||' -e 's|\.cnb$||'); do
+          if [ -f examples/${name}.cnb ]; then
+            build/core/cadabra2ipynb --python examples/${name}.cnb colab/${name}.ipynb
+            echo "converted ${name}"
+          else
+            echo "::warning::tutorial ${name}.cnb is listed on the web site but not in examples/"
+          fi
+        done
+        cat > colab/README.md <<EOF
+        # Cadabra tutorials for Google Colab
+
+        Generated automatically from \`examples/*.cnb\` in
+        [kpeeters/cadabra2](https://github.com/kpeeters/cadabra2) by the workflow
+        \`.github/workflows/colab.yml\` there; do not edit this repository by hand.
+
+        Open a notebook with
+        \`https://colab.research.google.com/github/kpeeters/cadabra2-colab/blob/main/<name>.ipynb\`,
+        or use the links on <https://cadabra.science/tutorials.html>.
+        EOF
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: colab-notebooks
+        path: colab/
+
+  test:
+    needs: convert
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        name: colab-notebooks
+        path: colab
+
+    # This installs the latest *released* cadabra2, which is also what
+    # the setup cell of the notebooks installs on Colab.
+    - name: run the notebooks with the PyPI wheel
+      run: |
+        python3 -m venv venv
+        venv/bin/pip install -q cadabra2 nbclient nbformat ipykernel
+        venv/bin/python - <<'EOF'
+        import glob, sys, nbformat
+        from nbclient import NotebookClient
+        failed = []
+        for path in sorted(glob.glob("colab/*.ipynb")):
+            nb = nbformat.read(path, as_version=4)
+            try:
+                NotebookClient(nb, timeout=300, kernel_name="python3").execute()
+                print("ok     ", path)
+            except Exception as e:
+                print("FAILED ", path, "\n", str(e)[:2000])
+                failed.append(path)
+        if failed:
+            print("::error::notebooks failing in a plain Python kernel: " + ", ".join(failed))
+            sys.exit(1)
+        EOF
+
+  publish:
+    needs: convert
+    runs-on: ubuntu-latest
+
+    # No checkout of cadabra2 here; this job only touches cadabra2-colab.
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        name: colab-notebooks
+        path: colab
+
+    - name: checkout cadabra2-colab
+      uses: actions/checkout@v4
+      with:
+        repository: kpeeters/cadabra2-colab
+        ref: main
+        path: cadabra2-colab
+        ssh-key: ${{ secrets.COLAB_DEPLOY_KEY }}
+
+    - name: update and push
+      run: |
+        cd cadabra2-colab
+        git rm -q -r --ignore-unmatch .
+        cp -r ../colab/. .
+        git add -A
+        git config user.name  "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        if git diff --cached --quiet; then
+          echo "no changes"
+        else
+          git commit -q -m "Notebooks generated from kpeeters/cadabra2@${GITHUB_SHA}"
+          git push
+        fi

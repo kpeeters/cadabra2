@@ -120,7 +120,7 @@
 			"cell_id": 16432830887788007622,
 			"cell_origin": "client",
 			"cell_type": "input",
-			"source": "from sympy import sin\nfrom sympy.plotting import plot, plot3d\nx,y=symbols('x y')\np1=plot3d(sin(x)*y)\np2=plot(sin(x)*x**2)"
+			"source": "from sympy import sin\nfrom sympy import symbols, sin\nfrom sympy.plotting import plot, plot3d\nx,y=symbols('x y')\np1=plot3d(sin(x)*y)\np2=plot(sin(x)*x**2)"
 		},
 		{
 			"cell_id": 18220392128932635794,
