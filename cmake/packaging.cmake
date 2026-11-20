@@ -4,9 +4,8 @@
 # Runtime gtkmm package names for the currently supported distributions,
 # depending on whether we build for GTK4 or GTK3. Ubuntu 22.04 and the older
 # (unsupported) distributions below do not ship gtkmm4, so they have to be
-# built with -DUSE_GTK4=OFF and keep their GTK3 names. Fedora 40-42 do
-# have gtkmm4 but are still packaged with GTK3 (-DUSE_GTK4=OFF in their
-# fedora-NN-package.yml); newer Fedoras use GTK4 (fedora-package.yml).
+# built with -DUSE_GTK4=OFF and keep their GTK3 names. Fedoras are
+# packaged with GTK4 (fedora-package.yml).
 if(USE_GTK4)
   set(GTKMM_FEDORA     "gtkmm4.0")
   set(GTKMM_TUMBLEWEED "libgtkmm-4_0-0")

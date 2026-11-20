@@ -93,13 +93,6 @@ jobs:
         VER=$(cat ${{ github.workspace }}/build/VERSION)
         echo "VERSION=$VER" >> $GITHUB_ENV
 
-    - name: Upload Release Assets
-      if:   github.event_name == 'release'
-      run: |
-        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-${{ matrix.dist.tag }}-${{ matrix.arch.name }}.deb --clobber
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     # Used by the devel-release and test jobs below.
     - name: Store package as build artifact
       uses: actions/upload-artifact@v4
@@ -132,6 +125,26 @@ jobs:
           -ubuntu-26.04-resolute-x86_64.deb -ubuntu-26.04-resolute-arm64.deb
           -debian-13-trixie-x86_64.deb -debian-13-trixie-arm64.deb
         token: ${{ github.token }}
+
+  # On a release event, uploads the packages to the release once they
+  # have passed the tests. This is the only job of a release build
+  # which can write to the repository.
+  release-upload:
+    needs: [build, test]
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: deb-*
+        merge-multiple: true
+        path: dist
+    - name: Upload release assets
+      run: gh release upload "${{ github.event.release.tag_name }}" dist/* --clobber --repo "$GITHUB_REPOSITORY"
+      env:
+        GH_TOKEN: ${{ github.token }}
 
   # Installs the package just built (not the one on the release page)
   # in a fresh container, for release and devel builds alike.

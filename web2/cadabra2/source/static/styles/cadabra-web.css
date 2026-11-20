@@ -932,7 +932,7 @@ ul.features li {
   display: flex;
   gap: 18px;
   padding-top: 4px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
 }
 .card-links a.dl { color: var(--ink-2); }

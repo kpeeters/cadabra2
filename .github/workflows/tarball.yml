@@ -13,7 +13,12 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    
+    # Uploads the tarball to the release. Nothing else runs here (no
+    # build, no third-party dependencies), so this job does not need to
+    # be split like the package workflows.
+    permissions:
+      contents: write
+
     steps:
     - name: Checkout Cadabra
       uses: actions/checkout@v4
@@ -23,11 +28,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y gh
 
-    - name: Authenticate GitHub CLI
-      run: gh auth setup-git
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
     - name: Create tarball
       run: |
         export CDB_MAJOR=`cat cmake/version.cmake |grep 'MAJOR '|sed -e 's/[^ ]* \([0-9]*\).*/\1/'`

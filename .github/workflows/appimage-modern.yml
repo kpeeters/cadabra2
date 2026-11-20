@@ -252,13 +252,6 @@ jobs:
           retention-days: 7
           if-no-files-found: error
 
-      - name: Upload to release
-        if: github.event_name == 'release'
-        run: |
-          gh release upload "${{ github.ref_name }}" Cadabra_*_${{ matrix.arch }}.AppImage --clobber
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 #       - name: Generate zsync file
 #         if: github.event_name == 'release'
 #         run: |
@@ -298,3 +291,22 @@ jobs:
         stale-suffix: >-
           _x86_64.AppImage _arm64.AppImage
         token: ${{ github.token }}
+
+  # On a release event, uploads the AppImages to the release. This is
+  # the only job of a release build which can write to the repository.
+  release-upload:
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: cadabra2-appimage-*
+        merge-multiple: true
+        path: dist
+    - name: Upload release assets
+      run: gh release upload "${{ github.event.release.tag_name }}" dist/* --clobber --repo "$GITHUB_REPOSITORY"
+      env:
+        GH_TOKEN: ${{ github.token }}

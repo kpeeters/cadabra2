@@ -16,8 +16,8 @@ Cadabra
 .. image:: https://github.com/kpeeters/cadabra2/workflows/Docker/badge.svg
    :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3ADocker
 
-.. image:: https://github.com/kpeeters/cadabra2/workflows/Windows%2011/badge.svg
-   :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3AWindows%2011
+.. image:: https://github.com/kpeeters/cadabra2/actions/workflows/devel.yml/badge.svg
+   :target: https://github.com/kpeeters/cadabra2/actions/workflows/devel.yml
 
 .. image:: https://github.com/kpeeters/cadabra2/workflows/FreeBSD/badge.svg
    :target: https://github.com/kpeeters/cadabra2/actions?query=workflow%3AFreeBSD

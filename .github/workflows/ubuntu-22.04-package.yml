@@ -59,27 +59,30 @@ jobs:
         VER=$(cat build/VERSION)
         echo "VERSION=$VER" >> $GITHUB_ENV
 
-    - name: Upload Release Assets
-      run: |
-        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-ubuntu-22.04-jammy-${{ matrix.name }}.deb --clobber
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # Used by the release-upload and test jobs below.
+    - name: Store package as build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: deb-jammy-${{ matrix.name }}
+        path: build/cadabra2-${{ env.VERSION }}-ubuntu-22.04-jammy-${{ matrix.name }}.deb
+        if-no-files-found: error
 
 
   test:
     needs: build
     runs-on: ubuntu-22.04
 
+    # Installs the package just built, not the one on the release page.
     steps:
-    - name: Get and install package
+    - uses: actions/download-artifact@v4
+      with:
+        name: deb-jammy-x86_64
+
+    - name: Install package
       run: |
-        sudo apt install xvfb
-        export VERSION=$(curl -s https://api.github.com/repos/kpeeters/cadabra2/releases|& jq .[0].tag_name -r)
-        export DEBNAME=cadabra2-${VERSION}-ubuntu-22.04-jammy-x86_64.deb
-        wget https://github.com/kpeeters/cadabra2/releases/download/${VERSION}/${DEBNAME}
         sudo apt -y update
-        sudo apt -y upgrade
-        sudo apt -y install ./${DEBNAME}
+        sudo apt -y install xvfb
+        sudo apt -y install ./cadabra2-*-ubuntu-22.04-jammy-x86_64.deb
 
     - name: Test simple cli run
       run:  printf "import sys\nprint(sys.path)\nimport cdb.main\nex:=(A+B) (C+D);\ndistribute(ex);\nquit()\n" > tst.cdb && cadabra2 tst.cdb
@@ -98,3 +101,21 @@ jobs:
           echo "Application failed to start"
           exit 1
         fi
+
+  # Uploads the packages to the release once they have passed the
+  # tests. This is the only job which can write to the repository.
+  release-upload:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: deb-jammy-*
+        merge-multiple: true
+        path: dist
+    - name: Upload release assets
+      run: gh release upload "${{ github.event.release.tag_name }}" dist/* --clobber --repo "$GITHUB_REPOSITORY"
+      env:
+        GH_TOKEN: ${{ github.token }}

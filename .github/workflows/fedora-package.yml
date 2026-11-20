@@ -1,7 +1,6 @@
 # Create GTK4 Fedora packages on a github release event, for all
 # Fedora versions listed in the matrices below (add new releases to
-# both the 'build' and 'test' lists). Older Fedoras are built with
-# GTK3 by the separate fedora-NN-package.yml files.
+# both the 'build' and 'test' lists).
 # This assumes that the cadabra version is the same as the
 # release name, and it will attempt to add the .rpm files
 # to the release assets.
@@ -79,13 +78,6 @@ jobs:
         VER=$(cat ${{ github.workspace }}/build/VERSION)
         echo "VERSION=$VER" >> $GITHUB_ENV
 
-    - name: Upload Release Assets
-      if:   github.event_name == 'release'
-      run: |
-        gh release upload "${{ env.VERSION }}" build/cadabra2-${{ env.VERSION }}-fedora${{ matrix.fedora }}-${{ matrix.arch.name }}.rpm --clobber
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     # Used by the devel-release and test jobs below.
     - name: Store package as build artifact
       uses: actions/upload-artifact@v4
@@ -116,6 +108,26 @@ jobs:
         stale-suffix: >-
           -fedora43-x86_64.rpm -fedora43-arm64.rpm -fedora44-x86_64.rpm -fedora44-arm64.rpm
         token: ${{ github.token }}
+
+  # On a release event, uploads the packages to the release once they
+  # have passed the tests. This is the only job of a release build
+  # which can write to the repository.
+  release-upload:
+    needs: [build, test]
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: rpm-fedora*
+        merge-multiple: true
+        path: dist
+    - name: Upload release assets
+      run: gh release upload "${{ github.event.release.tag_name }}" dist/* --clobber --repo "$GITHUB_REPOSITORY"
+      env:
+        GH_TOKEN: ${{ github.token }}
 
   # Installs the package just built (not the one on the release page)
   # in a fresh container, for release and devel builds alike.

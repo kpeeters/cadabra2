@@ -6,8 +6,6 @@
 # linux.yml has passed) and the result is published to the rolling
 # 'devel' prerelease, https://github.com/kpeeters/cadabra2/releases/tag/devel,
 # through .github/actions/rolling-release.
-#
-# windows.yml separately builds on every push as a quick check.
 
 name: Windows 11 installer
 
@@ -119,20 +117,13 @@ jobs:
       run: |
         mv build/cadabra2-${{ env.VERSION }}-win64.msi build/cadabra2-${{ env.GIT_TAG_VERSION }}-windows-${{ matrix.name }}.msi
 
-    # Used by the devel-release job below.
+    # Used by the devel-release, release-upload and test jobs below.
     - name: Store installer as build artifact
       uses: actions/upload-artifact@v4
       with:
         name: msi-${{ matrix.name }}
         path: build/cadabra2-${{ env.GIT_TAG_VERSION }}-windows-${{ matrix.name }}.msi
         if-no-files-found: error
-
-    - name: Upload release assets
-      if:   github.event_name == 'release'
-      run: |
-        gh release upload "${{ env.GIT_TAG_VERSION }}" build/cadabra2-${{ env.GIT_TAG_VERSION }}-windows-${{ matrix.name }}.msi --clobber
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Package names carry the version, so stale-suffix lists every
   # combination of the build matrix; it removes the package of a
@@ -161,3 +152,118 @@ jobs:
         stale-suffix: >-
           -windows-x86_64.msi -windows-arm64.msi
         token: ${{ github.token }}
+
+  # Installs the installer just built and starts the notebook, for
+  # release and devel builds alike.
+  test:
+    needs: msys2-ucrt64
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2022
+            name: x86_64
+            display-name: "Windows 11 x86_64"
+          - os: windows-11-arm
+            name: arm64
+            display-name: "Windows 11 arm64"
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: pwsh
+    
+    steps:
+    - name: Download installer
+      uses: actions/download-artifact@v4
+      with:
+        name: msi-${{ matrix.name }}
+
+    - name: Install silently
+      shell: pwsh
+      run: |
+        dir
+        $installer = Get-ChildItem -Filter "cadabra*.msi" | Select-Object -First 1 -ExpandProperty Name
+        if (-not $installer) {
+            Write-Error "No installer found"
+            exit 1
+        }
+        $installerPath = (Get-Item -Path ".\$installer").FullName        
+        Write-Host "Installing $installerPath"
+        Start-Process -FilePath "msiexec" -ArgumentList "/i", "$installerPath", "/qn", "/l*v", "install.log" -Wait
+        Write-Host "Installer finished"
+
+    - name: Upload installation log
+      uses: actions/upload-artifact@v4
+      with:
+        name: install-${{ matrix.os }}.log
+        path: install.log
+
+    - name: Check installation location
+      shell: cmd
+      run: |
+        echo "Main folder:"
+        dir "C:\Program Files\Cadabra" 
+        
+    - name: Start GUI and take screenshot
+      shell: pwsh
+      run: |
+        # Attempt to start the notebook
+        if (-not (Test-Path "C:\Program Files\Cadabra\cadabra2-gtk.exe")) {
+        Write-Host "Executable not found"
+        exit 1
+        }
+        $process = Start-Process "C:\Program Files\Cadabra\cadabra2-gtk.exe" -ArgumentList "-n", "Examples\schwarzschild.cnb" -WorkingDirectory "C:\Program Files\Cadabra" -PassThru
+        Start-Sleep -Seconds 120
+
+        # Take screenshot
+        Add-Type -AssemblyName System.Windows.Forms
+        Add-Type -AssemblyName System.Drawing
+        
+        $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+        $bitmap = New-Object System.Drawing.Bitmap($screen.Width, $screen.Height)
+        $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+        $graphics.CopyFromScreen($screen.Location, [System.Drawing.Point]::Empty, $screen.Size)
+        $bitmap.Save("screenshot.png")
+        $graphics.Dispose()
+        $bitmap.Dispose()
+
+        # Cleanup
+        Stop-Process -Id $process.Id -Force
+      
+    - name: Upload cadabra_log.txt
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: cadabra_log-${{ matrix.os }}.txt
+        path: C:\Windows\Temp\cadabra_log.txt
+
+    - name: Upload screenshot
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-screenshot-${{ matrix.os }}
+        path: screenshot.png
+
+  # On a release event, uploads the installers to the release once they
+  # have passed the tests. This is the only job of a release build
+  # which can write to the repository.
+  release-upload:
+    needs: [msys2-ucrt64, test]
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    # The workflow default is the msys2 shell, which only exists on
+    # the Windows runners.
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: msi-*
+        merge-multiple: true
+        path: dist
+    - name: Upload release assets
+      run: gh release upload "${{ github.event.release.tag_name }}" dist/* --clobber --repo "$GITHUB_REPOSITORY"
+      env:
+        GH_TOKEN: ${{ github.token }}
