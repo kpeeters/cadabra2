@@ -1,15 +1,21 @@
-# Create an Ubuntu 22.04 package on a github release event.
-# This assumes that the cadabra version is the same as the
-# release name, and it will attempt to add the .deb file
+# Create an Ubuntu 22.04 package (GTK3; jammy has no gtkmm4) on a
+# github release event. This assumes that the cadabra version is the
+# same as the release name, and it will attempt to add the .deb files
 # to the release assets.
+#
+# On every push to devel, devel.yml calls this workflow (once
+# linux.yml has passed) to build the same packages with a pre-release
+# package version (X.Y.Z~devN, see DEVEL_PACKAGE in
+# cmake/packaging.cmake) and publish them to the rolling 'devel'
+# prerelease, https://github.com/kpeeters/cadabra2/releases/tag/devel,
+# through .github/actions/rolling-release.
 
 name: Ubuntu-22.04 package
 
-# on: [push]
-
 on:
- release:
-   types: [created]
+  release:
+    types: [published]
+  workflow_call:
 
 jobs:
   build:
@@ -26,27 +32,21 @@ jobs:
     runs-on: ${{ matrix.os }}
     
     steps:
-    - uses: actions/checkout@v3
+    # Full history, so that 'git rev-list --count' in cmake/version.cmake
+    # gives the real commit serial.
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        persist-credentials: false
 
-#    - name: Exit if not on devel branch
-#      if: github.ref != 'refs/heads/devel'
-#      run: exit 1
-      
-    - name: Set up GitHub CLI
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y gh
-
-    - name: Authenticate GitHub CLI
-      run: gh auth setup-git
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
     - name: Get dependencies
       run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install git cmake ninja-build python3-dev g++ libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev libmpfr-dev libmpc-dev libtbb-dev catch2 && python3 --version && which python3 && python3 -m pip install --upgrade pip && python3 -m pip install wheel && python3 -m pip install sympy gmpy2 numpy
 
     - name: Configure
-      run:  mkdir build && cd build && cmake -G Ninja -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DUSE_GTK4=OFF -DCMAKE_INSTALL_PREFIX=/usr ..
+      run: |
+        mkdir build && cd build
+        cmake -G Ninja -DPACKAGING_MODE=ON -DENABLE_MATHEMATICA=OFF -DUSE_GTK4=OFF -DCMAKE_INSTALL_PREFIX=/usr \
+              -DDEVEL_PACKAGE=${{ github.event_name == 'release' && 'OFF' || 'ON' }} ..
       
     - name: Build
       run:  cd build && cmake --build .
@@ -59,7 +59,7 @@ jobs:
         VER=$(cat build/VERSION)
         echo "VERSION=$VER" >> $GITHUB_ENV
 
-    # Used by the release-upload and test jobs below.
+    # Used by the devel-release, release-upload and test jobs below.
     - name: Store package as build artifact
       uses: actions/upload-artifact@v4
       with:
@@ -102,14 +102,43 @@ jobs:
           exit 1
         fi
 
-  # Uploads the packages to the release once they have passed the
-  # tests. This is the only job which can write to the repository.
-  release-upload:
+  # Package names carry the version, so stale-suffix lists every
+  # combination of the build matrix; it removes the package of a
+  # previous version once a new one is uploaded.
+  devel-release:
     needs: [build, test]
+    if: github.event_name != 'release' && github.ref == 'refs/heads/devel'
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: deb-jammy-*
+        merge-multiple: true
+        path: dist
+    - uses: ./.github/actions/rolling-release
+      with:
+        assets: dist/*.deb
+        stale-suffix: >-
+          -ubuntu-22.04-jammy-x86_64.deb -ubuntu-22.04-jammy-arm64.deb
+        token: ${{ github.token }}
+
+  # Uploads the packages to the release once they have passed the
+  # tests. This is the only job of a release build which can write to
+  # the repository.
+  release-upload:
+    needs: [build, test]
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+    - uses: ./.github/actions/check-release-version
     - uses: actions/download-artifact@v4
       with:
         pattern: deb-jammy-*

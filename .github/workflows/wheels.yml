@@ -48,7 +48,7 @@ on:
   push:
     branches: [devel]
   release:
-    types: [created]
+    types: [published]
   workflow_dispatch:
 
 jobs:
@@ -132,9 +132,14 @@ jobs:
     runs-on: ubuntu-latest
     environment: testpypi
     permissions:
+      contents: read     # for the checkout of the version check
       id-token: write
 
     steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+    - uses: ./.github/actions/check-release-version
     - name: Download all wheels
       uses: actions/download-artifact@v4
       with:
@@ -155,9 +160,14 @@ jobs:
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
+      contents: read     # for the checkout of the version check
       id-token: write
 
     steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+    - uses: ./.github/actions/check-release-version
     - name: Download all wheels
       uses: actions/download-artifact@v4
       with:

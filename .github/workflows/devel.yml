@@ -61,6 +61,18 @@ jobs:
       contents: write
     secrets: inherit
 
+  jammy:
+    needs: linux
+    uses: ./.github/workflows/ubuntu-22.04-package.yml
+    permissions:
+      contents: write
+    secrets: inherit
+
+  # Builds a source tarball and Cadabra from it, without publishing.
+  tarball:
+    needs: linux
+    uses: ./.github/workflows/tarball.yml
+
   # Builds and tests the docker image, without pushing it.
   docker:
     needs: linux

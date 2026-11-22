@@ -18,6 +18,10 @@ jobs:
     - name: Checkout Cadabra
       uses: actions/checkout@v4
 
+    # The formula points at the tarball of the tag named after the
+    # version in cmake/version.cmake.
+    - uses: ./.github/actions/check-release-version
+
     - name: Checkout Homebrew repo
       uses: actions/checkout@v4
       with:

@@ -16,7 +16,7 @@ name: Fedora package (GTK4)
 
 on:
   release:
-    types: [created]
+    types: [published]
   workflow_call:
 
 jobs:
@@ -119,6 +119,10 @@ jobs:
     permissions:
       contents: write
     steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+    - uses: ./.github/actions/check-release-version
     - uses: actions/download-artifact@v4
       with:
         pattern: rpm-fedora*

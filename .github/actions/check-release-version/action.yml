@@ -1,0 +1,30 @@
+name: Check release version
+description: >
+  On a release event, check that the release tag (without a trailing
+  -rcN) equals the version in cmake/version.cmake, and fail otherwise.
+  Does nothing on other events. Needs a checkout of the repository.
+
+# The package names, the wheels and the Homebrew formula all take their
+# version from cmake/version.cmake, while the uploads go to the release
+# of the tag. A mismatch would put wrongly named files on the release,
+# or upload the wrong version to PyPI (which cannot be undone), so this
+# runs before every release upload.
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        TAG: ${{ github.event.release.tag_name }}
+      run: |
+        set -euo pipefail
+        if [ "${GITHUB_EVENT_NAME}" != "release" ]; then
+          exit 0
+        fi
+        V=$(sed -n 's/^set(CADABRA_VERSION_\(MAJOR\|MINOR\|PATCH\) *\([0-9]*\))/\2/p' cmake/version.cmake | paste -sd.)
+        T=$(echo "${TAG}" | sed -e 's/-rc[0-9]*$//')
+        if [ "${T}" != "${V}" ]; then
+          echo "::error::release tag '${TAG}' does not match version ${V} in cmake/version.cmake"
+          exit 1
+        fi
+        echo "release tag '${TAG}' matches version ${V}"

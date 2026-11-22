@@ -1,39 +1,35 @@
-# This is a build which gets triggered on every release, to
-# generate a tarball which includes all submodules.
+# Generate a source tarball which includes the MicroTeX sources (which
+# a normal build fetches separately), and build and test Cadabra from
+# it. On a release, the tarball is then added to the release assets.
+#
+# On every push to devel, devel.yml calls this workflow (once
+# linux.yml has passed) to check that the tarball is complete; the
+# tarball is not published then.
 
 name: Tarball
 
 on:
   release:
     types: [released]
+  workflow_call:
 
-# on: [push]
+permissions:
+  contents: read
 
 jobs:
-  build:
+  tarball:
 
     runs-on: ubuntu-latest
-    # Uploads the tarball to the release. Nothing else runs here (no
-    # build, no third-party dependencies), so this job does not need to
-    # be split like the package workflows.
-    permissions:
-      contents: write
 
     steps:
     - name: Checkout Cadabra
       uses: actions/checkout@v4
-
-    - name: Set up GitHub CLI
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y gh
+      with:
+        persist-credentials: false
 
     - name: Create tarball
       run: |
-        export CDB_MAJOR=`cat cmake/version.cmake |grep 'MAJOR '|sed -e 's/[^ ]* \([0-9]*\).*/\1/'`
-        export CDB_MINOR=`cat cmake/version.cmake |grep 'MINOR '|sed -e 's/[^ ]* \([0-9]*\).*/\1/'`
-        export CDB_PATCH=`cat cmake/version.cmake |grep 'PATCH '|sed -e 's/[^ ]* \([0-9]*\).*/\1/'`
-        export VERSION=${CDB_MAJOR}.${CDB_MINOR}.${CDB_PATCH}
+        VERSION=$(sed -n 's/^set(CADABRA_VERSION_\(MAJOR\|MINOR\|PATCH\) *\([0-9]*\))/\2/p' cmake/version.cmake | paste -sd.)
         echo "VERSION=$VERSION" >> $GITHUB_ENV
         mkdir -p submodules
         cd submodules
@@ -41,11 +37,72 @@ jobs:
         cd ../..
         mv cadabra2 cadabra2-${VERSION}
         tar zcf cadabra2-${VERSION}-source-inclusive.tar.gz --exclude ".git" cadabra2-${VERSION}
-        mv cadabra2-${VERSION} cadabra2 
-      
-    - name: Upload tarball to assets
+        mv cadabra2-${VERSION} cadabra2
+        mv cadabra2-${VERSION}-source-inclusive.tar.gz cadabra2/
+
+    # Used by the test and release-upload jobs below.
+    - name: Store tarball as build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: tarball
+        path: cadabra2-${{ env.VERSION }}-source-inclusive.tar.gz
+        if-no-files-found: error
+
+  # Builds and tests Cadabra from the tarball alone (no git checkout),
+  # with the MicroTeX sources from the tarball.
+  test:
+    needs: tarball
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        name: tarball
+        path: dist
+
+    - name: get dependencies
+      run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install ninja-build cmake python3-dev g++ libgtkmm-4.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev libmpfr-dev libmpc-dev libtbb-dev catch2 && python3 -m pip install sympy gmpy2 numpy
+
+    - name: unpack
       run: |
-        gh release upload "${{ env.VERSION }}" ${{ github.workspace }}/../cadabra2-${VERSION}-source-inclusive.tar.gz --clobber
+        mkdir src
+        tar xzf dist/cadabra2-*-source-inclusive.tar.gz -C src
+        ls src
+
+    - name: configure
+      run: |
+        set -o pipefail
+        cd src/cadabra2-*
+        mkdir build && cd build
+        cmake -G Ninja -DENABLE_MATHEMATICA=OFF .. | tee cmake.log
+        grep -q "Found MicroTeX as submodule" cmake.log || { echo "::error::MicroTeX not taken from the tarball"; exit 1; }
+
+    - name: build
+      run:  cd src/cadabra2-*/build && cmake --build .
+
+    - name: test
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+        CTEST_OUTPUT_ON_FAILURE: 1
+      run:  cd src/cadabra2-*/build && ctest
+
+  # On a release, uploads the tarball once it has passed the test. This
+  # is the only job which can write to the repository.
+  release-upload:
+    needs: [tarball, test]
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+    - uses: ./.github/actions/check-release-version
+    - uses: actions/download-artifact@v4
+      with:
+        name: tarball
+        path: dist
+    - name: Upload release assets
+      run: gh release upload "${{ github.event.release.tag_name }}" dist/* --clobber --repo "$GITHUB_REPOSITORY"
+      env:
+        GH_TOKEN: ${{ github.token }}
