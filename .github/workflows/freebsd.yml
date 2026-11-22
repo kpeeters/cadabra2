@@ -4,7 +4,10 @@
 
 name: FreeBSD
 
-on: [push]
+on:
+  push:
+    branches-ignore: [master]
+    tags-ignore: ['*']
 
 jobs:
   build:
