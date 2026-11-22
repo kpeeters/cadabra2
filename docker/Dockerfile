@@ -5,9 +5,10 @@
 #      and https://hub.docker.com/r/flavleger/cadabra
 #
 #
-# Build with
+# Build from the top-level directory of the source tree (the image
+# contains a build of that tree, see also .dockerignore) with
 #
-#    docker build . -t cadabra2-jupyter
+#    docker build -f docker/Dockerfile -t cadabra2-jupyter .
 #
 # Then run with
 #
@@ -21,8 +22,10 @@ RUN apt update && apt install -y \
     libgmp3-dev libglibmm-2.68-dev libboost-all-dev libssl-dev libgmp-dev libsqlite3-dev uuid-dev  \
     python3-matplotlib python3-mpmath python3-sympy python3-gmpy2 python3-pip
 RUN pip install jupyter
-RUN git clone -b "master" --depth 1 https://github.com/kpeeters/cadabra2 && \
-    mkdir -p cadabra2/build && cd cadabra2/build && \
+# The .git directory comes along, so that cmake/version.cmake can
+# determine the commit.
+COPY . /cadabra2
+RUN mkdir -p cadabra2/build && cd cadabra2/build && \
     cmake .. -DENABLE_FRONTEND=OFF && \
     make -j `nproc` && \
     make install

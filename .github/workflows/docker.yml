@@ -1,6 +1,13 @@
-
-# Build docker images with a Jupyter server with Cadabra
-# kernel whenever a commit is pushed to github.
+# Build the docker image with a Jupyter server with Cadabra kernel
+# (docker/Dockerfile), from the commit being built.
+#
+# On a release, the image is built for amd64 and arm64 and pushed to
+# Docker Hub as kpeeters/cadabra2-jupyter:latest. On every push to
+# devel, devel.yml calls this workflow with push=false, which only
+# builds the amd64 image and tests it, without logging in to Docker
+# Hub. In both cases the amd64 image is tested first: it should import
+# the cadabra2 module and run a small notebook with the cadabra2
+# Jupyter kernel.
 #
 # Lint this thing with
 #
@@ -8,67 +15,104 @@
 
 name: Docker
 
-# on: [push]
-
 on:
   release:
     types: [released]
+  workflow_call:
+    inputs:
+      push:
+        description: "Build for all platforms and push the image to Docker Hub."
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-#     strategy:
-#       fail-fast: false
-#       matrix:
-#         arch:
-#           - amd64
-#           - arm64
+    env:
+      PUSH: ${{ github.event_name == 'release' || inputs.push }}
 
     steps:
-    - name: Prepare
-      run: |
-        platform=${{ matrix.platform }}
-        echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV          
+    # Full history, so that 'git rev-list --count' in cmake/version.cmake
+    # gives the real commit serial.
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        persist-credentials: false
 
     - name: Set up QEMU
+      if: env.PUSH == 'true'
       uses: docker/setup-qemu-action@master
 
-    - uses: actions/checkout@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@master
 
-#     - name: Exit if not on master branch
-#       if: github.ref != 'refs/heads/master'
-#       run: exit 1
-      
+    - name: Build amd64 image for testing
+      uses: docker/build-push-action@master
+      with:
+        platforms: linux/amd64
+        context: .
+        file: docker/Dockerfile
+        load: true
+        tags: cadabra2-jupyter:test
+
+    - name: Test image
+      run: |
+        set -e
+        # Same PYTHONPATH as docker/entrypoint.sh, which is bypassed here.
+        run() { docker run --rm --entrypoint "$1" -e PYTHONPATH=/usr/local/lib/python3.11/dist-packages \
+                    -v "$PWD/dockertest:/test" cadabra2-jupyter:test "${@:2}"; }
+        mkdir dockertest
+        cat > dockertest/test.ipynb <<'EOF'
+        {
+         "cells": [
+          {
+           "cell_type": "code",
+           "execution_count": null,
+           "metadata": {},
+           "outputs": [],
+           "source": ["ex:=(A+B)(C+D);\n", "distribute(ex);\n", "print('result: '+str(ex))"]
+          }
+         ],
+         "metadata": {"kernelspec": {"name": "cadabra2", "display_name": "Cadabra2", "language": "python"}},
+         "nbformat": 4,
+         "nbformat_minor": 5
+        }
+        EOF
+        chmod -R a+rwX dockertest
+        run python3 -c "import cadabra2; print('cadabra2 module ok')"
+        run jupyter kernelspec list | tee dockertest/kernels.txt
+        grep -q cadabra2 dockertest/kernels.txt
+        run jupyter nbconvert --to notebook --execute \
+            --ExecutePreprocessor.kernel_name=cadabra2 --ExecutePreprocessor.timeout=120 \
+            --output /test/out.ipynb /test/test.ipynb
+        grep -o 'result: [^"]*' dockertest/out.ipynb | tee dockertest/result.txt
+        grep -q 'A D' dockertest/result.txt
+
     - name: Log in to Docker Hub
+      if: env.PUSH == 'true'
       uses: docker/login-action@master
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Extract metadata (tags, labels) for Docker
+      if: env.PUSH == 'true'
       id: meta
       uses: docker/metadata-action@master
       with:
         images: kpeeters/cadabra2-jupyter
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@master
-
-    - name: Build Docker image
+    - name: Build and push multi-platform image
+      if: env.PUSH == 'true'
       uses: docker/build-push-action@master
       with:
         platforms: linux/amd64, linux/arm64
         context: .
         file: docker/Dockerfile
         push: true
-#${{ github.ref == 'master' }}
         labels: ${{ steps.meta.outputs.labels }}
         tags:   kpeeters/cadabra2-jupyter:latest
-#        outputs: type=docker
-
-#     - name: Upload artifact to github assets
-#       uses: actions/upload-artifact@main
-#       with:
-#         name: cadabra2-jupyter-${{ matrix.arch }}
-#         path: cadabra2-jupyter-${{ matrix.arch }}.tar

@@ -60,3 +60,10 @@ jobs:
     permissions:
       contents: write
     secrets: inherit
+
+  # Builds and tests the docker image, without pushing it.
+  docker:
+    needs: linux
+    uses: ./.github/workflows/docker.yml
+    with:
+      push: false
