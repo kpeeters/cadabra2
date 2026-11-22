@@ -1,0 +1,10 @@
+# Keep the docker build context (see docker/Dockerfile) to the source
+# tree; .git is needed for the version information.
+build*/
+scratch/
+experiments/
+examples/incomplete/
+doc/unused/
+**/*~
+**/*.pyc
+**/__pycache__/
