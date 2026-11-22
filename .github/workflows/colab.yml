@@ -177,7 +177,9 @@ jobs:
         for path in sorted(glob.glob("colab/*.ipynb")):
             nb = nbformat.read(path, as_version=4)
             try:
-                NotebookClient(nb, timeout=300, kernel_name="python3").execute()
+                # Per cell; some tutorials (e.g. kerr_newman_cos) have
+                # cells which take several minutes.
+                NotebookClient(nb, timeout=1200, kernel_name="python3").execute()
                 print("ok     ", path)
             except Exception as e:
                 print("FAILED ", path, "\n", str(e)[:2000])
