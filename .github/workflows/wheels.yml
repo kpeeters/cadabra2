@@ -33,6 +33,12 @@
 #
 # Note that uploads to PyPI are permanent: a version number can never
 # be uploaded again, even after deleting it.
+#
+# Once the wheels are uploaded, the Colab versions of the tutorial
+# notebooks are run with them (colab.yml): on devel with the wheel just
+# uploaded to TestPyPI, without publishing the notebooks; on a full
+# release with the wheel just uploaded to PyPI, after which the
+# notebooks are published to kpeeters/cadabra2-colab.
 
 name: Wheels
 
@@ -161,3 +167,26 @@ jobs:
 
     - name: Publish
       uses: pypa/gh-action-pypi-publish@release/v1
+
+  colab_devel:
+    name: Colab notebooks (TestPyPI wheel)
+    needs: publish_testpypi
+    if: github.event_name != 'release' && github.ref == 'refs/heads/devel'
+    permissions:
+      contents: read
+    uses: ./.github/workflows/colab.yml
+    with:
+      index: testpypi
+      publish: false
+
+  colab_release:
+    name: Colab notebooks (PyPI wheel)
+    needs: publish_pypi
+    if: github.event_name == 'release' && !github.event.release.prerelease
+    permissions:
+      contents: read
+    uses: ./.github/workflows/colab.yml
+    with:
+      index: pypi
+      publish: true
+    secrets: inherit

@@ -1,12 +1,26 @@
 # Convert the tutorial notebooks to Jupyter notebooks for the standard
-# Python kernel (using the cadabra2_jupyter IPython extension), and
-# publish them in the separate repository kpeeters/cadabra2-colab, so
-# that they can be opened with
+# Python kernel (using the cadabra2_jupyter IPython extension), test
+# them, and publish them in the separate repository
+# kpeeters/cadabra2-colab, so that they can be opened with
 #
 #    https://colab.research.google.com/github/kpeeters/cadabra2-colab/blob/main/<name>.ipynb
 #
 # The list of tutorials is taken from the tutorials page of the web
 # site.
+#
+# The setup cell of these notebooks installs the cadabra2 release from
+# PyPI, so the notebooks are only published on a release, after they
+# have been run with exactly that wheel. This workflow is called from
+# wheels.yml once the wheels have been uploaded:
+#
+#  - on a push to devel, with index=testpypi and publish=false: the
+#    notebooks of that commit are run with its development wheel from
+#    TestPyPI, but not published;
+#  - on a release, with index=pypi and publish=true.
+#
+# A manual run (Actions -> Colab notebooks -> Run workflow) on master
+# with index=pypi and publish=true publishes the notebooks of master,
+# tested with the latest PyPI release.
 #
 # This workflow cannot write to the cadabra2 repository: its
 # GITHUB_TOKEN is read-only. Publishing uses a deploy key of the
@@ -21,23 +35,31 @@
 #  - Add the contents of colab_deploy (the private key) as the
 #    repository secret COLAB_DEPLOY_KEY of cadabra2 (Settings ->
 #    Secrets and variables -> Actions). Then delete both key files.
-#
-# Every notebook is also executed with the cadabra2 wheel from PyPI in
-# a plain Python kernel, so that broken tutorials show up as a failed
-# run (this does not stop the publishing).
 
 name: Colab notebooks
 
 on:
-  push:
-    branches: [devel]
-    paths:
-      - 'examples/*.cnb'
-      - 'web2/cadabra2/source/tutorials.html'
-      - 'core/DataCell.cc'
-      - 'core/cadabra2ipynb.cc'
-      - '.github/workflows/colab.yml'
+  workflow_call:
+    inputs:
+      index:
+        description: "Where to install the cadabra2 wheel from: 'pypi' or 'testpypi'."
+        type: string
+        required: true
+      publish:
+        description: "Publish the notebooks to cadabra2-colab once they pass."
+        type: boolean
+        required: true
   workflow_dispatch:
+    inputs:
+      index:
+        description: "Where to install the cadabra2 wheel from (pypi installs the latest release)."
+        type: choice
+        options: [pypi, testpypi]
+        default: pypi
+      publish:
+        description: "Publish the notebooks to cadabra2-colab once they pass."
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -46,11 +68,31 @@ jobs:
   convert:
 
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
 
     steps:
     - uses: actions/checkout@v4
       with:
+        fetch-depth: 0
         persist-credentials: false
+
+    # The version of the wheel built from this commit, determined in
+    # the same way as in wheels.yml. A manual run with index=pypi
+    # uses the latest release instead (empty version).
+    - name: determine wheel version
+      id: version
+      run: |
+        V=$(sed -n 's/^set(CADABRA_VERSION_\(MAJOR\|MINOR\|PATCH\) *\([0-9]*\))/\2/p' cmake/version.cmake | paste -sd.)
+        if [ "${{ github.event_name }}" != "release" ]; then
+          if [ "${{ inputs.index }}" = "testpypi" ]; then
+            V=${V}.dev$(git rev-list --count HEAD)
+          else
+            V=""
+          fi
+        fi
+        echo "version=${V}" >> "$GITHUB_OUTPUT"
+        echo "Testing with cadabra2 ${V:-(latest release)} from ${{ inputs.index }}" >> "$GITHUB_STEP_SUMMARY"
 
     - name: get dependencies
       run:  sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install ninja-build git cmake python3-dev g++ libgtkmm-4.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev libmpfr-dev libmpc-dev libtbb-dev catch2
@@ -100,12 +142,34 @@ jobs:
         name: colab-notebooks
         path: colab
 
-    # This installs the latest *released* cadabra2, which is also what
-    # the setup cell of the notebooks installs on Colab.
-    - name: run the notebooks with the PyPI wheel
+    # A wheel which has just been uploaded can take a few minutes to
+    # show up in the index, hence the retries.
+    - name: install cadabra2
+      env:
+        VERSION: ${{ needs.convert.outputs.version }}
+        INDEX:   ${{ inputs.index }}
       run: |
         python3 -m venv venv
-        venv/bin/pip install -q cadabra2 nbclient nbformat ipykernel
+        venv/bin/pip install -q nbclient nbformat ipykernel
+        if [ "${INDEX}" = "testpypi" ]; then
+          ARGS="-i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ --pre"
+        else
+          ARGS=""
+        fi
+        SPEC=cadabra2${VERSION:+==${VERSION}}
+        for i in $(seq 1 10); do
+          if venv/bin/pip install --no-cache-dir ${ARGS} "${SPEC}"; then
+            venv/bin/pip show cadabra2 | head -2
+            exit 0
+          fi
+          echo "${SPEC} not installable yet, retrying in 30 seconds"
+          sleep 30
+        done
+        echo "::error::could not install ${SPEC} from ${INDEX}"
+        exit 1
+
+    - name: run the notebooks
+      run: |
         venv/bin/python - <<'EOF'
         import glob, sys, nbformat
         from nbclient import NotebookClient
@@ -124,7 +188,8 @@ jobs:
         EOF
 
   publish:
-    needs: convert
+    needs: [convert, test]
+    if: inputs.publish
     runs-on: ubuntu-latest
 
     # No checkout of cadabra2 here; this job only touches cadabra2-colab.
