@@ -69,9 +69,14 @@ jobs:
     secrets: inherit
 
   # Builds a source tarball and Cadabra from it, without publishing.
+  # GitHub checks permissions statically: the called workflow contains
+  # the (release-only, here skipped) release-upload job which requests
+  # contents: write, so the caller has to allow it.
   tarball:
     needs: linux
     uses: ./.github/workflows/tarball.yml
+    permissions:
+      contents: write
 
   # Builds and tests the docker image, without pushing it.
   docker:
