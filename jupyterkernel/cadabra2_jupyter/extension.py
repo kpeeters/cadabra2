@@ -56,9 +56,29 @@ class IPythonServer:
         return -1
 
 
+# A line which is just ';' means 'display the last result' in Cadabra,
+# but IPython reads a leading ';' as its auto-quote escape (';f a b'
+# becomes 'f("a b")', so a bare ';' becomes '("")'). That happens before
+# the 'post' transformers run, so such lines are first hidden in a
+# comment, which IPython leaves alone, and restored just before the
+# Cadabra conversion.
+_BARE_SEMICOLON = "#__cdb_bare_semicolon__"
+
+
+def _protect_bare_semicolons(lines):
+    """IPython cleanup transformer: hide bare ';' lines from IPython's
+    escape handling."""
+    out = []
+    for line in lines:
+        if line.strip() == ";":
+            line = line.replace(";", _BARE_SEMICOLON, 1)
+        out.append(line)
+    return out
+
+
 def _cadabra_transformer(lines):
     """IPython input transformer: convert a cell from Cadabra to Python."""
-    code = "".join(lines)
+    code = "".join(lines).replace(_BARE_SEMICOLON, ";")
     if not code.strip():
         return lines
     pycode = cadabra2.cdb2python_string(code, True, "")
@@ -87,7 +107,9 @@ def load(ip):
 
     # The 'post' transformers run after IPython has turned '%magic' and
     # '!shell' lines into plain Python, so the Cadabra converter only
-    # ever sees Python and Cadabra notation.
+    # ever sees Python and Cadabra notation. The 'cleanup' transformer
+    # runs before IPython's own escapes; see _protect_bare_semicolons.
+    ip.input_transformers_cleanup.append(_protect_bare_semicolons)
     ip.input_transformers_post.append(_cadabra_transformer)
     _loaded = True
 
@@ -96,4 +118,6 @@ def unload(ip):
     global _loaded
     if _cadabra_transformer in ip.input_transformers_post:
         ip.input_transformers_post.remove(_cadabra_transformer)
+    if _protect_bare_semicolons in ip.input_transformers_cleanup:
+        ip.input_transformers_cleanup.remove(_protect_bare_semicolons)
     _loaded = False

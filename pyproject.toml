@@ -7,7 +7,7 @@
 # shown on PyPI is PYPI.md (not README.rst, which is for GitHub).
 
 [build-system]
-requires = ["scikit-build-core>=0.10"]
+requires = ["scikit-build-core>=0.10", "pybind11-stubgen>=2.5"]
 build-backend = "scikit_build_core.build"
 
 [project]

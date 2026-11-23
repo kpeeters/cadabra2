@@ -19,7 +19,8 @@ USER root
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y \
     git cmake pkgconf libpython3-dev python3-dev g++ \
-    libgmp3-dev libglibmm-2.68-dev libboost-all-dev libssl-dev libgmp-dev libsqlite3-dev uuid-dev  \
+    libgmp3-dev libglibmm-2.68-dev libssl-dev libgmp-dev libsqlite3-dev uuid-dev \
+    libboost-dev libboost-filesystem-dev libboost-program-options-dev libboost-date-time-dev \
     python3-matplotlib python3-mpmath python3-sympy python3-gmpy2 python3-pip
 RUN pip install jupyter
 # The .git directory comes along, so that cmake/version.cmake can

@@ -6,7 +6,9 @@
 #    https://colab.research.google.com/github/kpeeters/cadabra2-colab/blob/main/<name>.ipynb
 #
 # The list of tutorials is taken from the tutorials page of the web
-# site.
+# site. The conversion is done by config/colab_notebooks.sh, through
+# the 'colab' CMake target; 'make colab' produces the same notebooks
+# locally (in build/colab), for publishing by hand without a release.
 #
 # The setup cell of these notebooks installs the cadabra2 release from
 # PyPI, so the notebooks are only published on a release, after they
@@ -100,37 +102,15 @@ jobs:
     - name: configure
       run:  mkdir build && cd build && cmake -G Ninja -DENABLE_MATHEMATICA=OFF ..
 
-    # Only the converter is needed, not the whole of Cadabra.
-    - name: build cadabra2ipynb
-      run:  cd build && cmake --build . --target cadabra2ipynb
-
+    # Only the converter is needed, not the whole of Cadabra; the
+    # 'colab' target builds it and runs config/colab_notebooks.sh.
     - name: convert tutorials
-      run: |
-        mkdir colab
-        for name in $(grep -o 'notebooks/[A-Za-z0-9_]*\.cnb' web2/cadabra2/source/tutorials.html | sort -u | sed -e 's|notebooks/||' -e 's|\.cnb$||'); do
-          if [ -f examples/${name}.cnb ]; then
-            build/core/cadabra2ipynb --python examples/${name}.cnb colab/${name}.ipynb
-            echo "converted ${name}"
-          else
-            echo "::warning::tutorial ${name}.cnb is listed on the web site but not in examples/"
-          fi
-        done
-        cat > colab/README.md <<EOF
-        # Cadabra tutorials for Google Colab
-
-        Generated automatically from \`examples/*.cnb\` in
-        [kpeeters/cadabra2](https://github.com/kpeeters/cadabra2) by the workflow
-        \`.github/workflows/colab.yml\` there; do not edit this repository by hand.
-
-        Open a notebook with
-        \`https://colab.research.google.com/github/kpeeters/cadabra2-colab/blob/main/<name>.ipynb\`,
-        or use the links on <https://cadabra.science/tutorials.html>.
-        EOF
+      run:  cd build && cmake --build . --target colab
 
     - uses: actions/upload-artifact@v4
       with:
         name: colab-notebooks
-        path: colab/
+        path: build/colab/
 
   test:
     needs: convert

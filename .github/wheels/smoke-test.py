@@ -30,6 +30,13 @@ assert res.success, "Cadabra cell failed: {}".format(res.error_in_exec or res.er
 assert str(shell.user_ns["ex"]) == str(cadabra2.Ex(r"A C + A D + B C + B D")), \
     "Unexpected result: {}".format(shell.user_ns["ex"])
 
+# A bare ';' line displays the last result; IPython must not turn it
+# into its auto-quote escape '("")'.
+cell = "ex:=(A+B) (C+D);\nconverge(ex):\n    distribute(_)\n;"
+assert shell.transform_cell(cell).rstrip().endswith("display(_)"), shell.transform_cell(cell)
+res = shell.run_cell(cell)
+assert res.success and res.result is None, "Bare ';' cell gave {!r}".format(res.result)
+
 # IPython magics and plain Python must still work with the extension loaded.
 res = shell.run_cell("%time x = 1 + 1\ny = x * 2")
 assert res.success and shell.user_ns["y"] == 4, "Plain Python cell failed"

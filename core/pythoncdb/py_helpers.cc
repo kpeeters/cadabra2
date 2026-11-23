@@ -1,5 +1,6 @@
 #include "../Config.hh"
 #include "../InstallPrefix.hh"
+#include <cstdlib>
 #include <fstream>
 #include "py_helpers.hh"
 #include <pybind11/embed.h>
@@ -78,8 +79,17 @@ namespace cadabra {
 		//
 		//    /usr/local/share/cadabra2/manual/
 		
-		std::string manual_page = install_prefix_of_module()
-			+ "/../../../share/cadabra2/manual/" + category + "/" + name + ".cnb";
+		//
+		// The environment variable CADABRA_MANUAL_DIR overrides this; it
+		// is used when generating cadabra2.pyi from the build tree (see
+		// cmake/stubgen.cmake), where the manual is not installed yet.
+
+		std::string manual_dir;
+		if(const char *env = std::getenv("CADABRA_MANUAL_DIR"))
+			manual_dir = env;
+		else
+			manual_dir = install_prefix_of_module() + "/../../../share/cadabra2/manual";
+		std::string manual_page = manual_dir + "/" + category + "/" + name + ".cnb";
 		std::ifstream ifs(manual_page);
 		try {
 			nlohmann::json root=nlohmann::json::parse(ifs);

@@ -198,8 +198,12 @@ std::string cadabra::latex_to_html(const std::string& str)
 std::string cadabra::latex_to_markdown(const std::string& str)
 	{
 	// Jupyter markdown renders $...$ and $$...$$ maths itself, so only
-	// text-mode constructions need converting. Note that '$$' in a
-	// regex_replace format string produces a single '$'.
+	// text-mode constructions need converting. The exception are the
+	// '\[ ... \]' and '\( ... \)' delimiters: in markdown these are
+	// backslash-escaped brackets, so the backslash gets stripped before
+	// the maths renderer sees them (Colab only knows '$' and '$$'); those
+	// get converted to '$$' and '$'. Note that '$$' in a regex_replace
+	// format string produces a single '$'.
 	std::regex section(R"(\\section\*\{([^\}]*)\})");
 	std::regex subsection(R"(\\subsection\*\{([^\}]*)\})");
 	std::regex subsubsection(R"(\\subsubsection\*\{([^\}]*)\})");
@@ -212,6 +216,12 @@ std::string cadabra::latex_to_markdown(const std::string& str)
 	std::regex end_verbatim(R"(\\end\{verbatim\})");
 	std::regex begin_equation(R"(\\begin\{(equation|dmath)\*?\})");
 	std::regex end_equation(R"(\\end\{(equation|dmath)\*?\})");
+	// The (^|[^\\]) guard avoids matching a LaTeX line break with
+	// spacing, '\\[2pt]'; the character it matches is put back as $1.
+	std::regex begin_dmath(R"((^|[^\\])\\\[)");
+	std::regex end_dmath(R"((^|[^\\])\\\])");
+	std::regex begin_imath(R"((^|[^\\])\\\()");
+	std::regex end_imath(R"((^|[^\\])\\\))");
 	std::regex algo(R"(\\algo\{([^\}]*)\})");
 	std::regex prop(R"(\\prop\{([^\}]*)\})");
 	std::regex latex(R"(\\LaTeX\{\})");
@@ -228,6 +238,10 @@ std::string cadabra::latex_to_markdown(const std::string& str)
 		res = std::regex_replace(res, end_verbatim, "\n```\n");
 		res = std::regex_replace(res, begin_equation, "\n$$$$");
 		res = std::regex_replace(res, end_equation, "$$$$\n");
+		res = std::regex_replace(res, begin_dmath, "$1\n$$$$");
+		res = std::regex_replace(res, end_dmath, "$1$$$$\n");
+		res = std::regex_replace(res, begin_imath, "$1$$");
+		res = std::regex_replace(res, end_imath, "$1$$");
 		res = std::regex_replace(res, section, "# $1");
 		res = std::regex_replace(res, subsection, "## $1");
 		res = std::regex_replace(res, subsubsection, "### $1");
@@ -993,7 +1007,10 @@ nlohmann::json cadabra::cnb2ipynb(const nlohmann::json& root, bool for_python_ke
 		                         "    import cadabra2\n"
 		                         "except ImportError:\n"
 		                         "    %pip install -q cadabra2\n"
-		                         "%load_ext cadabra2_jupyter");
+		                         "%load_ext cadabra2_jupyter\n"
+		                         "# The extension already makes the Cadabra functions available;\n"
+		                         "# this import tells the editor's code checker where they come from.\n"
+		                         "from cadabra2 import *");
 		cell["metadata"]=nlohmann::json::object();
 		cell["outputs"]=nlohmann::json::array();
 		cell["execution_count"]={};

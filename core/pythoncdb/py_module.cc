@@ -26,8 +26,9 @@ namespace cadabra {
 
 	PYBIND11_MODULE(cadabra2, m)
 		{
-		py::options options;
-		options.disable_function_signatures();
+		// Function signatures are kept in the docstrings, as
+		// pybind11-stubgen needs them to write cadabra2.pyi (see
+		// cmake/stubgen.cmake) and they show in help() and editor hovers.
 
 //		m.doc() = "Cadabra symbolic computer algebra";
 		m.def("init_ipython", &init_ipython);

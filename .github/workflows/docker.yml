@@ -1,13 +1,22 @@
 # Build the docker image with a Jupyter server with Cadabra kernel
 # (docker/Dockerfile), from the commit being built.
 #
-# On a release, the image is built for amd64 and arm64 and pushed to
-# Docker Hub as kpeeters/cadabra2-jupyter:latest. On every push to
-# devel, devel.yml calls this workflow with push=false, which only
-# builds the amd64 image and tests it, without logging in to Docker
-# Hub. In both cases the amd64 image is tested first: it should import
-# the cadabra2 module and run a small notebook with the cadabra2
-# Jupyter kernel.
+# On a release, the image is built for amd64 and arm64, each natively
+# on its own runner (no QEMU emulation), tested, and pushed by digest
+# to Docker Hub; the 'merge' job then combines the two into the
+# multi-platform image kpeeters/cadabra2-jupyter:latest.
+#
+# On every push to devel, devel.yml calls this workflow with
+# push=false, which only builds the amd64 image and tests it, without
+# logging in to Docker Hub. A manual run (Actions -> Docker -> Run
+# workflow) with push=true runs the full release route; note that
+# this overwrites 'latest' with the image of the branch being run.
+#
+# The test of each image: it should import the cadabra2 module and run
+# a small notebook with the cadabra2 Jupyter kernel.
+#
+# The layers which do not depend on the source (apt, pip) are cached
+# in the GitHub Actions cache, per platform.
 #
 # Lint this thing with
 #
@@ -24,16 +33,29 @@ on:
         description: "Build for all platforms and push the image to Docker Hub."
         type: boolean
         default: false
+  workflow_dispatch:
+    inputs:
+      push:
+        description: "Build for all platforms and push the image to Docker Hub (overwrites 'latest')."
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
+env:
+  IMAGE: kpeeters/cadabra2-jupyter
+  PUSH: ${{ github.event_name == 'release' || inputs.push }}
+
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON((github.event_name == 'release' || inputs.push) && '[{"arch":"amd64","os":"ubuntu-24.04"},{"arch":"arm64","os":"ubuntu-24.04-arm"}]' || '[{"arch":"amd64","os":"ubuntu-24.04"}]') }}
 
-    env:
-      PUSH: ${{ github.event_name == 'release' || inputs.push }}
+    name: build (${{ matrix.arch }})
+    runs-on: ${{ matrix.os }}
 
     steps:
     # Full history, so that 'git rev-list --count' in cmake/version.cmake
@@ -43,21 +65,19 @@ jobs:
         fetch-depth: 0
         persist-credentials: false
 
-    - name: Set up QEMU
-      if: env.PUSH == 'true'
-      uses: docker/setup-qemu-action@master
-
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@master
 
-    - name: Build amd64 image for testing
+    - name: Build image for testing
       uses: docker/build-push-action@master
       with:
-        platforms: linux/amd64
+        platforms: linux/${{ matrix.arch }}
         context: .
         file: docker/Dockerfile
         load: true
         tags: cadabra2-jupyter:test
+        cache-from: type=gha,scope=docker-${{ matrix.arch }}
+        cache-to: type=gha,mode=max,scope=docker-${{ matrix.arch }}
 
     - name: Test image
       run: |
@@ -99,20 +119,69 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Extract metadata (tags, labels) for Docker
+    - name: Extract metadata (labels) for Docker
       if: env.PUSH == 'true'
       id: meta
       uses: docker/metadata-action@master
       with:
-        images: kpeeters/cadabra2-jupyter
+        images: ${{ env.IMAGE }}
 
-    - name: Build and push multi-platform image
+    # Same build as above (all layers come from the cache), now pushed
+    # without a tag; the merge job tags the combination as 'latest'.
+    - name: Push image by digest
       if: env.PUSH == 'true'
+      id: push
       uses: docker/build-push-action@master
       with:
-        platforms: linux/amd64, linux/arm64
+        platforms: linux/${{ matrix.arch }}
         context: .
         file: docker/Dockerfile
-        push: true
         labels: ${{ steps.meta.outputs.labels }}
-        tags:   kpeeters/cadabra2-jupyter:latest
+        outputs: type=image,name=${{ env.IMAGE }},push-by-digest=true,name-canonical=true,push=true
+        cache-from: type=gha,scope=docker-${{ matrix.arch }}
+
+    - name: Store digest
+      if: env.PUSH == 'true'
+      env:
+        DIGEST: ${{ steps.push.outputs.digest }}
+      run: |
+        mkdir -p digests
+        touch "digests/${DIGEST#sha256:}"
+
+    - name: Upload digest
+      if: env.PUSH == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: docker-digest-${{ matrix.arch }}
+        path: digests/*
+        if-no-files-found: error
+
+  # Combines the per-platform images into kpeeters/cadabra2-jupyter:latest.
+  merge:
+    needs: build
+    if: github.event_name == 'release' || inputs.push
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: docker-digest-*
+        merge-multiple: true
+        path: digests
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@master
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@master
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Create and push multi-platform manifest
+      working-directory: digests
+      run: |
+        set -e
+        ls
+        docker buildx imagetools create -t "${IMAGE}:latest" $(printf "${IMAGE}@sha256:%s " *)
+        docker buildx imagetools inspect "${IMAGE}:latest"

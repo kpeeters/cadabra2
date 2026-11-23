@@ -428,8 +428,18 @@ add_executable(cadabra2ipynb
    )
 target_link_libraries(cadabra2ipynb
    ${Boost_LIBRARIES}
-   #    ${GLIBMM_LIBRARIES}     
+   #    ${GLIBMM_LIBRARIES}
    ${Python_LIBRARIES}
+   )
+
+# Convert the tutorial notebooks for Google Colab (kpeeters/cadabra2-colab);
+# see .github/workflows/colab.yml. Output in <build>/colab. Not part of ALL.
+add_custom_target(colab
+   COMMAND sh ${CMAKE_SOURCE_DIR}/config/colab_notebooks.sh
+           $<TARGET_FILE:cadabra2ipynb> ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}/colab
+   DEPENDS cadabra2ipynb
+   COMMENT "Converting tutorial notebooks for Colab into ${CMAKE_BINARY_DIR}/colab"
+   VERBATIM
    )
 
 # cadabra2cadabra
@@ -525,6 +535,46 @@ add_subdirectory(packages)
 
 
 #---------------------------------------------------------------------------
+# Type stub cadabra2.pyi, so that static checkers (Pyright in Colab and
+# VS Code, mypy, ...) know the names and signatures in the compiled
+# module. Needs pybind11-stubgen, which is a build requirement of the
+# wheel (pyproject.toml) and optional otherwise. It imports the module
+# just built, so it is skipped when cross-compiling.
+#---------------------------------------------------------------------------
+
+set(HAVE_STUBGEN FALSE)
+if(NOT CMAKE_CROSSCOMPILING)
+  execute_process(
+    COMMAND "${Python_EXECUTABLE}" -c "import pybind11_stubgen"
+    RESULT_VARIABLE STUBGEN_RESULT
+    OUTPUT_QUIET ERROR_QUIET)
+  if(STUBGEN_RESULT EQUAL 0)
+    set(HAVE_STUBGEN TRUE)
+  endif()
+endif()
+if(HAVE_STUBGEN)
+  message(STATUS "Generating cadabra2.pyi with pybind11-stubgen")
+  add_custom_command(
+    OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/stubs/cadabra2.pyi"
+    COMMAND ${CMAKE_COMMAND}
+            "-DPython_EXECUTABLE=${Python_EXECUTABLE}"
+            "-DMODULE_DIR=$<TARGET_FILE_DIR:cadabra2>"
+            "-DPACKAGES_DIR=${CMAKE_CURRENT_BINARY_DIR}/packages"
+            "-DAPPDIRS_DIR=${CADABRA_LIBS_DIR}/appdirs"
+            "-DMANUAL_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
+            "-DOUTPUT_DIR=${CMAKE_CURRENT_BINARY_DIR}/stubs"
+            -P "${CADABRA_ROOT_DIR}/cmake/stubgen.cmake"
+    DEPENDS cadabra2 copy-main "${CADABRA_ROOT_DIR}/cmake/stubgen.cmake"
+    COMMENT "Generating cadabra2.pyi"
+  )
+  add_custom_target(cadabra2-stubs ALL
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/stubs/cadabra2.pyi")
+else()
+  message(STATUS "Not generating cadabra2.pyi (pybind11-stubgen not found, or cross-compiling)")
+endif()
+
+
+#---------------------------------------------------------------------------
 # Installation.
 #---------------------------------------------------------------------------
 
@@ -548,6 +598,19 @@ else()
     DESTINATION 
     ${PYTHON_SITE_PATH}
     )
+endif()
+
+# The stub sits next to the module (PEP 561 allows this for a
+# single-file extension module); OPTIONAL because stubgen may have
+# failed, which only gives a warning.
+if(HAVE_STUBGEN)
+  if(WIN32)
+    set(STUB_DEST .)
+  else()
+    set(STUB_DEST ${PYTHON_SITE_PATH})
+  endif()
+  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/stubs/cadabra2.pyi"
+    DESTINATION ${STUB_DEST} OPTIONAL)
 endif()
 
 if(WIN32)
