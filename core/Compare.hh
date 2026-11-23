@@ -7,6 +7,50 @@
 
 namespace cadabra {
 
+	// Lazy replacement type to avoid temporary Ex objects in compare methods.
+	class Lazy_Ex {
+		public:
+			enum class repl_t : std::uint8_t {
+				same,				// identity operation
+				flip_parent_rel,  	// flip top node's parent_rel
+				erase_parent_rel,	// set top node's parent_rel to p_none
+				erase_children		// ignore any children
+			};
+
+			Lazy_Ex() = default;
+			Lazy_Ex(Ex::iterator it_, repl_t op_) : it(it_), op(op_) {};
+
+			Ex::iterator it;
+			repl_t op;
+
+			// Apply the operation only when needed.
+			Ex resolve()  const noexcept {
+				Ex ret {it};
+				switch(op) {
+					case repl_t::erase_children:
+						ret.erase_children(ret.begin());
+						break;
+					case repl_t::flip_parent_rel:
+						ret.begin()->flip_parent_rel();
+						break;
+					case repl_t::erase_parent_rel:
+						ret.begin()->fl.parent_rel = str_node::parent_rel_t::p_none;
+						break;
+					case repl_t::same:
+						break;
+					}
+				return ret;
+			}
+
+			// Comparison routine used for Lazy_Ex replacement map
+			class less {
+				public:
+					bool operator()(const Lazy_Ex& first, const Lazy_Ex& second) const;		
+			};
+
+	};
+		
+
 	/// \ingroup compare
 	///
 	/// Basic building block subtree comparison function for tensors
@@ -56,7 +100,16 @@ namespace cadabra {
 	int subtree_compare(const Properties*,
 	                    Ex::iterator one, Ex::iterator two,
 	                    int mod_prel=-2, bool checksets=true, int compare_multiplier=-2,
+	                    bool literal_wildcards=false,
+						Lazy_Ex::repl_t op1 = Lazy_Ex::repl_t::same, 
+						Lazy_Ex::repl_t op2 = Lazy_Ex::repl_t::same);
+
+	// Revised subtree comparison to handle Lazy_Ex objects
+	int subtree_compare(const Properties*,
+	                    const Lazy_Ex& one, const Lazy_Ex& two,
+	                    int mod_prel=-2, bool checksets=true, int compare_multiplier=-2,
 	                    bool literal_wildcards=false);
+
 
 	/// Various comparison functions, some exact, some with pattern logic.
 
@@ -275,18 +328,15 @@ namespace cadabra {
 			bool    satisfies_conditions(Ex::iterator conditions, std::string& error);
 
 			/// Map for the replacement of nodes (indices, patterns).
-
-			typedef std::map<Ex, Ex, tree_exact_less_no_wildcards_obj>     replacement_map_t;
+			typedef std::map<Lazy_Ex, Lazy_Ex, Lazy_Ex::less>                  replacement_map_t;
 			replacement_map_t                                              replacement_map;
 
 			/// Map for the replacement of entire subtrees (object patterns).
-
 			typedef std::map<nset_t::iterator, Ex::iterator, nset_it_less> subtree_replacement_map_t;
 			subtree_replacement_map_t                                      subtree_replacement_map;
 
 			/// Map for matching of index names to index values. Note: this is in the opposite order
 			/// from replacement_map!
-
 			replacement_map_t                                              index_value_map;
 
 			/// Information to keep track of where individual factors/terms
